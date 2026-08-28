@@ -1,10 +1,11 @@
-// Behaviour gate for the root's GENERATED pages — the landing page (R4) and the
-// fleet privacy page — run in CI by smoke-test.yml.
+// Behaviour gate for the root's GENERATED pages — the landing page (R4), its
+// coverage map, and the fleet privacy page — run in CI by smoke-test.yml.
 //
-// WHY THIS IS A GATE AND NOT A SCRATCH SCRIPT. The page itself is generated and
-// drift-checked by build_landing_page.py, which proves it matches metros.json.
-// It cannot prove the page still WORKS, and the part that matters most is
-// invisible to a diff: the forwarding guard.
+// WHY THIS IS A GATE AND NOT A SCRATCH SCRIPT. The pages themselves are
+// generated and drift-checked by build_landing_page.py / build_coverage_map.py,
+// which prove they match metros.json. That cannot prove they still WORK, and
+// the parts that matter most are invisible to a diff: the forwarding guard, and
+// (since the address-first redesign) the address box's routing.
 //
 // Before R2.3 the Illinois app served from this origin's root, so every share
 // link and embed snippet it handed out was built from the root URL —
@@ -21,23 +22,83 @@
 //
 //   node scripts/landing_test.mjs          # BASE_URL defaults to :8131
 import { chromium } from "playwright";
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 const BASE = process.env.BASE_URL || "http://localhost:8131";
+const HERE = dirname(fileURLToPath(import.meta.url));
 // The expected tags come from metros.json rather than a literal. They were
 // hardcoded as (il|nyc|sf) and went stale the moment R5 renamed the folders
 // to ny/ and ca/ — the test failed on a correct change, which is the failure
 // mode a gate must not have. metros.json is the same source the page is
 // generated from, so the two can only disagree if the generator is wrong.
 const FLEET = JSON.parse(readFileSync(
-  join(dirname(fileURLToPath(import.meta.url)), "..", "metros.json"), "utf8")).metros;
+  join(HERE, "..", "metros.json"), "utf8")).metros;
 const TAGS = FLEET.map((m) => m.tag).filter(Boolean);
 const failures = [];
 function check(name, ok, detail) {
   console.log(`  ${ok ? "PASS" : "FAIL"}  ${name}${detail ? "  — " + detail : ""}`);
   if (!ok) failures.push(name);
+}
+
+// The coverage map loads Leaflet from cdnjs, which the sandboxed dev
+// environment cannot reach (see CLAUDE.md — Chromium does not use the agent
+// proxy). scripts/vendor_leaflet.sh mirrors it via curl, which can; serve that
+// copy same-origin when it is present, exactly as each instance's own
+// smoke_test.mjs does. In CI the dir is absent and the real CDN answers, so
+// this route never installs and nothing about the test changes.
+const LEAFLET_VENDOR = join(HERE, "vendor", "leaflet");
+async function serveVendoredLeaflet(page) {
+  if (!existsSync(LEAFLET_VENDOR)) return false;
+  await page.route("**/cdnjs.cloudflare.com/ajax/libs/leaflet/**", (route) => {
+    const name = new URL(route.request().url()).pathname.split("/").pop();
+    const path = join(LEAFLET_VENDOR, name);
+    if (!existsSync(path)) return route.abort();
+    route.fulfill({
+      status: 200,
+      contentType: name.endsWith(".css") ? "text/css" : "application/javascript",
+      body: readFileSync(path),
+    });
+  });
+  return true;
+}
+
+// A 1x1 transparent GIF for OSM basemap tiles. The map's correctness has
+// nothing to do with whether a raster tile painted, and letting real tile
+// requests fly would make this gate depend on a third party's uptime.
+const BLANK_TILE = Buffer.from(
+  "R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBTAA7", "base64");
+async function stubTiles(page) {
+  await page.route("**/tile.openstreetmap.org/**", (route) =>
+    route.fulfill({ status: 200, contentType: "image/gif", body: BLANK_TILE }));
+}
+
+// One Photon response, shaped like the real thing. The address box is asserted
+// against a STUB rather than the live geocoder for the same reason /il/ is
+// stubbed below: a gate that needs photon.komoot.io to be up and to keep
+// ranking a given address the same way is a gate that fails on someone else's
+// schedule. What is under test is the ROUTING — bbox match, tie-break, the
+// #point= handoff — not whether Photon can find a street.
+function photonStub(features) {
+  return (route) => route.fulfill({
+    status: 200,
+    contentType: "application/json",
+    body: JSON.stringify({ type: "FeatureCollection", features }),
+  });
+}
+function photonFeature(lat, lng) {
+  return { type: "Feature", geometry: { type: "Point", coordinates: [lng, lat] }, properties: {} };
+}
+
+// Read an element's text, or null if it is not there. page.textContent()
+// blocks for its full 30s timeout and then THROWS, which kills the run with an
+// uncaught TimeoutError instead of reporting a failure — so a regression that
+// removes an element takes the whole gate down and reports nothing about the
+// checks after it. A gate should fail loudly on the thing that broke, not
+// crash before it can say so.
+async function textOrNull(page, selector) {
+  return page.textContent(selector, { timeout: 2000 }).catch(() => null);
 }
 
 const browser = await chromium.launch();
@@ -54,20 +115,39 @@ try {
     const wordmark = await page.textContent(".wordmark").catch(() => null);
     check("wordmark renders", wordmark === "districtry", JSON.stringify(wordmark));
 
-    const cards = await page.$$eval(".card", (els) =>
+    const pills = await page.$$eval(".pill", (els) =>
       els.map((e) => ({
         href: e.getAttribute("href"),
-        name: e.querySelector("b")?.textContent,
-        tag: e.querySelector(".card-tag")?.textContent?.trim(),
+        // the layer count lives in a child span, so strip it off the name
+        name: e.firstChild?.textContent?.trim(),
+        n: e.querySelector(".pill-n")?.textContent?.trim(),
       })));
-    check("every fleet place is listed", cards.length === FLEET.length,
-      JSON.stringify(cards.map(c => c.name)) + " vs metros.json " + FLEET.length);
-    check("Illinois card points at /il/",
-      cards.some((c) => c.name === "Illinois" && /\/il\/$/.test(c.href)),
-      cards.find((c) => c.name === "Illinois")?.href);
-    check("cards carry their instance tag",
-      cards.every((c) => TAGS.includes(String(c.tag || "").replace(/^\/\s*/, ""))),
-      JSON.stringify(cards.map((c) => c.tag)) + " vs metros.json " + JSON.stringify(TAGS));
+    check("every fleet place is listed", pills.length === FLEET.length,
+      JSON.stringify(pills.map((p) => p.name)) + " vs metros.json " + FLEET.length);
+    check("Illinois pill points at /il/",
+      pills.some((p) => p.name === "Illinois" && /\/il\/$/.test(p.href)),
+      pills.find((p) => p.name === "Illinois")?.href);
+    check("every pill links a fleet url",
+      pills.every((p) => FLEET.some((m) => m.url === p.href)),
+      JSON.stringify(pills.map((p) => p.href)));
+    // A layer count is the one number on this page a reader could act on, and
+    // it is read from each instance's own worksheet — a pill showing 0, blank
+    // or NaN means the generator lost its grip on that file.
+    check("every pill states a positive layer count",
+      pills.every((p) => /^\d+$/.test(p.n || "") && Number(p.n) > 0),
+      JSON.stringify(pills.map((p) => p.n)));
+
+    // The "not yet" disclosure is generated by subtracting the covered states
+    // from the 50+DC list, so a place that is BOTH live and listed as missing
+    // is a contradiction the page would state in two directions at once.
+    const notYet = await page.$$eval(".not-yet-list div", (els) =>
+      els.map((e) => e.textContent.trim()));
+    const liveNames = FLEET.map((m) => m.landing_name);
+    check("the not-yet list never names a place that already answers",
+      notYet.every((s) => !liveNames.includes(s)),
+      notYet.filter((s) => liveNames.includes(s)).join(", ") || "no overlap");
+    check("the not-yet list is non-empty and plausible",
+      notYet.length > 40 && notYet.length < 51, String(notYet.length));
 
     // Barlow must actually be applied, not silently falling back to system-ui.
     const font = await page.evaluate(() =>
@@ -78,6 +158,192 @@ try {
       return [...document.fonts].filter((f) => f.status === "loaded").map((f) => f.family + " " + f.weight);
     });
     check("a self-hosted face actually loaded", loaded.length > 0, JSON.stringify(loaded));
+    await ctx.close();
+  }
+
+  // --- 1b. the rename toast fades on its own, and dismisses on click -------
+  //
+  // It is a TOAST now rather than an inline banner, which means it sits over
+  // the masthead and can cover the wordmark. A toast that fails to fade is a
+  // permanent obstruction on the front door — and because it is absolutely
+  // positioned, a reader cannot scroll it away.
+  {
+    const ctx = await browser.newContext({ serviceWorkers: "block" });
+    const page = await ctx.newPage();
+    await page.goto(BASE + "/", { waitUntil: "domcontentloaded" });
+    const notice = await page.$("#notice");
+    check("the rename notice renders", notice !== null);
+    if (notice) {
+      const shown = await notice.isVisible();
+      check("the rename notice starts visible", shown, String(shown));
+      await page.click("#notice-dismiss");
+      // The fade is a 900ms CSS animation, then display:none.
+      await page.waitForTimeout(1600);
+      const after = await page.evaluate(() => {
+        const el = document.getElementById("notice");
+        return el ? getComputedStyle(el).display : "removed";
+      });
+      check("dismissing the rename notice hides it",
+        after === "none" || after === "removed", after);
+    }
+    await ctx.close();
+  }
+
+  // --- 1c. the address box routes to the instance that covers the point ----
+  //
+  // This is the page's one genuinely interactive feature, and every part of it
+  // is invisible to the drift check: the geocode call, the bbox test against
+  // metros.json, and the #point= handoff. Photon is STUBBED (see photonStub
+  // above) so what is measured is the routing and not a third party's ranking.
+  //
+  // Each instance is exercised from a point inside its OWN bbox, taken from
+  // metros.json rather than typed here — so a bbox that is edited, or a metro
+  // that is added, is covered without touching this file.
+  //
+  // UNCOVERED_POINT leads every stubbed response on purpose. The box is
+  // documented to take the first result that falls inside a covered bbox, not
+  // simply result #1, so ranking a miss above the hit is what proves the scan
+  // happens at all. (It cannot, on its own, prove the bbox test EXISTS — every
+  // probe point here is its own bbox's centre, so a build with the filter
+  // deleted still lands correctly on the nearest-centre tie-break. Block 1d is
+  // what catches that, which is why its instance stubs matter.)
+  const UNCOVERED_POINT = [32.7767, -96.797];   // Dallas — outside all five bboxes
+  async function stubInstances(page) {
+    for (const t of TAGS) {
+      await page.route(`**/${t}/**`, (r) => r.fulfill({
+        status: 200, contentType: "text/html",
+        body: `<!doctype html><title>${t} stub</title>`,
+      }));
+    }
+  }
+  for (const m of FLEET) {
+    const lat = (m.bbox.minLat + m.bbox.maxLat) / 2;
+    const lng = (m.bbox.minLng + m.bbox.maxLng) / 2;
+    const ctx = await browser.newContext({ serviceWorkers: "block" });
+    const page = await ctx.newPage();
+    await page.route("**/photon.komoot.io/**", photonStub([
+      photonFeature(...UNCOVERED_POINT),
+      photonFeature(lat, lng),
+    ]));
+    // Stub every instance, not just this one: a routing bug that sends the
+    // reader to the WRONG instance must show up as a wrong URL, not as a
+    // navigation failure that looks the same as a right one.
+    await stubInstances(page);
+    await page.goto(BASE + "/", { waitUntil: "domcontentloaded" });
+    await page.fill("#search-input", "somewhere in " + m.landing_name);
+    await page.click("#search-button");
+    await page.waitForTimeout(700);
+    const u = new URL(page.url());
+    check(`an address in ${m.landing_name} opens /${m.tag}/`,
+      u.pathname === `/${m.tag}/`, page.url());
+    check(`an address in ${m.landing_name} arrives with its point selected`,
+      /^#point=-?\d+\.\d+,-?\d+\.\d+$/.test(u.hash), JSON.stringify(u.hash));
+    await ctx.close();
+  }
+
+  // --- 1d. an address nobody covers SAYS SO, and never guesses -------------
+  //
+  // The honesty rule this whole project runs on, applied to the front door: a
+  // point outside every bbox must not be routed anywhere. Sending it to the
+  // nearest instance would be the front door inventing an answer.
+  //
+  // THE INSTANCE STUBS ARE LOAD-BEARING HERE, and their absence is how the
+  // first draft of this block passed against a build with the bbox test
+  // deleted: the wrong navigation went to the real districtry.com, which is
+  // unreachable from the sandbox, so the failed navigation left page.url()
+  // sitting on "/" and read exactly like the correct behaviour. Stubbed, a
+  // wrong route lands on a real 200 and the pathname check fires. This is
+  // therefore the block that proves the bbox filter exists at all.
+  {
+    const ctx = await browser.newContext({ serviceWorkers: "block" });
+    const page = await ctx.newPage();
+    await page.route("**/photon.komoot.io/**", photonStub([photonFeature(...UNCOVERED_POINT)]));
+    await stubInstances(page);
+    await page.goto(BASE + "/", { waitUntil: "domcontentloaded" });
+    await page.fill("#search-input", "Dallas, Texas");
+    await page.click("#search-button");
+    await page.waitForTimeout(700);
+    check("an uncovered address stays on the landing page",
+      new URL(page.url()).pathname === "/", page.url());
+    const msg = await textOrNull(page, "#search-status");
+    check("an uncovered address is told so", /outside/i.test(msg || ""), JSON.stringify(msg));
+    await ctx.close();
+  }
+
+  // --- 1e. a geocoder failure degrades to a message, not a dead button -----
+  {
+    const ctx = await browser.newContext({ serviceWorkers: "block" });
+    const page = await ctx.newPage();
+    await page.route("**/photon.komoot.io/**", (r) => r.abort());
+    await stubInstances(page);
+    await page.goto(BASE + "/", { waitUntil: "domcontentloaded" });
+    await page.fill("#search-input", "200 S 9th St, Springfield IL");
+    await page.click("#search-button");
+    await page.waitForTimeout(700);
+    const msg = await textOrNull(page, "#search-status");
+    check("a failed search says so", /failed/i.test(msg || ""), JSON.stringify(msg));
+    // The button must come back, or one flaky lookup bricks the box for the
+    // rest of the visit.
+    const disabled = await page.evaluate(
+      () => document.getElementById("search-button")?.disabled).catch(() => null);
+    check("a failed search re-enables the button", disabled === false, String(disabled));
+    await ctx.close();
+  }
+
+  // --- 1f. the coverage map loads, draws, and lists every place -----------
+  //
+  // The map is a separate generated page embedded in an iframe, so the landing
+  // page's own checks say nothing about it. Its legend is the accessible,
+  // non-geometric statement of the same fact the polygons make — if the
+  // outlines fail to load, the legend is what a reader is left with, so it is
+  // what this asserts.
+  {
+    const ctx = await browser.newContext({ serviceWorkers: "block" });
+    const page = await ctx.newPage();
+    const errs = [];
+    page.on("console", (mm) => {
+      if (mm.type() !== "error") return;
+      const t = mm.text();
+      if (/Failed to load resource|net::ERR|gc\.zgo\.at/i.test(t)) return;
+      errs.push(t);
+    });
+    page.on("pageerror", (e) => errs.push(String(e)));
+    const vendored = await serveVendoredLeaflet(page);
+    await stubTiles(page);
+    const resp = await page.goto(BASE + "/coverage-map.html", { waitUntil: "load" });
+    check("coverage map loads", resp.status() === 200, `HTTP ${resp.status()}`);
+    await page.waitForTimeout(1500);
+    check("coverage map has no console errors", errs.length === 0, errs.slice(0, 2).join(" | "));
+    check("coverage map rendered a Leaflet map",
+      await page.evaluate(() => !!document.querySelector(".leaflet-container")),
+      vendored ? "vendored Leaflet" : "CDN Leaflet");
+    const legend = await page.$$eval("#legend-rows a", (els) =>
+      els.map((e) => ({ name: e.querySelector(".nm")?.textContent, href: e.getAttribute("href") })));
+    check("coverage map legend lists every fleet place",
+      legend.length === FLEET.length,
+      JSON.stringify(legend.map((r) => r.name)) + " vs metros.json " + FLEET.length);
+    check("coverage map legend links the fleet urls",
+      legend.every((r) => FLEET.some((m) => m.url === r.href)),
+      JSON.stringify(legend.map((r) => r.href)));
+    // The outlines each come from their own instance's data/app — a 404 on one
+    // is exactly the "drew Illinois for everybody" failure the two-tier map
+    // exists to avoid, and it would otherwise show only as a missing polygon.
+    const polys = await page.evaluate(() => document.querySelectorAll(".leaflet-overlay-pane path").length);
+    check("coverage map drew the coverage outlines", polys > 0, `${polys} path(s)`);
+    await ctx.close();
+  }
+
+  // --- 1g. the landing page actually embeds the coverage map --------------
+  {
+    const ctx = await browser.newContext({ serviceWorkers: "block" });
+    const page = await ctx.newPage();
+    await serveVendoredLeaflet(page);
+    await stubTiles(page);
+    await page.goto(BASE + "/", { waitUntil: "load" });
+    const src = await page.getAttribute("iframe.coverage-frame", "src").catch(() => null);
+    check("landing page embeds the coverage map", src === "coverage-map.html", String(src));
+    const r = await page.request.get(BASE + "/coverage-map.html");
+    check("the embedded coverage map resolves", r.status() === 200, `HTTP ${r.status()}`);
     await ctx.close();
   }
 

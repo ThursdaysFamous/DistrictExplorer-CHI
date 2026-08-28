@@ -85,9 +85,12 @@ DARK_TOKENS = [
 # outlived it.
 DARK_EXTRA = {"brand-600": "brand"}
 
-# The front door is measured too, and its row is not filler: it is the only
-# surface here that contacts nobody and stores nothing, which is a fact a reader
-# landing on districtry.com should be able to read off the same table.
+# The front door is measured too, and its row is not filler. It used to be the
+# one surface here that contacted nobody and stored nothing; since the
+# address-first redesign it has a search box of its own, so it now sends a typed
+# address to the same geocoder the apps use, and the table says so. That is
+# exactly why the row is measured rather than asserted — the claim changed
+# because the page changed, and nobody had to remember to come and edit it.
 FRONT_DOOR = {"file": "index.html", "name": "The front door", "url": "/", "tag": None}
 
 # Third parties every app reaches, with the policy that governs each. Kept here
@@ -112,11 +115,16 @@ COMMON_RECIPIENTS = [
 # Geocoders, keyed by the host the measurement finds. What a geocoder receives is
 # the most sensitive flow on the page — it is the text you type — so each is
 # named individually rather than pooled into "address search".
+# The "what" strings say "as you type OR when you press the button" rather than
+# "as you type", because the two kinds of surface differ and the narrower claim
+# would be wrong for one of them: the apps' boxes are type-ahead and send on
+# each keystroke, while the front door's sends only on submit. Over-stating what
+# leaves a browser is the safe direction to be wrong in, and it is still wrong.
 GEOCODERS = {
     "photon.komoot.io": (
         "Photon / Komoot", "address search", "https://www.komoot.com/privacy",
-        "<strong>The text you type into the search box</strong>, sent as you type so "
-        "suggestions can appear."),
+        "<strong>The text you type into the search box</strong> — sent as you type on the "
+        "apps' type-ahead boxes, and only when you press the button on the front door."),
     "nominatim.openstreetmap.org": (
         "Nominatim / OpenStreetMap", "address search, office pins",
         "https://osmfoundation.org/wiki/Privacy_Policy",
@@ -189,7 +197,15 @@ def measure(rel, name, url, tag):
     app["storage"] = storage
 
     app["geocoders"] = [h for h in GEOCODERS if h in src]
-    app["has_map"] = bool(app["geocoders"])
+    # WHAT has_map GATES: the fleet-wide parity claims (identical analytics
+    # vocabulary, CARTO tiles, cdnjs), which are claims about the map APPS.
+    # It was `bool(app["geocoders"])` — a proxy that held only while the front
+    # door had no search box of its own. The address-first redesign gave it
+    # one, and the proxy promptly classified the front door as an app and
+    # failed the build for not sending the apps' analytics events, which it
+    # has never sent and should not. The tag is the real question being asked:
+    # a tagged surface is an instance, an untagged one is the root.
+    app["has_map"] = tag is not None
     app["tiles"] = bool(re.search(r"[a-z]\.basemaps\.cartocdn\.com", src))
     app["cdn"] = "cdnjs.cloudflare.com" in src
 
@@ -307,7 +323,7 @@ def render_recipient_rows(apps):
         label, sub, policy, what = GEOCODERS[host]
         users = [a["name"] for a in apps if host in a["geocoders"]]
         rows.append(recipient_row(label, sub, policy, what,
-                                  "Only while you are typing an address, or when a "
+                                  "Only while you are searching for an address, or when a "
                                   "card places an office pin.",
                                   ", ".join(users) + "."))
     rows.append(recipient_row(
@@ -485,7 +501,6 @@ def build():
     desc = ("What districtry stores, what leaves your browser and to whom, and what it "
             "deliberately never collects — for every app on the site. No accounts, no "
             "profiles, nothing sold.")
-    mapped = [a for a in apps if a["has_map"]]
 
     return """<!DOCTYPE html>
 <html lang="en">
@@ -897,7 +912,9 @@ td small, th small { display: block; color: var(--faint); font-size: 12px;
         "mark": load_mark(),
         "updated": UPDATED,
         "approws": render_app_rows(apps),
-        "recipients": render_recipient_rows(mapped),
+        # ALL the apps, not just the mapped ones: the geocoder rows name which
+        # surfaces reach each host, and the front door reaches one now.
+        "recipients": render_recipient_rows(apps),
         "storage": render_storage_paragraphs(apps),
         "analytics": render_analytics_section(apps),
         "footerlinks": render_footer_links(apps),

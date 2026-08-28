@@ -141,7 +141,9 @@ INDEX_HTML = os.path.join(REPO_ROOT, "il", "index.html")
 # reader clicks, and it is now the most prominent authored surface on the site.
 # Its three destinations are the fleet's own instances, so a dead one is this
 # repo's to fix — which is what AUTHORED, rather than PUBLISHED, means here.
-AUTHORED_PAGES = ["index.html", "il/index.html", "il/sources.html",
+# coverage-map.html joins it for the same reason: the landing page embeds it in
+# an iframe, so its legend rows are links a reader clicks on the front door.
+AUTHORED_PAGES = ["index.html", "coverage-map.html", "il/index.html", "il/sources.html",
                   "privacy.html", "il/faq.html", "ny/index.html", "ny/faq.html", "ny/sources.html",
                   "ca/index.html", "ca/faq.html", "ca/sources.html",
                   "wi/index.html", "wi/faq.html", "wi/sources.html"]
