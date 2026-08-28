@@ -2023,6 +2023,25 @@ at county scale and at state scale, and it has been expensive every time.
   the statewide polling list could not be had — was wrong. **Asked directly, the Elections
   Commission sent the whole file in an afternoon**, and the ward card went from two cities
   to 7,131 of 7,161 wards.
+- **An UNBLOCKED website is not the only website — ask the BODY's own host.** The rule
+  above has a twin that is easier to miss, because nothing refuses you and nothing warns.
+  Wisconsin swept all 72 counties for a district-keyed supervisor list, recorded 50 as
+  publishing none, and drafted 42 e-mails asking for it. Nine of the fifty were publishing
+  a complete one. Dane County — the state's second-largest board, 37 seats — publishes its
+  roster at `board.danecounty.gov`, a different host from the `countyofdane.com` the
+  project's own clerk file carried; the sweep asked each COUNTY's site and never the
+  BOARD's. A county board, a school board, a court system and an election authority are
+  each capable of having their own subdomain, their own CMS, and their own vocabulary.
+  **When a sweep of "the county's website" returns nothing, that is a fact about one host.**
+- **RE-READ YOUR OWN RECORDS BEFORE RE-PROBING THE WORLD.** All nine of those recoveries
+  came out of files this project had already written, not out of any new source. The
+  trigger was a builder docstring that cited a county's board page as the authority for
+  its seat count — a page nobody had ever wired into the roster scraper, while an e-mail
+  was being drafted asking that county for the list it publishes. A gap record, a
+  docstring and a scraper table are three places the same county can be described
+  differently; when they disagree, one of them is a shipped bug. Audit them against each
+  other on a schedule, and treat a long, confident blocker as a place to look rather than
+  a reason not to.
 - **The ask is a route, not a last resort.** Put it in the ladder beside the technical
   probes. Its cost is one e-mail; its yield in this fleet includes a statewide polling
   file, a licence-gated county's written permission, several precinct tables no county
@@ -2184,6 +2203,29 @@ at county scale and at state scale, and it has been expensive every time.
   outline and INSIDE anchor, because a county-specific card DOES answer there; and it must
   NOT be added to the dispatch-county list, which is now a two-directional gate that fails
   on a listed county registering nothing.
+- **A parser keyed to a WORD is blind to a COLUMN.** If the extractor needs the literal
+  word beside the number — `District 7` — then a page that says it ONCE in a table header
+  and prints bare numerals in the cells is invisible, and the record will say the publisher
+  offers "no district column" when having one is precisely why it could not be read. Three
+  Wisconsin counties sat in a no-source gap for that reason. Before writing a publisher off
+  for shape, ask what shapes the reader can actually see, and add the table reading: pair
+  the numeral cell with the nearest name cell, **stopping at the next numeral** so a row
+  with no readable name can never borrow its neighbour's.
+- **Roles are often published OUTSIDE the rows they belong to.** A body's chair and vice
+  chairs frequently sit in an officers block above the member list rather than beside the
+  member's own row, so an extractor that only sees a role attached to the name it is
+  reading will find none — and any downstream rule keyed to "the roster marks no chair"
+  then fires wrongly. In Wisconsin that rule WITHHELD the chair on counties whose pages
+  name one in plain text. Join the block to the roster on a unique full name, print every
+  join, and never overwrite a role a row already carries.
+- **The before/after ambiguity follows you into every new block.** Wherever a name and its
+  key sit on separate lines, some publishers put the name first and some the key first,
+  and the wrong choice yields a full, plausible, entirely wrong answer shifted by one. It
+  is pinned per source for district rows — and it recurs, unpinned, the moment you parse a
+  new region of the same page: an officers block cost exactly that, filing one county's
+  Second Vice Chair as First. Three cases are safe: the line carries its own name (use it
+  and look no further); exactly one neighbouring line reads as a name (use that one); both
+  do (attach nothing and say so).
 - **Nest only on containment the source enforces.** Wisconsin's county subdivisions nest
   under County because 608 incorporated municipalities occupy 671 subdivision records — the
   58 that cross a county line get one record per county. The Places layer is one record per
