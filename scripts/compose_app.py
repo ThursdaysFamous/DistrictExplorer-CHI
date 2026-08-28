@@ -77,7 +77,7 @@ SUBPAGES = {
            "ny/community-board.html"],
     "ca": ["ca/faq.html", "ca/sources.html", "ca/supervisor-district.html"],
     "wi": ["wi/faq.html", "wi/sources.html"],
-    "ia": ["ia/sources.html"],  # faq.html deferred — new hand-authored content, not this PR's scope
+    "ia": ["ia/faq.html", "ia/sources.html"],
 }
 
 # Blocks whose ONE source is engine/shared/<name>.txt rather than

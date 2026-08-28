@@ -12,6 +12,7 @@
     "tagline": "Every civic district that covers your point in Iowa, and who represents you there.",
     "theme_color": "#6d3fd1",
     "favicon_data_uri": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2212%22%20fill%3D%22%236d3fd1%22/%3E%3Ctext%20x%3D%2232%22%20y%3D%2242%22%20font-family%3D%22Arial%2CHelvetica%2Csans-serif%22%20font-size%3D%2226%22%20font-weight%3D%22700%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%3EIA%3C/text%3E%3C/svg%3E",
+    "apple_touch_icon": "icons/apple-touch-icon.png",
     "head": {
       "title": "What district am I in? Find your Iowa district — districtry",
       "description": "Click a point in Iowa — or search an address — and see your U.S. House, Iowa Senate, Iowa House and county, and who represents you.",
@@ -202,16 +203,21 @@
   },
   "history_page": {
     "file": "history.html",
-    "intro": "districtry Iowa launched with the national tier: every county, both chambers of the Iowa Legislature, and Iowa's U.S. House delegation.",
+    "intro": "districtry Iowa launched with the full phase-1 roadmap: every county and its supervisor districts, both chambers of the Iowa Legislature, Iowa's U.S. House delegation, school districts, townships and cities, and ZIP codes and post offices.",
     "entries": [
-      { "date": "2026-08-27", "title": "Launched", "body": "The national tier: county, U.S. House, Iowa Senate and Iowa House — four layers, statewide, each with a sourced boundary and (except county, identity-only by design) a weekly-refreshed officeholder roster. The flagship county-supervisor layer and the rest of the phase-1 roadmap follow in later PRs." }
+      { "date": "2026-08-27", "title": "Launched", "body": "Ten layers, statewide, each with a sourced boundary: the national tier (county, U.S. House, Iowa Senate, Iowa House); the flagship county-supervisor layer (270 features across 98 of 99 counties, aware of each county's own election plan under Senate File 75); school-district-unified; county-subdivision and municipality (Iowa's civil townships and its 939 incorporated cities); and zip-code and post-office. Every layer with a statewide officeholder source carries a weekly-refreshed roster; where none exists (county, county-subdivision, municipality, and county-supervisor's supervisor names), the card says so and links the official body rather than guessing. Phase 2 — precincts, judicial districts, community colleges, and the county auditor — is next." }
     ]
   },
   "metro_explorers": [
-    { "id": "chicago", "label": "Illinois", "url": "https://districtry.com/il/", "emoji": "🌭", "explorer_name": "districtry Illinois", "bbox": { "minLng": -91.52, "minLat": 36.96, "maxLng": -87.01, "maxLat": 42.51 } },
-    { "id": "nyc", "label": "New York City", "url": "https://districtry.com/ny/", "emoji": "🗽", "explorer_name": "districtry New York City", "bbox": { "minLng": -74.3, "minLat": 40.45, "maxLng": -73.6, "maxLat": 41.0 } },
-    { "id": "sf", "label": "San Francisco", "url": "https://districtry.com/ca/", "emoji": "🌉", "explorer_name": "districtry San Francisco", "bbox": { "minLng": -122.6, "minLat": 37.6, "maxLng": -122.3, "maxLat": 37.95 } },
-    { "id": "wisconsin", "label": "Wisconsin", "url": "https://districtry.com/wi/", "emoji": "🧀", "explorer_name": "districtry Wisconsin", "bbox": { "minLng": -92.89, "minLat": 42.49, "maxLng": -86.25, "maxLat": 47.31 } },
-    { "id": "iowa", "label": "Iowa", "url": "https://districtry.com/ia/", "emoji": "🌽", "explorer_name": "districtry Iowa", "bbox": { "minLng": -96.64, "minLat": 40.37, "maxLng": -90.14, "maxLat": 43.50 } }
+    { "id": "chicago", "label": "Illinois", "url": "https://districtry.com/il/", "emoji": "🌭", "explorer_name": "districtry Illinois",
+      "bbox": { "minLng": -91.52, "minLat": 36.96, "maxLng": -87.01, "maxLat": 42.51 } },
+    { "id": "nyc", "label": "New York City", "url": "https://districtry.com/ny/", "emoji": "🗽", "explorer_name": "districtry New York City",
+      "bbox": { "minLng": -74.3, "minLat": 40.45, "maxLng": -73.6, "maxLat": 41.0 } },
+    { "id": "sf", "label": "San Francisco", "url": "https://districtry.com/ca/", "emoji": "🌉", "explorer_name": "districtry San Francisco",
+      "bbox": { "minLng": -122.6, "minLat": 37.6, "maxLng": -122.3, "maxLat": 37.95 } },
+    { "id": "wisconsin", "label": "Wisconsin", "url": "https://districtry.com/wi/", "emoji": "🧀", "explorer_name": "districtry Wisconsin",
+      "bbox": { "minLng": -92.89, "minLat": 42.49, "maxLng": -86.25, "maxLat": 47.31 } },
+    { "id": "iowa", "label": "Iowa", "url": "https://districtry.com/ia/", "emoji": "🌽", "explorer_name": "districtry Iowa",
+      "bbox": { "minLng": -96.64, "minLat": 40.37, "maxLng": -90.14, "maxLat": 43.5 } }
   ]
 }

@@ -36,34 +36,34 @@
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://districtry.com/wi/#website",
-      "url": "https://districtry.com/wi/",
-      "name": "districtry Wisconsin",
-      "description": "Find every civic district that covers a point or address in Wisconsin, and who represents you there.",
+      "@id": "https://districtry.com/ia/#website",
+      "url": "https://districtry.com/ia/",
+      "name": "districtry Iowa",
+      "description": "Find every civic district that covers a point or address in Iowa, and who represents you there.",
       "inLanguage": "en-US",
-      "publisher": { "@id": "https://districtry.com/wi/#publisher" }
+      "publisher": { "@id": "https://districtry.com/ia/#publisher" }
     },
     {
       "@type": "Organization",
-      "@id": "https://districtry.com/wi/#publisher",
+      "@id": "https://districtry.com/ia/#publisher",
       "name": "Overberg",
       "url": "https://overberg.co"
     },
     {
       "@type": "WebApplication",
-      "name": "districtry Wisconsin",
-      "url": "https://districtry.com/wi/",
-      "description": "Click any point in Wisconsin, or search an address, to see every civic district that contains it, and who represents you.",
+      "name": "districtry Iowa",
+      "url": "https://districtry.com/ia/",
+      "description": "Click any point in Iowa, or search an address, to see every civic district that contains it, and who represents you.",
       "applicationCategory": "Reference",
       "operatingSystem": "Any (modern web browser)",
       "browserRequirements": "Requires JavaScript",
       "isAccessibleForFree": true,
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
       "inLanguage": "en-US",
-      "image": "https://districtry.com/wi/og-image.png",
-      "areaServed": { "@type": "State", "name": "Wisconsin" },
-      "keywords": "Wisconsin district map, what district am I in, Wisconsin Assembly district, Wisconsin Senate district, school district lookup, civic districts, who represents me Wisconsin",
-      "isPartOf": { "@id": "https://districtry.com/wi/#website" },
+      "image": "https://districtry.com/ia/og-image.png",
+      "areaServed": { "@type": "State", "name": "Iowa" },
+      "keywords": "Iowa district map, what district am I in, Iowa Senate district, Iowa House district, county supervisor district, school district lookup, civic districts, who represents me Iowa",
+      "isPartOf": { "@id": "https://districtry.com/ia/#website" },
       "sameAs": "https://github.com/ThursdaysFamous/districtry"
     }
   ]
@@ -78,6 +78,9 @@
 <meta name="theme-color" content="#6d3fd1">
 
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2212%22%20fill%3D%22%236d3fd1%22/%3E%3Ctext%20x%3D%2232%22%20y%3D%2242%22%20font-family%3D%22Arial%2CHelvetica%2Csans-serif%22%20font-size%3D%2226%22%20font-weight%3D%22700%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%3EIA%3C/text%3E%3C/svg%3E" />
+
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="districtry" />
 <!-- ==== GENERATED:END head-theme ==== -->
 
 <!-- warm the connections first paint waits on: the CDN serving Leaflet +
@@ -3587,7 +3590,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
 <main class="layout" id="layout">
   <section class="map-col" aria-label="Interactive district map">
-    <div id="map" role="application" aria-label="Map of Wisconsin. Click anywhere to select a point, or use the search box above."></div>
+    <div id="map" role="application" aria-label="Map of Iowa. Click anywhere to select a point, or use the search box above."></div>
 
     <button type="button" class="layer-toggle-btn" id="layer-drawer-btn" aria-expanded="true" aria-controls="results-col">
       Layers ▾
@@ -3629,7 +3632,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <svg class="districtry-empty-mark" viewBox="0 0 96 96" aria-hidden="true"><g style="mix-blend-mode:multiply"><polygon points="51.5,63.2 12.4,55.7 11.5,18.6 42.7,5.0 72.7,35.3" fill="#6d3fd1" fill-opacity="0.20"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="54.1,81.9 34.6,47.9 56.5,19.3 87.5,28.1 83.8,71.0" fill="#1d5fd6" fill-opacity="0.18"></polygon></g><g style="mix-blend-mode:multiply"><polygon points="13.7,64.5 27.6,31.2 62.7,37.6 70.3,66.9 33.9,89.0" fill="#b0316e" fill-opacity="0.16"></polygon></g><circle cx="42" cy="60" r="17" fill="none" stroke="#9aa3b2" stroke-width="9"></circle><line x1="59" y1="16" x2="59" y2="82.5" stroke="#9aa3b2" stroke-width="9"></line></svg>
       <h2>No point selected</h2>
       <p>Search an address or click anywhere on the map to build a civic profile for that location.</p>
-      <p class="empty-state-lede">See your county, city, village or town, school districts, Wisconsin Senate and Assembly districts, ZIP code, and U.S. House district — plus who represents you.</p>
+      <p class="empty-state-lede">See your county, county supervisor district, township or city, school district, Iowa Senate and House districts, ZIP code, and U.S. House district — plus who represents you.</p>
     </div>
     <div id="groups-root" hidden></div>
     <!-- The results-panel foot: the document footer below is hidden by the
@@ -4185,13 +4188,12 @@ function initIowaExplorer() {
    * MAP
    * ======================================================================= */
 
-  // minZoom 7, not 9: the served area is no longer a metro. It now runs from the
-  // Wisconsin line to the Metro East — 4.29° of latitude — and at zoom 9 that
-  // needs 2,049 px of vertical map, so the coverage ring could not be seen whole
-  // on any screen. Zoom 7 fits it on a phone, and fits all of Illinois (where the
-  // statewide layers answer) on a desktop pane. maxZoom 19 matches what the CARTO
-  // tile layer below already declares; the map was capped a level under its own
-  // basemap.
+  // minZoom 7, not a metro-scale zoom: Iowa's own coverage is the whole state,
+  // 3.23° of latitude and 6.6° of longitude (METRO_BBOX) — at a tighter zoom
+  // the coverage ring could not be seen whole on a phone-sized viewport. Zoom 7
+  // fits the state on a phone and leaves room on a desktop pane. maxZoom 19
+  // matches what the CARTO tile layer below already declares; the map was
+  // capped a level under its own basemap.
   // The opening view: the whole served area, centred on it. The centre is
   // DERIVED from METRO_BBOX (worksheet-generated) rather than METRO_CENTER —
   // METRO_CENTER is the metro anchor the geocoder biases toward, which for a

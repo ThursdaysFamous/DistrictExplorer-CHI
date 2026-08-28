@@ -370,6 +370,49 @@ loaders, no new code beyond worksheet rows and layer registration. `min_register
 
 ## PR 10 — go-live
 
+> **Shipped 2026-08-27.** The mechanical checklist below (deploy exclude, sitemap, sync-fleet,
+> landing/privacy regeneration, history finalization) shipped exactly as planned — but making
+> `/ia/` genuinely live surfaced six real defects the dark instance's own gates had no way to
+> catch, since nothing had ever loaded these pages in a browser against the real sitemap before:
+> **(1)** `ia/index.html`'s hand-authored JSON-LD (`WebSite`/`Organization`/`WebApplication`),
+> its map `aria-label`, its empty-state teaser copy, and one code comment about the map's
+> `minZoom` were all uncorrected copies of Wisconsin's own text, left over from the PR 0 clone —
+> found by a `grep -rn "Wisconsin"` sweep of `ia/` run for the first time at go-live (the sweep
+> `docs/EXPANSION_GUIDE.md` §2.7 calls for, which PR 0 evidently ran incompletely). Fixed to
+> describe Iowa; the many other "Wisconsin"/"Chicago" hits in that sweep are legitimate —
+> `METRO_EXPLORERS`' own sibling entry, or ENGINE-fenced shared-code comments citing a real
+> fork as an example, never hand-edited. **(2)** `ia/faq.html` never existed — PR 0 deferred it
+> as "new hand-authored content, not this PR's scope," and no PR since had reason to create it —
+> so the sitemap row this PR was about to add would have been a live 404. Written now: ten
+> Iowa-accurate Q&A pairs (mirrored exactly in FAQPage JSON-LD, matching every sibling's own
+> count), composed from `wi/faq.html`'s shell via `scripts/compose_app.py` (newly registered in
+> `SUBPAGES["ia"]`). **(3)** `ia/og-image.png` was referenced by `index.html`, `sources.html` and
+> the new `faq.html` but was never generated — a 1200×630 placeholder now ships (violet ground,
+> wordmark, tagline), the same "simple placeholder art, real branding later" posture PR 0 used
+> for the app icons. **(4)** `ia/vendor/leaflet-maplibre-gl.js` (the same-origin MapLibre bridge
+> plugin every other instance vendors for itself) was never committed — the app degraded silently
+> to its raster-tile fallback, which is why no smoke test caught it. Copied byte-for-byte from
+> `wi/vendor/` (confirmed identical across all four siblings). **(5)** `ia/fonts/` did not exist
+> at all — all eighteen self-hosted Barlow/IBM Plex Mono `.woff2` files `index.html`, `faq.html`,
+> `sources.html` and `history.html` each declare `@font-face` rules for were missing, so every
+> Iowa page has been silently rendering in a browser's fallback font since PR 0. Copied from
+> `wi/fonts/` (confirmed byte-identical across siblings). None of (2)-(5) tripped any existing
+> gate because nothing before this PR ever served `ia/` pages against their real relative paths
+> in a browser with the sitemap driving navigation — `page_consistency_test.mjs` is what finally
+> caught all four, the moment `/ia/faq.html` and `/ia/history.html` first entered `sitemap.xml`.
+> **(6)** `ia/history.html` — and, it turns out, the already-live `wi/history.html` — carried no
+> Open Graph tags, no `.districtry-mark` brand element, and no "Why this exists" link, because
+> `scripts/build_history_page.py`'s template never had them; every OTHER sub-page type
+> (faq/sources) gets these from the shared `styles-subpage` ENGINE fence, but `history.html` uses
+> its own bespoke, simpler template that was never given the same treatment. This was invisible
+> for Wisconsin because `docs/IA_EXPANSION_PLAN.md` itself records that WI's own `history.html`
+> was never added to `sitemap.xml` — so `page_consistency_test.mjs`, which walks the sitemap,
+> had literally never visited a `history.html` page before this PR added Iowa's. Fixed at the
+> generator (og:title/og:image/og:description, a small inline `.districtry-mark` SVG, the
+> why-exists footer link), then regenerated — which correctly updated `wi/history.html` too,
+> fixing the same latent gap on Wisconsin's own already-public page as a direct, desirable
+> consequence of fixing the shared machinery at its root rather than hand-patching one output.
+
 Swap the PR 0 blanket `ia/**` deploy exclude for the granular set the other three instances use
 (`ia/data/state`, `ia/data/source`, `ia/scripts`, `ia/data/*.geojson`); add `ia` to the
 `for published in ny ca wi; do test -f "_site/$published/index.html"` presence loop. Add `/ia/`,

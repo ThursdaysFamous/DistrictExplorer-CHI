@@ -218,8 +218,10 @@ starve it forever.
   3. Fork-local branding rows per `EXPANSION_GUIDE.md` §4.2 (head meta/OG/JSON-LD/theme-color/
      favicon, masthead mark/wordmark, `:root` palette values, analytics).
   4. `sources.html` hand-mirrored palette (lines 140–154) re-pointed.
-  5. Assets + SW — **manifests + icons SHIPPED (2026-08-24)**; og-image and the head-snippet's
-     absolute `og:image` still open. The manifest was the one branded surface nothing generated,
+  5. Assets + SW — **manifests + icons SHIPPED (2026-08-24)**, **og-image SHIPPED (2026-08-28)**.
+     The head-snippet's `og:image` (`districtry/pwa/head-snippet.html`) is a paste-in reference
+     with no live consumer and still shows a relative path — a documentation-only loose end, not
+     a shipped-surface gap. The manifest was the one branded surface nothing generated,
      and it rotted exactly there: every other surface had said districtry since the rebrand while
      `il/manifest.webmanifest` still read `"Chicago District Explorer"` in the pre-rebrand navy
      `#0b3d91`, pointing at the old Chicago-flag star icons — so **installing to an Android home
@@ -236,7 +238,15 @@ starve it forever.
      `apple-mobile-web-app-title` (without which iOS labels the shortcut from `<title>` — the
      question-led SEO string, truncated mid-question).
   6. Tooling: `build_fonts.py` → self-hosted Barlow woff2s (no font CDN in production);
-     `build_og_image.mjs` rebuilt from `OG Card.dc.html`.
+     `build_og_image.mjs` rebuilt from `OG Card.dc.html` — **DONE (2026-08-28)**, triggered by
+     Iowa's launch: the script still rendered the pre-rebrand Chicago-flag design, so Iowa's
+     first pass at an og-image was hand-drawn instead of using the real one, and checking why
+     turned up Wisconsin's live og-image.png shipping `districtry/og-districtry.png` verbatim —
+     labeled "districtry / illinois". The rebuilt script takes an instance + label and renders
+     `OG Card.dc.html`'s actual design (same SVG shapes, same Barlow/Barlow Condensed type) using
+     that instance's own self-hosted fonts, no network dependency. Re-run for `ia` and `wi`; `il`,
+     `ny` and `ca` keep their existing images (Illinois's is this same design, correctly labeled;
+     NY/SF predate it and are their own pre-rebrand assets, out of scope here).
   7. **Dark mode** — its own proposal and approval (greenfield engine work).
   8. **Domain migration, last and independent:** districtry.com — CNAME ×3 forks, Pages custom
      domains/DNS, `metros.json` URLs + `--sync-fleet` regen everywhere, GA hostname gate,
