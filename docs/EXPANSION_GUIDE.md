@@ -1580,6 +1580,21 @@ the two overlap Part 5 is the shorter statement of the same rule.
   times implies five direct lines that do not exist, so it is hoisted to the board
   office and shown once. The test is mechanical — collect the distinct numbers, and
   if exactly one covers the whole board, it belongs to the board.
+- **FIX THE ROSTER, THEN FIX EVERY CARD THAT READS IT — the count is not always one.**
+  Iowa applied the switchboard rule above to `ia-county-officers.json` and its County
+  card and called it done, while a SECOND file carried the same people onto a second
+  card: `ia-supervisor-members.json` copied each supervisor's phone out of the officer
+  roster before the hoist, so the County Supervisor District card went on printing the
+  courthouse number under one name. That is strictly worse than the form the rule was
+  written against — where five identical numbers at least LOOK like a switchboard, one
+  number under one supervisor reads as their own line and nothing on the card
+  contradicts it. **A derived roster inherits the defect its parent was just cured of**,
+  and the mechanical test cannot see it, because the derived file shows one phone per
+  card and no repetition at all. So the guard belongs where the copy happens: the
+  supervisor builder now REFUSES to write if a member row arrives carrying a phone,
+  which makes a genuine per-person line something an operator has to admit rather than
+  something a loop inherits. Before closing out any roster fix, grep for every reader of
+  that file.
 - **READ THE TEXT OR READ THE LINK — decide per source, and never assume the link is
   the safer one.** Putnam's board page 404s on all five member profile links and
   points TWO of them at a member who has left the board; the visible text is

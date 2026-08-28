@@ -8739,6 +8739,7 @@ function initIowaExplorer() {
           seq: seq,
           member: member || null,
           memberSourceUrl: keyed ? keyed.sourceUrl : null,
+          boardPhone: keyed ? keyed.boardPhone : null,
           county: findPropCI(props, ["county"]),
           district: district,
           plantype: findPropCI(props, ["plantype"]),
@@ -8766,8 +8767,16 @@ function initIowaExplorer() {
       if (result.member && result.member.name) {
         var person = { name: String(result.member.name), badge: "Supervisor" };
         if (result.member.party) person.note = String(result.member.party);
-        if (result.member.phone) person.phone = String(result.member.phone);
+        // NO PHONE ON THIS ROW. Every county keyed here publishes ONE number
+        // for the whole board, which is the courthouse board office and not
+        // this supervisor's line — it rides the labelled row below instead of
+        // being presented as a direct line the reader does not have.
         wrap.appendChild(renderPersonRows([person]));
+        if (result.boardPhone) {
+          wrap.appendChild(renderLinkRow({
+            title: "Board office", phone: String(result.boardPhone)
+          }));
+        }
       }
       var rows = [];
       rows.push({
