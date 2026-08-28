@@ -304,6 +304,12 @@ PROVENANCE = [
         ),
     },
     {
+        "layer": "school-director-district",
+        "app_file": "ia-school-director-districts.json",
+        "source_url": "https://services.arcgis.com/vPD5PVLI6sfkZ5E4/arcgis/rest/services/IowaSchoolDirectorDistricts/FeatureServer/0",
+        "note": "716 school board director districts inside the 324 shipped school districts, from the Iowa Legislature's own ArcGIS org. LICENCE CC0 — carried on the ITEM (5d6e55f885c54dd282eb17daaca20740), NOT on the service, whose own licenseInfo is null and whose copyrightText is empty; query arcgis.com/sharing/rest/search for the service name before concluding an ArcGIS layer states no terms. 728 features are published: 10 are exact duplicates (Davis County and East Buchanan each publish every row twice) and 2 name districts stale in this layer. At-large boards are read from the publisher's own AT-LARGE label in DIST_NAME. Built by ia/scripts/build_ia_school_director_districts.py; operator-rebuilt, no weekly workflow (this is geometry, not a roster).",
+    },
+    {
         "layer": "school-site",
         "app_file": "ia-school-sites.json",
         "source_url": "https://services.arcgis.com/vPD5PVLI6sfkZ5E4/arcgis/rest/services/IowaSchoolBldgs/FeatureServer/0",
