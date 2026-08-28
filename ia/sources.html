@@ -834,7 +834,7 @@ table.matrix code {
   <section class="matrix-section">
     <h2>The layer matrix</h2>
     <!-- ==== GENERATED:BEGIN layer-matrix ==== -->
-      <p class="matrix-lede">17 layers — 6 political and legislative, 2 public safety, 4 schools, 5 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
+      <p class="matrix-lede">18 layers — 6 political and legislative, 2 public safety, 5 schools, 5 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
       <nav class="matrix-nav" aria-label="Jump to a layer group">
         <a href="#political">Political &amp; legislative</a>
         <a href="#safety">Public safety</a>
@@ -962,7 +962,7 @@ table.matrix code {
       </section>
 
       <section class="matrix-group" id="schools">
-        <h2>Schools <span class="matrix-count">4 layers</span></h2>
+        <h2>Schools <span class="matrix-count">5 layers</span></h2>
         <p class="matrix-blurb">The district, the attendance zone, and the schools nearest the point.</p>
         <div class="matrix-wrap">
           <table class="matrix">
@@ -1003,6 +1003,17 @@ table.matrix code {
                 </td>
                 <td data-label="Who it names">Identity-only: the board is genuinely ELECTED (Iowa Code 260C.11 — one trustee per director district, elected by that district's own electors), but no single statewide roster names all 124 trustees — the state trustees' association's own page publishes only 15 rows (one seat per college), and each college names its own trustees on its own site instead. The sub-district geometry a real roster would need is itself short one polygon (Des Moines Area's District 2), so a districted card is deferred rather than built on a source with a known hole.</td>
                 <td data-label="Where it applies">Iowa — statewide, all 15 merged areas.</td>
+              </tr>
+              <tr id="layer-cc-director-district">
+                <th scope="row"><span class="layer-name">CC Director District</span><code>cc-director-district</code></th>
+                <td data-label="What it answers">The community college director district covering the point — the sub-district its board of trustees is elected from.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://services.arcgis.com/vPD5PVLI6sfkZ5E4/arcgis/rest/services/CC_DD2023/FeatureServer/0" target="_blank" rel="noopener">Iowa Dept. of Education, Division of Community Colleges — CC_DirectorDistricts_FINAL, effective 2023-08-01, 123 features across 15 colleges. Its item (b89cf40cef40497e80ae8eb0a6e6d22f) states an EMPTY licence — terms UNSTATED, which is not the same as permissive, and NOT the CC0 the school-director layer's item carries</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">None. Trustees are elected per director district under Iowa Code 260C.11, but there is no statewide roster and each of the 15 colleges publishes its own board its own way — 6 of 15 name a numbered district on a discoverable page, one is captcha-fronted and one refuses this client. Measured per college in ia/WATCH.md rather than half-joined.</td>
+                <td data-label="Where it applies">Iowa — all 15 merged areas, tiled completely. 123 polygons cover a parent layer that seats 124 directors, and the whole difference is Des Moines Area: this publisher draws it as EIGHT districts numbered 1 and 3-9, balancing them against its own IDEAL of the merged area over eight. It is not a hole — the uncovered share of that college is 0.11%, lower than most of the fifteen. The two publishers disagree about the COUNT, not the ground, and this app resolves neither.</td>
               </tr>
               <tr id="layer-school-site">
                 <th scope="row"><span class="layer-name">School Location</span><code>school-site</code></th>

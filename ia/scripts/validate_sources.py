@@ -310,6 +310,12 @@ PROVENANCE = [
         "note": "716 school board director districts inside the 324 shipped school districts, from the Iowa Legislature's own ArcGIS org. LICENCE CC0 — carried on the ITEM (5d6e55f885c54dd282eb17daaca20740), NOT on the service, whose own licenseInfo is null and whose copyrightText is empty; query arcgis.com/sharing/rest/search for the service name before concluding an ArcGIS layer states no terms. 728 features are published: 10 are exact duplicates (Davis County and East Buchanan each publish every row twice) and 2 name districts stale in this layer. At-large boards are read from the publisher's own AT-LARGE label in DIST_NAME. Built by ia/scripts/build_ia_school_director_districts.py; operator-rebuilt, no weekly workflow (this is geometry, not a roster).",
     },
     {
+        "layer": "cc-director-district",
+        "app_file": "ia-cc-director-districts.json",
+        "source_url": "https://services.arcgis.com/vPD5PVLI6sfkZ5E4/arcgis/rest/services/CC_DD2023/FeatureServer/0",
+        "note": "123 community college director districts (Iowa Code 260C.11) inside the 15 merged areas, effective 2023-08-01. THE SERVICE'S NAME IS NOT ITS SLUG: the URL says CC_DD2023, the service calls itself CC_DirectorDistricts_FINAL, and an ArcGIS item search on the slug returns unrelated global items — search the NAME (item b89cf40cef40497e80ae8eb0a6e6d22f, owner education_iowa). Its licence is EMPTY, i.e. terms UNSTATED, which is NOT the CC0 the school-director layer's item carries; the two were checked the same way and differ. Joined to the parent on the numeric key with one asserted Southeastern 8->16 remap. Registered BESPOKE rather than through the polygon factory: the children encode the 2023 merged-area plan and the parent layer the 2026 update, so in ~0.2% of ground the two name different colleges and the card must resolve both and decline rather than contradict its own parent. Built by ia/scripts/build_ia_cc_director_districts.py; operator-rebuilt, no weekly workflow (geometry, not a roster).",
+    },
+    {
         "layer": "school-site",
         "app_file": "ia-school-sites.json",
         "source_url": "https://services.arcgis.com/vPD5PVLI6sfkZ5E4/arcgis/rest/services/IowaSchoolBldgs/FeatureServer/0",
