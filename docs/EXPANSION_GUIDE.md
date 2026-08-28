@@ -1457,6 +1457,31 @@ the two overlap Part 5 is the shorter statement of the same rule.
   The order of operations is the whole lesson: Bureau's $150 quote is still a
   block because its permission e-mail does not exist yet.
 
+- **AND THE INVERSE, WHICH COSTS A WHOLE LAYER WHEN YOU GET IT WRONG: "ALL RIGHTS
+  RESERVED" ON AN ITEM CAN BE THE TEXT OF A REQUIRED NOTICE RATHER THAN A REFUSAL OF
+  USE.** The rule above says read the terms before you build; this is the same rule
+  pointing the other way, and it is easier to miss because stopping *feels* like the
+  careful choice. The City of Des Moines's ward layer (2026-08-28) carries item
+  `licenseInfo` opening "© Copyright City of Des Moines, Iowa 2025. All rights
+  reserved." Read alone that is the Piatt answer — an assertion of rights with no grant
+  — and this project nearly recorded it as a licensing block. The city's own **Terms and
+  Conditions of Use** say the opposite: applications using its portal data "must include
+  the following disclaimer", and then quote that same string. The city contemplates
+  applications using the data and states one condition for doing so. **An item's
+  `licenseInfo` is where the licence lives; it is not always where the GRANT lives**, and
+  a copyright notice quoted as a required attribution reads character-for-character like
+  a copyright notice asserted as a prohibition.
+  **Concretely:** before recording a `blocked` gap on the strength of a rights string,
+  look for the portal's own terms/licence page — on an ArcGIS Hub site it is a page item
+  the site config names (`slug: "terms"`), reachable through the sharing API even when
+  the site itself renders client-side. If the terms impose a CONDITION rather than a
+  prohibition, satisfy the condition and ship: Des Moines's disclaimer travels **in the
+  data file** and renders **on the card**, not only in a builder comment a reader never
+  opens, and the layer's worksheet row quotes it so the sources page carries it too.
+  Watch for what else those terms say — Des Moines's include a **Right to Discontinue
+  Feeds** clause, which is why that layer's weekly workflow re-fetches the service
+  instead of assuming a pre-built file's source persists.
+
 - **An AT-LARGE board is county-card rows, and the mechanism now exists — use it.** §1.5
   called this shape long before anything implemented it. Monroe and Randolph (2026-08-02)
   are the reference pair and Pike, Brown, Calhoun and Putnam (also 2026-08-02) the larger
