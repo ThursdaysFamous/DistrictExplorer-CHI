@@ -118,6 +118,7 @@ ROSTER_FILES = {
     "ia-senate-members.json": 45,  # Senate roster from Open States ia.csv + legis.iowa.gov enrichment, refreshed weekly by update-ia-legislature-roster.yml; floor tolerates transient vacancies (50 seats).
     "ia-house-members.json": 93,  # House roster from Open States ia.csv + legis.iowa.gov enrichment, refreshed weekly by update-ia-legislature-roster.yml; floor tolerates transient vacancies (100 seats).
     "ia-county-board-directory.json": 98,  # One row per county covered by ia-supervisor-districts.json: board size read back from the shipped geometry, plus the county's own official page (Iowa State Association of Counties' member directory) for the card's footer link. Built by ia/scripts/build_ia_county_board_directory.py; not a roster of people — Iowa publishes none statewide.
+    "ia-county-auditors.json": 99,  # All 99 county auditors (name, party where published — 5 of 99 carry none, office address, phone; no e-mail is published), from the Iowa State Association of County Auditors' own directory. Built by ia/scripts/ia_county_auditor_scraper.py + build_ia_county_auditors.py, refreshed weekly by update-ia-county-auditor-roster.yml.
     "coverage-gaps.json": 0,  # The Data gaps panel's content; one recorded gap (Jones County, absent from the county-supervisor source layer).
 }
 

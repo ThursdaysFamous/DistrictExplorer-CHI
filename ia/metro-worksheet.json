@@ -57,8 +57,9 @@
       "id": "county", "label": "County", "group": "geography", "area_rank": 3,
       "rank_note": "99 counties, pre-built from TIGERweb; the fork's offline anchor layer",
       "source": {
-        "answers": "Which county contains the point.",
+        "answers": "Which county contains the point, and its county auditor (Iowa's county election commissioner, Iowa Code 47.2).",
         "boundary": [{ "label": "U.S. Census TIGERweb — State_County, layer 1, pre-built for the state and shipped with the app", "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer/1" }],
+        "people": "ia-county-auditors.json, rebuilt weekly by CI from the Iowa State Association of County Auditors' own directory (https://iowaauditors.org/find/directory/) — one entry per county: name, party where published (94 of 99; the other 5 carry no party icon on the source page and ship with party omitted rather than guessed), office address, phone. No e-mail is published anywhere on the page.",
         "applies": "Iowa — statewide."
       }
     },
@@ -196,6 +197,7 @@
       { "file": "ia-senate-members.json", "min_keys": 45, "note": "Senate roster from Open States ia.csv + legis.iowa.gov enrichment, refreshed weekly by update-ia-legislature-roster.yml; floor tolerates transient vacancies (50 seats)." },
       { "file": "ia-house-members.json", "min_keys": 93, "note": "House roster from Open States ia.csv + legis.iowa.gov enrichment, refreshed weekly by update-ia-legislature-roster.yml; floor tolerates transient vacancies (100 seats)." },
       { "file": "ia-county-board-directory.json", "min_keys": 98, "note": "One row per county covered by ia-supervisor-districts.json: board size read back from the shipped geometry, plus the county's own official page (Iowa State Association of Counties' member directory) for the card's footer link. Built by ia/scripts/build_ia_county_board_directory.py; not a roster of people — Iowa publishes none statewide." },
+      { "file": "ia-county-auditors.json", "min_keys": 99, "note": "All 99 county auditors (name, party where published — 5 of 99 carry none, office address, phone; no e-mail is published), from the Iowa State Association of County Auditors' own directory. Built by ia/scripts/ia_county_auditor_scraper.py + build_ia_county_auditors.py, refreshed weekly by update-ia-county-auditor-roster.yml." },
       { "file": "coverage-gaps.json", "min_keys": 0, "note": "The Data gaps panel's content; one recorded gap (Jones County, absent from the county-supervisor source layer)." }
     ]
   },
