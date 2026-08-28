@@ -8624,6 +8624,13 @@ function initIowaExplorer() {
   var loadCountyBoardDirectory = makeCached(function () {
     return fetchJSONWithRetry("data/app/ia-county-board-directory.json", {}, 2);
   });
+  // Which supervisor holds THIS district — plan 3 counties only, and only
+  // those that publish the keying themselves. A county absent from this file
+  // still answers with its district, its board size and its county link, and
+  // its supervisors are still named (unkeyed) on the County card.
+  var loadIaSupervisorMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/ia-supervisor-members.json", {}, 2);
+  });
 
   registerLayer({
     id: "county-supervisor",
@@ -8653,17 +8660,24 @@ function initIowaExplorer() {
       // with no footer link rather than an error card.
       return Promise.all([
         queryFeatureAt(loadSupervisorDistricts, point),
-        loadCountyBoardDirectory().catch(function () { return null; })
+        loadCountyBoardDirectory().catch(function () { return null; }),
+        loadIaSupervisorMembers().catch(function () { return null; })
       ]).then(function (parts) {
         var feature = parts[0];
         if (!feature) return null;
         var props = feature.properties || {};
         var fips = findPropCI(props, ["fips"]);
         var entry = (parts[1] && fips != null) ? parts[1][String(fips)] : null;
+        var district = findPropCI(props, ["district"]);
+        var keyed = (parts[2] && fips != null) ? parts[2][String(fips)] : null;
+        var member = (keyed && district != null && keyed.districts)
+          ? keyed.districts[String(district)] : null;
         return {
           seq: seq,
+          member: member || null,
+          memberSourceUrl: keyed ? keyed.sourceUrl : null,
           county: findPropCI(props, ["county"]),
-          district: findPropCI(props, ["district"]),
+          district: district,
           plantype: findPropCI(props, ["plantype"]),
           numDistricts: findPropCI(props, ["numdistricts"]),
           population: findPropCI(props, ["population"]),
@@ -8680,6 +8694,18 @@ function initIowaExplorer() {
       return result.district != null ? "District " + String(result.district) : "Unknown district";
     },
     render: function (result) {
+      var wrap = cardEl("div", "card-flush");
+      // The representative first — the header pill already carries "District
+      // N". Only a plan 3 county can reach here with a member: under plan 1
+      // there are no districts, and under plan 2 supervisors are elected
+      // countywide, so naming one for a district would imply an election that
+      // did not happen.
+      if (result.member && result.member.name) {
+        var person = { name: String(result.member.name), badge: "Supervisor" };
+        if (result.member.party) person.note = String(result.member.party);
+        if (result.member.phone) person.phone = String(result.member.phone);
+        wrap.appendChild(renderPersonRows([person]));
+      }
       var rows = [];
       rows.push({
         label: "County",
@@ -8711,7 +8737,8 @@ function initIowaExplorer() {
       if (result.population != null) {
         rows.push({ label: "2020 population", value: Number(result.population).toLocaleString() });
       }
-      return renderFieldStack(rows);
+      wrap.appendChild(renderFieldStack(rows));
+      return wrap;
     },
     primaryLink: function (result) {
       var url = safeHttpUrl(result.sourceUrl || result.countyUrl);
