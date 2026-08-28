@@ -3093,17 +3093,14 @@
   },
   "sheriff": {
    "name": "Dennis Stuart",
-   "party": "Republican",
-   "url": "https://www.washburnsheriff.org/",
-   "phone": "(715) 468-4700",
-   "checked": true
+   "party": "Republican"
   },
   "coroner": {
    "name": "Angela Pank",
    "party": "Republican",
    "title": "Coroner"
   },
-  "contactChecked": 5
+  "contactChecked": 4
  },
  "55131": {
   "county": "Washington",
