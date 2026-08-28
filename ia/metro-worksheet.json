@@ -113,7 +113,19 @@
       }
     },
     {
-      "id": "county-subdivision", "label": "County Subdivision", "group": "geography", "area_rank": 8,
+      "id": "community-college", "label": "Community College", "group": "schools", "area_rank": 8,
+      "rank_note": "15 merged areas, shipped as published (no dissolve) — larger on average than a school district, ranked beside it",
+      "source": {
+        "answers": "The community college merged area covering the point, and its director-district count.",
+        "boundary": [
+          { "label": "Iowa Legislature's own ArcGIS organization — CC_2026update layer (edited 2026-07-02, the current vintage: it fixes a confirmed coding error the older CommColleges2020 layer carries for Southeastern Community College), pre-built by ia/scripts/build_ia_community_colleges.py, witnessed against a second LSA layer on name set, 2020 census population (sums to Iowa's exact 3,190,369), and director-district count (sums to 124)", "url": "https://services.arcgis.com/vPD5PVLI6sfkZ5E4/arcgis/rest/services/CC_2026update/FeatureServer/0" }
+        ],
+        "people": "Identity-only: the board is genuinely ELECTED (Iowa Code 260C.11 — one trustee per director district, elected by that district's own electors), but no single statewide roster names all 124 trustees — the state trustees' association's own page publishes only 15 rows (one seat per college), and each college names its own trustees on its own site instead. The sub-district geometry a real roster would need is itself short one polygon (Des Moines Area's District 2), so a districted card is deferred rather than built on a source with a known hole.",
+        "applies": "Iowa — statewide, all 15 merged areas."
+      }
+    },
+    {
+      "id": "county-subdivision", "label": "County Subdivision", "group": "geography", "area_rank": 9,
       "rank_note": "1,663 records tiling the state, live from TIGERweb (no data/app file) — 1,600 civil townships, 62 incorporated cities that double as their own subdivision record, and one federal reservoir carried as unorganized territory",
       "source": {
         "answers": "The civil township, or incorporated-city subdivision record, covering the point — and its type.",
@@ -125,7 +137,7 @@
       }
     },
     {
-      "id": "municipality", "label": "City", "group": "geography", "area_rank": 9,
+      "id": "municipality", "label": "City", "group": "geography", "area_rank": 10,
       "rank_note": "939 incorporated cities, live from TIGERweb (no data/app file) — small dense pockets within the county-subdivision fabric, so smaller on average than a civil township despite fewer records",
       "source": {
         "answers": "The incorporated city covering the point, if any.",
@@ -137,7 +149,7 @@
       }
     },
     {
-      "id": "zip-code", "label": "ZIP Code", "group": "geography", "area_rank": 10,
+      "id": "zip-code", "label": "ZIP Code", "group": "geography", "area_rank": 11,
       "rank_note": "Census ZCTAs by Iowa envelope (no data/app file) — 1,443 features measured in-envelope, smaller on average than an incorporated city",
       "source": {
         "answers": "The ZIP Code Tabulation Area (ZCTA) covering the point.",
@@ -148,7 +160,7 @@
       }
     },
     {
-      "id": "precinct", "label": "Precinct", "group": "political", "area_rank": 11,
+      "id": "precinct", "label": "Precinct", "group": "political", "area_rank": 12,
       "rank_note": "1,660 election precincts, pre-built (mapshaper-simplified from the Legislature's own ArcGIS layer) — identity-only, no roster; ranked with the other fine-grained political boundaries",
       "source": {
         "answers": "The election precinct covering the point, and its county.",
@@ -159,7 +171,7 @@
       }
     },
     {
-      "id": "police-station", "label": "Police Station", "group": "safety", "area_rank": 12,
+      "id": "police-station", "label": "Police Station", "group": "safety", "area_rank": 13,
       "rank_note": "Nearest-3 point layer (449 stations in the state envelope) — not a containment boundary; ranked with the amenity points",
       "source": {
         "answers": "The three nearest police stations, straight-line distance.",
@@ -170,7 +182,7 @@
       }
     },
     {
-      "id": "fire-station", "label": "Fire Station", "group": "safety", "area_rank": 13,
+      "id": "fire-station", "label": "Fire Station", "group": "safety", "area_rank": 14,
       "rank_note": "Nearest-3 point layer (1,262 stations in the state envelope) — denser than the police set, so ranked after it",
       "source": {
         "answers": "The three nearest fire stations, straight-line distance.",
@@ -181,7 +193,7 @@
       }
     },
     {
-      "id": "school-site", "label": "School Location", "group": "schools", "area_rank": 14,
+      "id": "school-site", "label": "School Location", "group": "schools", "area_rank": 15,
       "rank_note": "Nearest-3 point layer (1,321 public school buildings, pre-built) — not a containment boundary; ranked with the amenity points",
       "source": {
         "answers": "The three nearest public school buildings, straight-line distance.",
@@ -192,7 +204,7 @@
       }
     },
     {
-      "id": "post-office", "label": "Post Office", "group": "geography", "area_rank": 15,
+      "id": "post-office", "label": "Post Office", "group": "geography", "area_rank": 16,
       "rank_note": "Nearest-3 point layer, straight-line distance — not a containment boundary, ranked last",
       "source": {
         "answers": "The three nearest post offices, straight-line distance.",
@@ -227,7 +239,8 @@
       { "file": "ia-school-districts.json", "min_features": 324, "max_features": 324, "note": "324 unified school districts, built by ia/scripts/build_ia_school_districts.py: TIGERweb's 325 dissolved (Orient-Macksburg into Nodaway Valley) and witnessed by name against the Dept. of Education's own current layer (2,000-point agreement gate)." },
       { "file": "ia-school-sites.json", "min_features": 1321, "max_features": 1321, "note": "1,321 public school buildings, pre-built by ia/scripts/build_ia_school_sites.py from the Iowa Legislature's own ArcGIS org's IowaSchoolBldgs layer (paginated past its 1,000-record cap)." },
       { "file": "ia-precincts.json", "min_features": 1660, "max_features": 1660, "note": "1,660 election precincts across all 99 counties, pre-built by ia/scripts/build_ia_precincts.py from the Iowa Legislature's own ArcGIS org's Iowa_Precincts layer (Visvalingam-simplified from ~18MB raw to under 3MB, 2,000-point agreement gate; polling-place fields never fetched)." },
-      { "file": "ia-judicial-districts.json", "min_features": 8, "max_features": 8, "note": "8 judicial election districts, whole-county unions dissolved from state-counties.json by ia/scripts/build_ia_judicial_district.py, per Iowa Code SS602.6107/602.6109 and double-witnessed at build time against the LSAFiscal organization's own published district polygons." }
+      { "file": "ia-judicial-districts.json", "min_features": 8, "max_features": 8, "note": "8 judicial election districts, whole-county unions dissolved from state-counties.json by ia/scripts/build_ia_judicial_district.py, per Iowa Code SS602.6107/602.6109 and double-witnessed at build time against the LSAFiscal organization's own published district polygons." },
+      { "file": "ia-community-colleges.json", "min_features": 15, "max_features": 15, "note": "15 community college merged areas, shipped as published (no dissolve) from the Iowa Legislature's own ArcGIS org by ia/scripts/build_ia_community_colleges.py, witnessed against a second LSA layer on name set, 2020 census population (3,190,369) and director-district count (124)." }
     ],
     "rosters": [
       { "file": "congress-roster.json", "min_keys": 4, "note": "U.S. House roster, refreshed weekly by update-ia-congress-roster.yml." },

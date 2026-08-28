@@ -834,7 +834,7 @@ table.matrix code {
   <section class="matrix-section">
     <h2>The layer matrix</h2>
     <!-- ==== GENERATED:BEGIN layer-matrix ==== -->
-      <p class="matrix-lede">15 layers — 6 political and legislative, 2 public safety, 2 schools, 5 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
+      <p class="matrix-lede">16 layers — 6 political and legislative, 2 public safety, 3 schools, 5 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
       <nav class="matrix-nav" aria-label="Jump to a layer group">
         <a href="#political">Political &amp; legislative</a>
         <a href="#safety">Public safety</a>
@@ -962,7 +962,7 @@ table.matrix code {
       </section>
 
       <section class="matrix-group" id="schools">
-        <h2>Schools <span class="matrix-count">2 layers</span></h2>
+        <h2>Schools <span class="matrix-count">3 layers</span></h2>
         <p class="matrix-blurb">The district, the attendance zone, and the schools nearest the point.</p>
         <div class="matrix-wrap">
           <table class="matrix">
@@ -981,6 +981,17 @@ table.matrix code {
                 </td>
                 <td data-label="Who it names"><span class="matrix-none">—</span></td>
                 <td data-label="Where it applies">Iowa — statewide, all 324 current districts.</td>
+              </tr>
+              <tr id="layer-community-college">
+                <th scope="row"><span class="layer-name">Community College</span><code>community-college</code></th>
+                <td data-label="What it answers">The community college merged area covering the point, and its director-district count.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://services.arcgis.com/vPD5PVLI6sfkZ5E4/arcgis/rest/services/CC_2026update/FeatureServer/0" target="_blank" rel="noopener">Iowa Legislature's own ArcGIS organization — CC_2026update layer (edited 2026-07-02, the current vintage: it fixes a confirmed coding error the older CommColleges2020 layer carries for Southeastern Community College), pre-built by ia/scripts/build_ia_community_colleges.py, witnessed against a second LSA layer on name set, 2020 census population (sums to Iowa's exact 3,190,369), and director-district count (sums to 124)</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">Identity-only: the board is genuinely ELECTED (Iowa Code 260C.11 — one trustee per director district, elected by that district's own electors), but no single statewide roster names all 124 trustees — the state trustees' association's own page publishes only 15 rows (one seat per college), and each college names its own trustees on its own site instead. The sub-district geometry a real roster would need is itself short one polygon (Des Moines Area's District 2), so a districted card is deferred rather than built on a source with a known hole.</td>
+                <td data-label="Where it applies">Iowa — statewide, all 15 merged areas.</td>
               </tr>
               <tr id="layer-school-site">
                 <th scope="row"><span class="layer-name">School Location</span><code>school-site</code></th>

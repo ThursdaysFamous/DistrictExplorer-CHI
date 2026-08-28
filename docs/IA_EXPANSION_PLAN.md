@@ -528,6 +528,42 @@ phase 2 must reach into that geometry early. The most complex remaining phase-2 
 possibly worth its own short research pass before a PR is written rather than implementing straight
 from this record.
 
+**Shipped 2026-08-28 (PR 6), after that research pass.** The dedicated pass resolved everything the
+note above left open, and corrected two of its own premises along the way. **The boundary revision
+question is answered, not merely gated both ways**: `CC_Boundaries_REV2026` turned out to be a LAYER
+name, not the service name — the service is `CC_2026update`, and querying
+`.../CC_Boundaries_REV2026/FeatureServer` (rather than `.../CC_2026update/FeatureServer/0`) 400s. The
+newer layer is shipped for a confirmed reason rather than a guess: it recodes Southeastern Community
+College from the older layer's "08" to "16", and Southeastern's own institutional history page states
+it was chartered in 1965 as "Merged Area XVI" — corroborated independently by the trustees'
+association's own I-VII/IX-XVI numbering (Iowa's original Merged Area 8 was dissolved into its
+neighbors decades ago; no "VIII" survives in current use anywhere). No primary legislative document
+explains the revision — the evidence (both layers edited within 2.3 minutes of each other, review notes
+about aligning the CC boundary to school-district lines rather than about population or reorganization)
+points to a routine LSA GIS data-accuracy pass, recorded as an inference, not a citation.
+**`ccforiowa.org`'s "124 Trustees" is NOT a 124-row roster** — the research corrected this before any
+code was written: that page publishes exactly 15 rows, one representative per college (its own
+governing table), with "124 Trustees" appearing only as prose on the same page. The real per-trustee
+rosters are the 15 individual colleges' own sites — DMACC, Kirkwood and Iowa Western were each
+confirmed live to publish a clean, complete, per-district table — meaning a real roster needs 15
+separate scrapers, not one. **The 124-vs-123 mismatch is fully resolved, not merely a one-off to
+reconcile**: `CC_DD2023` (the 123-feature sub-district layer) is short exactly one polygon, Des Moines
+Area's own District 2 — confirmed by DMACC's site naming 9 sitting trustees across Districts 1-9 while
+the layer carries only 8 Des Moines Area features, and independently by the LSA's own
+`NumberofDirectorDistricts` field, which gives DMACC's true count as 9 and sums to exactly 124 across
+all 15 colleges statewide. **Given both of those findings, the design decision resolves in favor of
+identity-only, matching Iowa's own `school-district-unified` precedent exactly**: shipping a districted
+card today would mean either fabricating Des Moines Area's missing seat or misrepresenting it as
+unrepresented territory, and no single roster source exists to populate 124 individual trustees even if
+the geometry were complete. `cc-director-district` stays deferred, now for a measured reason rather than
+an open question. Three independent witnesses gate the build exactly, all at build time: the 15 college
+names match a second LSA layer one for one, that layer's population sums to Iowa's exact 2020 census
+total (3,190,369), and its director-district count sums to 124. A card for each college links that
+specific college's own site (15 domains, each verified live — content-matched where reachable, and
+where blocked, confirmed via a recognized access-control signature already on record elsewhere in this
+fleet: `indianhills.edu` behind a genuine Cloudflare managed challenge, `nwicc.edu` behind the
+`sgcaptcha`/202 gate this project has already named for two Illinois counties).
+
 `school-site` (Iowa DE `IowaSchoolBldgs` — CONFIRMED 1,321 features, `licenseInfo` null, edited
 2026-07-29, genuinely current). **A NAMING TRAP, confirmed live**: the service's own internal title is
 "PublicSchoolBldgs", and querying that STRING as a slug returns a completely different, stale service
