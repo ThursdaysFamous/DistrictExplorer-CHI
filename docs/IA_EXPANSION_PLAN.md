@@ -599,6 +599,51 @@ Playwright rung (the Kendall/McHenry-class ladder), untested in this pass. Neith
 a recorded gap yet — attempt the browser rung before deciding either way. Sequenced inside or just
 after PR 6's window.
 
+**Attempted 2026-08-28, after PR 6. THE PLAYWRIGHT RUNG ITSELF DOES NOT WORK IN THIS SANDBOX FOR THIS
+HOST** — a stronger block than the documented Leaflet/MapLibre CDN case: `page.goto("https://
+silo.knack.com/directory")` fails `net::ERR_CONNECTION_RESET` even with Chromium launched with an
+explicit `proxy: { server: ... }` pointed at this environment's own `HTTPS_PROXY`, where a plain `curl`
+to the same URL succeeds (curl honours `HTTPS_PROXY`; this sandbox's Chromium does not honour an
+explicit launch-time proxy option for arbitrary third-party hosts either, only the documented CDN
+workaround's same-origin `page.route` substitution — there is no live-browser route to this host from
+here at all). **CURL, WITH THE RIGHT HEADERS, SUCCEEDED WHERE THE BROWSER COULD NOT REACH IT**: the
+`api.knack.com` host in the note above was itself imprecise — the app's own boot config (fetched from
+the embed's thin loader HTML) declares `api_subdomain = 'us-api'`, so requests belong on
+`us-api.knack.com` — but that alone still 401'd. The actual missing piece was a header, not a host:
+Knack's own client sends `X-Knack-REST-API-Key: knack` (the literal string "knack" — a documented
+placeholder value, not a real secret) for anonymous, view-scoped record access, together with a
+`Referer`/`Origin` matching the embed's own origin. With both, `GET https://us-api.knack.com/v1/pages/
+scene_120/views/view_231/records` returns HTTP 200 with real, paginated data — 776 libraries total.
+Knack's own public, unauthenticated application-schema endpoint
+(`GET /v1/applications/5adf7c79596212286f183285`, 557 KB, no key needed) is what confirmed
+`scene_120`/`view_231`/`object_8` were the right ids in the first place (the original note's guesses
+were correct) and let every OTHER scene/view in the 85-scene app be enumerated — the large majority sit
+on `staff*`/`admin*`-slugged scenes (edit/add forms, internal detail views) that are a separate,
+non-public administrative area and were deliberately never probed, matching this project's own
+never-work-around-an-access-control posture; only `scene_120` (slug `directory`) and `scene_130` (slug
+`library1a`, reached by the SAME public page's own hash routing, confirmed `authenticated: false` in
+the schema like `scene_120`) were tried, and only the former answered.
+
+**THE ONE GENUINELY PUBLIC VIEW DOES NOT CARRY WHAT A NEAREST-N CARD NEEDS, AND THAT IS NOW A MEASURED
+FACT RATHER THAN AN OPEN QUESTION.** `view_231`'s records expose exactly 8 real fields: Library Name,
+Agency, City, County, Director/Administrator, Director email, Library Telephone Number, and an internal
+District Office region code — no street address, no coordinates. Cross-checked against `object_8`'s
+full 158-field schema (reachable only because the app-schema endpoint is itself public, not because any
+object-level record endpoint was tried): the object DOES define "Physical Location (street address)"
+and "Latitude" fields (no matching "Longitude" field found under any name), proving the State Library's
+own system tracks more than the public embed exposes — the state drew its own public/private line
+narrower than "does this data exist," and this project's own convention is to read fields as scoped by
+the VIEW that serves them, never by what the underlying object happens to also contain. Every sibling
+`library` layer in this fleet (Chicago, NYC, SF, Wisconsin) is a NEAREST-N proximity card built from
+real building-level coordinates; a per-county roster list was considered as a different shape this
+County field could support, and rejected — it would answer a different question than every other
+`library` card in the fleet ("every library in your whole county" against "the nearest 3, straight-line
+distance"), and 776 libraries across 99 counties skew heavily toward the handful of urban counties,
+risking a card that is a wall of names in exactly the places most readers would open it. **RECORDED AS
+A GAP, not a retry candidate**: reached, not merely "couldn't reach it" — the public boundary the state
+drew itself excludes exactly the field this concept's own established shape needs. Phase 2 closes
+without `library`.
+
 County card gains the **auditor**, Iowa's county election commissioner (Iowa Code 47.2 — CONFIRMED,
 was ASSERTED): `iowaauditors.org/find/directory/` — CONFIRMED, 99 rows embedded directly in
 server-rendered HTML, each carrying name, **party as a CSS icon class** (`fa-republican`/`fa-democrat`
