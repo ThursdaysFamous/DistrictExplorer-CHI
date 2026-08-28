@@ -508,8 +508,30 @@ def resolves(host, attempts=3):
     return False, last
 
 
-def hollow_body(url):
-    """Does this 200 actually carry a page? Returns a detail string, or None.
+# A page that forwards a browser onward the instant it loads. Both spellings
+# appear in the wild: `content="0; url=x"` and a bare `content="0;x"`.
+META_REFRESH_RE = re.compile(
+    r"""<meta[^>]+http-equiv\s*=\s*["']?refresh["']?[^>]*content\s*=\s*["']([^"']*)["']""",
+    re.I)
+
+
+def meta_refresh_target(text, url):
+    """Absolute URL this HTML instantly forwards a browser to, or None."""
+    m = META_REFRESH_RE.search(text)
+    if not m:
+        return None
+    content = m.group(1)
+    at = re.search(r"""url\s*=\s*["']?([^"'\s;]+)""", content, re.I)
+    if not at:
+        # The bare form: everything after the delay, if it looks like a target.
+        _, _, rest = content.partition(";")
+        rest = rest.strip().strip('"\'')
+        at = re.match(r"(\S+)", rest) if rest else None
+    return urllib.parse.urljoin(url, at.group(1).strip()) if at else None
+
+
+def peek_body(url):
+    """(size, first few KB of text) for an HTML-ish answer, else None.
 
     Reads at most HOLLOW_PEEK_BYTES so a megabyte PDF costs nothing, and
     measures only HTML-ish answers — a 400-byte SVG or a small PDF is a
@@ -536,9 +558,38 @@ def hollow_body(url):
         size = int(declared) if declared is not None else len(head)
     except ValueError:
         size = len(head)
+    return size, head.decode("utf-8", "replace")
+
+
+def hollow_body(url, followed=False):
+    """Does this 200 actually carry a page? Returns a detail string, or None.
+
+    A SMALL PAGE THAT IS A META REFRESH IS NOT HOLLOW — it is a redirect, and
+    the reader lands wherever it points. `tigerweb.geo.census.gov/` is 411
+    bytes of `<meta http-equiv="REFRESH" content="0; url=tigerwebmain/…">`,
+    titled "TIGERweb Redirect", and every browser lands on the real TIGERweb
+    page; reporting it as a link that "answers nothing" told a maintainer to
+    replace a working citation of the Census's own service root — cited from
+    five instances' pages. So one hop is followed and the DESTINATION is
+    measured by the same rules, which keeps the parking-lander catches this
+    test exists for: Morris and Henderson forward with `window.location`
+    rather than a meta refresh (still named as a script-only redirect below),
+    and a meta refresh INTO a lander is caught at the destination by its own
+    marker. One hop only, and a destination that cannot be fetched reads as
+    fine, the same failing-open posture peek_body already takes — this test
+    creates FAILs, so it errs quiet.
+    """
+    peeked = peek_body(url)
+    if peeked is None:
+        return None
+    size, raw = peeked
     if size > HOLLOW_MAX_BYTES:
         return None
-    text = head.decode("utf-8", "replace").lower()
+    target = None if followed else meta_refresh_target(raw, url)
+    if target:
+        onward = hollow_body(target, followed=True)
+        return None if onward is None else "%s, via a meta refresh to %s" % (onward, target)
+    text = raw.lower()
     for marker, what in HOLLOW_MARKERS:
         if marker in text:
             return "HTTP 200, %d bytes — %s" % (size, what)
@@ -574,20 +625,28 @@ def probe(url, resolved=None):
         code, final = resp.status_code, resp.url
         if method == "get":
             resp.close()
-        if code < 400:
+        if code == 202:
+            # Same reading as validate_sources.py: "Accepted" is never a
+            # document — it is what several counties' bot-management fronts
+            # serve, and treating it as success is how a block goes unnoticed.
+            # THIS TEST MUST PRECEDE `code < 400`, and for three weeks it did
+            # not: 202 is under 400, so the success branch matched first and
+            # this one could never run. The block was not missed outright,
+            # because the hollow-body test then caught the interstitial as a
+            # 169-to-220-byte page — but it named it the WRONG thing, telling a
+            # maintainer to "find the real address and update every citation"
+            # for co.taylor.wi.us and dekalbcounty.org, whose pages are fine
+            # and whose sgcaptcha front this repo already knows about.
+            result = {"state": "blocked", "detail": "HTTP 202 — bot-management interstitial"}
+        elif code < 400:
             result = {"state": "ok", "detail": "HTTP %d" % code, "final": final}
             break
-        if code in GONE_STATUSES:
+        elif code in GONE_STATUSES:
             result = {"state": "gone", "detail": "HTTP %d" % code}
         elif code in BLOCK_STATUSES:
             result = {"state": "blocked", "detail": "HTTP %d" % code}
         elif code == RATE_LIMIT_STATUS:
             result = {"state": "rate-limited", "detail": "HTTP 429"}
-        elif code == 202:
-            # Same reading as validate_sources.py: "Accepted" is never a
-            # document — it is what several counties' bot-management fronts
-            # serve, and treating it as success is how a block goes unnoticed.
-            result = {"state": "blocked", "detail": "HTTP 202 — bot-management interstitial"}
         else:
             result = {"state": "unreachable", "detail": "HTTP %d" % code}
 
