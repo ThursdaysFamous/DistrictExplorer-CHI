@@ -149,10 +149,15 @@ INDEX_HTML = os.path.join(REPO_ROOT, "il", "index.html")
 # update", and it named four instances out of five. That is the gate's premise
 # failing on the gate, so both surfaces are now DISCOVERED:
 #
-#   * the repo root's own pages — the landing page, the one-for-the-fleet
-#     /privacy.html, sponsorship.html, and the redirect shells that catch
-#     pre-R5 paths. A shell's canonical names the page it forwards readers to,
-#     so probing it answers whether that page is still there.
+#   * the repo root's own pages — the landing page, the coverage map the
+#     landing page embeds in an iframe (its legend rows are links a reader
+#     clicks on the front door), the one-for-the-fleet /privacy.html,
+#     sponsorship.html, and the redirect shells that catch pre-R5 paths. A
+#     shell's canonical names the page it forwards readers to, so probing it
+#     answers whether that page is still there. coverage-map.html is the
+#     argument in miniature: it shipped on 2026-08-28 and had to be added to
+#     the literal by hand in the same commit, which is the step Iowa did not
+#     get.
 #   * every .html an instance directory owns — index, faq, sources, history and
 #     the per-concept SEO pages alike, which is one fewer list to forget.
 #

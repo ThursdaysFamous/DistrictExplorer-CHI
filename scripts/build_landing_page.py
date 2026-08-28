@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
-"""Build the root landing page — the fleet's front door (R4, docs/DEV_PROCESS_ASSESSMENT.md).
+"""Build the root landing page — the fleet's front door (R4, docs/DEV_PROCESS_ASSESSMENT.md;
+address-first redesign with a coverage map, from the Claude Design handoff
+"Districtry landing page alternatives").
 
 WHY THIS EXISTS. "One repo, one site" only pays off if the site has a front
 door. R2.3 moved the Illinois app to /il/ and left the root a redirect stub; R3
 brought SF and NYC in as folders. This is the page that finally makes the root
-mean something: the brand, and the list of places the fleet answers for.
+mean something: the brand, an address box that opens the right place, a map of
+what's covered, and the list of places the fleet answers for.
 
 IT IS GENERATED, AND THAT IS THE POINT. The rebrand assessment's central finding
 was that brand identity had become scattered literals — 98 files carrying
@@ -13,7 +16,8 @@ because index.html could not be parameterised. A hand-written landing page whose
 state list is HTML would reproduce that failure on day one of the fix. So every
 fact on this page comes from a file that already owns it:
 
-    metros.json                            the fleet list — name, tag, blurb, url
+    metros.json                            the fleet list — name, tag, blurb,
+                                            scope, url, bbox
     districtry/tokens/districtry.tokens.css the design tokens (light + dark)
     districtry/icons/favicon.svg           the mark, inlined as a data URI
     fonts/barlow-fontface.css              self-hosted Barlow (build_fonts.py landing)
@@ -35,11 +39,33 @@ permalink, or the share/embed campaign tags — and renders the landing page onl
 for a bare visit. The guard runs in <head> before the body paints, so a
 forwarded visit never flashes this page.
 
-WHAT IS DELIBERATELY ABSENT. No analytics: the root stub carried none, the brand
-block's analytics keys are per-instance (ga_hostname is a specific app's host),
-and adding a tracker to a new surface is not a build-step decision. No coverage
-map: it would need Leaflet plus an instance's own boundary data, and a fleet page
-that loads one instance's geometry is telling a lie about the other two.
+THE COVERAGE MAP EXISTS NOW, AND THE OBJECTION THAT USED TO RULE IT OUT IS
+ANSWERED RATHER THAN IGNORED. This docstring used to say no coverage map: "it
+would need Leaflet plus an instance's own boundary data, and a fleet page that
+loads one instance's geometry is telling a lie about the other two." The
+objection was about ONE instance's shape standing in for the whole fleet — so
+scripts/build_coverage_map.py draws every instance's OWN published outline
+(each already shipped in its own data/app/*.json) rather than picking one.
+The <iframe> here just embeds that separately-generated, separately-drift-gated
+page; see its own module docstring for the two-tier (statewide vs.
+county-dispatched) story it draws.
+
+THE ADDRESS BOX ROUTES FOR REAL. It calls the same Photon endpoint the fleet's
+own apps already call for their "did you mean a sibling metro" fallback
+(geocodeUnbounded in each instance's ENGINE metro-portal block), tests the
+result against each metro's own bbox (the same bbox METRO_EXPLORERS already
+carries for that fallback), and sends the reader straight to the covered
+instance with the point pre-selected — or says plainly that nowhere covers it
+yet, never guessing. This duplicates neither data nor a UI: it is new code
+because the root page has no per-instance JS module to call into, but the
+provider, the bbox test and the tie-break on an overlap are the same ones
+metro-portal already uses.
+
+WHAT IS DELIBERATELY ABSENT. No analytics beyond the fleet's existing GoatCounter
+tag (adding a NEW tracker to a new surface is not a build-step decision), and
+no per-visitor geolocation (the address box asks for a query the reader typed,
+never the browser's location — matching the independence paragraph's promise
+that this page does not ask for more than an address).
 
     python3 scripts/build_landing_page.py            # write index.html
     python3 scripts/build_landing_page.py --check    # drift gate; exit 1 on diff
@@ -78,12 +104,12 @@ FAVICON = os.path.join(REPO_ROOT, "districtry", "icons", "favicon.svg")
 # which is why the two are different files doing different jobs.
 MARK_SOURCE = os.path.join(REPO_ROOT, "il", "index.html")
 
-# Each instance's worksheet, for the layer count on its card. A card that states
+# Each instance's worksheet, for the layer count on its pill. A pill that states
 # a number must read it from the thing that owns it; a hand-typed count is the
 # drift this repo keeps writing generators to avoid.
 #
 # KEYED BY INSTANCE TAG — the folder, which is the URL, which is the state code
-# on the card. R5 renamed sf/ -> ca/ and nyc/ -> ny/ (the tag is the STATE, not
+# on the pill. R5 renamed sf/ -> ca/ and nyc/ -> ny/ (the tag is the STATE, not
 # the metro: metros.json still calls them 'sf' and 'nyc' by id), and this table
 # is the one place that pairs a tag with a file, so it moves with them.
 INSTANCE_WORKSHEET = {
@@ -105,12 +131,16 @@ CANONICAL = "https://districtry.com/"
 # rather than editing a page — set NOTICE to None when it has served its time.
 # It is deliberately plain about what happened and what it means for a reader
 # who typed the old name, because that is the only reason they are reading it.
+# Presentation: a dismissible toast that auto-fades after NOTICE_SECONDS (the
+# Claude Design handoff's default), never persisted across visits — every load
+# gets the chance to notice it, exactly like the banner it replaces did.
 NOTICE = {
     "heading": "chidistricts.com is now districtry.com",
     "body": ("Same map, same data, same answers — a new name, because it now covers "
              "more than Chicago and more than one state. Illinois lives at "
              "districtry.com/il, and every link below goes straight there."),
 }
+NOTICE_SECONDS = 15
 
 # The independence line, and it earns its place rather than decorating the page.
 # On 2026-08-25 Google Safe Browsing flagged districtry.com under "Deceptive
@@ -133,18 +163,36 @@ INDEPENDENCE = (
 # before R2.3, so it is the only instance whose old links can be in the wild.
 FORWARD_TO = "/il/"
 
+# Every US state + DC, so the "not yet" disclosure never needs a hand-typed
+# list: it is this set minus whichever metros.json landing_name values are
+# themselves a full state (a city instance's landing_name — "New York City",
+# "San Francisco" — never matches one, so New York and California correctly
+# stay listed even though a city inside each already answers).
+US_STATES_AND_DC = [
+    "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",
+    "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia",
+    "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky",
+    "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota",
+    "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada",
+    "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina",
+    "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania",
+    "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas",
+    "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin",
+    "Wyoming",
+]
+
 # Tokens this page actually sets. Naming them explicitly makes the token file a
 # CHECKED dependency: rename one upstream and this build fails by name instead
 # of emitting a page with a broken custom property.
 LIGHT_TOKENS = [
     "brand-600", "brand-700", "brand-warm", "brand-tint", "brand-border",
-    "paper", "surface", "ink", "ink-3", "muted", "faint", "border",
+    "paper", "surface", "ink", "ink-3", "muted", "faint", "border", "error",
     "font-heading", "font-heading-weight", "font-body",
-    "radius-card", "shadow-card",
+    "radius-card", "radius-btn", "shadow-card",
 ]
 DARK_TOKENS = [
     "brand-700", "brand-warm", "brand-tint", "brand-border",
-    "paper", "surface", "ink", "ink-3", "muted", "faint", "border",
+    "paper", "surface", "ink", "ink-3", "muted", "faint", "border", "error",
     "shadow-card",
 ]
 # --brand-700 and --brand-warm now EXIST in the token file's dark tier, so the
@@ -233,7 +281,7 @@ def instance_layer_count(tag):
     rel = INSTANCE_WORKSHEET.get(tag)
     if not rel:
         fail("no worksheet mapped for instance %r — add it to INSTANCE_WORKSHEET "
-             "so its card can state a layer count" % tag)
+             "so its pill can state a layer count" % tag)
     try:
         w = json.loads(read(os.path.join(REPO_ROOT, rel), "the %s worksheet" % tag))
     except ValueError as e:
@@ -253,7 +301,7 @@ def load_metros():
     if not metros:
         fail("metros.json carries no metros")
     for m in metros:
-        for key in ("tag", "landing_name", "blurb", "url"):
+        for key in ("tag", "landing_name", "blurb", "scope", "url", "bbox"):
             if not m.get(key):
                 fail("metro %r has no %r — the landing page is generated from "
                      "these fields, so a new metro must carry them"
@@ -261,13 +309,22 @@ def load_metros():
     return metros
 
 
+def oxford_join(items):
+    if len(items) <= 1:
+        return "".join(items)
+    if len(items) == 2:
+        return items[0] + " and " + items[1]
+    return ", ".join(items[:-1]) + " and " + items[-1]
+
+
 def render_notice():
     if not NOTICE:
         return ""
     return (
-        '    <aside class="notice" aria-labelledby="notice-h">\n'
+        '    <aside id="notice" class="notice" role="status" aria-live="polite">\n'
         '      <p id="notice-h" class="notice-h">%s</p>\n'
         '      <p class="notice-b">%s</p>\n'
+        '      <button type="button" id="notice-dismiss" aria-label="Dismiss this notice">&#x2715;</button>\n'
         '    </aside>\n'
         % (html.escape(NOTICE["heading"]), html.escape(NOTICE["body"]))
     )
@@ -277,23 +334,50 @@ def render_independence():
     return ('    <p class="independence">%s</p>\n' % html.escape(INDEPENDENCE))
 
 
-def render_cards(metros):
+def render_pills(metros):
+    """One pill per place: name, and the layer count as a quiet trailing number.
+
+    The number is bare on screen because that is the design, and bare is
+    meaningless read aloud — "Illinois 39" — so the anchor carries an
+    aria-label that says what the number counts. `title` keeps the blurb as a
+    sighted hover hint; it is deliberately not the accessible name, since a
+    two-line blurb is a poor thing to hear in place of a link's text.
+    """
     rows = []
     for m in metros:
+        n = instance_layer_count(m["tag"])
         rows.append(
-            '      <a class="card" href="%s">\n'
-            '        <span class="card-word">districtry<span class="card-tag"> / %s</span></span>\n'
-            '        <b>%s</b>\n'
-            '        <span class="blurb">%s</span>\n'
-            '        <span class="card-stat">%d layers</span>\n'
-            '      </a>'
+            '        <a class="pill" href="%s" title="%s" aria-label="%s, %d layers">%s'
+            '<span class="pill-n">%d</span></a>'
             % (html.escape(m["url"], quote=True),
-               html.escape(m["tag"]),
+               html.escape(m["blurb"], quote=True),
+               html.escape(m["landing_name"], quote=True), n,
                html.escape(m["landing_name"]),
-               html.escape(m["blurb"]),
-               instance_layer_count(m["tag"]))
+               n)
         )
     return "\n".join(rows)
+
+
+DC = "District of Columbia"
+
+
+def render_not_yet(metros):
+    """The uncovered list, and a summary phrase that counts it honestly.
+
+    DC is in the list but is not a state, so it is counted separately rather
+    than folded into the number — "47 states and DC", never "48 states and
+    DC", which is the off-by-one a hand-typed summary invites.
+    """
+    covered_states = set(m["landing_name"] for m in metros)
+    remaining = [s for s in US_STATES_AND_DC if s not in covered_states]
+    n_states = len([s for s in remaining if s != DC])
+    summary = "%d states" % n_states
+    if DC in remaining:
+        summary += " and DC"
+    items = "\n".join(
+        '        <div>%s</div>' % html.escape(s) for s in remaining
+    )
+    return summary, items
 
 
 def _landing_jsonld(metros, title, desc):
@@ -343,6 +427,24 @@ def _landing_jsonld(metros, title, desc):
     return json.dumps(graph, indent=2, ensure_ascii=False)
 
 
+def render_metros_js(metros):
+    """The address box's routing table: tag/name/url/bbox, embedded exactly
+    like METRO_EXPLORERS is in each instance — enough for the client to
+    replicate the same bbox test each app's own metro-portal handoff already
+    runs, with nothing fetched at request time."""
+    rows = []
+    for m in metros:
+        b = m["bbox"]
+        rows.append(
+            '    { tag: %s, name: %s, url: %s,\n'
+            '      bbox: { minLat: %s, maxLat: %s, minLng: %s, maxLng: %s } }'
+            % (json.dumps(m["tag"]), json.dumps(m["landing_name"], ensure_ascii=False),
+               json.dumps(m["url"]), json.dumps(b["minLat"]), json.dumps(b["maxLat"]),
+               json.dumps(b["minLng"]), json.dumps(b["maxLng"]))
+        )
+    return ",\n".join(rows)
+
+
 def build():
     metros = load_metros()
     tokens_css = read(TOKENS, "the design tokens")
@@ -364,9 +466,11 @@ def build():
     # Console shows the demand is phrased as a question ("what district am i
     # in"), and a brand nobody is searching for yet cannot earn the click.
     title = "What district am I in? Find your district — districtry"
-    desc = ("Pick your state, then enter an address or ZIP — districtry shows every "
-            "civic district that covers that point on the map, and the people who hold "
-            "those seats. Free, no login.")
+    desc = ("Enter an address or ZIP — districtry shows every civic district that covers "
+            "that point on the map, and the people who hold those seats. Free, no login.")
+
+    live_names = oxford_join([m["landing_name"] for m in metros])
+    not_yet_summary, not_yet_items = render_not_yet(metros)
 
     return """<!DOCTYPE html>
 <html lang="en">
@@ -466,7 +570,39 @@ body {
   font: 400 16px/1.55 var(--font-body);
   -webkit-font-smoothing: antialiased;
 }
+.shell { position: relative; min-height: 100vh; }
 .wrap { max-width: 940px; margin: 0 auto; padding: 56px 24px 72px; }
+
+/* The rename toast: absolutely positioned against .shell (full viewport
+   width), never against .wrap (the centered 940px column) — it sits near the
+   top-right of the WINDOW, matching where a reader's eye actually lands, not
+   near the top-right of the text measure. */
+.notice {
+  position: absolute; z-index: 20; top: 18px; right: 24px;
+  width: 480px; max-width: calc(100%% - 48px);
+  padding: 14px 40px 15px 18px;
+  background: var(--brand-tint); border: 1px solid var(--brand-border);
+  border-radius: var(--radius-card); box-shadow: 0 6px 22px rgba(23, 22, 28, .16);
+  opacity: 1;
+}
+.notice-h {
+  margin: 0 0 5px; font: var(--font-heading-weight) 17px/1.25 var(--font-heading);
+  color: var(--ink);
+}
+.notice-b { margin: 0; font-size: 14.5px; line-height: 1.5; color: var(--ink-3); max-width: 52em; }
+.notice #notice-dismiss {
+  position: absolute; top: 9px; right: 10px; width: 26px; height: 26px;
+  display: flex; align-items: center; justify-content: center; padding: 0;
+  background: transparent; border: 1px solid transparent; border-radius: 999px;
+  color: var(--muted); font: 400 13px/1 var(--font-body); cursor: pointer;
+  transition: color .14s ease, border-color .14s ease, background .14s ease;
+}
+.notice #notice-dismiss:hover, .notice #notice-dismiss:focus-visible {
+  background: var(--surface); border-color: var(--brand-border); color: var(--ink);
+}
+@keyframes notice-out { from { opacity: 1; } to { opacity: 0; } }
+.notice.is-fading { animation: notice-out 900ms ease forwards; }
+@media (prefers-reduced-motion: reduce) { .notice.is-fading { animation-duration: 1ms; } }
 
 /* The logo lockup: the 5c mark beside the wordmark, at a size the mark is
    actually drawn for. The brand spec's blend rule is a REAL rule, not
@@ -490,49 +626,91 @@ h1 {
 }
 .lede { color: var(--muted); margin: 14px 0 0; max-width: 40em; font-size: 15px; }
 
-.notice {
-  margin: 26px 0 0; padding: 14px 18px 15px;
-  background: var(--brand-tint); border: 1px solid var(--brand-border);
-  border-radius: var(--radius-card);
+.search-card {
+  margin: 26px 0 0; padding: 20px 22px 22px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-card); box-shadow: var(--shadow-card);
 }
-.notice-h {
-  margin: 0 0 5px; font: var(--font-heading-weight) 17px/1.25 var(--font-heading);
-  color: var(--ink);
+.search-eyebrow {
+  display: block; font: var(--font-heading-weight) 13px/1 var(--font-heading);
+  letter-spacing: .09em; text-transform: uppercase; color: var(--faint);
+  margin-bottom: 11px;
 }
-.notice-b { margin: 0; font-size: 14.5px; line-height: 1.5; color: var(--ink-3); max-width: 52em; }
+.search-row { display: flex; gap: 10px; align-items: stretch; }
+.search-input {
+  flex: 1 1 auto; min-width: 0; padding: 12px 14px;
+  font: 400 15px/1.3 var(--font-body); color: var(--ink);
+  background: var(--paper); border: 1px solid var(--border);
+  border-radius: var(--radius-btn);
+}
+.search-input::placeholder { color: var(--faint); }
+.search-input:focus-visible {
+  outline: 2px solid var(--brand-600); outline-offset: 1px;
+  border-color: var(--brand-border);
+}
+/* THE LABEL COLOUR FLIPS WITH THE THEME, and it is a contrast fix rather than
+   a preference. --brand-600 is #6d3fd1 in light (white on it: 6.40:1, passes
+   AA) and #a78bfa in dark — white on THAT is 2.72:1, well under the 4.5:1 AA
+   floor for 15px text. Dark ink on the same violet is 6.76:1, and on the
+   --brand-700 hover (#c4b0ff) 9.64:1. This is the one place on the page where
+   a token pair reverses its foreground, so it is stated rather than inherited. */
+.search-button {
+  flex: 0 0 auto; padding: 0 22px;
+  font: var(--font-heading-weight) 15px/1 var(--font-heading); color: #fff;
+  background: var(--brand-600); border: 1px solid var(--brand-600);
+  border-radius: var(--radius-btn); cursor: pointer; white-space: nowrap;
+}
+.search-button:hover { background: var(--brand-700); border-color: var(--brand-700); }
+.search-button:focus-visible { outline: 2px solid var(--brand-600); outline-offset: 2px; }
+.search-button:disabled { opacity: .6; cursor: default; }
+@media (prefers-color-scheme: dark) {
+  .search-button { color: var(--paper); }
+}
+.search-help { margin: 12px 0 0; font-size: 13.5px; line-height: 1.5; color: var(--muted); }
+.search-status { margin: 10px 0 0; font-size: 13.5px; line-height: 1.4; min-height: 0; }
+.search-status.err { color: var(--error); }
+
+h2 {
+  font: var(--font-heading-weight) 15px/1 var(--font-heading);
+  letter-spacing: .09em; text-transform: uppercase;
+  color: var(--faint); margin: 40px 0 12px;
+}
+.coverage-frame {
+  display: block; width: 100%%; height: 430px;
+  border: 1px solid var(--border); border-radius: var(--radius-card);
+  background: var(--paper);
+}
+.coverage-caption {
+  margin: 11px 0 0; font-size: 13px; line-height: 1.55; color: var(--muted);
+  max-width: 52em;
+}
+
+.pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill {
+  display: inline-flex; align-items: baseline; gap: 8px; padding: 7px 13px 8px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 999px;
+  text-decoration: none; color: var(--ink);
+  font: var(--font-heading-weight) 15px/1 var(--font-heading);
+}
+.pill:hover, .pill:focus-visible { border-color: var(--brand-border); background: var(--brand-tint); }
+.pill:focus-visible { outline: 2px solid var(--brand-600); outline-offset: 2px; }
+.pill-n { font: 400 12px/1 var(--font-body); color: var(--faint); font-variant-numeric: tabular-nums; }
+
+.not-yet { margin: 14px 0 0; max-width: 52em; }
+.not-yet > summary {
+  cursor: pointer; font-size: 13px; line-height: 1.55; color: var(--muted);
+}
+.not-yet > summary:hover, .not-yet > summary:focus-visible { color: var(--ink-3); }
+.not-yet-list {
+  margin: 10px 0 0; column-count: 3; column-gap: 22px;
+  font-size: 12.5px; line-height: 1.9; color: var(--muted);
+}
 
 /* Stated plainly and early, never as a warning banner — it is a fact about who
    this is, not an alarm. See INDEPENDENCE for why it is above the fold. */
 .independence {
   margin: 18px 0 0; max-width: 52em; font-size: 13.5px; line-height: 1.55;
   color: var(--muted);
-}
-
-h2 {
-  font: var(--font-heading-weight) 15px/1 var(--font-heading);
-  letter-spacing: .09em; text-transform: uppercase;
-  color: var(--faint); margin: 44px 0 14px;
-}
-.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
-.card {
-  display: block; text-decoration: none; color: var(--ink);
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius-card); box-shadow: var(--shadow-card);
-  padding: 16px 18px 18px;
-}
-.card:hover, .card:focus-visible { border-color: var(--brand-border); }
-.card:focus-visible { outline: 2px solid var(--brand-600); outline-offset: 2px; }
-.card-word {
-  display: block; font: var(--font-heading-weight) 13px/1 var(--font-heading);
-  color: var(--faint); letter-spacing: .01em; margin-bottom: 9px;
-}
-.card-tag { font-weight: 400; }
-.card b { display: block; font: var(--font-heading-weight) 21px/1.15 var(--font-heading); margin-bottom: 6px; }
-.blurb { display: block; font-size: 14px; line-height: 1.5; color: var(--ink-3); }
-.card-stat {
-  display: inline-block; margin-top: 11px; padding: 3px 9px 4px;
-  background: var(--brand-tint); border: 1px solid var(--brand-border);
-  border-radius: 999px; font-size: 12px; color: var(--ink-3);
 }
 
 .does { display: grid; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr)); gap: 22px 26px; }
@@ -562,11 +740,19 @@ footer .foot-links { margin-top: 12px; }
   .wordmark { font-size: 38px; }
   .logo-mark { width: 48px; height: 48px; }
   h1 { font-size: 22px; }
+  .search-row { flex-direction: column; }
+  .notice { position: static; width: auto; max-width: none; margin: 0 0 26px; }
+  .not-yet-list { column-count: 2; }
+  /* Taller, not shorter: at this breakpoint the map's legend stops floating
+     and takes a strip along the bottom (see build_coverage_map.py), so the
+     frame needs the extra room or the map area is what pays for the panel. */
+  .coverage-frame { height: 560px; }
 }
 </style>
 </head>
 <body>
-  <div class="wrap">
+  <div class="shell">
+%(notice)s    <div class="wrap">
     <header class="mast">
       %(mark)s
       <span class="wordmark">districtry</span>
@@ -575,12 +761,41 @@ footer .foot-links { margin-top: 12px; }
     <h1>Every district that covers a point, and who represents it.</h1>
     <p class="lede">%(desc)s</p>
 
-%(notice)s%(independence)s
-    <h2>Choose a place</h2>
-    <div class="cards">
-%(cards)s
+    <div class="search-card">
+      <span class="search-eyebrow">Start with an address</span>
+      <form id="search-form" class="search-row">
+        <input type="text" id="search-input" class="search-input" name="q"
+               placeholder="Street address or ZIP" autocomplete="off"
+               aria-label="Street address or ZIP" />
+        <button type="submit" id="search-button" class="search-button">Show districts</button>
+      </form>
+      <p class="search-help">districtry opens the map that covers the point. %(live_names)s answer
+         today — an address anywhere else says so instead of guessing.</p>
+      <p id="search-status" class="search-status" role="status" aria-live="polite"></p>
     </div>
 
+    <h2>Where it answers today</h2>
+    <iframe class="coverage-frame" src="coverage-map.html"
+            title="Map of the areas districtry covers today"
+            loading="lazy"></iframe>
+    <p class="coverage-caption">Two tiers, because coverage is not one thing: the pale dashed area
+       is where the statewide layers answer — county, township, municipality, school district,
+       ZIP — and the solid fill is where the county-level layers reach as well. The map's own
+       legend states how much of each place that is; click an area to open its map.</p>
+
+    <h2>Or choose a place</h2>
+    <div class="pills">
+%(pills)s
+    </div>
+    <details class="not-yet">
+      <summary>Not yet: %(not_yet_summary)s — what nobody covers yet is listed here
+        rather than quietly missing.</summary>
+      <div class="not-yet-list">
+%(not_yet_items)s
+      </div>
+    </details>
+
+%(independence)s
     <h2>What it does</h2>
     <div class="does">
       <div>
@@ -625,7 +840,129 @@ footer .foot-links { margin-top: 12px; }
          <a href="https://overberg.co/why/" target="_blank" rel="noopener">Why this exists</a> ·
          <a href="https://github.com/ThursdaysFamous/districtry" target="_blank" rel="noopener">Source on GitHub</a></p>
     </footer>
+    </div>
   </div>
+<script>
+(function () {
+  /* ---------- rename-notice toast: auto-fades, dismissible ---------- */
+  var notice = document.getElementById("notice");
+  if (notice) {
+    var fadeTimer = null, cleanupTimer = null, faded = false;
+    function fade() {
+      if (faded) return;
+      faded = true;
+      clearTimeout(fadeTimer);
+      clearTimeout(cleanupTimer);
+      var done = function () {
+        notice.removeEventListener("animationend", done);
+        notice.style.display = "none";
+      };
+      notice.addEventListener("animationend", done);
+      notice.classList.add("is-fading");
+      // belt and braces: some browsers skip animationend for a 0-duration
+      // reduced-motion run, or a tab backgrounded mid-fade.
+      cleanupTimer = setTimeout(done, 3000);
+    }
+    fadeTimer = setTimeout(fade, %(notice_seconds)d * 1000);
+    var dismiss = document.getElementById("notice-dismiss");
+    if (dismiss) dismiss.addEventListener("click", fade);
+    /* The toast is FIRST in the DOM, so its dismiss button is the page's first
+       tab stop: a keyboard reader lands there before anything else. Auto-fading
+       it out from under them would destroy the focused element and drop focus
+       to <body> mid-navigation. While focus is inside, the timer does not run;
+       it restarts when focus leaves. A click still fades immediately, because
+       that is the reader ASKING for it to go. */
+    notice.addEventListener("focusin", function () { clearTimeout(fadeTimer); });
+    notice.addEventListener("focusout", function () {
+      if (faded) return;
+      clearTimeout(fadeTimer);
+      fadeTimer = setTimeout(fade, %(notice_seconds)d * 1000);
+    });
+  }
+
+  /* ---------- address box: geocode, then route to the covered instance ----------
+     Same provider (Photon, unbounded) and the same bbox test each instance's
+     own metro-portal ENGINE block already runs for its sibling-metro fallback
+     — see this file's module docstring. Takes the first Photon result (of up
+     to 5, ranked) that actually falls inside a covered bbox, so a bare place
+     name ambiguous across states still has a fair shot at landing correctly
+     rather than wherever result #1 happened to be. */
+  var METROS = [
+%(metros_js)s
+  ];
+
+  function metroAt(lat, lng) {
+    var best = null, bestDist = Infinity;
+    for (var i = 0; i < METROS.length; i++) {
+      var b = METROS[i].bbox;
+      if (lat < b.minLat || lat > b.maxLat || lng < b.minLng || lng > b.maxLng) continue;
+      var dLat = lat - (b.minLat + b.maxLat) / 2, dLng = lng - (b.minLng + b.maxLng) / 2;
+      var dist = dLat * dLat + dLng * dLng;
+      if (dist < bestDist) { best = METROS[i]; bestDist = dist; }
+    }
+    return best;
+  }
+
+  var form = document.getElementById("search-form");
+  var input = document.getElementById("search-input");
+  var button = document.getElementById("search-button");
+  var status = document.getElementById("search-status");
+  var inFlight = null;
+
+  function setStatus(text, isError) {
+    status.textContent = text;
+    status.className = "search-status" + (isError ? " err" : "");
+  }
+  function resetButton() {
+    button.disabled = false;
+    button.textContent = "Show districts";
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var q = input.value.trim();
+    if (!q) { setStatus("Type an address or ZIP first.", true); return; }
+    if (inFlight) inFlight.abort();
+    inFlight = new AbortController();
+    button.disabled = true;
+    button.textContent = "Searching\\u2026";
+    setStatus("Searching\\u2026", false);
+    fetch("https://photon.komoot.io/api/?q=" + encodeURIComponent(q) + "&lang=en&limit=5",
+      { signal: inFlight.signal, headers: { Accept: "application/json" } })
+      .then(function (res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+      .then(function (data) {
+        var feats = (data && data.features) || [];
+        var metro = null, lat = null, lng = null;
+        for (var i = 0; i < feats.length; i++) {
+          var c = feats[i] && feats[i].geometry && feats[i].geometry.coordinates;
+          if (!c || c.length < 2) continue;
+          var m = metroAt(c[1], c[0]);
+          if (m) { metro = m; lat = c[1]; lng = c[0]; break; }
+        }
+        if (!metro) {
+          resetButton();
+          setStatus(
+            feats.length
+              ? "That address is outside every place districtry covers today \\u2014 see what's covered below."
+              : "No matches \\u2014 try a fuller address, or pick a place below.",
+            true
+          );
+          return;
+        }
+        setStatus("Opening " + metro.name + "\\u2026", false);
+        window.location.href = metro.url + "#point=" + lat.toFixed(5) + "," + lng.toFixed(5);
+      })
+      ["catch"](function (err) {
+        if (err && err.name === "AbortError") return;
+        resetButton();
+        setStatus("Search failed \\u2014 try again, or pick a place below.", true);
+      });
+  });
+})();
+</script>
 </body>
 </html>
 """ % {
@@ -640,10 +977,15 @@ footer .foot-links { margin-top: 12px; }
         "light": token_css(LIGHT_TOKENS, light, ":root"),
         "dark": token_css(DARK_TOKENS, dark, '[data-theme="dark"]', DARK_EXTRA,
                           indent="    "),
-        "cards": render_cards(metros),
+        "pills": render_pills(metros),
         "mark": load_mark(),
         "notice": render_notice(),
         "independence": render_independence(),
+        "live_names": html.escape(live_names),
+        "not_yet_summary": html.escape(not_yet_summary),
+        "not_yet_items": not_yet_items,
+        "metros_js": render_metros_js(metros),
+        "notice_seconds": NOTICE_SECONDS,
     }
 
 

@@ -206,6 +206,24 @@ jobs:
           # app links it with a `../` hop. An assemble that drops it turns that
           # link into a 404 on all three apps at once.
           test -f _site/privacy.html  || { echo "::error::assemble produced no root privacy.html"; exit 1; }
+          # The landing page embeds the coverage map in an iframe, and the map
+          # in turn fetches each instance's own outline from its data/app. An
+          # assemble that drops either publishes a front door with a 404 in the
+          # middle of it. The outline paths are READ OUT OF the generated map
+          # rather than listed here, so adding a state cannot leave this guard
+          # behind — it checks whatever the map actually asks for.
+          # NB the loop is NOT `grep | while read`: a pipeline's last stage runs
+          # in a subshell, so an `exit 1` in there would abandon the subshell and
+          # let the step pass — a guard that cannot fail.
+          test -f _site/coverage-map.html || { echo "::error::assemble produced no root coverage-map.html"; exit 1; }
+          missing=""
+          for outline in $(grep -oE '"[a-z]{2}/data/app/[a-z0-9-]+\.json"' _site/coverage-map.html | tr -d '"' | sort -u); do
+            test -f "_site/$outline" || missing="$missing $outline"
+          done
+          if [ -n "$missing" ]; then
+            echo "::error::the coverage map fetches outline(s) the assemble did not publish:$missing"
+            exit 1
+          fi
           for unpublished in engine; do
             test ! -e "_site/$unpublished" || { echo "::error::$unpublished leaked into the published tree"; exit 1; }
           done
