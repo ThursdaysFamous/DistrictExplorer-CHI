@@ -483,6 +483,31 @@ partition/containment-gate, double-witness shape), the closer fleet analog than 
 judicial-subcircuit, which is a per-county-dispatch pattern Iowa's single-org geometry doesn't need.
 Judges are RETENTION, never "elected" — the card must say so. PR 5.
 
+**Shipped 2026-08-28 (PR 5).** The county citation didn't survive as predicted: the CURRENT codified
+SS602.6107/602.6109 carry no county list at all (confirmed live — SS602.6107(3) freezes the "Code 2003"
+composition in effect rather than restating it, and the legacy 2003 code archive at
+`legis.iowa.gov/DOCS/IACODE/2003/...` returns connection failures from this sandbox on every URL
+variant tried). The operative crosswalk instead comes from two independent CURRENT publishers who
+agree exactly — iowacourts.gov's own per-district "District N Counties" page and Ballotpedia's compiled
+table — and is spatially DOUBLE-WITNESSED at build time against the LSAFiscal organization's own REAL
+published district polygons (not merely a text cross-check the way Wisconsin's `wi-circuit-court`
+precedent needed, since Iowa actually has independently-drawn geometry to check against): all 99
+counties' proven-interior anchor points confirmed inside the correct real district polygon, 0
+mismatches. **The URL-pattern prediction was an undercount, not wrong**: verified live for all 8
+districts, there are THREE shapes, not two — District 1 number-suffixed, Districts 2–7 bare (not just
+2 and 3), District 8 a still-different number-PREFIXED shape (`district-8-judges-and-magistrates`) the
+original research pass never reached. **The bench data is far richer, and far messier, than planned
+for**: 371 judges across all 8 districts (roughly the scale of Wisconsin's 261-judge bench), each
+carrying their own role/title string that the CMS punctuates at least four inconsistent ways — colon
+("Chief Judge: District 1B"), semicolon ("District court Judge; District 3A"), no separator at all
+("District Court Judge D5", "Senior Judge District 2A"), and one outright typo ("Magisrate"). Rather
+than guess a single split rule and risk mis-parsing some fraction of 371 rows into a wrong rank or
+sub-district, the shipped card renders each title VERBATIM as one field. No phone, e-mail, or
+courthouse address ships for any judge — measured absent on both the roster listing and a sampled
+individual profile page, not assumed. `ia/scripts/build_ia_judicial_district.py`'s general N-way county
+dissolve (District 2 unions 22 counties — Wisconsin's own circuit-court dissolve only ever merges
+pairs) reuses `build_metro_outline.py`'s segment-count algorithm rather than forking a new one.
+
 `community-college` (Iowa Code 260C.11 — CONFIRMED, was ASSERTED: an ELECTED board, one member per
 director district — mirrors the fleet's DISTRICTED political-layer pattern, **not** Wisconsin's
 `wtcs-district` shape, whose board is appointed under a different statute; a real divergence the

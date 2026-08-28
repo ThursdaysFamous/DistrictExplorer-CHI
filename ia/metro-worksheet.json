@@ -44,7 +44,19 @@
       }
     },
     {
-      "id": "ia-senate", "label": "Iowa Senate District", "group": "political", "area_rank": 2,
+      "id": "ia-judicial-district", "label": "Judicial District", "group": "political", "area_rank": 2,
+      "rank_note": "8 districts averaging 12.4 counties apiece (5-22 counties) — smaller than the 4 U.S. House districts' ~25-county average, larger than every other layer",
+      "source": {
+        "answers": "The judicial election district covering the point, and its bench (district judges, district associate judges, and magistrates).",
+        "boundary": [
+          { "label": "Iowa Code SS602.6107/602.6109 (Code 2003) county-to-district assignment, cross-verified against iowacourts.gov's own per-district county page and Ballotpedia, spatially double-witnessed at build time against the LSAFiscal organization's own published district polygons; dissolved from state-counties.json by ia/scripts/build_ia_judicial_district.py", "url": "https://www.iowacourts.gov/iowa-courts/district-court/" }
+        ],
+        "people": "ia-judicial-judges.json, rebuilt weekly by CI from each district's own \"Judges and Magistrates\" roster page at iowacourts.gov. Judges are RETENTION, never elected: appointed by the Governor from a judicial nominating commission's list, then subject to periodic yes/no retention elections. No phone, e-mail, or courthouse address is published for any judge.",
+        "applies": "Iowa — statewide, all 8 districts across all 99 counties."
+      }
+    },
+    {
+      "id": "ia-senate", "label": "Iowa Senate District", "group": "political", "area_rank": 3,
       "rank_note": "50 Senate districts, each the union of two whole House districts",
       "source": {
         "answers": "The Iowa Senate district covering the point, and the senator holding it.",
@@ -54,7 +66,7 @@
       }
     },
     {
-      "id": "county", "label": "County", "group": "geography", "area_rank": 3,
+      "id": "county", "label": "County", "group": "geography", "area_rank": 4,
       "rank_note": "99 counties, pre-built from TIGERweb; the fork's offline anchor layer",
       "source": {
         "answers": "Which county contains the point, and its county auditor (Iowa's county election commissioner, Iowa Code 47.2).",
@@ -64,7 +76,7 @@
       }
     },
     {
-      "id": "ia-house", "label": "Iowa House District", "group": "political", "area_rank": 4,
+      "id": "ia-house", "label": "Iowa House District", "group": "political", "area_rank": 5,
       "rank_note": "100 House districts; two nest exactly inside each Senate district",
       "source": {
         "answers": "The Iowa House district covering the point, and the representative holding it.",
@@ -74,7 +86,7 @@
       }
     },
     {
-      "id": "county-supervisor", "label": "County Supervisor District", "group": "political", "area_rank": 5,
+      "id": "county-supervisor", "label": "County Supervisor District", "group": "political", "area_rank": 6,
       "rank_note": "The flagship layer: 270 features across 98 counties, PLANTYPE-aware (at-large / residence-district / single-member)",
       "source": {
         "answers": "The county supervisor district covering the point (where drawn), the county's election plan (at-large, residence-district-elected-countywide, or single-member district), and the board's size.",
@@ -89,7 +101,7 @@
       }
     },
     {
-      "id": "school-district-unified", "label": "School District (Unified)", "group": "schools", "area_rank": 6,
+      "id": "school-district-unified", "label": "School District (Unified)", "group": "schools", "area_rank": 7,
       "rank_note": "324 unified school districts, statewide — the only school-district tiling Iowa runs (TIGER's elementary/secondary layers measure zero)",
       "source": {
         "answers": "The unified school district covering the point.",
@@ -101,7 +113,7 @@
       }
     },
     {
-      "id": "county-subdivision", "label": "County Subdivision", "group": "geography", "area_rank": 7,
+      "id": "county-subdivision", "label": "County Subdivision", "group": "geography", "area_rank": 8,
       "rank_note": "1,663 records tiling the state, live from TIGERweb (no data/app file) — 1,600 civil townships, 62 incorporated cities that double as their own subdivision record, and one federal reservoir carried as unorganized territory",
       "source": {
         "answers": "The civil township, or incorporated-city subdivision record, covering the point — and its type.",
@@ -113,7 +125,7 @@
       }
     },
     {
-      "id": "municipality", "label": "City", "group": "geography", "area_rank": 8,
+      "id": "municipality", "label": "City", "group": "geography", "area_rank": 9,
       "rank_note": "939 incorporated cities, live from TIGERweb (no data/app file) — small dense pockets within the county-subdivision fabric, so smaller on average than a civil township despite fewer records",
       "source": {
         "answers": "The incorporated city covering the point, if any.",
@@ -125,7 +137,7 @@
       }
     },
     {
-      "id": "zip-code", "label": "ZIP Code", "group": "geography", "area_rank": 9,
+      "id": "zip-code", "label": "ZIP Code", "group": "geography", "area_rank": 10,
       "rank_note": "Census ZCTAs by Iowa envelope (no data/app file) — 1,443 features measured in-envelope, smaller on average than an incorporated city",
       "source": {
         "answers": "The ZIP Code Tabulation Area (ZCTA) covering the point.",
@@ -136,7 +148,7 @@
       }
     },
     {
-      "id": "precinct", "label": "Precinct", "group": "political", "area_rank": 10,
+      "id": "precinct", "label": "Precinct", "group": "political", "area_rank": 11,
       "rank_note": "1,660 election precincts, pre-built (mapshaper-simplified from the Legislature's own ArcGIS layer) — identity-only, no roster; ranked with the other fine-grained political boundaries",
       "source": {
         "answers": "The election precinct covering the point, and its county.",
@@ -147,7 +159,7 @@
       }
     },
     {
-      "id": "police-station", "label": "Police Station", "group": "safety", "area_rank": 11,
+      "id": "police-station", "label": "Police Station", "group": "safety", "area_rank": 12,
       "rank_note": "Nearest-3 point layer (449 stations in the state envelope) — not a containment boundary; ranked with the amenity points",
       "source": {
         "answers": "The three nearest police stations, straight-line distance.",
@@ -158,7 +170,7 @@
       }
     },
     {
-      "id": "fire-station", "label": "Fire Station", "group": "safety", "area_rank": 12,
+      "id": "fire-station", "label": "Fire Station", "group": "safety", "area_rank": 13,
       "rank_note": "Nearest-3 point layer (1,262 stations in the state envelope) — denser than the police set, so ranked after it",
       "source": {
         "answers": "The three nearest fire stations, straight-line distance.",
@@ -169,7 +181,7 @@
       }
     },
     {
-      "id": "school-site", "label": "School Location", "group": "schools", "area_rank": 13,
+      "id": "school-site", "label": "School Location", "group": "schools", "area_rank": 14,
       "rank_note": "Nearest-3 point layer (1,321 public school buildings, pre-built) — not a containment boundary; ranked with the amenity points",
       "source": {
         "answers": "The three nearest public school buildings, straight-line distance.",
@@ -180,7 +192,7 @@
       }
     },
     {
-      "id": "post-office", "label": "Post Office", "group": "geography", "area_rank": 14,
+      "id": "post-office", "label": "Post Office", "group": "geography", "area_rank": 15,
       "rank_note": "Nearest-3 point layer, straight-line distance — not a containment boundary, ranked last",
       "source": {
         "answers": "The three nearest post offices, straight-line distance.",
@@ -191,7 +203,7 @@
       }
     }
   ],
-  "min_register_layer": 10,
+  "min_register_layer": 11,
   "anchor_point": { "lat": 42.0494, "lng": -92.9071, "note": "downtown Marshalltown, Marshall County" },
   "anchors": [
     { "layer": "county", "expected": "Marshall County" },
@@ -214,7 +226,8 @@
       { "file": "jones-county-outline.json", "min_features": 1, "max_features": 1, "dynamic_reference": true, "note": "Jones County's own boundary, extracted from state-counties.json by ia/scripts/build_ia_county_outline.py — the Data-gaps panel's map highlight for gap jones-county-supervisor. Referenced dynamically (built from the gap's county slug at runtime), never by a literal in index.html." },
       { "file": "ia-school-districts.json", "min_features": 324, "max_features": 324, "note": "324 unified school districts, built by ia/scripts/build_ia_school_districts.py: TIGERweb's 325 dissolved (Orient-Macksburg into Nodaway Valley) and witnessed by name against the Dept. of Education's own current layer (2,000-point agreement gate)." },
       { "file": "ia-school-sites.json", "min_features": 1321, "max_features": 1321, "note": "1,321 public school buildings, pre-built by ia/scripts/build_ia_school_sites.py from the Iowa Legislature's own ArcGIS org's IowaSchoolBldgs layer (paginated past its 1,000-record cap)." },
-      { "file": "ia-precincts.json", "min_features": 1660, "max_features": 1660, "note": "1,660 election precincts across all 99 counties, pre-built by ia/scripts/build_ia_precincts.py from the Iowa Legislature's own ArcGIS org's Iowa_Precincts layer (Visvalingam-simplified from ~18MB raw to under 3MB, 2,000-point agreement gate; polling-place fields never fetched)." }
+      { "file": "ia-precincts.json", "min_features": 1660, "max_features": 1660, "note": "1,660 election precincts across all 99 counties, pre-built by ia/scripts/build_ia_precincts.py from the Iowa Legislature's own ArcGIS org's Iowa_Precincts layer (Visvalingam-simplified from ~18MB raw to under 3MB, 2,000-point agreement gate; polling-place fields never fetched)." },
+      { "file": "ia-judicial-districts.json", "min_features": 8, "max_features": 8, "note": "8 judicial election districts, whole-county unions dissolved from state-counties.json by ia/scripts/build_ia_judicial_district.py, per Iowa Code SS602.6107/602.6109 and double-witnessed at build time against the LSAFiscal organization's own published district polygons." }
     ],
     "rosters": [
       { "file": "congress-roster.json", "min_keys": 4, "note": "U.S. House roster, refreshed weekly by update-ia-congress-roster.yml." },
@@ -222,6 +235,7 @@
       { "file": "ia-house-members.json", "min_keys": 93, "note": "House roster from Open States ia.csv + legis.iowa.gov enrichment, refreshed weekly by update-ia-legislature-roster.yml; floor tolerates transient vacancies (100 seats)." },
       { "file": "ia-county-board-directory.json", "min_keys": 98, "note": "One row per county covered by ia-supervisor-districts.json: board size read back from the shipped geometry, plus the county's own official page (Iowa State Association of Counties' member directory) for the card's footer link. Built by ia/scripts/build_ia_county_board_directory.py; not a roster of people — Iowa publishes none statewide." },
       { "file": "ia-county-auditors.json", "min_keys": 99, "note": "All 99 county auditors (name, party where published — 5 of 99 carry none, office address, phone; no e-mail is published), from the Iowa State Association of County Auditors' own directory. Built by ia/scripts/ia_county_auditor_scraper.py + build_ia_county_auditors.py, refreshed weekly by update-ia-county-auditor-roster.yml." },
+      { "file": "ia-judicial-judges.json", "min_keys": 8, "note": "All 8 districts' benches (371 judges measured 2026-08-28), one entry per district keyed to the geometry's district number. From each district's own \"Judges and Magistrates\" page at iowacourts.gov (name + each judge's own role/title string, shipped verbatim — no phone/e-mail/address is published for any judge). Built by ia/scripts/ia_judicial_district_scraper.py + build_ia_judicial_district_roster.py, refreshed weekly by update-ia-judicial-district-roster.yml." },
       { "file": "coverage-gaps.json", "min_keys": 0, "note": "The Data gaps panel's content; one recorded gap (Jones County, absent from the county-supervisor source layer)." }
     ]
   },
@@ -233,6 +247,8 @@
   "workflows": [
     { "file": "update-ia-congress-roster.yml", "purpose": "U.S. House (IA) roster (unitedstates/congress-legislators)", "schedule": "Mon 14:30 UTC" },
     { "file": "update-ia-legislature-roster.yml", "purpose": "Iowa Senate + House rosters (Open States ia.csv, legis.iowa.gov enrichment)", "schedule": "Tue 14:30 UTC" },
+    { "file": "update-ia-county-auditor-roster.yml", "purpose": "County auditor roster (iowaauditors.org's own association directory)", "schedule": "Wed 14:30 UTC" },
+    { "file": "update-ia-judicial-district-roster.yml", "purpose": "Judicial district bench (iowacourts.gov per-district Judges and Magistrates pages) + a --check re-verification of the district geometry against the LSAFiscal witness", "schedule": "Thu 16:30 UTC" },
     { "file": "ia-validate-sources.yml", "purpose": "source freshness (IA manifest: TIGERweb, congress-legislators, Open States, legis.iowa.gov)", "schedule": "1st of month 15:00 UTC" }
   ],
   "geocoder": { "address": "Photon (Iowa-bounded type-ahead)", "unbounded": "Photon (whole-coverage, sibling-metro lookup)", "poi": "Nominatim (office-address pin lookup, Iowa-bounded, serial >=1s queue)", "search_placeholder": "Search an Iowa address" },

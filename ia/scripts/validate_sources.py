@@ -88,6 +88,44 @@ PROVENANCE = [
         "note": "Delegation roster from the public-domain congress-legislators project; refreshed weekly by update-ia-congress-roster.yml.",
     },
     {
+        "layer": "ia-judicial-district",
+        "app_file": "ia-judicial-districts.json",
+        "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/",
+        "note": (
+            "8 judicial election districts, whole-county unions per Iowa Code "
+            "SS602.6107/602.6109 (Code 2003) -- the county-to-district crosswalk "
+            "is cross-verified against iowacourts.gov's own per-district county "
+            "page and Ballotpedia, then dissolved from state-counties.json by "
+            "ia/scripts/build_ia_judicial_district.py."
+        ),
+    },
+    {
+        "layer": "ia-judicial-district",
+        "app_file": "ia-judicial-districts.json",
+        "source_url": (
+            "https://services2.arcgis.com/KhKjlwEBlPJd6v51/arcgis/rest/services/"
+            "JudicialDistricts/FeatureServer/0"
+        ),
+        "note": (
+            "LSAFiscal's own published district polygons -- the spatial double "
+            "witness the builder checks the crosswalk against at build time, "
+            "never the geometry source itself (this layer draws no new "
+            "boundary; it dissolves whole counties)."
+        ),
+    },
+    {
+        "layer": "ia-judicial-district",
+        "app_file": "ia-judicial-judges.json",
+        "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/judicial-district-1/judges-and-magistrates-district-1/",
+        "note": (
+            "371 judges across all 8 districts (measured 2026-08-28), from each "
+            "district's own \"Judges and Magistrates\" page -- three different "
+            "URL shapes, one per district (see "
+            "ia_judicial_district_scraper.py). Judges are RETENTION, never "
+            "elected; no phone/e-mail/address is published for any judge."
+        ),
+    },
+    {
         "layer": "county",
         "app_file": "state-counties.json",
         "source_url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer/1",

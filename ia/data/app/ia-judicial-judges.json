@@ -1,0 +1,1526 @@
+{
+ "1": {
+  "judges": [
+   {
+    "name": "David P. Odekirk",
+    "role": "Chief Judge: District 1B"
+   },
+   {
+    "name": "Melissa A. Anderson-Seeber",
+    "role": "District Court Judge: District 1B"
+   },
+   {
+    "name": "Thomas A. Bitter",
+    "role": "District Court Judge: District 1A"
+   },
+   {
+    "name": "Joel A. Dalrymple",
+    "role": "District Court Judge: District 1B"
+   },
+   {
+    "name": "Andrea J. Dryer",
+    "role": "District Court Judge: District 1B"
+   },
+   {
+    "name": "Linda M. Fangman",
+    "role": "District Court Judge: District 1B"
+   },
+   {
+    "name": "Alan T. Heavens",
+    "role": "District Court Judge: District 1A"
+   },
+   {
+    "name": "Brook K. Jacobsen",
+    "role": "District Court Judge: District 1B"
+   },
+   {
+    "name": "Laura J. Parrish",
+    "role": "District Court Judge: District 1A"
+   },
+   {
+    "name": "Michael J. Shubatt",
+    "role": "District Court Judge: District 1A"
+   },
+   {
+    "name": "David F. Staudt",
+    "role": "District Court Judge: District 1B"
+   },
+   {
+    "name": "Richard D. Stochl",
+    "role": "District Court Judge: District 1B"
+   },
+   {
+    "name": "John J. Sullivan",
+    "role": "District Court Judge: District 1B"
+   },
+   {
+    "name": "Monica Zrinyi Ackley",
+    "role": "District Court Judge: District 1A"
+   },
+   {
+    "name": "Patrice J. Eichman",
+    "role": "District Associate Judge: District 1B"
+   },
+   {
+    "name": "Mark T. Hostager",
+    "role": "District Associate Judge: District 1A"
+   },
+   {
+    "name": "Michelle Jungers",
+    "role": "District Associate Judge: District 1B"
+   },
+   {
+    "name": "Linnea M. Nelson Nicol",
+    "role": "District Associate Judge: District 1B"
+   },
+   {
+    "name": "Stephanie C. Rattenborg",
+    "role": "District Associate Judge: District 1A"
+   },
+   {
+    "name": "Robert J. Richter",
+    "role": "District Associate Judge: District 1A"
+   },
+   {
+    "name": "Michelle M. Wagner",
+    "role": "District Associate Judge: District 1B"
+   },
+   {
+    "name": "William P. Wegman",
+    "role": "District Associate Judge: District 1B"
+   },
+   {
+    "name": "Thomas J. Straka",
+    "role": "Associate Juvenile Judge: District 1A"
+   },
+   {
+    "name": "Daniel L. Block",
+    "role": "Senior Judge: District 1B"
+   },
+   {
+    "name": "James D. Coil",
+    "role": "Senior Judge: District 1B"
+   },
+   {
+    "name": "Andrew Abbott",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Natalia Blaskovich",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Matthew Boleyn",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Heather Feldkamp",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Mary Beth Fleming",
+    "role": "Magistrate"
+   },
+   {
+    "name": "James Katcher",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Alex Koenigs",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Benjamin Lange",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Rick Lubben",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Joseph Goodwin Martin",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Nathaniel Moonen",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Dakota Moore",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Emilie Roth Richardson",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Christina Shriver",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Christine Skilton",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Justin Vorwald",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Jeremiah White",
+    "role": "Magistrate"
+   }
+  ],
+  "sourceUrl": "https://www.iowacourts.gov/iowa-courts/district-court/judicial-district-1/judges-and-magistrates-district-1/"
+ },
+ "2": {
+  "judges": [
+   {
+    "name": "Amy Moore",
+    "role": "Chief Judge"
+   },
+   {
+    "name": "Gregg Rosenbladt",
+    "role": "Assistant Chief Judge"
+   },
+   {
+    "name": "Bethany J. Currie",
+    "role": "District Court Judge: 2B"
+   },
+   {
+    "name": "Rustin T. Davenport",
+    "role": "District Court Judge: District 2A"
+   },
+   {
+    "name": "Angela L. Doyle",
+    "role": "District Court Judge: District 2B"
+   },
+   {
+    "name": "John R. Flynn",
+    "role": "District Court Judge: 2B"
+   },
+   {
+    "name": "Christopher C. Foy",
+    "role": "District Court Judge: District 2A"
+   },
+   {
+    "name": "John J. Haney",
+    "role": "District Court Judge: District 2B"
+   },
+   {
+    "name": "Derek Johnson",
+    "role": "District Court Judge: District 2B"
+   },
+   {
+    "name": "Adria Kester",
+    "role": "District 2B"
+   },
+   {
+    "name": "Jennifer Miller",
+    "role": "District Court Judge: 2B"
+   },
+   {
+    "name": "Blake Norman",
+    "role": "District Court Judge: 2A"
+   },
+   {
+    "name": "Christopher C. Polking",
+    "role": "District Court Judge: 2B"
+   },
+   {
+    "name": "DeDra L. Schroeder",
+    "role": "District Court Judge: District 2A"
+   },
+   {
+    "name": "Ashley M. Sparks",
+    "role": "District Court Judge: District 2B"
+   },
+   {
+    "name": "Kurt J. Stoebe",
+    "role": "District Court Judge: 2B"
+   },
+   {
+    "name": "Colleen D. Weiland",
+    "role": "District Court Judge: District 2A"
+   },
+   {
+    "name": "Kathryn E. Austin",
+    "role": "District Associate Judge: 2B"
+   },
+   {
+    "name": "Elizabeth Batey",
+    "role": "District Associate Judge: District 2A"
+   },
+   {
+    "name": "Hans Becker",
+    "role": "District Associate Judge: District 2B"
+   },
+   {
+    "name": "Ashley M. Beisch",
+    "role": "District Associate Judge: District 2B"
+   },
+   {
+    "name": "Paul G. Crawford",
+    "role": "District Associate Judge: District 2B"
+   },
+   {
+    "name": "Joseph B. McCarville",
+    "role": "District Associate Judge: District 2B"
+   },
+   {
+    "name": "Mark Milder",
+    "role": "District Associate Judge: District 2A"
+   },
+   {
+    "name": "Stephen A. Owen",
+    "role": "District Associate Judge: District 2B"
+   },
+   {
+    "name": "Karen Kaufman Salic",
+    "role": "District Associate Judge: District 2A"
+   },
+   {
+    "name": "Adam Sauer",
+    "role": "District Associate Judge: District 2A"
+   },
+   {
+    "name": "Hunter Thorpe",
+    "role": "District Associate Judge: District 2B"
+   },
+   {
+    "name": "Joseph L. Tofilon",
+    "role": "District Associate Judge: District 2B"
+   },
+   {
+    "name": "James M. Drew",
+    "role": "Senior Judge District 2A"
+   },
+   {
+    "name": "James C. Ellefson",
+    "role": "Senior Judge: District 2B"
+   },
+   {
+    "name": "James A. McGlynn",
+    "role": "Senior Judge: District 2B"
+   },
+   {
+    "name": "Peter B. Newell",
+    "role": "Senior Judge: District 2A"
+   },
+   {
+    "name": "Kurt L. Wilke",
+    "role": "Senior Judge: District 2"
+   },
+   {
+    "name": "Timothy A. Casperson",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Neven Conrad",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Leslie Dalen",
+    "role": "Magistrate: 2A"
+   },
+   {
+    "name": "Paul W. Demro",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Justin T. Deppe",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Dani L. Eisentrager",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Ethan Epley",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Katherine Evans",
+    "role": "Magistrate: 2A"
+   },
+   {
+    "name": "William H. Habhab",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Thomas L. Hillers",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Douglas A. Krull",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Nicholas T. Larson",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Mary Lauver",
+    "role": "Magistrate: D2"
+   },
+   {
+    "name": "Sarah J. Livingston",
+    "role": "Magistrate: District 2B"
+   },
+   {
+    "name": "Brandy Lundy",
+    "role": "Magistrate"
+   },
+   {
+    "name": "William Morrison",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Jessica L. Morton",
+    "role": "Magistrate"
+   },
+   {
+    "name": "A. Eric Neu",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Kevin M. O'Hare",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Nellie O’Mara",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Ricki L. Osborn Stubbs",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Merrill C. Swartz",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Karen Thalacker",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Ann Troge",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Kimberly Voss-Orr",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Ronald J. Wagenaar",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Joshua J. Walsh",
+    "role": "Magistrate: 2B"
+   },
+   {
+    "name": "Arach Wilson",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Jennie L. Wilson-Moore",
+    "role": "Magistrate"
+   }
+  ],
+  "sourceUrl": "https://www.iowacourts.gov/iowa-courts/district-court/judicial-district-2/judges-and-magistrates/"
+ },
+ "3": {
+  "judges": [
+   {
+    "name": "Patrick H. Tott",
+    "role": "Chief Judge"
+   },
+   {
+    "name": "Steven J. Andreasen",
+    "role": "District Court Judge: District 3B"
+   },
+   {
+    "name": "Charles K. Borth",
+    "role": "District Court Judge: District 3A"
+   },
+   {
+    "name": "James N. Daane",
+    "role": "District Court Judge: 3B"
+   },
+   {
+    "name": "Tod Deck",
+    "role": "District Court Judge: District 3B"
+   },
+   {
+    "name": "Zachary Hindman",
+    "role": "District Court Judge: District 3B"
+   },
+   {
+    "name": "Shayne L. Mayer",
+    "role": "District Court Judge: District 3A"
+   },
+   {
+    "name": "Jeffrey A. Neary",
+    "role": "District Court Judge: District 3B"
+   },
+   {
+    "name": "Carl J. Petersen",
+    "role": "District Court Judge: District 3A"
+   },
+   {
+    "name": "Roger L. Sailer",
+    "role": "District Court Judge: 3B"
+   },
+   {
+    "name": "Andrew J. Smith",
+    "role": "District court Judge; District 3A"
+   },
+   {
+    "name": "Robert D. Tiefenthaler",
+    "role": "District Court Judge: District 3B"
+   },
+   {
+    "name": "Kristi Busse",
+    "role": "District Associate Judge: District 3A"
+   },
+   {
+    "name": "Mark Cord",
+    "role": "District Associate Judge: District 3"
+   },
+   {
+    "name": "Shawna L. Ditsworth",
+    "role": "District Associate Judge: 3A"
+   },
+   {
+    "name": "Jennifer Bennett Finn",
+    "role": "District Associate Judge: District 3A"
+   },
+   {
+    "name": "John C. Nelson",
+    "role": "District Associate Judge: District 3B"
+   },
+   {
+    "name": "Jessica R. Noll",
+    "role": "District Associate Judge"
+   },
+   {
+    "name": "Stephanie Forker Parry",
+    "role": "District Associate Judge"
+   },
+   {
+    "name": "Kristal L. Phillips",
+    "role": "District Associate Judge"
+   },
+   {
+    "name": "Daniel Vakulskas",
+    "role": "District Associate Judge"
+   },
+   {
+    "name": "Melinda B. Wicks",
+    "role": "District Associate Judge"
+   },
+   {
+    "name": "Todd Hensley",
+    "role": "Senior Judge: District 3B"
+   },
+   {
+    "name": "Duane E. Hoffmeyer",
+    "role": "Senior Judge: District 3B"
+   },
+   {
+    "name": "Timothy Jarman",
+    "role": "Senior Judge: District 3B"
+   },
+   {
+    "name": "David C. Larson",
+    "role": "Senior Judge: District 3A"
+   },
+   {
+    "name": "Nancy L. Whittenburg",
+    "role": "Senior Judge: District 3A"
+   },
+   {
+    "name": "Brad Bonner",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Brian E. Buckmeier",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Tobias Cosgrove",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Kley B. De Jong",
+    "role": "Magistrate: 3B"
+   },
+   {
+    "name": "Cody Farrens",
+    "role": "Magistrate"
+   },
+   {
+    "name": "David Forsyth",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Kevin J Huyser",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Molly Joly",
+    "role": "Magisrate"
+   },
+   {
+    "name": "Angela Kayl",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Mark J. Laddusaw",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Lisa Kay Mazurek",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Justin Reininger",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Abby L. Walleck",
+    "role": "Magistrate"
+   }
+  ],
+  "sourceUrl": "https://www.iowacourts.gov/iowa-courts/district-court/judicial-district-3/judges-and-magistrates/"
+ },
+ "4": {
+  "judges": [
+   {
+    "name": "Craig M. Dreismeier",
+    "role": "Chief Judge: District 4"
+   },
+   {
+    "name": "Jennifer Benson Bahr",
+    "role": "District Judge: District 4"
+   },
+   {
+    "name": "Donna Bothwell",
+    "role": "District Judge: District 4"
+   },
+   {
+    "name": "Richard H. Davidson",
+    "role": "District Court Judge: District 4"
+   },
+   {
+    "name": "Michael D. Hooper",
+    "role": "District Court Judge: District 4"
+   },
+   {
+    "name": "Eric J. Nelson",
+    "role": "District Court Judge: D4"
+   },
+   {
+    "name": "Margaret Reyes",
+    "role": "District Court Judge: District 4"
+   },
+   {
+    "name": "Justin Wyatt",
+    "role": "District Court Judge: District 4"
+   },
+   {
+    "name": "Amy Zacharias",
+    "role": "District Court Judge: District 4"
+   },
+   {
+    "name": "David W. Brooks",
+    "role": "District Associate Judge: District 4"
+   },
+   {
+    "name": "Charles D. Fagan",
+    "role": "District Associate Judge: District 4"
+   },
+   {
+    "name": "Matthew Schuling",
+    "role": "District Associate Judge"
+   },
+   {
+    "name": "Scott D. Strait",
+    "role": "District Associate Judge: District 4"
+   },
+   {
+    "name": "Ashley West-Joons",
+    "role": "District Associate Judge"
+   },
+   {
+    "name": "Gary Anderson",
+    "role": "Senior Judge: District 4"
+   },
+   {
+    "name": "Mark J. Eveloff",
+    "role": "Senior Judge: District 4"
+   },
+   {
+    "name": "James S. Heckerman",
+    "role": "Senior Judge: District 4"
+   },
+   {
+    "name": "Kathleen A. Kilnoski",
+    "role": "Senior Judge: District 4"
+   },
+   {
+    "name": "Jeffrey L. Larson",
+    "role": "Senior Judge: District 4"
+   },
+   {
+    "name": "Greg W Steensland",
+    "role": "Senior Judge: District 4"
+   },
+   {
+    "name": "Sara Benson",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Eric Checketts",
+    "role": "Magistrate"
+   },
+   {
+    "name": "William T. Early",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Justin Hockenberry",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Jonathan Mailander",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Brian S. Mensen",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Ivan Miller",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Jesse A. Render",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Aaron W. Rodenburg",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Robert V. Rodenburg",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Keith Tucker",
+    "role": "Magistrate"
+   }
+  ],
+  "sourceUrl": "https://www.iowacourts.gov/iowa-courts/district-court/judicial-district-4/judges-and-magistrates/"
+ },
+ "5": {
+  "judges": [
+   {
+    "name": "David M. Porter",
+    "role": "Chief Judge"
+   },
+   {
+    "name": "Nicholas A. Bailey",
+    "role": "District Court Judge: District 5A"
+   },
+   {
+    "name": "Scott J. Beattie",
+    "role": "District Court Judge"
+   },
+   {
+    "name": "Sarah Crane",
+    "role": "District Court Judge"
+   },
+   {
+    "name": "David Faith",
+    "role": "District Court Judge: District 5A"
+   },
+   {
+    "name": "Jeffrey D. Farrell",
+    "role": "District Court Judge: District 5C"
+   },
+   {
+    "name": "Celene Gogerty",
+    "role": "District Court Judge: 5C"
+   },
+   {
+    "name": "Patrick Greenwood",
+    "role": "District Judge: District 5"
+   },
+   {
+    "name": "Samantha J. Gronewald",
+    "role": "District Court Judge 5C"
+   },
+   {
+    "name": "Michael K. Jacobsen",
+    "role": "District Court Judge D5"
+   },
+   {
+    "name": "Christopher Kemp",
+    "role": "District Court Judge: District 5C"
+   },
+   {
+    "name": "Heather Lauber",
+    "role": "District Court Judge: District 5C"
+   },
+   {
+    "name": "Coleman J. McAllister",
+    "role": "District Court Judge: 5C"
+   },
+   {
+    "name": "Lawrence P. McLellan",
+    "role": "District Court Judge: District 5C"
+   },
+   {
+    "name": "Thomas P. \"Tom\" Murphy",
+    "role": "District Court Judge"
+   },
+   {
+    "name": "David Nelmark",
+    "role": "District Court Judge: 5C"
+   },
+   {
+    "name": "Dustria Ann Relph",
+    "role": "District Judge: District 5B"
+   },
+   {
+    "name": "Elisabeth Reynoldson",
+    "role": "District Court Judge: 5B"
+   },
+   {
+    "name": "Stacy Ritchie",
+    "role": "District Court Judge: 5A"
+   },
+   {
+    "name": "Scott D. Rosenberg",
+    "role": "District Court Judge: District 5C"
+   },
+   {
+    "name": "Paul Scott",
+    "role": "District Court Judge: District 5C"
+   },
+   {
+    "name": "Joseph W. Seidlin",
+    "role": "District Court Judge: District 5C"
+   },
+   {
+    "name": "Charles Sinnard",
+    "role": "District Court Judge: District 5A"
+   },
+   {
+    "name": "Patrick D. Smith",
+    "role": "District Court Judge: District 5C"
+   },
+   {
+    "name": "Jeanie K. Vaudt",
+    "role": "District Court Judge: District 5C"
+   },
+   {
+    "name": "Kimberly Ayotte",
+    "role": "District Associate Judge"
+   },
+   {
+    "name": "Jordan Brackey",
+    "role": "District Associate Judge: District 5C"
+   },
+   {
+    "name": "Gregory D. Brandt",
+    "role": "District Associate Judge: District 5C"
+   },
+   {
+    "name": "Susan Cox",
+    "role": "District Associate Judge: District 5C"
+   },
+   {
+    "name": "Erica Crisp",
+    "role": "District Associate Judge: 5A"
+   },
+   {
+    "name": "Kristen Formanek",
+    "role": "District Associate Judge: District 5C"
+   },
+   {
+    "name": "Becky Goettsch",
+    "role": "District Associate Judge: District 5C"
+   },
+   {
+    "name": "Brendan Greiner",
+    "role": "District Associate Judge: 5C"
+   },
+   {
+    "name": "Steven W. Guiter",
+    "role": "District Associate Judge: District 5A"
+   },
+   {
+    "name": "Steven J. Holwerda",
+    "role": "District Associate Judge: District 5"
+   },
+   {
+    "name": "Erik Howe",
+    "role": "District Associate Judge: District 5C"
+   },
+   {
+    "name": "Thomas Ogden",
+    "role": "District Associate Judge 5A"
+   },
+   {
+    "name": "Brent Pattison",
+    "role": "District Associate Judge: 5C"
+   },
+   {
+    "name": "Lynn Poschner",
+    "role": "District Associate Judge"
+   },
+   {
+    "name": "Jesse Ramirez",
+    "role": "District Associate Judge: District 5C"
+   },
+   {
+    "name": "Mark F. Schlenker",
+    "role": "District Associate Judge: District 5A"
+   },
+   {
+    "name": "Rachael E. Seymour",
+    "role": "District Associate Judge: District 5C"
+   },
+   {
+    "name": "Kimberly Smith",
+    "role": "District Associate Judge: District 5C"
+   },
+   {
+    "name": "Ashley Stewart",
+    "role": "District Associate Judge: District 5C"
+   },
+   {
+    "name": "Tabitha Lee Turner",
+    "role": "District 5C: District Associate Judge"
+   },
+   {
+    "name": "Katie Ranes",
+    "role": "District Associate Probate Judge: District 5C"
+   },
+   {
+    "name": "Andrew J. Zimmerman",
+    "role": "District Associate Judge 5B"
+   },
+   {
+    "name": "Craig E. Block",
+    "role": "Senior Judge"
+   },
+   {
+    "name": "Richard B. Clogg",
+    "role": "Senior Judge"
+   },
+   {
+    "name": "Michael D. Huppert",
+    "role": "Senior Judge: District 5C"
+   },
+   {
+    "name": "Martha Mertz",
+    "role": "Senior Judge"
+   },
+   {
+    "name": "Brad McCall",
+    "role": "District Court Judge: District 5A"
+   },
+   {
+    "name": "Kevin A. Parker",
+    "role": "Senior Judge"
+   },
+   {
+    "name": "Terry Rickers",
+    "role": "Senior Judge"
+   },
+   {
+    "name": "Gina Burress",
+    "role": "Magistrate: District 5A"
+   },
+   {
+    "name": "Shireen Carter",
+    "role": "Magistrate: District 5B"
+   },
+   {
+    "name": "Amy Davis",
+    "role": "Magistrate: District 5A"
+   },
+   {
+    "name": "Heather Dickinson",
+    "role": "Magistrate: District 5C"
+   },
+   {
+    "name": "Robert Engler",
+    "role": "Magistrate: 5B"
+   },
+   {
+    "name": "Timothy Farmer",
+    "role": "Magistrate: 5A"
+   },
+   {
+    "name": "David M. Erickson",
+    "role": "Magistrate: 5C"
+   },
+   {
+    "name": "Jeremy Feitelson",
+    "role": "Magistrate 5C"
+   },
+   {
+    "name": "Debra George",
+    "role": "Magistrate: 5B"
+   },
+   {
+    "name": "Justin Gross",
+    "role": "Magistrate: District 5C"
+   },
+   {
+    "name": "Adam D. Hanson",
+    "role": "Magistrate: District 5A"
+   },
+   {
+    "name": "Matthew C. Hanson",
+    "role": "Magistrate: District 5B"
+   },
+   {
+    "name": "Jeffrey M. Lipman",
+    "role": "Magistrate: District 5B"
+   },
+   {
+    "name": "Arielle Lipman",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Dale Mays",
+    "role": "Magistrate: 5A"
+   },
+   {
+    "name": "Adnan Mahmutagic",
+    "role": "Magistrate: District 5C"
+   },
+   {
+    "name": "Michael Maynes",
+    "role": "Magistrate: District 5B"
+   },
+   {
+    "name": "Todd G. Nielsen",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Anita Olson-Kiene",
+    "role": "Magistrate: District 5B"
+   },
+   {
+    "name": "Leah Patton",
+    "role": "Magistrate: District 5C"
+   },
+   {
+    "name": "Daniel Rockhold",
+    "role": "Magistrate: District 5B"
+   },
+   {
+    "name": "Beth Tigges",
+    "role": "Magistrate: District 5C"
+   },
+   {
+    "name": "Meggen L. Weeks",
+    "role": "Magistrate: District 5B"
+   }
+  ],
+  "sourceUrl": "https://www.iowacourts.gov/iowa-courts/district-court/judicial-district-5/judges-and-magistrates/"
+ },
+ "6": {
+  "judges": [
+   {
+    "name": "Lars G. Anderson",
+    "role": "Chief Judge"
+   },
+   {
+    "name": "Jason D. Besler",
+    "role": "District Court Judge"
+   },
+   {
+    "name": "Christopher L. Bruns",
+    "role": "District Court Judge"
+   },
+   {
+    "name": "Andrew B. Chappell",
+    "role": "District Court Judge"
+   },
+   {
+    "name": "Valerie Clay",
+    "role": "District Court Judge"
+   },
+   {
+    "name": "David Cox",
+    "role": "District Court Judge"
+   },
+   {
+    "name": "Elizabeth Dupuich",
+    "role": "District Court Judge"
+   },
+   {
+    "name": "Mark Fisher",
+    "role": "District Court Judge"
+   },
+   {
+    "name": "Michael J. Harris",
+    "role": "District Court Judge"
+   },
+   {
+    "name": "Chad A. Kepros",
+    "role": "District Court Judge"
+   },
+   {
+    "name": "Justin Lightfoot",
+    "role": "District Court Judge"
+   },
+   {
+    "name": "Kevin McKeever",
+    "role": "District Court Judge"
+   },
+   {
+    "name": "Ian K. Thornhill",
+    "role": "District Court Judge"
+   },
+   {
+    "name": "Joan Black",
+    "role": "District Associate Judge"
+   },
+   {
+    "name": "Carrie Bryner",
+    "role": "District Associate Judge"
+   },
+   {
+    "name": "Jason A. Burns",
+    "role": "District Associate Judge"
+   },
+   {
+    "name": "Heidi Ann Carmer",
+    "role": "District Associate Judge"
+   },
+   {
+    "name": "Angeline Johnston",
+    "role": "District Associate Judge"
+   },
+   {
+    "name": "Casey D. Jones",
+    "role": "District Associate Judge"
+   },
+   {
+    "name": "Russell Glen Keast",
+    "role": "District Associate Judge"
+   },
+   {
+    "name": "Kristin Schneider",
+    "role": "District Associate Judge"
+   },
+   {
+    "name": "Brandon Schrock",
+    "role": "District Associate Judge"
+   },
+   {
+    "name": "Nicholas L. Scott",
+    "role": "District Associate Judge"
+   },
+   {
+    "name": "Patrick R. Grady",
+    "role": "Senior Judge"
+   },
+   {
+    "name": "Sean W. McPartland",
+    "role": "Senior Judge"
+   },
+   {
+    "name": "Paul D. Miller",
+    "role": "Senior Judge"
+   },
+   {
+    "name": "Deborah Farmer Minot",
+    "role": "Senior Judge"
+   },
+   {
+    "name": "Robert E. Sosalla",
+    "role": "Senior Judge"
+   },
+   {
+    "name": "Mitchell E. Turner",
+    "role": "Senior Judge"
+   },
+   {
+    "name": "Kevin Ahrenholz",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Christine Boyer",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Dusty Clements",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Maria Cole",
+    "role": "Magistrate: 6"
+   },
+   {
+    "name": "Karen D. Egerton",
+    "role": "Magistrate"
+   },
+   {
+    "name": "David Fiester",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Chris Foster",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Dana A. Judas",
+    "role": "Magistrate:"
+   },
+   {
+    "name": "Eric Lam",
+    "role": "Magistrate: 6"
+   },
+   {
+    "name": "Mark Neary",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Kandyce J. Smolik",
+    "role": "Magistrate"
+   }
+  ],
+  "sourceUrl": "https://www.iowacourts.gov/iowa-courts/district-court/judicial-district-6/judges-and-magistrates/"
+ },
+ "7": {
+  "judges": [
+   {
+    "name": "Henry W. Latham",
+    "role": "Chief Judge: District 7"
+   },
+   {
+    "name": "Joel W. Barrows",
+    "role": "District Court Judge: District 7"
+   },
+   {
+    "name": "Jeffrey D. Bert",
+    "role": "District Court Judge: District 7"
+   },
+   {
+    "name": "Meghan K. Corbin",
+    "role": "District Court Judge: District 7"
+   },
+   {
+    "name": "Mark R. Fowler",
+    "role": "District Court Judge: District 7"
+   },
+   {
+    "name": "Mark R. Lawson",
+    "role": "District Court Judge: District 7"
+   },
+   {
+    "name": "Jeffrey C. McDaniel",
+    "role": "District Court Judge: District 7"
+   },
+   {
+    "name": "Patrick A. McElyea",
+    "role": "District Court Judge: District 7"
+   },
+   {
+    "name": "Elizabeth M. O'Donnell",
+    "role": "District Court Judge: District 7"
+   },
+   {
+    "name": "Thomas G. Reidel",
+    "role": "District Court Judge: District 7"
+   },
+   {
+    "name": "Tamra J. Roberts",
+    "role": "District Court Judge: District 7"
+   },
+   {
+    "name": "Stuart P. Werling",
+    "role": "District Court Judge: District 7"
+   },
+   {
+    "name": "Christine Dalton Ploof",
+    "role": "District Associate Judge: District 7"
+   },
+   {
+    "name": "Peter G. Gierut",
+    "role": "District Associate Judge: District 7"
+   },
+   {
+    "name": "Michael E. Motto",
+    "role": "District Associate Judge: District 7"
+   },
+   {
+    "name": "Kimberly K. Shepherd",
+    "role": "District Associate Judge: District 7"
+   },
+   {
+    "name": "Gary P. Strausser",
+    "role": "District Associate Judge: District 7"
+   },
+   {
+    "name": "Cheryl E. Traum",
+    "role": "District Associate Judge: District 7"
+   },
+   {
+    "name": "John D. Telleen",
+    "role": "Senior Judge"
+   },
+   {
+    "name": "Mark D. Cleve",
+    "role": "Senior District Court Judge: District 7"
+   },
+   {
+    "name": "Katherine R. Abel",
+    "role": "Magistrate: Cedar County"
+   },
+   {
+    "name": "Paul A. Aitken",
+    "role": "Magistrate: Scott County"
+   },
+   {
+    "name": "Ryan M. Beckenbaugh",
+    "role": "Magistrate: Scott County"
+   },
+   {
+    "name": "Meena Brandt",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Jennie Clausen",
+    "role": "Magistrate: Scott County"
+   },
+   {
+    "name": "Sara Davenport",
+    "role": "Magistrate: Clinton County"
+   },
+   {
+    "name": "Christine D. Frederick",
+    "role": "Magistrate: Scott County"
+   },
+   {
+    "name": "Troy Howell",
+    "role": "Magistrate: Scott County"
+   },
+   {
+    "name": "Lynne C. Jasper",
+    "role": "Magistrate: Scott County"
+   },
+   {
+    "name": "Kyle R. Maurer",
+    "role": "Magistrate: Cedar County"
+   },
+   {
+    "name": "Sarah E. Oldsen",
+    "role": "Magistrate: Jackson County"
+   },
+   {
+    "name": "Patricia Rolfstad",
+    "role": "Magistrate: Clinton County"
+   },
+   {
+    "name": "Jay R. Sommers",
+    "role": "Magistrate: Scott County"
+   },
+   {
+    "name": "Elizabeth A. Srp",
+    "role": "Magistrate: Clinton County"
+   },
+   {
+    "name": "Eric C. Syverud",
+    "role": "Magistrate: Scott County"
+   },
+   {
+    "name": "Cynthia Zamora Taylor",
+    "role": "Magistrate: Scott County"
+   },
+   {
+    "name": "Joel A. Walker",
+    "role": "Magistrate: Muscatine County"
+   },
+   {
+    "name": "Richard D. Wells",
+    "role": "Magistrate: Scott County"
+   }
+  ],
+  "sourceUrl": "https://www.iowacourts.gov/iowa-courts/district-court/judicial-district-7/judges-and-magistrates/"
+ },
+ "8": {
+  "judges": [
+   {
+    "name": "Shawn R. Showers",
+    "role": "Chief Judge: District 8"
+   },
+   {
+    "name": "Clinton Boddicker",
+    "role": "Assistant Chief Judge: District 8"
+   },
+   {
+    "name": "Michael O. Carpenter",
+    "role": "District Court Judge: District 8A"
+   },
+   {
+    "name": "Crystal Cronk",
+    "role": "District Court Judge: District 8A"
+   },
+   {
+    "name": "Dustin Hite",
+    "role": "District Court Judge: 8A"
+   },
+   {
+    "name": "Wyatt Peterson",
+    "role": "District Court Judge: District 8B"
+   },
+   {
+    "name": "Joshua Schier",
+    "role": "District Court Judge: District 8B"
+   },
+   {
+    "name": "Amber Thompson",
+    "role": "District Court Judge: District 8A"
+   },
+   {
+    "name": "Shane M. Wiley",
+    "role": "District Court Judge: District 8B"
+   },
+   {
+    "name": "John M. Wright",
+    "role": "District Court Judge: District 8B"
+   },
+   {
+    "name": "Joel D. Yates",
+    "role": "District Court Judge: District 8A"
+   },
+   {
+    "name": "Susan Cole",
+    "role": "District Associate Judge: District 8A"
+   },
+   {
+    "name": "Emily Dean",
+    "role": "District Associate Judge: District 8B"
+   },
+   {
+    "name": "Nicole Jensen",
+    "role": "District Associate Judge: District 8A"
+   },
+   {
+    "name": "Daniel P. Kitchen",
+    "role": "District Associate Judge: District 8A"
+   },
+   {
+    "name": "Richelle Mahaffey",
+    "role": "District Associate Judge: District 8A"
+   },
+   {
+    "name": "Patrick J. McAvan",
+    "role": "District Associate Judge: District 8A"
+   },
+   {
+    "name": "Ty Rogers",
+    "role": "District Associate Judge: District 8B"
+   },
+   {
+    "name": "Jennifer Slocum",
+    "role": "District Associate Judge: District 8B"
+   },
+   {
+    "name": "Jonathan Stensvaag",
+    "role": "District Associate Judge: 8B"
+   },
+   {
+    "name": "Mary Ann Brown",
+    "role": "Senior Judge: District 8B"
+   },
+   {
+    "name": "Kirk A. Daily",
+    "role": "Senior Judge: District 8A"
+   },
+   {
+    "name": "Mark Kruse",
+    "role": "Senior Judge: District 8B"
+   },
+   {
+    "name": "Gary R. Noneman",
+    "role": "Senior Judge: District 8B"
+   },
+   {
+    "name": "William S. Owens",
+    "role": "Senior Judge: District 8A"
+   },
+   {
+    "name": "Michael J. Schilling",
+    "role": "Senior Judge: District 8B"
+   },
+   {
+    "name": "Daniel P. Wilson",
+    "role": "Senior Judge: District 8A"
+   },
+   {
+    "name": "Patrick C. Brau",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Larry Brock",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Michael Fisher",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Joseph Goedken",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Timothy B. Liechty",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Monte McCoy",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Phil Parsons",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Rebecca Petig",
+    "role": "Magistrate"
+   },
+   {
+    "name": "James R. Underwood",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Lois Vroom",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Julian West",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Steven J. Westercamp",
+    "role": "Magistrate"
+   },
+   {
+    "name": "Misty White",
+    "role": "Magistrate"
+   }
+  ],
+  "sourceUrl": "https://www.iowacourts.gov/iowa-courts/district-court/judicial-district-8/district-8-judges-and-magistrates/"
+ }
+}
