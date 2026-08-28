@@ -447,6 +447,23 @@ confirmed live**: two decoys exist at deceptively similar names — `IaPrecincts
 `Precincts` service on the SAME org as the real one (1,689 features, no edit metadata, unexplained) —
 **the builder must pin the item id, never search by service name.** PR 4.
 
+**Shipped 2026-08-28 (PR 4).** The raw fetch (native precision, all 1,660 features) ran ~18 MB —
+this instance's largest single source file by a wide margin, because precincts follow actual
+parcel/road boundaries rather than county lines the way the chamber districts do. Cut to under 3 MB
+(2,945,407 bytes) by the same Visvalingam `keep-shapes` mapshaper pipeline
+`build_legislative_boundaries.py` established, adapted to precincts' `PCTID_TXT` key, gated at the
+fleet's standard 2,000-random-point agreement check: 1999/2000 (99.95%) agreement, 0 multi-feature
+overlaps. mapshaper reports 78 source self-intersections it cannot auto-repair, unchanged across
+reruns — a property of the source digitization, not treated as fatal, since the point-agreement gate
+is what actually proves correctness, not mapshaper's own repair log. The predicted name gap was
+confirmed exactly as expected: `PctNameOfficial` is empty on 2 of 1,660 records (Warren County
+precincts 91-1 and 91-31), recovered via a title-cased `Label` fallback (Label is populated on all
+1,660 with no exceptions). Shipped `precinct` via `registerPolygonLayer` (compact, identity-only —
+name + county, no roster: a precinct has no elected representative of its own). Polling-place fields
+are withheld the strongest way available: `PollingPlace`/`PollingPlaceAddr`/`PPID` are never added to
+the builder's `outFields` query parameter at all, so a future edit cannot add them to a card by
+merely forgetting a display-only filter.
+
 `ia-judicial-district` (8 whole-county unions). Iowa Code §§602.6107/602.6109, Code 2003 — CONFIRMED,
 was ASSERTED, frozen by a transitional provision subject to a decennial Supreme Court review (next
 possible redraw window opened 2012, none enacted — worth a one-line card/backlog note that the

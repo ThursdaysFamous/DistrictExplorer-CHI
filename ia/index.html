@@ -5978,6 +5978,7 @@ function initIowaExplorer() {
     "county-subdivision", // 1,663 records tiling the state, live from TIGERweb (no data/app file) — 1,600 civil townships, 62 incorporated cities that double as their own subdivision record, and one federal reservoir carried as unorganized territory
     "municipality",      // 939 incorporated cities, live from TIGERweb (no data/app file) — small dense pockets within the county-subdivision fabric, so smaller on average than a civil township despite fewer records
     "zip-code",          // Census ZCTAs by Iowa envelope (no data/app file) — 1,443 features measured in-envelope, smaller on average than an incorporated city
+    "precinct",          // 1,660 election precincts, pre-built (mapshaper-simplified from the Legislature's own ArcGIS layer) — identity-only, no roster; ranked with the other fine-grained political boundaries
     "police-station",    // Nearest-3 point layer (449 stations in the state envelope) — not a containment boundary; ranked with the amenity points
     "fire-station",      // Nearest-3 point layer (1,262 stations in the state envelope) — denser than the police set, so ranked after it
     "school-site",       // Nearest-3 point layer (1,321 public school buildings, pre-built) — not a containment boundary; ranked with the amenity points
@@ -9059,6 +9060,33 @@ function initIowaExplorer() {
     }
   });
 
+  /* ---------- 14. Precinct — Iowa Legislature, phase 2 PR 4 ----------
+   * Pre-built (ia/scripts/build_ia_precincts.py) from the Iowa
+   * Legislature's own ArcGIS org — 1,660 election precincts across all 99
+   * counties, vintage 2024-01-30. Identity-only card, DELIBERATELY: the
+   * live layer also carries a polling place name/address in-band, but no
+   * dated, per-election display contract exists yet for that (phase 4 —
+   * see Wisconsin's own five-condition contract for what that needs), so
+   * this builder never fetches those columns at all — a field that was
+   * never fetched cannot leak onto a card. No roster: a precinct has no
+   * elected representative of its own. ---------- */
+  var loadIaPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/ia-precincts.json", {}, 2);
+  });
+
+  registerPolygonLayer({
+    id: "precinct",
+    group: "political",
+    label: "Precinct",
+    loader: loadIaPrecincts,
+    style: { color: "#5C4B8C", weight: 1, fillColor: "#8F7BC4", fillOpacity: 0.04, dashArray: "2 2" },
+    fields: [
+      { name: "name", label: "Precinct", keys: ["name"], primary: true },
+      { name: "county", label: "County", keys: ["county"] }
+    ],
+    compact: true, compactMetaField: "county" // 4b name-only card
+  });
+
   /* =========================================================================
    * GROWING THIS FORK — docs/EXPANSION_GUIDE.md Part 3 (deepening a state)
    * and Part 4 (a new concept). Phase 1 of docs/IA_EXPANSION_PLAN.md is now
@@ -9627,7 +9655,7 @@ function initIowaExplorer() {
   // standard"): representation first, then services, then geography broad ->
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
-  var LAYER_SIDEBAR_RANK = ["us-house", "ia-senate", "ia-house", "county", "county-subdivision", "municipality", "county-supervisor", "school-district-unified", "zip-code", "police-station", "fire-station", "school-site", "post-office"];
+  var LAYER_SIDEBAR_RANK = ["us-house", "ia-senate", "ia-house", "county", "county-subdivision", "municipality", "county-supervisor", "school-district-unified", "zip-code", "precinct", "police-station", "fire-station", "school-site", "post-office"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -9727,8 +9755,9 @@ function initIowaExplorer() {
   var DST_DARK_MAP_COLORS = { "#0B5394": "#4FA4FE", "#14181C": "#696F76", "#1B5E3F": "#5FB387",
     "#1B7A3D": "#58CD7A", "#2E9E6B": "#5BEAA5", "#2F6B3A": "#6FBE7B", "#41B6E6": "#C6EBFE",
     "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD", "#4B2E83": "#9E7BF1", "#4C8F59": "#83DC93",
-    "#6B7280": "#B1BBCE", "#7A0B1E": "#EA5C63", "#7A5C3E": "#CFA57D", "#8C2E4A": "#F47294",
-    "#A98B6C": "#F3CBA1", "#B0316E": "#FD88B8", "#D06A9C": "#FFBDDA"};
+    "#5C4B8C": "#AB95EF", "#6B7280": "#B1BBCE", "#7A0B1E": "#EA5C63", "#7A5C3E": "#CFA57D",
+    "#8C2E4A": "#F47294", "#8F7BC4": "#D1C2FF", "#A98B6C": "#F3CBA1", "#B0316E": "#FD88B8",
+    "#D06A9C": "#FFBDDA"};
   /* ==== GENERATED:END dark-map-palette ==== */
   /* ==== ENGINE:BEGIN districtry-theme ==== */
   /* The theme controller and the wordmark fleet switch, shared for the same

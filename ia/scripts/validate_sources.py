@@ -237,6 +237,20 @@ PROVENANCE = [
             "the geometry source."
         ),
     },
+    {
+        "layer": "precinct",
+        "app_file": "ia-precincts.json",
+        "source_url": "https://services.arcgis.com/vPD5PVLI6sfkZ5E4/arcgis/rest/services/Iowa_Precincts/FeatureServer/0",
+        "note": (
+            "1,660 election precincts across all 99 counties, pre-built by "
+            "ia/scripts/build_ia_precincts.py from the Iowa Legislature's "
+            "own ArcGIS org (item d394edea208c4003ac1d6bd1ec78532f, pinned "
+            "by URL rather than name — two decoy services with confusingly "
+            "similar names live on the same and a sibling org). "
+            "Visvalingam-simplified with a 2,000-point agreement gate; "
+            "polling-place fields are never fetched."
+        ),
+    },
 ]
 
 # Live endpoints the app queries at runtime.

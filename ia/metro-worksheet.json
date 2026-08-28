@@ -136,7 +136,18 @@
       }
     },
     {
-      "id": "police-station", "label": "Police Station", "group": "safety", "area_rank": 10,
+      "id": "precinct", "label": "Precinct", "group": "political", "area_rank": 10,
+      "rank_note": "1,660 election precincts, pre-built (mapshaper-simplified from the Legislature's own ArcGIS layer) — identity-only, no roster; ranked with the other fine-grained political boundaries",
+      "source": {
+        "answers": "The election precinct covering the point, and its county.",
+        "boundary": [
+          { "label": "Iowa Legislature's own ArcGIS organization — Iowa_Precincts layer, pre-built by ia/scripts/build_ia_precincts.py (Visvalingam-simplified, 2,000-point agreement gate)", "url": "https://services.arcgis.com/vPD5PVLI6sfkZ5E4/arcgis/rest/services/Iowa_Precincts/FeatureServer/0" }
+        ],
+        "applies": "Iowa — statewide, all 1,660 precincts across 99 counties. Polling-place fields (PollingPlace/PollingPlaceAddr/PPID) are deliberately never fetched — a precinct's polling place changes far more often than its boundary and this layer makes no claim about it."
+      }
+    },
+    {
+      "id": "police-station", "label": "Police Station", "group": "safety", "area_rank": 11,
       "rank_note": "Nearest-3 point layer (449 stations in the state envelope) — not a containment boundary; ranked with the amenity points",
       "source": {
         "answers": "The three nearest police stations, straight-line distance.",
@@ -147,7 +158,7 @@
       }
     },
     {
-      "id": "fire-station", "label": "Fire Station", "group": "safety", "area_rank": 11,
+      "id": "fire-station", "label": "Fire Station", "group": "safety", "area_rank": 12,
       "rank_note": "Nearest-3 point layer (1,262 stations in the state envelope) — denser than the police set, so ranked after it",
       "source": {
         "answers": "The three nearest fire stations, straight-line distance.",
@@ -158,7 +169,7 @@
       }
     },
     {
-      "id": "school-site", "label": "School Location", "group": "schools", "area_rank": 12,
+      "id": "school-site", "label": "School Location", "group": "schools", "area_rank": 13,
       "rank_note": "Nearest-3 point layer (1,321 public school buildings, pre-built) — not a containment boundary; ranked with the amenity points",
       "source": {
         "answers": "The three nearest public school buildings, straight-line distance.",
@@ -169,7 +180,7 @@
       }
     },
     {
-      "id": "post-office", "label": "Post Office", "group": "geography", "area_rank": 13,
+      "id": "post-office", "label": "Post Office", "group": "geography", "area_rank": 14,
       "rank_note": "Nearest-3 point layer, straight-line distance — not a containment boundary, ranked last",
       "source": {
         "answers": "The three nearest post offices, straight-line distance.",
@@ -202,7 +213,8 @@
       { "file": "ia-supervisor-districts.json", "min_features": 270, "max_features": 270, "note": "Every county supervisor district across 98 of 99 counties (Jones County absent — a recorded gap), built by ia/scripts/build_ia_supervisor_districts.py: the state's own aggregate for 95 counties, Black Hawk's own hosted GIS (5 real districts), and Story/Johnson as one county-level TRANSITIONING feature each (5,000-in-state-point agreement gate)." },
       { "file": "jones-county-outline.json", "min_features": 1, "max_features": 1, "dynamic_reference": true, "note": "Jones County's own boundary, extracted from state-counties.json by ia/scripts/build_ia_county_outline.py — the Data-gaps panel's map highlight for gap jones-county-supervisor. Referenced dynamically (built from the gap's county slug at runtime), never by a literal in index.html." },
       { "file": "ia-school-districts.json", "min_features": 324, "max_features": 324, "note": "324 unified school districts, built by ia/scripts/build_ia_school_districts.py: TIGERweb's 325 dissolved (Orient-Macksburg into Nodaway Valley) and witnessed by name against the Dept. of Education's own current layer (2,000-point agreement gate)." },
-      { "file": "ia-school-sites.json", "min_features": 1321, "max_features": 1321, "note": "1,321 public school buildings, pre-built by ia/scripts/build_ia_school_sites.py from the Iowa Legislature's own ArcGIS org's IowaSchoolBldgs layer (paginated past its 1,000-record cap)." }
+      { "file": "ia-school-sites.json", "min_features": 1321, "max_features": 1321, "note": "1,321 public school buildings, pre-built by ia/scripts/build_ia_school_sites.py from the Iowa Legislature's own ArcGIS org's IowaSchoolBldgs layer (paginated past its 1,000-record cap)." },
+      { "file": "ia-precincts.json", "min_features": 1660, "max_features": 1660, "note": "1,660 election precincts across all 99 counties, pre-built by ia/scripts/build_ia_precincts.py from the Iowa Legislature's own ArcGIS org's Iowa_Precincts layer (Visvalingam-simplified from ~18MB raw to under 3MB, 2,000-point agreement gate; polling-place fields never fetched)." }
     ],
     "rosters": [
       { "file": "congress-roster.json", "min_keys": 4, "note": "U.S. House roster, refreshed weekly by update-ia-congress-roster.yml." },
