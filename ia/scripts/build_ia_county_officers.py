@@ -320,7 +320,7 @@ def main():
 
     directory = {}
     filled = {k: 0 for k, _ in OFFICES}
-    boards = withheld = divergences = mislabels = resolved = 0
+    boards = withheld = divergences = mislabels = resolved = switchboards = 0
     pins_used = set()
     withheld_detail = []
 
@@ -430,9 +430,27 @@ def main():
                         m["party"] = party
                 members.append(m)
             members.sort(key=lambda m: surname(m["name"]))
+            # AN IDENTICAL PHONE ON EVERY MEMBER ROW IS A SWITCHBOARD, NOT
+            # CONTACT (docs/EXPANSION_GUIDE.md Part 5). Repeating one number
+            # under five names implies five direct lines that do not exist.
+            # The guide states the test mechanically -- collect the distinct
+            # numbers, and if exactly one covers the whole board, it belongs to
+            # the board -- so it is applied that way here rather than by a
+            # per-county pin. Measured 2026-08-28: every one of the 92 boards
+            # ISAC publishes is a single switchboard, but a county that ever
+            # publishes real per-member lines keeps them on the members.
+            phones = {m["phone"] for m in members if m.get("phone")}
+            if len(phones) == 1 and len(members) > 1:
+                entry["boardPhone"] = phones.pop()
+                switchboards += 1
+                for m in members:
+                    m.pop("phone", None)
             entry["supervisors"] = members
             if seats is not None:
                 entry["supervisorSeats"] = seats
+            plan = (board_dir.get(geoid[2:].lstrip("0").zfill(3), {}) or {}).get("plan")
+            if plan:
+                entry["supervisorPlan"] = plan
             boards += 1
 
         directory[geoid] = entry
@@ -487,6 +505,8 @@ def main():
                 raise RuntimeError("%s supervisor carries unexpected field(s) %s"
                                    % (geoid, sorted(set(m) - {"name", "phone", "party"})))
 
+    print("  switchboard phones hoisted off member rows: %d board(s)" % switchboards,
+          file=sys.stderr)
     print("ia-county-officers: %d counties | %s | boards %d, withheld %d | "
           "%d e-mails, %d phones | %d office(s) withheld for divergence, "
           "%d ISAC mislabel(s) corrected, %d pinned divergence(s)"

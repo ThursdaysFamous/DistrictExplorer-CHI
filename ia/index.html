@@ -5978,6 +5978,7 @@ function initIowaExplorer() {
     "school-district-unified", // 324 unified school districts, statewide — the only school-district tiling Iowa runs (TIGER's elementary/secondary layers measure zero)
     "school-director-district", // 716 director districts inside the 324 school districts — the sub-district fabric a board is elected from, where a district elects by district at all
     "community-college", // 15 merged areas, shipped as published (no dissolve) — larger on average than a school district, ranked beside it
+    "cc-director-district", // 123 director districts inside the 15 community college merged areas — the sub-fabric a college's board of trustees is elected from (Iowa Code 260C.11)
     "county-subdivision", // 1,663 records tiling the state, live from TIGERweb (no data/app file) — 1,600 civil townships, 62 incorporated cities that double as their own subdivision record, and one federal reservoir carried as unorganized territory
     "municipality",      // 939 incorporated cities, live from TIGERweb (no data/app file) — small dense pockets within the county-subdivision fabric, so smaller on average than a civil township despite fewer records
     "zip-code",          // Census ZCTAs by Iowa envelope (no data/app file) — 1,443 features measured in-envelope, smaller on average than an incorporated city
@@ -8394,6 +8395,24 @@ function initIowaExplorer() {
   var loadIaCountyOfficers = makeCached(function () {
     return fetchJSONWithRetry("data/app/ia-county-officers.json", {}, 2);
   });
+  var loadIaSupervisorMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/ia-supervisor-members.json", {}, 2);
+  });
+  // What a list of supervisors MEANS, per Iowa Code 331.206's representation
+  // plan. An unqualified list of N names claims all N represent the reader,
+  // which is true under plans 1 and 2 and FALSE under plan 3 — the fleet rule
+  // is docs/EXPANSION_GUIDE.md Part 5, "PROVE 'AT LARGE' FROM A CERTIFIED
+  // ELECTION DOCUMENT": stating it wrong "tells a reader nine people represent
+  // them when one does". A county whose plan this app does not know (Jones,
+  // absent from the state's own district layer) claims NEITHER.
+  var IA_BOARD_PLAN_NOTE = {
+    "PLAN 1": "Elected at large — every voter in the county votes on every seat.",
+    "PLAN 2": "Elected countywide — every voter votes on every seat, though each " +
+      "supervisor must live in a different district.",
+    "PLAN 3": "Elected by district — one of these supervisors represents you, not the whole board.",
+    "TRANSITIONING": "This county is moving from at-large to district elections " +
+      "(Senate File 75); the board below is the one sitting now."
+  };
   // The other five elected county offices, in the order Iowa Code ch. 331
   // names them. The auditor is not here: it ships from its own file above
   // (Iowa Code 47.2 makes it the county's commissioner of elections) and
@@ -8422,7 +8441,8 @@ function initIowaExplorer() {
       return Promise.all([
         queryFeatureAt(loadStateCounties, point),
         loadIaCountyAuditors().catch(function () { return null; }),
-        loadIaCountyOfficers().catch(function () { return null; })
+        loadIaCountyOfficers().catch(function () { return null; }),
+        loadIaSupervisorMembers().catch(function () { return null; })
       ]).then(function (parts) {
         var feature = parts[0];
         if (!feature) return null;
@@ -8430,12 +8450,17 @@ function initIowaExplorer() {
         var geoid = findPropCI(props, ["geoid"]);
         var auditor = (parts[1] && geoid != null) ? parts[1][String(geoid)] : null;
         var officers = (parts[2] && geoid != null) ? parts[2][String(geoid)] : null;
+        // the supervisor roster is keyed by 3-digit county FIPS, the county
+        // GEOID's own tail
+        var keyed = (parts[3] && geoid != null)
+          ? parts[3][String(geoid).slice(2)] : null;
         return {
           seq: seq,
           name: findPropCI(props, ["name"]),
           geoid: geoid,
           auditor: auditor || null,
-          officers: officers || null
+          officers: officers || null,
+          supervisorDistricts: (keyed && keyed.districts) || null
         };
       });
     },
@@ -8492,12 +8517,49 @@ function initIowaExplorer() {
         var supervisors = officers.supervisors;
         if (supervisors && supervisors.length) {
           wrap.appendChild(renderSectionLabel("BOARD OF SUPERVISORS"));
-          wrap.appendChild(renderPersonRows(supervisors.map(function (m) {
-            var row = { name: String(m.name), badge: "Supervisor" };
+          var planNote = IA_BOARD_PLAN_NOTE[officers.supervisorPlan];
+          if (planNote) {
+            wrap.appendChild(renderFieldStack([{ label: "Election", value: planNote }]));
+          }
+          // Where this county's districts are keyed (phase 3 PR 2), each name
+          // carries the district it holds, so a plan-3 reader can find theirs
+          // instead of reading five names and guessing.
+          var byName = {};
+          var keyedDistricts = result.supervisorDistricts;
+          if (keyedDistricts) {
+            Object.keys(keyedDistricts).forEach(function (d) {
+              var rec = keyedDistricts[d];
+              if (rec && rec.name) byName[String(rec.name)] = d;
+            });
+          }
+          // where every seat is keyed, order by district rather than by
+          // surname — a plan-3 reader is looking for a number, not a name
+          var ordered = supervisors.slice();
+          if (ordered.length && ordered.every(function (m) { return byName[String(m.name)]; })) {
+            ordered.sort(function (a, b) {
+              return parseInt(byName[String(a.name)], 10) - parseInt(byName[String(b.name)], 10);
+            });
+          }
+          wrap.appendChild(renderPersonRows(ordered.map(function (m) {
+            var dist = byName[String(m.name)];
+            var row = {
+              name: String(m.name),
+              badge: dist ? "District " + String(dist) : "Supervisor"
+            };
             if (m.party) row.note = String(m.party);
+            // no phone here on purpose: where every member shares one number it
+            // is the board office's, hoisted to the office block below
             if (m.phone) row.phone = String(m.phone);
             return row;
           })));
+          if (officers.boardPhone) {
+            // one row, not an office expander: this is the single number the
+            // whole board shares, and it reads as what it is rather than as
+            // five direct lines
+            wrap.appendChild(renderLinkRow({
+              title: "Board office", phone: String(officers.boardPhone)
+            }));
+          }
         } else if (officers.supervisorsWithheld) {
           unresolved.push({
             label: "Board of supervisors",
@@ -8677,6 +8739,7 @@ function initIowaExplorer() {
           seq: seq,
           member: member || null,
           memberSourceUrl: keyed ? keyed.sourceUrl : null,
+          boardPhone: keyed ? keyed.boardPhone : null,
           county: findPropCI(props, ["county"]),
           district: district,
           plantype: findPropCI(props, ["plantype"]),
@@ -8704,8 +8767,16 @@ function initIowaExplorer() {
       if (result.member && result.member.name) {
         var person = { name: String(result.member.name), badge: "Supervisor" };
         if (result.member.party) person.note = String(result.member.party);
-        if (result.member.phone) person.phone = String(result.member.phone);
+        // NO PHONE ON THIS ROW. Every county keyed here publishes ONE number
+        // for the whole board, which is the courthouse board office and not
+        // this supervisor's line — it rides the labelled row below instead of
+        // being presented as a direct line the reader does not have.
         wrap.appendChild(renderPersonRows([person]));
+        if (result.boardPhone) {
+          wrap.appendChild(renderLinkRow({
+            title: "Board office", phone: String(result.boardPhone)
+          }));
+        }
       }
       var rows = [];
       rows.push({
@@ -9431,6 +9502,130 @@ function initIowaExplorer() {
     }
   });
 
+  /* ---------- 9b. CC Director District — the trustees' own sub-fabric ----------
+   * Iowa Code 260C.11: a merged area's board of directors is elected from
+   * director districts of substantially equal population. This layer is that
+   * sub-fabric inside the 15 colleges the parent ships
+   * (data/app/ia-cc-director-districts.json,
+   * ia/scripts/build_ia_cc_director_districts.py).
+   *
+   * 123 polygons cover 124 seats and the shortfall is at source, not here:
+   * Des Moines Area publishes districts 1 and 3-9 and NO District 2. The
+   * builder refuses to interpolate it, so a point inside that missing district
+   * answers with no card rather than with a neighbouring district's number.
+   *
+   * IDENTITY-ONLY. Trustees ARE elected per district, but no statewide roster
+   * exists and the 15 colleges publish their boards 15 ways — 6 name a
+   * numbered district on a discoverable page, one sits behind a captcha and
+   * one refuses this client (measured 2026-08-28, per college, in WATCH.md).
+   * Joining 6 of 15 would leave a reader unable to tell a college with no
+   * published district from one this app simply has not read. ---------- */
+  var loadCcDirectorDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/ia-cc-director-districts.json", {}, 2);
+  });
+
+  registerLayer({
+    id: "cc-director-district",
+    group: "schools",
+    subOf: "community-college",
+    label: "CC Director District",
+    overlay: {
+      load: loadCcDirectorDistricts,
+      // the parent's hue, one shade brighter and solid, so the sub-districts
+      // read as inside their merged area rather than as a second fabric
+      style: { color: "#7A4B12", weight: 1, fillColor: "#D89A4E", fillOpacity: 0.14 }
+    },
+    hoverName: function (feature) {
+      var v = findPropCI(feature.properties || {}, ["label"]);
+      return v != null ? String(v) : null;
+    },
+    // TWO LEGS, AND THE SECOND ONE IS THE POINT. The director districts encode
+    // the 2023 merged-area plan; the parent layer is the 2026 update, and the
+    // two draw the college boundary differently. In the ~0.2% of ground where
+    // they disagree a single-source lookup answers with a DIFFERENT college
+    // than the parent card names — measured live at 41.536,-92.685, where the
+    // parent says Des Moines Area and this layer's polygon says Indian Hills.
+    // A sub-layer contradicting its own parent is worse than a silent one, and
+    // nothing here can tell which boundary is right, so a mismatch answers with
+    // no district and says why.
+    query: function (point, seq) {
+      return Promise.all([
+        queryFeatureAt(loadCcDirectorDistricts, point),
+        queryFeatureAt(loadIaCommunityColleges, point).catch(function () { return null; })
+      ]).then(function (parts) {
+        var feature = parts[0];
+        if (!feature) return null;
+        var props = feature.properties || {};
+        var parentProps = (parts[1] && parts[1].properties) || null;
+        var parentName = parentProps ? findPropCI(parentProps, ["name"]) : null;
+        var name = findPropCI(props, ["name"]);
+        return {
+          seq: seq,
+          label: findPropCI(props, ["label"]),
+          name: name,
+          population: findPropCI(props, ["population"]),
+          // null when the parent could not be read at all — only a real
+          // disagreement suppresses the district
+          disagrees: (parentName != null && name != null &&
+                      String(parentName) !== String(name)) ? String(parentName) : null
+        };
+      });
+    },
+    cardIdentifier: function (result) {
+      return result.disagrees ? null
+        : (result.label != null ? String(result.label) : "Unknown district");
+    },
+    render: function (result) {
+      if (result.disagrees) {
+        return renderFieldStack([{
+          label: "Not shown",
+          value: "The two published plans disagree about which college covers this " +
+            "point — the merged-area layer says " + String(result.disagrees) +
+            " and the 2023 director-district plan says " + String(result.name) +
+            ". They are drawn three years apart, and this app cannot tell which " +
+            "boundary is current, so it names neither district."
+        }]);
+      }
+      var rows = [
+        { label: "Director district", value: result.label != null ? String(result.label) : "Unknown", primary: true },
+        { label: "Community college", value: result.name != null ? String(result.name) : "Unknown" }
+      ];
+      if (result.population != null) {
+        rows.push({ label: "2020 population", value: Number(result.population).toLocaleString() });
+      }
+      rows.push({
+        label: "Election",
+        value: "One member of this college's board of trustees is elected from " +
+          "this district (Iowa Code 260C.11)."
+      });
+      rows.push({
+        label: "Trustees",
+        value: "Not shown. Iowa publishes no statewide roster of community " +
+          "college trustees, and the 15 colleges publish their boards 15 " +
+          "different ways — naming some and not others would read as a college " +
+          "having no trustees rather than as one this app has not read."
+      });
+      return renderFieldStack(rows);
+    },
+    // Frame the parent while this is on (the WI mpd-squad-area contract): a
+    // director district only means anything against the college it divides.
+    onToggle: function (on) {
+      var parentRt = layerRuntime["community-college"];
+      if (!parentRt) return;
+      if (on) {
+        if (!state.layersOn["community-college"]) {
+          var box = document.getElementById("toggle-community-college");
+          if (box && !box.checked) box.click();
+        }
+        parentRt.outlineOnly = true;
+      } else {
+        parentRt.outlineOnly = false;
+      }
+      var parentMod = getLayerById("community-college");
+      if (parentMod && parentRt.overlayLayer) updateLayerHighlight(parentMod);
+    }
+  });
+
   /* =========================================================================
    * GROWING THIS FORK — docs/EXPANSION_GUIDE.md Part 3 (deepening a state)
    * and Part 4 (a new concept). Phase 1 of docs/IA_EXPANSION_PLAN.md is now
@@ -10001,7 +10196,7 @@ function initIowaExplorer() {
   // standard"): representation first, then services, then geography broad ->
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
-  var LAYER_SIDEBAR_RANK = ["us-house", "ia-judicial-district", "ia-senate", "ia-house", "county", "county-subdivision", "municipality", "county-supervisor", "school-district-unified", "school-director-district", "community-college", "zip-code", "precinct", "police-station", "fire-station", "school-site", "post-office"];
+  var LAYER_SIDEBAR_RANK = ["us-house", "ia-judicial-district", "ia-senate", "ia-house", "county", "county-subdivision", "municipality", "county-supervisor", "school-district-unified", "school-director-district", "community-college", "cc-director-district", "zip-code", "precinct", "police-station", "fire-station", "school-site", "post-office"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -10102,9 +10297,9 @@ function initIowaExplorer() {
     "#1B7A3D": "#57CC79", "#1F7A3A": "#5ACC75", "#2E9E6B": "#5AE9A4", "#2F6B3A": "#6EBE7A",
     "#41B6E6": "#C2EAFF", "#444B54": "#919BA8", "#4A2E8C": "#9A7BFC", "#4B2E83": "#9E7BF1",
     "#4C8F59": "#82DB92", "#5C4B8C": "#AA94EE", "#6B7280": "#B0BACD", "#6FBF7F": "#9FFFB1",
-    "#7A0B1E": "#EA5B63", "#7A5C3E": "#CEA57C", "#8A5A1E": "#E3A155", "#8C2E4A": "#F37293",
-    "#8F7BC4": "#D0C1FE", "#A98B6C": "#F2CAA0", "#B0316E": "#FE86B7", "#C98A3E": "#FECE9B",
-    "#D06A9C": "#FEBCD9"};
+    "#7A0B1E": "#EA5B63", "#7A4B12": "#D69550", "#7A5C3E": "#CEA57C", "#8A5A1E": "#E3A155",
+    "#8C2E4A": "#F37293", "#8F7BC4": "#D0C1FE", "#A98B6C": "#F2CAA0", "#B0316E": "#FE86B7",
+    "#C98A3E": "#FECE9B", "#D06A9C": "#FEBCD9", "#D89A4E": "#FEDDB9"};
   /* ==== GENERATED:END dark-map-palette ==== */
   /* ==== ENGINE:BEGIN districtry-theme ==== */
   /* The theme controller and the wordmark fleet switch, shared for the same

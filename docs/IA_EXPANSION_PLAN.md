@@ -812,6 +812,93 @@ Association of School Boards' directory is member-gated. The card says that in t
 Files: `ia/scripts/build_ia_school_director_districts.py`,
 `ia/data/app/ia-school-director-districts.json`.
 
+**PR 4 — the County card's board section, corrected against the Wisconsin/Illinois
+exercise — SHIPPED 2026-08-28.** A review of how the board of supervisors is surfaced,
+against the fleet rules that earlier exercise produced, found Iowa breaking **both** of
+them. Neither was a new judgement call; both are written in `docs/EXPANSION_GUIDE.md`
+Part 5 with a stated test.
+
+**"AN IDENTICAL PHONE NUMBER ON EVERY MEMBER ROW IS A SWITCHBOARD, NOT CONTACT."** The
+guide states the test mechanically — *collect the distinct numbers, and if exactly one
+covers the whole board, it belongs to the board* — and Iowa failed it in **every one of
+the 92 counties ISAC publishes**: a single board-office number repeated under three to
+five names, implying direct lines that do not exist. Adams printed `(641) 322-3240` five
+times on the County card and a sixth on the district card. The test now runs in the
+builder exactly as the guide words it, hoisting the number to `boardPhone` and rendering
+it once as a "Board office" row; 350 redundant values were removed. It is deliberately
+NOT a per-county pin — a county that ever publishes real per-member lines keeps them.
+
+**"PROVE 'AT LARGE' FROM A CERTIFIED ELECTION DOCUMENT."** The rule warns that putting a
+county's whole board on the County card *"claims that all N members represent every
+resident… it tells a reader nine people represent them when one does"*. Iowa listed the
+whole board unqualified for all 92, and **35 of those counties elect by district** under
+Iowa Code 331.206 plan 3. Iowa's position was better than the Illinois case that produced
+the rule — it has certified proof of each county's method in the Legislature's own
+`PLANTYPE` — it simply was not using it on that card. `supervisorPlan` now rides the
+roster (read back from the shipped geometry, where `seats` already comes from) and every
+list is qualified: plans 1 and 2 say every voter votes on every seat, plan 3 says one of
+these supervisors represents you and not the whole board. **Jones County, which is absent
+from the state's district layer, claims NEITHER method** rather than defaulting to one.
+
+Two smaller improvements came with it: where phase 3 PR 2 keyed a county's districts, each
+name now carries the district it holds and the board is ordered by district rather than by
+surname — a plan-3 reader is looking for a number, not a name.
+
+A note for whoever next diffs this data: the phone drop is 741 → 391, **47.2%**, and
+`check_roster_retention.py` fails a field that loses at least HALF its records. It is
+silent here by twenty records. That is the gate working to spec rather than a blind spot,
+and the change is intentional — but it is close enough to the line to be worth stating.
+
+**PR 5 — `cc-director-district` — SHIPPED 2026-08-28.** The sub-fabric a community
+college's board of trustees is elected from (Iowa Code 260C.11), 123 districts inside the
+15 merged areas, `subOf: "community-college"`.
+
+**Two things this build found are worth more than the layer.**
+
+**The child and the parent disagree about where colleges end, and the browser spot-check
+is what caught it.** The director districts encode the 2023 plan; the parent
+`community-college` layer is the 2026 update. In roughly 0.2% of the state they name
+DIFFERENT colleges — at 41.536,-92.685 the parent card said Des Moines Area while the
+child's polygon said Indian Hills. A `registerPolygonLayer` single-source lookup ships
+that contradiction silently, so this layer is registered BESPOKE with a two-leg query
+that resolves both and, on a mismatch, names **neither** district and tells the reader
+which plan says what. **A sub-layer that contradicts its own parent is worse than one
+that declines to answer.**
+
+**Des Moines Area's "missing District 2" is not missing.** The source publishes 123
+polygons against a parent that seats 124 directors, and DMACC carries districts 1 and
+3-9. The obvious reading — a hole in the map — was tested and is wrong, twice over.
+Sampling puts the share of each merged area covered by none of its own director districts
+at 0.00-0.64% across all fifteen colleges, and **Des Moines Area's is 0.11%, LOWER than
+most and far below Southeastern's 0.64%** — those slivers are digitisation differences
+between independently drawn layers, the same artifact Illinois measured between
+Richland's precinct and board layers. And the source's own `IDEAL` for Des Moines Area is
+99,579 against a merged-area population of 794,895, which is the total over EIGHT
+(99,362) rather than nine (88,322), with every deviation computed against it and inside
+±2%. Kirkwood is the control: its IDEAL implies nine for nine polygons. So this publisher
+drew eight districts deliberately, skipping the number 2, and the disagreement with the
+parent is about the COUNT, not the ground. **Nothing here resolves which is right.**
+
+The join is numeric rather than by name (the source writes "North Iowa Area" and
+"Northwest" where the app ships "North Iowa" and "Northwest Iowa"), with one asserted
+`8 -> 16` Southeastern remap — the same stale-numbering correction the parent builder
+documents — and the builder FAILS if `CCdist 8` ever stops appearing, so a remap that has
+outlived its reason cannot quietly mis-key a different college.
+
+**The licence does NOT follow the school-director precedent.** That layer's item carries
+CC0; this one's item states an EMPTY licence. Both were checked the same way and they
+differ, so "the licence lives on the item" is a place to look, not a promise about what
+is written there. The terms here are recorded as UNSTATED, which is a different claim
+from permissive.
+
+Identity-only: trustees are elected per district, but 6 of the 15 colleges name a
+numbered district on a discoverable page, one sits behind a captcha and one refuses this
+client — joining six would read as the other nine having no trustees. Per-college
+measurements are in `ia/WATCH.md` for a future keying pass.
+
+Files: `ia/scripts/build_ia_cc_director_districts.py`,
+`ia/data/app/ia-cc-director-districts.json`.
+
 **Still to come this phase:**
 
 
