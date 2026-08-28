@@ -5981,6 +5981,7 @@ function initIowaExplorer() {
     "cc-director-district", // 123 director districts inside the 15 community college merged areas — the sub-fabric a college's board of trustees is elected from (Iowa Code 260C.11)
     "county-subdivision", // 1,663 records tiling the state, live from TIGERweb (no data/app file) — 1,600 civil townships, 62 incorporated cities that double as their own subdivision record, and one federal reservoir carried as unorganized territory
     "municipality",      // 939 incorporated cities, live from TIGERweb (no data/app file) — small dense pockets within the county-subdivision fabric, so smaller on average than a civil township despite fewer records
+    "dsm-ward",          // The instance's first CITY tier: 4 wards averaging 22.7 sq mi inside one 90.66 sq mi city, so strictly smaller than the City that contains them and larger than a precinct
     "zip-code",          // Census ZCTAs by Iowa envelope (no data/app file) — 1,443 features measured in-envelope, smaller on average than an incorporated city
     "precinct",          // 1,660 election precincts, pre-built (mapshaper-simplified from the Legislature's own ArcGIS layer) — identity-only, no roster; ranked with the other fine-grained political boundaries
     "police-station",    // Nearest-3 point layer (449 stations in the state envelope) — not a containment boundary; ranked with the amenity points
@@ -9093,6 +9094,150 @@ function initIowaExplorer() {
       return wrap;
     }
   });
+  /* ---------- 12. Des Moines City Council Ward — the instance's first city tier ----------
+   * Iowa Code 372.4(1)(b): a city governed on 1 July 1975 by the mayor-council
+   * form with "two council members elected at large and one council member
+   * from each of four wards" may continue in it, and Des Moines does. So this
+   * layer answers FOUR of the city's SEVEN elected seats, and the card names
+   * the other three under their own heading rather than pretending a ward is
+   * the whole of a reader's city government. (372.4(2) is explicit that the
+   * mayor is not a member of the council, which is why the mayor is badged
+   * Mayor and not folded into a council list.)
+   *
+   * GEOMETRY AND PEOPLE COME FROM TWO DIFFERENT CITY PUBLISHERS ON PURPOSE.
+   * The city's Wards feature service carries a member name and e-mail in band
+   * and they are correct today — and they are still not read here, for the
+   * Coles County reason: a roster attached to a boundary is refreshed when the
+   * boundary is, and these features demonstrably are not (ward 2's was last
+   * edited 2024-02-16 while wards 1, 3 and 4 were edited across 2025-12-29..31
+   * for the November 2025 cycle). The council page publishes a phone, an
+   * election date and a term the service has no field for. So the polygons
+   * come from the service and the people from the page, and
+   * build_dsm_council.py refuses to write a roster whose four ward members
+   * disagree with the polygons' own in-band names.
+   *
+   * COVERAGE IS THE LAYER'S OWN GEOMETRY, and that it can be is measured
+   * rather than assumed: erasing the four wards from the city's own boundary
+   * layer leaves 0.0070% of its 90.66 square miles in 753 perimeter fragments
+   * (largest 3,482 m2), which is two outlines digitised apart rather than a
+   * hole. build_dsm_wards.py gates that every run. The same builder records
+   * the one real artifact — wards 1 and 2 overlap along 2.6 km of their shared
+   * edge by a ribbon averaging 14 m wide, 9.3 acres in all.
+   *
+   * THE DATA NOTICE ON THIS CARD IS REQUIRED, NOT DECORATIVE. The city's
+   * "Terms and Conditions of Use for City of Des Moines Data" states that
+   * applications using its data "must include the following disclaimer", and
+   * that text ships verbatim from the boundary file rather than being retyped
+   * here. Its licenseInfo opens "All rights reserved" — which is the text OF
+   * that required notice, not a refusal of use, and reading it as a refusal is
+   * what nearly kept this layer from shipping at all. ---------- */
+  var loadDsmWards = makeCached(function () {
+    return fetchJSONWithRetry("data/app/dsm-wards.json", {}, 2);
+  });
+  var loadDsmCouncil = makeCached(function () {
+    return fetchJSONWithRetry("data/app/dsm-council-members.json", {}, 2);
+  });
+  function desMoinesCoverage(point) {
+    // the four wards ARE the city for this layer's purposes; a load failure
+    // rejects through to the engine's fail-open, so an outage never hides the
+    // toggle for a Des Moines reader
+    return loadDsmWards().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+  function dsmPersonRow(rec, fallbackBadge) {
+    var row = { name: String(rec.name) };
+    if (rec.seat) row.badge = String(rec.seat);
+    else if (fallbackBadge) row.badge = fallbackBadge;
+    if (rec.termExpires) row.note = "Term expires " + String(rec.termExpires);
+    if (rec.phone) row.phone = String(rec.phone);
+    if (rec.email) row.email = String(rec.email);
+    return row;
+  }
+
+  registerLayer({
+    id: "dsm-ward",
+    group: "political",
+    label: "Des Moines City Council Ward",
+    coverage: desMoinesCoverage,
+    overlay: {
+      load: loadDsmWards,
+      // deep teal — a municipal hue that reads apart from county-supervisor's
+      // green above it and the magenta City dots it sits inside
+      style: { color: "#125E63", weight: 1.6, fillColor: "#1B8A91", fillOpacity: 0.07 }
+    },
+    hoverName: function (feature) {
+      var label = findPropCI(feature.properties || {}, ["label"]);
+      return label != null ? "Des Moines " + String(label) : null;
+    },
+    query: function (point, seq) {
+      // the roster is a small same-origin file and its failure is not this
+      // layer's failure: the ward still answers, identity-only
+      return Promise.all([
+        queryFeatureAt(loadDsmWards, point),
+        loadDsmCouncil().catch(function () { return null; }),
+        loadDsmWards().catch(function () { return null; })
+      ]).then(function (parts) {
+        var feature = parts[0];
+        if (!feature) return null;
+        var props = feature.properties || {};
+        var ward = findPropCI(props, ["ward"]);
+        var roster = parts[1];
+        var member = (roster && roster.wards && ward != null)
+          ? roster.wards[String(ward)] : null;
+        return {
+          seq: seq,
+          ward: ward,
+          label: findPropCI(props, ["label"]),
+          sqmiles: findPropCI(props, ["sqmiles"]),
+          member: member || null,
+          citywide: (roster && roster.citywide) || null,
+          rosterUrl: roster ? roster.sourceUrl : null,
+          disclaimer: parts[2] ? parts[2].disclaimer : null
+        };
+      });
+    },
+    cardIdentifier: function (result) {
+      return result.label != null ? String(result.label) : "Unknown ward";
+    },
+    render: function (result) {
+      var wrap = cardEl("div", "card-flush");
+      if (result.member && result.member.name) {
+        wrap.appendChild(renderPersonRows([dsmPersonRow(result.member, "Council member")]));
+      }
+      // The three seats no ward can carry. Every Des Moines reader elects
+      // these people too, so leaving them off would make a four-of-seven
+      // answer look like the whole one.
+      if (result.citywide && result.citywide.length) {
+        wrap.appendChild(renderSectionLabel("ELECTED BY THE WHOLE CITY"));
+        wrap.appendChild(renderPersonRows(result.citywide.map(function (rec) {
+          return dsmPersonRow(rec, "Citywide");
+        }), { tinted: true }));
+      }
+      var rows = [{ label: "City", value: "Des Moines", primary: true }];
+      if (result.sqmiles != null) {
+        rows.push({ label: "Area", value: Number(result.sqmiles).toFixed(2) + " sq mi" });
+      }
+      rows.push({
+        label: "Council",
+        value: "A mayor, two at-large members and one member from each of four wards " +
+          "(Iowa Code §372.4(1)(b)). The mayor is not a member of the council."
+      });
+      if (result.disclaimer) {
+        // required verbatim by the City of Des Moines' own terms of use for
+        // its data portal — see build_dsm_wards.py
+        rows.push({ label: "Data notice", value: String(result.disclaimer) });
+      }
+      wrap.appendChild(renderFieldStack(rows));
+      return wrap;
+    },
+    primaryLink: function (result) {
+      var url = safeHttpUrl(result.rosterUrl);
+      if (!url) return null;
+      return { label: "Des Moines City Council", url: url };
+    }
+  });
+
 
   /* ---------- 9. ZIP Code (statewide ZCTA) ----------
    * The WI/IL statewide pattern: TIGERweb's ZCTA layer has NO STATE field
@@ -10196,7 +10341,7 @@ function initIowaExplorer() {
   // standard"): representation first, then services, then geography broad ->
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
-  var LAYER_SIDEBAR_RANK = ["us-house", "ia-judicial-district", "ia-senate", "ia-house", "county", "county-subdivision", "municipality", "county-supervisor", "school-district-unified", "school-director-district", "community-college", "cc-director-district", "zip-code", "precinct", "police-station", "fire-station", "school-site", "post-office"];
+  var LAYER_SIDEBAR_RANK = ["us-house", "ia-judicial-district", "ia-senate", "ia-house", "county", "county-subdivision", "municipality", "dsm-ward", "county-supervisor", "school-district-unified", "school-director-district", "community-college", "cc-director-district", "zip-code", "precinct", "police-station", "fire-station", "school-site", "post-office"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -10293,13 +10438,14 @@ function initIowaExplorer() {
      carries the method and the measurements behind it, and its --check fails
      when a layer colour moves and its dark counterpart does not. */
   /* ==== GENERATED:BEGIN dark-map-palette ==== */
-  var DST_DARK_MAP_COLORS = { "#0B5394": "#4FA4FE", "#14181C": "#696F76", "#1B5E3F": "#5FB387",
-    "#1B7A3D": "#57CC79", "#1F7A3A": "#5ACC75", "#2E9E6B": "#5AE9A4", "#2F6B3A": "#6EBE7A",
-    "#41B6E6": "#C2EAFF", "#444B54": "#919BA8", "#4A2E8C": "#9A7BFC", "#4B2E83": "#9E7BF1",
-    "#4C8F59": "#82DB92", "#5C4B8C": "#AA94EE", "#6B7280": "#B0BACD", "#6FBF7F": "#9FFFB1",
-    "#7A0B1E": "#EA5B63", "#7A4B12": "#D69550", "#7A5C3E": "#CEA57C", "#8A5A1E": "#E3A155",
-    "#8C2E4A": "#F37293", "#8F7BC4": "#D0C1FE", "#A98B6C": "#F2CAA0", "#B0316E": "#FE86B7",
-    "#C98A3E": "#FECE9B", "#D06A9C": "#FEBCD9", "#D89A4E": "#FEDDB9"};
+  var DST_DARK_MAP_COLORS = { "#0B5394": "#4FA4FE", "#125E63": "#57B1B8", "#14181C": "#696F76",
+    "#1B5E3F": "#5FB387", "#1B7A3D": "#57CC79", "#1B8A91": "#4FD6DF", "#1F7A3A": "#5ACC75",
+    "#2E9E6B": "#5AE9A4", "#2F6B3A": "#6EBE7A", "#41B6E6": "#C2EAFF", "#444B54": "#919BA8",
+    "#4A2E8C": "#9A7BFC", "#4B2E83": "#9E7BF1", "#4C8F59": "#82DB92", "#5C4B8C": "#AA94EE",
+    "#6B7280": "#B0BACD", "#6FBF7F": "#9FFFB1", "#7A0B1E": "#EA5B63", "#7A4B12": "#D69550",
+    "#7A5C3E": "#CEA57C", "#8A5A1E": "#E3A155", "#8C2E4A": "#F37293", "#8F7BC4": "#D0C1FE",
+    "#A98B6C": "#F2CAA0", "#B0316E": "#FE86B7", "#C98A3E": "#FECE9B", "#D06A9C": "#FEBCD9",
+    "#D89A4E": "#FEDDB9"};
   /* ==== GENERATED:END dark-map-palette ==== */
   /* ==== ENGINE:BEGIN districtry-theme ==== */
   /* The theme controller and the wordmark fleet switch, shared for the same

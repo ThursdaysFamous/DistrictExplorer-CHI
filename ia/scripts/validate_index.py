@@ -88,7 +88,7 @@ CAPABILITIES = [
 # ==== GENERATED:BEGIN validator-config ====
 # Floor, not a moving target: new layers only raise this; a drop means
 # modules were lost.
-MIN_REGISTER_LAYER = 12
+MIN_REGISTER_LAYER = 13
 
 # Every layer id that must be registered in index.html. Most modules register
 # through the factories, so deleting one would NOT lower the raw registerLayer(
@@ -98,7 +98,7 @@ EXPECT_LAYER_IDS = [
     "us-house", "ia-judicial-district", "ia-senate", "county", "ia-house",
     "county-supervisor", "school-district-unified",
     "school-director-district", "community-college", "cc-director-district",
-    "county-subdivision", "municipality", "zip-code", "precinct",
+    "county-subdivision", "municipality", "dsm-ward", "zip-code", "precinct",
     "police-station", "fire-station", "school-site", "post-office",
 ]
 
@@ -118,6 +118,7 @@ GEOMETRY_FILES = {
     "ia-precincts.json": (1660, 1660),  # 1,660 election precincts across all 99 counties, pre-built by ia/scripts/build_ia_precincts.py from the Iowa Legislature's own ArcGIS org's Iowa_Precincts layer (Visvalingam-simplified from ~18MB raw to under 3MB, 2,000-point agreement gate; polling-place fields never fetched).
     "ia-judicial-districts.json": (8, 8),  # 8 judicial election districts, whole-county unions dissolved from state-counties.json by ia/scripts/build_ia_judicial_district.py, per Iowa Code SS602.6107/602.6109 and double-witnessed at build time against the LSAFiscal organization's own published district polygons.
     "ia-community-colleges.json": (15, 15),  # 15 community college merged areas, shipped as published (no dissolve) from the Iowa Legislature's own ArcGIS org by ia/scripts/build_ia_community_colleges.py, witnessed against a second LSA layer on name set, 2020 census population (3,190,369) and director-district count (124).
+    "dsm-wards.json": (4, 4),  # The City of Des Moines's four council wards, shipped as published (no dissolve) from the city's own Wards feature service by ia/scripts/build_dsm_wards.py. Gated twice: the wards must still tile the city's own City Boundary layer (0.0070% uncovered in 753 perimeter fragments, largest 3,482 m² — a hole is one large compact part, so the largest fragment is capped as well as the total), and simplification must add no overlap to the source's own 14 m sliver along the ward 1/2 edge. Carries verbatim the City of Des Moines disclaimer its terms of use require, which the card renders.
 }
 
 # file -> minimum key count (officeholder rosters).
@@ -131,6 +132,7 @@ ROSTER_FILES = {
     "ia-supervisor-members.json": 12,  # Which supervisor holds each county supervisor district, keyed by 3-digit county FIPS. PLAN 3 COUNTIES ONLY (Iowa Code 331.206): under plan 1 there are no districts and under plan 2 supervisors are elected countywide and merely reside in one, so only under plan 3 does naming a district's supervisor answer something the County card's list does not. No Iowa publisher attaches a district to a supervisor's name — four statewide routes are measured closed — so the district number is recovered from each county's own board page by PROXIMITY to names the shipped roster already carries, reading no markup at all. Gated: districts must be exactly 1..N with no repeats, the people placed must be exactly the people ia-county-officers.json names, and N must equal the shipped geometry's NUMDISTRICTS. A county failing any gate ships nothing and keeps its unkeyed County-card listing. Built by ia/scripts/ia_supervisor_district_scraper.py + build_ia_supervisor_roster.py, refreshed weekly by update-ia-supervisor-roster.yml.
     "ia-judicial-judges.json": 8,  # All 8 districts' benches (371 judges measured 2026-08-28), one entry per district keyed to the geometry's district number. From each district's own "Judges and Magistrates" page at iowacourts.gov (name + each judge's own role/title string, shipped verbatim — no phone/e-mail/address is published for any judge). Built by ia/scripts/ia_judicial_district_scraper.py + build_ia_judicial_district_roster.py, refreshed weekly by update-ia-judicial-district-roster.yml.
     "coverage-gaps.json": 0,  # The Data gaps panel's content; one recorded gap (Jones County, absent from the county-supervisor source layer).
+    "dsm-council-members.json": 3,  # All seven seats Des Moines elects — the four ward members keyed by ward plus a citywide block of the mayor and both at-large members — from the city's own council page, refreshed weekly by update-ia-dsm-council-roster.yml. The scrape is scoped by <h2> heading because the page's Appointed Staff and Department Directors sections use IDENTICAL card markup, and it refuses to write if a name appears under both; the four ward members are cross-witnessed against the Wards layer's own in-band names and e-mails before anything is written.
 }
 
 # Files the app references DYNAMICALLY — the URL is built from a slug at

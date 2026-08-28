@@ -899,6 +899,44 @@ measurements are in `ia/WATCH.md` for a future keying pass.
 Files: `ia/scripts/build_ia_cc_director_districts.py`,
 `ia/data/app/ia-cc-director-districts.json`.
 
+
+### PR 5 — `dsm-ward`, the instance's first city tier — SHIPPED 2026-08-28
+
+4 wards, `ia/data/app/dsm-wards.json` + `dsm-council-members.json`, weekly CI
+(`update-ia-dsm-council-roster.yml`, Thu 17:30 UTC). Four things the roadmap above got wrong or
+under-specified, all corrected by measuring at build time:
+
+* **The composition citation.** §372.4 is the *mayor-council* form, not council-manager; its
+  subsection (1)(b) grandfathers exactly Des Moines's 1975 shape — "two council members elected at
+  large and one council member from each of four wards" — and (1)(a) permits the city manager the
+  city's own page describes, "without changing the form". §372.4(2) also states plainly that the
+  mayor **is not a member of the council**, which is why the card badges him Mayor rather than
+  folding him into a council list.
+* **"No separate scrape needed for ward seats" was wrong, and shipping on it would have been the
+  Coles County mistake.** The in-band `PersonFName`/`PersonLName`/`EMail` are correct today and are
+  still not read as the roster: a roster attached to a boundary is refreshed when the boundary is,
+  and these demonstrably are not on one schedule (ward 2's feature carried its **2024-02-16** edit
+  while wards 1, 3 and 4 were edited across **2025-12-29..31** for the November 2025 cycle). The
+  service also has no phone field and a null `PersonTitle` on all four. So the council page is the
+  authority and the in-band names are the build-time **witness** the scrape must agree with.
+* **The licence nearly stopped the layer, and the stop would have been wrong.** The item's
+  `licenseInfo` opens "© Copyright City of Des Moines, Iowa 2025. All rights reserved." — read
+  alone, the Piatt County answer. The city's own **Terms and Conditions of Use** (data.dsm.city)
+  say the opposite: applications using portal data "must include the following disclaimer", and
+  quote that same string. It is the text of a **required notice**, not a refusal, and it ships
+  verbatim on the card. **Read the portal's terms page before writing a publisher off** —
+  `licenseInfo` is where the licence lives but not always where the grant lives.
+* **Two geometry artifacts, both measured and neither smoothed.** The city's own wards 1 and 2
+  overlap by 9.29 acres, of which one part is a 14 m-wide ribbon running 2.6 km along their shared
+  edge (compactness **0.0169**) — so the agreement gate now measures the SOURCE's overlap and fails
+  only if simplification adds to it. And the four wards leave **0.0070%** of the city uncovered in
+  753 perimeter fragments; that is a **weekly gate**, because Des Moines annexes land and a ward
+  layer that has not caught up would leave a reader in a real hole no roster check would notice.
+
+The page's **Appointed Staff and Department Directors sections use identical card markup to the
+elected members**, so the scrape is scoped by `<h2>` heading, refuses if a name appears under both,
+and refuses if the unelected sections vanish — they are the control proving the split still works.
+
 **Still to come this phase:**
 
 
@@ -907,12 +945,7 @@ Files: `ia/scripts/build_ia_cc_director_districts.py`,
 actually elect by director district vs. at-large, since not every district necessarily uses the
 geometry the same way; identity + district link only, board-member roster stays a recorded gap).
 `cc-director-district` (DE `CC_DD2023` — VERIFIED exists, 123 features, effective 2023-08-01 through
-the statutory decade term to 2033; `subOf: "community-college"`). **Des Moines tier**: `dsm-ward` — the
-city's own `Wards_view/FeatureServer/0` — VERIFIED exists, 4 wards, fields including
-`PersonFName`/`PersonLName`/`EMail`, i.e. **the city's own layer names the sitting council member
-in-band**, no separate scrape needed for ward seats; served in state-plane WKID 102676, reproject
-server-side; mayor + at-large members (composition to confirm on `dsm.city` at PR time) ship as card
-rows, never polygons. **The HSEMD NG911 ask goes out this phase**: Iowa's Homeland Security &amp;
+the statutory decade term to 2033; `subOf: "community-college"`). **The HSEMD NG911 ask goes out this phase**: Iowa's Homeland Security &amp;
 Emergency Management Dept. runs a 911 program requiring counties to submit PSAP/Fire/Law/EMS service
 boundaries to a state GIS standard, but no open statewide aggregate was found on the state's ArcGIS
 organization in the research pass (only county-local layers, e.g. Linn and Scott) — the "ask is a

@@ -1,0 +1,63 @@
+{
+ "citywide": [
+  {
+   "elected": "January 2024",
+   "email": "connieboesen@dmgov.org",
+   "name": "Connie Boesen",
+   "phone": "(515) 283-4944",
+   "seat": "Mayor",
+   "termExpires": "January 2028"
+  },
+  {
+   "elected": "December 2019",
+   "email": "CarlVoss@dmgov.org",
+   "name": "Carl Voss",
+   "phone": "(515) 210-0237",
+   "seat": "At-Large",
+   "termExpires": "January 2028"
+  },
+  {
+   "elected": "March 2024",
+   "email": "MikeSimonson@dmgov.org",
+   "name": "Mike Simonson",
+   "phone": "(515) 238-0874",
+   "seat": "At-Large",
+   "termExpires": "January 2030"
+  }
+ ],
+ "sourceUrl": "https://www.dsm.city/government/city_council/index.php",
+ "wards": {
+  "1": {
+   "elected": "January 2026",
+   "email": "RobBarron@dmgov.org",
+   "name": "Rob X. Barron",
+   "phone": "(515) 238-7799",
+   "seat": "Ward 1",
+   "termExpires": "January 2030"
+  },
+  "2": {
+   "elected": "January 2016",
+   "email": "LindaW@dmgov.org",
+   "name": "Linda Westergaard",
+   "phone": "(515) 988-4288",
+   "seat": "Ward 2",
+   "termExpires": "January 2028"
+  },
+  "3": {
+   "elected": "January 2018",
+   "email": "JoshMandelbaum@dmgov.org",
+   "name": "Josh Mandelbaum",
+   "phone": "(515) 250-3384",
+   "seat": "Ward 3",
+   "termExpires": "January 2030"
+  },
+  "4": {
+   "elected": "March 2014",
+   "email": "JoeGatto@dmgov.org",
+   "name": "Joe Gatto",
+   "phone": "(515) 402-2626",
+   "seat": "Ward 4",
+   "termExpires": "January 2028"
+  }
+ }
+}
