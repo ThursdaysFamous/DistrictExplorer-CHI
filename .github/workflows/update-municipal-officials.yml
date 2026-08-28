@@ -625,6 +625,14 @@ jobs:
             gh issue create --title "$title" --body "$body"
           fi
 
+      # The history page's stat tiles are MEASURED from the roster file(s)
+      # this job rewrites, so regenerate it in the same run — otherwise the
+      # smoke gate's `build_history_page.py --check` fails on this PR with a
+      # tile that has drifted from the data it counts.
+      - name: Regenerate the history page
+        if: steps.build.outcome == 'success'
+        run: python3 scripts/build_history_page.py
+
       # Gate the regenerated data before it can reach a PR: the app must still
       # parse and carry every layer, and every data/app file must be present
       # and well formed. node is preinstalled on ubuntu-latest.
@@ -636,7 +644,7 @@ jobs:
         id: diff
         if: steps.build.outcome == 'success'
         run: |
-          if git diff --quiet -- il/data/app/; then
+          if git diff --quiet -- il/data/app/ il/history.html; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -654,7 +662,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add il/data/app/municipal-officials.json il/data/app/cook-library-trustees.json il/data/app/township-officials.json
+          git add il/data/app/municipal-officials.json il/data/app/cook-library-trustees.json il/data/app/township-officials.json il/history.html
           git commit -m "Update municipal and township officials rosters from the county clerk directories"
           git push -u origin "$branch" --force
           # Only open a PR if one isn't already open for this branch; if it is,

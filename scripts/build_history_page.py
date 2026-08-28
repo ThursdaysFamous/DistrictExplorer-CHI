@@ -123,6 +123,20 @@ def stat_tiles(tiles):
 def build_instance(inst, w):
     cfg = w["history_page"]
     metro_name = w["metro_name"]
+    # The name a READER sees is brand.app_name — the key that already owns every
+    # reader-facing surface (the wordmark, sources.html's title, og:site_name).
+    # It is NOT metro_name, which is the engine's internal handle for the fork and
+    # is the one value free to disagree with the brand: Illinois's worksheet still
+    # says "Chicago" there — a true record of where the app started, and wrong on a
+    # page whose own footer links "districtry Illinois". Taking the product word
+    # off the front of app_name leaves the place name, which keeps every instance
+    # whose two names already agree byte-identical and fixes the one where they
+    # never did.
+    brand = w.get("brand") or {}
+    product = brand.get("product_name") or "districtry"
+    app_name = brand.get("app_name") or ("%s %s" % (product, metro_name))
+    place = (app_name[len(product):].strip()
+             if app_name.startswith(product) else metro_name)
     mine = next((m for m in w["metro_explorers"]
                  if m["id"] == w["this_metro"] or m.get("label") == metro_name), None)
     if mine is None:
@@ -181,10 +195,10 @@ def build_instance(inst, w):
     favicon_uri = "data:image/svg+xml," + urllib.parse.quote(favicon, safe="")
     fontface = read(FONTFACE, "the self-hosted font CSS").rstrip("\n")
 
-    title = "History — districtry %s" % metro_name
+    title = "History — %s" % app_name
     desc = ("How the %s deployment grew, what it checks on a schedule, and the "
             "corrections its own machinery has caught — dated, measured, and "
-            "regenerated with every change." % metro_name)
+            "regenerated with every change." % place)
 
     return """<!DOCTYPE html>
 <html lang="en">
@@ -197,7 +211,7 @@ def build_instance(inst, w):
 <link rel="canonical" href="%(canonical)s" />
 <link rel="icon" href="%(favicon)s" type="image/svg+xml" />
 <meta property="og:type" content="article" />
-<meta property="og:site_name" content="districtry %(metro_name)s" />
+<meta property="og:site_name" content="%(app_name)s" />
 <meta property="og:title" content="%(title)s" />
 <meta property="og:description" content="%(desc)s" />
 <meta property="og:url" content="%(canonical)s" />
@@ -329,13 +343,13 @@ at the diff.</p>
 </html>
 """ % {
         "title": esc(title), "desc": esc(desc), "canonical": esc(canonical),
-        "metro_name": esc(metro_name), "og_image": esc(app_url + "og-image.png"),
+        "app_name": esc(app_name), "og_image": esc(app_url + "og-image.png"),
         "favicon": favicon_uri, "inst": inst,
         "fontface": fontface,
         "light": token_css(LIGHT_TOKENS, light, ":root"),
         "dark": token_css(DARK_TOKENS, dark, '[data-theme="dark"]', DARK_EXTRA,
                           indent="    "),
-        "metro_lower": esc(w["this_metro"]),
+        "metro_lower": esc(place.lower()),
         "intro": esc(cfg["intro"]),
         "tiles": stat_tiles(tiles),
         "entries": "\n".join(entries_html),
