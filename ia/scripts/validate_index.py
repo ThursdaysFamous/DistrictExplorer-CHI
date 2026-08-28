@@ -96,9 +96,9 @@ MIN_REGISTER_LAYER = 11
 # LAYER_AREA_RANK order; check 5 keeps the two naming the same set.
 EXPECT_LAYER_IDS = [
     "us-house", "ia-judicial-district", "ia-senate", "county", "ia-house",
-    "county-supervisor", "school-district-unified", "county-subdivision",
-    "municipality", "zip-code", "precinct", "police-station", "fire-station",
-    "school-site", "post-office",
+    "county-supervisor", "school-district-unified", "community-college",
+    "county-subdivision", "municipality", "zip-code", "precinct",
+    "police-station", "fire-station", "school-site", "post-office",
 ]
 
 # file -> (min features, max features) for the boundary layers fetched by the app.
@@ -114,6 +114,7 @@ GEOMETRY_FILES = {
     "ia-school-sites.json": (1321, 1321),  # 1,321 public school buildings, pre-built by ia/scripts/build_ia_school_sites.py from the Iowa Legislature's own ArcGIS org's IowaSchoolBldgs layer (paginated past its 1,000-record cap).
     "ia-precincts.json": (1660, 1660),  # 1,660 election precincts across all 99 counties, pre-built by ia/scripts/build_ia_precincts.py from the Iowa Legislature's own ArcGIS org's Iowa_Precincts layer (Visvalingam-simplified from ~18MB raw to under 3MB, 2,000-point agreement gate; polling-place fields never fetched).
     "ia-judicial-districts.json": (8, 8),  # 8 judicial election districts, whole-county unions dissolved from state-counties.json by ia/scripts/build_ia_judicial_district.py, per Iowa Code SS602.6107/602.6109 and double-witnessed at build time against the LSAFiscal organization's own published district polygons.
+    "ia-community-colleges.json": (15, 15),  # 15 community college merged areas, shipped as published (no dissolve) from the Iowa Legislature's own ArcGIS org by ia/scripts/build_ia_community_colleges.py, witnessed against a second LSA layer on name set, 2020 census population (3,190,369) and director-district count (124).
 }
 
 # file -> minimum key count (officeholder rosters).

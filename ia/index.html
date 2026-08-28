@@ -5976,6 +5976,7 @@ function initIowaExplorer() {
     "ia-house",          // 100 House districts; two nest exactly inside each Senate district
     "county-supervisor", // The flagship layer: 270 features across 98 counties, PLANTYPE-aware (at-large / residence-district / single-member)
     "school-district-unified", // 324 unified school districts, statewide — the only school-district tiling Iowa runs (TIGER's elementary/secondary layers measure zero)
+    "community-college", // 15 merged areas, shipped as published (no dissolve) — larger on average than a school district, ranked beside it
     "county-subdivision", // 1,663 records tiling the state, live from TIGERweb (no data/app file) — 1,600 civil townships, 62 incorporated cities that double as their own subdivision record, and one federal reservoir carried as unorganized territory
     "municipality",      // 939 incorporated cities, live from TIGERweb (no data/app file) — small dense pockets within the county-subdivision fabric, so smaller on average than a civil township despite fewer records
     "zip-code",          // Census ZCTAs by Iowa envelope (no data/app file) — 1,443 features measured in-envelope, smaller on average than an incorporated city
@@ -9195,6 +9196,77 @@ function initIowaExplorer() {
     }
   });
 
+  /* ---------- 16. Community College — Iowa Legislature geometry, phase 2 PR 6 ----------
+   * 15 merged areas (Iowa Code 260C.11/260C.13), shipped AS PUBLISHED — no
+   * dissolve, no derivation. The Iowa Legislature's ArcGIS org carries two
+   * vintages of this boundary; the newer one (CC_2026update, edited
+   * 2026-07-02) is shipped because it fixes a real, confirmed bug the older
+   * CommColleges2020 (2021-12-15) carries: Southeastern Community College
+   * coded "08" there against its own institutional history of having been
+   * chartered "Merged Area XVI" — every other source in this build (the
+   * trustees' association's own I-VII/IX-XVI numbering included) agrees
+   * "16" is correct. Three independent witnesses agree exactly at build
+   * time: the 15 college names match a second LSA layer one for one, that
+   * layer's population sums to Iowa's exact 2020 census total (3,190,369),
+   * and its director-district count sums to 124 — exactly the trustee
+   * count the state trustees' association states in prose on its own site.
+   * ia/scripts/build_ia_community_colleges.py has the full derivation.
+   *
+   * IDENTITY-ONLY, DELIBERATELY, same posture as this instance's own
+   * school-district-unified: the board IS genuinely ELECTED (Iowa Code
+   * 260C.11 — "one member elected from each director district ... by the
+   * electors of the respective district", four-year terms — a real
+   * DISTRICTED political layer, unlike Wisconsin's WTCS technical college
+   * board, which is appointed under a different statute), but no single
+   * roster names all 124 trustees: the state trustees' association page
+   * publishes only 15 rows (one seat per college, its own governing
+   * table), and each college names its own trustees on its own site
+   * instead. The sub-district geometry a real roster would need
+   * (`CC_DD2023`) is itself short one polygon (Des Moines Area's District
+   * 2 is entirely absent, confirmed live), so a districted card is
+   * deferred rather than built around a source with a known hole. ---------- */
+  var loadIaCommunityColleges = makeCached(function () {
+    return fetchJSONWithRetry("data/app/ia-community-colleges.json", {}, 2);
+  });
+
+  // Each merged area's own site — not a roster (no names), just the
+  // college's own home page, keyed on the shipped `name` property exactly.
+  var IA_COMMUNITY_COLLEGE_SITES = {
+    "Northeast Iowa": "https://www.nicc.edu/",
+    "North Iowa": "https://www.niacc.edu/",
+    "Iowa Lakes": "https://www.iowalakes.edu/",
+    "Northwest Iowa": "https://www.nwicc.edu/",
+    "Iowa Central": "https://www.iowacentral.edu/",
+    "Iowa Valley": "https://www.iavalley.edu/",
+    "Hawkeye": "https://www.hawkeyecollege.edu/",
+    "Southeastern": "https://www.scciowa.edu/",
+    "Eastern Iowa": "https://www.eicc.edu/",
+    "Kirkwood": "https://www.kirkwood.edu/",
+    "Des Moines Area": "https://www.dmacc.edu/",
+    "Western Iowa Tech": "https://www.witcc.edu/",
+    "Iowa Western": "https://www.iwcc.edu/",
+    "Southwestern": "https://www.swcc.edu/",
+    "Indian Hills": "https://www.indianhills.edu/"
+  };
+
+  registerPolygonLayer({
+    id: "community-college",
+    group: "schools",
+    label: "Community College",
+    loader: loadIaCommunityColleges,
+    style: { color: "#8A5A1E", weight: 1.5, fillColor: "#C98A3E", fillOpacity: 0.05, dashArray: "8 3" },
+    fields: [
+      { name: "name", label: "College", keys: ["name"], primary: true },
+      { name: "directorDistricts", label: "Director districts", keys: ["directordistricts"] },
+      { label: "How the board is elected", value: "Iowa Code 260C.11: one trustee is elected from each director district by that district's own electors, to a four-year term." }
+    ],
+    primaryLink: function (result) {
+      var url = safeHttpUrl(IA_COMMUNITY_COLLEGE_SITES[result.name]);
+      if (url) return { label: result.name + " Community College", url: url };
+      return { label: "Iowa community colleges", url: "https://www.ccforiowa.org/" };
+    }
+  });
+
   /* =========================================================================
    * GROWING THIS FORK — docs/EXPANSION_GUIDE.md Part 3 (deepening a state)
    * and Part 4 (a new concept). Phase 1 of docs/IA_EXPANSION_PLAN.md is now
@@ -9202,7 +9274,8 @@ function initIowaExplorer() {
    * re-verification pass on 2026-08-28 found the original "precinct first"
    * note undercounted those two by roughly 10x and corrected the sequencing
    * — see docs/IA_EXPANSION_PLAN.md's Phase 2 roadmap section). Remaining:
-   * community-college (PR 6) and the library gap investigation.
+   * the library gap investigation (untested Playwright rung against the
+   * State Library of Iowa's Knack export).
    * ======================================================================= */
 
   /* ==== ENGINE:BEGIN hover-explorer ==== */
@@ -9764,7 +9837,7 @@ function initIowaExplorer() {
   // standard"): representation first, then services, then geography broad ->
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
-  var LAYER_SIDEBAR_RANK = ["us-house", "ia-judicial-district", "ia-senate", "ia-house", "county", "county-subdivision", "municipality", "county-supervisor", "school-district-unified", "zip-code", "precinct", "police-station", "fire-station", "school-site", "post-office"];
+  var LAYER_SIDEBAR_RANK = ["us-house", "ia-judicial-district", "ia-senate", "ia-house", "county", "county-subdivision", "municipality", "county-supervisor", "school-district-unified", "community-college", "zip-code", "precinct", "police-station", "fire-station", "school-site", "post-office"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -9865,8 +9938,8 @@ function initIowaExplorer() {
     "#1B7A3D": "#58CD7A", "#2E9E6B": "#5BEAA5", "#2F6B3A": "#6FBE7B", "#41B6E6": "#C6EBFE",
     "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD", "#4B2E83": "#9E7BF1", "#4C8F59": "#83DC93",
     "#5C4B8C": "#AB95EF", "#6B7280": "#B1BBCE", "#7A0B1E": "#EA5C63", "#7A5C3E": "#CFA57D",
-    "#8C2E4A": "#F47294", "#8F7BC4": "#D1C2FF", "#A98B6C": "#F3CBA1", "#B0316E": "#FD88B8",
-    "#D06A9C": "#FFBDDA"};
+    "#8A5A1E": "#E3A156", "#8C2E4A": "#F47294", "#8F7BC4": "#D1C2FF", "#A98B6C": "#F3CBA1",
+    "#B0316E": "#FD88B8", "#C98A3E": "#FFCF9C", "#D06A9C": "#FFBDDA"};
   /* ==== GENERATED:END dark-map-palette ==== */
   /* ==== ENGINE:BEGIN districtry-theme ==== */
   /* The theme controller and the wordmark fleet switch, shared for the same

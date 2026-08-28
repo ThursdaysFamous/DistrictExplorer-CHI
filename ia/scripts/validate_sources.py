@@ -126,6 +126,30 @@ PROVENANCE = [
         ),
     },
     {
+        "layer": "community-college",
+        "app_file": "ia-community-colleges.json",
+        "source_url": "https://services.arcgis.com/vPD5PVLI6sfkZ5E4/arcgis/rest/services/CC_2026update/FeatureServer/0",
+        "note": (
+            "15 community college merged areas, shipped as published (no "
+            "dissolve) -- the 2026-07-02 vintage, which fixes a confirmed "
+            "coding error the older CommColleges2020 layer carries for "
+            "Southeastern Community College. Pre-built by "
+            "ia/scripts/build_ia_community_colleges.py, witnessed against a "
+            "second LSA layer on name set, 2020 census population (Iowa's "
+            "exact 3,190,369) and director-district count (124)."
+        ),
+    },
+    {
+        "layer": "community-college",
+        "app_file": "ia-community-colleges.json",
+        "source_url": "https://services.arcgis.com/vPD5PVLI6sfkZ5E4/arcgis/rest/services/CommColleges2020/FeatureServer/1",
+        "note": (
+            "The second LSA layer used as the build-time witness (name set, "
+            "population, director-district count) -- never the geometry "
+            "source itself."
+        ),
+    },
+    {
         "layer": "county",
         "app_file": "state-counties.json",
         "source_url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer/1",
