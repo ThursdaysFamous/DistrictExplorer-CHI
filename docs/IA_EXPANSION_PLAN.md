@@ -711,6 +711,58 @@ can reach a card. Files: `ia/scripts/ia_county_officers_scraper.py`,
 `ia_county_officer_sources_scraper.py`, `build_ia_county_officers.py`,
 `ia/data/app/ia-county-officers.json`, `.github/workflows/update-ia-county-officers-roster.yml`.
 
+**PR 2 — the County Supervisor District card names its supervisor — SHIPPED 2026-08-28.**
+The district card could say *where* you are and how big the board is; it could not say who
+represents you. It now can, for the counties where that question even has a district-level answer.
+
+**The scope is a legal distinction, not a convenience.** Iowa Code §331.206 lets each county pick
+one of three representation plans, and the shipped geometry carries which: **plan 1** (44 counties)
+elects at large with no districts at all, **plan 2** (15) elects supervisors COUNTYWIDE who merely
+have to *reside* in a district, and **plan 3** (39-40) has each district elect its own supervisor.
+Only under plan 3 does naming a district's supervisor tell a reader something PR 1's countywide
+board listing does not — and keying a plan 2 district would read as a district election that did
+not happen. So 44 counties needed nothing and 15 were deliberately left alone.
+
+**Four statewide routes are measured closed**, which is why this is per-county at all: the
+Legislature's own `CountySupervisorDistricts` layer *has* a `NAME` field and it holds the
+DISTRICT's name ("Bremer Supervisor District 1"), all 266 distinct; the ISAC member portal
+publishes every supervisor and attaches a district to none of them, in all 99 counties; the
+Secretary of State's statewide canvass summary carries **zero** supervisor contests, because Iowa
+counties canvass their own county offices — so the Illinois canvass route simply does not exist
+here; and electionresults.iowa.gov is an Angular application with no reachable data API.
+
+**The parse reads no markup, and that is what made one script cover 39 counties across four-plus
+CMSes.** The names were already known and already gated — PR 1's `ia-county-officers.json` — so the
+only missing fact is a *number*. Each page is flattened to text and each known surname matched to
+the nearest "District N", which is Wisconsin's `witness_window()` pattern pointed at a district
+instead of a phone number. Four gates, all of which must pass or the county ships nothing: every
+supervisor found, every one within the window, the districts exactly 1..N with no repeats, and N
+equal to the geometry's `NUMDISTRICTS`.
+
+**The window was then tightened by measurement rather than left generous.** A first pass at 300
+characters keyed 17 counties; measuring the gap it actually used on all 67 districts found a
+maximum of **42** and nothing above 60 — a county that publishes this pairing publishes it
+adjacently. The window is now 80. That matters concretely: Polk's page prints its five supervisors
+TWICE, once as a bare navigation run with no districts near it, and a window wide enough to reach
+from that run to an unrelated "District 5" elsewhere on the page would have paired them
+confidently and wrongly. Every run prints its widest gap so the assumption can be re-checked
+rather than assumed.
+
+Result: **17 counties, 67 districts**. The other 23 plan 3 counties ship nothing and say why —
+several refuse this client outright, two sit behind a captcha (an access control, not an obstacle
+to route around), and the rest name no district on any page the scraper can find. None of them is
+degraded: their supervisors are still named, unkeyed, on the County card.
+
+**Two counties surfaced a conflict rather than a gap, and they resolve in opposite directions** —
+which is why neither is settled by a rule. **Humboldt** is one of PR 1's seven withheld boards
+(ISAC lists 6, illegal under §331.201); its own page shows 5 districts and 5 of those 6 names, so
+the portal's 6 looks like the defect. **Warren** is also withheld (ISAC 5 against geometry 3), and
+its own page shows 5 districts and 5 names — so there the likely stale party is the LSA GEOMETRY,
+not the county. Both are recorded in `ia/WATCH.md` rather than guessed at.
+
+Files: `ia/scripts/ia_supervisor_district_scraper.py`, `build_ia_supervisor_roster.py`,
+`ia/data/app/ia-supervisor-members.json`, `.github/workflows/update-ia-supervisor-roster.yml`.
+
 **Still to come this phase:**
 
 

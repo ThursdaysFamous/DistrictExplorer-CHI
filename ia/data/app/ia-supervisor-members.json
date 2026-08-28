@@ -1,0 +1,436 @@
+{
+ "003": {
+  "county": "Adams",
+  "districts": {
+   "1": {
+    "name": "Bobbi Maynes",
+    "party": "Republican",
+    "phone": "(641) 322-3240"
+   },
+   "2": {
+    "name": "Tony Hardisty",
+    "party": "Republican",
+    "phone": "(641) 322-3240"
+   },
+   "3": {
+    "name": "Scott Akin",
+    "party": "Republican",
+    "phone": "(641) 322-3240"
+   },
+   "4": {
+    "name": "Leland Shipley",
+    "party": "Republican",
+    "phone": "(641) 322-3240"
+   },
+   "5": {
+    "name": "Chris Standley",
+    "party": "Republican",
+    "phone": "(641) 322-3240"
+   }
+  },
+  "sourceUrl": "https://adamscounty.iowa.gov/supervisors/"
+ },
+ "017": {
+  "county": "Bremer",
+  "districts": {
+   "1": {
+    "name": "Bob Brunkhorst",
+    "party": "Republican",
+    "phone": "(319) 352-0130"
+   },
+   "2": {
+    "name": "Corey Cerwinske",
+    "party": "Republican",
+    "phone": "(319) 352-0130"
+   },
+   "3": {
+    "name": "Dewey Hildebrandt",
+    "party": "Republican",
+    "phone": "(319) 352-0130"
+   }
+  },
+  "sourceUrl": "https://www.bremercounty.iowa.gov/government/board_of_supervisors/index.php"
+ },
+ "033": {
+  "county": "Cerro Gordo",
+  "districts": {
+   "1": {
+    "name": "Chris Watts",
+    "party": "Republican",
+    "phone": "(641) 421-3024"
+   },
+   "2": {
+    "name": "Casey Callanan",
+    "party": "Republican",
+    "phone": "(641) 421-3024"
+   },
+   "3": {
+    "name": "Carl Ginapp",
+    "party": "Republican",
+    "phone": "(641) 421-3024"
+   }
+  },
+  "sourceUrl": "https://cerrogordo.gov/supervisors/"
+ },
+ "069": {
+  "county": "Franklin",
+  "districts": {
+   "1": {
+    "name": "Gary McVicker",
+    "party": "Republican",
+    "phone": "(641) 456-5624"
+   },
+   "2": {
+    "name": "Dick Lukensmeyer",
+    "party": "Republican",
+    "phone": "(641) 456-5624"
+   },
+   "3": {
+    "name": "Chris Vanness",
+    "party": "Republican",
+    "phone": "(641) 456-5624"
+   }
+  },
+  "sourceUrl": "https://www.franklincountyia.gov/government/board_of_supervisors/index.php"
+ },
+ "075": {
+  "county": "Grundy",
+  "districts": {
+   "1": {
+    "name": "LJ Kopsa",
+    "party": "Republican",
+    "phone": "(319) 824-5813"
+   },
+   "2": {
+    "name": "Heidi Nederhoff",
+    "party": "Republican",
+    "phone": "(319) 824-5813"
+   },
+   "3": {
+    "name": "Vic Vandehaar",
+    "party": "Republican",
+    "phone": "(319) 824-5813"
+   },
+   "4": {
+    "name": "Mark Schildroth",
+    "party": "Republican",
+    "phone": "(319) 824-5813"
+   },
+   "5": {
+    "name": "Jeffrey Pabst",
+    "party": "Republican",
+    "phone": "(319) 824-5813"
+   }
+  },
+  "sourceUrl": "https://www.grundycountyiowa.gov/departments/supervisors"
+ },
+ "079": {
+  "county": "Hamilton",
+  "districts": {
+   "1": {
+    "name": "Mary Clausen",
+    "party": "Republican",
+    "phone": "(515) 832-9530"
+   },
+   "2": {
+    "name": "April Ely",
+    "party": "Republican",
+    "phone": "(515) 832-9530"
+   },
+   "3": {
+    "name": "Rick Young",
+    "party": "Republican",
+    "phone": "(515) 832-9530"
+   }
+  },
+  "sourceUrl": "https://www.hamiltoncounty.iowa.gov/departments/board_of_supervisors/index.php"
+ },
+ "113": {
+  "county": "Linn",
+  "districts": {
+   "1": {
+    "name": "Kirsten Running-Marquardt",
+    "party": "Democratic",
+    "phone": "(319) 892-5000"
+   },
+   "2": {
+    "name": "Sami Scheetz",
+    "phone": "(319) 892-5000"
+   },
+   "3": {
+    "name": "Brandy Meisheid",
+    "party": "Republican",
+    "phone": "(319) 892-5000"
+   }
+  },
+  "sourceUrl": "https://www.linncountyiowa.gov/123/Board-of-Supervisors"
+ },
+ "119": {
+  "county": "Lyon",
+  "districts": {
+   "1": {
+    "name": "Douglas Bosch",
+    "party": "Republican",
+    "phone": "(712) 472-8517"
+   },
+   "2": {
+    "name": "Dennis Scholten",
+    "party": "Republican",
+    "phone": "(712) 472-8517"
+   },
+   "3": {
+    "name": "Cory Altena",
+    "party": "Republican",
+    "phone": "(712) 472-8517"
+   },
+   "4": {
+    "name": "Cody Hoefert",
+    "party": "Republican",
+    "phone": "(712) 472-8517"
+   },
+   "5": {
+    "name": "Steven Herman",
+    "party": "Republican",
+    "phone": "(712) 472-8517"
+   }
+  },
+  "sourceUrl": "https://lyoncounty.iowa.gov/supervisors/"
+ },
+ "121": {
+  "county": "Madison",
+  "districts": {
+   "1": {
+    "name": "Heather Stancil",
+    "party": "Republican",
+    "phone": "(515) 462-3225"
+   },
+   "2": {
+    "name": "Jessica Hobbs",
+    "party": "Republican",
+    "phone": "(515) 462-3225"
+   },
+   "3": {
+    "name": "Diane Fitch",
+    "party": "Republican",
+    "phone": "(515) 462-3225"
+   }
+  },
+  "sourceUrl": "https://madisoncounty.iowa.gov/offices/board-of-supervisors/"
+ },
+ "131": {
+  "county": "Mitchell",
+  "districts": {
+   "1": {
+    "name": "Todd Frein",
+    "party": "Democratic",
+    "phone": "(641) 832-3942"
+   },
+   "2": {
+    "name": "Jim Wherry",
+    "party": "Republican",
+    "phone": "(641) 832-3942"
+   },
+   "3": {
+    "name": "Sydney Hartogh",
+    "party": "Republican",
+    "phone": "(641) 832-3942"
+   },
+   "4": {
+    "name": "Pam Marzen",
+    "party": "Republican",
+    "phone": "(641) 832-3942"
+   },
+   "5": {
+    "name": "Mark Hendrickson",
+    "party": "Republican",
+    "phone": "(641) 832-3942"
+   }
+  },
+  "sourceUrl": "https://mitchellcounty.iowa.gov/board-of-supervisors/#agendas"
+ },
+ "133": {
+  "county": "Monona",
+  "districts": {
+   "1": {
+    "name": "Bo Fox",
+    "party": "Republican",
+    "phone": "(712) 433-1585"
+   },
+   "2": {
+    "name": "Tom Brouillette",
+    "party": "Democratic",
+    "phone": "(712) 433-1585"
+   },
+   "3": {
+    "name": "Vincent Phillips",
+    "party": "Republican",
+    "phone": "(712) 433-1585"
+   }
+  },
+  "sourceUrl": "https://www.mononacountyiowa.gov/supervisors/"
+ },
+ "151": {
+  "county": "Pocahontas",
+  "districts": {
+   "1": {
+    "name": "Peter Seehusen",
+    "party": "Republican",
+    "phone": "(712) 335-3361"
+   },
+   "2": {
+    "name": "Clarence J. Siepker",
+    "party": "Republican",
+    "phone": "(712) 335-3361"
+   },
+   "3": {
+    "name": "Kyle Smith",
+    "party": "Republican",
+    "phone": "(712) 335-3361"
+   },
+   "4": {
+    "name": "Brent Aden",
+    "party": "Republican",
+    "phone": "(712) 335-3361"
+   },
+   "5": {
+    "name": "Louis Stauter",
+    "party": "No party",
+    "phone": "(712) 335-3361"
+   }
+  },
+  "sourceUrl": "https://pocahontascounty.iowa.gov/board-of-supervisors/"
+ },
+ "153": {
+  "county": "Polk",
+  "districts": {
+   "1": {
+    "name": "Matt McCoy",
+    "party": "Democratic",
+    "phone": "(515) 286-3120"
+   },
+   "2": {
+    "name": "Jill Altringer",
+    "party": "Republican",
+    "phone": "(515) 286-3120"
+   },
+   "3": {
+    "name": "Mark Holm",
+    "party": "Republican",
+    "phone": "(515) 286-3120"
+   },
+   "4": {
+    "name": "Tom Hockensmith",
+    "party": "Democratic",
+    "phone": "(515) 286-3120"
+   },
+   "5": {
+    "name": "Angela Connolly",
+    "party": "Democratic",
+    "phone": "(515) 286-3120"
+   }
+  },
+  "sourceUrl": "https://www.polkcountyiowa.gov/board-of-supervisors/"
+ },
+ "161": {
+  "county": "Sac",
+  "districts": {
+   "1": {
+    "name": "Ranell Drake",
+    "phone": "(712) 662-7401"
+   },
+   "2": {
+    "name": "Mike Fischer",
+    "party": "Republican",
+    "phone": "(712) 662-7401"
+   },
+   "3": {
+    "name": "Jim Wissler",
+    "party": "Republican",
+    "phone": "(712) 662-7401"
+   }
+  },
+  "sourceUrl": "https://www.saccountyiowa.gov/supervisors/"
+ },
+ "173": {
+  "county": "Taylor",
+  "districts": {
+   "1": {
+    "name": "Ronald Fitzgerald",
+    "party": "Republican",
+    "phone": "(712) 523-2060"
+   },
+   "2": {
+    "name": "Lincoln Wall",
+    "phone": "(712) 523-2060"
+   },
+   "3": {
+    "name": "Jack Beggs",
+    "party": "Republican",
+    "phone": "(712) 523-2060"
+   }
+  },
+  "sourceUrl": "https://taylorcounty.iowa.gov/departments/board-of-supervisors/"
+ },
+ "187": {
+  "county": "Webster",
+  "districts": {
+   "1": {
+    "name": "Austin Hayek",
+    "party": "Republican",
+    "phone": "(515) 573-7175"
+   },
+   "2": {
+    "name": "Nathan Montgomery",
+    "party": "Republican",
+    "phone": "(515) 573-7175"
+   },
+   "3": {
+    "name": "Bob Thode",
+    "party": "Democratic",
+    "phone": "(515) 573-7175"
+   },
+   "4": {
+    "name": "Niki Conrad",
+    "party": "Democratic",
+    "phone": "(515) 573-7175"
+   },
+   "5": {
+    "name": "John Cochrane",
+    "party": "Republican",
+    "phone": "(515) 573-7175"
+   }
+  },
+  "sourceUrl": "https://www.webstercountyia.gov/departments/board_of_supervisors/index.php"
+ },
+ "191": {
+  "county": "Winneshiek",
+  "districts": {
+   "1": {
+    "name": "Mark Vick",
+    "party": "Republican",
+    "phone": "(563) 382-2370"
+   },
+   "2": {
+    "name": "Mark Faldet",
+    "party": "Democratic",
+    "phone": "(563) 382-2370"
+   },
+   "3": {
+    "name": "Shirley Vermace",
+    "party": "Democratic",
+    "phone": "(563) 382-2370"
+   },
+   "4": {
+    "name": "Daniel Langreck",
+    "party": "Republican",
+    "phone": "(563) 382-2370"
+   },
+   "5": {
+    "name": "Steve Kelsay",
+    "party": "Republican",
+    "phone": "(563) 382-2370"
+   }
+  },
+  "sourceUrl": "https://winneshiekcounty.iowa.gov/departments/board-of-supervisors"
+ }
+}

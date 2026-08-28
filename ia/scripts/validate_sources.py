@@ -192,6 +192,12 @@ PROVENANCE = [
         "note": "The Iowa County Attorneys Association roster (PDF, 5 May 2026) — the county attorney row's authority. Note the literal @ and & in the filename. iowa-icaa.com answers 404 with a FULL page body, so a reachability check on any other path there proves nothing.",
     },
     {
+        "layer": "county-supervisor",
+        "app_file": "ia-supervisor-members.json",
+        "source_url": "https://www.polkcountyiowa.gov/board-of-supervisors/",
+        "note": "Which supervisor holds each district, for PLAN 3 counties only (Iowa Code 331.206 — plan 1 has no districts and plan 2 elects countywide). There is no statewide source: the Legislature's own layer names DISTRICTS not people, the ISAC portal attaches a district to nobody, the Secretary of State's statewide canvass carries ZERO supervisor contests (counties canvass their own county offices), and electionresults.iowa.gov exposes no data API. So each county's own board page supplies the district NUMBER by proximity to names the shipped roster already carries. Probed here at one representative county (Polk); the run reads 40 and keys the ones that pass its gates. Built by ia/scripts/ia_supervisor_district_scraper.py + build_ia_supervisor_roster.py; refreshed weekly by update-ia-supervisor-roster.yml.",
+    },
+    {
         "layer": "county",
         "app_file": "metro-outline.json",
         "source_url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer/1",
