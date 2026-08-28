@@ -97,7 +97,7 @@ MIN_REGISTER_LAYER = 10
 EXPECT_LAYER_IDS = [
     "us-house", "ia-senate", "county", "ia-house", "county-supervisor",
     "school-district-unified", "county-subdivision", "municipality",
-    "zip-code", "police-station", "fire-station", "school-site",
+    "zip-code", "precinct", "police-station", "fire-station", "school-site",
     "post-office",
 ]
 
@@ -112,6 +112,7 @@ GEOMETRY_FILES = {
     "jones-county-outline.json": (1, 1),  # Jones County's own boundary, extracted from state-counties.json by ia/scripts/build_ia_county_outline.py — the Data-gaps panel's map highlight for gap jones-county-supervisor. Referenced dynamically (built from the gap's county slug at runtime), never by a literal in index.html.
     "ia-school-districts.json": (324, 324),  # 324 unified school districts, built by ia/scripts/build_ia_school_districts.py: TIGERweb's 325 dissolved (Orient-Macksburg into Nodaway Valley) and witnessed by name against the Dept. of Education's own current layer (2,000-point agreement gate).
     "ia-school-sites.json": (1321, 1321),  # 1,321 public school buildings, pre-built by ia/scripts/build_ia_school_sites.py from the Iowa Legislature's own ArcGIS org's IowaSchoolBldgs layer (paginated past its 1,000-record cap).
+    "ia-precincts.json": (1660, 1660),  # 1,660 election precincts across all 99 counties, pre-built by ia/scripts/build_ia_precincts.py from the Iowa Legislature's own ArcGIS org's Iowa_Precincts layer (Visvalingam-simplified from ~18MB raw to under 3MB, 2,000-point agreement gate; polling-place fields never fetched).
 }
 
 # file -> minimum key count (officeholder rosters).
