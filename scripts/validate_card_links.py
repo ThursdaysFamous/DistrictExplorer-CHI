@@ -129,30 +129,82 @@ except ImportError:  # pragma: no cover - requests is pinned in requirements.txt
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INDEX_HTML = os.path.join(REPO_ROOT, "il", "index.html")
-# Every authored HTML page the app serves, not just the app itself. sources.html
-# now carries the credit row that used to live in index.html's footer plus one
-# boundary link per layer, so scanning index.html alone would have quietly
-# dropped ~50 authored URLs off this gate's surface the day that page shipped.
-# A page listed here but absent is skipped, not fatal: a fork without the page
-# is not a broken fork.
+# EVERY AUTHORED HTML PAGE THIS REPO SERVES, DISCOVERED RATHER THAN LISTED.
 #
-# The repo-root index.html is the FLEET LANDING PAGE as of R4, and it belongs
-# here for exactly the reason sources.html did: every link on it is a link a
-# reader clicks, and it is now the most prominent authored surface on the site.
-# Its three destinations are the fleet's own instances, so a dead one is this
-# repo's to fix — which is what AUTHORED, rather than PUBLISHED, means here.
-# coverage-map.html joins it for the same reason: the landing page embeds it in
-# an iframe, so its legend rows are links a reader clicks on the front door.
-AUTHORED_PAGES = ["index.html", "coverage-map.html", "il/index.html", "il/sources.html",
-                  "privacy.html", "il/faq.html", "ny/index.html", "ny/faq.html", "ny/sources.html",
-                  "ca/index.html", "ca/faq.html", "ca/sources.html",
-                  "wi/index.html", "wi/faq.html", "wi/sources.html"]
-APP_DATA_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
-# One data/app per instance. This used to be APP_DATA_DIR alone, which meant
-# the gate watched Illinois's roster URLs and nobody else's — a sibling could
-# ship a card link to a dead host and every check here stayed green.
+# WHAT belongs here was never in doubt. sources.html carries the credit row
+# that used to live in index.html's footer plus one boundary link per layer, so
+# scanning index.html alone silently dropped ~50 authored URLs off this gate the
+# day that page shipped; the repo-root index.html is the FLEET LANDING PAGE as
+# of R4 and the most prominent authored surface on the site. Every link on both
+# is a link a reader clicks, and a dead one is this repo's to fix — which is
+# what AUTHORED, rather than PUBLISHED, means here.
+#
+# KEEPING THE LIST BY HAND WAS THE PROBLEM. Both this list and APP_DATA_DIRS
+# below were last extended by hand on 2026-08-26, for Wisconsin. Iowa shipped as
+# the fifth instance the NEXT DAY and was added to neither, so every URL in
+# ia/index.html, ia/faq.html and ia/sources.html — and Iowa's whole data/app,
+# 277 more — sat outside this gate, where a dead link would have stayed green
+# forever. APP_DATA_DIRS is the sharper half of that: its own comment says the
+# premise is that "a new county is covered the day it ships with nothing to
+# update", and it named four instances out of five. That is the gate's premise
+# failing on the gate, so both surfaces are now DISCOVERED:
+#
+#   * the repo root's own pages — the landing page, the coverage map the
+#     landing page embeds in an iframe (its legend rows are links a reader
+#     clicks on the front door), the one-for-the-fleet /privacy.html,
+#     sponsorship.html, and the redirect shells that catch pre-R5 paths. A
+#     shell's canonical names the page it forwards readers to, so probing it
+#     answers whether that page is still there. coverage-map.html is the
+#     argument in miniature: it shipped on 2026-08-28 and had to be added to
+#     the literal by hand in the same commit, which is the step Iowa did not
+#     get.
+#   * every .html an instance directory owns — index, faq, sources, history and
+#     the per-concept SEO pages alike, which is one fewer list to forget.
+#
+# An INSTANCE is a top-level directory that serves an app: its own index.html
+# and its own data/app/. Discovery rather than the generator's INSTANCES table
+# is deliberate — this gate's monthly workflow installs requests and shapely and
+# nothing else, and `from generate_metro_files import INSTANCES` EXITS 1 at
+# import when jsonschema is absent (not an ImportError, so it cannot be caught
+# as one), which would take the whole run down. The rule also cannot name an
+# instance that is not one: districtry/ has an index.html and no data/app.
+def instance_dirs():
+    """Every instance folder in this repo, in directory order."""
+    out = []
+    for entry in sorted(os.listdir(REPO_ROOT)):
+        full = os.path.join(REPO_ROOT, entry)
+        if entry.startswith(".") or not os.path.isdir(full):
+            continue
+        if (os.path.isfile(os.path.join(full, "index.html"))
+                and os.path.isdir(os.path.join(full, "data", "app"))):
+            out.append(entry)
+    return out
+
+
+def authored_pages(instances):
+    """Repo-relative paths of the root's pages, then each instance's own.
+
+    A page that vanishes is simply not found — the same posture the hand-kept
+    list had ("absent is skipped, not fatal"), except that now an ADDED page is
+    not missed either.
+    """
+    pages = [os.path.basename(p)
+             for p in sorted(glob.glob(os.path.join(REPO_ROOT, "*.html")))]
+    for inst in instances:
+        pages += ["%s/%s" % (inst, os.path.basename(p))
+                  for p in sorted(glob.glob(os.path.join(REPO_ROOT, inst, "*.html")))]
+    return pages
+
+
+INSTANCE_DIRS = instance_dirs()
+AUTHORED_PAGES = authored_pages(INSTANCE_DIRS)
+# One data/app per instance. This used to be il/data/app alone, which meant the
+# gate watched Illinois's roster URLs and nobody else's — a sibling could ship a
+# card link to a dead host and every check here stayed green. Listing the four
+# instances that existed then fixed that case and not the class; discovery is
+# what stops the next one.
 APP_DATA_DIRS = [os.path.join(REPO_ROOT, inst, "data", "app")
-                 for inst in ("il", "ny", "ca", "wi")]
+                 for inst in INSTANCE_DIRS]
 
 FAIL, WARN, OK = "FAIL", "WARN", "OK"
 
@@ -318,6 +370,17 @@ def expected_block(host):
 # ---- extraction --------------------------------------------------------------
 INDEX_URL_RE = re.compile(r'url: *"(https?://[^"]+)"')
 INDEX_HREF_RE = re.compile(r'href="(https?://[^"]+)"')
+# A MEASURED GAP IN THESE TWO PATTERNS, recorded rather than quietly closed. A
+# card link can also arrive as `directoryUrl` — the chamber factory's fallback
+# when a member has no page of their own (`memberUrl || opts.directoryUrl`) —
+# and on 2026-08-28 ten such URLs across all five instances were matched by
+# neither pattern, so a reader clicks them and nothing probes them. A third
+# regex is two lines and was deliberately NOT added in the same change that
+# widened the PAGE list: these patterns also match inside COMMENTS, and the
+# chamber factory's own worked example reads
+# `directoryUrl: "https://example.gov/senate/members"` — so the naive version
+# reports a documentation placeholder as a dead card link. Whoever adds the
+# pattern answers the comment-line question with it.
 
 AUTHORED, PUBLISHED = "authored", "published"
 
@@ -450,8 +513,30 @@ def resolves(host, attempts=3):
     return False, last
 
 
-def hollow_body(url):
-    """Does this 200 actually carry a page? Returns a detail string, or None.
+# A page that forwards a browser onward the instant it loads. Both spellings
+# appear in the wild: `content="0; url=x"` and a bare `content="0;x"`.
+META_REFRESH_RE = re.compile(
+    r"""<meta[^>]+http-equiv\s*=\s*["']?refresh["']?[^>]*content\s*=\s*["']([^"']*)["']""",
+    re.I)
+
+
+def meta_refresh_target(text, url):
+    """Absolute URL this HTML instantly forwards a browser to, or None."""
+    m = META_REFRESH_RE.search(text)
+    if not m:
+        return None
+    content = m.group(1)
+    at = re.search(r"""url\s*=\s*["']?([^"'\s;]+)""", content, re.I)
+    if not at:
+        # The bare form: everything after the delay, if it looks like a target.
+        _, _, rest = content.partition(";")
+        rest = rest.strip().strip('"\'')
+        at = re.match(r"(\S+)", rest) if rest else None
+    return urllib.parse.urljoin(url, at.group(1).strip()) if at else None
+
+
+def peek_body(url):
+    """(size, first few KB of text) for an HTML-ish answer, else None.
 
     Reads at most HOLLOW_PEEK_BYTES so a megabyte PDF costs nothing, and
     measures only HTML-ish answers — a 400-byte SVG or a small PDF is a
@@ -478,9 +563,38 @@ def hollow_body(url):
         size = int(declared) if declared is not None else len(head)
     except ValueError:
         size = len(head)
+    return size, head.decode("utf-8", "replace")
+
+
+def hollow_body(url, followed=False):
+    """Does this 200 actually carry a page? Returns a detail string, or None.
+
+    A SMALL PAGE THAT IS A META REFRESH IS NOT HOLLOW — it is a redirect, and
+    the reader lands wherever it points. `tigerweb.geo.census.gov/` is 411
+    bytes of `<meta http-equiv="REFRESH" content="0; url=tigerwebmain/…">`,
+    titled "TIGERweb Redirect", and every browser lands on the real TIGERweb
+    page; reporting it as a link that "answers nothing" told a maintainer to
+    replace a working citation of the Census's own service root — cited from
+    five instances' pages. So one hop is followed and the DESTINATION is
+    measured by the same rules, which keeps the parking-lander catches this
+    test exists for: Morris and Henderson forward with `window.location`
+    rather than a meta refresh (still named as a script-only redirect below),
+    and a meta refresh INTO a lander is caught at the destination by its own
+    marker. One hop only, and a destination that cannot be fetched reads as
+    fine, the same failing-open posture peek_body already takes — this test
+    creates FAILs, so it errs quiet.
+    """
+    peeked = peek_body(url)
+    if peeked is None:
+        return None
+    size, raw = peeked
     if size > HOLLOW_MAX_BYTES:
         return None
-    text = head.decode("utf-8", "replace").lower()
+    target = None if followed else meta_refresh_target(raw, url)
+    if target:
+        onward = hollow_body(target, followed=True)
+        return None if onward is None else "%s, via a meta refresh to %s" % (onward, target)
+    text = raw.lower()
     for marker, what in HOLLOW_MARKERS:
         if marker in text:
             return "HTTP 200, %d bytes — %s" % (size, what)
@@ -516,20 +630,28 @@ def probe(url, resolved=None):
         code, final = resp.status_code, resp.url
         if method == "get":
             resp.close()
-        if code < 400:
+        if code == 202:
+            # Same reading as validate_sources.py: "Accepted" is never a
+            # document — it is what several counties' bot-management fronts
+            # serve, and treating it as success is how a block goes unnoticed.
+            # THIS TEST MUST PRECEDE `code < 400`, and for three weeks it did
+            # not: 202 is under 400, so the success branch matched first and
+            # this one could never run. The block was not missed outright,
+            # because the hollow-body test then caught the interstitial as a
+            # 169-to-220-byte page — but it named it the WRONG thing, telling a
+            # maintainer to "find the real address and update every citation"
+            # for co.taylor.wi.us and dekalbcounty.org, whose pages are fine
+            # and whose sgcaptcha front this repo already knows about.
+            result = {"state": "blocked", "detail": "HTTP 202 — bot-management interstitial"}
+        elif code < 400:
             result = {"state": "ok", "detail": "HTTP %d" % code, "final": final}
             break
-        if code in GONE_STATUSES:
+        elif code in GONE_STATUSES:
             result = {"state": "gone", "detail": "HTTP %d" % code}
         elif code in BLOCK_STATUSES:
             result = {"state": "blocked", "detail": "HTTP %d" % code}
         elif code == RATE_LIMIT_STATUS:
             result = {"state": "rate-limited", "detail": "HTTP 429"}
-        elif code == 202:
-            # Same reading as validate_sources.py: "Accepted" is never a
-            # document — it is what several counties' bot-management fronts
-            # serve, and treating it as success is how a block goes unnoticed.
-            result = {"state": "blocked", "detail": "HTTP 202 — bot-management interstitial"}
         else:
             result = {"state": "unreachable", "detail": "HTTP %d" % code}
 
@@ -731,10 +853,11 @@ def render(rows, cites, origin, prefixes):
 
     lines = ["# Card + roster link validation", "",
              "**%d FAIL · %d WARN · %d OK** — %d URLs across %d hosts, extracted from "
-             "`index.html` and `data/app/*.json`. Of those, %d chosen by this repo "
-             "(a dead one is ours to fix) and %d carried from their own publisher "
-             "(capped at WARN — see the script's header)."
+             "%d authored pages and %d instances' `data/app/*.json`. Of those, %d chosen "
+             "by this repo (a dead one is ours to fix) and %d carried from their own "
+             "publisher (capped at WARN — see the script's header)."
              % (n[FAIL], n[WARN], n[OK], len(cites), hosts,
+                len(AUTHORED_PAGES), len(INSTANCE_DIRS),
                 len(cites) - n_pub, n_pub), ""]
     # Both phrases are the ones evaluate() writes for a refusal it counts OK;
     # keep them in step if either message is reworded.
@@ -817,6 +940,16 @@ def main():
               file=sys.stderr)
         sys.exit(1)
 
+    # Discovery's one failure mode is finding nothing and reporting a narrowed
+    # surface as a clean run — which is the failure this gate exists to catch,
+    # so it is fatal rather than quiet.
+    if not INSTANCE_DIRS:
+        print("validate_card_links: FAIL — no instance directory found under %s. "
+              "An instance is a folder with its own index.html and data/app/; "
+              "finding none means this ran from the wrong tree." % REPO_ROOT,
+              file=sys.stderr)
+        sys.exit(1)
+
     cites, origin, prefixes = collect()
     if not cites:
         print("validate_card_links: FAIL — extracted 0 URLs, which cannot be right. "
@@ -829,6 +962,12 @@ def main():
         print("validate_card_links: %d URLs (%d chosen here, %d carried from their "
               "publisher) across %d hosts (offline; nothing probed)"
               % (len(cites), n_auth, len(cites) - n_auth, len(hosts)))
+        # The pages and roster directories are discovered, so print what that
+        # found: a missing instance is visible here rather than only as a
+        # surface that quietly got smaller.
+        print("  %d instances (%s); %d authored pages: %s"
+              % (len(INSTANCE_DIRS), ", ".join(INSTANCE_DIRS),
+                 len(AUTHORED_PAGES), ", ".join(AUTHORED_PAGES)))
         for host, count in sorted(hosts.items()):
             print("  %4d  %s" % (count, host))
         return
