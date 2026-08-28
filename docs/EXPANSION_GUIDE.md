@@ -428,6 +428,20 @@ In the **instance**: (6) its own `scripts/` with `validate_index.py`, `smoke_tes
 no-ops silently without one, and a real port shipped days of zero analytics; (9) *(operator)*
 any CI secrets its scrapers need.
 
+**Anything fleet-level that names the instances should DISCOVER them, not list them.** Every
+hand-kept fleet list is a registration step, and this one is the step most often missed:
+`validate_card_links.py` carried its authored pages and its roster directories as literals,
+both were extended by hand for Wisconsin on 2026-08-26, and Iowa arrived the NEXT DAY and was
+added to neither — `ia/index.html`, `ia/faq.html`, `ia/sources.html` and Iowa's whole
+`data/app` (303 URLs, 52 of them this repo's own) sat outside the link gate, where a dead link
+stays green forever. Both are now derived: every `*.html` at the root and in each instance
+folder, one `data/app` per instance, where an instance is a top-level directory with its own
+`index.html` and `data/app/`. One caveat if you reach for the generator's table to do the same
+elsewhere: `from generate_metro_files import INSTANCES` **exits 1** when `jsonschema` is
+missing rather than raising `ImportError`, so the usual `try/except ImportError` fallback does
+not catch it — `check_roster_retention.py` carries exactly that guard and dies at import
+without the package, which only its own workflow happens to install.
+
 ## 2.5 Offline anchors, ground truth, and the coverage wash
 
 Live civic APIs are flaky and CI-hostile, so the test strategy rests on ≥3 **API-free

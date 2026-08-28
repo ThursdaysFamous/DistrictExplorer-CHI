@@ -129,28 +129,77 @@ except ImportError:  # pragma: no cover - requests is pinned in requirements.txt
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INDEX_HTML = os.path.join(REPO_ROOT, "il", "index.html")
-# Every authored HTML page the app serves, not just the app itself. sources.html
-# now carries the credit row that used to live in index.html's footer plus one
-# boundary link per layer, so scanning index.html alone would have quietly
-# dropped ~50 authored URLs off this gate's surface the day that page shipped.
-# A page listed here but absent is skipped, not fatal: a fork without the page
-# is not a broken fork.
+# EVERY AUTHORED HTML PAGE THIS REPO SERVES, DISCOVERED RATHER THAN LISTED.
 #
-# The repo-root index.html is the FLEET LANDING PAGE as of R4, and it belongs
-# here for exactly the reason sources.html did: every link on it is a link a
-# reader clicks, and it is now the most prominent authored surface on the site.
-# Its three destinations are the fleet's own instances, so a dead one is this
-# repo's to fix — which is what AUTHORED, rather than PUBLISHED, means here.
-AUTHORED_PAGES = ["index.html", "il/index.html", "il/sources.html",
-                  "privacy.html", "il/faq.html", "ny/index.html", "ny/faq.html", "ny/sources.html",
-                  "ca/index.html", "ca/faq.html", "ca/sources.html",
-                  "wi/index.html", "wi/faq.html", "wi/sources.html"]
-APP_DATA_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
-# One data/app per instance. This used to be APP_DATA_DIR alone, which meant
-# the gate watched Illinois's roster URLs and nobody else's — a sibling could
-# ship a card link to a dead host and every check here stayed green.
+# WHAT belongs here was never in doubt. sources.html carries the credit row
+# that used to live in index.html's footer plus one boundary link per layer, so
+# scanning index.html alone silently dropped ~50 authored URLs off this gate the
+# day that page shipped; the repo-root index.html is the FLEET LANDING PAGE as
+# of R4 and the most prominent authored surface on the site. Every link on both
+# is a link a reader clicks, and a dead one is this repo's to fix — which is
+# what AUTHORED, rather than PUBLISHED, means here.
+#
+# KEEPING THE LIST BY HAND WAS THE PROBLEM. Both this list and APP_DATA_DIRS
+# below were last extended by hand on 2026-08-26, for Wisconsin. Iowa shipped as
+# the fifth instance the NEXT DAY and was added to neither, so every URL in
+# ia/index.html, ia/faq.html and ia/sources.html — and Iowa's whole data/app,
+# 277 more — sat outside this gate, where a dead link would have stayed green
+# forever. APP_DATA_DIRS is the sharper half of that: its own comment says the
+# premise is that "a new county is covered the day it ships with nothing to
+# update", and it named four instances out of five. That is the gate's premise
+# failing on the gate, so both surfaces are now DISCOVERED:
+#
+#   * the repo root's own pages — the landing page, the one-for-the-fleet
+#     /privacy.html, sponsorship.html, and the redirect shells that catch
+#     pre-R5 paths. A shell's canonical names the page it forwards readers to,
+#     so probing it answers whether that page is still there.
+#   * every .html an instance directory owns — index, faq, sources, history and
+#     the per-concept SEO pages alike, which is one fewer list to forget.
+#
+# An INSTANCE is a top-level directory that serves an app: its own index.html
+# and its own data/app/. Discovery rather than the generator's INSTANCES table
+# is deliberate — this gate's monthly workflow installs requests and shapely and
+# nothing else, and `from generate_metro_files import INSTANCES` EXITS 1 at
+# import when jsonschema is absent (not an ImportError, so it cannot be caught
+# as one), which would take the whole run down. The rule also cannot name an
+# instance that is not one: districtry/ has an index.html and no data/app.
+def instance_dirs():
+    """Every instance folder in this repo, in directory order."""
+    out = []
+    for entry in sorted(os.listdir(REPO_ROOT)):
+        full = os.path.join(REPO_ROOT, entry)
+        if entry.startswith(".") or not os.path.isdir(full):
+            continue
+        if (os.path.isfile(os.path.join(full, "index.html"))
+                and os.path.isdir(os.path.join(full, "data", "app"))):
+            out.append(entry)
+    return out
+
+
+def authored_pages(instances):
+    """Repo-relative paths of the root's pages, then each instance's own.
+
+    A page that vanishes is simply not found — the same posture the hand-kept
+    list had ("absent is skipped, not fatal"), except that now an ADDED page is
+    not missed either.
+    """
+    pages = [os.path.basename(p)
+             for p in sorted(glob.glob(os.path.join(REPO_ROOT, "*.html")))]
+    for inst in instances:
+        pages += ["%s/%s" % (inst, os.path.basename(p))
+                  for p in sorted(glob.glob(os.path.join(REPO_ROOT, inst, "*.html")))]
+    return pages
+
+
+INSTANCE_DIRS = instance_dirs()
+AUTHORED_PAGES = authored_pages(INSTANCE_DIRS)
+# One data/app per instance. This used to be il/data/app alone, which meant the
+# gate watched Illinois's roster URLs and nobody else's — a sibling could ship a
+# card link to a dead host and every check here stayed green. Listing the four
+# instances that existed then fixed that case and not the class; discovery is
+# what stops the next one.
 APP_DATA_DIRS = [os.path.join(REPO_ROOT, inst, "data", "app")
-                 for inst in ("il", "ny", "ca", "wi")]
+                 for inst in INSTANCE_DIRS]
 
 FAIL, WARN, OK = "FAIL", "WARN", "OK"
 
@@ -316,6 +365,17 @@ def expected_block(host):
 # ---- extraction --------------------------------------------------------------
 INDEX_URL_RE = re.compile(r'url: *"(https?://[^"]+)"')
 INDEX_HREF_RE = re.compile(r'href="(https?://[^"]+)"')
+# A MEASURED GAP IN THESE TWO PATTERNS, recorded rather than quietly closed. A
+# card link can also arrive as `directoryUrl` — the chamber factory's fallback
+# when a member has no page of their own (`memberUrl || opts.directoryUrl`) —
+# and on 2026-08-28 ten such URLs across all five instances were matched by
+# neither pattern, so a reader clicks them and nothing probes them. A third
+# regex is two lines and was deliberately NOT added in the same change that
+# widened the PAGE list: these patterns also match inside COMMENTS, and the
+# chamber factory's own worked example reads
+# `directoryUrl: "https://example.gov/senate/members"` — so the naive version
+# reports a documentation placeholder as a dead card link. Whoever adds the
+# pattern answers the comment-line question with it.
 
 AUTHORED, PUBLISHED = "authored", "published"
 
@@ -729,10 +789,11 @@ def render(rows, cites, origin, prefixes):
 
     lines = ["# Card + roster link validation", "",
              "**%d FAIL · %d WARN · %d OK** — %d URLs across %d hosts, extracted from "
-             "`index.html` and `data/app/*.json`. Of those, %d chosen by this repo "
-             "(a dead one is ours to fix) and %d carried from their own publisher "
-             "(capped at WARN — see the script's header)."
+             "%d authored pages and %d instances' `data/app/*.json`. Of those, %d chosen "
+             "by this repo (a dead one is ours to fix) and %d carried from their own "
+             "publisher (capped at WARN — see the script's header)."
              % (n[FAIL], n[WARN], n[OK], len(cites), hosts,
+                len(AUTHORED_PAGES), len(INSTANCE_DIRS),
                 len(cites) - n_pub, n_pub), ""]
     # Both phrases are the ones evaluate() writes for a refusal it counts OK;
     # keep them in step if either message is reworded.
@@ -815,6 +876,16 @@ def main():
               file=sys.stderr)
         sys.exit(1)
 
+    # Discovery's one failure mode is finding nothing and reporting a narrowed
+    # surface as a clean run — which is the failure this gate exists to catch,
+    # so it is fatal rather than quiet.
+    if not INSTANCE_DIRS:
+        print("validate_card_links: FAIL — no instance directory found under %s. "
+              "An instance is a folder with its own index.html and data/app/; "
+              "finding none means this ran from the wrong tree." % REPO_ROOT,
+              file=sys.stderr)
+        sys.exit(1)
+
     cites, origin, prefixes = collect()
     if not cites:
         print("validate_card_links: FAIL — extracted 0 URLs, which cannot be right. "
@@ -827,6 +898,12 @@ def main():
         print("validate_card_links: %d URLs (%d chosen here, %d carried from their "
               "publisher) across %d hosts (offline; nothing probed)"
               % (len(cites), n_auth, len(cites) - n_auth, len(hosts)))
+        # The pages and roster directories are discovered, so print what that
+        # found: a missing instance is visible here rather than only as a
+        # surface that quietly got smaller.
+        print("  %d instances (%s); %d authored pages: %s"
+              % (len(INSTANCE_DIRS), ", ".join(INSTANCE_DIRS),
+                 len(AUTHORED_PAGES), ", ".join(AUTHORED_PAGES)))
         for host, count in sorted(hosts.items()):
             print("  %4d  %s" % (count, host))
         return
