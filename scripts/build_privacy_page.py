@@ -85,38 +85,52 @@ DARK_TOKENS = [
 # outlived it.
 DARK_EXTRA = {"brand-600": "brand"}
 
-# The front door is measured too, and its row is not filler: it is the only
-# surface here that contacts nobody and stores nothing, which is a fact a reader
-# landing on districtry.com should be able to read off the same table.
+# The front door is measured too, and its row is not filler. It used to be the
+# one surface here that contacted nobody and stored nothing; since the
+# address-first redesign it has a search box of its own, so it now sends a typed
+# address to the same geocoder the apps use, and the table says so. That is
+# exactly why the row is measured rather than asserted — the claim changed
+# because the page changed, and nobody had to remember to come and edit it.
 FRONT_DOOR = {"file": "index.html", "name": "The front door", "url": "/", "tag": None}
 
 # Third parties every app reaches, with the policy that governs each. Kept here
 # rather than scraped, because a host name is not a policy URL — but the
 # PRESENCE of each is measured below, so a fleet that stops using one fails the
 # build instead of going on naming it.
+# The last slot is the KEY that decides which surfaces the row names, and it is
+# measured rather than written. These rows used to end in a flat "Every app.",
+# which was true while only the apps drew a map — and stopped being true the day
+# the front door embedded a coverage map, silently, on a page whose whole job is
+# to say who receives what. `None` means every surface (hosting reaches all of
+# them); otherwise it is the measured flag a surface must carry to be named.
 COMMON_RECIPIENTS = [
     ("GitHub Pages", "hosting",
      "https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement",
      "The ordinary web-server request for each file — your IP address, browser, and the "
      "page you asked for. GitHub, not this project, keeps those logs.",
-     "Every visit."),
+     "Every visit.", None),
     ("CARTO", "basemap tiles", "https://carto.com/privacy/",
      "The map tiles you request — which, taken together, describe the area you are "
      "looking at and how far you zoomed in.",
-     "Whenever the map draws or moves."),
+     "Whenever the map draws or moves.", "tiles"),
     ("Cloudflare (cdnjs)", "mapping library", "https://www.cloudflare.com/privacypolicy/",
      "A request for one JavaScript file, Leaflet 1.9.4, pinned by hash.",
-     "Every visit to a map."),
+     "Every visit to a map.", "cdn"),
 ]
 
 # Geocoders, keyed by the host the measurement finds. What a geocoder receives is
 # the most sensitive flow on the page — it is the text you type — so each is
 # named individually rather than pooled into "address search".
+# The "what" strings say "as you type OR when you press the button" rather than
+# "as you type", because the two kinds of surface differ and the narrower claim
+# would be wrong for one of them: the apps' boxes are type-ahead and send on
+# each keystroke, while the front door's sends only on submit. Over-stating what
+# leaves a browser is the safe direction to be wrong in, and it is still wrong.
 GEOCODERS = {
     "photon.komoot.io": (
         "Photon / Komoot", "address search", "https://www.komoot.com/privacy",
-        "<strong>The text you type into the search box</strong>, sent as you type so "
-        "suggestions can appear."),
+        "<strong>The text you type into the search box</strong> — sent as you type on the "
+        "apps' type-ahead boxes, and only when you press the button on the front door."),
     "nominatim.openstreetmap.org": (
         "Nominatim / OpenStreetMap", "address search, office pins",
         "https://osmfoundation.org/wiki/Privacy_Policy",
@@ -159,9 +173,36 @@ def resolve_key(src, token):
     return m.group(1)
 
 
+def embedded_sources(rel, src):
+    """The same-origin pages this one EMBEDS, read so their third parties count
+    as this surface's.
+
+    A reader on a page with an <iframe> loads whatever that frame loads —
+    their IP reaches its hosts on the same visit, without a click. Measuring
+    only the outer document would have let the front door's coverage map bring
+    in a basemap host this page never named. Relative srcs only: an off-site
+    frame is a different question, and nothing here has one.
+    """
+    out = []
+    base = os.path.dirname(os.path.join(REPO_ROOT, rel))
+    for m in re.finditer(r'<iframe[^>]*\ssrc="([^":?#]+\.html)"', src):
+        path = os.path.normpath(os.path.join(base, m.group(1)))
+        if os.path.isfile(path):
+            out.append(read(path, "a page embedded by %s" % rel))
+        else:
+            fail("%s embeds %s, which does not exist — this page measures what a "
+                 "reader's browser actually loads" % (rel, m.group(1)))
+    return out
+
+
 def measure(rel, name, url, tag):
     """Everything this page claims about one app, read off the file it serves."""
     src = read(os.path.join(REPO_ROOT, rel), "the %s app" % name)
+    # Whatever it embeds is loaded by the same visit, so it is measured with it.
+    # (Appended AFTER the storage/analytics regexes' subject for a reason: those
+    # want the outer document's own keys. Only the third-party host checks below
+    # read `src_all`.)
+    src_all = "\n".join([src] + embedded_sources(rel, src))
     app = {"file": rel, "name": name, "url": url, "tag": tag}
 
     m = re.search(r"gtag/js\?id=(G-[A-Z0-9]+)", src)
@@ -188,10 +229,24 @@ def measure(rel, name, url, tag):
         storage[store] = sorted(found)
     app["storage"] = storage
 
-    app["geocoders"] = [h for h in GEOCODERS if h in src]
-    app["has_map"] = bool(app["geocoders"])
-    app["tiles"] = bool(re.search(r"[a-z]\.basemaps\.cartocdn\.com", src))
-    app["cdn"] = "cdnjs.cloudflare.com" in src
+    app["geocoders"] = [h for h in GEOCODERS if h in src_all]
+    # WHAT has_map GATES: the fleet-wide parity claims (identical analytics
+    # vocabulary, CARTO tiles, cdnjs), which are claims about the map APPS.
+    # It was `bool(app["geocoders"])` — a proxy that held only while the front
+    # door had no search box of its own. The address-first redesign gave it
+    # one, and the proxy promptly classified the front door as an app and
+    # failed the build for not sending the apps' analytics events, which it
+    # has never sent and should not. The tag is the real question being asked:
+    # a tagged surface is an instance, an untagged one is the root.
+    app["has_map"] = tag is not None
+    # The HOST, not a subdomain-prefixed form of it. This was
+    # `[a-z]\.basemaps\.cartocdn\.com`, which happened to work only because the
+    # apps carry `tiles.basemaps…` preconnect hints — the tile URL ITSELF is a
+    # Leaflet template, `{s}.basemaps…`, whose character before the dot is `}`.
+    # A page that requested CARTO tiles without also preconnecting them measured
+    # as requesting no tiles at all.
+    app["tiles"] = "basemaps.cartocdn.com" in src_all
+    app["cdn"] = "cdnjs.cloudflare.com" in src_all
 
     # A layer that asks a government server about the SELECTED POINT rather than
     # downloading the layer and testing in the browser. Definitions are
@@ -301,13 +356,18 @@ def render_app_rows(apps):
 
 def render_recipient_rows(apps):
     rows = []
-    for label, sub, policy, what, when in COMMON_RECIPIENTS:
-        rows.append(recipient_row(label, sub, policy, what, when, "Every app."))
+    for label, sub, policy, what, when, key in COMMON_RECIPIENTS:
+        users = apps if key is None else [a for a in apps if a[key]]
+        if not users:
+            fail("no surface requests %s any more — the recipients table names it, "
+                 "so either the fleet changed or the measurement is broken" % label)
+        rows.append(recipient_row(label, sub, policy, what, when,
+                                  ", ".join(a["name"] for a in users) + "."))
     for host in sorted({h for a in apps for h in a["geocoders"]}):
         label, sub, policy, what = GEOCODERS[host]
         users = [a["name"] for a in apps if host in a["geocoders"]]
         rows.append(recipient_row(label, sub, policy, what,
-                                  "Only while you are typing an address, or when a "
+                                  "Only while you are searching for an address, or when a "
                                   "card places an office pin.",
                                   ", ".join(users) + "."))
     rows.append(recipient_row(
@@ -485,7 +545,6 @@ def build():
     desc = ("What districtry stores, what leaves your browser and to whom, and what it "
             "deliberately never collects — for every app on the site. No accounts, no "
             "profiles, nothing sold.")
-    mapped = [a for a in apps if a["has_map"]]
 
     return """<!DOCTYPE html>
 <html lang="en">
@@ -897,7 +956,9 @@ td small, th small { display: block; color: var(--faint); font-size: 12px;
         "mark": load_mark(),
         "updated": UPDATED,
         "approws": render_app_rows(apps),
-        "recipients": render_recipient_rows(mapped),
+        # ALL the apps, not just the mapped ones: the geocoder rows name which
+        # surfaces reach each host, and the front door reaches one now.
+        "recipients": render_recipient_rows(apps),
         "storage": render_storage_paragraphs(apps),
         "analytics": render_analytics_section(apps),
         "footerlinks": render_footer_links(apps),

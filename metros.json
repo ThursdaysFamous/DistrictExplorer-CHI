@@ -1,5 +1,5 @@
 {
-  "$comment": "The fleet manifest (docs/MECHANIZATION_PLAYBOOK.md, Conversion 3) — the single source of the metro fleet, served at https://districtry.com/metros.json by the Pages deploy. Runtime behavior is deliberately unchanged: the app never fetches this file. It is consumed at GENERATION time — `generate_metro_files.py --sync-fleet` projects these entries (minus `repo`) into each fork's worksheet metro_explorers, and the weekly fleet-status workflow reads `repo` to aggregate across forks. Launching metro N+1 means: add its entry here, then run --sync-fleet + regenerate in each fork (a regeneration PR, never a hand edit). The `tag`, `landing_name` and `blurb` fields drive the ROOT LANDING PAGE (scripts/build_landing_page.py) and are deliberately fleet-level: sync_fleet projects a whitelist into each worksheet's metro_explorers, so these three never reach an app. `tag` is the instance tag the brand spec sets in the wordmark (districtry / il); `landing_name` is the AREA a reader picks. `label` is what the apps' own switcher and handoff call the place: Illinois carries `label: \"Illinois\"` (renamed from Chicago on 2026-08-25) because the instance serves 89 counties and a reader sent there is not being sent to a city — `id` stays `chicago`, since it keys the instance's own THIS_METRO. `url` is what the landing page links, and since R5 they ARE districtry.com paths — which is also what the apps' own sibling-metro switcher shows, so a change here reaches both surfaces by `--sync-fleet` + regenerate and never by editing an app.",
+  "$comment": "The fleet manifest (docs/MECHANIZATION_PLAYBOOK.md, Conversion 3) — the single source of the metro fleet, served at https://districtry.com/metros.json by the Pages deploy. Runtime behavior is deliberately unchanged: the app never fetches this file. It is consumed at GENERATION time — `generate_metro_files.py --sync-fleet` projects these entries (minus `repo`) into each fork's worksheet metro_explorers, and the weekly fleet-status workflow reads `repo` to aggregate across forks. Launching metro N+1 means: add its entry here, then run --sync-fleet + regenerate in each fork (a regeneration PR, never a hand edit). The `tag`, `landing_name`, `blurb` and `scope` fields drive the ROOT LANDING PAGE (scripts/build_landing_page.py) and coverage map (scripts/build_coverage_map.py) and are deliberately fleet-level: sync_fleet projects a whitelist into each worksheet's metro_explorers, so these four never reach an app. `tag` is the instance tag the brand spec sets in the wordmark (districtry / il); `landing_name` is the AREA a reader picks. `label` is what the apps' own switcher and handoff call the place: Illinois carries `label: \"Illinois\"` (renamed from Chicago on 2026-08-25) because the instance serves 89 counties and a reader sent there is not being sent to a city — `id` stays `chicago`, since it keys the instance's own THIS_METRO. `url` is what the landing page links, and since R5 they ARE districtry.com paths — which is also what the apps' own sibling-metro switcher shows, so a change here reaches both surfaces by `--sync-fleet` + regenerate and never by editing an app. `scope` is a short (2-4 word) ground-truth phrase for how much of the place is covered — 'X counties' for a partial state, 'all N counties' for a complete one, 'N boroughs'/'1 city' for a city instance — read by the pill row's badge and the coverage-map legend; it says the same thing `blurb`'s prose already says in more words, so keep the two in agreement when either changes.",
   "metros": [
     {
       "id": "chicago",
@@ -16,7 +16,8 @@
       },
       "tag": "il",
       "landing_name": "Illinois",
-      "blurb": "91 counties. Wards, county boards, police districts and beats, school zones, judicial subcircuits, and the people who hold those seats."
+      "blurb": "91 counties. Wards, county boards, police districts and beats, school zones, judicial subcircuits, and the people who hold those seats.",
+      "scope": "91 counties"
     },
     {
       "id": "nyc",
@@ -33,7 +34,8 @@
       },
       "tag": "ny",
       "landing_name": "New York City",
-      "blurb": "Boroughs, City Council and community districts, NYPD precincts and sectors, school zones, and the state and federal seats above them."
+      "blurb": "Boroughs, City Council and community districts, NYPD precincts and sectors, school zones, and the state and federal seats above them.",
+      "scope": "5 boroughs"
     },
     {
       "id": "sf",
@@ -50,7 +52,8 @@
       },
       "tag": "ca",
       "landing_name": "San Francisco",
-      "blurb": "Supervisor districts, neighborhoods, police districts, school attendance areas, and the state and federal seats above them."
+      "blurb": "Supervisor districts, neighborhoods, police districts, school attendance areas, and the state and federal seats above them.",
+      "scope": "1 city"
     },
     {
       "id": "wisconsin",
@@ -67,7 +70,8 @@
       },
       "tag": "wi",
       "landing_name": "Wisconsin",
-      "blurb": "County boards, circuit courts, wards and aldermanic districts across all 72 counties — clerk to Court of Appeals — plus school districts, cities, villages and towns, and the Assembly, Senate and U.S. House seats, and who holds those."
+      "blurb": "County boards, circuit courts, wards and aldermanic districts across all 72 counties — clerk to Court of Appeals — plus school districts, cities, villages and towns, and the Assembly, Senate and U.S. House seats, and who holds those.",
+      "scope": "all 72 counties"
     },
     {
       "id": "iowa",
@@ -84,7 +88,8 @@
       },
       "tag": "ia",
       "landing_name": "Iowa",
-      "blurb": "All 99 counties: supervisor districts with each county's own election plan, townships and cities, school districts, ZIP codes and post offices — and the Iowa Senate, House and U.S. House seats, and who holds those."
+      "blurb": "All 99 counties: supervisor districts with each county's own election plan, townships and cities, school districts, ZIP codes and post offices — and the Iowa Senate, House and U.S. House seats, and who holds those.",
+      "scope": "all 99 counties"
     }
   ]
 }
