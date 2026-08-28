@@ -206,6 +206,18 @@ PROVENANCE = [
         ),
     },
     {
+        "layer": "school-site",
+        "app_file": "ia-school-sites.json",
+        "source_url": "https://services.arcgis.com/vPD5PVLI6sfkZ5E4/arcgis/rest/services/IowaSchoolBldgs/FeatureServer/0",
+        "note": (
+            "1,321 public school buildings, pre-built by "
+            "ia/scripts/build_ia_school_sites.py from the Iowa Legislature's "
+            "own ArcGIS org (paginated past the layer's 1,000-record cap; "
+            "pin the slug IowaSchoolBldgs, never its internal title "
+            "PublicSchoolBldgs, which names a different, stale service)."
+        ),
+    },
+    {
         "layer": "school-district-unified",
         "app_file": "ia-school-districts.json",
         "source_url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/School/MapServer/0",

@@ -497,6 +497,15 @@ implementing PR decides otherwise. `maxRecordCount`/pagination unchecked — liv
 `county-subdivision`/`municipality`'s pattern) if it fits under the cap in one request, else pre-build
 like WI's own `school-site`. PR 3.
 
+**Shipped 2026-08-28 (PR 3).** `maxRecordCount` measured 1,000, below the layer's own 1,321-feature
+count, so a live single-request load would have silently truncated — pre-built via
+`ia/scripts/build_ia_school_sites.py`, matching WI's precedent rather than the live-load pattern.
+Unlike Wisconsin's DPI layers, this dataset carries no placeless rows, no private-school class, and no
+reprojection trap (native WGS84) — measured across the full 1,321 records, not sampled — so the
+builder needed none of WI's placeless-skip or dual-layer-merge machinery. Shipped proximity-only
+(name, `SchoolType` as the tag, physical address), the administrator contact fields left unused on the
+card as planned.
+
 `police-station` + `fire-station` — see the correction above. PR 1.
 
 `library` — State Library of Iowa. **CONFIRMED no ArcGIS layer exists anywhere in Iowa's state GIS

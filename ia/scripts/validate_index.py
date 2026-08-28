@@ -97,7 +97,8 @@ MIN_REGISTER_LAYER = 10
 EXPECT_LAYER_IDS = [
     "us-house", "ia-senate", "county", "ia-house", "county-supervisor",
     "school-district-unified", "county-subdivision", "municipality",
-    "zip-code", "police-station", "fire-station", "post-office",
+    "zip-code", "police-station", "fire-station", "school-site",
+    "post-office",
 ]
 
 # file -> (min features, max features) for the boundary layers fetched by the app.
@@ -110,6 +111,7 @@ GEOMETRY_FILES = {
     "ia-supervisor-districts.json": (270, 270),  # Every county supervisor district across 98 of 99 counties (Jones County absent — a recorded gap), built by ia/scripts/build_ia_supervisor_districts.py: the state's own aggregate for 95 counties, Black Hawk's own hosted GIS (5 real districts), and Story/Johnson as one county-level TRANSITIONING feature each (5,000-in-state-point agreement gate).
     "jones-county-outline.json": (1, 1),  # Jones County's own boundary, extracted from state-counties.json by ia/scripts/build_ia_county_outline.py — the Data-gaps panel's map highlight for gap jones-county-supervisor. Referenced dynamically (built from the gap's county slug at runtime), never by a literal in index.html.
     "ia-school-districts.json": (324, 324),  # 324 unified school districts, built by ia/scripts/build_ia_school_districts.py: TIGERweb's 325 dissolved (Orient-Macksburg into Nodaway Valley) and witnessed by name against the Dept. of Education's own current layer (2,000-point agreement gate).
+    "ia-school-sites.json": (1321, 1321),  # 1,321 public school buildings, pre-built by ia/scripts/build_ia_school_sites.py from the Iowa Legislature's own ArcGIS org's IowaSchoolBldgs layer (paginated past its 1,000-record cap).
 }
 
 # file -> minimum key count (officeholder rosters).

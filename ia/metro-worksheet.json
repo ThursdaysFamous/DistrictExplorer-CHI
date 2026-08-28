@@ -158,7 +158,18 @@
       }
     },
     {
-      "id": "post-office", "label": "Post Office", "group": "geography", "area_rank": 12,
+      "id": "school-site", "label": "School Location", "group": "schools", "area_rank": 12,
+      "rank_note": "Nearest-3 point layer (1,321 public school buildings, pre-built) — not a containment boundary; ranked with the amenity points",
+      "source": {
+        "answers": "The three nearest public school buildings, straight-line distance.",
+        "boundary": [
+          { "label": "Iowa Legislature's own ArcGIS organization — IowaSchoolBldgs layer, pre-built by ia/scripts/build_ia_school_sites.py", "url": "https://services.arcgis.com/vPD5PVLI6sfkZ5E4/arcgis/rest/services/IowaSchoolBldgs/FeatureServer/0" }
+        ],
+        "applies": "Iowa — statewide; nearest-3 is a proximity fact, not an attendance-zone or enrollment claim."
+      }
+    },
+    {
+      "id": "post-office", "label": "Post Office", "group": "geography", "area_rank": 13,
       "rank_note": "Nearest-3 point layer, straight-line distance — not a containment boundary, ranked last",
       "source": {
         "answers": "The three nearest post offices, straight-line distance.",
@@ -190,7 +201,8 @@
       { "file": "ia-house-districts.json", "min_features": 100, "max_features": 100, "note": "Iowa House districts, pre-built by ia/scripts/build_legislative_boundaries.py (2,000-point agreement gate)." },
       { "file": "ia-supervisor-districts.json", "min_features": 270, "max_features": 270, "note": "Every county supervisor district across 98 of 99 counties (Jones County absent — a recorded gap), built by ia/scripts/build_ia_supervisor_districts.py: the state's own aggregate for 95 counties, Black Hawk's own hosted GIS (5 real districts), and Story/Johnson as one county-level TRANSITIONING feature each (5,000-in-state-point agreement gate)." },
       { "file": "jones-county-outline.json", "min_features": 1, "max_features": 1, "dynamic_reference": true, "note": "Jones County's own boundary, extracted from state-counties.json by ia/scripts/build_ia_county_outline.py — the Data-gaps panel's map highlight for gap jones-county-supervisor. Referenced dynamically (built from the gap's county slug at runtime), never by a literal in index.html." },
-      { "file": "ia-school-districts.json", "min_features": 324, "max_features": 324, "note": "324 unified school districts, built by ia/scripts/build_ia_school_districts.py: TIGERweb's 325 dissolved (Orient-Macksburg into Nodaway Valley) and witnessed by name against the Dept. of Education's own current layer (2,000-point agreement gate)." }
+      { "file": "ia-school-districts.json", "min_features": 324, "max_features": 324, "note": "324 unified school districts, built by ia/scripts/build_ia_school_districts.py: TIGERweb's 325 dissolved (Orient-Macksburg into Nodaway Valley) and witnessed by name against the Dept. of Education's own current layer (2,000-point agreement gate)." },
+      { "file": "ia-school-sites.json", "min_features": 1321, "max_features": 1321, "note": "1,321 public school buildings, pre-built by ia/scripts/build_ia_school_sites.py from the Iowa Legislature's own ArcGIS org's IowaSchoolBldgs layer (paginated past its 1,000-record cap)." }
     ],
     "rosters": [
       { "file": "congress-roster.json", "min_keys": 4, "note": "U.S. House roster, refreshed weekly by update-ia-congress-roster.yml." },
