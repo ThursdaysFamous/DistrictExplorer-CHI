@@ -8,7 +8,7 @@ still relies on Search Console + its own crawl.
 
 Ownership is proven by hosting the key as a plain-text file at the site root:
 
-    https://chidistricts.com/6ce8d9c81c2e4b0b914e34fd134ed36e.txt
+    https://districtry.com/6ce8d9c81c2e4b0b914e34fd134ed36e.txt
 
 The key is a PUBLIC ownership token, not a secret — publishing it is the whole
 point of the protocol, so it lives in the repo and deploys with the site.
@@ -16,7 +16,7 @@ point of the protocol, so it lives in the repo and deploys with the site.
 Usage (run only AFTER a deploy where the key file is already live):
 
     python3 scripts/indexnow_submit.py                       # submit the homepage
-    python3 scripts/indexnow_submit.py https://chidistricts.com/ https://chidistricts.com/other
+    python3 scripts/indexnow_submit.py https://districtry.com/ https://districtry.com/other
 
 Good times to run it: the first time the key file goes live (initial indexing),
 and after any deploy that changes page content (e.g. a weekly roster refresh).
@@ -28,7 +28,7 @@ import urllib.request
 
 # ==== TEMPLATE:BEGIN indexnow-host ====
 KEY = "6ce8d9c81c2e4b0b914e34fd134ed36e"
-HOST = "chidistricts.com"
+HOST = "districtry.com"
 # ==== TEMPLATE:END indexnow-host ====
 ENDPOINT = "https://api.indexnow.org/indexnow"  # shared endpoint: fans out to all IndexNow engines
 
