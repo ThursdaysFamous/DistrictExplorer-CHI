@@ -59,6 +59,9 @@ checkpoint with a stale date is a checkpoint that didn't happen.
 | Iowa specifically, no fixed cadence | The director layer's `UID` looks like a primary key and is NOT one — WEBSTER CITY publishes districts 2 and 3 both carrying `UID 3063002`, with different populations and different geometry. The builder keys on `<GEOID>-<DISTRICT>` and asserts uniqueness, so a future build cannot silently drop a district to a key collision. If the county ever fixes that typo nothing here changes; if a SECOND collision appears, the uniqueness assertion is what will say so | 2026-08-28 (first build; one collision measured, keyed around) |
 
 
+| Iowa specifically, on any County-card change touching the board | The board section obeys two fleet rules that Iowa broke on first ship and now enforces mechanically (`docs/EXPANSION_GUIDE.md` Part 5). **The switchboard rule**: an identical phone on every member row is the board office, not five direct lines — `build_ia_county_officers.py` collects the distinct numbers per board and hoists the number to `boardPhone` when exactly one covers the whole board, which is currently ALL 92 boards ISAC publishes. If a county ever publishes real per-member lines the test stops firing for it and the numbers stay on the members, so **do not replace it with a per-county pin**. **The whole-board rule**: listing N names on the County card claims all N represent the reader, which is true under Iowa Code 331.206 plans 1 and 2 and FALSE under plan 3 — 35 of the listed boards are plan 3. Every list is therefore qualified by `supervisorPlan`, read back from the shipped district geometry, and a county whose plan this app does not know (Jones, absent from the state layer) claims NEITHER method rather than defaulting to one | 2026-08-28 (both applied; 92 switchboards hoisted, 350 redundant phone values removed) |
+
+
 ---
 
 ## Unresolved — confirm at the next legislature roster refresh
