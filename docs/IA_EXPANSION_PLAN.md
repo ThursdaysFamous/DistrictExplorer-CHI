@@ -812,6 +812,43 @@ Association of School Boards' directory is member-gated. The card says that in t
 Files: `ia/scripts/build_ia_school_director_districts.py`,
 `ia/data/app/ia-school-director-districts.json`.
 
+**PR 4 — the County card's board section, corrected against the Wisconsin/Illinois
+exercise — SHIPPED 2026-08-28.** A review of how the board of supervisors is surfaced,
+against the fleet rules that earlier exercise produced, found Iowa breaking **both** of
+them. Neither was a new judgement call; both are written in `docs/EXPANSION_GUIDE.md`
+Part 5 with a stated test.
+
+**"AN IDENTICAL PHONE NUMBER ON EVERY MEMBER ROW IS A SWITCHBOARD, NOT CONTACT."** The
+guide states the test mechanically — *collect the distinct numbers, and if exactly one
+covers the whole board, it belongs to the board* — and Iowa failed it in **every one of
+the 92 counties ISAC publishes**: a single board-office number repeated under three to
+five names, implying direct lines that do not exist. Adams printed `(641) 322-3240` five
+times on the County card and a sixth on the district card. The test now runs in the
+builder exactly as the guide words it, hoisting the number to `boardPhone` and rendering
+it once as a "Board office" row; 350 redundant values were removed. It is deliberately
+NOT a per-county pin — a county that ever publishes real per-member lines keeps them.
+
+**"PROVE 'AT LARGE' FROM A CERTIFIED ELECTION DOCUMENT."** The rule warns that putting a
+county's whole board on the County card *"claims that all N members represent every
+resident… it tells a reader nine people represent them when one does"*. Iowa listed the
+whole board unqualified for all 92, and **35 of those counties elect by district** under
+Iowa Code 331.206 plan 3. Iowa's position was better than the Illinois case that produced
+the rule — it has certified proof of each county's method in the Legislature's own
+`PLANTYPE` — it simply was not using it on that card. `supervisorPlan` now rides the
+roster (read back from the shipped geometry, where `seats` already comes from) and every
+list is qualified: plans 1 and 2 say every voter votes on every seat, plan 3 says one of
+these supervisors represents you and not the whole board. **Jones County, which is absent
+from the state's district layer, claims NEITHER method** rather than defaulting to one.
+
+Two smaller improvements came with it: where phase 3 PR 2 keyed a county's districts, each
+name now carries the district it holds and the board is ordered by district rather than by
+surname — a plan-3 reader is looking for a number, not a name.
+
+A note for whoever next diffs this data: the phone drop is 741 → 391, **47.2%**, and
+`check_roster_retention.py` fails a field that loses at least HALF its records. It is
+silent here by twenty records. That is the gate working to spec rather than a blind spot,
+and the change is intentional — but it is close enough to the line to be worth stating.
+
 **Still to come this phase:**
 
 

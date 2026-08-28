@@ -50,10 +50,23 @@ def main():
     with open(GEOMETRY) as f:
         geo = json.load(f)
     seats = {}
+    plans = {}
     fips_by_county = {}
     for feat in geo["features"]:
         p = feat["properties"]
         county = p["COUNTY"]
+        # Iowa Code 331.206's representation plan, read back from the same
+        # shipped geometry `seats` comes from. It is carried here because the
+        # County card needs it to say what a list of supervisors MEANS: under
+        # plans 1 and 2 every voter votes on every seat, under plan 3 one
+        # supervisor represents you, and an unqualified list of N names claims
+        # the former (docs/EXPANSION_GUIDE.md Part 5, "PROVE 'AT LARGE' FROM A
+        # CERTIFIED ELECTION DOCUMENT").
+        if county in plans and plans[county] != p["PLANTYPE"]:
+            raise RuntimeError(
+                "%s carries two different PLANTYPE values (%s, %s) across its rows"
+                % (county, plans[county], p["PLANTYPE"]))
+        plans[county] = p["PLANTYPE"]
         if county in seats and seats[county] != p["NUMDISTRICTS"]:
             raise RuntimeError(
                 "%s carries two different NUMDISTRICTS values (%d, %d) across its rows"
@@ -84,11 +97,15 @@ def main():
     directory = {}
     for county, fips in sorted(fips_by_county.items()):
         _, url = url_by_county_ci[county.lower()]
-        directory[fips] = {"county": county, "seats": seats[county], "url": url}
+        directory[fips] = {"county": county, "seats": seats[county],
+                           "plan": plans[county], "url": url}
 
     total = sum(v["seats"] for v in directory.values())
-    print("ia-county-board-directory: %d counties, %d supervisor seats, %d official links"
-          % (len(directory), total, len(directory)), file=sys.stderr)
+    from collections import Counter
+    by_plan = Counter(v["plan"] for v in directory.values())
+    print("ia-county-board-directory: %d counties, %d supervisor seats, %d official "
+          "links | plans %s" % (len(directory), total, len(directory),
+                                dict(sorted(by_plan.items()))), file=sys.stderr)
 
     payload = json.dumps(directory, indent=1, sort_keys=True) + "\n"
     if check_only:

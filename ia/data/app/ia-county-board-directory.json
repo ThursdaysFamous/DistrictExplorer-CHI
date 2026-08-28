@@ -1,491 +1,589 @@
 {
  "001": {
   "county": "Adair",
+  "plan": "PLAN 3",
   "seats": 5,
   "url": "https://www.adaircounty.iowa.gov/"
  },
  "003": {
   "county": "Adams",
+  "plan": "PLAN 3",
   "seats": 5,
   "url": "https://adamscounty.iowa.gov/"
  },
  "005": {
   "county": "Allamakee",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://allamakeecounty.iowa.gov/"
  },
  "007": {
   "county": "Appanoose",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://appanoosecounty.iowa.gov/"
  },
  "009": {
   "county": "Audubon",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://www.auduboncountyia.gov/"
  },
  "011": {
   "county": "Benton",
+  "plan": "PLAN 2",
   "seats": 3,
   "url": "https://www.bentoncountyia.gov/"
  },
  "013": {
   "county": "Black Hawk",
+  "plan": "PLAN 3",
   "seats": 5,
   "url": "https://www.blackhawkcounty.iowa.gov/"
  },
  "015": {
   "county": "Boone",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://www.boonecounty.iowa.gov/"
  },
  "017": {
   "county": "Bremer",
+  "plan": "PLAN 3",
   "seats": 3,
   "url": "https://www.bremercounty.iowa.gov/"
  },
  "019": {
   "county": "Buchanan",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://www.buchanancounty.iowa.gov/"
  },
  "021": {
   "county": "Buena Vista",
+  "plan": "PLAN 2",
   "seats": 5,
   "url": "https://buenavistacounty.iowa.gov/"
  },
  "023": {
   "county": "Butler",
+  "plan": "PLAN 3",
   "seats": 3,
   "url": "https://butlercounty.iowa.gov/"
  },
  "025": {
   "county": "Calhoun",
+  "plan": "PLAN 3",
   "seats": 3,
   "url": "https://www.calhouncounty.iowa.gov/"
  },
  "027": {
   "county": "Carroll",
+  "plan": "PLAN 2",
   "seats": 5,
   "url": "https://www.carrollcountyiowa.gov/"
  },
  "029": {
   "county": "Cass",
+  "plan": "PLAN 3",
   "seats": 5,
   "url": "https://www.casscountyia.gov/"
  },
  "031": {
   "county": "Cedar",
+  "plan": "PLAN 1",
   "seats": 5,
   "url": "https://cedarcounty.iowa.gov/"
  },
  "033": {
   "county": "Cerro Gordo",
+  "plan": "PLAN 3",
   "seats": 3,
   "url": "https://cerrogordo.gov/"
  },
  "035": {
   "county": "Cherokee",
+  "plan": "PLAN 2",
   "seats": 5,
   "url": "https://www.cherokeecounty.iowa.gov/"
  },
  "037": {
   "county": "Chickasaw",
+  "plan": "PLAN 3",
   "seats": 5,
   "url": "https://chickasawcounty.iowa.gov/"
  },
  "039": {
   "county": "Clarke",
+  "plan": "PLAN 2",
   "seats": 3,
   "url": "https://clarkecounty.iowa.gov/"
  },
  "041": {
   "county": "Clay",
+  "plan": "PLAN 1",
   "seats": 5,
   "url": "https://claycounty.iowa.gov/"
  },
  "043": {
   "county": "Clayton",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://www.claytoncountyia.gov/"
  },
  "045": {
   "county": "Clinton",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://www.clintoncounty-ia.gov/"
  },
  "047": {
   "county": "Crawford",
+  "plan": "PLAN 1",
   "seats": 5,
   "url": "https://www.crawfordcounty.iowa.gov/"
  },
  "049": {
   "county": "Dallas",
+  "plan": "PLAN 2",
   "seats": 3,
   "url": "https://www.dallascountyiowa.gov/"
  },
  "051": {
   "county": "Davis",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://www.daviscountyiowa.gov/"
  },
  "053": {
   "county": "Decatur",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://decaturcountyiowa.gov/"
  },
  "055": {
   "county": "Delaware",
+  "plan": "PLAN 2",
   "seats": 3,
   "url": "https://delawarecounty.iowa.gov/"
  },
  "057": {
   "county": "Des Moines",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://www.desmoinescounty.iowa.gov/"
  },
  "059": {
   "county": "Dickinson",
+  "plan": "PLAN 3",
   "seats": 5,
   "url": "https://dickinsoncountyiowa.gov/"
  },
  "061": {
   "county": "Dubuque",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://www.dubuquecountyiowa.gov/"
  },
  "063": {
   "county": "Emmet",
+  "plan": "PLAN 1",
   "seats": 5,
   "url": "https://emmetcounty.iowa.gov/"
  },
  "065": {
   "county": "Fayette",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://fayettecounty.iowa.gov/"
  },
  "067": {
   "county": "Floyd",
+  "plan": "PLAN 3",
   "seats": 3,
   "url": "https://www.floydco.iowa.gov/"
  },
  "069": {
   "county": "Franklin",
+  "plan": "PLAN 3",
   "seats": 3,
   "url": "https://www.franklincountyia.gov/"
  },
  "071": {
   "county": "Fremont",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://www.fremontcountyia.gov/"
  },
  "073": {
   "county": "Greene",
+  "plan": "PLAN 2",
   "seats": 5,
   "url": "https://www.co.greene.ia.us/"
  },
  "075": {
   "county": "Grundy",
+  "plan": "PLAN 3",
   "seats": 5,
   "url": "https://www.grundycountyiowa.gov/"
  },
  "077": {
   "county": "Guthrie",
+  "plan": "PLAN 3",
   "seats": 5,
   "url": "https://guthriecounty.gov/"
  },
  "079": {
   "county": "Hamilton",
+  "plan": "PLAN 3",
   "seats": 3,
   "url": "https://www.hamiltoncounty.iowa.gov/"
  },
  "081": {
   "county": "Hancock",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://hancockcountyia.gov/"
  },
  "083": {
   "county": "Hardin",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://www.hardincountyia.gov/"
  },
  "085": {
   "county": "Harrison",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://harrisoncounty.iowa.gov/"
  },
  "087": {
   "county": "Henry",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://henrycounty.iowa.gov/"
  },
  "089": {
   "county": "Howard",
+  "plan": "PLAN 3",
   "seats": 3,
   "url": "https://howardcounty.iowa.gov/"
  },
  "091": {
   "county": "Humboldt",
+  "plan": "PLAN 3",
   "seats": 5,
   "url": "https://www.humboldtcounty.iowa.gov/"
  },
  "093": {
   "county": "Ida",
+  "plan": "PLAN 3",
   "seats": 3,
   "url": "https://idacounty.iowa.gov/"
  },
  "095": {
   "county": "Iowa",
+  "plan": "PLAN 1",
   "seats": 5,
   "url": "https://iowacounty.iowa.gov/"
  },
  "097": {
   "county": "Jackson",
+  "plan": "PLAN 2",
   "seats": 3,
   "url": "https://jacksoncounty.iowa.gov/"
  },
  "099": {
   "county": "Jasper",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://www.jasperia.org/"
  },
  "101": {
   "county": "Jefferson",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "http://jeffersoncounty.iowa.gov/"
  },
  "103": {
   "county": "Johnson",
+  "plan": "TRANSITIONING",
   "seats": 5,
   "url": "https://www.johnsoncountyiowa.gov/"
  },
  "107": {
   "county": "Keokuk",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://keokukcounty.iowa.gov/"
  },
  "109": {
   "county": "Kossuth",
+  "plan": "PLAN 3",
   "seats": 5,
   "url": "https://kossuthcounty.iowa.gov/"
  },
  "111": {
   "county": "Lee",
+  "plan": "PLAN 3",
   "seats": 5,
   "url": "https://www.leecounty.org/"
  },
  "113": {
   "county": "Linn",
+  "plan": "PLAN 3",
   "seats": 3,
   "url": "https://www.linncountyiowa.gov/"
  },
  "115": {
   "county": "Louisa",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://louisacountyia.gov/"
  },
  "117": {
   "county": "Lucas",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://lucascounty.iowa.gov/"
  },
  "119": {
   "county": "Lyon",
+  "plan": "PLAN 3",
   "seats": 5,
   "url": "https://lyoncounty.iowa.gov/"
  },
  "121": {
   "county": "Madison",
+  "plan": "PLAN 3",
   "seats": 3,
   "url": "https://madisoncounty.iowa.gov/"
  },
  "123": {
   "county": "Mahaska",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://www.mahaskacountyia.gov/"
  },
  "125": {
   "county": "Marion",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://www.marioncountyiowa.gov/"
  },
  "127": {
   "county": "Marshall",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://www.marshallcountyia.gov/"
  },
  "129": {
   "county": "Mills",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://www.millscountyiowa.gov/"
  },
  "131": {
   "county": "Mitchell",
+  "plan": "PLAN 3",
   "seats": 5,
   "url": "https://mitchellcounty.iowa.gov/"
  },
  "133": {
   "county": "Monona",
+  "plan": "PLAN 3",
   "seats": 3,
   "url": "https://www.mononacountyiowa.gov"
  },
  "135": {
   "county": "Monroe",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://monroecounty.iowa.gov/"
  },
  "137": {
   "county": "Montgomery",
+  "plan": "PLAN 3",
   "seats": 5,
   "url": "https://montgomerycountyia.gov/"
  },
  "139": {
   "county": "Muscatine",
+  "plan": "PLAN 2",
   "seats": 5,
   "url": "https://www.muscatinecountyiowa.gov/"
  },
  "141": {
   "county": "O'Brien",
+  "plan": "PLAN 2",
   "seats": 5,
   "url": "https://obriencounty.iowa.gov/"
  },
  "143": {
   "county": "Osceola",
+  "plan": "PLAN 3",
   "seats": 5,
   "url": "https://osceolacountyia.gov/"
  },
  "145": {
   "county": "Page",
+  "plan": "PLAN 2",
   "seats": 3,
   "url": "https://pagecounty.iowa.gov/"
  },
  "147": {
   "county": "Palo Alto",
+  "plan": "PLAN 3",
   "seats": 5,
   "url": "https://paloaltocounty.iowa.gov/"
  },
  "149": {
   "county": "Plymouth",
+  "plan": "PLAN 2",
   "seats": 5,
   "url": "https://www.plymouthcountyiowa.gov/"
  },
  "151": {
   "county": "Pocahontas",
+  "plan": "PLAN 3",
   "seats": 5,
   "url": "https://pocahontascounty.iowa.gov/"
  },
  "153": {
   "county": "Polk",
+  "plan": "PLAN 3",
   "seats": 5,
   "url": "https://www.polkcountyiowa.gov/"
  },
  "155": {
   "county": "Pottawattamie",
+  "plan": "PLAN 1",
   "seats": 5,
   "url": "https://www.pottcounty-ia.gov/"
  },
  "157": {
   "county": "Poweshiek",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://poweshiekcountyiowa.gov/"
  },
  "159": {
   "county": "Ringgold",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://www.ringgoldcounty.iowa.gov/"
  },
  "161": {
   "county": "Sac",
+  "plan": "PLAN 3",
   "seats": 3,
   "url": "https://www.saccountyiowa.gov/"
  },
  "163": {
   "county": "Scott",
+  "plan": "PLAN 1",
   "seats": 5,
   "url": "https://www.scottcountyiowa.gov/"
  },
  "165": {
   "county": "Shelby",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://shelbycounty.iowa.gov/"
  },
  "167": {
   "county": "Sioux",
+  "plan": "PLAN 3",
   "seats": 5,
   "url": "https://siouxcountyia.gov/"
  },
  "169": {
   "county": "Story",
+  "plan": "TRANSITIONING",
   "seats": 3,
   "url": "https://www.storycountyiowa.gov/"
  },
  "171": {
   "county": "Tama",
+  "plan": "PLAN 3",
   "seats": 3,
   "url": "https://www.tamacounty.iowa.gov/"
  },
  "173": {
   "county": "Taylor",
+  "plan": "PLAN 3",
   "seats": 3,
   "url": "https://www.taylorcounty.iowa.gov/"
  },
  "175": {
   "county": "Union",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://unioncountyiowa.gov/"
  },
  "177": {
   "county": "Van Buren",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://www.vanburencounty.iowa.gov/"
  },
  "179": {
   "county": "Wapello",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://wapellocounty.org/"
  },
  "181": {
   "county": "Warren",
+  "plan": "PLAN 3",
   "seats": 3,
   "url": "https://www.warrencountyia.gov/"
  },
  "183": {
   "county": "Washington",
+  "plan": "PLAN 3",
   "seats": 5,
   "url": "https://washingtoncounty.iowa.gov/"
  },
  "185": {
   "county": "Wayne",
+  "plan": "PLAN 1",
   "seats": 3,
   "url": "https://waynecounty.iowa.gov/"
  },
  "187": {
   "county": "Webster",
+  "plan": "PLAN 3",
   "seats": 5,
   "url": "https://www.webstercountyia.gov/"
  },
  "189": {
   "county": "Winnebago",
+  "plan": "PLAN 3",
   "seats": 3,
   "url": "https://www.winnebagocountyiowa.gov/"
  },
  "191": {
   "county": "Winneshiek",
+  "plan": "PLAN 3",
   "seats": 5,
   "url": "https://winneshiekcounty.iowa.gov/"
  },
  "193": {
   "county": "Woodbury",
+  "plan": "PLAN 2",
   "seats": 5,
   "url": "https://www.woodburycountyiowa.gov/"
  },
  "195": {
   "county": "Worth",
+  "plan": "PLAN 3",
   "seats": 3,
   "url": "https://worthcountyiowa.gov/"
  },
  "197": {
   "county": "Wright",
+  "plan": "PLAN 2",
   "seats": 3,
   "url": "https://wrightcounty.iowa.gov/"
  }
