@@ -55,7 +55,7 @@ in the researched-but-unbuilt backlog.
   "nyc": ["borough", "judicial-district", "borough-president", "district-attorney", "congress", "municipal-court", "state-senate", "school-district", "cec", "fire-battalion", "council", "community-district", "election-district", "state-assembly", "police-sector", "police-precinct", "zip-code", "neighborhood", "hs-zone", "ms-zone", "es-zone", "school-site", "police-station", "fire-station", "post-office", "library", "early-voting"],
   "sf": ["congress", "ca-senate", "ca-assembly", "bart-director", "election-precinct", "supervisor-district", "police-district", "zip-code", "neighborhood", "elementary-attendance-area", "police-station", "fire-station", "school-site", "post-office", "library", "early-voting"],
   "wisconsin": ["us-house", "wi-senate", "wi-assembly", "wi-circuit-court", "wi-court-of-appeals", "county", "school-district-secondary", "school-district-unified", "school-district-elementary", "county-board", "mps-school-board", "aldermanic-district", "county-subdivision", "ward", "municipality", "mpd-district", "mpd-squad-area", "milwaukee-neighborhoods", "tid-district", "fire-service", "law-service", "ems-service", "psap-area", "zip-code", "school-site", "library", "police-station", "fire-station", "post-office"],
-  "iowa": ["us-house", "ia-senate", "county", "ia-house", "county-supervisor", "school-district-unified", "county-subdivision", "municipality", "zip-code", "post-office", "police-station", "fire-station"]
+  "iowa": ["us-house", "ia-senate", "county", "ia-house", "county-supervisor", "school-district-unified", "county-subdivision", "municipality", "zip-code", "post-office", "police-station", "fire-station", "school-site"]
 }
 ```
 <!-- ==== GUIDEBOOK:END coverage-map ==== -->
@@ -1948,7 +1948,7 @@ v1.0.6) · **CountyDispatch** `registerCountyLayer` (CHI fork-level dispatcher: 
 concept layer holding a per-county entry table — see
 `docs/EXPANSION_GUIDE.md` Part 2; adding a county is a table entry, not a layer).
 
-Fleet totals: **Chicago 39 · NYC 27 · SF 16 · Wisconsin 31 · Iowa 12** layers.
+Fleet totals: **Chicago 39 · NYC 27 · SF 16 · Wisconsin 31 · Iowa 13** layers.
 
 ---
 
@@ -2032,7 +2032,7 @@ which the never-guess rule excludes as a source.
 | Middle / high attendance zone | SHIPPED `cps-middle` · `cps-high` | SHIPPED `ms-zone` · `hs-zone` | NO HONEST ANALOG — SFUSD publishes only elementary areas; MS is feeder-pattern, HS is citywide choice | SHIPPED `school-district-secondary` (union high, TIGERweb School layer 1, live) | n/a — same measured zero |
 | School admin region / network | SHIPPED `cps-network` · `cps-hs-network` | SHIPPED `school-district` (32 CSDs) | NO HONEST ANALOG — one undivided district, no sub-regions | NO HONEST ANALOG — no sub-district network tier | n/a |
 | Statewide school-district identity | SHIPPED `school-district-{unified,secondary,elementary}` (TIGERweb, coverage-gated) | n/a | n/a | SHIPPED `school-district-unified` (369, pre-built TIGERweb) | SHIPPED `school-district-unified` (324) — TIGERweb's 325 dissolved one district: Orient-Macksburg merged into Nodaway Valley for the 2026-2027 school year, ahead of TIGERweb's federal vintage, resolved by diffing the Dept. of Education's own school-year-versioned layers and spatially sampling the dissolved district's old boundary against the current one (all 10 samples landed in Nodaway Valley — a clean, whole absorption). Identity-only, no roster, exactly the WI precedent |
-| School site points | SHIPPED `school-site` | SHIPPED `school-site` | SHIPPED `school-site` | SHIPPED `school-site` (DPI's own two AGO layers pre-built: 2,138 placed public + 828 private = 2,966; DPI's 152 placeless virtual-program rows — no geometry AND no address — don't ship on a proximity card, and the builder fails if a no-geometry row ever carries an address) | NOT SHIPPED — Dept. of Education's `IowaSchoolBldgs` layer (1,321 points, verified); phase 2 |
+| School site points | SHIPPED `school-site` | SHIPPED `school-site` | SHIPPED `school-site` | SHIPPED `school-site` (DPI's own two AGO layers pre-built: 2,138 placed public + 828 private = 2,966; DPI's 152 placeless virtual-program rows — no geometry AND no address — don't ship on a proximity card, and the builder fails if a no-geometry row ever carries an address) | SHIPPED `school-site` (phase 2 PR 3, 2026-08-28: 1,321 public school buildings, pre-built from the Iowa Legislature's own ArcGIS org's `IowaSchoolBldgs` layer, paginated past its 1,000-record cap; no private-school class and no placeless rows in this dataset, unlike Wisconsin's) |
 
 ### Geography / amenities
 
@@ -9459,7 +9459,7 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 | `library` | Library (nearest 3) | geography | NearestPt | pre-built `library-sites.json` — DPI's WI_Public_Libraries_and_Branches L6, 482 outlets with address + phone (build_wi_libraries.py; the layer's LAT/LONG attributes are mercator meters — geometry only) | — (boards appointed, s. 43.54 — locations, not a district card) | — |
 | `post-office` | Post Office | geography | NearestPt | USGS National Map L38 | — | — |
 
-### Iowa — 12 layers
+### Iowa — 13 layers
 
 | id | label | group | pattern | source | roster / join |
 |---|---|---|---|---|---|
@@ -9475,6 +9475,7 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 | `post-office` | Post Office | geography | Nearest-3 | live USGS National Map structures L38 by Iowa bounding envelope — 1,170 points measured in-envelope, deliberately catching border-state offices near the line | — (nearest-3, straight-line distance; a proximity fact, not a jurisdictional claim) |
 | `police-station` | Police Station | safety | Nearest-3 | live USGS National Map structures L53 by Iowa bounding envelope — 449 points measured in-envelope (phase 2 PR 1; corrects the phase-2 roadmap's original 53-point estimate, which read at roughly Chicago-metro-bbox scale, not statewide) | — (nearest-3, straight-line distance; a proximity fact, not a jurisdictional claim) |
 | `fire-station` | Fire Station | safety | Nearest-3 | live USGS National Map structures L51 by Iowa bounding envelope — 1,262 points measured in-envelope (phase 2 PR 1; corrects the original 51-point estimate the same way) | — (nearest-3, straight-line distance; a proximity fact, not a jurisdictional claim) |
+| `school-site` | School Location | schools | Nearest-3 | pre-built (Iowa Legislature's own ArcGIS org, `IowaSchoolBldgs` layer, 1,321 public school buildings, paginated past its 1,000-record cap — phase 2 PR 3, 2026-08-28) | — (nearest-3, straight-line distance; never an enrollment or attendance-zone claim, matching Wisconsin's own school-site precedent) |
 
 Iowa's flagship layer, `county-supervisor`, is the first in the fleet built around a
 mid-decade statewide redistricting statute: **Senate File 75** (signed 2025-04-11) forces

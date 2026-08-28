@@ -834,7 +834,7 @@ table.matrix code {
   <section class="matrix-section">
     <h2>The layer matrix</h2>
     <!-- ==== GENERATED:BEGIN layer-matrix ==== -->
-      <p class="matrix-lede">12 layers — 4 political and legislative, 2 public safety, 1 schools, 5 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
+      <p class="matrix-lede">13 layers — 4 political and legislative, 2 public safety, 2 schools, 5 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
       <nav class="matrix-nav" aria-label="Jump to a layer group">
         <a href="#political">Political &amp; legislative</a>
         <a href="#safety">Public safety</a>
@@ -940,7 +940,7 @@ table.matrix code {
       </section>
 
       <section class="matrix-group" id="schools">
-        <h2>Schools <span class="matrix-count">1 layer</span></h2>
+        <h2>Schools <span class="matrix-count">2 layers</span></h2>
         <p class="matrix-blurb">The district, the attendance zone, and the schools nearest the point.</p>
         <div class="matrix-wrap">
           <table class="matrix">
@@ -959,6 +959,17 @@ table.matrix code {
                 </td>
                 <td data-label="Who it names"><span class="matrix-none">—</span></td>
                 <td data-label="Where it applies">Iowa — statewide, all 324 current districts.</td>
+              </tr>
+              <tr id="layer-school-site">
+                <th scope="row"><span class="layer-name">School Location</span><code>school-site</code></th>
+                <td data-label="What it answers">The three nearest public school buildings, straight-line distance.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://services.arcgis.com/vPD5PVLI6sfkZ5E4/arcgis/rest/services/IowaSchoolBldgs/FeatureServer/0" target="_blank" rel="noopener">Iowa Legislature's own ArcGIS organization — IowaSchoolBldgs layer, pre-built by ia/scripts/build_ia_school_sites.py</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names"><span class="matrix-none">—</span></td>
+                <td data-label="Where it applies">Iowa — statewide; nearest-3 is a proximity fact, not an attendance-zone or enrollment claim.</td>
               </tr>
             </tbody>
           </table>
