@@ -3010,5 +3010,98 @@
   },
   "perf_profile": {
     "file": "scripts/perf_profile.mjs"
+  },
+  "history_page": {
+    "file": "history.html",
+    "intro": "districtry Illinois began as a Chicago-only explorer and grew outward one county at a time — 91 of the state's 102 counties as of 26 August 2026. The counties that are missing are missing for reasons this project measured and wrote down, not for want of looking, and every one of them is on the record in the app's own data-gaps panel. This page is the deployment's record: what it ships, what it re-reads on a schedule, and the corrections its own machinery has caught.",
+    "metrics": [
+      {
+        "label": "villages, towns and cities with their own officials named",
+        "file": "data/app/municipal-officials.json",
+        "metric": "keys",
+        "note": "each read from the county clerk's own published directory, refreshed weekly"
+      },
+      {
+        "label": "municipalities whose mayor or village president is named",
+        "file": "data/app/municipal-officials.json",
+        "metric": "count-nonzero:head",
+        "note": "where a municipality publishes a board without naming who leads it, the card says so rather than guess"
+      },
+      {
+        "label": "county clerks' offices, re-read weekly",
+        "file": "data/app/il-county-clerks.json",
+        "metric": "keys",
+        "note": "name, address, phone and e-mail, from the State Board of Elections' own directory of election authorities"
+      },
+      {
+        "label": "Illinois House seats with their member, party and both offices",
+        "file": "data/app/il-house-members.json",
+        "metric": "keys",
+        "note": "the whole chamber, re-read from the General Assembly's own roster every Monday"
+      },
+      {
+        "label": "Illinois Senate seats with their member, party and both offices",
+        "file": "data/app/il-senate-members.json",
+        "metric": "keys",
+        "note": "refreshed in the same Monday run as the House; a member who leaves is a change a person reviews, never one that ships on its own"
+      }
+    ],
+    "entries": [
+      {
+        "date": "2026-08-26",
+        "title": "Clay, the ninety-first county",
+        "body": "Clay County's board districts ship, taking the map to 91 of Illinois's 102 counties. Its fourteen lettered districts were never the problem — the county publishes them, and seven are independently confirmed by certified 2026 primary returns — but the census draws one Clay City precinct where the county runs two districts through it, and nothing published said where that line falls. County Clerk Amy Britton answered in two sentences: District A is the village of Clay City, District B the unincorporated area around it. That is a corporate-limits line the census already draws, so the split was resolved block by block — 833 people inside the village, 333 outside, every block sorting cleanly to one side, and the two blocks that sit on the margin shipped with their measured precinct rather than absorbed quietly. Two of the districts sit further from equal population than this project's own ceiling normally allows; they ship only because the Clerk confirmed the map is current, and the measured figure is recorded rather than smoothed. Clay ships its board and not its precincts, because its two published surfaces disagree on how many precincts it has, and a precinct card would state more than is known."
+      },
+      {
+        "date": "2026-08-25",
+        "title": "A county held back by its own numbers, and the letter that released it",
+        "body": "Wayne County's district composition had been corroborated twice over for weeks: the county's own board page states which precincts make up each of its seven districts, and its certified November 2024 General — 27 precinct-level results grouped by which board candidate each precinct actually voted on — partitions the same 27 precincts the same way, agreeing on six of seven exactly. The one difference is the county seat, where the board page omits two Fairfield precincts that the certified ballot shows voting in District 7, so the page is incomplete rather than the ballots wrong. None of that was the blocker. Composed against an ideal of 2,311 people, one district deviates by 32.4% — past the 30% ceiling this project enforces everywhere else, and both sources agreed on that district exactly, which is what made the number worth pausing over instead of dismissing as a mis-transcription. Clerk Elizabeth Woodrow was asked directly whether the plan had moved since it was drawn. Her reply: “Nothing has changed with this map for years.” The ceiling was raised for Wayne alone rather than widened for the fleet, and the measured deviation is on the record."
+      },
+      {
+        "date": "2026-08-23",
+        "title": "Four counties in one day, and a lesson about labels",
+        "body": "Richland, Jackson, Douglas and Vermilion all join. Vermilion is the largest county the project has added and the one that teaches the most: it publishes three board-district layers, and the best-labelled one is obsolete. A service described as “Governmental and school districts” holds the 2011 plan, while the plan actually in force is an undocumented layer with a typo in its own name. Currency is a measurement, not a reading of a name — a plan drawn to a census balances on that census, and across 4,943 census blocks the layer that ships runs within 0.7% of equal population where the better-labelled one runs 15.1% out. The builder now refuses to write if that comparison ever reverses, in either direction. Jackson, the same day, is the first county in the fleet whose districts split precincts and are built anyway: its adopted map is a vector PDF whose districts are real polygon objects, so the shapes were read from the file rather than sampled from its pixels, and nothing traced ships — the map only ever chose between the two districts the county's own canvass had already named."
+      },
+      {
+        "date": "2026-08-22",
+        "title": "A county is not blocked because its website is",
+        "body": "Knox County had been recorded as refusing every request. That was true of knoxcountyil.gov, and it was written down as though it described the county. Knox has four hosts: the website denies, a public GIS server answers and carries the county's twenty townships, the same site's document store has no block at all, and a fourth is simply dead. Knox joined as the 80th county — the first to join by closing an enclave rather than extending the frontier, filling a hole that seven already-served neighbours had left around it. Its districts come from the county's own adopted map, checked against certified returns and census population before shipping; a faster method that read the map's fill colours was tried first, produced a clean and confident answer, and was wrong, which is why that arithmetic check is now a gate in the builder rather than a comment in it. The frontier probe now sweeps GIS subdomains too, because the old host list could never have found the one host that mattered."
+      },
+      {
+        "date": "2026-08-21",
+        "title": "Two counties that were never dark",
+        "body": "Gallatin's record said the county was dark on every route tried, and that its clerk's own mail domain did not resolve. Neither was true. The site answers normally and serves an incomplete certificate chain — the leaf without its intermediate — which every automated client reports as a hard failure and which no browser notices, so a misconfiguration had been recorded as an absence. Coles County had taught the pattern days earlier; sweeping all 27 frontier counties' clerk domains for the same shape found Gallatin and confirmed Vermilion, whose record had likewise said its site could not be reached. The fix supplies the missing intermediate and pins its fingerprint, rather than turning certificate verification off."
+      },
+      {
+        "date": "2026-08-20",
+        "title": "Four websites that answer perfectly and serve nothing",
+        "body": "A sweep of all 406 municipal websites this app links found four that return a clean HTTP 200 and no content a reader wants: one is a domain-for-sale lander, one an entirely empty body, and two the default placeholder page that ships with an unconfigured web server. This is the one failure a status-code check cannot see — the link gate asks whether a URL answers, and all four answer flawlessly. The tell is content, and the cheap version of it is size: every one of the four came back under 1,200 bytes, against real municipal front pages that run to tens of thousands. None of them entered the roster by mistake — each is the website that municipality's own county publishes for it, so the counties are citing them too, and this project does not overwrite a county's published value on its own initiative. They are recorded as gaps instead."
+      },
+      {
+        "date": "2026-08-18",
+        "title": "A clerk said there were no maps, and the county built anyway",
+        "body": "Clark County's Clerk answered the standing request with one sentence: the County Board is elected by districts, and no maps are available. That settles the board's form and refuses its geometry in the same breath. But Clark's districts are unions of whole precincts, so the county's own certified canvasses describe them completely, and the census voting districts — matching all 23 precinct names and summing to the county's exact population — supply the polygons. It is the first county in the fleet built entirely from election returns, with no map at any stage. Because a certified return names who won an election rather than who holds the seat today, every roster row names the election that seated the member instead of claiming a currency the returns cannot show."
+      },
+      {
+        "date": "2026-08-17",
+        "title": "The first boundary this project ever bought",
+        "body": "Jo Daviess County's GIS office sells its data under a signed licence rather than publishing it. Its board-district shapefile ships displayed under the county's written permission — a purchased licence plus the IT/GIS Director's authorisation by e-mail — with the raw file retained offline rather than committed to this repository. It is the 63rd county, and the first whose boundary was paid for."
+      },
+      {
+        "date": "2026-08-08",
+        "title": "The guard that measured the wrong thing",
+        "body": "Brown County's website switched on Cloudflare's e-mail obfuscation, so every published mailto: link became an encoded attribute instead. The scraper read mailto: only, and returned seven board members carrying zero e-mail addresses — while the guard that checks Brown seats seven passed happily. Seven rows in, seven rows out, guard satisfied, contact gone, on a tool whose whole purpose is telling residents how to reach their board. A count guard answers “did this break?” and cannot answer “does this still say what it said?”, so a retention gate now compares every roster field against the same file before the change and fails when a field stops being published — no threshold to configure, and a field is protected the moment it first ships. The obvious follow-up question was then measured rather than reassured about: all 25 other scrapers reading mailto: were fetched and checked, and none served the obfuscated form."
+      },
+      {
+        "date": "2026-08-07",
+        "title": "A dead link nobody was checking",
+        "body": "Macon County's precinct card had been linking maconcountyil.gov for three days. That hostname has no DNS record at all — not a redirect, not a 404, no address associated with it. The county is at maconcounty.illinois.gov. Nothing in this repository checked the URLs the cards actually render: one gate covered the dataset endpoints the layers fetch and another covered layer counts, while the link a reader clicks was unguarded. A link gate now extracts its own surface from the app's authored pages and every roster file — around 1,200 URLs across some 540 hosts — so a new county is covered the day it ships, with nothing to remember to update. It separates links this project chose, which fail, from links carried through from a county's own published roster, which warn."
+      },
+      {
+        "date": "2026-08-04",
+        "title": "Contiguity stops deciding which county comes next",
+        "body": "Until this day a county could only join if it touched the area already served, which meant the shape of the map was choosing the work rather than the data being available. That gate was retired: a county now joins whenever a county-keyed layer answers in it, wherever it sits. The served area is allowed to be disjoint, and has been four times since — each island rejoining as soon as a neighbouring county filled the gap, and the outline recomputed from the counties themselves every time rather than patched by hand. The honesty test it replaced is unchanged: a county is never joined just because some statewide layer happens to give a rich answer there."
+      }
+    ]
   }
 }
