@@ -64,13 +64,14 @@ async function serveVendoredLeaflet(page) {
   return true;
 }
 
-// A 1x1 transparent GIF for OSM basemap tiles. The map's correctness has
+// A 1x1 transparent GIF for the CARTO basemap tiles. The map's correctness has
 // nothing to do with whether a raster tile painted, and letting real tile
-// requests fly would make this gate depend on a third party's uptime.
+// requests fly would make this gate depend on a third party's uptime — and
+// spend the fleet's metered CARTO quota on CI.
 const BLANK_TILE = Buffer.from(
   "R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBTAA7", "base64");
 async function stubTiles(page) {
-  await page.route("**/tile.openstreetmap.org/**", (route) =>
+  await page.route("**/*.basemaps.cartocdn.com/**", (route) =>
     route.fulfill({ status: 200, contentType: "image/gif", body: BLANK_TILE }));
 }
 

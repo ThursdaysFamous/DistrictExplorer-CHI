@@ -44,6 +44,9 @@ MANIFEST = os.path.join(REPO_ROOT, "metros.json")
 TOKENS = os.path.join(REPO_ROOT, "districtry", "tokens", "districtry.tokens.css")
 FONTFACE = os.path.join(REPO_ROOT, "fonts", "barlow-fontface.css")
 OUT = os.path.join(REPO_ROOT, "coverage-map.html")
+# The app, for its CARTO key — lifted rather than restated, the same way
+# build_landing_page.py lifts the 5c mark, so the key has one home.
+APP_SOURCE = os.path.join(REPO_ROOT, "il", "index.html")
 
 # Leaflet pinned to the exact version + SRI the fleet's own apps load (grep
 # il/index.html rather than retype it — a version bump there is a version
@@ -125,6 +128,30 @@ def token_css(names, table, where, extra=None, indent="  "):
             fail("token --%s is missing from the %s block" % (src, where))
         out.append("%s--%s: %s;" % (indent, alias, table[src].strip()))
     return "\n".join(out)
+
+
+def load_carto_key():
+    """The fleet's CARTO Basemaps key, read out of the app rather than restated.
+
+    WHY CARTO AND NOT OSM'S OWN TILE SERVER. The design prototype used
+    tile.openstreetmap.org, and shipping that would have put a THIRD PARTY THE
+    PRIVACY PAGE DOES NOT DISCLOSE in front of every front-door visitor: that
+    page names GitHub Pages, CARTO and cdnjs, and its whole standard is that a
+    recipient of your IP is named. CARTO is the basemap every app in the fleet
+    already uses, on a key already issued for this domain, so the front door
+    reaches nobody the site has not already accounted for. It is also better
+    cartography for this job: Positron IS the muted paper ground this page
+    wants, and Dark Matter is a REAL dark basemap, which retired a
+    `saturate/invert/hue-rotate` filter that was faking one. (OSM's own tile
+    usage policy also asks that automated and high-volume users stay off those
+    servers, which a page embedded on the site's front door would be.)
+    """
+    src = read(APP_SOURCE, "the app, for the CARTO basemap key")
+    m = re.search(r'var BASE_CARTO_KEY = "([^"]+)"', src)
+    if not m:
+        fail("the app no longer declares BASE_CARTO_KEY — the coverage map reads "
+             "the fleet's basemap key from there so it has one home")
+    return m.group(1)
 
 
 def load_metros():
@@ -220,6 +247,10 @@ def build():
 <meta charset="UTF-8" />
 <title>districtry — coverage map</title>
 <meta name="robots" content="noindex" />
+<!-- The tile host is a third origin reached only after Leaflet parses and the
+     map builds, so the TCP+TLS handshake is on the critical path for the first
+     tile. Same hint the apps carry, for the same reason. -->
+<link rel="preconnect" href="https://tiles.basemaps.cartocdn.com" crossorigin />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/%(lv)s/leaflet.css" integrity="%(css_i)s" crossorigin="" />
 <!-- Not `defer`: the inline script below runs immediately after this one and
      calls L.map() directly, so this needs to have already executed by then.
@@ -255,17 +286,22 @@ html, body { margin: 0; height: 100%%; background: var(--paper); font-family: va
    the override but a line of CSS that reads as though it worked. */
 .leaflet-container .leaflet-control-attribution { font-size: 10px; color: var(--muted); background: var(--surface); }
 .leaflet-container .leaflet-control-attribution a { color: var(--brand-600); }
-.glow-pane { filter: blur(7px); }
-/* Quiets OSM's raster colour down to the paper-and-ink ground the chrome
-   sits on. Dark mode adds an invert+hue-rotate pass — the standard trick for
-   an otherwise-fixed-palette raster tile set, since (unlike the fleet's own
-   vector MapLibre basemap) OSM's raster tiles have no dark style to switch
-   to; only .leaflet-tile-pane is filtered, so markers and the legend read
-   normally against it. */
-.leaflet-tile-pane { filter: saturate(.18) brightness(1.05) contrast(.96); }
-@media (prefers-color-scheme: dark) {
-  .leaflet-tile-pane { filter: saturate(.22) invert(.92) hue-rotate(180deg) brightness(.95) contrast(.92); }
+/* Leaflet's zoom buttons are a white box with dark glyphs, hardcoded. On Dark
+   Matter that is the brightest thing on the map. The app carries the same
+   override for the same reason; `--surface` and `--ink` already flip, so this
+   only needs to say that the control uses them. */
+.leaflet-bar a, .leaflet-bar a:hover {
+  background-color: var(--surface); color: var(--ink); border-bottom-color: var(--border);
 }
+.leaflet-bar a:hover { background-color: var(--brand-tint); }
+.leaflet-touch .leaflet-bar { border-color: var(--border); }
+.glow-pane { filter: blur(7px); }
+/* NO tile filter here, deliberately. An earlier draft rode OSM's own raster
+   and had to fake both themes with saturate/brightness and an invert +
+   hue-rotate pass. CARTO's Positron and Dark Matter ARE the two grounds this
+   page wants, drawn that way rather than filtered into it — so the light
+   basemap is genuinely pale and the dark one is genuinely dark, and the
+   coverage wash keeps its true colour on both. */
 .place-label {
   font: 600 12.5px/1 var(--font-heading); color: var(--ink);
   text-shadow: 0 0 4px var(--paper), 0 0 4px var(--paper), 0 0 8px var(--paper);
@@ -332,6 +368,7 @@ var CITIES = [
 %(cities_js)s
 ];
 var DATA = %(data_color)s, BRAND = %(brand_color)s;
+var CARTO_KEY = %(carto_key)s;
 
 if (typeof L === "undefined") {
   document.getElementById("map").outerHTML =
@@ -342,9 +379,28 @@ if (typeof L === "undefined") {
     zoomControl: true, scrollWheelZoom: false, attributionControl: true,
     minZoom: 3, maxZoom: 9
   });
-  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  /* The fleet's own basemap, raster tier. The apps upgrade to the MapLibre
+     vector build; this page stays on raster on purpose — it is a static
+     overview inside a lazy iframe, and a 1 MB GL bundle to draw five
+     polygons at zoom 4 is not a trade worth making. The ATTRIBUTION IS THE
+     LICENCE: CARTO's free tier is domain + quota enforced in exchange for
+     the visible OSM + CARTO credit, so it is not decoration. */
+  function tileUrl(kind) {
+    return "https://{s}.basemaps.cartocdn.com/" + kind + "/{z}/{x}/{y}{r}.png?key=" + CARTO_KEY;
+  }
+  var darkQuery = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+  function tileKind() { return darkQuery && darkQuery.matches ? "dark_all" : "light_all"; }
+  var tiles = L.tileLayer(tileUrl(tileKind()), {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> ' +
+      'contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
   }).addTo(map);
+  /* A reader who flips their system theme with this page open gets the other
+     basemap, rather than a pale one on a dark page until they reload. */
+  if (darkQuery) {
+    var onScheme = function () { tiles.setUrl(tileUrl(tileKind())); };
+    if (darkQuery.addEventListener) darkQuery.addEventListener("change", onScheme);
+    else if (darkQuery.addListener) darkQuery.addListener(onScheme);
+  }
   map.fitBounds([[25.4, -123.8], [48.4, -68.4]], { padding: [8, 8] });
   function open_(url) { window.open(url, "_blank", "noopener"); }
 
@@ -429,6 +485,7 @@ if (typeof L === "undefined") {
         "cities_js": cities_js,
         "data_color": json.dumps(DATA_COLOR),
         "brand_color": json.dumps(BRAND_COLOR),
+        "carto_key": json.dumps(load_carto_key()),
     }
 
 
