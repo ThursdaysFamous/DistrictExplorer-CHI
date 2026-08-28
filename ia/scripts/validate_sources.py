@@ -239,6 +239,14 @@ ENDPOINTS = [
         "layer": "post-office",
         "url": "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/38?f=json",
     },
+    {
+        "layer": "police-station",
+        "url": "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/53?f=json",
+    },
+    {
+        "layer": "fire-station",
+        "url": "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/51?f=json",
+    },
 ]
 
 FAIL, WARN, OK = "FAIL", "WARN", "OK"

@@ -5978,6 +5978,8 @@ function initIowaExplorer() {
     "county-subdivision", // 1,663 records tiling the state, live from TIGERweb (no data/app file) — 1,600 civil townships, 62 incorporated cities that double as their own subdivision record, and one federal reservoir carried as unorganized territory
     "municipality",      // 939 incorporated cities, live from TIGERweb (no data/app file) — small dense pockets within the county-subdivision fabric, so smaller on average than a civil township despite fewer records
     "zip-code",          // Census ZCTAs by Iowa envelope (no data/app file) — 1,443 features measured in-envelope, smaller on average than an incorporated city
+    "police-station",    // Nearest-3 point layer (449 stations in the state envelope) — not a containment boundary; ranked with the amenity points
+    "fire-station",      // Nearest-3 point layer (1,262 stations in the state envelope) — denser than the police set, so ranked after it
     "post-office"        // Nearest-3 point layer, straight-line distance — not a containment boundary, ranked last
   ];
   /* ==== GENERATED:END layer-area-rank ==== */
@@ -8913,11 +8915,88 @@ function initIowaExplorer() {
     }
   });
 
+  /* ---------- 11/12. Police + Fire Stations (nearest 3) — USGS National Map,
+   * phase 2 PR 1 ----------
+   * The safety group's first members, structures layers 53 (Law Enforcement)
+   * and 51 (Fire/EMS/Rescue) — same service/schema/loader shape as Post
+   * Office above, and IL's colour pairs kept for fleet parity (WI's own
+   * safety-group layers reuse them too). No coverage function — the envelope
+   * deliberately reaches past the state line, so a reader near a border sees
+   * the genuinely nearest stations, which may be in a neighboring state;
+   * nearest-3 is straight-line and the intro says so, never a jurisdictional
+   * claim. Measured 2026-08-28 against METRO_BBOX (re-verified by reproducing
+   * Post Office's own shipped 1,170 count against the same envelope first):
+   * 449 police points, 1,262 fire points — corrects docs/IA_EXPANSION_PLAN.md's
+   * original research-pass figures of 53/51, which read at roughly
+   * Chicago-metro-bbox scale rather than Iowa's full statewide envelope. ---------- */
+  var USGS_POLICE_LAYER = "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/53";
+  var USGS_FIRE_LAYER = "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/51";
+  function usgsStructuresLoader(layerUrl, label) {
+    return makeCached(function () {
+      var url = layerUrl + "/query?geometry=" +
+        [METRO_BBOX.minLng, METRO_BBOX.minLat, METRO_BBOX.maxLng, METRO_BBOX.maxLat].join(",") +
+        "&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects" +
+        "&where=1%3D1&outFields=NAME,ADDRESS,CITY,ZIPCODE&outSR=4326&f=geojson&geometryPrecision=6";
+      return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2).then(function (gj) {
+        if (!hasUsableGeometry(gj)) throw new Error("no usable geometry from " + label);
+        return gj;
+      });
+    });
+  }
+  function usgsStructureLine(fallbackName) {
+    return function (props) {
+      var name = findPropCI(props, ["name"]);
+      var address = findPropCI(props, ["address"]);
+      var city = findPropCI(props, ["city"]);
+      var zip = findPropCI(props, ["zipcode", "zip"]);
+      return (name ? String(name) : fallbackName) +
+        (address ? " — " + String(address) : "") +
+        (city ? ", " + String(city) : "") +
+        (zip ? " " + String(zip) : "");
+    };
+  }
+  function usgsStructureItem(fallbackName) {
+    return function (props) { // 4d two-line row: name over address
+      var name = findPropCI(props, ["name"]);
+      var address = findPropCI(props, ["address"]);
+      var city = findPropCI(props, ["city"]);
+      var zip = findPropCI(props, ["zipcode", "zip"]);
+      var note = (address ? String(address) : "") + (city ? (address ? ", " : "") + String(city) : "") + (zip ? " " + String(zip) : "");
+      return { name: name ? String(name) : fallbackName, note: note || undefined };
+    };
+  }
+
+  registerNearestPointLayer({
+    id: "police-station",
+    group: "safety",
+    color: "#0B5394",
+    fill: "#41B6E6",
+    label: "Police Station",
+    loader: usgsStructuresLoader(USGS_POLICE_LAYER, "USGS structures layer 53"),
+    intro: "Nearest police stations (USGS National Map structures data), straight-line distance:",
+    line: usgsStructureLine("Police station"),
+    item: usgsStructureItem("Police station")
+  });
+
+  registerNearestPointLayer({
+    id: "fire-station",
+    group: "safety",
+    color: "#7A0B1E",
+    fill: "#C8102E",
+    label: "Fire Station",
+    loader: usgsStructuresLoader(USGS_FIRE_LAYER, "USGS structures layer 51"),
+    intro: "Nearest fire stations (USGS National Map structures data), straight-line distance:",
+    line: usgsStructureLine("Fire station"),
+    item: usgsStructureItem("Fire station")
+  });
+
   /* =========================================================================
    * GROWING THIS FORK — docs/EXPANSION_GUIDE.md Part 3 (deepening a state)
    * and Part 4 (a new concept). Phase 1 of docs/IA_EXPANSION_PLAN.md is now
-   * fully shipped; phase 2 begins with precinct, ia-judicial-district and
-   * community-college.
+   * fully shipped; phase 2 begins with police-station + fire-station (a live
+   * re-verification pass on 2026-08-28 found the original "precinct first"
+   * note undercounted those two by roughly 10x and corrected the sequencing
+   * — see docs/IA_EXPANSION_PLAN.md's Phase 2 roadmap section).
    * ======================================================================= */
 
   /* ==== ENGINE:BEGIN hover-explorer ==== */
@@ -9479,7 +9558,7 @@ function initIowaExplorer() {
   // standard"): representation first, then services, then geography broad ->
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
-  var LAYER_SIDEBAR_RANK = ["us-house", "ia-senate", "ia-house", "county", "county-subdivision", "municipality", "county-supervisor", "school-district-unified", "zip-code", "post-office"];
+  var LAYER_SIDEBAR_RANK = ["us-house", "ia-senate", "ia-house", "county", "county-subdivision", "municipality", "county-supervisor", "school-district-unified", "zip-code", "police-station", "fire-station", "post-office"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -9579,8 +9658,8 @@ function initIowaExplorer() {
   var DST_DARK_MAP_COLORS = { "#0B5394": "#4FA4FE", "#14181C": "#696F76", "#1B5E3F": "#5FB387",
     "#2E9E6B": "#5BEAA5", "#2F6B3A": "#6FBE7B", "#41B6E6": "#C6EBFE", "#444B54": "#929BA8",
     "#4A2E8C": "#9B7CFD", "#4B2E83": "#9E7BF1", "#4C8F59": "#83DC93", "#6B7280": "#B1BBCE",
-    "#7A5C3E": "#CFA57D", "#8C2E4A": "#F47294", "#A98B6C": "#F3CBA1", "#B0316E": "#FD88B8",
-    "#D06A9C": "#FFBDDA"};
+    "#7A0B1E": "#EA5C63", "#7A5C3E": "#CFA57D", "#8C2E4A": "#F47294", "#A98B6C": "#F3CBA1",
+    "#B0316E": "#FD88B8", "#D06A9C": "#FFBDDA"};
   /* ==== GENERATED:END dark-map-palette ==== */
   /* ==== ENGINE:BEGIN districtry-theme ==== */
   /* The theme controller and the wordmark fleet switch, shared for the same
