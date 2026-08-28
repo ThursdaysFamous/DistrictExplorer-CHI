@@ -3,11 +3,16 @@ name: Update IA county auditor roster
 # Weekly refresh of Iowa's 99 county auditors
 # (ia/data/app/ia-county-auditors.json, read by ia/index.html's County card).
 # Iowa Code 47.2 designates the auditor as each county's own election
-# commissioner. The source is the auditors' own trade association
-# (iowaauditors.org/find/directory/) — one entry per county: name, party
-# (present on 94 of 99 as of the build that shipped this workflow; withheld
-# rather than guessed for the rest), office address, phone. No e-mail is
-# published anywhere on the page.
+# commissioner. TWO SOURCES, because neither is complete on its own: the
+# auditors' own trade association (iowaauditors.org/find/directory/) publishes
+# name, party, office address and phone but NO E-MAIL; the Secretary of State's
+# own auditors page (sos.iowa.gov/auditors/) publishes name, party and an
+# e-mail for all 99 — Cloudflare-obfuscated, decoded at scrape time — but no
+# usable office address. The scraper merges them and GATES the merge on the two
+# naming the same person; where they disagree, the county's own site decides
+# and the answer is pinned per county in DIVERGENCE_RESOLVED (3 measured, and
+# they do NOT all resolve the same way, which is why it is a table and not a
+# rule about which publisher to prefer).
 
 on:
   schedule:
@@ -38,7 +43,9 @@ jobs:
       - name: Install dependencies
         run: pip install -c ia/scripts/requirements.txt requests
 
-      - name: Scrape the auditors' association directory
+      # One step, two sites: the scraper fetches the association directory
+      # and the Secretary of State's page and merges them.
+      - name: Scrape the auditor directories (association + Secretary of State)
         run: python3 ia/scripts/ia_county_auditor_scraper.py
 
       - name: Rebuild the county auditor roster

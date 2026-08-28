@@ -32,6 +32,7 @@ CACHE = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache", "ia_c
 OUT = os.path.join(APP_DATA_DIR, "ia-county-auditors.json")
 
 EXPECT_COUNTIES = 99
+MIN_EMAILS = 95
 
 
 def main():
@@ -76,6 +77,8 @@ def main():
                   "address": r["address"], "phone": r["phone"]}
         if r["party"]:
             entry["party"] = r["party"]
+        if r.get("email"):
+            entry["email"] = r["email"]
         directory[geoid] = entry
 
     missing = sorted(set(geoid_by_name.values()) - set(directory.keys()))
@@ -83,8 +86,18 @@ def main():
         raise RuntimeError("no auditor record for GEOID(s): %s" % missing)
 
     with_party = sum(1 for v in directory.values() if v.get("party"))
-    print("ia-county-auditors: %d counties, %d with a party on record"
-          % (len(directory), with_party), file=sys.stderr)
+    with_email = sum(1 for v in directory.values() if v.get("email"))
+    print("ia-county-auditors: %d counties, %d with a party, %d with an e-mail"
+          % (len(directory), with_party, with_email), file=sys.stderr)
+    # The e-mail comes from the Secretary of State (see the scraper). A floor,
+    # not a target: if Cloudflare's obfuscation changes shape the decode returns
+    # nothing and every row silently loses its address -- the exact failure
+    # scripts/check_roster_retention.py exists to catch, caught here first.
+    if with_email < MIN_EMAILS:
+        raise RuntimeError(
+            "only %d of %d auditors carry an e-mail (floor %d) -- re-run "
+            "ia/scripts/ia_county_auditor_scraper.py and check the Cloudflare "
+            "data-cfemail decode" % (with_email, len(directory), MIN_EMAILS))
 
     payload = json.dumps(directory, indent=1, sort_keys=True) + "\n"
     if check_only:

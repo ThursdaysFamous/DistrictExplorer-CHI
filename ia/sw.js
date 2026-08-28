@@ -69,6 +69,7 @@ const ROSTER_URLS = [
   "./data/app/ia-house-members.json",
   "./data/app/ia-county-board-directory.json",
   "./data/app/ia-county-auditors.json",
+  "./data/app/ia-county-officers.json",
   "./data/app/ia-judicial-judges.json",
   "./data/app/coverage-gaps.json",
 ];

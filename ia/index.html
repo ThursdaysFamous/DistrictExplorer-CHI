@@ -8390,6 +8390,19 @@ function initIowaExplorer() {
   var loadIaCountyAuditors = makeCached(function () {
     return fetchJSONWithRetry("data/app/ia-county-auditors.json", {}, 2);
   });
+  var loadIaCountyOfficers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/ia-county-officers.json", {}, 2);
+  });
+  // The other five elected county offices, in the order Iowa Code ch. 331
+  // names them. The auditor is not here: it ships from its own file above
+  // (Iowa Code 47.2 makes it the county's commissioner of elections) and
+  // renders first on the card.
+  var IA_COUNTY_OFFICES = [
+    { key: "treasurer", label: "County Treasurer" },
+    { key: "recorder", label: "County Recorder" },
+    { key: "sheriff", label: "Sheriff" },
+    { key: "countyAttorney", label: "County Attorney" }
+  ];
 
   registerLayer({
     id: "county",
@@ -8407,18 +8420,21 @@ function initIowaExplorer() {
     query: function (point, seq) {
       return Promise.all([
         queryFeatureAt(loadStateCounties, point),
-        loadIaCountyAuditors().catch(function () { return null; })
+        loadIaCountyAuditors().catch(function () { return null; }),
+        loadIaCountyOfficers().catch(function () { return null; })
       ]).then(function (parts) {
         var feature = parts[0];
         if (!feature) return null;
         var props = feature.properties || {};
         var geoid = findPropCI(props, ["geoid"]);
         var auditor = (parts[1] && geoid != null) ? parts[1][String(geoid)] : null;
+        var officers = (parts[2] && geoid != null) ? parts[2][String(geoid)] : null;
         return {
           seq: seq,
           name: findPropCI(props, ["name"]),
           geoid: geoid,
-          auditor: auditor || null
+          auditor: auditor || null,
+          officers: officers || null
         };
       });
     },
@@ -8432,10 +8448,11 @@ function initIowaExplorer() {
       var auditor = result.auditor;
       if (auditor && auditor.name) {
         var person = { name: String(auditor.name), badge: "County Auditor" };
-        // 5 of 99 auditors carry no party on the association's own page
-        // (measured 2026-08-28) — omitted here rather than guessed.
+        // 1 of 99 auditors carries no party on either source (measured
+        // 2026-08-28) — omitted here rather than guessed.
         if (auditor.party) person.note = String(auditor.party);
         if (auditor.phone) person.phone = String(auditor.phone);
+        if (auditor.email) person.email = String(auditor.email);
         wrap.appendChild(renderPersonRows([person]));
         if (auditor.office || (auditor.address && auditor.address.length)) {
           var office = {
@@ -8444,6 +8461,50 @@ function initIowaExplorer() {
           };
           wrap.appendChild(renderOfficeGroup({ offices: [office] }));
         }
+      }
+
+      // The rest of the elected slate. Each office renders only if a name
+      // resolved: an office whose two publishers name different people ships
+      // no name at all and says so below, rather than picking one.
+      var officers = result.officers;
+      if (officers) {
+        var slate = [];
+        var unresolved = [];
+        IA_COUNTY_OFFICES.forEach(function (office) {
+          var rec = officers[office.key];
+          if (rec && rec.name) {
+            var row = { name: String(rec.name), badge: office.label };
+            if (rec.party) row.note = String(rec.party);
+            if (rec.phone) row.phone = String(rec.phone);
+            if (rec.email) row.email = String(rec.email);
+            slate.push(row);
+            return;
+          }
+          var why = officers[office.key + "Withheld"];
+          if (why) unresolved.push({ label: office.label, value: "Not shown — " + String(why) + "." });
+        });
+        if (slate.length) {
+          wrap.appendChild(renderSectionLabel("OTHER COUNTYWIDE OFFICES"));
+          wrap.appendChild(renderPersonRows(slate, { tinted: true }));
+        }
+
+        var supervisors = officers.supervisors;
+        if (supervisors && supervisors.length) {
+          wrap.appendChild(renderSectionLabel("BOARD OF SUPERVISORS"));
+          wrap.appendChild(renderPersonRows(supervisors.map(function (m) {
+            var row = { name: String(m.name), badge: "Supervisor" };
+            if (m.party) row.note = String(m.party);
+            if (m.phone) row.phone = String(m.phone);
+            return row;
+          })));
+        } else if (officers.supervisorsWithheld) {
+          unresolved.push({
+            label: "Board of supervisors",
+            value: "Not shown — " + String(officers.supervisorsWithheld) +
+              ". The board's districts are still on the County supervisor layer."
+          });
+        }
+        if (unresolved.length) wrap.appendChild(renderFieldStack(unresolved));
       }
       return wrap;
     }
