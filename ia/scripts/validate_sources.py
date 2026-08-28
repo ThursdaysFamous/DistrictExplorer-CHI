@@ -163,6 +163,36 @@ PROVENANCE = [
     },
     {
         "layer": "county",
+        "app_file": "ia-county-auditors.json",
+        "source_url": "https://sos.iowa.gov/auditors/",
+        "note": "The Secretary of State's own auditors page — the second witness on every auditor's name and party, and the ONLY published source of an auditor e-mail (Cloudflare data-cfemail, decoded at scrape time). Read by the same ia/scripts/ia_county_auditor_scraper.py.",
+    },
+    {
+        "layer": "county",
+        "app_file": "ia-county-officers.json",
+        "source_url": "https://member-portal.iowacounties.org/countydirectory/directory/Story",
+        "note": "ISAC's member portal, one page per county — the ONLY statewide source for the county treasurer and for the board of supervisors. Probed here at a single county (Story) because the portal has no index page; a bad county name answers HTTP 200 with an empty table, so the scraper gates on parsed row count and never on status. Built by ia/scripts/ia_county_officers_scraper.py + build_ia_county_officers.py; refreshed weekly by update-ia-county-officers-roster.yml.",
+    },
+    {
+        "layer": "county",
+        "app_file": "ia-county-officers.json",
+        "source_url": "https://iowalandrecords.org/recorder-directory/",
+        "note": "All 99 county recorders with a plain mailto: and office phone — the highest-quality county officer source found in Iowa, and the recorder row's authority over the ISAC portal.",
+    },
+    {
+        "layer": "county",
+        "app_file": "ia-county-officers.json",
+        "source_url": "https://www.issda.org/assets/Gold-Star/2025%20Sheriff%20Directory.pdf",
+        "note": "The Iowa State Sheriffs' & Deputies' Association directory (PDF, 4 April 2025) — the sheriff row's authority. A DATED DOCUMENT, so it is the half of the pair that goes stale: Sac County's own site names a sheriff this PDF has not caught up with, pinned in the builder's DIVERGENCE_RESOLVED. A newer edition appearing at a different path is the thing to watch for.",
+    },
+    {
+        "layer": "county",
+        "app_file": "ia-county-officers.json",
+        "source_url": "https://iowa-icaa.com/Roster/%40RosterOfCA%26ACAs.pdf",
+        "note": "The Iowa County Attorneys Association roster (PDF, 5 May 2026) — the county attorney row's authority. Note the literal @ and & in the filename. iowa-icaa.com answers 404 with a FULL page body, so a reachability check on any other path there proves nothing.",
+    },
+    {
+        "layer": "county",
         "app_file": "metro-outline.json",
         "source_url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer/1",
         "note": "The whole-state outline for the coverage wash, pre-built by ia/scripts/build_metro_outline.py — dissolved from all 99 counties' geometry on the same layer as state-counties.json, not fetched as a separate state polygon (so a future partial-coverage narrowing needs only a smaller METRO_COUNTY_FIPS, the Wisconsin precedent).",

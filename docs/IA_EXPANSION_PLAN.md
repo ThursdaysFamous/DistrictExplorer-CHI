@@ -670,7 +670,49 @@ data already shipped, moderate scraper/statute work) → PR 6 community-college 
 + elected sub-district roster design, the hardest remaining item) → library (attempted inside or after
 PR 6's window, contingent on the untested Playwright rung).
 
-## Phase 3 roadmap — elected-education fabrics + first city tier
+## Phase 3 roadmap — the officeholder pass, elected-education fabrics, first city tier
+
+**PR 1 — the County card's full elected officer slate — SHIPPED 2026-08-28.** This was phase 4
+work in the committed roadmap and was pulled forward, because a boundary and its officeholder
+sourcing belong in the same change (`docs/EXPANSION_GUIDE.md` Part 2 rule 4) and the County card
+was answering *where* for 99 counties while naming 1 of their 6 elected offices. It ships all six
+(Iowa Code ch. 331) from **five publishers**, and the reason it is five is measured rather than
+architectural — no publisher covers Iowa's county offices, and the two that come closest are each
+wrong in a way the other catches:
+
+- **The ISAC member portal** (`member-portal.iowacounties.org/countydirectory/directory/<County>`)
+  is the only statewide source for the **treasurer** and the **board of supervisors**, regenerated
+  daily — and it publishes an **APPOINTED chief deputy in the elected sheriff's row** in Crawford,
+  Page and Sioux, and an appointed assistant in Page's county-attorney row. Four mislabels, detected
+  only because each office's own directory names the same person as a deputy.
+- **The dated directories** — Iowa Land Records (recorders, 99/99 with a plain `mailto:`, the
+  best-quality county source found in Iowa), the ISSDA sheriff directory (PDF, April 2025) and the
+  ICAA roster (PDF, May 2026) — are better on identity and carry e-mail, and they **go stale**: Sac
+  County's own site names a sheriff the ISSDA PDF has not caught up with.
+- **The Secretary of State's auditors page** turned out to publish a full card per county — name,
+  party and a Cloudflare-obfuscated e-mail for all 99. The auditor scraper's own docstring had said
+  no such statewide roster existed "in a form this project can read", because the page's county
+  DROPDOWN was read instead of the page body underneath it. **That correction is the phase's
+  cheapest yield**: 99 e-mails and 4 parties on a layer that had shipped weeks earlier.
+
+Neither publisher wins categorically, so the builder does not pick one. It resolves what it can
+MEASURE (the deputy mislabels), pins what a county's own site settled (Sac's sheriff, and three
+auditors where the two directories disagree — resolving **2-1 for the SoS**, which is exactly why
+it is a pinned table and not a preference), and **withholds the rest**: five offices ship no name
+at all and say on the card that two directories disagree and who each names. Seven counties ship
+no board of supervisors, gated on Iowa Code §331.201's "three members unless increased to five"
+AND on the seat count read back from the supervisor-district geometry this repo already ships.
+
+Coverage: treasurer 99/99, recorder 97/99, sheriff 98/99, county attorney 97/99, 92 of 99 boards,
+277 officer e-mails, 741 phone numbers. **No address from any of these sources ships** — the ICAA
+prints private-law-office addresses, so both PDFs are read for a phone and an e-mail and never for
+the line itself, and the builder asserts structurally that no field beyond name/phone/e-mail/party
+can reach a card. Files: `ia/scripts/ia_county_officers_scraper.py`,
+`ia_county_officer_sources_scraper.py`, `build_ia_county_officers.py`,
+`ia/data/app/ia-county-officers.json`, `.github/workflows/update-ia-county-officers-roster.yml`.
+
+**Still to come this phase:**
+
 
 `school-director-district` (LSA `IowaSchoolDirectorDistricts` — VERIFIED exists, 728 features, "as of
 2023-12-18" — this PR's first deliverable is the coverage/semantics gate: which of the 324 districts
@@ -692,10 +734,10 @@ current-edition polling-place export exists beyond the 2024-08 item.
 
 ## Phase 4 roadmap — officeholders, polling, second city
 
-County card gains the remaining elected county officers (treasurer, recorder, sheriff, county attorney,
-board chair where published) — ISAC's (Iowa State Association of Counties) directory checked first at
-execution time, else the Wisconsin tranche model: per-county scrape, per-office floors, dated rows,
-landing in reviewed tranches rather than one 99-county PR. **Polling places** ship only if the SOS ask
+~~County card gains the remaining elected county officers~~ — **DONE in phase 3 PR 1** (above), and
+it did not need the Wisconsin tranche model: ISAC's member portal plus three per-office statewide
+directories covered all 99 counties in one PR. What phase 4 still owns here is the **board CHAIR**,
+which no statewide publisher names, and keying supervisors to their own districts (phase 3 PR 2). **Polling places** ship only if the SOS ask
 in phase 3 lands a current per-election edition — `IowaPollingPlaces` joined to `precinct` by `PPID`
 under the full Wisconsin display contract (election named, provisional wording while pre-certification,
 pull dated, retired once the election passes) — the August 2024 item never ships labeled "current."

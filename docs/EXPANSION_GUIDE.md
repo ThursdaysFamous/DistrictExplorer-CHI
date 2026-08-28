@@ -2099,6 +2099,14 @@ at county scale and at state scale, and it has been expensive every time.
   inside a single district. Before writing a county off for want of a precinct-to-district
   TABLE, check whether it publishes the two LAYERS.
 
+- **Read the page BODY, not its navigation.** Iowa's auditor scraper shipped with a docstring
+  saying the Secretary of State published no readable statewide roster because the page "links
+  out to each county's own page rather than listing names itself". The page's county DROPDOWN is
+  a list of links; underneath it sits a full card per county with the name, the party and an
+  e-mail address, for all 99. The cost of that misreading was measured when it was corrected:
+  99 e-mail addresses and 4 parties on a layer that had already shipped. A `<select>` of anchors
+  is a table of contents, and a table of contents is not the document.
+
 ## 5.2 Is it the right source? — verification
 
 - **Currency is a measurement, not a reading of a name.** One county publishes three
@@ -2191,6 +2199,36 @@ at county scale and at state scale, and it has been expensive every time.
   entries whose voting location is a clerk's HOME, at a residential address. The agency may
   publish that; committing it to a public repository indefinitely is a different act, and
   this project does not make it. Run the check on every replacement file.
+
+- **When two publishers name different officeholders, WITHHOLD — do not prefer one.** Iowa's
+  county officers are published by a daily-regenerated association portal and by each office's
+  own statewide directory, and the honest finding is that *neither wins categorically*. The
+  portal ships an APPOINTED chief deputy in the elected sheriff's row in three counties (and an
+  appointed assistant in a fourth's county-attorney row); the directories are dated documents
+  and go stale, so a county's own site names a sheriff their PDF has not caught up with. The
+  same pattern held for the auditor, where an association and the Secretary of State disagree in
+  three counties and the counties' own sites resolve them **2-1 for the state**. So the ladder is:
+  resolve what you can MEASURE, pin what a THIRD WITNESS settled (with the witness URL in the
+  pin), and ship NO NAME for the rest, saying on the card that two directories disagree and who
+  each names. A preference rule would have shipped a chief deputy as an elected sheriff in three
+  counties, silently, forever. **Make the pin table fail when a pin outlives its disagreement**,
+  or it calcifies into an assertion nobody re-checks.
+- **A name difference is usually not a disagreement, and the naive test says it is.** Before any
+  of the above can fire, "same person, spelled differently" has to be recognised: honorifics and
+  post-nominals (`Mr. Shawn Harden, J.D.` / `SHAWN M. HARDEN`), a dropped middle initial, a hyphen
+  (`Cosgrove-Whitmer` / `COSGROVE WHITMER`), spacing inside a surname (`VanDerMaaten` /
+  `VAN DER MAATEN`), a suffix, a typographic apostrophe, a trade-body designation
+  (`JARED HARMON (J-CINA)`), a one-character misspelling, and NICKNAMES — `Jeff`/`Jeffrey`,
+  `Tammy`/`Tamara`, `Cathy`/`Catherine`, none of which a prefix rule catches. In every case that
+  turned out to be two different people, the SURNAMES differed outright; in every false positive
+  they matched exactly. Lean the test on the surname, and state its limit (two people sharing a
+  surname and a first initial in one county office would read as one).
+- **An ALL-CAPS source needs a name-aware title case, not the generic one.** The fleet's
+  `cardTitleCase` is built for feed strings and turns `McGOWAN` into `Mcgowan` and `O\u2019TOOLE`
+  into `O\u2019toole`. A name needs Mc/Mac, a leading letter-apostrophe, single-letter initials,
+  roman numerals and hyphenated surnames handled explicitly — and it should be keyed to the
+  office whose SOURCE is all-caps, never applied by detection, because running it over a
+  correctly-cased name risks changing a spelling its own publisher chose.
 
 ## 5.4 Shape and structure
 

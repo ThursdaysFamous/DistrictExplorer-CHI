@@ -13,3 +13,18 @@ requests==2.33.1
 # scripts/generate_metro_files.py. The generator is otherwise stdlib-only;
 # validate_index.py deliberately stays stdlib and does NOT import this.
 jsonschema==4.26.0
+
+# PDF text extraction for the two county offices whose only statewide directory
+# is a published document rather than a page or an API: the sheriff (ISSDA's
+# directory) and the county attorney (the ICAA's roster), both read by
+# ia/scripts/ia_county_officer_sources_scraper.py for
+# .github/workflows/update-ia-county-officers-roster.yml.
+#
+# pdfplumber AND NOT pypdf, and the reason is not style. Both documents are
+# MULTI-COLUMN. pypdf flattens a page to text, which interleaves the columns --
+# it lands one county's sheriff on a line with two other counties' text, and
+# glues the ICAA's APPOINTED assistants onto the elected county attorney's
+# name, which is the one thing that parse must never do. Both parses therefore
+# assign every word to a column by its x-coordinate BEFORE forming a line, and
+# extract_words() is what exposes that; pypdf has no equivalent.
+pdfplumber==0.11.10

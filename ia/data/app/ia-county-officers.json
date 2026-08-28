@@ -1,0 +1,4510 @@
+{
+ "19001": {
+  "county": "Adair",
+  "countyAttorney": {
+   "email": "attorney@adaircountyiowa.org",
+   "name": "Melissa Larson",
+   "party": "Democratic",
+   "phone": "641-743-6390"
+  },
+  "recorder": {
+   "email": "recorder@adaircountyiowa.org",
+   "name": "Kelly Mitchell",
+   "party": "Republican",
+   "phone": "(641) 743-2411"
+  },
+  "sheriff": {
+   "email": "JVandewater@AdairCountySO.org",
+   "name": "Jeff Vandewater",
+   "party": "Republican",
+   "phone": "(641) 743-2148"
+  },
+  "supervisorsWithheld": "the county directory lists 4, and Iowa Code 331.201 allows only 3 or 5",
+  "treasurer": {
+   "name": "Brenda Wallace",
+   "party": "Republican",
+   "phone": "(641) 743-2312"
+  }
+ },
+ "19003": {
+  "county": "Adams",
+  "countyAttorney": {
+   "email": "acattorney@adamscounty.iowa.gov",
+   "name": "Andrew Knuth",
+   "party": "Republican",
+   "phone": "641-322-4008"
+  },
+  "recorder": {
+   "email": "recorder@adamscounty.iowa.gov",
+   "name": "Jamie Stargell",
+   "party": "Republican",
+   "phone": "(641) 322-3744"
+  },
+  "sheriff": {
+   "email": "sheriff21@adamscountyia.com",
+   "name": "Alan Johannes",
+   "party": "Republican",
+   "phone": "(641) 322-4444"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Scott Akin",
+    "party": "Republican",
+    "phone": "(641) 322-3240"
+   },
+   {
+    "name": "Tony Hardisty",
+    "party": "Republican",
+    "phone": "(641) 322-3240"
+   },
+   {
+    "name": "Bobbi Maynes",
+    "party": "Republican",
+    "phone": "(641) 322-3240"
+   },
+   {
+    "name": "Leland Shipley",
+    "party": "Republican",
+    "phone": "(641) 322-3240"
+   },
+   {
+    "name": "Chris Standley",
+    "party": "Republican",
+    "phone": "(641) 322-3240"
+   }
+  ],
+  "treasurer": {
+   "name": "Holly Schafer",
+   "phone": "(641) 322-3210"
+  }
+ },
+ "19005": {
+  "county": "Allamakee",
+  "countyAttorney": {
+   "email": "agericke@allamakeecounty.iowa.gov",
+   "name": "Anthony Gericke",
+   "party": "Republican",
+   "phone": "563-568-3813"
+  },
+  "recorder": {
+   "email": "kmathis@allamakeecounty.iowa.gov",
+   "name": "Karen Mathis",
+   "party": "Republican",
+   "phone": "(563) 568-2364"
+  },
+  "sheriff": {
+   "email": "sheriff@co.allamakee.ia.us",
+   "name": "Clark Mellick",
+   "party": "Republican",
+   "phone": "(563) 568-4521"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Dan Byrnes",
+    "party": "Democratic",
+    "phone": "(563) 568-3522"
+   },
+   {
+    "name": "Tom Clark",
+    "party": "Republican",
+    "phone": "(563) 568-3522"
+   },
+   {
+    "name": "Dennis Keatley",
+    "party": "Republican",
+    "phone": "(563) 568-3522"
+   }
+  ],
+  "treasurer": {
+   "name": "Nicki Smedsrud",
+   "party": "Republican",
+   "phone": "(563) 568-3793"
+  }
+ },
+ "19007": {
+  "county": "Appanoose",
+  "countyAttorney": {
+   "email": "tstewart@appanoosecounty.net",
+   "name": "Ty A. Stewart",
+   "phone": "641-437-7178"
+  },
+  "recorder": {
+   "email": "mmessamaker@appanoosecounty.net",
+   "name": "Maegan Messamaker",
+   "party": "Republican",
+   "phone": "(641) 856-6103"
+  },
+  "sheriff": {
+   "email": "sheriff@appanoosecountysheriff.org",
+   "name": "Gary Anderson",
+   "party": "Republican",
+   "phone": "(641) 437-7100"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Scott Buban",
+    "party": "Republican",
+    "phone": "(641) 856-5512"
+   },
+   {
+    "name": "Dustin Harvey",
+    "party": "Republican",
+    "phone": "(641) 856-5512"
+   },
+   {
+    "name": "Jeffery Kulmatycki",
+    "party": "Republican",
+    "phone": "(641) 856-5512"
+   }
+  ],
+  "treasurer": {
+   "name": "Jennifer Salstrand",
+   "party": "Republican",
+   "phone": "(641) 856-3097"
+  }
+ },
+ "19009": {
+  "county": "Audubon",
+  "countyAttorney": {
+   "email": "cswensen@auduboncountyia.gov",
+   "name": "Christopher R. Swensen",
+   "party": "Democratic",
+   "phone": "712-563-2202"
+  },
+  "recorder": {
+   "email": "recorder@auduboncountyia.gov",
+   "name": "Miranda Bills",
+   "party": "Democratic",
+   "phone": "(712) 563-2119"
+  },
+  "sheriff": {
+   "email": "audcoso@auduboncountyia.gov",
+   "name": "Todd W. Johnson",
+   "party": "Republican",
+   "phone": "(712) 563-2631"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Kent Grabill",
+    "party": "Republican",
+    "phone": "(712) 563-2428"
+   },
+   {
+    "name": "Heath Hansen",
+    "party": "Republican",
+    "phone": "(712) 563-2428"
+   },
+   {
+    "name": "Donald Mosinski",
+    "party": "Republican",
+    "phone": "(712) 563-2428"
+   }
+  ],
+  "treasurer": {
+   "name": "Debbie Campbell",
+   "party": "Democratic",
+   "phone": "(712) 563-2293"
+  }
+ },
+ "19011": {
+  "county": "Benton",
+  "countyAttorney": {
+   "email": "rlough@bentoncountyia.gov",
+   "name": "Ray P. Lough",
+   "party": "Republican",
+   "phone": "319-472-2436"
+  },
+  "recorder": {
+   "email": "lspeidel@bentoncountyia.gov",
+   "name": "Lexa Speidel",
+   "party": "Republican",
+   "phone": "(319) 472-3309"
+  },
+  "sheriff": {
+   "email": "d.upah@bentonsheriff.com",
+   "name": "David Upah",
+   "phone": "(319) 472-2337"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Tracy Seeman",
+    "party": "Republican",
+    "phone": "(319) 472-4869"
+   },
+   {
+    "name": "Ronald Tippett",
+    "phone": "(319) 472-4869"
+   },
+   {
+    "name": "Mr. Bruce E. Volz",
+    "party": "Republican",
+    "phone": "(319) 472-4869"
+   }
+  ],
+  "treasurer": {
+   "name": "Melinda Schoettmer",
+   "party": "Republican",
+   "phone": "(319) 472-2450"
+  }
+ },
+ "19013": {
+  "county": "Black Hawk",
+  "countyAttorney": {
+   "email": "bwilliams@blackhawkcounty.iowa.gov",
+   "name": "Brian Williams",
+   "party": "Democratic",
+   "phone": "319-833-3001"
+  },
+  "recorder": {
+   "email": "ssmith@blackhawkcounty.iowa.gov",
+   "name": "Sandie Smith",
+   "party": "Democratic",
+   "phone": "(319) 833-3171"
+  },
+  "sheriff": {
+   "email": "NNeff@bhcso.org",
+   "name": "Nathan Neff",
+   "party": "Democratic",
+   "phone": "(319) 291-2587"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Justin Brandt",
+    "party": "Republican",
+    "phone": "(319) 833-3003"
+   },
+   {
+    "name": "Tavis Hall",
+    "party": "Democratic",
+    "phone": "(319) 833-3003"
+   },
+   {
+    "name": "Ritch Kurtenbach",
+    "party": "Democratic",
+    "phone": "(319) 833-3003"
+   },
+   {
+    "name": "Linda Laylin",
+    "party": "Democratic",
+    "phone": "(319) 833-3003"
+   },
+   {
+    "name": "Chris Schwartz",
+    "party": "Democratic",
+    "phone": "(319) 833-3003"
+   }
+  ],
+  "treasurer": {
+   "name": "Lynda Hintzman",
+   "party": "Republican",
+   "phone": "(319) 833-3013"
+  }
+ },
+ "19015": {
+  "county": "Boone",
+  "countyAttorney": {
+   "email": "mspeers@boonecounty.iowa.gov",
+   "name": "Matthew Speers",
+   "party": "Republican",
+   "phone": "515-433-0542"
+  },
+  "recorder": {
+   "email": "ecanfield@boonecounty.iowa.gov",
+   "name": "Erin Canfield",
+   "party": "Republican",
+   "phone": "(515) 433-0514"
+  },
+  "sheriff": {
+   "email": "sheriff@boonecounty.iowa.gov",
+   "name": "Andy Godzicki",
+   "phone": "(515) 433-0524"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Shawn Bryant",
+    "party": "Republican",
+    "phone": "(515) 433-0500"
+   },
+   {
+    "name": "Erich Kretzinger",
+    "party": "Republican",
+    "phone": "(515) 433-0500"
+   },
+   {
+    "name": "Scott Longhorn",
+    "party": "Republican",
+    "phone": "(515) 433-0500"
+   }
+  ],
+  "treasurer": {
+   "name": "Lauren Novak",
+   "party": "Republican",
+   "phone": "(515) 433-0510"
+  }
+ },
+ "19017": {
+  "county": "Bremer",
+  "countyAttorney": {
+   "email": "drobinson@co.bremer.ia.us",
+   "name": "Darius P. R. Robinson",
+   "party": "Republican",
+   "phone": "319-352-0214"
+  },
+  "recorder": {
+   "email": "mthurm@co.bremer.ia.us",
+   "name": "Missy Thurm",
+   "party": "Republican",
+   "phone": "(319) 352-0401"
+  },
+  "sheriff": {
+   "email": "dpickett@co.bremer.ia.us",
+   "name": "Dan Pickett",
+   "party": "Republican",
+   "phone": "(319) 352-5400"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Bob Brunkhorst",
+    "party": "Republican",
+    "phone": "(319) 352-0130"
+   },
+   {
+    "name": "Corey Cerwinske",
+    "party": "Republican",
+    "phone": "(319) 352-0130"
+   },
+   {
+    "name": "Dewey Hildebrandt",
+    "party": "Republican",
+    "phone": "(319) 352-0130"
+   }
+  ],
+  "treasurer": {
+   "name": "Adam Hoffman",
+   "party": "Republican",
+   "phone": "(319) 352-0242"
+  }
+ },
+ "19019": {
+  "county": "Buchanan",
+  "countyAttorney": {
+   "email": "sharden@co.buchanan.ia.us",
+   "name": "Shawn M. Harden",
+   "party": "Democratic",
+   "phone": "319-334-3710"
+  },
+  "recorder": {
+   "email": "mmangrich@co.buchanan.ia.us",
+   "name": "Michelle Mangrich",
+   "party": "Democratic",
+   "phone": "(319) 334-4259"
+  },
+  "sheriff": {
+   "email": "sbuzynski@co.buchanan.ia.us",
+   "name": "Scott Buzynski",
+   "party": "Republican",
+   "phone": "(319) 334-2568"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "John Kurtz",
+    "party": "Republican",
+    "phone": "(319) 334-3578"
+   },
+   {
+    "name": "Dawn Vogel",
+    "party": "Republican",
+    "phone": "(319) 334-3578"
+   },
+   {
+    "name": "Keith Wieland",
+    "party": "Republican",
+    "phone": "(319) 334-3578"
+   }
+  ],
+  "treasurer": {
+   "name": "Gina Mether",
+   "party": "Republican",
+   "phone": "(319) 334-4340"
+  }
+ },
+ "19021": {
+  "county": "Buena Vista",
+  "countyAttorney": {
+   "email": "paul.allen@bvcountyattorney.gov",
+   "name": "Paul Allen",
+   "party": "Republican",
+   "phone": "712-732-1933"
+  },
+  "recorder": {
+   "email": "creis@bvcountyiowa.com",
+   "name": "Curtis Reis",
+   "party": "Republican",
+   "phone": "(712) 749-2539"
+  },
+  "sheriff": {
+   "email": "kory@bvsheriff.com",
+   "name": "Kory Elston",
+   "party": "Republican",
+   "phone": "(712) 749-2530"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Kathy Croker",
+    "party": "Republican",
+    "phone": "(712) 749-2545"
+   },
+   {
+    "name": "Dan Hartman",
+    "party": "Republican",
+    "phone": "(712) 749-2545"
+   },
+   {
+    "name": "Paul Merten",
+    "party": "Democratic",
+    "phone": "(712) 749-2545"
+   },
+   {
+    "name": "Rhonda Ringgenberg",
+    "party": "Republican",
+    "phone": "(712) 749-2545"
+   },
+   {
+    "name": "Kelly Snyder",
+    "party": "Republican",
+    "phone": "(712) 749-2545"
+   }
+  ],
+  "treasurer": {
+   "name": "Danelle Haberman",
+   "party": "Republican",
+   "phone": "(712) 749-2533"
+  }
+ },
+ "19023": {
+  "county": "Butler",
+  "countyAttorney": {
+   "email": "dave@sgllawoffice.com",
+   "name": "David A. Kuehner",
+   "phone": "319-346-6546"
+  },
+  "recorder": {
+   "email": "jjacobs@butlercounty.iowa.gov",
+   "name": "Janice Jacobs",
+   "party": "Republican",
+   "phone": "(319) 346-6612"
+  },
+  "sheriff": {
+   "email": "jjohnson@butlercounty.iowa.gov",
+   "name": "Jason S. Johnson",
+   "party": "Republican",
+   "phone": "(319) 346-6621"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Greg Barnett",
+    "party": "Republican",
+    "phone": "(319) 346-6547"
+   },
+   {
+    "name": "Wayne Dralle",
+    "party": "Republican",
+    "phone": "(319) 346-6547"
+   },
+   {
+    "name": "Rusty Eddy",
+    "party": "Republican",
+    "phone": "(319) 346-6547"
+   }
+  ],
+  "treasurer": {
+   "name": "Roxie Nicolaus",
+   "party": "Republican",
+   "phone": "(319) 346-6626"
+  }
+ },
+ "19025": {
+  "county": "Calhoun",
+  "countyAttorney": {
+   "email": "bsmith@calhouncounty.iowa.gov",
+   "name": "Ben Smith",
+   "party": "Republican",
+   "phone": "712-297-7829"
+  },
+  "recorder": {
+   "email": "cvoith@calhouncounty.iowa.gov",
+   "name": "Cathy Voith",
+   "party": "Republican",
+   "phone": "(712) 297-8121"
+  },
+  "sheriff": {
+   "email": "priley@calhouncounty.iowa.gov",
+   "name": "Patrick Riley",
+   "phone": "(712) 297-7583"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Dave George",
+    "party": "Republican",
+    "phone": "(712) 297-7741"
+   },
+   {
+    "name": "Scott Jacobs",
+    "party": "Republican",
+    "phone": "(712) 297-7741"
+   },
+   {
+    "name": "Cory Ridgely",
+    "party": "Republican",
+    "phone": "(712) 297-7741"
+   }
+  ],
+  "treasurer": {
+   "name": "Lori Erkenbrack",
+   "party": "Republican",
+   "phone": "(712) 297-7111"
+  }
+ },
+ "19027": {
+  "county": "Carroll",
+  "countyAttorney": {
+   "email": "csteger@carrollcountyattorney.org",
+   "name": "Curt Steger",
+   "party": "Republican",
+   "phone": "712-792-8013"
+  },
+  "recorder": {
+   "email": "awittrock@carrollcountyiowa.org",
+   "name": "Ashten Wittrock",
+   "party": "Republican",
+   "phone": "(712) 792-3328"
+  },
+  "sheriff": {
+   "email": "ping@co.carroll.ia.us",
+   "name": "Ken Pingrey",
+   "party": "Republican",
+   "phone": "(712) 792-4393"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Michael Andersen",
+    "party": "Republican",
+    "phone": "(712) 792-4923"
+   },
+   {
+    "name": "Stephanie Hausman",
+    "party": "Republican",
+    "phone": "(712) 792-4923"
+   },
+   {
+    "name": "Scott Johnson",
+    "party": "Republican",
+    "phone": "(712) 792-4923"
+   },
+   {
+    "name": "Mark McCrea",
+    "party": "Republican",
+    "phone": "(712) 792-4923"
+   },
+   {
+    "name": "Eugene Meiners",
+    "party": "Democratic",
+    "phone": "(712) 792-4923"
+   }
+  ],
+  "treasurer": {
+   "name": "Lisa Wagner",
+   "party": "Republican",
+   "phone": "(712) 792-1200"
+  }
+ },
+ "19029": {
+  "county": "Cass",
+  "countyAttorney": {
+   "email": "vstrazdas@casscoia.us",
+   "name": "Vanessa Strazdas",
+   "party": "Republican",
+   "phone": "712-243-4504"
+  },
+  "recorder": {
+   "email": "mward@casscoia.us",
+   "name": "Mary Ward",
+   "party": "Republican",
+   "phone": "(712) 243-1692"
+  },
+  "sheriff": {
+   "name": "John Westering",
+   "party": "Republican",
+   "phone": "(712) 243-2206"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Steve Baier",
+    "party": "Republican",
+    "phone": "(712) 243-6661"
+   },
+   {
+    "name": "Stephen Green",
+    "party": "Republican",
+    "phone": "(712) 243-6661"
+   },
+   {
+    "name": "Mark O'Brien",
+    "party": "Republican",
+    "phone": "(712) 243-6661"
+   },
+   {
+    "name": "Bernard Pettinger",
+    "party": "Republican",
+    "phone": "(712) 243-6661"
+   },
+   {
+    "name": "Wendy Richter",
+    "party": "Republican",
+    "phone": "(712) 243-6661"
+   }
+  ],
+  "treasurer": {
+   "name": "Tracey Marshall",
+   "party": "Republican",
+   "phone": "(712) 243-5503"
+  }
+ },
+ "19031": {
+  "county": "Cedar",
+  "countyAttorney": {
+   "email": "ablank@cedarcounty.iowa.gov",
+   "name": "Adam Blank",
+   "party": "Republican",
+   "phone": "563-886-6646"
+  },
+  "recorder": {
+   "email": "mbahnsen@cedarcounty.iowa.gov",
+   "name": "Melissa Bahnsen",
+   "party": "Republican",
+   "phone": "(563) 886-2230"
+  },
+  "sheriff": {
+   "email": "wwethington@cedarcounty.org",
+   "name": "Warren Wethington",
+   "party": "Republican",
+   "phone": "(563) 886-2121"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Bruce Barnhart",
+    "party": "Republican",
+    "phone": "(563) 886-3168"
+   },
+   {
+    "name": "Jon Bell",
+    "party": "Republican",
+    "phone": "(563) 886-3168"
+   },
+   {
+    "name": "Mike Bixler",
+    "party": "Republican",
+    "phone": "(563) 886-3168"
+   },
+   {
+    "name": "Brad Gaul",
+    "party": "Republican",
+    "phone": "(563) 886-3168"
+   },
+   {
+    "name": "Jeff Kaufmann",
+    "party": "Republican",
+    "phone": "(563) 886-3168"
+   }
+  ],
+  "treasurer": {
+   "name": "Sandy Delaney",
+   "party": "Democratic",
+   "phone": "(563) 886-2557"
+  }
+ },
+ "19033": {
+  "county": "Cerro Gordo",
+  "countyAttorney": {
+   "email": "cdalen@cgcounty.org",
+   "name": "Carlyle D. Dalen",
+   "party": "Democratic",
+   "phone": "641-421-3101"
+  },
+  "recorder": {
+   "email": "alegler@cerrogordo.gov",
+   "name": "AnnMarie Legler",
+   "party": "Democratic",
+   "phone": "(641) 421-3054"
+  },
+  "sheriff": {
+   "email": "Dhepperly@cerrogordo.gov",
+   "name": "David Hepperly",
+   "party": "Republican",
+   "phone": "(641) 421-3000"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Casey Callanan",
+    "party": "Republican",
+    "phone": "(641) 421-3024"
+   },
+   {
+    "name": "Carl Ginapp",
+    "party": "Republican",
+    "phone": "(641) 421-3024"
+   },
+   {
+    "name": "Chris Watts",
+    "party": "Republican",
+    "phone": "(641) 421-3024"
+   }
+  ],
+  "treasurer": {
+   "name": "Nikki Fessler",
+   "party": "Republican",
+   "phone": "(641) 421-3033"
+  }
+ },
+ "19035": {
+  "county": "Cherokee",
+  "countyAttorney": {
+   "email": "rrkolpin@co.cherokee.ia.us",
+   "name": "Ryan Kolpin",
+   "party": "Republican",
+   "phone": "712-225-2835"
+  },
+  "recorder": {
+   "email": "sboothby@co.cherokee.ia.us",
+   "name": "Sam Boothby",
+   "party": "Republican",
+   "phone": "(712) 225-6735"
+  },
+  "sheriff": {
+   "email": "derekscott@cherokeecoso.us",
+   "name": "Derek Scott",
+   "party": "Republican",
+   "phone": "(712) 225-6728"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Shane Bellefy",
+    "party": "Republican",
+    "phone": "(712) 225-6706"
+   },
+   {
+    "name": "Cheryl Ellis",
+    "party": "Republican",
+    "phone": "(712) 225-6706"
+   },
+   {
+    "name": "Ray Mullins II",
+    "party": "Republican",
+    "phone": "(712) 225-6706"
+   },
+   {
+    "name": "Bryan Petersen",
+    "party": "Republican",
+    "phone": "(712) 225-6706"
+   },
+   {
+    "name": "Dave Skou",
+    "party": "Republican",
+    "phone": "(712) 225-6706"
+   }
+  ],
+  "treasurer": {
+   "name": "Jodi B. Mongan",
+   "party": "Republican",
+   "phone": "(712) 225-6740"
+  }
+ },
+ "19037": {
+  "county": "Chickasaw",
+  "countyAttorney": {
+   "email": "d.laudner@chickasawcounty.iowa.gov",
+   "name": "David Laudner",
+   "party": "Republican",
+   "phone": "641-394-3446"
+  },
+  "recorder": {
+   "email": "s.troyna@chickasawcounty.iowa.gov",
+   "name": "Shirley Troyna",
+   "party": "Democratic",
+   "phone": "(641) 394-2336"
+  },
+  "sheriff": {
+   "email": "r.shawver@chickasawcounty.iowa.gov",
+   "name": "Ryan Shawver",
+   "party": "Republican",
+   "phone": "(641) 394-3121"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Steve Breitbach",
+    "party": "Democratic",
+    "phone": "(641) 394-2100"
+   },
+   {
+    "name": "Issac Carter",
+    "party": "Republican",
+    "phone": "(641) 394-2100"
+   },
+   {
+    "name": "Scott Cerwinske",
+    "party": "Republican",
+    "phone": "(641) 394-2100"
+   },
+   {
+    "name": "Jacob Hackman",
+    "party": "Republican",
+    "phone": "(641) 394-2100"
+   },
+   {
+    "name": "Travis Suckow",
+    "party": "Republican",
+    "phone": "(641) 394-2100"
+   }
+  ],
+  "treasurer": {
+   "name": "Matthew Ysbrand",
+   "party": "Republican",
+   "phone": "(641) 394-2107"
+  }
+ },
+ "19039": {
+  "county": "Clarke",
+  "countyAttorney": {
+   "email": "atty@clarkecountyiowa.org",
+   "name": "Johanna Olson",
+   "party": "Republican",
+   "phone": "641-342-3423"
+  },
+  "recorder": {
+   "email": "shumphrey@clarkecountyiowa.org",
+   "name": "Selena Humphrey",
+   "party": "Republican",
+   "phone": "(641) 342-3313"
+  },
+  "sheriff": {
+   "email": "cccivil@iowatelecom.net",
+   "name": "Rob Kovacevich",
+   "party": "Democratic",
+   "phone": "(641) 342-2914"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Randy Dunbar",
+    "party": "Republican",
+    "phone": "(641) 342-3641"
+   },
+   {
+    "name": "Dean Robins",
+    "party": "Republican",
+    "phone": "(641) 342-3641"
+   },
+   {
+    "name": "Brian Sorensen",
+    "party": "Republican",
+    "phone": "(641) 342-3641"
+   }
+  ],
+  "treasurer": {
+   "name": "Jessica Smith",
+   "party": "Republican",
+   "phone": "(641) 342-3311"
+  }
+ },
+ "19041": {
+  "county": "Clay",
+  "countyAttorney": {
+   "email": "tjohnson@claycounty.iowa.gov",
+   "name": "Travis S. Johnson",
+   "phone": "712-262-8641"
+  },
+  "recorder": {
+   "email": "sweeks@claycounty.iowa.gov",
+   "name": "Sheila Weeks",
+   "party": "Republican",
+   "phone": "(712) 262-1081"
+  },
+  "sheriff": {
+   "email": "craveling@claycounty.iowa.govclaycountysheriffsoffice.com",
+   "name": "Chris Raveling",
+   "party": "Republican",
+   "phone": "(712) 262-3221"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Barry Anderson",
+    "party": "Republican",
+    "phone": "(712) 262-1569"
+   },
+   {
+    "name": "Allen Batschelet",
+    "party": "Republican",
+    "phone": "(712) 262-1569"
+   },
+   {
+    "name": "Courtney DeLoss",
+    "party": "Republican",
+    "phone": "(712) 262-1569"
+   },
+   {
+    "name": "Art Hamrick",
+    "party": "Independent",
+    "phone": "(712) 262-1569"
+   },
+   {
+    "name": "Randy Swanson",
+    "party": "Republican",
+    "phone": "(712) 262-1569"
+   }
+  ],
+  "treasurer": {
+   "name": "LeAnn Black",
+   "party": "Republican",
+   "phone": "(712) 262-2179"
+  }
+ },
+ "19043": {
+  "county": "Clayton",
+  "countyAttorney": {
+   "email": "zherrmann@claytoncountyia.gov",
+   "name": "Zach Herrmann",
+   "party": "Republican",
+   "phone": "563-245-3888"
+  },
+  "recorder": {
+   "email": "jfettkether@claytoncountyia.gov",
+   "name": "Josie Fettkether",
+   "party": "Republican",
+   "phone": "(563) 245-2710"
+  },
+  "sheriff": {
+   "email": "bostrander@claytoncountyia.gov",
+   "name": "Brent Ostrander",
+   "party": "Republican",
+   "phone": "(563) 245-2422"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Steve Doeppke",
+    "party": "Republican",
+    "phone": "(563) 245-2166"
+   },
+   {
+    "name": "Ray Peterson",
+    "party": "Republican",
+    "phone": "(563) 245-2166"
+   },
+   {
+    "name": "Doug Reimer",
+    "party": "Republican",
+    "phone": "(563) 245-2166"
+   }
+  ],
+  "treasurer": {
+   "name": "Linda Zuercher",
+   "party": "Republican",
+   "phone": "(563) 245-1807"
+  }
+ },
+ "19045": {
+  "county": "Clinton",
+  "countyAttorney": {
+   "email": "mwolf@clintonca.net",
+   "name": "Mike Wolf",
+   "party": "Republican",
+   "phone": "563-243-6218"
+  },
+  "recorder": {
+   "email": "sjudd@clintoncounty-ia.gov",
+   "name": "Scott Judd",
+   "party": "Republican",
+   "phone": "(563) 244-0565"
+  },
+  "sheriff": {
+   "email": "sheriffgreenwalt@gapa911.us",
+   "name": "Bill Greenwalt",
+   "party": "Republican",
+   "phone": "(563) 242-9211"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Erin George",
+    "party": "Republican",
+    "phone": "(563) 244-0575"
+   },
+   {
+    "name": "Mr. Jim Irwin Jr.",
+    "party": "Republican",
+    "phone": "(563) 244-0575"
+   },
+   {
+    "name": "Dan Srp",
+    "party": "Republican",
+    "phone": "(563) 244-0575"
+   }
+  ],
+  "treasurer": {
+   "name": "Dustin Johnson",
+   "party": "Republican",
+   "phone": "(563) 244-0573"
+  }
+ },
+ "19047": {
+  "county": "Crawford",
+  "countyAttorney": {
+   "email": "colin.johnson@crawfordca.org",
+   "name": "Colin Johnson",
+   "party": "Democratic",
+   "phone": "712-263-5601"
+  },
+  "recorder": {
+   "email": "smeseck@crawfordcounty.iowa.gov",
+   "name": "Sara Meseck",
+   "party": "Republican",
+   "phone": "(712) 263-3643"
+  },
+  "sheriff": {
+   "email": "jsteinkuehler@crawfordso.netOfficeAdmin",
+   "name": "James Steinkuehler",
+   "party": "Republican",
+   "phone": "(712) 263-2146"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Craig Dozark",
+    "party": "Republican",
+    "phone": "(712) 263-5356"
+   },
+   {
+    "name": "Jean Heiden",
+    "party": "Republican",
+    "phone": "(712) 263-5356"
+   },
+   {
+    "name": "Dave Muhlbauer",
+    "party": "Democratic",
+    "phone": "(712) 263-5356"
+   },
+   {
+    "name": "Ty Rosburg",
+    "party": "Republican",
+    "phone": "(712) 263-5356"
+   },
+   {
+    "name": "Kyle Schultz",
+    "party": "Republican",
+    "phone": "(712) 263-5356"
+   }
+  ],
+  "treasurer": {
+   "name": "Sheri Neddermeyer",
+   "party": "Republican",
+   "phone": "(712) 263-2648"
+  }
+ },
+ "19049": {
+  "county": "Dallas",
+  "countyAttorney": {
+   "email": "DCAttorney@dallascountyiowa.gov",
+   "name": "Matt Schultz",
+   "party": "Republican",
+   "phone": "515-993-5060"
+  },
+  "recorder": {
+   "email": "ReNae.Arnold@dallascountyiowa.gov",
+   "name": "ReNae Arnold",
+   "party": "Republican",
+   "phone": "(515) 993-5804"
+  },
+  "sheriff": {
+   "email": "adam.infante@dallascountyiowa.gov",
+   "name": "Adam Infante",
+   "party": "Republican",
+   "phone": "(515) 993-4567"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Kim Chapman",
+    "party": "Republican",
+    "phone": "(515) 993-5806"
+   },
+   {
+    "name": "Brad Golightly",
+    "party": "Republican",
+    "phone": "(515) 993-5806"
+   },
+   {
+    "name": "Julia Helm",
+    "party": "Republican",
+    "phone": "(515) 993-5806"
+   }
+  ],
+  "treasurer": {
+   "name": "Summer Portzen",
+   "party": "Republican",
+   "phone": "(515) 993-5808"
+  }
+ },
+ "19051": {
+  "county": "Davis",
+  "countyAttorney": {
+   "email": "attorney@daviscountyiowa.org",
+   "name": "Rick Lynch",
+   "party": "Democratic",
+   "phone": "641-664-2010"
+  },
+  "recorder": {
+   "email": "recorder@daviscountyiowa.org",
+   "name": "Megan Clyman",
+   "party": "Democratic",
+   "phone": "(641) 664-2321"
+  },
+  "sheriffWithheld": "the county directory names Zachary Dunlavy and the sheriff's own statewide directory names Dave Davis",
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Ron Bride",
+    "party": "Republican",
+    "phone": "(641) 664-2344"
+   },
+   {
+    "name": "David Henderson",
+    "party": "Republican",
+    "phone": "(641) 664-2344"
+   },
+   {
+    "name": "Alan Yahnke",
+    "party": "Republican",
+    "phone": "(641) 664-2344"
+   }
+  ],
+  "treasurer": {
+   "name": "Mike Johnson",
+   "party": "Republican",
+   "phone": "(641) 664-2155"
+  }
+ },
+ "19053": {
+  "county": "Decatur",
+  "countyAttorney": {
+   "email": "alanwilson@mileslawfirm.net",
+   "name": "Alan Wilson",
+   "party": "Republican",
+   "phone": "641-446-3773"
+  },
+  "recorder": {
+   "email": "dec-rec@grm.net",
+   "name": "Erica Cook",
+   "party": "Republican",
+   "phone": "(641) 446-4322"
+  },
+  "sheriff": {
+   "email": "sheriff@dcsoia.org",
+   "name": "Chris Lane",
+   "party": "Republican",
+   "phone": "(641) 446-4111"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Steve Fulkerson",
+    "party": "Republican",
+    "phone": "(641) 446-4382"
+   },
+   {
+    "name": "Ward Graham",
+    "phone": "(641) 446-4382"
+   },
+   {
+    "name": "Doug Tharp",
+    "party": "Republican",
+    "phone": "(641) 446-4382"
+   }
+  ],
+  "treasurer": {
+   "name": "Janet Pierson",
+   "party": "Republican",
+   "phone": "(641) 446-4321"
+  }
+ },
+ "19055": {
+  "county": "Delaware",
+  "countyAttorney": {
+   "email": "jwbernau@msn.com",
+   "name": "John Bernau",
+   "party": "Republican",
+   "phone": "563-927-3819"
+  },
+  "recorder": {
+   "email": "dschindler@co.delaware.ia.us",
+   "name": "Daneen Schindler",
+   "party": "Republican",
+   "phone": "(563) 927-4665"
+  },
+  "sheriff": {
+   "email": "themesath@delawarecountyia.us1225W.HowardSt",
+   "name": "Travis Hemesath",
+   "party": "Republican",
+   "phone": "(563) 927-3135"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Shirley Helmrichs",
+    "party": "Republican",
+    "phone": "(563) 927-2515"
+   },
+   {
+    "name": "Jeff Madlom",
+    "party": "Republican",
+    "phone": "(563) 927-2515"
+   },
+   {
+    "name": "Dan Wheeler",
+    "phone": "(563) 927-2515"
+   }
+  ],
+  "treasurer": {
+   "name": "Jenny Eschen",
+   "party": "Republican",
+   "phone": "(563) 927-2845"
+  }
+ },
+ "19057": {
+  "county": "Des Moines",
+  "countyAttorney": {
+   "email": "dmca@dmcounty.com",
+   "name": "Lisa K. Schaefer",
+   "party": "Democratic",
+   "phone": "319-753-8209"
+  },
+  "recorder": {
+   "email": "steffenern@dmcounty.com",
+   "name": "Natalie Steffener",
+   "party": "Democratic",
+   "phone": "(319) 753-8221"
+  },
+  "sheriff": {
+   "email": "glendeningk@dmcounty.com",
+   "name": "Kevin Glendening",
+   "party": "No party",
+   "phone": "(319) 753-8212"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Tom Broeker",
+    "party": "Republican",
+    "phone": "(319) 208-5645"
+   },
+   {
+    "name": "Jim Cary",
+    "party": "Democratic",
+    "phone": "(319) 208-5645"
+   },
+   {
+    "name": "Shane McCampbell",
+    "party": "No party",
+    "phone": "(319) 208-5645"
+   }
+  ],
+  "treasurer": {
+   "name": "Janelle Nalley-Londquist",
+   "party": "Democratic",
+   "phone": "(319) 753-8252"
+  }
+ },
+ "19059": {
+  "county": "Dickinson",
+  "countyAttorney": {
+   "email": "kmaughan@dickinsoncountyiowa.gov",
+   "name": "Kevin Maughan",
+   "party": "Republican",
+   "phone": "712-336-4003"
+  },
+  "recorder": {
+   "email": "aditsworth@dickinsoncountyiowa.gov",
+   "name": "Ann Ditsworth",
+   "party": "Republican",
+   "phone": "(712) 336-1495"
+  },
+  "sheriff": {
+   "email": "gbaloun@co.dickinson.ia.us",
+   "name": "Greg Baloun",
+   "party": "Republican",
+   "phone": "(712) 336-2793"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Steven Clark",
+    "party": "Republican",
+    "phone": "(712) 260-6939"
+   },
+   {
+    "name": "Steve Dullard",
+    "party": "Republican",
+    "phone": "(712) 260-6939"
+   },
+   {
+    "name": "Bill Leupold",
+    "party": "Republican",
+    "phone": "(712) 260-6939"
+   },
+   {
+    "name": "Levi Marwardt",
+    "party": "Republican",
+    "phone": "(712) 260-6939"
+   },
+   {
+    "name": "Kim Wermersen",
+    "party": "Republican",
+    "phone": "(712) 260-6939"
+   }
+  ],
+  "treasurer": {
+   "name": "Kris Rowley",
+   "party": "Republican",
+   "phone": "(712) 336-6333"
+  }
+ },
+ "19061": {
+  "county": "Dubuque",
+  "countyAttorney": {
+   "email": "Scott.nelson@dubuquecountyiowa.gov",
+   "name": "Scott J. Nelson",
+   "phone": "563-589-4470"
+  },
+  "recorder": {
+   "email": "ann.sweeney@dubuquecountyiowa.gov",
+   "name": "Ann Sweeney",
+   "phone": "(563) 589-4434"
+  },
+  "sheriff": {
+   "email": "jkennedy@dbqcosheriff.com",
+   "name": "Joseph Kennedy",
+   "party": "Democratic",
+   "phone": "(563) 589-4400"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Wayne Kenniker",
+    "party": "Republican",
+    "phone": "(563) 589-4441"
+   },
+   {
+    "name": "Ann McDonough",
+    "party": "Democratic",
+    "phone": "(563) 589-4441"
+   },
+   {
+    "name": "Harley Pothoff",
+    "party": "Republican",
+    "phone": "(563) 589-4441"
+   }
+  ],
+  "treasurer": {
+   "name": "Michael Clasen",
+   "party": "Republican",
+   "phone": "(563) 589-4436"
+  }
+ },
+ "19063": {
+  "county": "Emmet",
+  "countyAttorney": {
+   "email": "mbauler@emmetcountyia.gov",
+   "name": "Melanie Summers Bauler",
+   "phone": "712-362-2229"
+  },
+  "recorder": {
+   "email": "dminion@emmetcountyia.gov",
+   "name": "Diann Quastad Minion",
+   "party": "Republican",
+   "phone": "(712) 362-4115"
+  },
+  "sheriff": {
+   "email": "jschultes@emmetcountyia.com",
+   "name": "Justin Schultes",
+   "phone": "(712) 362-2639"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Todd Glasnapp",
+    "party": "Democratic",
+    "phone": "(712) 362-3812"
+   },
+   {
+    "name": "Lisa Hansen",
+    "party": "Republican",
+    "phone": "(712) 362-3812"
+   },
+   {
+    "name": "John Pluth",
+    "party": "Republican",
+    "phone": "(712) 362-3812"
+   },
+   {
+    "name": "Jeff Quastad",
+    "party": "No party",
+    "phone": "(712) 362-3812"
+   },
+   {
+    "name": "Tim Schumacher",
+    "party": "Republican",
+    "phone": "(712) 362-3812"
+   }
+  ],
+  "treasurer": {
+   "name": "Lisa M. Rosburg",
+   "party": "Republican",
+   "phone": "(712) 362-3824"
+  }
+ },
+ "19065": {
+  "county": "Fayette",
+  "countyAttorney": {
+   "email": "nlein@co.fayette.ia.us",
+   "name": "Nathan Lein",
+   "party": "Democratic",
+   "phone": "319-283-1211"
+  },
+  "recorder": {
+   "email": "kreierson@co.fayette.ia.us",
+   "name": "Kristie Reierson",
+   "party": "Republican",
+   "phone": "(563) 422-3687"
+  },
+  "sheriff": {
+   "email": "mfisher@fayettecountyso.us",
+   "name": "Marty Fisher",
+   "party": "Republican",
+   "phone": "(563) 422-6067"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Jeffrey Bunn",
+    "party": "Republican",
+    "phone": "(563) 422-3538"
+   },
+   {
+    "name": "Bruce T Lehmann",
+    "party": "Republican",
+    "phone": "(563) 422-3538"
+   },
+   {
+    "name": "Alex Popenhagen",
+    "phone": "(563) 422-3538"
+   }
+  ],
+  "treasurer": {
+   "name": "Kyle Jacobsen",
+   "party": "Republican",
+   "phone": "(563) 422-3787"
+  }
+ },
+ "19067": {
+  "county": "Floyd",
+  "countyAttorney": {
+   "email": "tprichard@floydcoia.org",
+   "name": "Todd Prichard",
+   "phone": "641-228-7571"
+  },
+  "recorder": {
+   "email": "aassink@floydcoia.org",
+   "name": "Amy Assink",
+   "party": "Republican",
+   "phone": "(641) 257-6154"
+  },
+  "sheriff": {
+   "email": "fcso@floydcoia.org",
+   "name": "Jeffrey Crooks",
+   "party": "No party",
+   "phone": "(641) 228-1821"
+  },
+  "supervisorsWithheld": "the county directory lists 2, and Iowa Code 331.201 allows only 3 or 5",
+  "treasurer": {
+   "name": "Jessie Holm",
+   "party": "Republican",
+   "phone": "(641) 257-6118"
+  }
+ },
+ "19069": {
+  "county": "Franklin",
+  "countyAttorney": {
+   "email": "amiller@co.franklin.ia.us",
+   "name": "Andrea Miller",
+   "party": "Republican",
+   "phone": "641-456-6027"
+  },
+  "recorder": {
+   "email": "hbushbaum@co.franklin.ia.us",
+   "name": "Heather Bushbaum",
+   "party": "Republican",
+   "phone": "(641) 456-5675"
+  },
+  "sheriff": {
+   "email": "adodd@co.franklin.ia.us",
+   "name": "Aaron Dodd",
+   "party": "Republican",
+   "phone": "(641) 456-2731"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Dick Lukensmeyer",
+    "party": "Republican",
+    "phone": "(641) 456-5624"
+   },
+   {
+    "name": "Gary McVicker",
+    "party": "Republican",
+    "phone": "(641) 456-5624"
+   },
+   {
+    "name": "Chris Vanness",
+    "party": "Republican",
+    "phone": "(641) 456-5624"
+   }
+  ],
+  "treasurer": {
+   "name": "Chad Murray",
+   "party": "Republican",
+   "phone": "(641) 456-5678"
+  }
+ },
+ "19071": {
+  "county": "Fremont",
+  "countyAttorney": {
+   "email": "pjohnson@co.fremont.ia.us",
+   "name": "Peter Johnson",
+   "party": "Democratic",
+   "phone": "712-374-2751"
+  },
+  "recorder": {
+   "email": "tberry@co.fremont.ia.us",
+   "name": "Tarah Berry",
+   "party": "Republican",
+   "phone": "(712) 374-2315"
+  },
+  "sheriff": {
+   "email": "kaistrope@co.fremont.ia.us",
+   "name": "Kevin Aistrope",
+   "party": "Republican",
+   "phone": "(712) 374-2673"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Clint Blackburn",
+    "party": "Republican",
+    "phone": "(712) 374-2415"
+   },
+   {
+    "name": "Jeff Shearer",
+    "party": "Republican",
+    "phone": "(712) 374-2415"
+   },
+   {
+    "name": "Dustin Sheldon",
+    "party": "Republican",
+    "phone": "(712) 374-2415"
+   }
+  ],
+  "treasurer": {
+   "name": "Alise Snyder",
+   "party": "Republican",
+   "phone": "(712) 374-2122"
+  }
+ },
+ "19073": {
+  "county": "Greene",
+  "countyAttorney": {
+   "email": "tlaehn@greenecounty.iowa.gov",
+   "name": "Thomas Laehn",
+   "party": "Libertarian",
+   "phone": "515-386-5677"
+  },
+  "recorder": {
+   "email": "debmcdonald@greenecounty.iowa.gov",
+   "name": "Deb McDonald",
+   "party": "Democratic",
+   "phone": "(515) 386-5670"
+  },
+  "sheriff": {
+   "email": "jwilliams@greenecountysheriff.net",
+   "name": "Jack Williams",
+   "party": "Republican",
+   "phone": "(515) 386-2136"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Peter Bardole",
+    "party": "Republican",
+    "phone": "(515) 386-5681"
+   },
+   {
+    "name": "Dan Benitz",
+    "party": "Republican",
+    "phone": "(515) 386-5681"
+   },
+   {
+    "name": "Joe Gannon",
+    "party": "Republican",
+    "phone": "(515) 386-5681"
+   },
+   {
+    "name": "John Muir",
+    "party": "Republican",
+    "phone": "(515) 386-5681"
+   },
+   {
+    "name": "Dawn Rudolph",
+    "party": "Republican",
+    "phone": "(515) 386-5681"
+   }
+  ],
+  "treasurer": {
+   "name": "Katlynn Mechaelsen",
+   "party": "Republican",
+   "phone": "(515) 386-5675"
+  }
+ },
+ "19075": {
+  "county": "Grundy",
+  "countyAttorney": {
+   "email": "erika.allen@grundycountyiowa.gov",
+   "name": "Erika L. Allen",
+   "party": "Republican",
+   "phone": "319-788-2545"
+  },
+  "recorder": {
+   "email": "travis.case@grundycountyiowa.gov",
+   "name": "Travis Case",
+   "party": "Republican",
+   "phone": "(319) 824-3234"
+  },
+  "sheriff": {
+   "email": "Kirk.dolleslager@grundycountyiowa.gov",
+   "name": "Kirk Dolleslager",
+   "party": "Republican",
+   "phone": "(319) 824-6933"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "LJ Kopsa",
+    "party": "Republican",
+    "phone": "(319) 824-5813"
+   },
+   {
+    "name": "Heidi Nederhoff",
+    "party": "Republican",
+    "phone": "(319) 824-5813"
+   },
+   {
+    "name": "Jeffrey Pabst",
+    "party": "Republican",
+    "phone": "(319) 824-5813"
+   },
+   {
+    "name": "Mark Schildroth",
+    "party": "Republican",
+    "phone": "(319) 824-5813"
+   },
+   {
+    "name": "Vic Vandehaar",
+    "party": "Republican",
+    "phone": "(319) 824-5813"
+   }
+  ],
+  "treasurer": {
+   "name": "Lori Kruse",
+   "party": "Republican",
+   "phone": "(319) 824-3108"
+  }
+ },
+ "19077": {
+  "county": "Guthrie",
+  "countyAttorney": {
+   "email": "d.minteer@guthriecounty.gov",
+   "name": "Dana R. Minteer",
+   "party": "Republican",
+   "phone": "641-747-3765"
+  },
+  "recorder": {
+   "email": "recorder@guthriecounty.gov",
+   "name": "Tristen Richard",
+   "party": "Republican",
+   "phone": "(641) 747-3412"
+  },
+  "sheriff": {
+   "email": "mharmann@gcso.gov",
+   "name": "Matt Harmann",
+   "phone": "(641) 747-2214"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Maggie Armstrong",
+    "party": "Republican",
+    "phone": "(641) 747-3512"
+   },
+   {
+    "name": "Mike Dickson",
+    "party": "Republican",
+    "phone": "(641) 747-3512"
+   },
+   {
+    "name": "Brian Johnson",
+    "party": "Republican",
+    "phone": "(641) 747-3512"
+   },
+   {
+    "name": "Jerome Kuster",
+    "party": "Republican",
+    "phone": "(641) 747-3512"
+   },
+   {
+    "name": "Steve Smith",
+    "party": "Republican",
+    "phone": "(641) 747-3512"
+   }
+  ],
+  "treasurer": {
+   "name": "Brenda Campbell",
+   "party": "Republican",
+   "phone": "(641) 747-3414"
+  }
+ },
+ "19079": {
+  "county": "Hamilton",
+  "countyAttorney": {
+   "email": "hamcoatt@wmtel.net",
+   "name": "Patrick B. Chambers",
+   "party": "Democratic",
+   "phone": "515-832-9580"
+  },
+  "recorder": {
+   "email": "recorder@hamiltoncounty.org",
+   "name": "Kim Anderson",
+   "party": "Republican",
+   "phone": "(515) 832-9535"
+  },
+  "sheriff": {
+   "email": "apruismann@hamiltoncounty.org",
+   "name": "Alex Pruismann",
+   "party": "Republican",
+   "phone": "(515) 832-9500"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Mary Clausen",
+    "party": "Republican",
+    "phone": "(515) 832-9530"
+   },
+   {
+    "name": "April Ely",
+    "party": "Republican",
+    "phone": "(515) 832-9530"
+   },
+   {
+    "name": "Rick Young",
+    "party": "Republican",
+    "phone": "(515) 832-9530"
+   }
+  ],
+  "treasurer": {
+   "name": "Matt Matteson",
+   "party": "Republican",
+   "phone": "(515) 832-9540"
+  }
+ },
+ "19081": {
+  "county": "Hancock",
+  "countyAttorney": {
+   "email": "rachel.martinez@hancocklaw-ia.com",
+   "name": "Rachel Martinez",
+   "party": "Republican",
+   "phone": "641-923-4198"
+  },
+  "recorder": {
+   "email": "tracy.marshall@hancockcountyia.org",
+   "name": "Tracy Marshall",
+   "party": "Republican",
+   "phone": "(641) 923-2464"
+  },
+  "sheriff": {
+   "email": "rgerdes@hancocklaw-ia.com",
+   "name": "Robert Gerdes Jr.",
+   "party": "Republican",
+   "phone": "(641) 923-2621"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Sis Greiman",
+    "party": "Republican",
+    "phone": "(641) 923-3421"
+   },
+   {
+    "name": "Osmund Bud Jermeland",
+    "party": "Republican",
+    "phone": "(641) 923-3421"
+   },
+   {
+    "name": "Gary Rayhons",
+    "party": "Republican",
+    "phone": "(641) 923-3421"
+   }
+  ],
+  "treasurer": {
+   "name": "Linda Juhl",
+   "party": "Republican",
+   "phone": "(641) 923-3122"
+  }
+ },
+ "19083": {
+  "county": "Hardin",
+  "countyAttorney": {
+   "email": "dmeyer@hardincountyia.gov",
+   "name": "Darrell Meyer",
+   "party": "Republican",
+   "phone": "641-939-8118"
+  },
+  "recorder": {
+   "email": "lkadner@hardincountyia.gov",
+   "name": "Lori Kadner",
+   "party": "Republican",
+   "phone": "(641) 939-8178"
+  },
+  "sheriff": {
+   "name": "David McDaniel",
+   "party": "Republican",
+   "phone": "(641) 939-8189"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Lance Granzow",
+    "party": "Republican",
+    "phone": "(641) 939-8220"
+   },
+   {
+    "name": "BJ Hoffman",
+    "party": "Republican",
+    "phone": "(641) 939-8220"
+   },
+   {
+    "name": "Renee` McClellan",
+    "party": "Republican",
+    "phone": "(641) 939-8220"
+   }
+  ],
+  "treasurer": {
+   "name": "Machel Eichmeier",
+   "party": "Republican",
+   "phone": "(641) 939-8232"
+  }
+ },
+ "19085": {
+  "county": "Harrison",
+  "countyAttorney": {
+   "email": "attorney@harrisoncounty.iowa.gov",
+   "name": "Sarah Delanty",
+   "party": "No party",
+   "phone": "712-600-6004"
+  },
+  "recorder": {
+   "email": "fgeith@harrisoncounty.iowa.gov",
+   "name": "Felicia Geith",
+   "party": "Republican",
+   "phone": "(712) 644-2545"
+  },
+  "sheriff": {
+   "email": "Bdoiel@hcia.us",
+   "name": "Brandon Doiel",
+   "phone": "(712) 600-9774"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Brian Rife",
+    "party": "Republican",
+    "phone": "(712) 644-3123"
+   },
+   {
+    "name": "Tony Smith",
+    "party": "Republican",
+    "phone": "(712) 644-3123"
+   },
+   {
+    "name": "Rebecca Wilkerson",
+    "party": "Republican",
+    "phone": "(712) 644-3123"
+   }
+  ],
+  "treasurer": {
+   "name": "Shelia Phillips",
+   "party": "Republican",
+   "phone": "(712) 644-2750"
+  }
+ },
+ "19087": {
+  "county": "Henry",
+  "countyAttorneyWithheld": "the county directory names Darin Stater and the county attorney's own statewide directory names BECKY WILSON",
+  "recorder": {
+   "email": "lbuffington@henrycountyiowa.us",
+   "name": "Lynnae Buffington",
+   "party": "Republican",
+   "phone": "(319) 385-0765"
+  },
+  "sheriff": {
+   "email": "rmcnamee@henrycountyiowa.us",
+   "name": "Rich McNamee",
+   "party": "Republican",
+   "phone": "(319) 385-2712"
+  },
+  "supervisorsWithheld": "the county directory lists 4, and Iowa Code 331.201 allows only 3 or 5",
+  "treasurer": {
+   "name": "Kellie Sloan",
+   "party": "Republican",
+   "phone": "(319) 385-0763"
+  }
+ },
+ "19089": {
+  "county": "Howard",
+  "countyAttorney": {
+   "email": "howatty@howardcounty.iowa.gov",
+   "name": "Kevin Schoeberl",
+   "party": "Republican",
+   "phone": "563-547-9202"
+  },
+  "recorder": {
+   "email": "rvokaty@howardcounty.iowa.gov",
+   "name": "Roxann Vokaty",
+   "party": "Democratic",
+   "phone": "(563) 547-9210"
+  },
+  "sheriff": {
+   "email": "rbusch@howardcounty.iowa.gov",
+   "name": "Rick Busch",
+   "phone": "(563) 547-3535"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Dean Eastman",
+    "party": "Republican",
+    "phone": "(563) 547-3404"
+   },
+   {
+    "name": "Pat Murray",
+    "party": "Democratic",
+    "phone": "(563) 547-3404"
+   },
+   {
+    "name": "Joseph Pisney",
+    "party": "Republican",
+    "phone": "(563) 547-3404"
+   }
+  ],
+  "treasurer": {
+   "name": "Christine Hron",
+   "party": "Republican",
+   "phone": "(563) 547-9211"
+  }
+ },
+ "19091": {
+  "county": "Humboldt",
+  "countyAttorney": {
+   "email": "jbeaty@humboldtcounty.iowa.gov",
+   "name": "Jonathan Beaty",
+   "party": "Republican",
+   "phone": "515-332-7139"
+  },
+  "recorderWithheld": "the county directory names Diane Amundson and the recorder's own statewide directory names Nicole Niemeyer",
+  "sheriff": {
+   "name": "Dean Kruger",
+   "party": "Republican",
+   "phone": "(515) 332-2471"
+  },
+  "supervisorsWithheld": "the county directory lists 6, and Iowa Code 331.201 allows only 3 or 5",
+  "treasurer": {
+   "name": "Jana Pettinger",
+   "party": "Republican",
+   "phone": "(515) 332-1681"
+  }
+ },
+ "19093": {
+  "county": "Ida",
+  "countyAttorney": {
+   "email": "mwhitmer@idacountyia.us",
+   "name": "Meghann Cosgrove Whitmer",
+   "party": "Democratic",
+   "phone": "712-364-3517"
+  },
+  "recorder": {
+   "email": "jphillips@idacountyia.us",
+   "name": "Julie Phillips",
+   "party": "Republican",
+   "phone": "(712) 364-2220"
+  },
+  "sheriff": {
+   "email": "wharriman@idacountysheriff.us",
+   "name": "Wade Harriman",
+   "party": "Republican",
+   "phone": "(712) 364-3146"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Kyle Rohlk",
+    "party": "Republican",
+    "phone": "(712) 364-2632"
+   },
+   {
+    "name": "Creston Schubert",
+    "party": "Republican",
+    "phone": "(712) 364-2632"
+   },
+   {
+    "name": "Devlun P. Whiteing",
+    "party": "Republican",
+    "phone": "(712) 364-2632"
+   }
+  ],
+  "treasurer": {
+   "name": "Traci Riessen",
+   "party": "Republican",
+   "phone": "(712) 364-2625"
+  }
+ },
+ "19095": {
+  "county": "Iowa",
+  "countyAttorney": {
+   "email": "iacoatty@netins.net",
+   "name": "Tim McMeen",
+   "party": "Republican",
+   "phone": "319-642-5521"
+  },
+  "recorder": {
+   "email": "LGahring@iowacounty.iowa.gov",
+   "name": "Lynn Gahring",
+   "party": "Republican",
+   "phone": "(319) 642-3622"
+  },
+  "sheriff": {
+   "email": "rrotter@iowacosheriff.org",
+   "name": "Robert Rotter",
+   "party": "Republican",
+   "phone": "(319) 642-7307"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Jonathan Degen",
+    "party": "Republican",
+    "phone": "(319) 642-3923"
+   },
+   {
+    "name": "Kevin Heitshusen",
+    "party": "Republican",
+    "phone": "(319) 642-3923"
+   },
+   {
+    "name": "Abigail Maas",
+    "party": "Republican",
+    "phone": "(319) 642-3923"
+   },
+   {
+    "name": "Seth Meyer",
+    "party": "Republican",
+    "phone": "(319) 642-3923"
+   },
+   {
+    "name": "Chris Montross",
+    "party": "Republican",
+    "phone": "(319) 642-3923"
+   }
+  ],
+  "treasurer": {
+   "name": "Michelle Sims",
+   "party": "Republican",
+   "phone": "(319) 642-3921"
+  }
+ },
+ "19097": {
+  "county": "Jackson",
+  "countyAttorney": {
+   "email": "jkies@jacksoncounty.iowa.gov",
+   "name": "John L. Kies",
+   "party": "Republican",
+   "phone": "563-652-3214"
+  },
+  "recorder": {
+   "email": "jjones@jacksoncounty.iowa.gov",
+   "name": "Jennifer Jones",
+   "party": "Republican",
+   "phone": "(563) 652-2504"
+  },
+  "sheriff": {
+   "email": "bkilburg@jacksoncounty.iowa.gov",
+   "name": "Brent Kilburg",
+   "party": "Republican",
+   "phone": "(563) 652-3312"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Nin Flagel",
+    "party": "Republican",
+    "phone": "(563) 652-3181"
+   },
+   {
+    "name": "Don Schwenker",
+    "party": "Republican",
+    "phone": "(563) 652-3181"
+   },
+   {
+    "name": "Mike Steines",
+    "party": "Republican",
+    "phone": "(563) 652-3181"
+   }
+  ],
+  "treasurer": {
+   "name": "Beth Gerlach",
+   "party": "Republican",
+   "phone": "(563) 652-5649"
+  }
+ },
+ "19099": {
+  "county": "Jasper",
+  "countyAttorney": {
+   "email": "general@jaspercoatty.org",
+   "name": "Scott Nicholson",
+   "party": "Democratic",
+   "phone": "641-792-5010"
+  },
+  "recorderWithheld": "the county directory names Denise Allan and the recorder's own statewide directory names Joseph Otto",
+  "sheriff": {
+   "email": "bshutts@jaspersheriff.org",
+   "name": "Brad Shutts",
+   "phone": "(641) 792-5912"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Doug Cupples",
+    "party": "Republican",
+    "phone": "(641) 792-7016"
+   },
+   {
+    "name": "Thad Nearmyer",
+    "party": "Republican",
+    "phone": "(641) 792-7016"
+   },
+   {
+    "name": "Brandon Talsma",
+    "party": "Republican",
+    "phone": "(641) 792-7016"
+   }
+  ],
+  "treasurer": {
+   "name": "Doug Bishop",
+   "party": "Democratic",
+   "phone": "(641) 792-7731"
+  }
+ },
+ "19101": {
+  "county": "Jefferson",
+  "countyAttorney": {
+   "email": "cmoulding@jeffersoncoia.us",
+   "name": "Chauncey Moulding",
+   "party": "Democratic",
+   "phone": "641-472-9201"
+  },
+  "recorder": {
+   "email": "recorder@jeffersoncountyia.com",
+   "name": "Kelly Spees",
+   "party": "Democratic",
+   "phone": "(641) 472-4331"
+  },
+  "sheriff": {
+   "email": "brichmond@jeffersoncoiowa.com",
+   "name": "Bart Richmond",
+   "party": "Republican",
+   "phone": "(641) 472-4146"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Lee Dimmitt",
+    "party": "Republican",
+    "phone": "(641) 471-1293"
+   },
+   {
+    "name": "Susie Drish",
+    "party": "Democratic",
+    "phone": "(641) 471-1293"
+   },
+   {
+    "name": "Joe Ledger",
+    "party": "Republican",
+    "phone": "(641) 471-1293"
+   }
+  ],
+  "treasurer": {
+   "name": "Mark Myers",
+   "party": "Democratic",
+   "phone": "(641) 472-2349"
+  }
+ },
+ "19103": {
+  "county": "Johnson",
+  "countyAttorney": {
+   "email": "rzimmerm@johnsoncountyiowa.gov",
+   "name": "Rachel Zimmermann Smith",
+   "party": "Democratic",
+   "phone": "319-339-6100"
+  },
+  "recorder": {
+   "email": "kpainter@johnsoncountyiowa.gov",
+   "name": "Kim Painter",
+   "party": "Democratic",
+   "phone": "(319) 356-6093"
+  },
+  "sheriff": {
+   "name": "Brad Kunkel",
+   "party": "Democratic",
+   "phone": "(319) 356-6020"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Lisa Green-Douglass",
+    "party": "Democratic",
+    "phone": "(319) 356-6000"
+   },
+   {
+    "name": "Jon Green",
+    "party": "Democratic",
+    "phone": "(319) 356-6000"
+   },
+   {
+    "name": "V Fixmer-Oraiz",
+    "party": "Democratic",
+    "phone": "(319) 356-6000"
+   },
+   {
+    "name": "Mandi Remington",
+    "party": "Democratic",
+    "phone": "(319) 356-6000"
+   },
+   {
+    "name": "Rod Sullivan",
+    "party": "Democratic",
+    "phone": "(319) 356-6000"
+   }
+  ],
+  "treasurer": {
+   "name": "Scott Finlayson",
+   "phone": "(319) 356-6087"
+  }
+ },
+ "19105": {
+  "county": "Jones",
+  "countyAttorney": {
+   "email": "kristofer.lyons@jonescountyiowa.gov",
+   "name": "Kristofer Lyons",
+   "phone": "319-462-3961"
+  },
+  "recorder": {
+   "email": "sheri.jones@jonescountyiowa.gov",
+   "name": "Sheri Jones",
+   "party": "Republican",
+   "phone": "(319) 462-2477"
+  },
+  "sheriff": {
+   "email": "greg.graver@jonescountyiowa.govStateIDNo",
+   "name": "Greg Graver",
+   "party": "Republican",
+   "phone": "(319) 462-4371"
+  },
+  "supervisors": [
+   {
+    "name": "Darrick Hall",
+    "phone": "(319) 462-2378"
+   },
+   {
+    "name": "Joe Oswald",
+    "party": "Democratic",
+    "phone": "(319) 462-2378"
+   },
+   {
+    "name": "John Schlarmann",
+    "party": "Republican",
+    "phone": "(319) 462-2378"
+   },
+   {
+    "name": "Jeff Swisher",
+    "party": "Republican",
+    "phone": "(319) 462-2378"
+   },
+   {
+    "name": "Jon Zirkelbach",
+    "party": "Republican",
+    "phone": "(319) 462-2378"
+   }
+  ],
+  "treasurer": {
+   "name": "Amy Picray",
+   "party": "Republican",
+   "phone": "(319) 462-3559"
+  }
+ },
+ "19107": {
+  "county": "Keokuk",
+  "countyAttorneyWithheld": "the county directory names Amber Thompson and the county attorney's own statewide directory names MADDISON DENNY",
+  "recorder": {
+   "email": "recorder@keokukcounty.iowa.gov",
+   "name": "Dawn Goldman",
+   "party": "Republican",
+   "phone": "(641) 622-2540"
+  },
+  "sheriff": {
+   "name": "Casey Hinnah",
+   "party": "Republican",
+   "phone": "(641) 622-2727"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Mr. Mike Hadley",
+    "party": "Republican",
+    "phone": "(641) 622-2902"
+   },
+   {
+    "name": "Kevin Weber",
+    "phone": "(641) 622-2902"
+   },
+   {
+    "name": "Daryl Wood",
+    "party": "Republican",
+    "phone": "(641) 622-2902"
+   }
+  ],
+  "treasurer": {
+   "name": "Christine Edmundson Long",
+   "party": "Republican",
+   "phone": "(641) 622-2421"
+  }
+ },
+ "19109": {
+  "county": "Kossuth",
+  "countyAttorney": {
+   "email": "attorney@kossuthcounty.iowa.gov",
+   "name": "Todd Holmes",
+   "party": "Democratic",
+   "phone": "515-295-9419"
+  },
+  "recorder": {
+   "email": "recorder@kossuthcounty.iowa.gov",
+   "name": "Karen Benschoter",
+   "party": "Republican",
+   "phone": "(515) 295-5660"
+  },
+  "sheriff": {
+   "email": "SheriffsOffice@kossuthcounty.iowa.gov",
+   "name": "Roger Fisher",
+   "phone": "(515) 295-3514"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Amber Garman",
+    "party": "Republican",
+    "phone": "(515) 295-2718"
+   },
+   {
+    "name": "Howard Haas",
+    "party": "Republican",
+    "phone": "(515) 295-2718"
+   },
+   {
+    "name": "Carter Nath",
+    "party": "Republican",
+    "phone": "(515) 295-2718"
+   },
+   {
+    "name": "Kyle Stecker",
+    "party": "Republican",
+    "phone": "(515) 295-2718"
+   },
+   {
+    "name": "Joshua Waechter",
+    "party": "Republican",
+    "phone": "(515) 295-2718"
+   }
+  ],
+  "treasurer": {
+   "name": "Nick Rahm",
+   "party": "Democratic",
+   "phone": "(515) 295-3404"
+  }
+ },
+ "19111": {
+  "county": "Lee",
+  "countyAttorney": {
+   "email": "rbraden@leecountyiowa.gov",
+   "name": "Ross Braden",
+   "party": "Republican",
+   "phone": "319-524-9590"
+  },
+  "recorder": {
+   "email": "nbooten@leecountyiowa.gov",
+   "name": "Nancy Booten",
+   "party": "Republican",
+   "phone": "(319) 376-1070"
+  },
+  "sheriff": {
+   "email": "evandenberg@leecountyiowa.gov",
+   "name": "Elliott Vandenberg",
+   "phone": "(319) 372-1152"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Denise Fraise",
+    "party": "Republican",
+    "phone": "(319) 372-6557"
+   },
+   {
+    "name": "Charles Holmes",
+    "party": "Republican",
+    "phone": "(319) 372-6557"
+   },
+   {
+    "name": "Ginger Knisley",
+    "party": "Republican",
+    "phone": "(319) 372-6557"
+   },
+   {
+    "name": "Garry Seyb",
+    "party": "Republican",
+    "phone": "(319) 372-6557"
+   },
+   {
+    "name": "Dr. Tim Wondra, D.C.",
+    "party": "Republican",
+    "phone": "(319) 372-6557"
+   }
+  ],
+  "treasurer": {
+   "name": "Mrs. Becky Gaylord",
+   "party": "Republican",
+   "phone": "(319) 372-3405"
+  }
+ },
+ "19113": {
+  "county": "Linn",
+  "countyAttorney": {
+   "email": "nick.maybanks@linncountyiowa.gov",
+   "name": "Nick Maybanks",
+   "party": "Democratic",
+   "phone": "319-892-6350"
+  },
+  "recorder": {
+   "email": "recorder@linncountyiowa.gov",
+   "name": "Carolyn Siebrecht",
+   "party": "Democratic",
+   "phone": "(319) 892-5420"
+  },
+  "sheriff": {
+   "name": "Brian Gardner",
+   "party": "Democratic",
+   "phone": "(319) 892-6100"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Kirsten Running-Marquardt",
+    "party": "Democratic",
+    "phone": "(319) 892-5000"
+   },
+   {
+    "name": "Brandy Meisheid",
+    "party": "Republican",
+    "phone": "(319) 892-5000"
+   },
+   {
+    "name": "Sami Scheetz",
+    "phone": "(319) 892-5000"
+   }
+  ],
+  "treasurer": {
+   "name": "Brent Oleson",
+   "party": "Democratic",
+   "phone": "(319) 892-5515"
+  }
+ },
+ "19115": {
+  "county": "Louisa",
+  "countyAttorney": {
+   "email": "aparsons@louisacountyia.gov",
+   "name": "Adam D. Parsons",
+   "party": "Republican",
+   "phone": "319-523-3331"
+  },
+  "recorder": {
+   "email": "thayes@louisacountyia.gov",
+   "name": "Tammy Hayes",
+   "party": "Republican",
+   "phone": "(319) 523-5361"
+  },
+  "sheriff": {
+   "email": "bmarquardt@louisacountyia.gov",
+   "name": "Brandon Marquardt",
+   "party": "Republican",
+   "phone": "(319) 523-4371"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Kevin Hardin",
+    "party": "Republican",
+    "phone": "(319) 523-3372"
+   },
+   {
+    "name": "Scot Hunt",
+    "party": "Republican",
+    "phone": "(319) 523-3372"
+   },
+   {
+    "name": "Shawn Maine",
+    "party": "Republican",
+    "phone": "(319) 523-3372"
+   }
+  ],
+  "treasurer": {
+   "name": "Beth Hardin",
+   "party": "Republican",
+   "phone": "(319) 523-4451"
+  }
+ },
+ "19117": {
+  "county": "Lucas",
+  "countyAttorney": {
+   "email": "ca@sheltonlawfirm.com",
+   "name": "Brandon Shelton",
+   "party": "Republican",
+   "phone": "641-774-5956"
+  },
+  "recorder": {
+   "email": "bittnerr@lucasco.org",
+   "name": "Rebecca Bittner",
+   "party": "Republican",
+   "phone": "(641) 774-2413"
+  },
+  "sheriff": {
+   "email": "tharpb@lucascosheriff.org",
+   "name": "Brett Tharp",
+   "party": "Republican",
+   "phone": "(641) 774-5083"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Larry Davis",
+    "party": "Republican",
+    "phone": "(641) 774-2018"
+   },
+   {
+    "name": "Cathy Reece",
+    "party": "Independent",
+    "phone": "(641) 774-2018"
+   },
+   {
+    "name": "Cathy Reece",
+    "party": "Republican",
+    "phone": "(641) 774-2018"
+   }
+  ],
+  "treasurer": {
+   "name": "Hanna Gwinn",
+   "party": "Republican",
+   "phone": "(641) 774-5213"
+  }
+ },
+ "19119": {
+  "county": "Lyon",
+  "countyAttorney": {
+   "email": "nmcgowan@co.lyon.ia.us",
+   "name": "Nolan McGowan",
+   "party": "Democratic",
+   "phone": "712-472-8545"
+  },
+  "recorder": {
+   "email": "agriesse@co.lyon.ia.us",
+   "name": "Amie Griesse",
+   "party": "Republican",
+   "phone": "(712) 472-8528"
+  },
+  "sheriff": {
+   "email": "sheriff@lyoncountyia.com",
+   "name": "Brian Hilt",
+   "party": "Republican",
+   "phone": "(712) 472-8300"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Cory Altena",
+    "party": "Republican",
+    "phone": "(712) 472-8517"
+   },
+   {
+    "name": "Douglas Bosch",
+    "party": "Republican",
+    "phone": "(712) 472-8517"
+   },
+   {
+    "name": "Steven Herman",
+    "party": "Republican",
+    "phone": "(712) 472-8517"
+   },
+   {
+    "name": "Cody Hoefert",
+    "party": "Republican",
+    "phone": "(712) 472-8517"
+   },
+   {
+    "name": "Dennis Scholten",
+    "party": "Republican",
+    "phone": "(712) 472-8517"
+   }
+  ],
+  "treasurer": {
+   "name": "Stacy Knobloch",
+   "party": "Republican",
+   "phone": "(712) 472-8500"
+  }
+ },
+ "19121": {
+  "county": "Madison",
+  "countyAttorney": {
+   "email": "sswanson@madisoncounty.iowa.gov",
+   "name": "Stephen Swanson",
+   "phone": "515-462-5034"
+  },
+  "recorder": {
+   "email": "bmacumber@madisoncounty.iowa.gov",
+   "name": "Brandy Macumber",
+   "party": "Republican",
+   "phone": "(515) 462-3771"
+  },
+  "sheriff": {
+   "email": "jbarnes@madisoncoia.us",
+   "name": "Jason Barnes",
+   "party": "Republican",
+   "phone": "(515) 462-3575"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Diane Fitch",
+    "party": "Republican",
+    "phone": "(515) 462-3225"
+   },
+   {
+    "name": "Jessica Hobbs",
+    "party": "Republican",
+    "phone": "(515) 462-3225"
+   },
+   {
+    "name": "Heather Stancil",
+    "party": "Republican",
+    "phone": "(515) 462-3225"
+   }
+  ],
+  "treasurer": {
+   "name": "Kylee Barber",
+   "party": "Republican",
+   "phone": "(515) 462-1542"
+  }
+ },
+ "19123": {
+  "county": "Mahaska",
+  "countyAttorney": {
+   "email": "ritland@mahaskacountyia.gov",
+   "name": "Andrew Ritland",
+   "party": "Republican",
+   "phone": "641-673-9819"
+  },
+  "recorder": {
+   "email": "versteegh@mahaskacountyia.gov",
+   "name": "Tracey Ver Steegh",
+   "party": "Republican",
+   "phone": "(641) 673-8187"
+  },
+  "sheriff": {
+   "email": "sheriff@mahaskacountyia.gov",
+   "name": "Russell Van Renterghem",
+   "party": "Republican",
+   "phone": "(641) 673-4322"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Mark Groenendyk",
+    "party": "Republican",
+    "phone": "(641) 673-3469"
+   },
+   {
+    "name": "Steve Wanders",
+    "party": "Republican",
+    "phone": "(641) 673-3469"
+   },
+   {
+    "name": "Chuck Webb",
+    "party": "Republican",
+    "phone": "(641) 673-3469"
+   }
+  ],
+  "treasurer": {
+   "name": "Shauna Hol",
+   "party": "Republican",
+   "phone": "(641) 673-5482"
+  }
+ },
+ "19125": {
+  "county": "Marion",
+  "countyAttorney": {
+   "email": "jharmon@marioncountyiowa.gov",
+   "name": "Jared Harmon (j-Cina)",
+   "phone": "641-828-2223"
+  },
+  "recorder": {
+   "email": "nellis@marioncountyiowa.gov",
+   "name": "Naomi Ellis",
+   "phone": "(641) 828-2211"
+  },
+  "sheriff": {
+   "email": "jsandholdt@co.marion.ia.us",
+   "name": "Jason Sandholdt",
+   "party": "Republican",
+   "phone": "(641) 828-2220"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Kisha Jahner",
+    "party": "Republican",
+    "phone": "(641) 828-2231"
+   },
+   {
+    "name": "Stephen McCombs",
+    "party": "Republican",
+    "phone": "(641) 828-2231"
+   },
+   {
+    "name": "James E. Mueller",
+    "party": "Republican",
+    "phone": "(641) 828-2231"
+   }
+  ],
+  "treasurer": {
+   "name": "Michaela Bigaouette",
+   "party": "Republican",
+   "phone": "(641) 828-2205"
+  }
+ },
+ "19127": {
+  "county": "Marshall",
+  "countyAttorney": {
+   "email": "jgaffney@marshallcountyia.gov",
+   "name": "Jordan Gaffney",
+   "phone": "641-754-6314"
+  },
+  "recorder": {
+   "email": "nbenson@marshallcountyia.gov",
+   "name": "Nan Benson",
+   "phone": "(641) 754-6323"
+  },
+  "sheriff": {
+   "email": "sheriff@marshallcountyia.gov",
+   "name": "Joel Phillips",
+   "party": "Republican",
+   "phone": "(641) 754-6380"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Christian Goodman",
+    "party": "Republican",
+    "phone": "(641) 754-6330"
+   },
+   {
+    "name": "Jarret Heil",
+    "party": "Republican",
+    "phone": "(641) 754-6330"
+   },
+   {
+    "name": "Carol Hibbs",
+    "party": "Republican",
+    "phone": "(641) 754-6330"
+   }
+  ],
+  "treasurer": {
+   "name": "Deann S. Tomlinson",
+   "party": "Republican",
+   "phone": "(641) 844-2730"
+  }
+ },
+ "19129": {
+  "county": "Mills",
+  "countyAttorney": {
+   "email": "dbirdsell@millscountyiowa.gov",
+   "name": "Deshawne Bird-Sell",
+   "party": "Republican",
+   "phone": "712-527-5233"
+  },
+  "recorder": {
+   "email": "lmurphy@millscountyiowa.gov",
+   "name": "Lori Murphy",
+   "party": "Republican",
+   "phone": "(712) 527-9315"
+  },
+  "sheriff": {
+   "email": "gschultz@millscountyiowa.gov",
+   "name": "Greg Schultz",
+   "party": "Republican",
+   "phone": "(712) 527-4871"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Richard Crouch",
+    "party": "Republican",
+    "phone": "(712) 527-4729"
+   },
+   {
+    "name": "Lonnie Mayberry",
+    "party": "Republican",
+    "phone": "(712) 527-4729"
+   },
+   {
+    "name": "Jack Sayers",
+    "party": "Republican",
+    "phone": "(712) 527-4729"
+   }
+  ],
+  "treasurer": {
+   "name": "Melissa Loghry",
+   "party": "Republican",
+   "phone": "(712) 527-4419"
+  }
+ },
+ "19131": {
+  "county": "Mitchell",
+  "countyAttorney": {
+   "email": "Aaron.m@walkprichard.com",
+   "name": "Aaron Murphy",
+   "party": "Independent",
+   "phone": "641-732-5727"
+  },
+  "recorder": {
+   "email": "helliott@mitchellcoia.us",
+   "name": "Hannah Elliott",
+   "party": "Republican",
+   "phone": "(641) 832-3941"
+  },
+  "sheriff": {
+   "name": "Gregory Beaver",
+   "party": "Republican",
+   "phone": "(641) 732-4740"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Todd Frein",
+    "party": "Democratic",
+    "phone": "(641) 832-3942"
+   },
+   {
+    "name": "Sydney Hartogh",
+    "party": "Republican",
+    "phone": "(641) 832-3942"
+   },
+   {
+    "name": "Mark Hendrickson",
+    "party": "Republican",
+    "phone": "(641) 832-3942"
+   },
+   {
+    "name": "Pam Marzen",
+    "party": "Republican",
+    "phone": "(641) 832-3942"
+   },
+   {
+    "name": "Jim Wherry",
+    "party": "Republican",
+    "phone": "(641) 832-3942"
+   }
+  ],
+  "treasurer": {
+   "name": "Shannon Paulus",
+   "party": "Democratic",
+   "phone": "(641) 832-3940"
+  }
+ },
+ "19133": {
+  "county": "Monona",
+  "countyAttorney": {
+   "email": "mocoatt2@mononacounty.org",
+   "name": "Haley Bryan",
+   "phone": "712-423-1728"
+  },
+  "recorder": {
+   "email": "mocorec@mononacountyiowa.gov",
+   "name": "Kelly Parsley",
+   "party": "Republican",
+   "phone": "(712) 433-2575"
+  },
+  "sheriff": {
+   "email": "mocoso@mononacounty.org",
+   "name": "Kevin Ewing",
+   "phone": "(712) 433-1414"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Tom Brouillette",
+    "party": "Democratic",
+    "phone": "(712) 433-1585"
+   },
+   {
+    "name": "Bo Fox",
+    "party": "Republican",
+    "phone": "(712) 433-1585"
+   },
+   {
+    "name": "Vincent Phillips",
+    "party": "Republican",
+    "phone": "(712) 433-1585"
+   }
+  ],
+  "treasurer": {
+   "name": "Abby Riesberg",
+   "party": "Republican",
+   "phone": "(712) 433-2347"
+  }
+ },
+ "19135": {
+  "county": "Monroe",
+  "countyAttorney": {
+   "email": "laura.davis@monroecolaw.com",
+   "name": "Laura B. Davis",
+   "party": "Republican",
+   "phone": "641-932-5155"
+  },
+  "recorder": {
+   "email": "cdemoss@monroecounty.iowa.gov",
+   "name": "Christine DeMoss",
+   "party": "Republican",
+   "phone": "(641) 932-5164"
+  },
+  "sheriff": {
+   "name": "Joe Worth",
+   "phone": "(641) 932-7815"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Michael Beary",
+    "party": "Republican",
+    "phone": "(641) 932-7706"
+   },
+   {
+    "name": "Kendall Hollingsworth",
+    "party": "Republican",
+    "phone": "(641) 932-7706"
+   },
+   {
+    "name": "Sonny Schroeder",
+    "party": "Republican",
+    "phone": "(641) 932-7706"
+   }
+  ],
+  "treasurer": {
+   "name": "Faith Powless",
+   "party": "Republican",
+   "phone": "(641) 932-5011"
+  }
+ },
+ "19137": {
+  "county": "Montgomery",
+  "countyAttorney": {
+   "email": "montcoatty@swanlawredoak.com",
+   "name": "Drew B. Swanson",
+   "party": "Republican",
+   "phone": "712-623-3011"
+  },
+  "recorder": {
+   "email": "cbruning@montgomerycountyia.gov",
+   "name": "Carleen Bruning",
+   "party": "Republican",
+   "phone": "(712) 623-4363"
+  },
+  "sheriff": {
+   "email": "jspunaugle@montgomerycountyia.gov",
+   "name": "Jon Spunaugle",
+   "party": "Republican",
+   "phone": "(712) 623-5107"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Bryant Amos",
+    "phone": "(712) 623-5127"
+   },
+   {
+    "name": "Alex Burton",
+    "party": "Republican",
+    "phone": "(712) 623-5127"
+   },
+   {
+    "name": "Mike Olson",
+    "party": "Republican",
+    "phone": "(712) 623-5127"
+   },
+   {
+    "name": "Mark Peterson",
+    "party": "Republican",
+    "phone": "(712) 623-5127"
+   },
+   {
+    "name": "Charla Schmid",
+    "party": "Republican",
+    "phone": "(712) 623-5127"
+   }
+  ],
+  "treasurer": {
+   "name": "Jackie Porter",
+   "party": "Republican",
+   "phone": "(712) 623-3292"
+  }
+ },
+ "19139": {
+  "county": "Muscatine",
+  "countyAttorney": {
+   "email": "korie.talkington@muscatinecountyiowa.gov",
+   "name": "Korie Talkington",
+   "party": "Republican",
+   "phone": "563-263-0382"
+  },
+  "recorder": {
+   "email": "sarah.hearst@muscatinecountyiowa.gov",
+   "name": "Sarah Hearst",
+   "party": "Republican",
+   "phone": "(563) 263-7741"
+  },
+  "sheriff": {
+   "email": "quinn.riess@muscatinecountyiowa.gov",
+   "name": "Quinn Riess",
+   "party": "Republican",
+   "phone": "(563) 263-6055"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Danny Chick",
+    "party": "Republican",
+    "phone": "(563) 263-5317"
+   },
+   {
+    "name": "Kurt Kirchner",
+    "party": "Republican",
+    "phone": "(563) 263-5317"
+   },
+   {
+    "name": "Nathan Mather",
+    "party": "Republican",
+    "phone": "(563) 263-5317"
+   },
+   {
+    "name": "Scott Sauer",
+    "party": "Republican",
+    "phone": "(563) 263-5317"
+   },
+   {
+    "name": "Jeff Sorensen",
+    "party": "Republican",
+    "phone": "(563) 263-5317"
+   }
+  ],
+  "treasurer": {
+   "name": "Amy Zybarth",
+   "party": "Republican",
+   "phone": "(563) 263-7113"
+  }
+ },
+ "19141": {
+  "county": "O'Brien",
+  "countyAttorney": {
+   "email": "kmorgan@obriencounty.iowa.gov",
+   "name": "Katie Morgan",
+   "party": "Republican",
+   "phone": "712-957-3375"
+  },
+  "recorder": {
+   "email": "ssmith@obriencounty.iowa.gov",
+   "name": "Susan Smith",
+   "party": "Republican",
+   "phone": "(712) 957-3045"
+  },
+  "sheriff": {
+   "email": "bdevereaux@obriencountysheriff.com",
+   "name": "Bruce Devereaux",
+   "party": "Republican",
+   "phone": "(712) 757-3415"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Dan Friedrichsen",
+    "party": "Republican",
+    "phone": "(712) 957-3225"
+   },
+   {
+    "name": "Dennis Vanden Hull",
+    "party": "Republican",
+    "phone": "(712) 957-3225"
+   },
+   {
+    "name": "Nancy McDowell",
+    "party": "Republican",
+    "phone": "(712) 957-3225"
+   },
+   {
+    "name": "Barb Rohwer",
+    "party": "Republican",
+    "phone": "(712) 957-3225"
+   },
+   {
+    "name": "Jim Thomas",
+    "party": "Republican",
+    "phone": "(712) 957-3225"
+   }
+  ],
+  "treasurer": {
+   "name": "Missy Hattermann",
+   "party": "Democratic",
+   "phone": "(712) 957-3210"
+  }
+ },
+ "19143": {
+  "county": "Osceola",
+  "countyAttorney": {
+   "email": "dwilson@osceolacoia.org",
+   "name": "Dawn Wilson",
+   "party": "Republican",
+   "phone": "712-754-4604"
+  },
+  "recorder": {
+   "email": "schristians@osceolacoia.org",
+   "name": "Sheila Christians",
+   "phone": "(712) 754-3345"
+  },
+  "sheriff": {
+   "name": "Kevin Wollmuth",
+   "party": "Republican",
+   "phone": "(712) 754-2556"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "LeRoy DeBoer",
+    "party": "No party",
+    "phone": "(712) 754-2241"
+   },
+   {
+    "name": "Jerry Helmers",
+    "party": "Republican",
+    "phone": "(712) 754-2241"
+   },
+   {
+    "name": "Jayson Vande Hoef",
+    "party": "Republican",
+    "phone": "(712) 754-2241"
+   },
+   {
+    "name": "Jeff Loring",
+    "party": "Republican",
+    "phone": "(712) 754-2241"
+   },
+   {
+    "name": "Mike Schulte",
+    "party": "Republican",
+    "phone": "(712) 754-2241"
+   }
+  ],
+  "treasurer": {
+   "name": "Becky Marco",
+   "party": "Republican",
+   "phone": "(712) 754-3217"
+  }
+ },
+ "19145": {
+  "county": "Page",
+  "countyAttorney": {
+   "email": "pagecoatty@co.page.ia.us",
+   "name": "Jim Varley",
+   "phone": "712-542-2514"
+  },
+  "recorder": {
+   "email": "besaias@co.page.ia.us",
+   "name": "Brenda Esaias",
+   "party": "Republican",
+   "phone": "(712) 542-3130"
+  },
+  "sheriff": {
+   "email": "pagesheriff@mediacombb.net",
+   "name": "Lyle Palmer",
+   "phone": "(712) 542-5193"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Judy Clark",
+    "party": "Republican",
+    "phone": "(712) 542-5018"
+   },
+   {
+    "name": "Todd Maher",
+    "party": "Republican",
+    "phone": "(712) 542-5018"
+   },
+   {
+    "name": "Brian Rogers",
+    "party": "Republican",
+    "phone": "(712) 542-5018"
+   }
+  ],
+  "treasurer": {
+   "name": "Angie Dow",
+   "party": "Republican",
+   "phone": "(712) 542-5322"
+  }
+ },
+ "19147": {
+  "county": "Palo Alto",
+  "countyAttorney": {
+   "email": "aquail@paiowaattorney.us",
+   "name": "Anne Quail",
+   "party": "Republican",
+   "phone": "712-852-3267"
+  },
+  "recorder": {
+   "email": "sruppert@paloaltocounty.iowa.gov",
+   "name": "Sue Ruppert",
+   "party": "Republican",
+   "phone": "(712) 852-3701"
+  },
+  "sheriff": {
+   "name": "John King",
+   "phone": "(712) 852-3535"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Roger Faulstick",
+    "party": "Democratic",
+    "phone": "(712) 852-2563"
+   },
+   {
+    "name": "Ronald Graettinger",
+    "party": "Republican",
+    "phone": "(712) 852-2563"
+   },
+   {
+    "name": "Craig Merrill",
+    "party": "Republican",
+    "phone": "(712) 852-2563"
+   },
+   {
+    "name": "Linus Solberg",
+    "party": "Democratic",
+    "phone": "(712) 852-2563"
+   },
+   {
+    "name": "Keith Wirtz",
+    "party": "Republican",
+    "phone": "(712) 852-2563"
+   }
+  ],
+  "treasurer": {
+   "name": "Robin Jamison",
+   "party": "Republican",
+   "phone": "(712) 852-3844"
+  }
+ },
+ "19149": {
+  "county": "Plymouth",
+  "countyAttorney": {
+   "email": "draymond@plymouthcountyiowa.gov",
+   "name": "Darin J. Raymond",
+   "party": "Republican",
+   "phone": "712-546-5019"
+  },
+  "recorder": {
+   "email": "jgoodchild@plymouthcountyiowa.gov",
+   "name": "Jolynn Goodchild",
+   "party": "Republican",
+   "phone": "(712) 546-4020"
+  },
+  "sheriff": {
+   "email": "jtebrink@plymouthcountyiowa.gov",
+   "name": "Jeff TeBrink",
+   "party": "Republican",
+   "phone": "(712) 546-8191"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Craig Anderson",
+    "party": "Republican",
+    "phone": "(712) 546-9571"
+   },
+   {
+    "name": "Don Kass",
+    "party": "Republican",
+    "phone": "(712) 546-9571"
+   },
+   {
+    "name": "Doug Manley",
+    "party": "Republican",
+    "phone": "(712) 546-9571"
+   },
+   {
+    "name": "John Meis",
+    "party": "Republican",
+    "phone": "(712) 546-9571"
+   },
+   {
+    "name": "Mike VanOtterloo",
+    "party": "Republican",
+    "phone": "(712) 546-9571"
+   }
+  ],
+  "treasurer": {
+   "name": "Shelly Sitzmann",
+   "party": "Republican",
+   "phone": "(712) 546-7078"
+  }
+ },
+ "19151": {
+  "county": "Pocahontas",
+  "countyAttorney": {
+   "email": "dfeistner@pocahontascounty.iowa.gov",
+   "name": "Daniel Feistner",
+   "party": "Republican",
+   "phone": "712-335-4215"
+  },
+  "recorder": {
+   "email": "cfrerk@pocahontascounty.iowa.gov",
+   "name": "Catherine Frerk",
+   "phone": "(712) 335-4404"
+  },
+  "sheriff": {
+   "email": "pokyso@mediacombb.net",
+   "name": "Steve Nelson",
+   "phone": "(712) 335-3308"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Brent Aden",
+    "party": "Republican",
+    "phone": "(712) 335-3361"
+   },
+   {
+    "name": "Peter Seehusen",
+    "party": "Republican",
+    "phone": "(712) 335-3361"
+   },
+   {
+    "name": "Clarence J. Siepker",
+    "party": "Republican",
+    "phone": "(712) 335-3361"
+   },
+   {
+    "name": "Kyle Smith",
+    "party": "Republican",
+    "phone": "(712) 335-3361"
+   },
+   {
+    "name": "Louis Stauter",
+    "party": "No party",
+    "phone": "(712) 335-3361"
+   }
+  ],
+  "treasurer": {
+   "name": "Amy M. Johnson",
+   "party": "Republican",
+   "phone": "(712) 335-4334"
+  }
+ },
+ "19153": {
+  "county": "Polk",
+  "countyAttorney": {
+   "email": "kimberly.graham@polkcountyiowa.gov",
+   "name": "Kimberly Graham",
+   "party": "Democratic",
+   "phone": "515-286-3737"
+  },
+  "recorder": {
+   "email": "julie.haggerty@polkcountyiowa.gov",
+   "name": "Julie Haggerty",
+   "party": "Democratic",
+   "phone": "(515) 286-3160"
+  },
+  "sheriff": {
+   "name": "Kevin Schneider",
+   "party": "Democratic",
+   "phone": "(515) 286-3814"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Jill Altringer",
+    "party": "Republican",
+    "phone": "(515) 286-3120"
+   },
+   {
+    "name": "Angela Connolly",
+    "party": "Democratic",
+    "phone": "(515) 286-3120"
+   },
+   {
+    "name": "Tom Hockensmith",
+    "party": "Democratic",
+    "phone": "(515) 286-3120"
+   },
+   {
+    "name": "Mark Holm",
+    "party": "Republican",
+    "phone": "(515) 286-3120"
+   },
+   {
+    "name": "Matt McCoy",
+    "party": "Democratic",
+    "phone": "(515) 286-3120"
+   }
+  ],
+  "treasurer": {
+   "name": "Mary Wells",
+   "party": "Democratic",
+   "phone": "(515) 286-2036"
+  }
+ },
+ "19155": {
+  "county": "Pottawattamie",
+  "countyAttorney": {
+   "email": "matthew.wilber@pottcounty-ia.gov",
+   "name": "Matthew Wilber",
+   "party": "Republican",
+   "phone": "712-328-5649"
+  },
+  "recorder": {
+   "email": "PottCoRecorder@pottcounty-ia.gov",
+   "name": "Andrew Moats",
+   "party": "Republican",
+   "phone": "(712) 328-5612"
+  },
+  "sheriff": {
+   "name": "Andy Brown",
+   "party": "Republican",
+   "phone": "(712) 890-2200"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Keith Jones",
+    "phone": "(712) 328-5644"
+   },
+   {
+    "name": "Jeff Jorgensen",
+    "party": "Republican",
+    "phone": "(712) 328-5644"
+   },
+   {
+    "name": "Susan Miller",
+    "party": "Republican",
+    "phone": "(712) 328-5644"
+   },
+   {
+    "name": "Brian Shea",
+    "party": "Republican",
+    "phone": "(712) 328-5644"
+   },
+   {
+    "name": "Tim Wichman",
+    "party": "Republican",
+    "phone": "(712) 328-5644"
+   }
+  ],
+  "treasurer": {
+   "name": "Lea Voss",
+   "party": "Republican",
+   "phone": "(712) 328-5627"
+  }
+ },
+ "19157": {
+  "county": "Poweshiek",
+  "countyAttorney": {
+   "email": "klaver_coatty@poweshiekcounty.org",
+   "name": "Bart Klaver",
+   "party": "Republican",
+   "phone": "641-623-5135"
+  },
+  "recorder": {
+   "email": "Recorder2@poweshiekcounty.org",
+   "name": "Lora A. Wyckoff",
+   "phone": "(641) 623-5434"
+  },
+  "sheriff": {
+   "email": "mmaschmann@poweshiekcosheriff.com",
+   "name": "Matt Maschmann",
+   "phone": "(641) 623-5679"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Jacki Bolen",
+    "party": "Republican",
+    "phone": "(641) 623-5723"
+   },
+   {
+    "name": "Jason Roudabush",
+    "party": "Democratic",
+    "phone": "(641) 623-5723"
+   },
+   {
+    "name": "Jeff Tindle",
+    "party": "Republican",
+    "phone": "(641) 623-5723"
+   }
+  ],
+  "treasurer": {
+   "name": "Jennifer Anderson",
+   "party": "Republican",
+   "phone": "(641) 623-5128"
+  }
+ },
+ "19159": {
+  "county": "Ringgold",
+  "countyAttorney": {
+   "email": "rtca@ringgoldcounty.us",
+   "name": "Mike Wells",
+   "phone": "641-464-3235"
+  },
+  "recorder": {
+   "email": "kmartin@ringgoldcounty.us",
+   "name": "Kisha Martin",
+   "party": "Republican",
+   "phone": "(641) 464-3231"
+  },
+  "sheriff": {
+   "email": "rhaley@ringgoldcounty.us",
+   "name": "Rob Haley",
+   "party": "Republican",
+   "phone": "(641) 464-3921"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Colby Holmes",
+    "party": "Republican",
+    "phone": "(641) 464-3244"
+   },
+   {
+    "name": "Steve Knapp",
+    "party": "Republican",
+    "phone": "(641) 464-3244"
+   },
+   {
+    "name": "Randy Taylor",
+    "party": "Republican",
+    "phone": "(641) 464-3244"
+   }
+  ],
+  "treasurer": {
+   "name": "Debbie Cannon",
+   "party": "Republican",
+   "phone": "(641) 464-3230"
+  }
+ },
+ "19161": {
+  "county": "Sac",
+  "countyAttorney": {
+   "email": "saccoaty@saccountyiowa.gov",
+   "name": "Ben Smith",
+   "party": "Republican",
+   "phone": "712-662-4791"
+  },
+  "recorder": {
+   "email": "recorder@saccountyiowa.gov",
+   "name": "Laura McKeever",
+   "party": "Republican",
+   "phone": "(712) 662-7789"
+  },
+  "sheriff": {
+   "name": "Katie Stange",
+   "phone": "(712) 662-7127"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Ranell Drake",
+    "phone": "(712) 662-7401"
+   },
+   {
+    "name": "Mike Fischer",
+    "party": "Republican",
+    "phone": "(712) 662-7401"
+   },
+   {
+    "name": "Jim Wissler",
+    "party": "Republican",
+    "phone": "(712) 662-7401"
+   }
+  ],
+  "treasurer": {
+   "name": "Tina Roth",
+   "party": "Republican",
+   "phone": "(712) 662-7411"
+  }
+ },
+ "19163": {
+  "county": "Scott",
+  "countyAttorney": {
+   "email": "kelly.cunningham@scottcountyiowa.gov",
+   "name": "Kelly G. Cunningham",
+   "party": "Republican",
+   "phone": "563-326-8600"
+  },
+  "recorder": {
+   "email": "Rita.Vargas@scottcountyiowa.gov",
+   "name": "Rita Vargas",
+   "party": "Democratic",
+   "phone": "(563) 326-8621"
+  },
+  "sheriff": {
+   "email": "sheriff@scottcountyiowa.com",
+   "name": "Tim Lane",
+   "party": "Republican",
+   "phone": "(563) 326-8625"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Ken Beck",
+    "party": "Republican",
+    "phone": "(563) 326-8749"
+   },
+   {
+    "name": "Maria Bribriesco",
+    "party": "Democratic",
+    "phone": "(563) 326-8749"
+   },
+   {
+    "name": "Jean Dickson",
+    "party": "Republican",
+    "phone": "(563) 326-8749"
+   },
+   {
+    "name": "John Maxwell",
+    "party": "Republican",
+    "phone": "(563) 326-8749"
+   },
+   {
+    "name": "Ross Paustian",
+    "party": "Republican",
+    "phone": "(563) 326-8749"
+   }
+  ],
+  "treasurer": {
+   "name": "Tony G. Knobbe",
+   "party": "Republican",
+   "phone": "(563) 326-8664"
+  }
+ },
+ "19165": {
+  "county": "Shelby",
+  "countyAttorney": {
+   "email": "mgross@sdsllaw.com",
+   "name": "Marcus Gross, Jr.",
+   "party": "Democratic",
+   "phone": "712-755-3141"
+  },
+  "recorder": {
+   "email": "ggreer@shelbycounty.iowa.gov",
+   "name": "Geralyn Greer",
+   "party": "Republican",
+   "phone": "(712) 755-5640"
+  },
+  "sheriff": {
+   "email": "ngross@shco.org",
+   "name": "Neil Gross",
+   "party": "Republican",
+   "phone": "(712) 755-5026"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Mike Kolbe",
+    "party": "Republican",
+    "phone": "(712) 755-3733"
+   },
+   {
+    "name": "Charles Parkhurst",
+    "party": "Republican",
+    "phone": "(712) 755-3733"
+   },
+   {
+    "name": "Bryce Schaben",
+    "party": "Republican",
+    "phone": "(712) 755-3733"
+   }
+  ],
+  "treasurer": {
+   "name": "Carolyn Blum",
+   "party": "Republican",
+   "phone": "(712) 755-5847"
+  }
+ },
+ "19167": {
+  "county": "Sioux",
+  "countyAttorney": {
+   "email": "thomask@siouxcounty.org",
+   "name": "Thomas Kunstle",
+   "party": "Republican",
+   "phone": "712-737-2457"
+  },
+  "recorder": {
+   "email": "jessicak@siouxcounty.org",
+   "name": "Jessica Kooiker",
+   "party": "Republican",
+   "phone": "(712) 737-2229"
+  },
+  "sheriff": {
+   "email": "jamievv@siouxcounty.org",
+   "name": "Jamie Van Voorst",
+   "party": "Republican",
+   "phone": "(712) 737-2280"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Dan Altena",
+    "party": "Republican",
+    "phone": "(712) 737-2216"
+   },
+   {
+    "name": "John Degen",
+    "party": "Republican",
+    "phone": "(712) 737-2216"
+   },
+   {
+    "name": "Craig Hoftyzer",
+    "party": "Republican",
+    "phone": "(712) 737-2216"
+   },
+   {
+    "name": "Jerry Muilenburg",
+    "party": "Republican",
+    "phone": "(712) 737-2216"
+   },
+   {
+    "name": "Mr. Carl L. Vande Weerd",
+    "party": "Republican",
+    "phone": "(712) 737-2216"
+   }
+  ],
+  "treasurer": {
+   "name": "Dan Zomermaand",
+   "party": "Republican",
+   "phone": "(712) 737-3505"
+  }
+ },
+ "19169": {
+  "county": "Story",
+  "countyAttorney": {
+   "email": "tmeals@storycountyiowa.gov",
+   "name": "Timothy Meals",
+   "phone": "515-382-7255"
+  },
+  "recorder": {
+   "email": "sherridge@storycountyiowa.gov",
+   "name": "Stacie Herridge",
+   "party": "Republican",
+   "phone": "(515) 382-7231"
+  },
+  "sheriff": {
+   "email": "pfitzgerald@storycountyiowa.gov",
+   "name": "Paul H. Fitzgerald",
+   "party": "Democratic",
+   "phone": "(515) 382-6566"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Latifah Faisal",
+    "party": "Democratic",
+    "phone": "(515) 382-7202"
+   },
+   {
+    "name": "Lisa Heddens",
+    "party": "Democratic",
+    "phone": "(515) 382-7202"
+   },
+   {
+    "name": "Linda Murken",
+    "party": "Democratic",
+    "phone": "(515) 382-7202"
+   }
+  ],
+  "treasurer": {
+   "name": "Ted Rasmusson",
+   "party": "Democratic",
+   "phone": "(515) 382-7331"
+  }
+ },
+ "19171": {
+  "county": "Tama",
+  "countyAttorney": {
+   "email": "bheeren@tca.tamacountyiowa.gov",
+   "name": "Brent D. Heeren",
+   "party": "Republican",
+   "phone": "641-484-3020"
+  },
+  "recorder": {
+   "email": "akemper@tamacounty.org",
+   "name": "Amelia Kemper",
+   "party": "Republican",
+   "phone": "(641) 484-3320"
+  },
+  "sheriff": {
+   "email": "cschmidt@so.tamacountyiowa.gov",
+   "name": "Casey Schmidt",
+   "party": "Republican",
+   "phone": "(641) 484-3760"
+  },
+  "supervisorsWithheld": "the county directory lists 4, and Iowa Code 331.201 allows only 3 or 5",
+  "treasurer": {
+   "name": "Amanda Kriegel",
+   "party": "Republican",
+   "phone": "(641) 484-3141"
+  }
+ },
+ "19173": {
+  "county": "Taylor",
+  "countyAttorney": {
+   "email": "tcattorney@taylorcounty.iowa.gov",
+   "name": "Mike Wells",
+   "phone": "712-523-2260"
+  },
+  "recorder": {
+   "email": "janel.irvin@taylorcounty.iowa.gov",
+   "name": "Janel Irvin",
+   "party": "Republican",
+   "phone": "(712) 523-2275"
+  },
+  "sheriff": {
+   "email": "Sheriff@Taylorcountyiowa.org",
+   "name": "Josh Weed",
+   "party": "Republican",
+   "phone": "(712) 523-2153"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Jack Beggs",
+    "party": "Republican",
+    "phone": "(712) 523-2060"
+   },
+   {
+    "name": "Ronald Fitzgerald",
+    "party": "Republican",
+    "phone": "(712) 523-2060"
+   },
+   {
+    "name": "Lincoln Wall",
+    "phone": "(712) 523-2060"
+   }
+  ],
+  "treasurer": {
+   "name": "Dana Davis",
+   "party": "Republican",
+   "phone": "(712) 523-2080"
+  }
+ },
+ "19175": {
+  "county": "Union",
+  "countyAttorney": {
+   "email": "spotoole@unioncountyiowa.gov",
+   "name": "Shane P. O\u2019Toole",
+   "party": "Republican",
+   "phone": "641-782-1730"
+  },
+  "recorder": {
+   "email": "kcarlton@unioncountyiowa.gov",
+   "name": "Katie Carlton",
+   "party": "Republican",
+   "phone": "(641) 782-1725"
+  },
+  "sheriff": {
+   "email": "bbolton@uclec.com",
+   "name": "Brian Bolton",
+   "party": "Republican",
+   "phone": "(641) 782-7717"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Dennis Brown",
+    "party": "Republican",
+    "phone": "(641) 782-1720"
+   },
+   {
+    "name": "Rick Friday",
+    "party": "Republican",
+    "phone": "(641) 782-1720"
+   },
+   {
+    "name": "Dennis Hopkins",
+    "party": "Republican",
+    "phone": "(641) 782-1720"
+   }
+  ],
+  "treasurer": {
+   "name": "Kelly Busch",
+   "party": "Republican",
+   "phone": "(641) 782-1710"
+  }
+ },
+ "19177": {
+  "county": "Van Buren",
+  "countyAttorney": {
+   "email": "hcmiller@vanburencounty.iowa.gov",
+   "name": "H. Craig Miller",
+   "party": "Republican",
+   "phone": "319-293-3409"
+  },
+  "recorder": {
+   "email": "lcrane@vanburencounty.iowa.gov",
+   "name": "Lisa Crane",
+   "party": "Republican",
+   "phone": "(319) 293-3240"
+  },
+  "sheriff": {
+   "name": "Brad Hudson",
+   "party": "Republican",
+   "phone": "(319) 293-3426"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Dale J. House",
+    "party": "Republican",
+    "phone": "(319) 293-3129"
+   },
+   {
+    "name": "Mark Meek",
+    "party": "Republican",
+    "phone": "(319) 293-3129"
+   },
+   {
+    "name": "Robert Waugh",
+    "party": "Republican",
+    "phone": "(319) 293-3129"
+   }
+  ],
+  "treasurer": {
+   "name": "Linda Whitten",
+   "party": "Democratic",
+   "phone": "(319) 293-3110"
+  }
+ },
+ "19179": {
+  "county": "Wapello",
+  "countyAttorney": {
+   "email": "sgrove@wapellocounty.org",
+   "name": "Steviee Grove",
+   "party": "Republican",
+   "phone": "641-683-0030"
+  },
+  "recorder": {
+   "email": "lkent@wapellocounty.org",
+   "name": "Lisa Kent",
+   "party": "Democratic",
+   "phone": "(641) 683-0046"
+  },
+  "sheriff": {
+   "email": "dphillips@wapellocounty.org",
+   "name": "Donald L. Phillips",
+   "party": "Democratic",
+   "phone": "(641) 684-4350"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Darren Batterson",
+    "party": "Republican",
+    "phone": "(641) 683-4630"
+   },
+   {
+    "name": "Carrie Teninty",
+    "party": "Republican",
+    "phone": "(641) 683-4630"
+   },
+   {
+    "name": "Bryan Ziegler",
+    "party": "Republican",
+    "phone": "(641) 683-4630"
+   }
+  ],
+  "treasurer": {
+   "name": "Laurie Fountain",
+   "party": "Democratic",
+   "phone": "(641) 683-0040"
+  }
+ },
+ "19181": {
+  "county": "Warren",
+  "countyAttorney": {
+   "email": "douge@warrencountyia.org",
+   "name": "Doug Eichholz",
+   "party": "Republican",
+   "phone": "515-690-9120"
+  },
+  "recorder": {
+   "email": "recorder@warrencountyia.org",
+   "name": "Jordyn Hill",
+   "party": "Republican",
+   "phone": "(515) 690-9110"
+  },
+  "sheriff": {
+   "email": "joec@warrencountyia.org",
+   "name": "Joe Carico",
+   "party": "Republican",
+   "phone": "(515) 961-1122"
+  },
+  "supervisorsWithheld": "the county directory lists 5, and the supervisor-district geometry seats 3",
+  "treasurer": {
+   "name": "Andrea Semple",
+   "party": "Republican",
+   "phone": "(515) 690-9240"
+  }
+ },
+ "19183": {
+  "county": "Washington",
+  "countyAttorney": {
+   "email": "nrepp@washingtoncounty.iowa.gov",
+   "name": "Nathan Repp",
+   "phone": "319-653-7746"
+  },
+  "recorder": {
+   "email": "tmangold@washingtoncounty.iowa.gov",
+   "name": "Teresa Mangold",
+   "party": "Republican",
+   "phone": "(319) 653-7727"
+  },
+  "sheriff": {
+   "name": "Jared Schneider",
+   "party": "Republican",
+   "phone": "(319) 653-2107"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Marcus Fedler",
+    "party": "Republican",
+    "phone": "(319) 653-7711"
+   },
+   {
+    "name": "Mr. Jack Seward Jr.",
+    "party": "Republican",
+    "phone": "(319) 653-7711"
+   },
+   {
+    "name": "Stan Stoops",
+    "party": "Republican",
+    "phone": "(319) 653-7711"
+   },
+   {
+    "name": "Bob Yoder",
+    "party": "Republican",
+    "phone": "(319) 653-7711"
+   },
+   {
+    "name": "Richard Young",
+    "party": "Republican",
+    "phone": "(319) 653-7711"
+   }
+  ],
+  "treasurer": {
+   "name": "Jeff Garrett",
+   "party": "Independent",
+   "phone": "(319) 653-7721"
+  }
+ },
+ "19185": {
+  "county": "Wayne",
+  "countyAttorney": {
+   "email": "alanwilson@mileslawfirm.net",
+   "name": "Alan M. Wilson",
+   "party": "Republican",
+   "phone": "641-872-2343"
+  },
+  "recorder": {
+   "email": "ahorton@waynecountyia.org",
+   "name": "Angie Horton",
+   "party": "Democratic",
+   "phone": "(641) 872-1676"
+  },
+  "sheriff": {
+   "email": "ddavis@wayneso.org",
+   "name": "D. Keith Davis",
+   "party": "Republican",
+   "phone": "(641) 872-1566"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Lance Lange",
+    "party": "Republican",
+    "phone": "(641) 870-0005"
+   },
+   {
+    "name": "Chris Moore",
+    "party": "Republican",
+    "phone": "(641) 870-0005"
+   },
+   {
+    "name": "Todd Wilson",
+    "party": "Republican",
+    "phone": "(641) 870-0005"
+   }
+  ],
+  "treasurer": {
+   "name": "Amanda Cooper",
+   "party": "Republican",
+   "phone": "(641) 872-2515"
+  }
+ },
+ "19187": {
+  "county": "Webster",
+  "countyAttorney": {
+   "email": "darren.driscoll@webstercountyia.gov",
+   "name": "Darren Driscoll",
+   "party": "Democratic",
+   "phone": "515-573-1452"
+  },
+  "recorder": {
+   "email": "recorder@webstercountyia.org",
+   "name": "Courtney Balkenende",
+   "party": "Democratic",
+   "phone": "(515) 576-2401"
+  },
+  "sheriff": {
+   "email": "lfleener@webstercountyia.org",
+   "name": "Luke Fleener",
+   "phone": "(515) 573-1410"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "John Cochrane",
+    "party": "Republican",
+    "phone": "(515) 573-7175"
+   },
+   {
+    "name": "Niki Conrad",
+    "party": "Democratic",
+    "phone": "(515) 573-7175"
+   },
+   {
+    "name": "Austin Hayek",
+    "party": "Republican",
+    "phone": "(515) 573-7175"
+   },
+   {
+    "name": "Nathan Montgomery",
+    "party": "Republican",
+    "phone": "(515) 573-7175"
+   },
+   {
+    "name": "Bob Thode",
+    "party": "Democratic",
+    "phone": "(515) 573-7175"
+   }
+  ],
+  "treasurer": {
+   "name": "Brenda Angstrom",
+   "party": "Democratic",
+   "phone": "(515) 573-2731"
+  }
+ },
+ "19189": {
+  "county": "Winnebago",
+  "countyAttorney": {
+   "email": "kelsey.beenken@winnebagocountyiowa.gov",
+   "name": "Kelsey Beenken",
+   "party": "Republican",
+   "phone": "641-585-0020"
+  },
+  "recorder": {
+   "email": "shanna.eastvold@winnebagocountyiowa.gov",
+   "name": "Shanna Eastvold",
+   "party": "Republican",
+   "phone": "(641) 585-2094"
+  },
+  "sheriff": {
+   "email": "shepperly@winncosheriff.org",
+   "name": "Steven Hepperly",
+   "party": "Democratic",
+   "phone": "(641) 585-2828"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Terry Durby",
+    "party": "Republican",
+    "phone": "(641) 585-3412"
+   },
+   {
+    "name": "Bill Jensvold",
+    "party": "Republican",
+    "phone": "(641) 585-3412"
+   },
+   {
+    "name": "Susan Smith",
+    "party": "Republican",
+    "phone": "(641) 585-3412"
+   }
+  ],
+  "treasurer": {
+   "name": "Julie Swenson",
+   "party": "Republican",
+   "phone": "(641) 585-2322"
+  }
+ },
+ "19191": {
+  "county": "Winneshiek",
+  "countyAttorney": {
+   "email": "avandermaaten@co.winneshiek.ia.us",
+   "name": "Andrew Van Der Maaten",
+   "party": "Republican",
+   "phone": "563-382-2959"
+  },
+  "recorder": {
+   "email": "jschultz@co.winneshiek.ia.us",
+   "name": "Jayne Schultz",
+   "party": "No party",
+   "phone": "(563) 382-3486"
+  },
+  "sheriff": {
+   "email": "sheriff@co.winneshiek.ia.us",
+   "name": "Dan Marx",
+   "party": "Republican",
+   "phone": "(563) 382-4268"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Mark Faldet",
+    "party": "Democratic",
+    "phone": "(563) 382-2370"
+   },
+   {
+    "name": "Steve Kelsay",
+    "party": "Republican",
+    "phone": "(563) 382-2370"
+   },
+   {
+    "name": "Daniel Langreck",
+    "party": "Republican",
+    "phone": "(563) 382-2370"
+   },
+   {
+    "name": "Shirley Vermace",
+    "party": "Democratic",
+    "phone": "(563) 382-2370"
+   },
+   {
+    "name": "Mark Vick",
+    "party": "Republican",
+    "phone": "(563) 382-2370"
+   }
+  ],
+  "treasurer": {
+   "name": "Tim Smock",
+   "party": "No party",
+   "phone": "(563) 382-3753"
+  }
+ },
+ "19193": {
+  "county": "Woodbury",
+  "countyAttorney": {
+   "email": "jloomis@woodburycountyiowa.gov",
+   "name": "James Loomis",
+   "party": "Republican",
+   "phone": "712-279-6516"
+  },
+  "recorder": {
+   "email": "miskaff@woodburycountyiowa.gov",
+   "name": "Michelle Skaff",
+   "phone": "(712) 279-6528"
+  },
+  "sheriff": {
+   "email": "csheehan@woodburycountyiowa.gov",
+   "name": "Chad Sheehan",
+   "phone": "(712) 279-6010"
+  },
+  "supervisorSeats": 5,
+  "supervisors": [
+   {
+    "name": "Daniel Bittinger II",
+    "party": "Republican",
+    "phone": "(712) 279-6525"
+   },
+   {
+    "name": "Kent Carper",
+    "phone": "(712) 279-6525"
+   },
+   {
+    "name": "David Dietrich",
+    "phone": "(712) 279-6525"
+   },
+   {
+    "name": "Mark Nelson",
+    "party": "Republican",
+    "phone": "(712) 279-6525"
+   },
+   {
+    "name": "Matthew Ung",
+    "party": "Republican",
+    "phone": "(712) 279-6525"
+   }
+  ],
+  "treasurer": {
+   "name": "Tina Bertrand",
+   "party": "Republican",
+   "phone": "(712) 279-6495"
+  }
+ },
+ "19195": {
+  "county": "Worth",
+  "countyAttorney": {
+   "email": "grevelaw@yahoo.com",
+   "name": "Jeffrey Greve",
+   "party": "Republican",
+   "phone": "641-324-1291"
+  },
+  "recorder": {
+   "email": "teresa.olson@worthcountyiowa.gov",
+   "name": "Teresa Olson",
+   "party": "Republican",
+   "phone": "(641) 324-2734"
+  },
+  "sheriff": {
+   "email": "jluther@worthcounty.org",
+   "name": "Jesse Luther",
+   "phone": "(641) 324-2481"
+  },
+  "supervisorSeats": 3,
+  "supervisors": [
+   {
+    "name": "Enos Loberg",
+    "party": "Republican",
+    "phone": "(641) 324-3630"
+   },
+   {
+    "name": "Mark Smeby",
+    "party": "Republican",
+    "phone": "(641) 324-3630"
+   },
+   {
+    "name": "AJ Stone",
+    "party": "Democratic",
+    "phone": "(641) 324-3630"
+   }
+  ],
+  "treasurer": {
+   "name": "Jake Hanson",
+   "party": "Republican",
+   "phone": "(641) 324-2942"
+  }
+ },
+ "19197": {
+  "county": "Wright",
+  "countyAttorney": {
+   "email": "esimonson@wrightco.iowa.gov",
+   "name": "Eric Simonson",
+   "party": "Republican",
+   "phone": "641-444-3240"
+  },
+  "recorder": {
+   "email": "erussell@wrightco.iowa.gov",
+   "name": "Eric Russell",
+   "party": "Republican",
+   "phone": "(515) 532-3204"
+  },
+  "sheriff": {
+   "email": "jschlutt@co.wright.ia.us",
+   "name": "Jason Schluttenhofer",
+   "party": "Republican",
+   "phone": "(515) 532-3722"
+  },
+  "supervisorsWithheld": "the county directory lists 5, and the supervisor-district geometry seats 3",
+  "treasurer": {
+   "name": "Peggy Schluttenhofer",
+   "party": "Republican",
+   "phone": "(515) 532-2691"
+  }
+ }
+}
