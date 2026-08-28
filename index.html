@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>What district am I in? Find your district — districtry</title>
-<meta name="description" content="Pick your state, then enter an address or ZIP — districtry shows every civic district that covers that point on the map, and the people who hold those seats. Free, no login." />
+<meta name="description" content="Enter an address or ZIP — districtry shows every civic district that covers that point on the map, and the people who hold those seats. Free, no login." />
 <link rel="canonical" href="https://districtry.com/" />
 <meta name="theme-color" content="#6d3fd1" />
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -15,7 +15,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="districtry" />
 <meta property="og:title" content="What district am I in? Find your district — districtry" />
-<meta property="og:description" content="Pick your state, then enter an address or ZIP — districtry shows every civic district that covers that point on the map, and the people who hold those seats. Free, no login." />
+<meta property="og:description" content="Enter an address or ZIP — districtry shows every civic district that covers that point on the map, and the people who hold those seats. Free, no login." />
 <meta property="og:url" content="https://districtry.com/" />
 <meta property="og:image" content="https://districtry.com/og-image.png" />
 <meta property="og:image:width" content="1200" />
@@ -24,7 +24,7 @@
 <meta property="og:locale" content="en_US" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="What district am I in? Find your district — districtry" />
-<meta name="twitter:description" content="Pick your state, then enter an address or ZIP — districtry shows every civic district that covers that point on the map, and the people who hold those seats. Free, no login." />
+<meta name="twitter:description" content="Enter an address or ZIP — districtry shows every civic district that covers that point on the map, and the people who hold those seats. Free, no login." />
 <meta name="twitter:image" content="https://districtry.com/og-image.png" />
 <!-- GoatCounter — cookieless page counts. One site for the whole fleet: every instance
      reports to districtry.goatcounter.com and the PATH tells them apart (/, /il, /ny,
@@ -41,7 +41,7 @@
       "@id": "https://districtry.com/#website",
       "url": "https://districtry.com/",
       "name": "districtry",
-      "description": "Pick your state, then enter an address or ZIP — districtry shows every civic district that covers that point on the map, and the people who hold those seats. Free, no login.",
+      "description": "Enter an address or ZIP — districtry shows every civic district that covers that point on the map, and the people who hold those seats. Free, no login.",
       "inLanguage": "en-US",
       "publisher": {
         "@id": "https://districtry.com/#publisher"
@@ -229,10 +229,12 @@
   --muted: #6b7280;
   --faint: #9aa3b2;
   --border: #e8e7ef;
+  --error: #c2410c;
   --font-heading: 'Barlow Condensed', sans-serif;
   --font-heading-weight: 600;
   --font-body: 'Barlow', 'Barlow Fallback', -apple-system, BlinkMacSystemFont, sans-serif;
   --radius-card: 10px;
+  --radius-btn: 8px;
   --shadow-card: 0 1px 3px rgba(23, 22, 28, 0.06);
 }
 @media (prefers-color-scheme: dark) {
@@ -248,6 +250,7 @@
     --muted: #9a94ab;
     --faint: #746e86;
     --border: rgba(236, 233, 244, 0.1);
+    --error: #f97316;
     --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.4);
     --brand-600: #a78bfa;
   }
@@ -260,7 +263,39 @@ body {
   font: 400 16px/1.55 var(--font-body);
   -webkit-font-smoothing: antialiased;
 }
+.shell { position: relative; min-height: 100vh; }
 .wrap { max-width: 940px; margin: 0 auto; padding: 56px 24px 72px; }
+
+/* The rename toast: absolutely positioned against .shell (full viewport
+   width), never against .wrap (the centered 940px column) — it sits near the
+   top-right of the WINDOW, matching where a reader's eye actually lands, not
+   near the top-right of the text measure. */
+.notice {
+  position: absolute; z-index: 20; top: 18px; right: 24px;
+  width: 480px; max-width: calc(100% - 48px);
+  padding: 14px 40px 15px 18px;
+  background: var(--brand-tint); border: 1px solid var(--brand-border);
+  border-radius: var(--radius-card); box-shadow: 0 6px 22px rgba(23, 22, 28, .16);
+  opacity: 1;
+}
+.notice-h {
+  margin: 0 0 5px; font: var(--font-heading-weight) 17px/1.25 var(--font-heading);
+  color: var(--ink);
+}
+.notice-b { margin: 0; font-size: 14.5px; line-height: 1.5; color: var(--ink-3); max-width: 52em; }
+.notice #notice-dismiss {
+  position: absolute; top: 9px; right: 10px; width: 26px; height: 26px;
+  display: flex; align-items: center; justify-content: center; padding: 0;
+  background: transparent; border: 1px solid transparent; border-radius: 999px;
+  color: var(--muted); font: 400 13px/1 var(--font-body); cursor: pointer;
+  transition: color .14s ease, border-color .14s ease, background .14s ease;
+}
+.notice #notice-dismiss:hover, .notice #notice-dismiss:focus-visible {
+  background: var(--surface); border-color: var(--brand-border); color: var(--ink);
+}
+@keyframes notice-out { from { opacity: 1; } to { opacity: 0; } }
+.notice.is-fading { animation: notice-out 900ms ease forwards; }
+@media (prefers-reduced-motion: reduce) { .notice.is-fading { animation-duration: 1ms; } }
 
 /* The logo lockup: the 5c mark beside the wordmark, at a size the mark is
    actually drawn for. The brand spec's blend rule is a REAL rule, not
@@ -284,49 +319,91 @@ h1 {
 }
 .lede { color: var(--muted); margin: 14px 0 0; max-width: 40em; font-size: 15px; }
 
-.notice {
-  margin: 26px 0 0; padding: 14px 18px 15px;
-  background: var(--brand-tint); border: 1px solid var(--brand-border);
-  border-radius: var(--radius-card);
+.search-card {
+  margin: 26px 0 0; padding: 20px 22px 22px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-card); box-shadow: var(--shadow-card);
 }
-.notice-h {
-  margin: 0 0 5px; font: var(--font-heading-weight) 17px/1.25 var(--font-heading);
-  color: var(--ink);
+.search-eyebrow {
+  display: block; font: var(--font-heading-weight) 13px/1 var(--font-heading);
+  letter-spacing: .09em; text-transform: uppercase; color: var(--faint);
+  margin-bottom: 11px;
 }
-.notice-b { margin: 0; font-size: 14.5px; line-height: 1.5; color: var(--ink-3); max-width: 52em; }
+.search-row { display: flex; gap: 10px; align-items: stretch; }
+.search-input {
+  flex: 1 1 auto; min-width: 0; padding: 12px 14px;
+  font: 400 15px/1.3 var(--font-body); color: var(--ink);
+  background: var(--paper); border: 1px solid var(--border);
+  border-radius: var(--radius-btn);
+}
+.search-input::placeholder { color: var(--faint); }
+.search-input:focus-visible {
+  outline: 2px solid var(--brand-600); outline-offset: 1px;
+  border-color: var(--brand-border);
+}
+/* THE LABEL COLOUR FLIPS WITH THE THEME, and it is a contrast fix rather than
+   a preference. --brand-600 is #6d3fd1 in light (white on it: 6.40:1, passes
+   AA) and #a78bfa in dark — white on THAT is 2.72:1, well under the 4.5:1 AA
+   floor for 15px text. Dark ink on the same violet is 6.76:1, and on the
+   --brand-700 hover (#c4b0ff) 9.64:1. This is the one place on the page where
+   a token pair reverses its foreground, so it is stated rather than inherited. */
+.search-button {
+  flex: 0 0 auto; padding: 0 22px;
+  font: var(--font-heading-weight) 15px/1 var(--font-heading); color: #fff;
+  background: var(--brand-600); border: 1px solid var(--brand-600);
+  border-radius: var(--radius-btn); cursor: pointer; white-space: nowrap;
+}
+.search-button:hover { background: var(--brand-700); border-color: var(--brand-700); }
+.search-button:focus-visible { outline: 2px solid var(--brand-600); outline-offset: 2px; }
+.search-button:disabled { opacity: .6; cursor: default; }
+@media (prefers-color-scheme: dark) {
+  .search-button { color: var(--paper); }
+}
+.search-help { margin: 12px 0 0; font-size: 13.5px; line-height: 1.5; color: var(--muted); }
+.search-status { margin: 10px 0 0; font-size: 13.5px; line-height: 1.4; min-height: 0; }
+.search-status.err { color: var(--error); }
+
+h2 {
+  font: var(--font-heading-weight) 15px/1 var(--font-heading);
+  letter-spacing: .09em; text-transform: uppercase;
+  color: var(--faint); margin: 40px 0 12px;
+}
+.coverage-frame {
+  display: block; width: 100%; height: 430px;
+  border: 1px solid var(--border); border-radius: var(--radius-card);
+  background: var(--paper);
+}
+.coverage-caption {
+  margin: 11px 0 0; font-size: 13px; line-height: 1.55; color: var(--muted);
+  max-width: 52em;
+}
+
+.pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill {
+  display: inline-flex; align-items: baseline; gap: 8px; padding: 7px 13px 8px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 999px;
+  text-decoration: none; color: var(--ink);
+  font: var(--font-heading-weight) 15px/1 var(--font-heading);
+}
+.pill:hover, .pill:focus-visible { border-color: var(--brand-border); background: var(--brand-tint); }
+.pill:focus-visible { outline: 2px solid var(--brand-600); outline-offset: 2px; }
+.pill-n { font: 400 12px/1 var(--font-body); color: var(--faint); font-variant-numeric: tabular-nums; }
+
+.not-yet { margin: 14px 0 0; max-width: 52em; }
+.not-yet > summary {
+  cursor: pointer; font-size: 13px; line-height: 1.55; color: var(--muted);
+}
+.not-yet > summary:hover, .not-yet > summary:focus-visible { color: var(--ink-3); }
+.not-yet-list {
+  margin: 10px 0 0; column-count: 3; column-gap: 22px;
+  font-size: 12.5px; line-height: 1.9; color: var(--muted);
+}
 
 /* Stated plainly and early, never as a warning banner — it is a fact about who
    this is, not an alarm. See INDEPENDENCE for why it is above the fold. */
 .independence {
   margin: 18px 0 0; max-width: 52em; font-size: 13.5px; line-height: 1.55;
   color: var(--muted);
-}
-
-h2 {
-  font: var(--font-heading-weight) 15px/1 var(--font-heading);
-  letter-spacing: .09em; text-transform: uppercase;
-  color: var(--faint); margin: 44px 0 14px;
-}
-.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
-.card {
-  display: block; text-decoration: none; color: var(--ink);
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius-card); box-shadow: var(--shadow-card);
-  padding: 16px 18px 18px;
-}
-.card:hover, .card:focus-visible { border-color: var(--brand-border); }
-.card:focus-visible { outline: 2px solid var(--brand-600); outline-offset: 2px; }
-.card-word {
-  display: block; font: var(--font-heading-weight) 13px/1 var(--font-heading);
-  color: var(--faint); letter-spacing: .01em; margin-bottom: 9px;
-}
-.card-tag { font-weight: 400; }
-.card b { display: block; font: var(--font-heading-weight) 21px/1.15 var(--font-heading); margin-bottom: 6px; }
-.blurb { display: block; font-size: 14px; line-height: 1.5; color: var(--ink-3); }
-.card-stat {
-  display: inline-block; margin-top: 11px; padding: 3px 9px 4px;
-  background: var(--brand-tint); border: 1px solid var(--brand-border);
-  border-radius: 999px; font-size: 12px; color: var(--ink-3);
 }
 
 .does { display: grid; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr)); gap: 22px 26px; }
@@ -356,58 +433,118 @@ footer .foot-links { margin-top: 12px; }
   .wordmark { font-size: 38px; }
   .logo-mark { width: 48px; height: 48px; }
   h1 { font-size: 22px; }
+  .search-row { flex-direction: column; }
+  .notice { position: static; width: auto; max-width: none; margin: 0 0 26px; }
+  .not-yet-list { column-count: 2; }
+  /* Taller, not shorter: at this breakpoint the map's legend stops floating
+     and takes a strip along the bottom (see build_coverage_map.py), so the
+     frame needs the extra room or the map area is what pays for the panel. */
+  .coverage-frame { height: 560px; }
 }
 </style>
 </head>
 <body>
-  <div class="wrap">
+  <div class="shell">
+    <aside id="notice" class="notice" role="status" aria-live="polite">
+      <p id="notice-h" class="notice-h">chidistricts.com is now districtry.com</p>
+      <p class="notice-b">Same map, same data, same answers — a new name, because it now covers more than Chicago and more than one state. Illinois lives at districtry.com/il, and every link below goes straight there.</p>
+      <button type="button" id="notice-dismiss" aria-label="Dismiss this notice">&#x2715;</button>
+    </aside>
+    <div class="wrap">
     <header class="mast">
       <svg class="logo-mark" viewBox="0 0 96 96" aria-hidden="true"><g class="mk-blend"><polygon points="51.5,63.2 12.4,55.7 11.5,18.6 42.7,5.0 72.7,35.3" fill="#6d3fd1" fill-opacity="0.55"></polygon></g><g class="mk-blend"><polygon points="54.1,81.9 34.6,47.9 56.5,19.3 87.5,28.1 83.8,71.0" fill="#1d5fd6" fill-opacity="0.5"></polygon></g><g class="mk-blend"><polygon points="13.7,64.5 27.6,31.2 62.7,37.6 70.3,66.9 33.9,89.0" fill="#b0316e" fill-opacity="0.45"></polygon></g><circle cx="42" cy="60" r="17" fill="none" stroke="currentColor" stroke-width="11"></circle><line x1="59" y1="16" x2="59" y2="82.5" stroke="currentColor" stroke-width="11"></line></svg>
       <span class="wordmark">districtry</span>
     </header>
 
     <h1>Every district that covers a point, and who represents it.</h1>
-    <p class="lede">Pick your state, then enter an address or ZIP — districtry shows every civic district that covers that point on the map, and the people who hold those seats. Free, no login.</p>
+    <p class="lede">Enter an address or ZIP — districtry shows every civic district that covers that point on the map, and the people who hold those seats. Free, no login.</p>
 
-    <aside class="notice" aria-labelledby="notice-h">
-      <p id="notice-h" class="notice-h">chidistricts.com is now districtry.com</p>
-      <p class="notice-b">Same map, same data, same answers — a new name, because it now covers more than Chicago and more than one state. Illinois lives at districtry.com/il, and every link below goes straight there.</p>
-    </aside>
-    <p class="independence">districtry is an independent, unofficial project. It is not a government service and is not affiliated with, endorsed by, or operated by any government agency. It asks for an address only to place a point on the map — there is no account, no sign-in, and it never asks for personal or financial information.</p>
-
-    <h2>Choose a place</h2>
-    <div class="cards">
-      <a class="card" href="https://districtry.com/il/">
-        <span class="card-word">districtry<span class="card-tag"> / il</span></span>
-        <b>Illinois</b>
-        <span class="blurb">91 counties. Wards, county boards, police districts and beats, school zones, judicial subcircuits, and the people who hold those seats.</span>
-        <span class="card-stat">39 layers</span>
-      </a>
-      <a class="card" href="https://districtry.com/ny/">
-        <span class="card-word">districtry<span class="card-tag"> / ny</span></span>
-        <b>New York City</b>
-        <span class="blurb">Boroughs, City Council and community districts, NYPD precincts and sectors, school zones, and the state and federal seats above them.</span>
-        <span class="card-stat">27 layers</span>
-      </a>
-      <a class="card" href="https://districtry.com/ca/">
-        <span class="card-word">districtry<span class="card-tag"> / ca</span></span>
-        <b>San Francisco</b>
-        <span class="blurb">Supervisor districts, neighborhoods, police districts, school attendance areas, and the state and federal seats above them.</span>
-        <span class="card-stat">16 layers</span>
-      </a>
-      <a class="card" href="https://districtry.com/wi/">
-        <span class="card-word">districtry<span class="card-tag"> / wi</span></span>
-        <b>Wisconsin</b>
-        <span class="blurb">County boards, circuit courts, wards and aldermanic districts across all 72 counties — clerk to Court of Appeals — plus school districts, cities, villages and towns, and the Assembly, Senate and U.S. House seats, and who holds those.</span>
-        <span class="card-stat">31 layers</span>
-      </a>
-      <a class="card" href="https://districtry.com/ia/">
-        <span class="card-word">districtry<span class="card-tag"> / ia</span></span>
-        <b>Iowa</b>
-        <span class="blurb">All 99 counties: supervisor districts with each county&#x27;s own election plan, townships and cities, school districts, ZIP codes and post offices — and the Iowa Senate, House and U.S. House seats, and who holds those.</span>
-        <span class="card-stat">19 layers</span>
-      </a>
+    <div class="search-card">
+      <span class="search-eyebrow">Start with an address</span>
+      <form id="search-form" class="search-row">
+        <input type="text" id="search-input" class="search-input" name="q"
+               placeholder="Street address or ZIP" autocomplete="off"
+               aria-label="Street address or ZIP" />
+        <button type="submit" id="search-button" class="search-button">Show districts</button>
+      </form>
+      <p class="search-help">districtry opens the map that covers the point. Illinois, New York City, San Francisco, Wisconsin and Iowa answer
+         today — an address anywhere else says so instead of guessing.</p>
+      <p id="search-status" class="search-status" role="status" aria-live="polite"></p>
     </div>
+
+    <h2>Where it answers today</h2>
+    <iframe class="coverage-frame" src="coverage-map.html"
+            title="Map of the areas districtry covers today"
+            loading="lazy"></iframe>
+    <p class="coverage-caption">Two tiers, because coverage is not one thing: the pale dashed area
+       is where the statewide layers answer — county, township, municipality, school district,
+       ZIP — and the solid fill is where the county-level layers reach as well. The map's own
+       legend states how much of each place that is; click an area to open its map.</p>
+
+    <h2>Or choose a place</h2>
+    <div class="pills">
+        <a class="pill" href="https://districtry.com/il/" title="91 counties. Wards, county boards, police districts and beats, school zones, judicial subcircuits, and the people who hold those seats." aria-label="Illinois, 39 layers">Illinois<span class="pill-n">39</span></a>
+        <a class="pill" href="https://districtry.com/ny/" title="Boroughs, City Council and community districts, NYPD precincts and sectors, school zones, and the state and federal seats above them." aria-label="New York City, 27 layers">New York City<span class="pill-n">27</span></a>
+        <a class="pill" href="https://districtry.com/ca/" title="Supervisor districts, neighborhoods, police districts, school attendance areas, and the state and federal seats above them." aria-label="San Francisco, 16 layers">San Francisco<span class="pill-n">16</span></a>
+        <a class="pill" href="https://districtry.com/wi/" title="County boards, circuit courts, wards and aldermanic districts across all 72 counties — clerk to Court of Appeals — plus school districts, cities, villages and towns, and the Assembly, Senate and U.S. House seats, and who holds those." aria-label="Wisconsin, 31 layers">Wisconsin<span class="pill-n">31</span></a>
+        <a class="pill" href="https://districtry.com/ia/" title="All 99 counties: supervisor districts with each county&#x27;s own election plan, townships and cities, school districts, ZIP codes and post offices — and the Iowa Senate, House and U.S. House seats, and who holds those." aria-label="Iowa, 19 layers">Iowa<span class="pill-n">19</span></a>
+    </div>
+    <details class="not-yet">
+      <summary>Not yet: 47 states and DC — what nobody covers yet is listed here
+        rather than quietly missing.</summary>
+      <div class="not-yet-list">
+        <div>Alabama</div>
+        <div>Alaska</div>
+        <div>Arizona</div>
+        <div>Arkansas</div>
+        <div>California</div>
+        <div>Colorado</div>
+        <div>Connecticut</div>
+        <div>Delaware</div>
+        <div>District of Columbia</div>
+        <div>Florida</div>
+        <div>Georgia</div>
+        <div>Hawaii</div>
+        <div>Idaho</div>
+        <div>Indiana</div>
+        <div>Kansas</div>
+        <div>Kentucky</div>
+        <div>Louisiana</div>
+        <div>Maine</div>
+        <div>Maryland</div>
+        <div>Massachusetts</div>
+        <div>Michigan</div>
+        <div>Minnesota</div>
+        <div>Mississippi</div>
+        <div>Missouri</div>
+        <div>Montana</div>
+        <div>Nebraska</div>
+        <div>Nevada</div>
+        <div>New Hampshire</div>
+        <div>New Jersey</div>
+        <div>New Mexico</div>
+        <div>New York</div>
+        <div>North Carolina</div>
+        <div>North Dakota</div>
+        <div>Ohio</div>
+        <div>Oklahoma</div>
+        <div>Oregon</div>
+        <div>Pennsylvania</div>
+        <div>Rhode Island</div>
+        <div>South Carolina</div>
+        <div>South Dakota</div>
+        <div>Tennessee</div>
+        <div>Texas</div>
+        <div>Utah</div>
+        <div>Vermont</div>
+        <div>Virginia</div>
+        <div>Washington</div>
+        <div>West Virginia</div>
+        <div>Wyoming</div>
+      </div>
+    </details>
+
+    <p class="independence">districtry is an independent, unofficial project. It is not a government service and is not affiliated with, endorsed by, or operated by any government agency. It asks for an address only to place a point on the map — there is no account, no sign-in, and it never asks for personal or financial information.</p>
 
     <h2>What it does</h2>
     <div class="does">
@@ -453,6 +590,137 @@ footer .foot-links { margin-top: 12px; }
          <a href="https://overberg.co/why/" target="_blank" rel="noopener">Why this exists</a> ·
          <a href="https://github.com/ThursdaysFamous/districtry" target="_blank" rel="noopener">Source on GitHub</a></p>
     </footer>
+    </div>
   </div>
+<script>
+(function () {
+  /* ---------- rename-notice toast: auto-fades, dismissible ---------- */
+  var notice = document.getElementById("notice");
+  if (notice) {
+    var fadeTimer = null, cleanupTimer = null, faded = false;
+    function fade() {
+      if (faded) return;
+      faded = true;
+      clearTimeout(fadeTimer);
+      clearTimeout(cleanupTimer);
+      var done = function () {
+        notice.removeEventListener("animationend", done);
+        notice.style.display = "none";
+      };
+      notice.addEventListener("animationend", done);
+      notice.classList.add("is-fading");
+      // belt and braces: some browsers skip animationend for a 0-duration
+      // reduced-motion run, or a tab backgrounded mid-fade.
+      cleanupTimer = setTimeout(done, 3000);
+    }
+    fadeTimer = setTimeout(fade, 15 * 1000);
+    var dismiss = document.getElementById("notice-dismiss");
+    if (dismiss) dismiss.addEventListener("click", fade);
+    /* The toast is FIRST in the DOM, so its dismiss button is the page's first
+       tab stop: a keyboard reader lands there before anything else. Auto-fading
+       it out from under them would destroy the focused element and drop focus
+       to <body> mid-navigation. While focus is inside, the timer does not run;
+       it restarts when focus leaves. A click still fades immediately, because
+       that is the reader ASKING for it to go. */
+    notice.addEventListener("focusin", function () { clearTimeout(fadeTimer); });
+    notice.addEventListener("focusout", function () {
+      if (faded) return;
+      clearTimeout(fadeTimer);
+      fadeTimer = setTimeout(fade, 15 * 1000);
+    });
+  }
+
+  /* ---------- address box: geocode, then route to the covered instance ----------
+     Same provider (Photon, unbounded) and the same bbox test each instance's
+     own metro-portal ENGINE block already runs for its sibling-metro fallback
+     — see this file's module docstring. Takes the first Photon result (of up
+     to 5, ranked) that actually falls inside a covered bbox, so a bare place
+     name ambiguous across states still has a fair shot at landing correctly
+     rather than wherever result #1 happened to be. */
+  var METROS = [
+    { tag: "il", name: "Illinois", url: "https://districtry.com/il/",
+      bbox: { minLat: 36.96, maxLat: 42.51, minLng: -91.52, maxLng: -87.01 } },
+    { tag: "ny", name: "New York City", url: "https://districtry.com/ny/",
+      bbox: { minLat: 40.45, maxLat: 41.0, minLng: -74.3, maxLng: -73.6 } },
+    { tag: "ca", name: "San Francisco", url: "https://districtry.com/ca/",
+      bbox: { minLat: 37.6, maxLat: 37.95, minLng: -122.6, maxLng: -122.3 } },
+    { tag: "wi", name: "Wisconsin", url: "https://districtry.com/wi/",
+      bbox: { minLat: 42.49, maxLat: 47.31, minLng: -92.89, maxLng: -86.25 } },
+    { tag: "ia", name: "Iowa", url: "https://districtry.com/ia/",
+      bbox: { minLat: 40.37, maxLat: 43.5, minLng: -96.64, maxLng: -90.14 } }
+  ];
+
+  function metroAt(lat, lng) {
+    var best = null, bestDist = Infinity;
+    for (var i = 0; i < METROS.length; i++) {
+      var b = METROS[i].bbox;
+      if (lat < b.minLat || lat > b.maxLat || lng < b.minLng || lng > b.maxLng) continue;
+      var dLat = lat - (b.minLat + b.maxLat) / 2, dLng = lng - (b.minLng + b.maxLng) / 2;
+      var dist = dLat * dLat + dLng * dLng;
+      if (dist < bestDist) { best = METROS[i]; bestDist = dist; }
+    }
+    return best;
+  }
+
+  var form = document.getElementById("search-form");
+  var input = document.getElementById("search-input");
+  var button = document.getElementById("search-button");
+  var status = document.getElementById("search-status");
+  var inFlight = null;
+
+  function setStatus(text, isError) {
+    status.textContent = text;
+    status.className = "search-status" + (isError ? " err" : "");
+  }
+  function resetButton() {
+    button.disabled = false;
+    button.textContent = "Show districts";
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var q = input.value.trim();
+    if (!q) { setStatus("Type an address or ZIP first.", true); return; }
+    if (inFlight) inFlight.abort();
+    inFlight = new AbortController();
+    button.disabled = true;
+    button.textContent = "Searching\u2026";
+    setStatus("Searching\u2026", false);
+    fetch("https://photon.komoot.io/api/?q=" + encodeURIComponent(q) + "&lang=en&limit=5",
+      { signal: inFlight.signal, headers: { Accept: "application/json" } })
+      .then(function (res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+      .then(function (data) {
+        var feats = (data && data.features) || [];
+        var metro = null, lat = null, lng = null;
+        for (var i = 0; i < feats.length; i++) {
+          var c = feats[i] && feats[i].geometry && feats[i].geometry.coordinates;
+          if (!c || c.length < 2) continue;
+          var m = metroAt(c[1], c[0]);
+          if (m) { metro = m; lat = c[1]; lng = c[0]; break; }
+        }
+        if (!metro) {
+          resetButton();
+          setStatus(
+            feats.length
+              ? "That address is outside every place districtry covers today \u2014 see what's covered below."
+              : "No matches \u2014 try a fuller address, or pick a place below.",
+            true
+          );
+          return;
+        }
+        setStatus("Opening " + metro.name + "\u2026", false);
+        window.location.href = metro.url + "#point=" + lat.toFixed(5) + "," + lng.toFixed(5);
+      })
+      ["catch"](function (err) {
+        if (err && err.name === "AbortError") return;
+        resetButton();
+        setStatus("Search failed \u2014 try again, or pick a place below.", true);
+      });
+  });
+})();
+</script>
 </body>
 </html>
