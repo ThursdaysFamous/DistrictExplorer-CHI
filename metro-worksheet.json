@@ -35,7 +35,9 @@
     { "id": "sf", "label": "San Francisco", "url": "https://districtry.com/ca/", "emoji": "🌉", "explorer_name": "districtry San Francisco",
       "bbox": { "minLng": -122.6, "minLat": 37.6, "maxLng": -122.3, "maxLat": 37.95 } },
     { "id": "wisconsin", "label": "Wisconsin", "url": "https://districtry.com/wi/", "emoji": "🧀", "explorer_name": "districtry Wisconsin",
-      "bbox": { "minLng": -92.89, "minLat": 42.49, "maxLng": -86.25, "maxLat": 47.31 } }
+      "bbox": { "minLng": -92.89, "minLat": 42.49, "maxLng": -86.25, "maxLat": 47.31 } },
+    { "id": "iowa", "label": "Iowa", "url": "https://districtry.com/ia/", "emoji": "🌽", "explorer_name": "districtry Iowa",
+      "bbox": { "minLng": -96.64, "minLat": 40.37, "maxLng": -90.14, "maxLat": 43.5 } }
   ],
   "hover_number_keys": [
     [

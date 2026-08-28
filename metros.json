@@ -68,6 +68,23 @@
       "tag": "wi",
       "landing_name": "Wisconsin",
       "blurb": "County boards, circuit courts, wards and aldermanic districts across all 72 counties — clerk to Court of Appeals — plus school districts, cities, villages and towns, and the Assembly, Senate and U.S. House seats, and who holds those."
+    },
+    {
+      "id": "iowa",
+      "explorer_name": "districtry Iowa",
+      "label": "Iowa",
+      "url": "https://districtry.com/ia/",
+      "emoji": "🌽",
+      "repo": "ThursdaysFamous/districtry",
+      "bbox": {
+        "minLng": -96.64,
+        "minLat": 40.37,
+        "maxLng": -90.14,
+        "maxLat": 43.50
+      },
+      "tag": "ia",
+      "landing_name": "Iowa",
+      "blurb": "All 99 counties: supervisor districts with each county's own election plan, townships and cities, school districts, ZIP codes and post offices — and the Iowa Senate, House and U.S. House seats, and who holds those."
     }
   ]
 }
