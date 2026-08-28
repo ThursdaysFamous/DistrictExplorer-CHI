@@ -95,6 +95,12 @@ PROVENANCE = [
     },
     {
         "layer": "county",
+        "app_file": "ia-county-auditors.json",
+        "source_url": "https://iowaauditors.org/find/directory/",
+        "note": "All 99 county auditors (Iowa Code 47.2), from the auditors' own association directory. Built by ia/scripts/ia_county_auditor_scraper.py + build_ia_county_auditors.py; refreshed weekly by update-ia-county-auditor-roster.yml.",
+    },
+    {
+        "layer": "county",
         "app_file": "metro-outline.json",
         "source_url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer/1",
         "note": "The whole-state outline for the coverage wash, pre-built by ia/scripts/build_metro_outline.py — dissolved from all 99 counties' geometry on the same layer as state-counties.json, not fetched as a separate state polygon (so a future partial-coverage narrowing needs only a smaller METRO_COUNTY_FIPS, the Wisconsin precedent).",

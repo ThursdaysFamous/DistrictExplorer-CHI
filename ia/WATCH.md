@@ -13,6 +13,7 @@ checkpoint with a stale date is a checkpoint that didn't happen.
 |---|---|---|---|
 | Weekly (Mon 14:30 UTC) | U.S. House (IA) roster refresh | `.github/workflows/update-ia-congress-roster.yml` → PR on change | Review + merge the PR; a week with a surprise diff is worth a look at the source |
 | Weekly (Tue 14:30 UTC) | Iowa Senate + House roster refresh (Open States ia.csv + legis.iowa.gov office enrichment) | `.github/workflows/update-ia-legislature-roster.yml` → PR on change | Review + merge the PR — especially after an Iowa general (November, even years) and each January seating |
+| Weekly (Wed 14:30 UTC) | County auditor roster refresh (iowaauditors.org's own association directory) | `.github/workflows/update-ia-county-auditor-roster.yml` → PR on change | Review + merge the PR — auditors are elected countywide and can turn over between the Iowa generals above |
 
 ---
 

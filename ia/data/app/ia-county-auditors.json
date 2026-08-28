@@ -1,0 +1,1134 @@
+{
+ "19001": {
+  "address": [
+   "400 Public Square",
+   "Suite 5",
+   "Greenfield, IA 50849"
+  ],
+  "county": "Adair",
+  "name": "Ruthie Smith",
+  "office": "Adair County Courthouse",
+  "party": "Republican",
+  "phone": "(641) 743-2546"
+ },
+ "19003": {
+  "address": [
+   "500 9th Street",
+   "Corning, IA 50841"
+  ],
+  "county": "Adams",
+  "name": "Betsy Stormer",
+  "office": "Adams County Courthouse",
+  "party": "Republican",
+  "phone": "(641) 322-3340"
+ },
+ "19005": {
+  "address": [
+   "110 Allamakee Street",
+   "Waukon, IA 52172"
+  ],
+  "county": "Allamakee",
+  "name": "Denise Beyer",
+  "office": "Allamakee County Courthouse",
+  "party": "Republican",
+  "phone": "(563) 568-3522"
+ },
+ "19007": {
+  "address": [
+   "201 North 12th Street",
+   "Centerville, IA 52544"
+  ],
+  "county": "Appanoose",
+  "name": "Kelly Howard",
+  "office": "Appanoose County Courthouse",
+  "party": "Republican",
+  "phone": "(641) 856-6191"
+ },
+ "19009": {
+  "address": [
+   "318 Leroy Street #4",
+   "Audubon, IA 50025"
+  ],
+  "county": "Audubon",
+  "name": "Lisa Frederiksen",
+  "office": "Audubon County Courthouse",
+  "party": "Republican",
+  "phone": "(712) 563-2584"
+ },
+ "19011": {
+  "address": [
+   "111 East 4th Street",
+   "P.O. Box 549",
+   "Vinton, IA 52349"
+  ],
+  "county": "Benton",
+  "name": "Hayley Rippel",
+  "office": "Benton County Courthouse",
+  "party": "Republican",
+  "phone": "(319) 472-2365"
+ },
+ "19013": {
+  "address": [
+   "316 East 5th Street",
+   "Waterloo, IA 50703"
+  ],
+  "county": "Black Hawk",
+  "name": "Karen Showalter",
+  "office": "Black Hawk County Courthouse",
+  "party": "Democratic",
+  "phone": "(319) 833-3002"
+ },
+ "19015": {
+  "address": [
+   "201 State Street",
+   "Boone, IA 50036"
+  ],
+  "county": "Boone",
+  "name": "Diane Patrick",
+  "office": "Boone County Courthouse",
+  "party": "Republican",
+  "phone": "(515) 433-0502"
+ },
+ "19017": {
+  "address": [
+   "415 East Bremer Avenue",
+   "Waverly, IA 50677"
+  ],
+  "county": "Bremer",
+  "name": "Shelley Wolf",
+  "office": "Bremer County Courthouse",
+  "party": "Republican",
+  "phone": "(319) 352-0340"
+ },
+ "19019": {
+  "address": [
+   "210 5th Avenue NE",
+   "P.O. Box 317",
+   "Independence, IA 50644"
+  ],
+  "county": "Buchanan",
+  "name": "Kris Wilgenbusch",
+  "office": "Buchanan County Courthouse",
+  "party": "Republican",
+  "phone": "(319) 334-4109"
+ },
+ "19021": {
+  "address": [
+   "317 E 5th Street",
+   "P.O. Box 220",
+   "Storm Lake, IA 50588"
+  ],
+  "county": "Buena Vista",
+  "name": "Susan K. Lloyd",
+  "office": "Buena Vista County Auditor&#039;s Office",
+  "party": "Republican",
+  "phone": "(712) 749-2542"
+ },
+ "19023": {
+  "address": [
+   "428 6th Street",
+   "P.O. Box 325",
+   "Allison, IA 50602"
+  ],
+  "county": "Butler",
+  "name": "Leslie Groen",
+  "office": "Butler County Courthouse",
+  "party": "Republican",
+  "phone": "(319) 346-6547"
+ },
+ "19025": {
+  "address": [
+   "416 4th Street",
+   "Suite 1",
+   "Rockwell City, IA 50579"
+  ],
+  "county": "Calhoun",
+  "name": "Jena Patzner",
+  "office": "Calhoun County Courthouse",
+  "party": "Republican",
+  "phone": "(712) 297-7741"
+ },
+ "19027": {
+  "address": [
+   "114 East 6th Street",
+   "Carroll, IA 51401"
+  ],
+  "county": "Carroll",
+  "name": "Kourtney Payer",
+  "office": "Carroll County Courthouse",
+  "party": "Republican",
+  "phone": "(712) 792-9802"
+ },
+ "19029": {
+  "address": [
+   "5 West 7th Street",
+   "Atlantic, IA 50022"
+  ],
+  "county": "Cass",
+  "name": "Kathy Somers",
+  "office": "Cass County Courthouse",
+  "phone": "(712) 243-4570"
+ },
+ "19031": {
+  "address": [
+   "400 Cedar Street",
+   "Tipton, IA 52772"
+  ],
+  "county": "Cedar",
+  "name": "Nicolette Welch",
+  "office": "Cedar County Courthouse",
+  "party": "Republican",
+  "phone": "(563) 886-3168"
+ },
+ "19033": {
+  "address": [
+   "220 North Washington Avenue",
+   "Mason City, IA 50401"
+  ],
+  "county": "Cerro Gordo",
+  "name": "Adam Wedmore",
+  "office": "Cerro Gordo County Courthouse",
+  "party": "Democratic",
+  "phone": "(641) 421-3034"
+ },
+ "19035": {
+  "address": [
+   "520 West Main",
+   "Cherokee, IA 51012"
+  ],
+  "county": "Cherokee",
+  "name": "Kris Glienke",
+  "office": "Cherokee County Courthouse",
+  "party": "Republican",
+  "phone": "(712) 225-6704"
+ },
+ "19037": {
+  "address": [
+   "8 East Prospect",
+   "P.O. Box 311",
+   "New Hampton, IA 50659"
+  ],
+  "county": "Chickasaw",
+  "name": "Sheila Shekleton",
+  "office": "Chickasaw County Courthouse",
+  "party": "Republican",
+  "phone": "(641) 394-2100"
+ },
+ "19039": {
+  "address": [
+   "100 South Main",
+   "Osceola, IA 50213"
+  ],
+  "county": "Clarke",
+  "name": "Jessica Graves",
+  "office": "Clarke County Courthouse",
+  "party": "Republican",
+  "phone": "(641) 342-3315"
+ },
+ "19041": {
+  "address": [
+   "300 West 4th Street",
+   "Suite 4",
+   "Spencer, IA 51301"
+  ],
+  "county": "Clay",
+  "name": "Ann Baschke",
+  "office": "Clay County Administration Building",
+  "party": "Republican",
+  "phone": "(712) 262-1569"
+ },
+ "19043": {
+  "address": [
+   "111 High Street NE",
+   "Suite 102",
+   "Elkader, IA 52043"
+  ],
+  "county": "Clayton",
+  "name": "Jennifer Garms",
+  "office": "Clayton County Courthouse",
+  "party": "Democratic",
+  "phone": "(563) 245-1106"
+ },
+ "19045": {
+  "address": [
+   "1900 North 3rd Street",
+   "P.O. Box 2957",
+   "Clinton, IA 52732"
+  ],
+  "county": "Clinton",
+  "name": "David Troester",
+  "office": "Clinton County Administration Building",
+  "party": "Republican",
+  "phone": "(563) 244-0568"
+ },
+ "19047": {
+  "address": [
+   "1202 Broadway",
+   "Suite 5",
+   "Denison, IA 51442"
+  ],
+  "county": "Crawford",
+  "name": "Terri Martens",
+  "office": "Crawford County Courthouse",
+  "party": "Democratic",
+  "phone": "(712) 263-3045"
+ },
+ "19049": {
+  "address": [
+   "210 North 10th Street",
+   "Adel, IA 50003"
+  ],
+  "county": "Dallas",
+  "name": "Todd Halbur",
+  "office": "Dallas County Government Office",
+  "party": "Republican",
+  "phone": "(515) 993-6914"
+ },
+ "19051": {
+  "address": [
+   "100 Courthouse Square",
+   "Suite 2",
+   "Bloomfield, IA 52537"
+  ],
+  "county": "Davis",
+  "name": "Kristi Goodson",
+  "office": "Davis County Courthouse",
+  "party": "Republican",
+  "phone": "(641) 664-2101"
+ },
+ "19053": {
+  "address": [
+   "207 North Main Street",
+   "Leon, IA 50144"
+  ],
+  "county": "Decatur",
+  "name": "Stephanie Daughton",
+  "office": "Decatur County Courthouse",
+  "party": "Republican",
+  "phone": "(641) 446-4323"
+ },
+ "19055": {
+  "address": [
+   "301 East Main Street",
+   "Manchester, IA 52057"
+  ],
+  "county": "Delaware",
+  "name": "Carla K. Becker",
+  "office": "Delaware County Courthouse",
+  "party": "Republican",
+  "phone": "(563) 927-4701"
+ },
+ "19057": {
+  "address": [
+   "513 North Main",
+   "P.O. Box 784",
+   "Burlington, IA 52601"
+  ],
+  "county": "Des Moines",
+  "name": "Sara Doty",
+  "office": "Des Moines County Courthouse",
+  "party": "Democratic",
+  "phone": "(319) 753-8232"
+ },
+ "19059": {
+  "address": [
+   "1802 Hill Avenue",
+   "Suite 1400",
+   "Spirit Lake, IA 51360"
+  ],
+  "county": "Dickinson",
+  "name": "Lori Pedersen",
+  "office": "Dickinson County Courthouse",
+  "party": "Republican",
+  "phone": "(712) 336-3356"
+ },
+ "19061": {
+  "address": [
+   "720 Central Avenue",
+   "Dubuque, IA 52001"
+  ],
+  "county": "Dubuque",
+  "name": "Keith Lucy",
+  "office": "Dubuque County Courthouse",
+  "party": "Republican",
+  "phone": "(563) 589-4457"
+ },
+ "19063": {
+  "address": [
+   "101 N. 6th Street",
+   "Estherville, IA 51334"
+  ],
+  "county": "Emmet",
+  "name": "Heidi Goebel",
+  "office": "Emmet County Auditor&#039;s Office",
+  "party": "Republican",
+  "phone": "(712) 362-4261"
+ },
+ "19065": {
+  "address": [
+   "114 North Vine Street",
+   "P.O. Box 267",
+   "West Union, IA 52175"
+  ],
+  "county": "Fayette",
+  "name": "Lori Moellers",
+  "office": "Fayette County Courthouse",
+  "party": "Republican",
+  "phone": "(563) 422-3497"
+ },
+ "19067": {
+  "address": [
+   "101 South Main Street",
+   "Suite 302",
+   "Charles City, IA 50616"
+  ],
+  "county": "Floyd",
+  "name": "Morrigan Montagne",
+  "office": "Floyd County Courthouse",
+  "party": "Republican",
+  "phone": "(641) 257-6131"
+ },
+ "19069": {
+  "address": [
+   "12 1st Avenue NW",
+   "P.O. Box 26",
+   "Hampton, IA 50441"
+  ],
+  "county": "Franklin",
+  "name": "Katy Flint",
+  "office": "Franklin County Courthouse",
+  "party": "Republican",
+  "phone": "(641) 456-5622"
+ },
+ "19071": {
+  "address": [
+   "506 Filmore Street",
+   "P.O. Box 610",
+   "Sidney, IA 51652"
+  ],
+  "county": "Fremont",
+  "name": "Dee Owen",
+  "office": "Fremont County Courthouse",
+  "party": "Republican",
+  "phone": "(712) 374-2031"
+ },
+ "19073": {
+  "address": [
+   "114 North Chestnut",
+   "Jefferson, IA 50129"
+  ],
+  "county": "Greene",
+  "name": "Billie Jo Hoskins",
+  "office": "Greene County Courthouse",
+  "party": "Republican",
+  "phone": "(515) 386-5683"
+ },
+ "19075": {
+  "address": [
+   "706 G Avenue",
+   "Grundy Center, IA 50638"
+  ],
+  "county": "Grundy",
+  "name": "Alan Tscherter",
+  "office": "Grundy County Courthouse",
+  "party": "Republican",
+  "phone": "(319) 824-3122"
+ },
+ "19077": {
+  "address": [
+   "200 North 5th Street",
+   "Guthrie Center, IA 50115"
+  ],
+  "county": "Guthrie",
+  "name": "Dani Fink",
+  "office": "Guthrie County Courthouse",
+  "party": "Republican",
+  "phone": "(641) 747-3619"
+ },
+ "19079": {
+  "address": [
+   "2300 Superior Street",
+   "Suite 2",
+   "Webster City, IA 50595"
+  ],
+  "county": "Hamilton",
+  "name": "Kim Schaa",
+  "office": "Hamilton County Courthouse",
+  "party": "Republican",
+  "phone": "(515) 832-9510"
+ },
+ "19081": {
+  "address": [
+   "855 State Street",
+   "P.O. Box 70",
+   "Garner, IA 50438"
+  ],
+  "county": "Hancock",
+  "name": "Michelle Eisenman",
+  "office": "Hancock County Courthouse",
+  "party": "Republican",
+  "phone": "(641) 923-3163"
+ },
+ "19083": {
+  "address": [
+   "1215 Edgington Avenue",
+   "Suite 1",
+   "Eldora, IA 50627"
+  ],
+  "county": "Hardin",
+  "name": "Jolene Pieters",
+  "office": "Hardin County Courthouse",
+  "party": "Republican",
+  "phone": "(641) 939-8109"
+ },
+ "19085": {
+  "address": [
+   "111 North 2nd Avenue",
+   "Logan, IA 51546"
+  ],
+  "county": "Harrison",
+  "name": "Megan Pauley Reffett",
+  "office": "Harrison County Courthouse",
+  "party": "Republican",
+  "phone": "(712) 644-2401"
+ },
+ "19087": {
+  "address": [
+   "100 East Washington Street",
+   "Suite 202",
+   "Mount Pleasant, IA 52641"
+  ],
+  "county": "Henry",
+  "name": "Robin Detrick",
+  "office": "Henry County Courthouse",
+  "party": "Republican",
+  "phone": "(319) 385-0756"
+ },
+ "19089": {
+  "address": [
+   "137 North Elm Street",
+   "Cresco, IA 52136"
+  ],
+  "county": "Howard",
+  "name": "Julie Chapman",
+  "office": "Howard County Courthouse",
+  "party": "Democratic",
+  "phone": "(563) 547-9203"
+ },
+ "19091": {
+  "address": [
+   "203 Main Street",
+   "P.O. Box 100",
+   "Dakota City, IA 50529"
+  ],
+  "county": "Humboldt",
+  "name": "Trish Erickson",
+  "office": "Humboldt County Courthouse",
+  "party": "Republican",
+  "phone": "(515) 332-1571"
+ },
+ "19093": {
+  "address": [
+   "401 Moorehead Street",
+   "Ida Grove, IA 51445"
+  ],
+  "county": "Ida",
+  "name": "Kristy Gilbert",
+  "office": "Ida County Courthouse",
+  "phone": "(712) 364-2626"
+ },
+ "19095": {
+  "address": [
+   "970 Court Avenue",
+   "Marengo, IA 52301"
+  ],
+  "county": "Iowa",
+  "name": "Brandy Enochson",
+  "office": "Iowa County East Annex",
+  "party": "Republican",
+  "phone": "(319) 642-3923 opt 0"
+ },
+ "19097": {
+  "address": [
+   "201 West Platt Street",
+   "Maquoketa, IA 52060"
+  ],
+  "county": "Jackson",
+  "name": "Alisa Smith",
+  "office": "Jackson County Courthouse",
+  "party": "Republican",
+  "phone": "(563) 652-3144"
+ },
+ "19099": {
+  "address": [
+   "101 1st Street North",
+   "P.O. Box 944",
+   "Newton, IA 50208"
+  ],
+  "county": "Jasper",
+  "name": "Jenna Jennings",
+  "office": "Jasper County Courthouse",
+  "phone": "(641) 792-7016"
+ },
+ "19101": {
+  "address": [
+   "51 East Briggs",
+   "Fairfield, IA 52556"
+  ],
+  "county": "Jefferson",
+  "name": "Christy Conner",
+  "office": "Jefferson County Courthouse",
+  "party": "Republican",
+  "phone": "(641) 472-2840"
+ },
+ "19103": {
+  "address": [
+   "913 South Dubuque Street",
+   "Suite 101",
+   "Iowa City, IA 52240"
+  ],
+  "county": "Johnson",
+  "name": "Julie Persons",
+  "office": "Johnson County Administration Building",
+  "party": "Democratic",
+  "phone": "(319) 356-6004"
+ },
+ "19105": {
+  "address": [
+   "500 West Main",
+   "P.O. Box 109",
+   "Anamosa, IA 52205"
+  ],
+  "county": "Jones",
+  "name": "Whitney Hein",
+  "office": "Jones County Courthouse",
+  "party": "Republican",
+  "phone": "(319) 462-2282"
+ },
+ "19107": {
+  "address": [
+   "101 South Main",
+   "Sigourney, IA 52591"
+  ],
+  "county": "Keokuk",
+  "name": "Christy Bates",
+  "office": "Keokuk County Courthouse",
+  "party": "Republican",
+  "phone": "(641) 622-2320"
+ },
+ "19109": {
+  "address": [
+   "114 West State Street",
+   "Algona, IA 50511"
+  ],
+  "county": "Kossuth",
+  "name": "Tammy Eden",
+  "office": "Kossuth County Courthouse",
+  "party": "Republican",
+  "phone": "(515) 295-2718"
+ },
+ "19111": {
+  "address": [
+   "933 Avenue H",
+   "P.O. Box 190",
+   "Fort Madison, IA 52627"
+  ],
+  "county": "Lee",
+  "name": "Sherri Yasenchok",
+  "office": "Lee County Office Building",
+  "party": "Republican",
+  "phone": "(319) 372-3705"
+ },
+ "19113": {
+  "address": [
+   "935 2nd Street SW",
+   "Cedar Rapids, IA 52404"
+  ],
+  "county": "Linn",
+  "name": "Todd Taylor",
+  "office": "Jean Oxley Public Service Center",
+  "party": "Democratic",
+  "phone": "(319) 892-5300"
+ },
+ "19115": {
+  "address": [
+   "117 South Main",
+   "P.O. Box 186",
+   "Wapello, IA 52653"
+  ],
+  "county": "Louisa",
+  "name": "Susan Schnedler",
+  "office": "Louisa County Courthouse",
+  "party": "Republican",
+  "phone": "(319) 523-3374"
+ },
+ "19117": {
+  "address": [
+   "916 Braden Avenue",
+   "Chariton, IA 50049"
+  ],
+  "county": "Lucas",
+  "name": "Julie Masters",
+  "office": "Lucas County Courthouse",
+  "party": "Republican",
+  "phone": "(641) 774-4512"
+ },
+ "19119": {
+  "address": [
+   "206 S. 2nd Avenue",
+   "Suite 205",
+   "Rock Rapids, IA 51246"
+  ],
+  "county": "Lyon",
+  "name": "Amy Sprock",
+  "office": "Lyon County Courthouse",
+  "party": "Republican",
+  "phone": "(712) 472-8517"
+ },
+ "19121": {
+  "address": [
+   "112 North John Wayne Drive",
+   "P.O. Box 152",
+   "Winterset, IA 50273"
+  ],
+  "county": "Madison",
+  "name": "Michele Brant",
+  "office": "Madison County Courthouse",
+  "phone": "(515) 462-3914"
+ },
+ "19123": {
+  "address": [
+   "106 South 1st Street",
+   "Oskaloosa, IA 52577"
+  ],
+  "county": "Mahaska",
+  "name": "Madison Garden",
+  "office": "Mahaska County Courthouse",
+  "party": "Republican",
+  "phone": "(641) 673-7148"
+ },
+ "19125": {
+  "address": [
+   "214 East Main",
+   "Knoxville, IA 50138"
+  ],
+  "county": "Marion",
+  "name": "Jake Grandia",
+  "office": "Marion County Courthouse",
+  "party": "Republican",
+  "phone": "(641) 828-2217"
+ },
+ "19127": {
+  "address": [
+   "1 East Main Street",
+   "Marshalltown, IA 50158"
+  ],
+  "county": "Marshall",
+  "name": "Nan Benson",
+  "office": "Marshall County",
+  "party": "Republican",
+  "phone": "(641) 754-6323"
+ },
+ "19129": {
+  "address": [
+   "418 Sharp Street",
+   "Glenwood, IA 51534"
+  ],
+  "county": "Mills",
+  "name": "Amber Farnan",
+  "office": "Mills County Courthouse",
+  "party": "Republican",
+  "phone": "(712) 527-3146"
+ },
+ "19131": {
+  "address": [
+   "212 South 5th Street",
+   "Osage, IA 50461"
+  ],
+  "county": "Mitchell",
+  "name": "Rachel Foster",
+  "office": "Mitchell County Courthouse",
+  "party": "Republican",
+  "phone": "(641) 832-3946"
+ },
+ "19133": {
+  "address": [
+   "610 Iowa Avenue",
+   "Onawa, IA 51040"
+  ],
+  "county": "Monona",
+  "name": "Peggy Rolph",
+  "office": "Monona County Courthouse",
+  "party": "Democratic",
+  "phone": "(712) 433-2191"
+ },
+ "19135": {
+  "address": [
+   "10 Benton Avenue E",
+   "Albia, IA 52531"
+  ],
+  "county": "Monroe",
+  "name": "Amanda Harlan",
+  "office": "Monroe County Courthouse",
+  "party": "Democratic",
+  "phone": "(641) 932-2865"
+ },
+ "19137": {
+  "address": [
+   "105 East Coolbaugh Street",
+   "P.O. Box 469",
+   "Red Oak, IA 51566"
+  ],
+  "county": "Montgomery",
+  "name": "Jill Ozuna",
+  "office": "Montgomery County Courthouse",
+  "party": "Republican",
+  "phone": "(712) 623-5127"
+ },
+ "19139": {
+  "address": [
+   "414 E. Third St.",
+   "Suite 201",
+   "Muscatine, IA 52761"
+  ],
+  "county": "Muscatine",
+  "name": "Tibe Vander Linden",
+  "office": "Muscatine County Administration Building",
+  "party": "Republican",
+  "phone": "(563) 263-5821"
+ },
+ "19141": {
+  "address": [
+   "155 South Hayes Avenue",
+   "P.O. Box 380",
+   "Primghar, IA 51245"
+  ],
+  "county": "O'Brien",
+  "name": "Rhea Schmalen",
+  "office": "O'Brien County Courthouse",
+  "party": "Republican",
+  "phone": "(712) 957-3225"
+ },
+ "19143": {
+  "address": [
+   "300 7th Street",
+   "Sibley, IA 51249"
+  ],
+  "county": "Osceola",
+  "name": "Rochelle Van Tilburg",
+  "office": "Osceola County Courthouse",
+  "party": "Republican",
+  "phone": "(712) 754-2241"
+ },
+ "19145": {
+  "address": [
+   "112 East Main",
+   "Clarinda, IA 51632"
+  ],
+  "county": "Page",
+  "name": "Kristin Wagoner",
+  "office": "Page County Courthouse",
+  "phone": "(712) 542-3219"
+ },
+ "19147": {
+  "address": [
+   "1010 Broadway",
+   "P.O. Box 95",
+   "Emmetsburg, IA 50536"
+  ],
+  "county": "Palo Alto",
+  "name": "Carmen Moser",
+  "office": "Palo Alto County Courthouse",
+  "party": "Republican",
+  "phone": "(712) 852-2924"
+ },
+ "19149": {
+  "address": [
+   "215 4th Avenue SE",
+   "Le Mars, IA 51031"
+  ],
+  "county": "Plymouth",
+  "name": "Stacey Feldman",
+  "office": "Plymouth County Courthouse",
+  "party": "Republican",
+  "phone": "(712) 546-6100"
+ },
+ "19151": {
+  "address": [
+   "99 Court Square",
+   "Suite 7",
+   "Pocahontas, IA 50574"
+  ],
+  "county": "Pocahontas",
+  "name": "Nita Hinrickson",
+  "office": "Pocahontas Courthouse",
+  "party": "Republican",
+  "phone": "(712) 335-3361"
+ },
+ "19153": {
+  "address": [
+   "111 Court Avenue",
+   "Des Moines, IA 50309"
+  ],
+  "county": "Polk",
+  "name": "Jamie Fitzgerald",
+  "office": "Polk County Administration Building",
+  "party": "Democratic",
+  "phone": "(515) 286-3080"
+ },
+ "19155": {
+  "address": [
+   "227 South 6th Street",
+   "P.O. Box 649",
+   "Council Bluffs, IA 51501"
+  ],
+  "county": "Pottawattamie",
+  "name": "Mary Ann Hanusa",
+  "office": "Pottawattamie County Courthouse",
+  "party": "Republican",
+  "phone": "(712) 328-5700"
+ },
+ "19157": {
+  "address": [
+   "302 East Main Street",
+   "P.O. Box 57",
+   "Montezuma, IA 50171"
+  ],
+  "county": "Poweshiek",
+  "name": "Missy Eilander",
+  "office": "Poweshiek County Courthouse",
+  "party": "Republican",
+  "phone": "(641) 623-5443"
+ },
+ "19159": {
+  "address": [
+   "109 West Madison Street",
+   "Mount Ayr, IA 50854"
+  ],
+  "county": "Ringgold",
+  "name": "Amanda Waske",
+  "office": "Ringgold County Courthouse",
+  "party": "Republican",
+  "phone": "(641) 464-3239"
+ },
+ "19161": {
+  "address": [
+   "100 NW State Street",
+   "Box 1",
+   "Sac City, IA 50583"
+  ],
+  "county": "Sac",
+  "name": "Renee Roland",
+  "office": "Sac County Courthouse",
+  "party": "Republican",
+  "phone": "(712) 662-7310"
+ },
+ "19163": {
+  "address": [
+   "600 W 4th Street",
+   "Davenport, IA 52801"
+  ],
+  "county": "Scott",
+  "name": "Kerri Tompkins",
+  "office": "Scott County Administrative Center",
+  "party": "Republican",
+  "phone": "(563) 326-8631"
+ },
+ "19165": {
+  "address": [
+   "612 Court Street",
+   "Harlan, IA 51537"
+  ],
+  "county": "Shelby",
+  "name": "Taryn Knapp",
+  "office": "Shelby County Courthouse",
+  "party": "Republican",
+  "phone": "(712) 755-3831 ext 6"
+ },
+ "19167": {
+  "address": [
+   "210 Central Avenue SW",
+   "P.O. Box 18",
+   "Orange City, IA 51041"
+  ],
+  "county": "Sioux",
+  "name": "Joe Van Tol",
+  "office": "Sioux County Courthouse",
+  "party": "Republican",
+  "phone": "(712) 737-2216"
+ },
+ "19169": {
+  "address": [
+   "900 6th Street",
+   "Nevada, IA 50201"
+  ],
+  "county": "Story",
+  "name": "Lucy Martin",
+  "office": "Story County Administration Building",
+  "party": "Democratic",
+  "phone": "(515) 382-7210"
+ },
+ "19171": {
+  "address": [
+   "104 West State Street",
+   "P.O. Box 61",
+   "Toledo, IA 52342"
+  ],
+  "county": "Tama",
+  "name": "Karen Rohrs",
+  "office": "Tama County Administration Building",
+  "party": "Republican",
+  "phone": "(641) 484-2740"
+ },
+ "19173": {
+  "address": [
+   "405 Jefferson",
+   "Suite 1",
+   "Bedford, IA 50833"
+  ],
+  "county": "Taylor",
+  "name": "Judy Henry",
+  "office": "Taylor County Courthouse",
+  "party": "Republican",
+  "phone": "(712) 523-2280"
+ },
+ "19175": {
+  "address": [
+   "300 North Pine Street",
+   "Suite 2",
+   "Creston, IA 50801"
+  ],
+  "county": "Union",
+  "name": "Sandy Hysell",
+  "office": "Union County Courthouse",
+  "party": "Republican",
+  "phone": "(641) 782-1701"
+ },
+ "19177": {
+  "address": [
+   "406 Dodge Street",
+   "P.O. Box 475",
+   "Keosauqua, IA 52565"
+  ],
+  "county": "Van Buren",
+  "name": "Lisa Plecker",
+  "office": "Van Buren County Courthouse",
+  "party": "Republican",
+  "phone": "(319) 293-3129"
+ },
+ "19179": {
+  "address": [
+   "101 West 4th",
+   "Ottumwa, IA 52501"
+  ],
+  "county": "Wapello",
+  "name": "Kelly Spurgeon",
+  "office": "Wapello County Courthouse",
+  "party": "Democratic",
+  "phone": "(641) 683-0020"
+ },
+ "19181": {
+  "address": [
+   "301 North Buxton",
+   "Suite 101",
+   "Indianola, IA 50125"
+  ],
+  "county": "Warren",
+  "name": "Kimberly Sheets",
+  "office": "Warren County Administration",
+  "party": "Democratic",
+  "phone": "(515) 690-9180"
+ },
+ "19183": {
+  "address": [
+   "222 West Main Street",
+   "P.O. Box 889",
+   "Washington, IA 52353"
+  ],
+  "county": "Washington",
+  "name": "Tamera Stewart",
+  "office": "Washington County Courthouse",
+  "party": "Republican",
+  "phone": "(319) 653-7715"
+ },
+ "19185": {
+  "address": [
+   "100 N Lafayette Street",
+   "P.O. Box 435",
+   "Corydon, IA 50060"
+  ],
+  "county": "Wayne",
+  "name": "Michelle Dooley",
+  "office": "Wayne County Courthouse",
+  "party": "Republican",
+  "phone": "(641) 872-2242"
+ },
+ "19187": {
+  "address": [
+   "703 Central Avenue",
+   "Fort Dodge, IA 50501"
+  ],
+  "county": "Webster",
+  "name": "Shaunna Abrams",
+  "office": "Webster County Courthouse",
+  "party": "Republican",
+  "phone": "(515) 573-7175"
+ },
+ "19189": {
+  "address": [
+   "126 South Clark Street",
+   "Forest City, IA 50436"
+  ],
+  "county": "Winnebago",
+  "name": "Karla Weiss",
+  "office": "Winnebago County Courthouse",
+  "party": "Republican",
+  "phone": "(641) 585-3412"
+ },
+ "19191": {
+  "address": [
+   "201 West Main Street",
+   "Decorah, IA 52101"
+  ],
+  "county": "Winneshiek",
+  "name": "Benjamin D. Steines",
+  "office": "Winneshiek County Courthouse",
+  "party": "Republican",
+  "phone": "(563) 382-5085"
+ },
+ "19193": {
+  "address": [
+   "620 Douglas Street",
+   "Room 103",
+   "Sioux City, IA 51101"
+  ],
+  "county": "Woodbury",
+  "name": "Michelle Skaff",
+  "office": "Woodbury County Courthouse",
+  "party": "Republican",
+  "phone": "(712) 279-6465"
+ },
+ "19195": {
+  "address": [
+   "1000 Central Avenue",
+   "Northwood, IA 50459"
+  ],
+  "county": "Worth",
+  "name": "Jacki A. Backhaus",
+  "office": "Worth County Courthouse",
+  "party": "Republican",
+  "phone": "(641) 324-2316"
+ },
+ "19197": {
+  "address": [
+   "115 North Main Street",
+   "P.O. Box 147",
+   "Clarion, IA 50525"
+  ],
+  "county": "Wright",
+  "name": "Amanda Meyer",
+  "office": "Wright County Courthouse",
+  "party": "Republican",
+  "phone": "(515) 532-2771"
+ }
+}

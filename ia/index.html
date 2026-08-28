@@ -8372,11 +8372,19 @@ function initIowaExplorer() {
    * Geometry is pre-built (TIGERweb State_County layer 1, STATE-filtered,
    * ia/scripts/build_state_counties.py) and served same-origin +
    * service-worker cached, so this layer answers even when every
-   * third-party host is down. Identity-only card: no statewide roster of
-   * county officers exists yet — this fork's own later expansion
-   * (docs/IA_EXPANSION_PLAN.md phase 4), never guessed at here. ---------- */
+   * third-party host is down. The card also carries the county AUDITOR
+   * (Iowa Code 47.2 — the county's own election commissioner), phase 2 PR
+   * 2: data/app/ia-county-auditors.json, keyed by GEOID, built from the
+   * auditors' own association directory (iowaauditors.org — see
+   * ia/scripts/ia_county_auditor_scraper.py / build_ia_county_auditors.py).
+   * The roster is a small same-origin file and its failure is not this
+   * layer's failure: the county still answers, degrading to the identity
+   * card this layer shipped with at launch. ---------- */
   var loadStateCounties = makeCached(function () {
     return fetchJSONWithRetry("data/app/state-counties.json", {}, 2);
+  });
+  var loadIaCountyAuditors = makeCached(function () {
+    return fetchJSONWithRetry("data/app/ia-county-auditors.json", {}, 2);
   });
 
   registerLayer({
@@ -8393,22 +8401,46 @@ function initIowaExplorer() {
       return name != null ? String(name) : null;
     },
     query: function (point, seq) {
-      return queryFeatureAt(loadStateCounties, point).then(function (feature) {
+      return Promise.all([
+        queryFeatureAt(loadStateCounties, point),
+        loadIaCountyAuditors().catch(function () { return null; })
+      ]).then(function (parts) {
+        var feature = parts[0];
         if (!feature) return null;
         var props = feature.properties || {};
+        var geoid = findPropCI(props, ["geoid"]);
+        var auditor = (parts[1] && geoid != null) ? parts[1][String(geoid)] : null;
         return {
           seq: seq,
           name: findPropCI(props, ["name"]),
-          geoid: findPropCI(props, ["geoid"])
+          geoid: geoid,
+          auditor: auditor || null
         };
       });
     },
     render: function (result) {
+      // Card convention: identity -> officeholder -> office -> contact -> link.
       var wrap = cardEl("div", "card-flush");
       wrap.appendChild(renderBodyIntro({
         title: result.name != null ? String(result.name) : "Unknown county",
         note: result.geoid != null ? "FIPS " + String(result.geoid) : null
       }));
+      var auditor = result.auditor;
+      if (auditor && auditor.name) {
+        var person = { name: String(auditor.name), badge: "County Auditor" };
+        // 5 of 99 auditors carry no party on the association's own page
+        // (measured 2026-08-28) — omitted here rather than guessed.
+        if (auditor.party) person.note = String(auditor.party);
+        if (auditor.phone) person.phone = String(auditor.phone);
+        wrap.appendChild(renderPersonRows([person]));
+        if (auditor.office || (auditor.address && auditor.address.length)) {
+          var office = {
+            label: auditor.office ? String(auditor.office) : "Auditor's Office",
+            lines: (auditor.address || []).map(String)
+          };
+          wrap.appendChild(renderOfficeGroup({ offices: [office] }));
+        }
+      }
       return wrap;
     }
   });

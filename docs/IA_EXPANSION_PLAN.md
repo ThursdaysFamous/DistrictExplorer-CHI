@@ -514,13 +514,20 @@ after PR 6's window.
 
 County card gains the **auditor**, Iowa's county election commissioner (Iowa Code 47.2 — CONFIRMED,
 was ASSERTED): `iowaauditors.org/find/directory/` — CONFIRMED, 99 rows embedded directly in
-server-rendered HTML, each carrying name, **party as a CSS icon class** (`fa-republican`/presumably
-`fa-democrat` — not plain text, a finding the original pass missed), office name, full mailing
+server-rendered HTML, each carrying name, **party as a CSS icon class** (`fa-republican`/`fa-democrat`
+— not plain text; present on 94 of 99 rows, the other 5 carrying no party icon at all, shipped with
+party omitted rather than guessed), office name, full mailing
 address, and phone in `(NNN) NNN-NNNN` format; zero e-mails anywhere on the page, confirming the
 no-email call. `sos.iowa.gov/auditors` does NOT 403 this sandbox either (corrected), but is a
 per-county page-link directory, not a second name/phone list — useful as "does this county have an
-official auditor page," not as a row-for-row cross-gate. PR 2, independent of every other item, ships
-early alongside PR 1.
+official auditor page," not as a row-for-row cross-gate.
+
+**Shipped 2026-08-28 (PR 2).** The 99 auditor names join `state-counties.json`'s BASENAME field
+exactly for all 99 counties — no alias table needed. `ia_county_auditor_scraper.py` +
+`build_ia_county_auditors.py` produce `data/app/ia-county-auditors.json`, keyed by GEOID, joined into
+the already-shipped `county` layer's card (mirroring Wisconsin's clerk-join pattern: a roster fetch
+failure degrades to the identity card the layer shipped with at launch, never breaks the county
+lookup). Refreshed weekly by `update-ia-county-auditor-roster.yml` (Wed 14:30 UTC) as a reviewed PR.
 
 **Sequencing, corrected from `ia/index.html`'s own "phase 2 begins with precinct, ia-judicial-district
 and community-college" note (wrong — fixed in the same change as PR 1)**: PR 1 police-station +

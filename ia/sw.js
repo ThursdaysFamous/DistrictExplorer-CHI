@@ -64,6 +64,7 @@ const ROSTER_URLS = [
   "./data/app/ia-senate-members.json",
   "./data/app/ia-house-members.json",
   "./data/app/ia-county-board-directory.json",
+  "./data/app/ia-county-auditors.json",
   "./data/app/coverage-gaps.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
