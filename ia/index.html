@@ -5976,6 +5976,7 @@ function initIowaExplorer() {
     "ia-house",          // 100 House districts; two nest exactly inside each Senate district
     "county-supervisor", // The flagship layer: 270 features across 98 counties, PLANTYPE-aware (at-large / residence-district / single-member)
     "school-district-unified", // 324 unified school districts, statewide — the only school-district tiling Iowa runs (TIGER's elementary/secondary layers measure zero)
+    "school-director-district", // 716 director districts inside the 324 school districts — the sub-district fabric a board is elected from, where a district elects by district at all
     "community-college", // 15 merged areas, shipped as published (no dissolve) — larger on average than a school district, ranked beside it
     "county-subdivision", // 1,663 records tiling the state, live from TIGERweb (no data/app file) — 1,600 civil townships, 62 incorporated cities that double as their own subdivision record, and one federal reservoir carried as unorganized territory
     "municipality",      // 939 incorporated cities, live from TIGERweb (no data/app file) — small dense pockets within the county-subdivision fabric, so smaller on average than a civil township despite fewer records
@@ -8784,6 +8785,81 @@ function initIowaExplorer() {
     compact: true, compactMetaField: "geoid" // 4b name-only card
   });
 
+  /* ---------- 6b. School Director District — the board's own sub-fabric ----------
+   * Iowa Code ch. 274/277: a school board is elected either AT LARGE or from
+   * DIRECTOR DISTRICTS, and which one is each district's own choice. This
+   * layer carries both, from the Iowa Legislature's own ArcGIS org
+   * (data/app/ia-school-director-districts.json,
+   * ia/scripts/build_ia_school_director_districts.py) — 716 features inside
+   * the 324 shipped school districts, 193 of them whole-district AT-LARGE
+   * features the publisher labels as such in DIST_NAME. The builder never
+   * infers at-large from DISTRICT == 0, so no card can ever read "District 0".
+   *
+   * Registered subOf the parent district: turning it on frames the parent as
+   * an outline and fills the sub-districts inside it (the WI mpd-squad-area
+   * pattern), which is the only way a reader can see that a board's districts
+   * tile their own school district and nothing else.
+   *
+   * IDENTITY-ONLY, and the reason is measured rather than assumed: no
+   * statewide roster of Iowa school board members exists to join. The state
+   * collects them through the login-gated Iowa Education Portal and the Iowa
+   * Association of School Boards' directory is member-gated — so the card
+   * says that, in those words, instead of naming anybody. ---------- */
+  var loadSchoolDirectorDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/ia-school-director-districts.json", {}, 2);
+  });
+
+  registerPolygonLayer({
+    id: "school-director-district",
+    group: "schools",
+    subOf: "school-district-unified",
+    label: "School Director District",
+    loader: loadSchoolDirectorDistricts,
+    // the parent's hue, one shade brighter and solid rather than dashed, so
+    // the sub-districts read as inside it rather than as a second fabric
+    style: { color: "#1F7A3A", weight: 1, fillColor: "#6FBF7F", fillOpacity: 0.14 },
+    fields: [
+      { name: "label", label: "Director district", keys: ["label"], primary: true },
+      { name: "name", label: "School district", keys: ["name"] },
+      // extracted for the two gates below and never rendered: a keyed field's
+      // `when` governs display only, so this reads the publisher's own
+      // at-large flag without the notes having to match a display string.
+      { name: "atlarge", label: "At large", keys: ["atlarge"], when: function () { return false; } },
+      { name: "population", label: "2020 population", keys: ["population"] },
+      {
+        label: "Election",
+        value: "This school district elects its whole board at large — every voter in the district votes on every seat.",
+        when: function (result) { return result.atlarge === true; }
+      },
+      {
+        label: "Election",
+        value: "One director is elected from this district by the voters who live in it.",
+        when: function (result) { return result.atlarge === false; }
+      },
+      {
+        label: "Board members",
+        value: "Not shown. Iowa publishes no statewide roster of school board members — the state collects them through the login-gated Iowa Education Portal, and the school boards' association directory is member-gated."
+      }
+    ],
+    // Frame the parent while this is on (the WI mpd-squad-area contract): a
+    // sub-district only means anything against the district it divides.
+    onToggle: function (on) {
+      var parentRt = layerRuntime["school-district-unified"];
+      if (!parentRt) return;
+      if (on) {
+        if (!state.layersOn["school-district-unified"]) {
+          var box = document.getElementById("toggle-school-district-unified");
+          if (box && !box.checked) box.click();
+        }
+        parentRt.outlineOnly = true;
+      } else {
+        parentRt.outlineOnly = false;
+      }
+      var parentMod = getLayerById("school-district-unified");
+      if (parentMod && parentRt.overlayLayer) updateLayerHighlight(parentMod);
+    }
+  });
+
   /* ---------- 7. County Subdivision — live TIGERweb ----------
    * Iowa's civil-township fabric plus incorporated-place MCD records, live
    * from TIGERweb (no builder script, no committed data/app file — the
@@ -9925,7 +10001,7 @@ function initIowaExplorer() {
   // standard"): representation first, then services, then geography broad ->
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
-  var LAYER_SIDEBAR_RANK = ["us-house", "ia-judicial-district", "ia-senate", "ia-house", "county", "county-subdivision", "municipality", "county-supervisor", "school-district-unified", "community-college", "zip-code", "precinct", "police-station", "fire-station", "school-site", "post-office"];
+  var LAYER_SIDEBAR_RANK = ["us-house", "ia-judicial-district", "ia-senate", "ia-house", "county", "county-subdivision", "municipality", "county-supervisor", "school-district-unified", "school-director-district", "community-college", "zip-code", "precinct", "police-station", "fire-station", "school-site", "post-office"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -10023,11 +10099,12 @@ function initIowaExplorer() {
      when a layer colour moves and its dark counterpart does not. */
   /* ==== GENERATED:BEGIN dark-map-palette ==== */
   var DST_DARK_MAP_COLORS = { "#0B5394": "#4FA4FE", "#14181C": "#696F76", "#1B5E3F": "#5FB387",
-    "#1B7A3D": "#58CD7A", "#2E9E6B": "#5BEAA5", "#2F6B3A": "#6FBE7B", "#41B6E6": "#C6EBFE",
-    "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD", "#4B2E83": "#9E7BF1", "#4C8F59": "#83DC93",
-    "#5C4B8C": "#AB95EF", "#6B7280": "#B1BBCE", "#7A0B1E": "#EA5C63", "#7A5C3E": "#CFA57D",
-    "#8A5A1E": "#E3A156", "#8C2E4A": "#F47294", "#8F7BC4": "#D1C2FF", "#A98B6C": "#F3CBA1",
-    "#B0316E": "#FD88B8", "#C98A3E": "#FFCF9C", "#D06A9C": "#FFBDDA"};
+    "#1B7A3D": "#57CC79", "#1F7A3A": "#5ACC75", "#2E9E6B": "#5AE9A4", "#2F6B3A": "#6EBE7A",
+    "#41B6E6": "#C2EAFF", "#444B54": "#919BA8", "#4A2E8C": "#9A7BFC", "#4B2E83": "#9E7BF1",
+    "#4C8F59": "#82DB92", "#5C4B8C": "#AA94EE", "#6B7280": "#B0BACD", "#6FBF7F": "#9FFFB1",
+    "#7A0B1E": "#EA5B63", "#7A5C3E": "#CEA57C", "#8A5A1E": "#E3A155", "#8C2E4A": "#F37293",
+    "#8F7BC4": "#D0C1FE", "#A98B6C": "#F2CAA0", "#B0316E": "#FE86B7", "#C98A3E": "#FECE9B",
+    "#D06A9C": "#FEBCD9"};
   /* ==== GENERATED:END dark-map-palette ==== */
   /* ==== ENGINE:BEGIN districtry-theme ==== */
   /* The theme controller and the wordmark fleet switch, shared for the same

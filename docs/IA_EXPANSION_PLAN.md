@@ -763,6 +763,55 @@ not the county. Both are recorded in `ia/WATCH.md` rather than guessed at.
 Files: `ia/scripts/ia_supervisor_district_scraper.py`, `build_ia_supervisor_roster.py`,
 `ia/data/app/ia-supervisor-members.json`, `.github/workflows/update-ia-supervisor-roster.yml`.
 
+**PR 3 — `school-director-district` — SHIPPED 2026-08-28.** The sub-district fabric a school
+board is actually elected from, registered `subOf: "school-district-unified"` so turning it on
+frames the parent as an outline and fills its director districts inside it. 716 features inside
+the 324 shipped districts: **193 whole-district AT-LARGE features and 523 numbered ones**, because
+Iowa Code ch. 274/277 lets each district choose, and the layer carries both.
+
+**The build corrected three things this document itself had on record wrong**, which is the reason
+to re-measure a source at build time rather than trust a research note:
+
+- `DIST_NAME` and `UID` were recorded here as *"100% NULL across all 728 — declared but empty;
+  never read them"*. Both are fully populated. `DIST_NAME` is the more valuable: its values are
+  `D1`..`D7` **and a literal `AT-LARGE`**, so a district that elects at large is now READ from the
+  publisher's own label instead of inferred from `DISTRICT == 0` — and no card can ever say
+  "District 0".
+- **`UID` is not a unique key.** WEBSTER CITY publishes districts 2 and 3 *both* carrying
+  `UID 3063002`, with different populations and different geometry — an upstream typo in a key
+  field, not a duplicate row. The layer keys on `<GEOID>-<DISTRICT>` and asserts uniqueness.
+- **Two districts publish every row twice, not one.** The note on file named only `DAVIS COUNTY`;
+  `EAST BUCHANAN` is duplicated identically. A Davis-shaped hard-code would have shipped East
+  Buchanan as a six-seat board, so the dedupe is structural — identical attributes AND identical
+  geometry — and asserts the count it removes rather than naming any county.
+
+Two further things are recorded rather than smoothed. `KINGSLEY-PIERSON` is incoherent at source
+(an `AT-LARGE` row of 2,503 people *and* a `D2` row of 632, with no District 1 anywhere); nothing
+invents the missing district or drops either row, and a gate fails if a *second* district ever
+develops the same contradiction. And the name join needed **two** aliases rather than the three
+assumed — `MARION INDEPENDENT` matches on its own — leaving `LU VERNE` and `ORIENT-MACKSBURG`
+stale in the director layer and correctly absent from ours. That second one is worth stating
+plainly: **it independently corroborates this repo's own work**, since
+`build_ia_school_districts.py` dissolved exactly that district into Nodaway Valley for 2026-2027.
+
+**The licence nearly went on the record wrong too.** The FeatureServer returns `licenseInfo: null`
+and an empty `copyrightText`, which reads as "no terms stated". The ITEM behind it
+(`5d6e55f885c54dd282eb17daaca20740`) carries `licenseInfo: "<p>CC0</p>"`. **Query
+`arcgis.com/sharing/rest/search` for the service name before concluding anything about an ArcGIS
+layer's terms** — the same shape as the Illinois lesson that an org publishes more than its viewer
+shows.
+
+Simplification was chosen by measurement, not habit: 9% retained vertices holds the 2,000-point
+gate at **99.85% with zero overlaps**, where 5% clears the 99.5% floor by only 0.1 points and 3%
+breaks topology outright (a point falling in two districts at once).
+
+**Identity-only, for a checkable reason.** No statewide roster of Iowa school board members exists
+to join: the state collects them through the login-gated Iowa Education Portal, and the Iowa
+Association of School Boards' directory is member-gated. The card says that in those words.
+
+Files: `ia/scripts/build_ia_school_director_districts.py`,
+`ia/data/app/ia-school-director-districts.json`.
+
 **Still to come this phase:**
 
 

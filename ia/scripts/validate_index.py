@@ -96,9 +96,10 @@ MIN_REGISTER_LAYER = 11
 # LAYER_AREA_RANK order; check 5 keeps the two naming the same set.
 EXPECT_LAYER_IDS = [
     "us-house", "ia-judicial-district", "ia-senate", "county", "ia-house",
-    "county-supervisor", "school-district-unified", "community-college",
-    "county-subdivision", "municipality", "zip-code", "precinct",
-    "police-station", "fire-station", "school-site", "post-office",
+    "county-supervisor", "school-district-unified",
+    "school-director-district", "community-college", "county-subdivision",
+    "municipality", "zip-code", "precinct", "police-station", "fire-station",
+    "school-site", "post-office",
 ]
 
 # file -> (min features, max features) for the boundary layers fetched by the app.
@@ -111,6 +112,7 @@ GEOMETRY_FILES = {
     "ia-supervisor-districts.json": (270, 270),  # Every county supervisor district across 98 of 99 counties (Jones County absent — a recorded gap), built by ia/scripts/build_ia_supervisor_districts.py: the state's own aggregate for 95 counties, Black Hawk's own hosted GIS (5 real districts), and Story/Johnson as one county-level TRANSITIONING feature each (5,000-in-state-point agreement gate).
     "jones-county-outline.json": (1, 1),  # Jones County's own boundary, extracted from state-counties.json by ia/scripts/build_ia_county_outline.py — the Data-gaps panel's map highlight for gap jones-county-supervisor. Referenced dynamically (built from the gap's county slug at runtime), never by a literal in index.html.
     "ia-school-districts.json": (324, 324),  # 324 unified school districts, built by ia/scripts/build_ia_school_districts.py: TIGERweb's 325 dissolved (Orient-Macksburg into Nodaway Valley) and witnessed by name against the Dept. of Education's own current layer (2,000-point agreement gate).
+    "ia-school-director-districts.json": (716, 716),  # 716 school board director districts, built by ia/scripts/build_ia_school_director_districts.py from the Iowa Legislature's own ArcGIS org. 728 features are published; 10 are EXACT duplicates (Davis County and East Buchanan each publish every row twice) and 2 name districts stale in that layer (LU VERNE, ORIENT-MACKSBURG — the latter independently corroborating this repo's own dissolve into Nodaway Valley). At-large boards are READ from the publisher's own AT-LARGE label in DIST_NAME, never inferred from DISTRICT=0. Keyed <GEOID>-<DISTRICT> because UID is NOT unique — Webster City publishes districts 2 and 3 under one UID. 2,000-point agreement gate at 99.85%, 0 overlaps.
     "ia-school-sites.json": (1321, 1321),  # 1,321 public school buildings, pre-built by ia/scripts/build_ia_school_sites.py from the Iowa Legislature's own ArcGIS org's IowaSchoolBldgs layer (paginated past its 1,000-record cap).
     "ia-precincts.json": (1660, 1660),  # 1,660 election precincts across all 99 counties, pre-built by ia/scripts/build_ia_precincts.py from the Iowa Legislature's own ArcGIS org's Iowa_Precincts layer (Visvalingam-simplified from ~18MB raw to under 3MB, 2,000-point agreement gate; polling-place fields never fetched).
     "ia-judicial-districts.json": (8, 8),  # 8 judicial election districts, whole-county unions dissolved from state-counties.json by ia/scripts/build_ia_judicial_district.py, per Iowa Code SS602.6107/602.6109 and double-witnessed at build time against the LSAFiscal organization's own published district polygons.
