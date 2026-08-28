@@ -33,7 +33,7 @@ THE CHAIR IS ALSO RECONCILED AGAINST THE WEEKLY BOARD ROSTER, because a
 chair is the one officer who is also a supervisor, and Wisconsin boards
 elect their chair at the organizational meeting after each April
 election — a cycle an April-2025 snapshot cannot see. Measured on
-2026-08-26, six of the 22 roster counties had visibly moved past the
+2026-08-26, six of the then-22 roster counties had visibly moved past the
 book: three chairs had rotated (the county's own page marks a different
 supervisor as chair), two had left their boards entirely, and one had
 changed her surname. So, per county, in order:
@@ -52,8 +52,10 @@ changed her surname. So, per county, in order:
     naming someone the county's own roster no longer seats fails the
     honesty rules, and inventing the successor would too.
 
-The 50 counties with no published roster keep the dated book row — there
-is nothing to reconcile against. Every decision prints on the build log.
+The 41 counties with no published roster keep the dated book row — there
+is nothing to reconcile against. (That was 50 until the 2026-08-27
+re-sweep; the set is READ from the shipped roster file, never listed here,
+so nine counties' chairs began reconciling with no change to this code.) Every decision prints on the build log.
 
 The Menominee/Shawano DA rows carry the book's own footnote — one
 prosecutorial unit, one district attorney (Wis. Stat. ch. 978) — and the
