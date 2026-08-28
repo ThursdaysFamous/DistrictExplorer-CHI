@@ -428,29 +428,108 @@ merge.
 
 ---
 
-## Phase 2 roadmap — statewide parity (+7; recorded now, built next, own plan PR when it opens)
+## Phase 2 roadmap — statewide parity (+7; corrected 2026-08-28 against a live re-verification pass, own plan PR when it opens)
 
-`precinct` (`Iowa_Precincts/FeatureServer/0` on the same LSA org — VERIFIED, research pass: 1,660
-features, `maxRecordCount` 1,000 so paginate; fields include `PollingPlace`/`PollingPlaceAddr`/`PPID`
-in-band, deliberately **withheld from the card** until phase 4's dated-polling display contract is
-built — shipping "current" polling data off a stale item invites exactly the honesty failure the fleet
-guards against; licence capture is this layer's step zero too, same null-`licenseInfo` posture).
-`ia-judicial-district` (8 derived whole-county unions; double witness = Iowa Code §602.6107(3), which
-freezes the composition at **§§602.6107/602.6109, Code 2003** — ASSERTED, to be fetched and pinned at
-PR time — cross-checked against `iowacourts.gov`'s own district pages and LSA's `JudicialDistricts`
-layer as a third witness; judges are merit-appointed and stand for **retention**, never "elected" —
-the card must say so; roster scrape runs CI-side since `iowacourts.gov` 403s this sandbox, and district
-page URL slugs are inconsistent across the 8 districts per the research pass — a scraper trap to
-encode, not discover twice). `community-college` (15 merged areas, LSA/DE dual-published — VERIFIED
-exists — elected boards, Iowa Code 260C.11 ASSERTED, per-college roster route recorded as a 15-site
-attrition project rather than attempted in this pass). `police-station` + `fire-station` (USGS
-structures 53/51, fleet-standard). `school-site` (DE `IowaSchoolBldgs` — VERIFIED exists, 1,321
-points, item touched the same week as this document). `library` (State Library of Iowa's directory —
-route unverified past its Knack-platform export button; ships if the export is automatable, else a
-recorded gap). County card gains the **auditor**, Iowa's county election commissioner (ASSERTED, Iowa
-Code 47.2): `iowaauditors.org/find/directory/` — VERIFIED, plain HTML, all 99 auditors with office
-address and phone, no email — cross-gated against `sos.iowa.gov/auditors` (exists per the research
-pass's search; 403s this sandbox — CI-side read).
+CORRECTED 2026-08-28 — the original research pass materially undercounted `police-station` and
+`fire-station`: live-requerying `carto.nationalmap.gov/.../structures/MapServer/{53,51}` against
+Iowa's own shipped `METRO_BBOX` returns **449 police points and 1,262 fire points**, not 53/51 (the
+original figures read at roughly Chicago-metro-bbox scale, not statewide-envelope scale — a
+methodology error, not a wrong endpoint). Both remain fleet-standard, licence-free (`licenseInfo`
+null), no-roster nearest-N layers with the exact shape `post-office` already ships — **now PR 1 of
+phase 2**, ahead of the three layers `ia/index.html`'s own sequencing comment assumed would go first.
+
+`precinct` (`Iowa_Precincts/FeatureServer/0`, item id `d394edea208c4003ac1d6bd1ec78532f` on the LSA
+org — CONFIRMED 1,660 features, `maxRecordCount` 1,000 so paginate, `licenseInfo` null, fields
+confirmed including `PollingPlace`/`PollingPlaceAddr`/`PPID`, deliberately **withheld from the card**
+until phase 4's dated-polling display contract is built). **A TRIPLE-DUPLICATE-SERVICE TRAP,
+confirmed live**: two decoys exist at deceptively similar names — `IaPrecincts` on the separate
+`LSAFiscal` org (1,651 features, titled "2022 Precincts", last edited 2022-08-30, stale) and a bare
+`Precincts` service on the SAME org as the real one (1,689 features, no edit metadata, unexplained) —
+**the builder must pin the item id, never search by service name.** PR 4.
+
+`ia-judicial-district` (8 whole-county unions). Iowa Code §§602.6107/602.6109, Code 2003 — CONFIRMED,
+was ASSERTED, frozen by a transitional provision subject to a decennial Supreme Court review (next
+possible redraw window opened 2012, none enacted — worth a one-line card/backlog note that the
+composition is statutorily revisable, not frozen forever). **`iowacourts.gov` does NOT 403 this
+sandbox** (corrected, not repeated — the Coles/data.iowa.gov pattern for a fourth time in this
+fleet); per-district URL pattern confirmed `iowacourts.gov/iowa-courts/district-court/judicial-district-{N}/`,
+and the "inconsistent slugs" trap is now characterized exactly: District 1's roster page is
+`.../judges-and-magistrates-district-1/` (number-suffixed) where Districts 2 and 3 are
+`.../judges-and-magistrates/` (bare) — a scraper must discover the slug per district, never assume one
+pattern fleet-wide. **Buildable with NO new boundary fetch**: `ia/data/app/state-counties.json`
+(shipped in PR 0, 99 features, GEOID/COUNTY/NAME) dissolves directly against a compiled
+county→district table sourced from the Code citation, with the LSAFiscal `JudicialDistricts/FeatureServer/0`
+(8 features, real polygons, `JUD_DIST`/`POP_2010` only, no county field — usable only as a spatial
+third witness, never as the crosswalk itself) as the double-witness gate — mirroring Wisconsin's
+`wi-circuit-court` build exactly (69 whole-county unions per Wis. Stat. 753.06, same
+partition/containment-gate, double-witness shape), the closer fleet analog than Illinois's
+judicial-subcircuit, which is a per-county-dispatch pattern Iowa's single-org geometry doesn't need.
+Judges are RETENTION, never "elected" — the card must say so. PR 5.
+
+`community-college` (Iowa Code 260C.11 — CONFIRMED, was ASSERTED: an ELECTED board, one member per
+director district — mirrors the fleet's DISTRICTED political-layer pattern, **not** Wisconsin's
+`wtcs-district` shape, whose board is appointed under a different statute; a real divergence the
+original roadmap note didn't flag). **AN ACTIVE, PREVIOUSLY-UNKNOWN 2026 BOUNDARY REVISION**: the LSA
+org carries `CommColleges2020` (15 features, 2021-12-15 vintage) AND `CC_Boundaries_REV2026` (15
+features, last edited 2026-07-02 — eight weeks before this correction), plus a
+`CC_BoundaryReviewQuestion` scratch/comment layer edited the same day — evidence of an active or
+just-closed boundary review with no primary citation found yet. Needs the same SF-75 discipline PR 5
+(`county-supervisor`) already built: pin which vintage is authoritative, find the primary source for
+what changed, gate the build both ways. **The roster problem is likely SOLVED, reversing the original
+"15-site attrition project" call**: `ccforiowa.org/about/board-members-officers` — the trustees' own
+association page — states "124 Trustees" and publishes a name/roman-numeral-district/college table
+spanning all 15 colleges, the Vermilion/Douglas "the association's own directory" pattern again; 124
+trustees against `CC_DD2023`'s 123 director districts is a one-off to reconcile at build time, not yet
+resolved. Also needs a design decision on whether the merged-area outline alone is enough to name a
+trustee (the roster is elected by director sub-district, `CC_DD2023`, itself phase 3 scope) or whether
+phase 2 must reach into that geometry early. The most complex remaining phase-2 item — PR 6, last, and
+possibly worth its own short research pass before a PR is written rather than implementing straight
+from this record.
+
+`school-site` (Iowa DE `IowaSchoolBldgs` — CONFIRMED 1,321 features, `licenseInfo` null, edited
+2026-07-29, genuinely current). **A NAMING TRAP, confirmed live**: the service's own internal title is
+"PublicSchoolBldgs", and querying that STRING as a slug returns a completely different, stale service
+(title "Public School Buildings", 1,336 features, last edited 2018-01-12, sparse fields, no
+administrator contact) — **the correct slug is `IowaSchoolBldgs`, never the visually-identical
+internal title.** Fields are richer than expected (per-building administrator name/title/phone/email
+in-band); default to WI's `school-site` precedent (proximity-only, no admin roster row) unless the
+implementing PR decides otherwise. `maxRecordCount`/pagination unchecked — live-load (matching
+`county-subdivision`/`municipality`'s pattern) if it fits under the cap in one request, else pre-build
+like WI's own `school-site`. PR 3.
+
+`police-station` + `fire-station` — see the correction above. PR 1.
+
+`library` — State Library of Iowa. **CONFIRMED no ArcGIS layer exists anywhere in Iowa's state GIS
+presence** (both the LSA and LSAFiscal orgs fully enumerated; an unauthenticated
+`arcgis.com/sharing/rest/search` catalog sweep for "iowa library"/"state library of iowa" turns up
+only third-party/hobbyist maps — unlike Wisconsin's own DPI-published layer). The real directory is
+`statelibraryofiowa.gov/resources/iowa-library-directory` (not `/libraries/directory`, which 404s),
+linking a Knack app at `silo.knack.com/directory`. **DEFINITIVELY NOT PLAIN-GET-AUTOMATABLE**: Knack's
+public application-metadata endpoint (app id `5adf7c79596212286f183285`) is open, but both real
+record-fetching routes (`api.knack.com/v1/pages/scene_120/views/view_231/records` and
+`.../objects/object_8/records`) return `401 Invalid API Key` without a private key — needs the
+Playwright rung (the Kendall/McHenry-class ladder), untested in this pass. Neither a simple layer nor
+a recorded gap yet — attempt the browser rung before deciding either way. Sequenced inside or just
+after PR 6's window.
+
+County card gains the **auditor**, Iowa's county election commissioner (Iowa Code 47.2 — CONFIRMED,
+was ASSERTED): `iowaauditors.org/find/directory/` — CONFIRMED, 99 rows embedded directly in
+server-rendered HTML, each carrying name, **party as a CSS icon class** (`fa-republican`/presumably
+`fa-democrat` — not plain text, a finding the original pass missed), office name, full mailing
+address, and phone in `(NNN) NNN-NNNN` format; zero e-mails anywhere on the page, confirming the
+no-email call. `sos.iowa.gov/auditors` does NOT 403 this sandbox either (corrected), but is a
+per-county page-link directory, not a second name/phone list — useful as "does this county have an
+official auditor page," not as a row-for-row cross-gate. PR 2, independent of every other item, ships
+early alongside PR 1.
+
+**Sequencing, corrected from `ia/index.html`'s own "phase 2 begins with precinct, ia-judicial-district
+and community-college" note (wrong — fixed in the same change as PR 1)**: PR 1 police-station +
+fire-station (zero roster/licence/currency risk) → PR 2 auditor (roster-only, no new geometry) → PR 3
+school-site (naming trap to navigate, otherwise simple) → PR 4 precinct (pagination +
+honesty-critical field-withholding, no roster complexity) → PR 5 ia-judicial-district (buildable from
+data already shipped, moderate scraper/statute work) → PR 6 community-college (currency reconciliation
++ elected sub-district roster design, the hardest remaining item) → library (attempted inside or after
+PR 6's window, contingent on the untested Playwright rung).
 
 ## Phase 3 roadmap — elected-education fabrics + first city tier
 

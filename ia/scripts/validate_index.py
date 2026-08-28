@@ -97,7 +97,7 @@ MIN_REGISTER_LAYER = 10
 EXPECT_LAYER_IDS = [
     "us-house", "ia-senate", "county", "ia-house", "county-supervisor",
     "school-district-unified", "county-subdivision", "municipality",
-    "zip-code", "post-office",
+    "zip-code", "police-station", "fire-station", "post-office",
 ]
 
 # file -> (min features, max features) for the boundary layers fetched by the app.

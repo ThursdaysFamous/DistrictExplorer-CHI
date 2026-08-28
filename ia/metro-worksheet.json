@@ -135,7 +135,29 @@
       }
     },
     {
-      "id": "post-office", "label": "Post Office", "group": "geography", "area_rank": 10,
+      "id": "police-station", "label": "Police Station", "group": "safety", "area_rank": 10,
+      "rank_note": "Nearest-3 point layer (449 stations in the state envelope) — not a containment boundary; ranked with the amenity points",
+      "source": {
+        "answers": "The three nearest police stations, straight-line distance.",
+        "boundary": [
+          { "label": "USGS National Map — structures layer 53 (Law Enforcement), queried live by an Iowa bounding envelope", "url": "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/53" }
+        ],
+        "applies": "Iowa — the state's bounding envelope; nearest-3 is a proximity fact, not a jurisdictional claim."
+      }
+    },
+    {
+      "id": "fire-station", "label": "Fire Station", "group": "safety", "area_rank": 11,
+      "rank_note": "Nearest-3 point layer (1,262 stations in the state envelope) — denser than the police set, so ranked after it",
+      "source": {
+        "answers": "The three nearest fire stations, straight-line distance.",
+        "boundary": [
+          { "label": "USGS National Map — structures layer 51 (Fire/EMS/Rescue), queried live by an Iowa bounding envelope", "url": "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/51" }
+        ],
+        "applies": "Iowa — the state's bounding envelope; nearest-3 is a proximity fact, not a jurisdictional claim."
+      }
+    },
+    {
+      "id": "post-office", "label": "Post Office", "group": "geography", "area_rank": 12,
       "rank_note": "Nearest-3 point layer, straight-line distance — not a containment boundary, ranked last",
       "source": {
         "answers": "The three nearest post offices, straight-line distance.",
