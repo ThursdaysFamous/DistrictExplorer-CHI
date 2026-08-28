@@ -140,7 +140,22 @@
       }
     },
     {
-      "id": "county-subdivision", "label": "County Subdivision", "group": "geography", "area_rank": 10,
+      "id": "cc-director-district",
+      "label": "CC Director District",
+      "group": "schools",
+      "area_rank": 10,
+      "rank_note": "123 director districts inside the 15 community college merged areas — the sub-fabric a college's board of trustees is elected from (Iowa Code 260C.11)",
+      "source": {
+        "answers": "The community college director district covering the point — the sub-district its board of trustees is elected from.",
+        "boundary": [
+          { "label": "Iowa Dept. of Education, Division of Community Colleges — CC_DirectorDistricts_FINAL, effective 2023-08-01, 123 features across 15 colleges. Its item (b89cf40cef40497e80ae8eb0a6e6d22f) states an EMPTY licence — terms UNSTATED, which is not the same as permissive, and NOT the CC0 the school-director layer's item carries", "url": "https://services.arcgis.com/vPD5PVLI6sfkZ5E4/arcgis/rest/services/CC_DD2023/FeatureServer/0" }
+        ],
+        "people": "None. Trustees are elected per director district under Iowa Code 260C.11, but there is no statewide roster and each of the 15 colleges publishes its own board its own way — 6 of 15 name a numbered district on a discoverable page, one is captcha-fronted and one refuses this client. Measured per college in ia/WATCH.md rather than half-joined.",
+        "applies": "Iowa — all 15 merged areas, tiled completely. 123 polygons cover a parent layer that seats 124 directors, and the whole difference is Des Moines Area: this publisher draws it as EIGHT districts numbered 1 and 3-9, balancing them against its own IDEAL of the merged area over eight. It is not a hole — the uncovered share of that college is 0.11%, lower than most of the fifteen. The two publishers disagree about the COUNT, not the ground, and this app resolves neither."
+      }
+    },
+    {
+      "id": "county-subdivision", "label": "County Subdivision", "group": "geography", "area_rank": 11,
       "rank_note": "1,663 records tiling the state, live from TIGERweb (no data/app file) — 1,600 civil townships, 62 incorporated cities that double as their own subdivision record, and one federal reservoir carried as unorganized territory",
       "source": {
         "answers": "The civil township, or incorporated-city subdivision record, covering the point — and its type.",
@@ -152,7 +167,7 @@
       }
     },
     {
-      "id": "municipality", "label": "City", "group": "geography", "area_rank": 11,
+      "id": "municipality", "label": "City", "group": "geography", "area_rank": 12,
       "rank_note": "939 incorporated cities, live from TIGERweb (no data/app file) — small dense pockets within the county-subdivision fabric, so smaller on average than a civil township despite fewer records",
       "source": {
         "answers": "The incorporated city covering the point, if any.",
@@ -164,7 +179,7 @@
       }
     },
     {
-      "id": "zip-code", "label": "ZIP Code", "group": "geography", "area_rank": 12,
+      "id": "zip-code", "label": "ZIP Code", "group": "geography", "area_rank": 13,
       "rank_note": "Census ZCTAs by Iowa envelope (no data/app file) — 1,443 features measured in-envelope, smaller on average than an incorporated city",
       "source": {
         "answers": "The ZIP Code Tabulation Area (ZCTA) covering the point.",
@@ -175,7 +190,7 @@
       }
     },
     {
-      "id": "precinct", "label": "Precinct", "group": "political", "area_rank": 13,
+      "id": "precinct", "label": "Precinct", "group": "political", "area_rank": 14,
       "rank_note": "1,660 election precincts, pre-built (mapshaper-simplified from the Legislature's own ArcGIS layer) — identity-only, no roster; ranked with the other fine-grained political boundaries",
       "source": {
         "answers": "The election precinct covering the point, and its county.",
@@ -186,7 +201,7 @@
       }
     },
     {
-      "id": "police-station", "label": "Police Station", "group": "safety", "area_rank": 14,
+      "id": "police-station", "label": "Police Station", "group": "safety", "area_rank": 15,
       "rank_note": "Nearest-3 point layer (449 stations in the state envelope) — not a containment boundary; ranked with the amenity points",
       "source": {
         "answers": "The three nearest police stations, straight-line distance.",
@@ -197,7 +212,7 @@
       }
     },
     {
-      "id": "fire-station", "label": "Fire Station", "group": "safety", "area_rank": 15,
+      "id": "fire-station", "label": "Fire Station", "group": "safety", "area_rank": 16,
       "rank_note": "Nearest-3 point layer (1,262 stations in the state envelope) — denser than the police set, so ranked after it",
       "source": {
         "answers": "The three nearest fire stations, straight-line distance.",
@@ -208,7 +223,7 @@
       }
     },
     {
-      "id": "school-site", "label": "School Location", "group": "schools", "area_rank": 16,
+      "id": "school-site", "label": "School Location", "group": "schools", "area_rank": 17,
       "rank_note": "Nearest-3 point layer (1,321 public school buildings, pre-built) — not a containment boundary; ranked with the amenity points",
       "source": {
         "answers": "The three nearest public school buildings, straight-line distance.",
@@ -219,7 +234,7 @@
       }
     },
     {
-      "id": "post-office", "label": "Post Office", "group": "geography", "area_rank": 17,
+      "id": "post-office", "label": "Post Office", "group": "geography", "area_rank": 18,
       "rank_note": "Nearest-3 point layer, straight-line distance — not a containment boundary, ranked last",
       "source": {
         "answers": "The three nearest post offices, straight-line distance.",
@@ -230,7 +245,7 @@
       }
     }
   ],
-  "min_register_layer": 11,
+  "min_register_layer": 12,
   "anchor_point": { "lat": 42.0494, "lng": -92.9071, "note": "downtown Marshalltown, Marshall County" },
   "anchors": [
     { "layer": "county", "expected": "Marshall County" },
@@ -253,6 +268,7 @@
       { "file": "jones-county-outline.json", "min_features": 1, "max_features": 1, "dynamic_reference": true, "note": "Jones County's own boundary, extracted from state-counties.json by ia/scripts/build_ia_county_outline.py — the Data-gaps panel's map highlight for gap jones-county-supervisor. Referenced dynamically (built from the gap's county slug at runtime), never by a literal in index.html." },
       { "file": "ia-school-districts.json", "min_features": 324, "max_features": 324, "note": "324 unified school districts, built by ia/scripts/build_ia_school_districts.py: TIGERweb's 325 dissolved (Orient-Macksburg into Nodaway Valley) and witnessed by name against the Dept. of Education's own current layer (2,000-point agreement gate)." },
       { "file": "ia-school-director-districts.json", "min_features": 716, "max_features": 716, "note": "716 school board director districts, built by ia/scripts/build_ia_school_director_districts.py from the Iowa Legislature's own ArcGIS org. 728 features are published; 10 are EXACT duplicates (Davis County and East Buchanan each publish every row twice) and 2 name districts stale in that layer (LU VERNE, ORIENT-MACKSBURG — the latter independently corroborating this repo's own dissolve into Nodaway Valley). At-large boards are READ from the publisher's own AT-LARGE label in DIST_NAME, never inferred from DISTRICT=0. Keyed <GEOID>-<DISTRICT> because UID is NOT unique — Webster City publishes districts 2 and 3 under one UID. 2,000-point agreement gate at 99.85%, 0 overlaps." },
+      { "file": "ia-cc-director-districts.json", "min_features": 123, "max_features": 123, "note": "123 community college director districts inside the 15 merged areas, built by ia/scripts/build_ia_cc_director_districts.py. Joined to the parent community-college layer on the NUMERIC key, never the name — the source writes \"North Iowa Area\" and \"Northwest\" where the app ships \"North Iowa\" and \"Northwest Iowa\" — with ONE asserted remap: this source numbers Southeastern 8 where the app ships 16, the correction build_ia_community_colleges.py already documents, and the builder FAILS if that key stops appearing rather than letting a retired remap mis-key something else. Every college publishes exactly the districts its board seats except Des Moines Area, drawn here as EIGHT districts numbered 1 and 3-9. That is a COUNT disagreement, not a coverage hole: sampling puts the share of each merged area covered by none of its own director districts at 0.00-0.64% across all fifteen, with Des Moines Area at 0.11% — lower than most — and the source's own IDEAL for it is the merged-area population over eight, so it balanced eight deliberately. 2,000-point agreement gate at 99.95%, 0 overlaps." },
       { "file": "ia-school-sites.json", "min_features": 1321, "max_features": 1321, "note": "1,321 public school buildings, pre-built by ia/scripts/build_ia_school_sites.py from the Iowa Legislature's own ArcGIS org's IowaSchoolBldgs layer (paginated past its 1,000-record cap)." },
       { "file": "ia-precincts.json", "min_features": 1660, "max_features": 1660, "note": "1,660 election precincts across all 99 counties, pre-built by ia/scripts/build_ia_precincts.py from the Iowa Legislature's own ArcGIS org's Iowa_Precincts layer (Visvalingam-simplified from ~18MB raw to under 3MB, 2,000-point agreement gate; polling-place fields never fetched)." },
       { "file": "ia-judicial-districts.json", "min_features": 8, "max_features": 8, "note": "8 judicial election districts, whole-county unions dissolved from state-counties.json by ia/scripts/build_ia_judicial_district.py, per Iowa Code SS602.6107/602.6109 and double-witnessed at build time against the LSAFiscal organization's own published district polygons." },
@@ -271,7 +287,7 @@
     ]
   },
   "sw": {
-    "cache_name": "districtry-ia-shell-v2",
+    "cache_name": "districtry-ia-shell-v3",
     "shell_urls": ["./", "./manifest.webmanifest", "./icons/icon-192.png", "./icons/icon-512.png", "./icons/apple-touch-icon.png", "./icons/icon-maskable-512.png", "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js", "https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.24.0/maplibre-gl.min.js", "./vendor/leaflet-maplibre-gl.js"]
   },
   "data_sources": { "registry": "ia/scripts/validate_sources.py" },
