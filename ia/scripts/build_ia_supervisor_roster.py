@@ -22,7 +22,7 @@ list does not already answer. Keying a plan 2 district would read as
 district-based election, which is precisely what plan 2 is not.
 
 THE PEOPLE COME FROM THE SHIPPED ROSTER, NOT FROM THE COUNTY PAGE. The scraper
-recovers only a NUMBER; every name, phone and party here is carried over from
+recovers only a NUMBER; every name and party here is carried over from
 data/app/ia-county-officers.json, which was itself gated against Iowa Code
 331.201's legal board sizes and against the seat count in the shipped district
 geometry. So a county page cannot introduce a person, only place one -- and
@@ -36,6 +36,17 @@ A county failing any of these ships nothing and is named in the run's output;
 its supervisors keep the unkeyed listing they already have on the County card.
 NEVER infer a district from the order a page lists people in -- that is the one
 failure mode that produces a complete, confident, wrong answer.
+
+NO PHONE RIDES A SUPERVISOR ROW. Every one of these 17 counties publishes ONE
+number for the whole board -- measured, one distinct value per county across
+all 67 keyed districts -- which is the courthouse board office, not a
+supervisor's line. build_ia_county_officers.py already hoists that number out
+of its own member rows into `boardPhone`; this file carries the same field at
+COUNTY level so the district card can print it as "Board office" instead of
+presenting the switchboard as the direct line of whichever supervisor the
+reader's district elected. A per-person number is a different fact and would
+have to arrive from a source that publishes one; the officer roster this reads
+from carries none, so none can leak through.
 
 Usage:
     python3 ia/scripts/ia_supervisor_district_scraper.py   # refresh the cache
@@ -82,10 +93,12 @@ def main():
         plan_by_county[p["COUNTY"]] = p.get("PLANTYPE")
 
     officers = load(OFFICERS, "county officers")
-    board_by_county = {}
+    board_by_county, board_phone_by_county = {}, {}
     for rec in officers.values():
         if rec.get("supervisors"):
             board_by_county[rec["county"]] = rec["supervisors"]
+        if rec.get("boardPhone"):
+            board_phone_by_county[rec["county"]] = rec["boardPhone"]
 
     cache = load(CACHE, "supervisor district cache -- run the scraper first")
 
@@ -126,14 +139,27 @@ def main():
             row = {"name": name}
             if src.get("party"):
                 row["party"] = src["party"]
+            # src carries no phone by construction (the officer builder hoists
+            # the shared board number out of its member rows). Should a source
+            # ever start publishing a genuine per-supervisor line, it has to be
+            # let through deliberately rather than inherited by this loop.
             if src.get("phone"):
-                row["phone"] = src["phone"]
+                raise RuntimeError(
+                    "%s names a phone on supervisor %s -- a per-person number "
+                    "is a new fact here. Confirm it is that supervisor's line "
+                    "and not the board switchboard before shipping it."
+                    % (county, name))
             members[dist] = row
-        directory[fips_by_county[county]] = {
+        rec = {
             "county": county,
             "districts": members,
             "sourceUrl": entry.get("sourceUrl"),
         }
+        # The board office's own number, county-level and labelled as such on
+        # the card. One number shared by every supervisor is a switchboard.
+        if board_phone_by_county.get(county):
+            rec["boardPhone"] = board_phone_by_county[county]
+        directory[fips_by_county[county]] = rec
 
     # The scraper caps the name-to-district gap at PROXIMITY_CHARS, so this is
     # a tripwire rather than a second gate: counties publish this pairing
@@ -149,13 +175,16 @@ def main():
             "scraper and read its skip reasons before loosening anything"
             % (len(directory), total_districts, MIN_COUNTIES, MIN_DISTRICTS))
 
-    # Structural refusal: only these four fields may ship. No address, ever.
+    # Structural refusal: only these two fields may ship on a person. No
+    # address, ever -- and no phone, because the only number any of these
+    # publishers gives is the board office's, which rides the county level.
     for fips, rec in directory.items():
         for dist, row in rec["districts"].items():
-            extra = set(row) - {"name", "party", "phone"}
+            extra = set(row) - {"name", "party"}
             if extra:
                 raise RuntimeError("%s district %s carries %s -- only "
-                                   "name/party/phone may ship" % (fips, dist, sorted(extra)))
+                                   "name/party may ship on a supervisor"
+                                   % (fips, dist, sorted(extra)))
 
     print("ia-supervisor-members: %d plan 3 counties, %d districts keyed, %d "
           "skipped | widest name-to-district gap %d chars"

@@ -115,7 +115,24 @@ MIN_FILES_COMPARED = 40
 # accepted. Keep these rare — each one is a field this check has stopped
 # watching, which is exactly what it exists to prevent.
 # ---------------------------------------------------------------------------
-ACCEPTED_DROPS = {}
+ACCEPTED_DROPS = {
+    # Removed on purpose, 2026-08-28. Every one of the 17 plan 3 counties keyed
+    # into this file publishes ONE phone number for its whole board -- measured,
+    # exactly one distinct value per county across all 67 districts -- which is
+    # the courthouse board office rather than a supervisor's line. The County
+    # card had already hoisted that number to a labelled "Board office" row
+    # (docs/EXPANSION_GUIDE.md Part 5, the switchboard rule); this file had gone
+    # on copying it onto each district, where ONE name renders and nothing on
+    # the card contradicts the reading that it is that supervisor's own line.
+    # The number still ships, once, county-level, as `boardPhone`. The builder
+    # now REFUSES to write if a member row arrives carrying a phone at all, so
+    # this is a field that cannot silently come back wrong.
+    "ia/data/app/ia-supervisor-members.json:phone":
+        "2026-08-28 -- the board switchboard, hoisted to county-level "
+        "`boardPhone` and rendered as \"Board office\". It was never a "
+        "per-supervisor number; build_ia_supervisor_roster.py now refuses any "
+        "phone on a member row.",
+}
 
 
 def records_in(payload):
