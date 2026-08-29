@@ -705,7 +705,17 @@ DOC_DISTNAME = re.compile(r"(?i)^District\s*(\d{1,2})\s+(.+)$")
 
 
 def document_rows(pdf_bytes, section):
-    """District -> {name, role, phone, email} out of the Clerk's directory."""
+    """District -> {name, role, phone, email} out of the Clerk's directory.
+
+    A row needs a PHONE to be recognised, which is how the directory writes
+    every seat it fills, so a VACANT seat would not parse and its district
+    would go missing — taking the whole county out through the count gate
+    below rather than shipping 22 of 23. That is deliberate and it is the same
+    all-or-nothing rule scrape_county holds, but it is NOT the vacancy handling
+    the page counties have: this county has no vacancy today, and the day it
+    has one the run fails naming the missing district, which is a person
+    reading the directory rather than a silent short roster.
+    """
     reader = PdfReader(io.BytesIO(pdf_bytes))
     whole = "\n".join(page.extract_text() or "" for page in reader.pages)
     try:
