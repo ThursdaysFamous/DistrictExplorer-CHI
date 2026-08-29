@@ -1535,6 +1535,215 @@
   "role": "Chairperson",
   "sourceUrl": "https://www.co.juneau.wi.gov/government/county_board_supervisors/index.php"
  },
+ "5505901": {
+  "county": "Kenosha",
+  "district": 1,
+  "email": "william.grady@kenoshacountywi.gov",
+  "name": "William Grady",
+  "phone": "262-652-2020",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=455",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505902": {
+  "county": "Kenosha",
+  "district": 2,
+  "email": "stephanie.knezz@kenoshacountywi.gov",
+  "name": "Stephanie Knezz",
+  "phone": "309-502-1078",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=456",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505903": {
+  "county": "Kenosha",
+  "district": 3,
+  "email": "riki.tagliapietra@kenoshacountywi.gov",
+  "name": "Riki Tagliapietra",
+  "phone": "262-358-6104",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=552",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505904": {
+  "county": "Kenosha",
+  "district": 4,
+  "email": "laura.belsky@kenoshacountywi.gov",
+  "name": "Laura Belsky",
+  "phone": "262-705-5722",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=458",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505905": {
+  "county": "Kenosha",
+  "district": 5,
+  "email": "julia.robinson@kenoshacountywi.gov",
+  "name": "Julia Robinson",
+  "phone": "262-705-3235",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=479",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505906": {
+  "county": "Kenosha",
+  "district": 6,
+  "email": "dave.tarzon@kenoshacountywi.gov",
+  "name": "Dave Tarzon",
+  "phone": "773-474-3301",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=553",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505907": {
+  "county": "Kenosha",
+  "district": 7,
+  "email": "daniel.gaschke@kenoshacountywi.gov",
+  "name": "Daniel Gaschke",
+  "phone": "262-902-7028",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=308",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505908": {
+  "county": "Kenosha",
+  "district": 8,
+  "email": "sarah.kirby@kenoshacountywi.gov",
+  "name": "Sarah Kirby",
+  "phone": "262-286-1313",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=454",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505909": {
+  "county": "Kenosha",
+  "district": 9,
+  "email": "john.morrissey@kenoshacountywi.gov",
+  "name": "John Morrissey",
+  "phone": "262-945-7377",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=453",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505910": {
+  "county": "Kenosha",
+  "district": 10,
+  "email": "david.lux@kenoshacountywi.gov",
+  "name": "David Lux",
+  "phone": "262-496-5849",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=554",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505911": {
+  "county": "Kenosha",
+  "district": 11,
+  "email": "guida.brown@kenoshacountywi.gov",
+  "name": "Guida Brown",
+  "phone": "262-945-1865",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=460",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505912": {
+  "county": "Kenosha",
+  "district": 12,
+  "email": "gabe.nudo@kenoshacountywi.gov",
+  "name": "Gabe Nudo",
+  "phone": "262-620-2574",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=139",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505913": {
+  "county": "Kenosha",
+  "district": 13,
+  "email": "john.franco@kenoshacountywi.gov",
+  "name": "John Franco",
+  "phone": "262-857-6772",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=140",
+  "role": "Vice-Chair",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505914": {
+  "county": "Kenosha",
+  "district": 14,
+  "email": "tim.stocker@kenoshacountywi.gov",
+  "name": "Tim Stocker",
+  "phone": "262-652-1312",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=461",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505915": {
+  "county": "Kenosha",
+  "district": 15,
+  "email": "dave.geertsen@kenoshacountywi.gov",
+  "name": "Dave Geertsen",
+  "phone": "262-515-3334",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=134",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505916": {
+  "county": "Kenosha",
+  "district": 16,
+  "email": "jeff.cologna@kenoshacountywi.gov",
+  "name": "Jeff Cologna",
+  "phone": "262-771-6236",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=555",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505917": {
+  "county": "Kenosha",
+  "district": 17,
+  "email": "luke.pollock@kenoshacountywi.gov",
+  "name": "Luke Pollock",
+  "phone": "847-909-8662",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=556",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505918": {
+  "county": "Kenosha",
+  "district": 18,
+  "email": "eric.meadows@kenoshacountywi.gov",
+  "name": "Eric Meadows",
+  "phone": "262-960-4475",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=144",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505919": {
+  "county": "Kenosha",
+  "district": 19,
+  "email": "keith.gray@kenoshacountywi.gov",
+  "name": "Keith Gray",
+  "phone": "847-757-7885",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=146",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505920": {
+  "county": "Kenosha",
+  "district": 20,
+  "email": "john.poole@kenoshacountywi.gov",
+  "name": "John Poole",
+  "phone": "262-945-4502",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=147",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505921": {
+  "county": "Kenosha",
+  "district": 21,
+  "email": "mark.nordigian@kenoshacountywi.gov",
+  "name": "Mark Nordigian",
+  "phone": "262-705-2347",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=148",
+  "role": "Chair",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505922": {
+  "county": "Kenosha",
+  "district": 22,
+  "email": "erin.decker@kenoshacountywi.gov",
+  "name": "Erin Decker",
+  "phone": "262-885-6133",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=459",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505923": {
+  "county": "Kenosha",
+  "district": 23,
+  "email": "aaron.karow@kenoshacountywi.gov",
+  "name": "Aaron Karow",
+  "phone": "262-620-8363",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=150",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
  "5506101": {
   "county": "Kewaunee",
   "district": 1,
