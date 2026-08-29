@@ -2,8 +2,8 @@ name: Update WI county board roster
 
 # Weekly refresh of the Wisconsin county board supervisors
 # (wi/data/app/county-board-members.json, read by wi/index.html's County Board
-# District card). Re-scrapes the 33 counties that publish a readable
-# district-keyed member list — 29 board pages, Milwaukee's and Racine's own GIS
+# District card). Re-scrapes the 34 counties that publish a readable
+# district-keyed member list — 30 board pages, Milwaukee's and Racine's own GIS
 # layers (Milwaukee witnessed against the county's Legistar API), Taylor's
 # roster carried as a dated document because its host answers a captcha, and
 # Adams's read out of the county clerk's own published directory PDF — and, if
@@ -49,10 +49,10 @@ jobs:
 
       # Otherwise stdlib — the scraper fetches with urllib and the builder reads
       # the shipped geometry off disk.
-      - name: Scrape the 33 counties that publish a readable member list
+      - name: Scrape the 34 counties that publish a readable member list
         run: python3 wi/scripts/wi_county_board_scraper.py
 
-      # Refuses to write below its floors (31 counties, 680 seats) and checks
+      # Refuses to write below its floors (32 counties, 710 seats) and checks
       # every county's seats against the district geometry actually shipped, so
       # the two publishers have to agree before this lands.
       - name: Rebuild the county board roster
