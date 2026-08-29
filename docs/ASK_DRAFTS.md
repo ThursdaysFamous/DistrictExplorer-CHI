@@ -562,6 +562,16 @@ Generated from the shipped rosters and the 2026-08-29 probe, so every name, numb
 
 ## Ask 6 — Jo Daviess County, Illinois: display permission under the site's new domain
 
+> **SENT 2026-08-29.** Replied on the original thread (*"County board district boundaries —
+> public release, or a digital data order?"*) to **jkratcha@**, cc **dlascala@**, **gis@**
+> and **akaiser@** — the operator kept the County Administrator on, so the "and the
+> county" half went with it. Awaiting a reply.
+>
+> **Follow up 2026-09-19**, and again **2026-10-03**, before recording the route unresponsive —
+> which would be a claim about this ask, never about the permission. The existing
+> authorization was given for this site and has not been withdrawn, so the display
+> continues meanwhile.
+
 **This is the only ask in this file that is not about getting data.** The data is already
 here, lawfully: `il/data/app/jo-daviess-county-board-districts.json` is built from the
 county's own board-district shapefile, purchased 2026-08-17 under Jo Daviess County GIS
@@ -577,9 +587,11 @@ authorization is what makes the file publishable, and it names one thing:
 domain 301-redirects to the new one and it is the same site, same operator, same use.
 Nothing about the display changed — but the permission names a domain, and the honest
 reading is that a permission naming a domain says what it says. `LICENSE-DATA.md` records
-exactly that, states that the permission has not been re-sought under the new name, and
-excludes this one file from the project's ODbL grant so nothing sweeps the county's data
-into an open licence. **This ask closes that gap.**
+exactly that and excludes this one file from the project's ODbL grant, so nothing sweeps
+the county's data into an open licence. **This ask closes that gap** — and on the day it
+was sent, `LICENSE-DATA.md` stopped saying the permission "has not been re-sought" and
+started naming the date it was, because a published legal statement that is a day stale is
+the kind of inaccuracy this project treats as a bug.
 
 Nothing is blocked on the answer and the county is not being asked to reconsider anything
 it already decided — which is worth saying plainly in the mail, because an office that
