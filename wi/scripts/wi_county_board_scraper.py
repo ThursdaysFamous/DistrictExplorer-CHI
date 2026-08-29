@@ -753,13 +753,42 @@ def is_name(text):
     return all(re.match(r"^[A-Za-z][A-Za-z'’\-]*$", t) for t in toks)
 
 
+# A COMMA-SEPARATED NAME HAS MORE THAN TWO SHAPES, and reading it as two is
+# how a suffix ends up where a first name belongs. The four shapes:
+#
+#     "Coenen, Devon"           Last, First          -> "Devon Coenen"
+#     "Schaefer, II"            Last, Suffix         -> "Joseph H. Schaefer II"
+#     "Dantinne, Jr., Norbert"  Last, Suffix, First  -> "Norbert Dantinne Jr."
+#     "Dantinne, Norbert, Jr."  Last, First, Suffix  -> "Norbert Dantinne Jr"
+#
+# The third is Brown County's own spelling of its district 13 supervisor, and
+# it shipped as "Jr., Norbert Dantinne": a split on the FIRST comma only ever
+# sees two fields, so "Jr." was read as the whole of the last name and flipped
+# to the front. The county's own profile slug for that member
+# (/government/county_board/norbert-dantinne-jr/) is the independent witness
+# that Norbert is the first name and Jr. the suffix, which is what makes this
+# a PINNED SHAPE rather than a special case for one person.
+#
+# So every field is split out, the SUFFIXES are lifted aside wherever they
+# sit, and only a genuine two-field Last, First is flipped — which leaves the
+# two shapes that already shipped byte-identical. The last two rows above are
+# therefore the same read, differing only in the trailing period, which the
+# strip on the line below has always taken off the END of a name whatever it
+# is; Brown writes the third, where the period sits mid-string and survives.
+#
+# A shape with more than two non-suffix fields is NOT pinned and is not
+# guessed at: it joins in the order the county wrote it, so an unread shape
+# reads oddly rather than naming somebody wrongly.
 def clean(text):
     text, role = split_role(repair(text))
     text = LEAD.sub("", text).strip(" .,-–—")
     if "," in text:
-        a, b = [x.strip() for x in text.split(",", 1)]
-        # "Schaefer, II" is a SUFFIX; only a genuine "Last, First" is flipped.
-        text = "%s %s" % (a, b) if SUFFIX.match(b) else "%s %s" % (b, a)
+        fields = [x.strip() for x in text.split(",") if x.strip()]
+        suffix = [x for x in fields if SUFFIX.match(x)]
+        rest = [x for x in fields if not SUFFIX.match(x)]
+        if len(rest) == 2:
+            rest = [rest[1], rest[0]]
+        text = " ".join(rest + suffix)
     return " ".join(text.split()), role
 
 
