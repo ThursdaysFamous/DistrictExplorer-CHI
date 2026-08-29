@@ -26,6 +26,9 @@ recorded as such:
     sgcaptcha challenge answering 202 (an access control, not an obstacle to
     route around), Forest does not resolve, and the remainder publish their
     members as PDFs, images or prose with no district column.
+    FOND DU LAC LEFT THAT BUCKET ON 2026-08-29 WITHOUT ITS BLOCK LIFTING —
+    the 403 is still there and still measured; what changed is that the page
+    behind it is now read through the Internet Archive. See ARCHIVE_COUNTIES.
 
     TAYLOR IS NOT A "PUBLISHES NOTHING" COUNTY, and the bucket above said so
     only because nothing here can SEE the page. It publishes a County Board
@@ -125,6 +128,43 @@ the same before/after ambiguity the rest of this file pins per county — see
 its comment for the three cases and for Jefferson, which a forward-only first
 draft filed one seat off.
 
+A COUNTY'S ROSTER NOW ARRIVES BY ONE OF FOUR CARRIERS (2026-08-29)
+------------------------------------------------------------------
+COUNTIES is the original and still the biggest: a page this client can fetch,
+read by one of five pinned line readings. ARCGIS_COUNTIES reads Milwaukee's and
+Racine's supervisors off their own GIS layers, because those two counties'
+SITES refuse this client while their GIS does not. DOCUMENT_ROSTERS carries
+Taylor, whose every host answers a captcha, from a page the operator read in a
+browser — with a NOT RE-READ line and the document's age printed every run,
+because pretending a weekly check happens would be the lie.
+
+ARCHIVE_COUNTIES is the fourth and it is the one that needs its reasoning
+stated. Fond du Lac's directory is richer than most of the pages that already
+ship — name, district, county e-mail and phone for all twenty-five seats, the
+Chair and both Vice Chairs titled — and www.fdlco.wi.gov answers this client
+HTTP 403 from AkamaiGHost on every path, every user-agent and both schemes.
+The county is not withholding anything; a CDN is refusing a datacenter
+address. The Internet Archive's crawler has been taking copies of that same
+public page for years, so the page is read from there.
+
+THE LINE THIS SITS ON. A captcha is an access control and is never worked
+around here (Taylor is the standing example). A client-fingerprint 403 is not
+defeated either — nothing in this file forges a fingerprint or retries the
+county's own server in disguise. Reading a public archive of a public page is
+a third party's copy of a document the county published to the world, and it
+is the arrangement Illinois already runs for Kendall and McHenry. The
+difference from Taylor is not politeness, it is REPEATABILITY: an archive can
+be re-read every week and a browser session in someone's memory cannot.
+
+WHICH IS WHY FRESHNESS IS GATED AND NOT ASSUMED. The failure mode of an
+archive is not a wrong answer, it is a stale one that looks current — see the
+two measurements recorded above ARCHIVE_COUNTIES, one of which would have
+stitched five supervisors from before an April election onto twenty from
+after it. Save Page Now is asked for a new copy on every run, the copy's age
+is checked before it is parsed, and the pages must have been captured close
+together. A county that cannot be read FRESHLY is skipped for that run,
+exactly like a county whose page has reshaped.
+
 Vacancies are DATA, not misses. Winnebago district 33 ("Vacant Vacant"),
 Shawano 5, Oneida 1 and Rusk 3 and 13 are seats the counties themselves say
 nobody holds; they ship as vacant, and a vacancy overrides any name the search
@@ -145,6 +185,7 @@ import ssl
 import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 
 DEFAULT_OUT = os.path.join(os.path.dirname(__file__), ".cache", "wi_county_boards_raw.json")
@@ -628,6 +669,351 @@ def document_county(spec):
     return out
 
 
+# =============================================================================
+# COUNTIES WHOSE ROSTER RIDES THE INTERNET ARCHIVE (added 2026-08-29)
+# =============================================================================
+# THE THIRD CARRIER, after a page this client can fetch and a county's own GIS
+# layer. Fond du Lac publishes a County Board Supervisors directory that is
+# richer than most of the counties that already ship — a name, a district, a
+# county e-mail and a phone for all twenty-five seats, with the Chair and both
+# Vice Chairs titled — and this client cannot read a byte of it: every path on
+# www.fdlco.wi.gov answers HTTP 403 from AkamaiGHost with the CDN's own "Access
+# Denied" body, to every user-agent tried, over http and https alike. That is a
+# client-fingerprint block on a datacenter address, not a refusal to publish,
+# and the proof is that the Internet Archive's own crawler has been fetching
+# the page successfully for years.
+#
+# So the county's own page is read through a public archive OF THAT PAGE. Not
+# evasion — nothing here defeats the block, and a captcha would end the matter
+# (see Taylor) — a second reader of a document the county publishes to the
+# world, with the copy's timestamp carried into the run log for provenance.
+# The Illinois side reached the same arrangement for Kendall and McHenry first
+# (scripts/kendall_county_board_scraper.py's WaybackFetcher); this is that
+# posture with Wisconsin's own gates around it.
+#
+# FRESHNESS IS THE WHOLE PROBLEM, AND IT IS MEASURED RATHER THAN ASSUMED.
+# A snapshot is a photograph, and an old one shows a board that has since
+# changed while looking exactly like a current one. Two measurements set the
+# rules below, both taken 2026-08-29 from the Archive's own CDX index:
+#
+#   1. NATURAL CRAWLING IS NOT ENOUGH. The captures of page 1 over the past
+#      year run 2025-08-15, 2025-10-02, ... 2026-02-09, 2026-05-05, 2026-05-11
+#      and then nothing — gaps of 48, 85 and (at the time of writing) 110 days.
+#      A roster resting on whatever the crawler happened to take would be
+#      months stale for months at a time and never say so. SAVE PAGE NOW is
+#      therefore the primary route: each run asks the Archive to take a FRESH
+#      capture of each page, and only falls back to the newest existing one.
+#   2. THE TWO PAGES CAN BE FROM DIFFERENT WORLDS. The directory paginates at
+#      twenty, so twenty-five supervisors need two fetches — and on the day
+#      this was written the newest capture of page 1 was 2026-05-11 while the
+#      newest of page 2 was 2026-03-16. Wisconsin's county boards are ALL
+#      reseated at the April spring election, so those two captures sit on
+#      opposite sides of one, and stitching them would have shipped five
+#      supervisors (districts 2, 4, 7, 16 and 21) who might no longer hold
+#      their seats, presented beside twenty who certainly did. Nothing about
+#      the merged result would have looked wrong. Hence PAGE_SPREAD_DAYS: the
+#      pages must be captured close to each other as well as recently.
+#
+# Both limits FAIL LOUDLY rather than degrading. A county that cannot be read
+# freshly is skipped for the run and its card goes back to linking the board,
+# which is the same thing that happens to any county whose page reshapes.
+WAYBACK_MAX_AGE_DAYS = 45     # Kendall's number, and for Kendall's reason
+PAGE_SPREAD_DAYS = 14         # see measurement 2 above — an April election is
+                              # the thing this stops a merge from straddling
+WAYBACK_AVAILABLE = "https://archive.org/wayback/available?url=%s"
+WAYBACK_SAVE = "https://web.archive.org/save/%s"
+WAYBACK_RAW = "https://web.archive.org/web/%sid_/%s"
+
+ARCHIVE_COUNTIES = [
+    {
+        "fips": "55039", "name": "Fond Du Lac", "seats": 25,
+        # Page 1 is the source_url a reader is sent to; page 2 exists only
+        # because the county's directory widget paginates at twenty. The pager
+        # states its own arithmetic ("1 - 20 of 25 items"), which is what the
+        # gates below check rather than trusting this list to stay complete.
+        "pages": [
+            "https://www.fdlco.wi.gov/government/county-board-supervisors",
+            "https://www.fdlco.wi.gov/government/county-board-supervisors/-npage-2",
+        ],
+        "source_url": "https://www.fdlco.wi.gov/government/county-board-supervisors",
+        "email_domain": "@fdlco.wi.gov",
+        "min_emails": 23,     # 25 today; a page that stops publishing them fails
+        "min_phones": 23,
+    },
+]
+
+
+def _spn_save(url):
+    """Ask Save Page Now for a fresh capture; return its 14-digit timestamp.
+
+    Anonymous by default. ARCHIVE_SPN_ACCESS_KEY / ARCHIVE_SPN_SECRET_KEY (the
+    same repo secrets Illinois' Kendall and McHenry workflows already pass)
+    switch on the SPN2 job API, which is the reliable path when a shared runner
+    address has spent the anonymous quota. Absent keys are not an error.
+    """
+    key = os.environ.get("ARCHIVE_SPN_ACCESS_KEY")
+    secret = os.environ.get("ARCHIVE_SPN_SECRET_KEY")
+    if key and secret:
+        try:
+            data = urllib.parse.urlencode({"url": url}).encode()
+            req = urllib.request.Request(
+                "https://web.archive.org/save", data=data,
+                headers=dict(UA, Accept="application/json",
+                             Authorization="LOW %s:%s" % (key, secret)))
+            with urllib.request.urlopen(req, timeout=60) as r:
+                job = json.load(r).get("job_id")
+            if job:
+                for _ in range(30):          # ~2.5 minutes, SPN2's own pace
+                    time.sleep(5)
+                    req = urllib.request.Request(
+                        "https://web.archive.org/save/status/" + job,
+                        headers=dict(UA, Accept="application/json",
+                                     Authorization="LOW %s:%s" % (key, secret)))
+                    with urllib.request.urlopen(req, timeout=30) as r:
+                        st = json.load(r)
+                    if st.get("status") == "success":
+                        return st.get("timestamp")
+                    if st.get("status") == "error":
+                        break
+        except Exception as e:              # noqa: BLE001 - save is best-effort
+            print("    SPN2 save failed (%s): %s" % (url, e), file=sys.stderr)
+    try:
+        req = urllib.request.Request(WAYBACK_SAVE % url, headers=UA)
+        with urllib.request.urlopen(req, timeout=180) as r:
+            m = re.search(r"/web/(\d{14})", r.geturl() or "")
+            if not m:
+                m = re.search(r"/web/(\d{14})", r.headers.get("Content-Location", "") or "")
+            if m:
+                return m.group(1)
+    except Exception as e:                  # noqa: BLE001 - save is best-effort
+        print("    Save Page Now unavailable (%s): %s" % (url, e), file=sys.stderr)
+    return None
+
+
+def _wayback_latest(url):
+    """Timestamp of the newest existing snapshot, or None."""
+    try:
+        req = urllib.request.Request(
+            WAYBACK_AVAILABLE % urllib.parse.quote(url, safe=""), headers=UA)
+        with urllib.request.urlopen(req, timeout=60) as r:
+            snap = (json.load(r).get("archived_snapshots") or {}).get("closest") or {}
+        return snap.get("timestamp") or None
+    except Exception:                       # noqa: BLE001 - reachability probe
+        return None
+
+
+BLOCK_PAGE = re.compile(r"(?i)<title>\s*(?:Access Denied|Just a moment)")
+
+
+def _snapshot_age_days(ts):
+    import datetime
+    taken = datetime.datetime.strptime(ts, "%Y%m%d%H%M%S").replace(
+        tzinfo=datetime.timezone.utc)
+    return (datetime.datetime.now(datetime.timezone.utc) - taken).days
+
+
+def fetch_archived(url):
+    """(html, timestamp) for the county's page, read through the Archive.
+
+    A fresh capture is REQUESTED first and the newest existing one is only the
+    fallback; either way the copy's age is checked before it is parsed, so a
+    stale archive fails the county loudly instead of shipping old officeholders
+    behind a current-looking card.
+    """
+    ts = _spn_save(url) or _wayback_latest(url)
+    if ts is None:
+        raise RuntimeError("no archive snapshot available for %s" % url)
+    age = _snapshot_age_days(ts)
+    if age > WAYBACK_MAX_AGE_DAYS:
+        raise RuntimeError(
+            "the newest archive copy of %s is %d days old (limit %d) and Save Page "
+            "Now did not take a fresh one — refusing to ship officeholders read "
+            "from it" % (url, age, WAYBACK_MAX_AGE_DAYS))
+    page = fetch(WAYBACK_RAW % (ts, url))
+    if BLOCK_PAGE.search(page):
+        raise RuntimeError("the archived copy of %s is itself a block page (%s)"
+                           % (url, ts))
+    return page, ts
+
+
+def fetch_page(url):
+    """(html, archived_at_or_None) — the county's own server first, the Archive
+    second. The direct rung costs one request and is tried on every run rather
+    than being written off: this project has twice recorded a county as blocked
+    on the strength of one client's view (Knox's website, Gallatin's TLS chain),
+    and a block that lifts should be noticed by the scraper, not by a person."""
+    try:
+        page = fetch(url, timeout=30)
+        if not BLOCK_PAGE.search(page):
+            return page, None
+    except Exception:                       # noqa: BLE001 - the expected path
+        pass
+    return fetch_archived(url)
+
+
+# --- reading a Granicus business-directory page -------------------------------
+# The generic readers above flatten a page to lines and hunt for a district
+# beside a name. This county's directory is STRUCTURED — one <h2 class=
+# "detail-title"> per supervisor followed by a labelled <ul class="detail-list">
+# — so it is read as the markup it is, which is what makes the e-mail and phone
+# reachable at all. Deliberately a separate reader rather than a sixth reading
+# direction: the thirty counties on the line readers keep byte-identical
+# behaviour, the same reason `_windowed_strict` did not become a flag on
+# `_windowed`.
+_ENTRY = re.compile(r'(?is)<h2[^>]*class="[^"]*detail-title[^"]*"[^>]*>(.*?)</h2>\s*'
+                    r'(?:<ul[^>]*class="[^"]*detail-list[^"]*"[^>]*>(.*?)</ul>)?')
+_FIELD = re.compile(r'(?is)<span[^>]*detail-list-label[^>]*>(.*?)</span>\s*'
+                    r'<span[^>]*detail-list-value[^>]*>(.*?)</span>')
+_MAILTO = re.compile(r'(?i)href="mailto:([^"]+)"')
+_PAGER = re.compile(r"(\d+)\s*[-–]\s*(\d+)\s+of\s+(\d+)\s+items")
+# A SUFFIX IS NEVER ONE LETTER, and that rule cost a name. The county writes
+# "Sippel, James V." — a middle initial — and a suffix pattern that accepted a
+# lone roman "V" flipped it to "James Sippel V.", a plausible, wrong, and
+# entirely silent rename. Jr/Sr/II/III/IV are two characters or more; a single
+# letter, with or without its period, is an initial.
+_NAME_SUFFIX = re.compile(r"^(?:Jr\.?|Sr\.?|II|III|IV)$", re.I)
+
+
+def _flat(fragment):
+    return " ".join(html_lib.unescape(_TAG.sub(" ", fragment or "")).split())
+
+
+def flip_surname_first(name):
+    """"Herlache, Thomas L. Jr." -> "Thomas L. Herlache Jr."
+
+    The shared `clean()` flips a comma too, but it treats everything after the
+    comma as given names, so a generational suffix ends up in the middle of the
+    person's name. This directory prints both shapes.
+    """
+    if "," not in name:
+        return name
+    last, rest = [x.strip() for x in name.split(",", 1)]
+    toks = rest.split()
+    suffix = toks.pop() if toks and _NAME_SUFFIX.match(toks[-1]) else ""
+    given = " ".join(toks)
+    out = ("%s %s" % (given, last)).strip() if given else last
+    return ("%s %s" % (out, suffix)).strip()
+
+
+def read_directory_page(page, seats, spec):
+    """(members_by_district, first_item, last_item, total) for one page."""
+    pager = _PAGER.search(_flat(page))
+    if not pager:
+        raise RuntimeError("no pager on the page — the directory has changed shape")
+    first, last, total = (int(x) for x in pager.groups())
+    if total != seats:
+        raise RuntimeError(
+            "the directory says it holds %d supervisors and this county is entered "
+            "with %d seats — one of the two has changed" % (total, seats))
+
+    out, addresses = {}, 0
+    for title_frag, list_frag in _ENTRY.findall(page):
+        title = _flat(title_frag)
+        m = DIST.search(title)
+        if not m:
+            continue
+        district = int(m.group(1))
+        if not 1 <= district <= seats:
+            raise RuntimeError("the directory names District %d on a %d-district board"
+                               % (district, seats))
+        if district in out:
+            raise RuntimeError("District %d appears twice on one page" % district)
+        rest, role = split_role(DIST.sub(" ", title, count=1))
+        if VACANT.search(rest):
+            out[district] = {"name": None, "vacant": True, "role": None}
+            continue
+        row = {"name": flip_surname_first(rest.strip().strip("-–—").strip()),
+               "vacant": False, "role": role}
+        for label_frag, value_frag in _FIELD.findall(list_frag or ""):
+            label = _flat(label_frag).rstrip(":").lower()
+            if label == "address":
+                # READ SO IT CAN BE REFUSED, never carried. Every one of these
+                # is a supervisor's HOME (rural routes, "N5528 Ledgetop
+                # Drive") — this fleet does not ship a home address even where
+                # the county publishes one, the same call Taylor's document
+                # roster records. Counting them is how the run proves it is
+                # still reading the field it is declining, rather than having
+                # quietly stopped seeing it.
+                addresses += 1
+            elif label == "email":
+                mm = _MAILTO.search(value_frag)
+                if mm:
+                    email = html_lib.unescape(mm.group(1)).strip()
+                    if email.lower().endswith(spec["email_domain"]):
+                        row["email"] = email
+            elif label == "phone":
+                row["phone"] = _flat(value_frag)
+        out[district] = row
+
+    want = last - first + 1
+    if len(out) != want:
+        raise RuntimeError("the pager says items %d-%d (%d supervisors) and %d were "
+                           "read" % (first, last, want, len(out)))
+    if not addresses:
+        raise RuntimeError("not one Address row on a page of %d supervisors — the "
+                           "directory has changed shape and the field this build "
+                           "deliberately drops can no longer be seen" % len(out))
+    return out, first, last, total
+
+
+def scrape_archive_county(spec):
+    """All seats or nothing, from a paginated directory read through the Archive."""
+    seats = spec["seats"]
+    members, spans, stamps = {}, [], []
+    for url in spec["pages"]:
+        page, archived_at = fetch_page(url)
+        got, first, last, _total = read_directory_page(page, seats, spec)
+        for d, row in got.items():
+            if d in members:
+                raise RuntimeError("District %d appears on two pages" % d)
+            members[d] = row
+        spans.append((first, last))
+        stamps.append(archived_at)
+        print("    %-4s %s  items %d-%d"
+              % ("live" if archived_at is None else archived_at[:8],
+                 url.rsplit("/", 1)[-1][:34], first, last), file=sys.stderr)
+
+    # THE PAGES MUST TILE THE BOARD, and be read from one moment in its life.
+    covered = []
+    for first, last in sorted(spans):
+        covered.extend(range(first, last + 1))
+    if covered != list(range(1, seats + 1)):
+        raise RuntimeError("the pages fetched cover items %s of a %d-supervisor "
+                           "directory — a page has been added or dropped"
+                           % (sorted(spans), seats))
+    # A PAGE THE COUNTY SERVED DIRECTLY COUNTS AS AGE ZERO, which is the whole
+    # reason this is computed over ages rather than over the archive stamps: if
+    # the block ever lifts for one request and not the next, page 1 arrives from
+    # today and page 2 from the newest snapshot, and comparing only the stamps
+    # would find one date, no spread, and nothing to complain about — the exact
+    # straddle this gate exists to stop, wearing a fresher coat.
+    ages = [0 if t is None else _snapshot_age_days(t) for t in stamps]
+    spread = max(ages) - min(ages)
+    if spread > PAGE_SPREAD_DAYS:
+        raise RuntimeError(
+            "the pages were captured %d days apart (limit %d) — a Wisconsin board "
+            "is reseated every April, so a merge across that gap can pair "
+            "supervisors who never sat together" % (spread, PAGE_SPREAD_DAYS))
+
+    if set(members) != set(range(1, seats + 1)):
+        missing = sorted(set(range(1, seats + 1)) - set(members))
+        raise RuntimeError("resolved %d of %d districts (missing %s)"
+                           % (len(members), seats, missing))
+    named = [m["name"] for m in members.values() if not m["vacant"]]
+    if len(set(named)) != len(named):
+        dupes = sorted({n for n in named if named.count(n) > 1})
+        raise RuntimeError("the same person is filed under two districts (%s)" % dupes)
+    emails = sum(1 for m in members.values() if m.get("email"))
+    phones = sum(1 for m in members.values() if m.get("phone"))
+    if emails < spec["min_emails"]:
+        raise RuntimeError("%d county e-mail addresses resolved, floor is %d"
+                           % (emails, spec["min_emails"]))
+    if phones < spec["min_phones"]:
+        raise RuntimeError("%d phone numbers resolved, floor is %d"
+                           % (phones, spec["min_phones"]))
+    return {str(d): members[d] for d in sorted(members)}, stamps
+
+
 def _fetch_json(url):
     req = urllib.request.Request(url, headers=UA)
     ctx = ssl.create_default_context()
@@ -866,14 +1252,19 @@ def main():
 
     counties, failures = {}, []
     jobs = [(c["fips"], c["name"], c["seats"], "arcgis", c) for c in ARCGIS_COUNTIES]
+    jobs += [(a["fips"], a["name"], a["seats"], "archive", a) for a in ARCHIVE_COUNTIES]
     jobs += [(d["fips"], d["name"], d["seats"], "document", d) for d in DOCUMENT_ROSTERS]
     jobs += [(fips, name, seats, strategy, url) for fips, name, seats, strategy, url in COUNTIES]
     for fips, name, seats, strategy, src in jobs:
         if only and fips != only:
             continue
         try:
+            archived_at = None
             if strategy == "arcgis":
                 districts = scrape_arcgis_county(src)
+                source_url = src["source_url"]
+            elif strategy == "archive":
+                districts, archived_at = scrape_archive_county(src)
                 source_url = src["source_url"]
             elif strategy == "document":
                 districts = document_county(src)
@@ -893,6 +1284,14 @@ def main():
             counties[fips]["carried_from_document"] = True
             counties[fips]["read_on"] = src["read_on"]
             counties[fips]["how"] = src["how"]
+        if strategy == "archive" and any(archived_at or []):
+            # SAME PRINCIPLE AS THE DOCUMENT LINE ABOVE: the file records that
+            # this county's page was read through a public archive and WHEN
+            # each copy was taken, so nobody has to know which table it came
+            # from to know how fresh it is. A page the county served directly
+            # carries no stamp, which is how a lifted block shows up here.
+            counties[fips]["read_via_archive"] = True
+            counties[fips]["archived_at"] = archived_at
         vac = sum(1 for d in districts.values() if d["vacant"])
         print("  ok   %-12s %d seats%s" % (name, seats, " (%d vacant)" % vac if vac else ""),
               file=sys.stderr)
@@ -903,7 +1302,8 @@ def main():
     total = sum(c["seats"] for c in counties.values())
     print("wrote %s: %d/%d counties, %d seats%s"
           % (out_path, len(counties),
-             len(COUNTIES) + len(ARCGIS_COUNTIES) + len(DOCUMENT_ROSTERS), total,
+             len(COUNTIES) + len(ARCGIS_COUNTIES) + len(ARCHIVE_COUNTIES)
+             + len(DOCUMENT_ROSTERS), total,
              ", %d county/counties missed" % len(failures) if failures else ""),
           file=sys.stderr)
 

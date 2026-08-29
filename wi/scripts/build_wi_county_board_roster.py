@@ -80,11 +80,16 @@ def main():
                 row["name"] = member["name"]
                 if member["role"]:
                     row["role"] = member["role"]
-                # the two county-GIS rosters carry contact on the feature —
-                # fields the page-scraped counties never publish; each rides
-                # only where its county published it
+                # CONTACT RIDES ONLY WHERE ITS COUNTY PUBLISHED IT. This
+                # started as the two county-GIS rosters' feature attributes,
+                # which is why the comment here used to say the page-scraped
+                # counties never publish contact — three now do, and `phone`
+                # was reaching this builder from Taylor's document roster and
+                # being dropped on the floor for want of these two lines.
                 if member.get("email"):
                     row["email"] = member["email"]
+                if member.get("phone"):
+                    row["phone"] = member["phone"]
                 if member.get("url"):
                     row["profileUrl"] = member["url"]
             roster[key] = row

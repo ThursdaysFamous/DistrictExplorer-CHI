@@ -287,6 +287,20 @@ EXPECTED_UNREACHABLE = {
         "the board-roles scraper carries it via the Internet Archive",
     "adamscountyil.gov":
         "Akamai \"Access Denied\" — same posture as McHenry and Kendall",
+    # THE ONE HERE WHOSE PAGE THIS REPO STILL READS EVERY WEEK. Fond du Lac's
+    # County Board Supervisors directory is Akamai-denied to this client on
+    # every path and both schemes, and its twenty-five supervisors ship anyway
+    # — read through the Internet Archive's copy of that same public page
+    # (wi/scripts/wi_county_board_scraper.py's ARCHIVE_COUNTIES). So the WI
+    # county-board card links a URL that will answer this checker 403 forever
+    # while the data behind it is refreshed weekly. Listing it stops the
+    # monthly report advising that a live link be treated as dead; the
+    # inversion is worth as much as usual here, because the day this host
+    # answers again is the day that scraper's direct rung starts serving and
+    # the archive hop can go.
+    "fdlco.wi.gov":
+        "Akamai \"Access Denied\" — the client-fingerprint block that makes the "
+        "county's board roster ride the Internet Archive instead",
     "chicagoelections.gov":
         "Cloudflare managed challenge — the Board of Election Commissioners' site "
         "refuses non-browser clients; the early-voting file is hand-transcribed",
