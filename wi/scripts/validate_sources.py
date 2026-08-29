@@ -275,7 +275,7 @@ PROVENANCE = [
         "app_file": "county-board-members.json",
         "source_url": "https://www.browncountywi.gov/government/county-board-of-supervisors/",
         "note": (
-            "The supervisor roster — 29 counties' own board pages plus two county GIS layers (rows above), scraped weekly by "
+            "The supervisor roster — 30 counties' own board pages plus two county GIS layers (rows above), scraped weekly by "
             "update-wi-county-board-roster.yml with each county's reading direction "
             "pinned (the full URL table is COUNTIES in wi_county_board_scraper.py). "
             "Two representative pages are probed — Brown, the largest launch-set "
@@ -284,6 +284,22 @@ PROVENANCE = [
             "weekly scrape already fails loudly per "
             "county; this row exists so the FILE's disappearance is noticed and so "
             "the roster has a manifest row at all."
+        ),
+    },
+    {
+        "layer": "county-board",
+        "app_file": "county-board-members.json",
+        "source_url": ("https://saukdomino.co.sauk.wi.us/Internet/Applications/"
+                       "main.nsf/publicDistrictList.xsp"),
+        "note": (
+            "Sauk's 31 districts on a Domino application host of the county's "
+            "own — linked from co.sauk.wi.us/countyboard/sauk-county-board-"
+            "members as its current-term list, and the same distinction Dane "
+            "makes below: the roster is not on the host the county's other "
+            "surfaces live on. Probed here because it is the only county whose "
+            "roster rides an application server rather than a page, so an "
+            "application that stops answering is noticed on this report rather "
+            "than only in the weekly scrape's own failure."
         ),
     },
     {

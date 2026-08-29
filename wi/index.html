@@ -8629,14 +8629,15 @@ function initWisconsinExplorer() {
    *
    * THE SUPERVISOR IS NAMED WHERE A COUNTY PUBLISHES ONE, AND NOWHERE ELSE.
    * Wisconsin publishes no statewide roster, so the people come from each
-   * county's own page: 20 of the 72 publish a district-keyed member list a
-   * parser can read (437 seats), and the other 52 do not — three publish
-   * district MAPS with no name on them, and the rest are unreadable or
-   * publish prose. A district in an unnamed county keeps the honest card:
-   * the district, and a link to the county board. A seat the county itself
-   * says is empty renders as VACANT, which is a fact rather than a gap
-   * (wi/scripts/wi_county_board_scraper.py records what each county
-   * publishes). ---------- */
+   * county's own surface: 34 of the 72 can be obtained (750 seats — 31 board
+   * pages, Milwaukee and Racine off their own GIS layers, Taylor as a dated
+   * document), and the other 38 cannot — two publish district MAPS with no
+   * name on them, and the rest are unreadable or publish prose. A district in
+   * an unnamed county keeps the honest card: the district, and a link to the
+   * county board. A seat the county itself says is empty renders as VACANT,
+   * which is a fact rather than a gap. Contact renders only where its county
+   * published it, per field (wi/scripts/wi_county_board_scraper.py records
+   * what each county publishes). ---------- */
   var loadSupervisoryDistricts = makeCached(function () {
     return fetchJSONWithRetry("data/app/county-supervisory-districts.json", {}, 2);
   });
@@ -8698,27 +8699,42 @@ function initWisconsinExplorer() {
         ? "District " + String(result.district) : "Unknown district";
     },
     render: function (result) {
-      var rows = [];
-      rows.push({
+      var wrap = cardEl("div", "card-flush");
+      var member = result.member;
+      var head = [{
         label: "County",
         value: result.county ? String(result.county) + " County" : "Unknown county",
         primary: true
-      });
-      var member = result.member;
+      }];
       if (member && member.vacant) {
         // The county says nobody holds this seat. Saying so is the honest
         // answer; omitting the row would read as "we could not find out".
-        rows.push({ label: "Supervisor", value: "Vacant" });
-      } else if (member && member.name) {
-        rows.push({
-          label: member.role ? "Supervisor (" + String(member.role) + ")" : "Supervisor",
-          value: String(member.name)
-        });
+        head.push({ label: "Supervisor", value: "Vacant" });
+      }
+      wrap.appendChild(renderFieldStack(head));
+      // THE CONTACT A COUNTY PUBLISHES IS PART OF THE ANSWER, and it was
+      // riding in the file without ever reaching the card: 86 county mailboxes,
+      // 46 phones and 18 profile pages. The fleet's card order is identifier,
+      // then the person, then how to reach them, so the supervisor renders as
+      // a person row and each field appears only where its county published it
+      // (renderPersonRows draws nothing for an absent field — no placeholders).
+      if (member && !member.vacant && member.name) {
+        var person = {
+          name: String(member.name),
+          badge: member.role ? String(member.role) : "Supervisor",
+          phone: member.phone ? String(member.phone) : null,
+          email: member.email ? String(member.email) : null
+        };
+        var profile = safeHttpUrl(member.profileUrl);
+        if (profile) person.links = [{ label: "Profile", url: profile }];
+        wrap.appendChild(renderPersonRows([person]));
       }
       if (result.seats) {
-        rows.push({ label: "Board", value: String(result.seats) + " supervisory districts" });
+        wrap.appendChild(renderFieldStack([
+          { label: "Board", value: String(result.seats) + " supervisory districts" }
+        ]));
       }
-      return renderFieldStack(rows);
+      return wrap;
     },
     primaryLink: function (result) {
       // Prefer the page the supervisor's own name was read from, so a reader

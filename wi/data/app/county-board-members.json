@@ -2923,6 +2923,251 @@
   "role": "Chairman",
   "sourceUrl": "https://ruskcounty.org/supervisors"
  },
+ "5511101": {
+  "county": "Sauk",
+  "district": 1,
+  "email": "wally.czuprynko@saukcountywi.gov",
+  "name": "Wally Czuprynko",
+  "phone": "608-432-5123",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511102": {
+  "county": "Sauk",
+  "district": 2,
+  "email": "terry.spencer@saukcountywi.gov",
+  "name": "Terry M. Spencer",
+  "phone": "608-963-8572",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511103": {
+  "county": "Sauk",
+  "district": 3,
+  "email": "brock.pelton@saukcountywi.gov",
+  "name": "Brock Pelton",
+  "phone": "608-415-8565",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511104": {
+  "county": "Sauk",
+  "district": 4,
+  "email": "palmer.schroeder@saukcountywi.gov",
+  "name": "Palmer Schroeder",
+  "phone": "608-393-1022",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511105": {
+  "county": "Sauk",
+  "district": 5,
+  "email": "peter.kinsman@saukcountywi.gov",
+  "name": "Peter Kinsman",
+  "phone": "608-344-8988",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511106": {
+  "county": "Sauk",
+  "district": 6,
+  "email": "rebecca.klitzke@saukcountywi.gov",
+  "name": "Rebecca Klitzke",
+  "phone": "608-524-5644",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511107": {
+  "county": "Sauk",
+  "district": 7,
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp",
+  "vacant": true
+ },
+ "5511108": {
+  "county": "Sauk",
+  "district": 8,
+  "email": "john.deitrich@saukcountywi.gov",
+  "name": "John M. Deitrich",
+  "phone": "(608) 415-3829",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511109": {
+  "county": "Sauk",
+  "district": 9,
+  "email": "mark.waldon@saukcountywi.gov",
+  "name": "Mark Waldon",
+  "phone": "608-495-0070",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511110": {
+  "county": "Sauk",
+  "district": 10,
+  "email": "marty.krueger@saukcountywi.gov",
+  "name": "Marty Krueger",
+  "phone": "608-963-3565",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511111": {
+  "county": "Sauk",
+  "district": 11,
+  "email": "michael.leuth@saukcountywi.gov",
+  "name": "Michael Leuth",
+  "phone": "608-415-1792",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511112": {
+  "county": "Sauk",
+  "district": 12,
+  "email": "david.clemens@saukcountywi.gov",
+  "name": "David Clemens",
+  "phone": "608-408-8941",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511113": {
+  "county": "Sauk",
+  "district": 13,
+  "email": "robert.prosser@saukcountywi.gov",
+  "name": "Robert Prosser",
+  "phone": "815-218-3693",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511114": {
+  "county": "Sauk",
+  "district": 14,
+  "email": "bobby.hansen@saukcountywi.gov",
+  "name": "Bobby Hansen",
+  "phone": "319-530-3959",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511115": {
+  "county": "Sauk",
+  "district": 15,
+  "email": "richard.cross@saukcountywi.gov",
+  "name": "Richard Cross",
+  "phone": "608-512-8086",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511116": {
+  "county": "Sauk",
+  "district": 16,
+  "email": "thomas.dorner@saukcountywi.gov",
+  "name": "Thomas Dorner",
+  "phone": "608-408-0147",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511117": {
+  "county": "Sauk",
+  "district": 17,
+  "email": "joan.fordham@saukcountywi.gov",
+  "name": "Joan Fordham",
+  "phone": "608-356-8927",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511118": {
+  "county": "Sauk",
+  "district": 18,
+  "email": "sam.pocernich@saukcountywi.gov",
+  "name": "Sam Pocernich",
+  "phone": "608-692-9323",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511119": {
+  "county": "Sauk",
+  "district": 19,
+  "email": "jeff.sederstrom@saukcountywi.gov",
+  "name": "Jeff Sederstrom",
+  "phone": "608-356-7567",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511120": {
+  "county": "Sauk",
+  "district": 20,
+  "email": "timothy.mccumber@saukcountywi.gov",
+  "name": "Timothy McCumber",
+  "phone": "608-963-6581",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511121": {
+  "county": "Sauk",
+  "district": 21,
+  "email": "bernadette.greenwood@saukcountywi.gov",
+  "name": "Bernadette Greenwood",
+  "phone": "608-448-6684",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511122": {
+  "county": "Sauk",
+  "district": 22,
+  "email": "jeff.nachreiner@saukcountywi.gov",
+  "name": "Jeff Nachreiner",
+  "phone": "608-546-2287",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511123": {
+  "county": "Sauk",
+  "district": 23,
+  "email": "ray.ring@saukcountywi.gov",
+  "name": "Ray Ring",
+  "phone": "608-588-4073",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511124": {
+  "county": "Sauk",
+  "district": 24,
+  "email": "gaile.burchill@saukcountywi.gov",
+  "name": "Gaile Burchill",
+  "phone": "608-588-0008",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511125": {
+  "county": "Sauk",
+  "district": 25,
+  "email": "brian.peper@saukcountywi.gov",
+  "name": "Brian L. Peper",
+  "phone": "608-415-3751",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511126": {
+  "county": "Sauk",
+  "district": 26,
+  "email": "brandon.lohr@saukcountywi.gov",
+  "name": "Brandon Lohr",
+  "phone": "608-370-0755",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511127": {
+  "county": "Sauk",
+  "district": 27,
+  "email": "scott.alexander@saukcountywi.gov",
+  "name": "Scott Kevin Alexander",
+  "phone": "608-408-3870",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511128": {
+  "county": "Sauk",
+  "district": 28,
+  "email": "susie.tatone@saukcountywi.gov",
+  "name": "Susie Tatone",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511129": {
+  "county": "Sauk",
+  "district": 29,
+  "email": "aaron.evert@saukcountywi.gov",
+  "name": "Aaron Evert",
+  "phone": "608-963-4067",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511130": {
+  "county": "Sauk",
+  "district": 30,
+  "email": "joel.chrisler@saukcountywi.gov",
+  "name": "Joel Chrisler",
+  "phone": "608-712-5975",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511131": {
+  "county": "Sauk",
+  "district": 31,
+  "email": "andy.arntsen@saukcountywi.gov",
+  "name": "Andy Arntsen",
+  "phone": "608-386-8181",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
  "5511501": {
   "county": "Shawano",
   "district": 1,
@@ -3090,6 +3335,7 @@
   "district": 1,
   "email": "lisa.carbaugh@co.taylor.wi.us",
   "name": "Lisa Carbaugh",
+  "phone": "715-965-1980",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511902": {
@@ -3097,6 +3343,7 @@
   "district": 2,
   "email": "tim.hansen@co.taylor.wi.us",
   "name": "Tim Hansen",
+  "phone": "715-965-7662",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511903": {
@@ -3104,6 +3351,7 @@
   "district": 3,
   "email": "sue.swiantek@co.taylor.wi.us",
   "name": "Susan Swiantek",
+  "phone": "715-560-9409",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511904": {
@@ -3111,6 +3359,7 @@
   "district": 4,
   "email": "michael.bub@co.taylor.wi.us",
   "name": "Michael Bub",
+  "phone": "715-965-7748",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511905": {
@@ -3118,6 +3367,7 @@
   "district": 5,
   "email": "jim.metz@co.taylor.wi.us",
   "name": "Loren (Jim) Metz",
+  "phone": "715-748-0740",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511906": {
@@ -3125,6 +3375,7 @@
   "district": 6,
   "email": "scott.mildbrand@co.taylor.wi.us",
   "name": "Scott Mildbrand",
+  "phone": "715-748-3988",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511907": {
@@ -3132,6 +3383,7 @@
   "district": 7,
   "email": "lorie.floyd@co.taylor.wi.us",
   "name": "Lorie Floyd",
+  "phone": "608-412-2974",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511908": {
@@ -3139,6 +3391,7 @@
   "district": 8,
   "email": "chuck.zenner@co.taylor.wi.us",
   "name": "Charles Zenner",
+  "phone": "715-678-2172",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511909": {
@@ -3146,6 +3399,7 @@
   "district": 9,
   "email": "diane.albrecht@co.taylor.wi.us",
   "name": "Diane J. Albrecht",
+  "phone": "715-748-5471",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511910": {
@@ -3153,6 +3407,7 @@
   "district": 10,
   "email": "catherine.lemke@co.taylor.wi.us",
   "name": "Catherine Lemke",
+  "phone": "715-748-5694",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511911": {
@@ -3160,6 +3415,7 @@
   "district": 11,
   "email": "jim.gebauer@co.taylor.wi.us",
   "name": "James Gebauer",
+  "phone": "715-748-4871",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511912": {
@@ -3167,6 +3423,7 @@
   "district": 12,
   "email": "rollie.thums@co.taylor.wi.us",
   "name": "Rollie Thums",
+  "phone": "715-427-5809",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511913": {
@@ -3174,6 +3431,7 @@
   "district": 13,
   "email": "bud.suckow@co.taylor.wi.us",
   "name": "Harvey 'Bud' Suckow",
+  "phone": "715-897-4514",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511914": {
@@ -3181,6 +3439,7 @@
   "district": 14,
   "email": "karen.cummings@co.taylor.wi.us",
   "name": "Karen Cummings",
+  "phone": "715-668-5226",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511915": {
@@ -3188,6 +3447,7 @@
   "district": 15,
   "email": "lynn.rosemeyer@co.taylor.wi.us",
   "name": "Lynette Rosemeyer",
+  "phone": "715-827-0027",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511916": {
@@ -3195,6 +3455,7 @@
   "district": 16,
   "email": "darrell.thompson@co.taylor.wi.us",
   "name": "Darrell Thompson",
+  "phone": "715-644-8285",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511917": {
@@ -3202,6 +3463,7 @@
   "district": 17,
   "email": "rod.adams@co.taylor.wi.us",
   "name": "Rodney Adams",
+  "phone": "715-678-2397",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5512101": {

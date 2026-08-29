@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-Scrape county board supervisors from the 29 Wisconsin counties that publish a
+Scrape county board supervisors from the 31 Wisconsin counties that publish a
 district-keyed member list. Stage 1 of the pair; build_wi_county_board_roster.py
 turns the intermediate JSON into data/app/county-board-members.json.
 
-WHY ONLY TWENTY-NINE OF SEVENTY-TWO
------------------------------------
+WHY ONLY THIRTY-ONE OF SEVENTY-TWO
+----------------------------------
 Wisconsin publishes county board DISTRICTS statewide (Wis. Stat. 5.15(4)(br)1,
 see build_wi_supervisory_districts.py) and publishes the PEOPLE in them
-nowhere: each county names its own supervisors, 72 different ways. Twenty-nine
+nowhere: each county names its own supervisors, 72 different ways. Thirty-one
 pair a district with a person in a form a parser can read (plus Milwaukee and
 Racine off their own GIS layers, below). The rest are not oversights and are
 recorded as such:
@@ -17,9 +17,11 @@ recorded as such:
     and no name on it anywhere. They were checked three pages deep apiece.
     This file used to claim 23 counties; that count came from a sweep that
     tested district NUMBERS, and numbers are what a map index has.
-  * Marinette publishes 29 of its 30 seats. District 26 is an unnumbered
-    "VACANT SEAT" row in an alphabetical list, and assigning it by elimination
-    would be an inference the county never wrote, so the county stays out.
+  * Marinette publishes 29 of its 30 seats: District 26 is an unnumbered
+    "VACANT SEAT" row in an alphabetical list. It kept the county out until
+    2026-08-29, when `eliminated_vacancy` made assigning that one seat an
+    arithmetic gate rather than a guess — it ships, and this bullet stays as
+    the record of why it did not.
   * The rest could not be read: 9 answer 403 to a datacenter client and hold
     it against browser headers (Marathon, La Crosse, Outagamie, Fond du Lac,
     Lafayette, Lincoln, Monroe, Rock, Sheboygan), Taylor sits behind an
@@ -94,6 +96,26 @@ same way:
                 Trempealeau) — see `_column`
     -strict     as before/after, but the scan STOPS at the next district line
                 (Richland, Rusk, Shawano) — see `_windowed_strict`
+
+A FIFTH SHAPE HAS NO DIRECTION TO PIN AT ALL (Sauk, 2026-08-29):
+
+    fielded     the page LABELS its own fields — "Supervisor: Schroder,
+                Palmer" — so the name is not near a district, it is in a
+                field the page names; see `_fielded`
+
+That is the whole point of it. `before` and `after` are one extraction shifted
+by one BECAUSE adjacency is all those pages give; a labelled field cannot be
+read off by one, and a page tweak cannot silently flip it. Sauk resolves all
+thirty-one seats where every windowed reading resolves ZERO — `is_name` rejects
+its "Supervisor: ..." line on the word supervisor and its ward lines on
+town/city/village/ward, so the county sat in the bucket below reading as though
+it published nothing. It publishes more than most: a name, a county e-mail, a
+phone and the district's ward composition per seat. THE READER WAS THE BLOCK
+FOR A THIRD TIME (nine counties on 2026-08-27, Taylor's host on 2026-08-29,
+this reader now) — and the fielded shape brings its own witnesses with it,
+which the FIELDED_PINS comment sets out: the e-mail on each row checks that
+row's own name, and the ward composition checks the county's district NUMBERING
+against LTSB's, the one thing no other county in this file can prove.
 
 The strict readings exist because a district whose own row yields no readable
 name reaches past the next heading and takes ITS name: Rusk prints an INDEX of
@@ -220,7 +242,15 @@ COUNTIES = [
      "https://www.co.shawano.wi.us/county_board/"),
     ("55121", "Trempealeau", 17, "column-before",
      "https://co.trempealeau.wi.us/government/agendas_minutes/standing_committees/"
-     "trempealeau_county_board_of_supervisors.php"),]
+     "trempealeau_county_board_of_supervisors.php"),
+    # --- 2026-08-29: the first county read by its page's own FIELD LABELS ---
+    # co.sauk.wi.us/countyboard/sauk-county-board-members links this list as
+    # "Committee Database: 2026-2028 Sauk County Board Supervisors" under the
+    # heading "Term of Office: April 21, 2026 - April 18, 2028", so it is the
+    # county's own current-term roster and not a stray application.
+    ("55111", "Sauk", 31, "fielded",
+     "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/"
+     "publicDistrictList.xsp"),]
 
 # --- text shaping -------------------------------------------------------------
 # nav is NOT boilerplate everywhere: Grant County publishes its entire board in
@@ -440,6 +470,92 @@ def _windowed_strict(lines, offsets):
                 out[d] = clean(lines[j])
                 break
     return out, vacant
+
+
+# --- the fielded reading: a page that LABELS its own fields -------------------
+# SAUK IS THE ONE COUNTY WITH NO READING DIRECTION TO PIN, because its page
+# does not put a name NEAR a district — it puts one in a field whose own label
+# says "Supervisor:". Everything the rest of this file pins per county exists
+# to survive that ambiguity; here it does not arise, and a page tweak cannot
+# silently flip a reading that keys off the page's own words.
+#
+# The county runs an IBM Domino/XPages application whose per-district panel is
+# a heading ("DISTRICT #4") followed by the district's WARD COMPOSITION, then
+# labelled Supervisor / Phone / Email / Address rows. The generic readings are
+# blind to it in both directions: `is_name` rejects the "Supervisor: ..." line
+# on the word supervisor, and rejects every ward line on town/city/village/ward
+# — so all three windowed readings resolve ZERO of the thirty-one seats. That
+# is a reader limit, not a publisher gap, and it is exactly the shape the
+# 2026-08-27 re-sweep found nine counties sitting in.
+PANEL_HEAD = re.compile(r"(?i)^district\s*#\s*(\d{1,2})$")
+FIELD = re.compile(r"(?i)^(supervisor|phone|email)\s*:\s*(.+)$")
+# The application has a template of its own for an empty seat — the panel
+# renders a `NoSupervisorPanel` reading "There is no supervisor for this
+# District." — so a vacancy here is the county's own statement, not an absence
+# this reader inferred. `VACANT` cannot see it: the sentence never says vacant.
+NO_SUPERVISOR = re.compile(r"(?i)\bno supervisor for this\s+district\b")
+# Ward lines, the witness input: "Village Of Lake Delton Wards 1, 2, 3 and 7",
+# "Town of Baraboo, Ward 4", "Town of Dellona, Ward 1 and Ward 2".
+WARD_LINE = re.compile(r"(?i)^(town|city|village)\s+of\s+(.+?)[,\s]+wards?\s+(.+)$")
+
+
+def flip_last_first(text):
+    """"Deitrich, John M." -> "John M. Deitrich", punctuation as published.
+
+    `clean` would do the flip and also strip the trailing period off a middle
+    initial — its end-strip runs before the comma split, which is why the
+    counties already shipping carry names like "Terry M Spencer". Those bytes
+    are not re-litigated here; this reading keeps what the county printed.
+    """
+    text = " ".join(text.split())
+    if "," not in text:
+        return text
+    a, b = [x.strip() for x in text.split(",", 1)]
+    if SUFFIX.match(b):
+        return "%s %s" % (a, b)     # "Schaefer, II" is a suffix, never a flip
+    return "%s %s" % (b, a)
+
+
+def _fielded(lines):
+    """district -> {name, role, email, phone}, plus the seats the page empties."""
+    heads = []
+    for i, line in enumerate(lines):
+        m = PANEL_HEAD.match(line)
+        if m:
+            heads.append((i, int(m.group(1))))
+    seen = [d for _, d in heads]
+    if len(set(seen)) != len(seen):
+        dupes = sorted({d for d in seen if seen.count(d) > 1})
+        raise RuntimeError("the page carries two panels for district(s) %s — a "
+                           "later one would silently overwrite an earlier" % dupes)
+    found, vacant, wards = {}, set(), {}
+    for k, (i, d) in enumerate(heads):
+        j = heads[k + 1][0] if k + 1 < len(heads) else len(lines)
+        panel = lines[i + 1:j]
+        row = {"name": None, "role": None, "email": None, "phone": None}
+        for line in panel:
+            m = FIELD.match(line)
+            if m:
+                label, value = m.group(1).lower(), m.group(2).strip()
+                if label == "supervisor" and row["name"] is None:
+                    row["name"] = flip_last_first(value)
+                elif label == "phone" and row["phone"] is None:
+                    row["phone"] = value
+                elif label == "email" and row["email"] is None:
+                    row["email"] = value
+                continue
+            wm = WARD_LINE.match(line)
+            if wm:
+                ctv = {"town": "T", "city": "C", "village": "V"}[wm.group(1).lower()]
+                mcd = re.sub(r"[^a-z]", "", wm.group(2).lower())
+                for n in re.findall(r"\d+", wm.group(3)):
+                    wards.setdefault(d, set()).add((ctv, mcd, int(n)))
+        if row["name"]:
+            found[d] = row
+        elif NO_SUPERVISOR.search(" ".join(panel)):
+            vacant.add(d)
+        # a panel that is neither is left unresolved: the all-seats guard fails
+    return found, vacant, wards
 
 
 READINGS = {
@@ -817,8 +933,208 @@ def eliminated_vacancy(lines, seats, found, vacant, county):
     return unclaimed[0]
 
 
+# --- what a fielded county is held to ----------------------------------------
+# THREE WITNESSES, none of them the page checking itself.
+#
+# ONE, THE E-MAIL ON EVERY SEAT'S OWN ROW. Sauk prints a county mailbox beside
+# each supervisor, and the county builds it as first.last@saukcountywi.gov —
+# so a reading shifted by one would file a name under a district whose e-mail
+# names somebody else, on all thirty rows at once. That is the shift this whole
+# file pins reading directions to avoid, answered here per seat rather than by
+# a pin. Twenty-nine of thirty agree exactly; the thirtieth is `name_fixes`.
+#
+# TWO, THE WARD COMPOSITION AGAINST LTSB. Each panel lists the wards the
+# district is built from, and LTSB's statewide ward layer — the same service
+# the app's Municipal Ward layer draws — carries a SUPERID on every ward. That
+# makes the county's numbering checkable against the state's, which is what the
+# roster's district key actually rests on: the map is LTSB's and the people are
+# the county's, and nothing else in this file proves the two number their
+# districts alike. Measured 2026-08-29: 117 of the county's 118 listed wards
+# land in LTSB's same-numbered district, and BOTH one-district shifts land
+# ZERO — the witness discriminates completely.
+#
+# THREE, THE CLERK'S OWN CANDIDATE FILING LIST for the 2026-2028 term, which
+# is where `name_fixes` and `phone_owner` come from. It is a January snapshot
+# of who FILED and is never used as a roster (it has District 1 as Jake Roxen,
+# where the county's maintained directory names Wally Czuprynko), but it is an
+# independent county document for a name and a phone number.
+#
+# NO ROLE IS ATTACHED, AND THAT IS DELIBERATE. This page marks no chair, and
+# `attach_officer_roles` therefore has nothing to find — Sauk names its chair
+# on a DIFFERENT page (co.sauk.wi.us/countyboard/county-board-contacts, "Tim
+# McCumber County Board Chair"), and a role read off one page cannot honestly
+# be sourced to another, since the roster carries one sourceUrl per county.
+# Nothing is lost: the officer builder's chair reconciliation finds the Blue
+# Book's "Tim McCumber" sitting in district 20 and CONFIRMS the dated book row
+# rather than withholding it, and the county's own contacts page independently
+# agrees with the book on both the name and the phone number district 20
+# carries here.
+LTSB_WARD_QUERY = ("https://services1.arcgis.com/FDsAtKBk8Hy4cAH0/arcgis/rest/"
+                   "services/WI_Municipal_Wards_Current/FeatureServer/0/query")
+
+FIELDED_PINS = {
+    "55111": {
+        # ONE SEAT'S NAME AND E-MAIL DISAGREE. District 4 prints "Schroder,
+        # Palmer" beside palmer.schroeder@saukcountywi.gov, and the Clerk's
+        # candidate filing list for this very term prints "Palmer B.
+        # Schroeder" — two county documents to one, so the surname the county
+        # mails to is what ships. The pin asserts the page still prints the
+        # misspelling: the day Sauk fixes its own record, this FAILS and the
+        # entry is deleted rather than quietly correcting a name forever.
+        "name_fixes": {4: ("Palmer Schroder", "Palmer Schroeder")},
+        # A PHONE PUBLISHED FOR TWO PEOPLE IS NOT A PER-PERSON PHONE. Districts
+        # 28 (Tatone) and 29 (Evert) both carry 608-963-4067; the Clerk's
+        # filing list gives that number as Evert's and Tatone's as another, so
+        # the directory has copied one supervisor's number onto a second seat.
+        # Evert keeps it on two documents' agreement and Tatone's is WITHHELD —
+        # the number this project holds for her is demonstrably his, and a
+        # candidate's own January phone is not the county's answer to "how do
+        # I reach my supervisor". Any duplicate NOT pinned here loses the
+        # number on every seat that shares it, which is the safe direction.
+        "phone_owner": {"6089634067": 29},
+    },
+}
+
+
+def digits(text):
+    return re.sub(r"[^0-9]", "", str(text or ""))
+
+
+def _email_agrees(name, email):
+    """first.last@ against the name on the same row — the anti-shift witness."""
+    local = str(email or "").split("@")[0].lower()
+    parts = [re.sub(r"[^a-z]", "", x) for x in local.split(".")]
+    parts = [x for x in parts if x]
+    toks = [re.sub(r"[^a-z]", "", t) for t in str(name or "").lower().split()]
+    toks = [t for t in toks if t]
+    if len(parts) < 2 or len(toks) < 2:
+        return False
+    return parts[0] == toks[0] and parts[-1] == toks[-1]
+
+
+def _ward_witness(fips, county, wards, seats):
+    """The county's own ward composition against LTSB's ward-level SUPERID.
+
+    A FETCH FAILURE IS NOT A DISAGREEMENT. An unreachable witness says nothing
+    about the roster, so it prints and stands aside; a witness that RUNS and
+    disagrees fails the county, because then the two publishers no longer
+    number the same districts and the roster's district key is the thing in
+    doubt.
+    """
+    try:
+        data = _fetch_json(
+            LTSB_WARD_QUERY + "?where=CNTY_FIPS%%3D%%27%s%%27&outFields="
+            "MCD_NAME,CTV,WARDID,SUPERID&returnGeometry=false&f=json" % fips)
+        feats = data.get("features") or []
+        if not feats:
+            raise RuntimeError("no wards returned")
+    except Exception as e:      # noqa: BLE001 - the witness, never the source
+        print("  WITNESS SKIPPED %-9s LTSB ward layer unreachable (%s) — the "
+              "roster ships unwitnessed this run" % (county, e), file=sys.stderr)
+        return
+    ltsb = {}
+    for f in feats:
+        a = f.get("attributes") or {}
+        key = (a.get("CTV"), re.sub(r"[^a-z]", "", str(a.get("MCD_NAME", "")).lower()),
+               int(str(a.get("WARDID") or 0)))
+        ltsb.setdefault(int(a["SUPERID"]), set()).add(key)
+    placed = sum(len(v) for v in wards.values())
+    if placed < 2 * seats:
+        raise RuntimeError("%s: the page lists only %d wards across %d districts — "
+                           "it has stopped printing its ward composition, and the "
+                           "numbering witness with it" % (county, placed, seats))
+    hit = sum(len(v & ltsb.get(d, set())) for d, v in wards.items())
+    shifts = [sum(len(v & ltsb.get(d + off, set())) for d, v in wards.items())
+              for off in (1, -1)]
+    print("  witness %-12s %d/%d listed wards in LTSB's own district (shifts %d/%d)"
+          % (county, hit, placed, shifts[0], shifts[1]), file=sys.stderr)
+    if any(shifts):
+        raise RuntimeError("%s: %d of its listed wards land one district off in "
+                           "LTSB's file — the two publishers may have renumbered "
+                           "apart; re-read both before shipping"
+                           % (county, max(shifts)))
+    if hit < 0.95 * placed:
+        raise RuntimeError("%s: only %d of %d listed wards land in LTSB's "
+                           "same-numbered district — the county's composition and "
+                           "the state's filing no longer describe one plan"
+                           % (county, hit, placed))
+
+
+def scrape_fielded_county(fips, county, seats, url):
+    """All seats or nothing, then the witnesses — see FIELDED_PINS above."""
+    lines = to_lines(fetch(url))
+    found, vacant, wards = _fielded(lines)
+    covered = set(found) | vacant
+    if covered != set(range(1, seats + 1)):
+        missing = sorted(set(range(1, seats + 1)) - covered)
+        raise RuntimeError(
+            "%s: resolved %d of %d districts (missing %s) under the 'fielded' "
+            "reading — the page has changed shape; re-read it before moving this "
+            "entry" % (county, len(covered), seats, missing))
+    pins = FIELDED_PINS.get(fips, {})
+    for d, (was, now) in sorted(pins.get("name_fixes", {}).items()):
+        if found.get(d, {}).get("name") != was:
+            raise RuntimeError(
+                "%s: district %s no longer prints %r (it prints %r) — the pinned "
+                "correction to %r has been overtaken by the county; delete it"
+                % (county, d, was, found.get(d, {}).get("name"), now))
+        found[d]["name"] = now
+        print("  name %-12s district %s: %r -> %r (the county's own e-mail and "
+              "the Clerk's filing list)" % (county, d, was, now), file=sys.stderr)
+    names = [r["name"] for r in found.values()]
+    if len(set(names)) != len(names):
+        dupes = sorted({n for n in names if names.count(n) > 1})
+        raise RuntimeError("%s: the same person is filed under two districts (%s)"
+                           % (county, dupes))
+    for d in sorted(found):
+        if not _email_agrees(found[d]["name"], found[d]["email"]):
+            raise RuntimeError(
+                "%s: district %s pairs %r with %r — the county builds its "
+                "mailboxes from its supervisors' own names, so a row whose "
+                "e-mail names somebody else is the shift this reading exists to "
+                "rule out" % (county, d, found[d]["name"], found[d]["email"]))
+    shared = {}
+    for d in sorted(found):
+        shared.setdefault(digits(found[d]["phone"]), []).append(d)
+    owner = pins.get("phone_owner", {})
+    for num in sorted(owner):
+        # the same rule the name pin follows: a pin that no longer describes
+        # the page is deleted, never left standing as a fact nobody rechecks
+        if len(shared.get(num, [])) < 2:
+            raise RuntimeError(
+                "%s: %s is no longer published for two districts — the pinned "
+                "owner (district %s) has been overtaken by the county; delete it"
+                % (county, num, owner[num]))
+    for num, seats_sharing in sorted(shared.items()):
+        if not num or len(seats_sharing) == 1:
+            continue
+        for d in seats_sharing:
+            if owner.get(num) == d:
+                continue
+            print("  phone %-12s district %s: withheld — %s is published for "
+                  "districts %s and cannot be all of theirs"
+                  % (county, d, found[d]["phone"],
+                     ", ".join(str(x) for x in seats_sharing)), file=sys.stderr)
+            found[d]["phone"] = None
+    _ward_witness(fips, county, wards, seats)
+    out = {}
+    for d in range(1, seats + 1):
+        if d in vacant:
+            out[str(d)] = {"name": None, "vacant": True, "role": None}
+            continue
+        row = {"name": found[d]["name"], "vacant": False, "role": found[d]["role"]}
+        if found[d]["email"]:
+            row["email"] = found[d]["email"]
+        if found[d]["phone"]:
+            row["phone"] = found[d]["phone"]
+        out[str(d)] = row
+    return out
+
+
 def scrape_county(fips, name, seats, strategy, url):
     """All seats or nothing — see the module docstring."""
+    if strategy == "fielded":
+        return scrape_fielded_county(fips, name, seats, url)
     lines = to_lines(fetch(url))
     if strategy in STRICT_READINGS:
         found, vacant = STRICT_READINGS[strategy](lines)

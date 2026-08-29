@@ -11,10 +11,19 @@ That is what stops a county's page reorganising into a plausible-but-wrong
 number of members — the two files were built from different publishers (the
 county's own page, and LTSB's statewide filing) and have to agree.
 
-Twenty of Wisconsin's 72 counties publish a district-keyed member list; the
-other 52 are recorded in the Data gaps panel and their cards keep linking the
-county board rather than naming anybody. See the scraper's docstring for what
-each of the other 52 actually publishes.
+Thirty-four of Wisconsin's 72 counties' district-keyed member lists can be
+obtained; the other 38 are recorded in the Data gaps panel and their cards keep
+linking the county board rather than naming anybody. See the scraper's
+docstring for what each of the other 38 actually publishes.
+
+CONTACT RIDES ONLY WHERE ITS COUNTY PUBLISHED IT. A county that names a
+supervisor's county mailbox, office phone or profile page gets those on the
+card; a county that names only a person gets a name. THE PHONE WAS BEING
+DROPPED HERE: Taylor's document rows have carried one since the county joined
+on 2026-08-29 — its own commit calls a county e-mail and phone official contact
+details that ship — and this builder wrote email and profileUrl and silently
+left the phone behind, so seventeen numbers sat in the scraper's cache and
+never reached a reader. Sauk arriving with thirty more is what surfaced it.
 
 Usage:
     python3 wi/scripts/build_wi_county_board_roster.py
@@ -31,8 +40,8 @@ GEOMETRY = os.path.join(APP_DATA_DIR, "county-supervisory-districts.json")
 RAW = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache", "wi_county_boards_raw.json")
 OUT = os.path.join(APP_DATA_DIR, "county-board-members.json")
 
-MIN_COUNTIES = 31      # 33 ship one (30 pages + 2 county GIS layers + Taylor by document); tolerates two dark
-MIN_SEATS = 690        # 719 today (663 page-scraped + Milwaukee 18 + Racine 21 + Taylor 17)
+MIN_COUNTIES = 32      # 34 ship one (31 pages + 2 county GIS layers + Taylor by document); tolerates two dark
+MIN_SEATS = 720        # 750 today (694 page-scraped + Milwaukee 18 + Racine 21 + Taylor 17)
 
 
 def main():
@@ -80,11 +89,14 @@ def main():
                 row["name"] = member["name"]
                 if member["role"]:
                     row["role"] = member["role"]
-                # the two county-GIS rosters carry contact on the feature —
-                # fields the page-scraped counties never publish; each rides
-                # only where its county published it
+                # Contact rides only where its county published it: the two
+                # county-GIS rosters carry it on the feature, Taylor's document
+                # carries a mailbox and a phone, and Sauk's page carries both
+                # beside every seat. A county that publishes none ships none.
                 if member.get("email"):
                     row["email"] = member["email"]
+                if member.get("phone"):
+                    row["phone"] = member["phone"]
                 if member.get("url"):
                     row["profileUrl"] = member["url"]
             roster[key] = row

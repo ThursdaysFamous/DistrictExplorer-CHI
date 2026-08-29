@@ -52,7 +52,7 @@ changed her surname. So, per county, in order:
     naming someone the county's own roster no longer seats fails the
     honesty rules, and inventing the successor would too.
 
-The 41 counties with no published roster keep the dated book row — there
+The 38 counties with no published roster keep the dated book row — there
 is nothing to reconcile against. (That was 50 until the 2026-08-27
 re-sweep; the set is READ from the shipped roster file, never listed here,
 so nine counties' chairs began reconciling with no change to this code.) Every decision prints on the build log.
