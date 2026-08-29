@@ -53,6 +53,12 @@ pair a district with a person in a form a parser can read on a PAGE (plus
 Milwaukee and Racine off their own GIS layers, Adams out of its own directory
 PDF, and Taylor by document — all below). The rest are not oversights and are
 recorded as such:
+nowhere: each county names its own supervisors, 72 different ways. THIRTY
+pair a district with a person in a form these readings can parse, plus
+Milwaukee and Racine off their own GIS layers, Columbia out of the table its
+listing page frames from a second host, and Taylor from a dated document —
+each of those four routes below. The rest are not oversights and are recorded
+as such:
 
   * Kenosha and Oconto publish district MAPS — a page per district with a PDF
     and no name on it anywhere. Both were re-checked 2026-08-29 and both
@@ -135,6 +141,10 @@ the same thing and the difference is stated where they are defined. The other
     2026-08-29, when `eliminated_vacancy` made assigning that one seat an
     arithmetic gate rather than a guess — it ships, and this bullet stays as
     the record of why it did not.
+  * Marinette publishes 29 of its 30 seats by number; District 26 is an
+    unnumbered "VACANT SEAT" row in an alphabetical list. That inference is
+    now made, opt-in and gated on arithmetic re-checked every run — see
+    ELIMINATION_VACANCY — so the county ships; it stayed out until 2026-08-29.
   * The rest could not be read: 9 answer 403 to a datacenter client and hold
     it against browser headers (Marathon, La Crosse, Outagamie, Fond du Lac,
     Lafayette, Lincoln, Monroe, Rock, Sheboygan), Taylor sits behind an
@@ -202,7 +212,19 @@ the same thing and the difference is stated where they are defined. The other
     Forest does not resolve, and the remainder publish their members as
     PDFs, images or prose with no district column.
 
-    TAYLOR IS NOT A "PUBLISHES NOTHING" COUNTY, and the bucket above said so
+    NEITHER COLUMBIA NOR TAYLOR WAS A "PUBLISHES NOTHING" COUNTY, and that
+    last bucket held both of them until each was actually looked at. Columbia
+    publishes all 28 of its seats with a profile page per supervisor and its
+    chair and both vice chairs named in a block of their own — a fuller list
+    than most counties already shipping — and this scraper could not see a
+    character of it, because the page is a shell around an <iframe> onto a
+    second host and the name inside is split across a First Name cell and a
+    Last Name cell. See FRAMED_TABLE_COUNTIES. WHEN A LISTING PAGE READS AS
+    EMPTY, LOOK FOR WHAT IT FRAMES: a county's roster host need not be a page
+    the county links in prose, and "the page carries no name" and "the county
+    publishes no name" are not the same measurement.
+
+    TAYLOR IS NOT A "PUBLISHES NOTHING" COUNTY EITHER, and the bucket said so
     only because nothing here can SEE the page. It publishes a County Board
     directory at co.taylor.wi.us/directory/county-board/ that is
     district-keyed and carries a name, a county e-mail, a street address and
@@ -2929,6 +2951,199 @@ def scrape_pdf_county(spec):
     return out, doc_url
 
 
+# COUNTIES WHOSE ROSTER IS A TABLE THE LISTING PAGE FRAMES FROM ANOTHER HOST.
+# Columbia publishes all 28 of its seats, each with its own profile page, and
+# none of the five readings above can see a word of it — for two reasons that
+# compound:
+#
+#   * THE PAGE A READER IS GIVEN CONTAINS NO SUPERVISOR. The county's
+#     Supervisor Listing is a DNN shell whose whole body is an <iframe> onto
+#     board.co.columbia.wi.us — a second host, unstyled, serving one table.
+#     Fetching the listing page and reading its lines yields the site nav, the
+#     clerk's address and nothing else; the county reads as publishing no
+#     roster, which is what it had been recorded as.
+#   * THE NAME IS SPLIT ACROSS TWO CELLS. The table's columns are First Name |
+#     Last Name | Address & Phone | Supervisory District | wards, so no single
+#     cell ever holds a whole name. `_column` pairs a bare-numeral district
+#     with the nearest cell that reads as a NAME, and "Connor" alone is one
+#     token where `is_name` needs two — so even pointed at the frame, the
+#     column reading resolves nothing.
+#
+# So this route reads the TABLE rather than the text: the header row maps
+# column NAMES to positions and every data row is read through that map. Read
+# by position instead and a county inserting a column ships every supervisor
+# under their neighbour's district — the same shifted-by-one failure the
+# pinned reading directions exist to prevent, one surface over.
+#
+# THE FRAME HOST IS PINNED AND CHECKED. The listing page's iframe src must
+# still be the host below, or the county fails loudly: a roster host the
+# county has stopped pointing at is not the county's roster any more, and
+# would go on scraping clean for as long as it stayed up. `source_url` is the
+# LISTING page all the same — it is where a reader confirms the name, and the
+# frame alone is a bare table with no county around it.
+#
+# WHAT IS DELIBERATELY NOT CARRIED. The Address & Phone column is supervisors'
+# HOME addresses ("P.O. Box 81", "W12974 State Road 188") with a home or cell
+# number beside them; a home address never ships in this fleet even where the
+# source publishes it (the Taylor rule), and the phone beside it is not an
+# office line. The "Email" link per row is a CONTACT FORM on the county's
+# site, not an address, so it cannot ship as one either.
+FRAMED_TABLE_COUNTIES = [
+    {
+        "fips": "55021", "name": "Columbia", "seats": 28,
+        "page": ("https://www.co.columbia.wi.us/columbiacounty/countyboard/"
+                 "Board-of-Supervisors/Supervisor-Listing"),
+        "frame": "https://board.co.columbia.wi.us/",
+        # header text -> what it holds. Matched case-insensitively on the
+        # header row's own cells; a header that stops appearing fails the
+        # county rather than shifting it.
+        "columns": {"district": "supervisory district",
+                     "first": "first name", "last": "last name"},
+        # The chair and both vice chairs are named in a footer block of their
+        # own, each linked to their own Supervisor-Profile — so the join is on
+        # the COUNTY'S OWN supervisor id, not on a name. That is the strongest
+        # form of this join in the file: `attach_officer_roles` has to match
+        # typography because its counties publish nothing better.
+        "officers": {"heading": "Columbia County Board Chairs", "window": 2000},
+    },
+]
+
+FRAME_SRC = re.compile(r'(?is)<iframe\b[^>]*\bsrc\s*=\s*["\']?([^"\'\s>]+)')
+TABLE_ROW = re.compile(r"(?is)<tr\b[^>]*>(.*?)</tr>")
+# `<t([dh])\b` and not `<t[dh]`: the latter also matches <thead>, which would
+# make the whole header section read as one giant cell.
+TABLE_CELL = re.compile(r"(?is)<t([dh])\b[^>]*>(.*?)</t\1>")
+PROFILE_ID = re.compile(r"(?i)supervisorid/(\d+)")
+_CELL_TAGS = re.compile(r"(?s)<[^>]+>")
+
+
+def cell_text(fragment):
+    return " ".join(html_lib.unescape(_CELL_TAGS.sub(" ", fragment)).split())
+
+
+def _row_cells(row_html):
+    """[(kind, inner_html)] for one <tr>, kind being 'd' (td) or 'h' (th)."""
+    return TABLE_CELL.findall(row_html)
+
+
+def _host(url):
+    return url.split("//", 1)[-1].split("/", 1)[0].lower()
+
+
+def framed_table_officers(page_html, spec, by_id, county):
+    """District -> role, joined on the county's own supervisor id.
+
+    Never fails the county: a footer that has moved costs the CHAIR MARKING,
+    and a county with no marked chair makes the officer builder withhold the
+    Blue Book's chair with its reason stated rather than name the wrong
+    person. Losing 28 supervisors over a footer would be the worse trade.
+    """
+    conf = spec.get("officers")
+    if not conf:
+        return {}
+    # re.search rather than str.lower().find(): lower() is not
+    # length-preserving for every Unicode code point, and an index taken from
+    # the folded copy can land mid-tag in the original.
+    at = re.search(re.escape(conf["heading"]), page_html, re.I)
+    if not at:
+        print("  note %-12s officers block %r is gone — no chair marked this run"
+              % (county, conf["heading"]), file=sys.stderr)
+        return {}
+    block = page_html[at.start():at.start() + conf["window"]]
+    pattern = re.compile(r'(?is)supervisorid/(\d+)[^>]*>\s*([^<]{2,60}?)\s*</a>\s*,\s*(%s)\b'
+                          % _ROLE)
+    roles = {}
+    for sid, named, role in pattern.findall(block):
+        district = by_id.get(sid)
+        if district is None:
+            print("  note %-12s officer %r (id %s) is not on the roster — role "
+                  "%r not attached" % (county, named, sid, role), file=sys.stderr)
+            continue
+        if district in roles:
+            print("  note %-12s district %s is named twice in the officers block "
+                  "— role %r not attached" % (county, district, role), file=sys.stderr)
+            continue
+        roles[district] = role_case(role)
+        print("  role %-12s district %s: %s -> %s"
+              % (county, district, named, roles[district]), file=sys.stderr)
+    if not roles:
+        print("  note %-12s officers block named nobody on the roster"
+              % county, file=sys.stderr)
+    return roles
+
+
+def scrape_framed_table_county(spec):
+    """A roster read as a TABLE out of the page the listing page frames."""
+    name, seats = spec["name"], spec["seats"]
+    page_html = fetch(spec["page"])
+    framed = [u for u in FRAME_SRC.findall(page_html) if u.startswith("http")]
+    if not any(_host(u) == _host(spec["frame"]) for u in framed):
+        raise RuntimeError(
+            "%s: the listing page no longer frames %s (it frames %s) — the roster "
+            "has moved, and scraping the old host would go on succeeding"
+            % (name, _host(spec["frame"]), [_host(u) for u in framed] or "nothing"))
+
+    rows = TABLE_ROW.findall(fetch(spec["frame"]))
+    header = None
+    for row in rows:
+        cs = _row_cells(row)
+        if cs and all(kind == "h" for kind, _ in cs):
+            header = {cell_text(c).lower(): i for i, (_, c) in enumerate(cs)}
+            break
+    if header is None:
+        raise RuntimeError("%s: the roster table has no header row to read its "
+                           "columns from" % name)
+    try:
+        idx = {k: header[v] for k, v in spec["columns"].items()}
+    except KeyError as missing:
+        raise RuntimeError("%s: the roster table no longer has a %s column (it has "
+                           "%s) — re-read it before shipping"
+                           % (name, missing, sorted(header)))
+
+    found, by_id = {}, {}
+    for row in rows:
+        cells = [c for kind, c in _row_cells(row) if kind == "d"]
+        if not cells:
+            continue                        # the header row
+        if len(cells) <= max(idx.values()):
+            raise RuntimeError("%s: a roster row has %d cells where the header "
+                               "declares at least %d — the table has reshaped"
+                               % (name, len(cells), max(idx.values()) + 1))
+        m = BARE_NUM.match(cell_text(cells[idx["district"]]))
+        if not m:
+            raise RuntimeError("%s: row %r carries no district number in its "
+                               "district column" % (name, cell_text(cells[idx["first"]])))
+        d = int(m.group(1))
+        whole = " ".join(cell_text(cells[idx[k]]) for k in ("first", "last")).strip()
+        if not _reads_as_name(whole):
+            raise RuntimeError("%s: district %d's name cells read as %r, which is "
+                               "not a name" % (name, d, whole))
+        if d in found:
+            raise RuntimeError("%s: district %d appears twice in the table" % (name, d))
+        found[d] = clean(whole)
+        sid = PROFILE_ID.search(cells[idx["last"]]) or PROFILE_ID.search(cells[idx["first"]])
+        if sid:
+            by_id[sid.group(1)] = str(d)
+
+    if set(found) != set(range(1, seats + 1)):
+        missing = sorted(set(range(1, seats + 1)) - set(found))
+        raise RuntimeError("%s: the table resolved %d of %d districts (missing %s)"
+                           % (name, len(found), seats, missing))
+    names = [v[0] for v in found.values()]
+    if len(set(names)) != len(names):
+        dupes = sorted({n for n in names if names.count(n) > 1})
+        raise RuntimeError("%s: the same person is filed under two districts (%s)"
+                           % (name, dupes))
+
+    roles = framed_table_officers(page_html, spec, by_id, name)
+    out = {}
+    for d in range(1, seats + 1):
+        member, role = found[d]
+        out[str(d)] = {"name": member, "vacant": False,
+                        "role": role or roles.get(str(d))}
+    return out
+
+
 def _fetch_json(url):
     req = urllib.request.Request(url, headers=UA)
     ctx = ssl.create_default_context()
@@ -4047,6 +4262,8 @@ def main():
     jobs += [(c["fips"], c["name"], c["seats"], "witnessed-document", c)
              for c in WITNESSED_DOCUMENT_COUNTIES]
     jobs += [(d["fips"], d["name"], d["seats"], "pdf", d) for d in PDF_COUNTIES]
+    jobs += [(t["fips"], t["name"], t["seats"], "framed-table", t)
+             for t in FRAMED_TABLE_COUNTIES]
     jobs += [(fips, name, seats, strategy, url) for fips, name, seats, strategy, url in COUNTIES]
     for fips, name, seats, strategy, src in jobs:
         if only and fips != only:
@@ -4079,6 +4296,9 @@ def main():
             elif strategy == "pdf":
                 districts, doc_url = scrape_pdf_county(src)
                 source_url, read_from = src["source_url"], "live"
+            elif strategy == "framed-table":
+                districts = scrape_framed_table_county(src)
+                source_url, read_from = src["page"], "live"
             else:
                 districts, read_from = scrape_county(fips, name, seats, strategy, src)
                 source_url = src
@@ -4125,7 +4345,8 @@ def main():
              + len(ARCHIVE_COUNTIES)
              + len(CONSTITUENT_COUNTIES)
              + len(WITNESSED_DOCUMENT_COUNTIES)
-             + len(PDF_COUNTIES), total,
+             + len(PDF_COUNTIES)
+             + len(FRAMED_TABLE_COUNTIES), total,
              ", %d county/counties missed" % len(failures) if failures else ""),
           file=sys.stderr)
 

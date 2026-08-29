@@ -103,10 +103,10 @@ TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
 # the other — the reference instance greyed out four counties whose layers were
 # answering because this list was not updated with them.
 METRO_COUNTY_FIPS = (
-    "007", "009", "013", "023", "025", "027", "033", "035",
-    "043", "045", "049", "055", "057", "061", "075", "077",
-    "079", "085", "095", "097", "099", "101", "103", "107",
-    "111", "115", "119",
+    "007", "009", "013", "021", "023", "025", "027", "033",
+    "035", "043", "045", "049", "055", "057", "061", "075",
+    "077", "079", "085", "095", "097", "099", "101", "103",
+    "107", "111", "115", "119",
     "121", "123", "125", "127", "129", "131", "133", "137",
     "139", "141",
 )
@@ -133,6 +133,22 @@ REQUEST_TIMEOUT = 180
 # tolerance that ever moved the edge past an anchor would fail the build.
 SIMPLIFY_TOLERANCE_M = 25
 
+# ADAMS IS WISCONSIN'S FIRST ENCLAVE (2026-08-29, when Columbia's roster
+# shipped) and it is a HOLE in the wash rather than a bite out of its edge:
+# every one of Adams's neighbours — Juneau, Wood, Portage, Waushara, Marquette
+# and now Columbia — serves, so the dissolve closes a ring around it. Columbia
+# moved the topology TWICE in the same join, and NEITHER MOVE WAS PREDICTED
+# BEFORE THE BUILD RAN: it borders Dane on one side and Juneau and Marquette on
+# the other, so it MERGED the southeast region into the west-central one, and
+# that merge is what sealed Adams. THE RING COUNT DID NOT MOVE — six before and
+# six after — because the region lost and the hole gained cancel; what moved is
+# the POLYGON count, six to five. A count that stands still is not a topology
+# that stood still, so read BOTH from `build_metro_outline.py --check` and from
+# the anchors, never from a map in your head. Adams keeps its OUTSIDE anchor
+# below, which is what proves the hole is a hole — a region mis-nested as a hole
+# (or a hole mis-read as a region) renders identically and answers the opposite
+# way to every containment test inside it.
+#
 # Points that MUST fall inside the dissolved outline (one per served county)
 # and outside it — ring-closure alone is not proof that a dissolve kept every
 # county. The template starts empty because no county-keyed layer exists yet;
@@ -147,6 +163,7 @@ INSIDE = {
     "Brown": (44.46004, -87.97772),
     "Burnett": (45.89865, -92.36377),
     "Crawford": (43.20611, -90.88776),
+    "Columbia": (43.46157, -89.30349),
     "Dane": (43.06959, -89.42476),
     "Dodge": (43.41296, -88.7031),
     "Dunn": (44.94602, -91.89321),
@@ -189,7 +206,6 @@ OUTSIDE = {
     "Calumet": (44.06871, -88.22361),
     "Chippewa": (45.07456, -91.28766),
     "Clark": (44.72754, -90.61921),
-    "Columbia": (43.46157, -89.30349),
     "Crawford": (43.20611, -90.88776),
     "Dodge": (43.41296, -88.7031),
     "Door": (45.06344, -86.98152),

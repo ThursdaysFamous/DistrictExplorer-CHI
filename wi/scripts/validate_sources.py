@@ -388,6 +388,19 @@ PROVENANCE = [
     {
         "layer": "county-board",
         "app_file": "county-board-members.json",
+        "source_url": "https://board.co.columbia.wi.us/",
+        "note": (
+            "Columbia's 28 supervisors, as the TABLE its Supervisor Listing page "
+            "frames from this second host. The listing page is what the card "
+            "links and what the roster records as its source; THIS host is the "
+            "one nothing else in the repo names, so it is registered here — "
+            "without a row, the only surface that would notice it going away is "
+            "the weekly scrape, and only by failing."
+        ),
+    },
+    {
+        "layer": "county-board",
+        "app_file": "county-board-members.json",
         "source_url": "https://co.taylor.wi.us/directory/county-board/",
         "blocked": "sg-captcha challenge on every path (HTTP 202 + meta-refresh to "
                    "/.well-known/sgcaptcha/); a captcha is an access control and is "

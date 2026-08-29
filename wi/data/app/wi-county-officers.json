@@ -510,7 +510,9 @@
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "Darren W Schroeder",
+   "name": "Douglas Richmond",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing",
    "seats": 28
   },
   "executive": {
