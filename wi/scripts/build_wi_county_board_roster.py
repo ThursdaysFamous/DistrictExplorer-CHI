@@ -11,11 +11,11 @@ That is what stops a county's page reorganising into a plausible-but-wrong
 number of members — the two files were built from different publishers (the
 county's own page, and LTSB's statewide filing) and have to agree.
 
-Thirty-three of Wisconsin's 72 counties have a district-keyed member list this
-can obtain — 30 from board pages, Milwaukee and Racine off their own GIS layers,
-and Taylor carried as a dated document — and the other 39 are recorded in the
+Thirty-four of Wisconsin's 72 counties have a district-keyed member list this
+can obtain — 31 from board pages, Milwaukee and Racine off their own GIS layers,
+and Taylor carried as a dated document — and the other 38 are recorded in the
 Data gaps panel, their cards linking the county board rather than naming
-anybody. See the scraper's docstring for what each of the 39 actually
+anybody. See the scraper's docstring for what each of the 38 actually
 publishes.
 
 Usage:
@@ -33,8 +33,8 @@ GEOMETRY = os.path.join(APP_DATA_DIR, "county-supervisory-districts.json")
 RAW = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache", "wi_county_boards_raw.json")
 OUT = os.path.join(APP_DATA_DIR, "county-board-members.json")
 
-MIN_COUNTIES = 31      # 33 ship one (30 pages + 2 county GIS layers + Taylor by document); tolerates two dark
-MIN_SEATS = 680        # 710 today (654 page-scraped + Milwaukee 18 + Racine 21 + Taylor 17)
+MIN_COUNTIES = 32      # 34 ship one (31 pages + 2 county GIS layers + Taylor by document); tolerates two dark
+MIN_SEATS = 710        # 740 today (684 page-scraped + Milwaukee 18 + Racine 21 + Taylor 17)
 
 
 def main():

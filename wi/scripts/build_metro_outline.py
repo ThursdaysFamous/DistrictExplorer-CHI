@@ -48,9 +48,10 @@ edges left to cancel. Disjoint regions fall out of the same walk — each closed
 ring is chained independently — and group_rings() nests them into a MultiPolygon.
 Wisconsin's roster counties exercise that path from day one — the file was a
 MultiPolygon of 9 separate regions when 20 counties shipped — and the count
-falls as counties join: Iowa's join on 2026-08-29 took it from 5 regions to 4,
-because Iowa borders served Grant and Richland on one side and served Dane and
-Green on the other, so it stitched the southwest region to the southeast one.
+moves in BOTH directions as counties join. Both moves landed on 2026-08-29:
+Iowa merged two regions into one, because it borders served Grant and Richland
+on one side and served Dane and Green on the other, and Marinette opened a new
+detached one in the northeast. Five went to four went back to five.
 READ THE REGION COUNT FROM `--check`, NEVER FROM THIS SENTENCE. Each region is
 verified by anchor, not by eye — a region mis-nested as a hole renders
 identically and answers False to every containment test inside it (the
@@ -103,10 +104,10 @@ TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
 # answering because this list was not updated with them.
 METRO_COUNTY_FIPS = (
     "007", "009", "013", "025", "033", "035", "043", "045",
-    "049", "055", "057", "061", "077", "079", "085", "095",
-    "097", "099", "101", "103", "107", "115", "119", "121",
-    "123", "125", "127", "129", "131", "133", "137", "139",
-    "141",
+    "049", "055", "057", "061", "075", "077", "079", "085",
+    "095", "097", "099", "101", "103", "107", "115", "119",
+    "121", "123", "125", "127", "129", "131", "133", "137",
+    "139", "141",
 )
 STATE_FIPS = "55"
 # No dispatch entries: county-board is ONE statewide layer here, not a
@@ -153,6 +154,7 @@ INSIDE = {
     "Jefferson": (43.02123, -88.77694),
     "Juneau": (43.94612, -90.13402),
     "Kewaunee": (44.50222, -87.3097),
+    "Marinette": (45.28025, -88.00346),
     "Marquette": (43.81242, -89.39817),
     "Milwaukee": (43.01735, -87.58072),
     "Oneida": (45.68206, -89.54525),
@@ -201,7 +203,6 @@ OUTSIDE = {
     "Lincoln": (45.33767, -89.73536),
     "Manitowoc": (44.11033, -87.53102),
     "Marathon": (44.90091, -89.76945),
-    "Marinette": (45.28025, -88.00346),
     "Menominee": (44.98678, -88.73481),
     "Monroe": (43.94362, -90.61172),
     "Oconto": (45.02524, -88.30368),
