@@ -42,6 +42,8 @@ TWO KINDS OF LINK, split by who can fix a dead one:
     the repair is upstream or a dropped field — never a guessed replacement.
     These are reported, and grouped, but they never FAIL the run: a monthly
     issue that is 90% other people's outages is an issue nobody reads.
+    The split is by WHO CHOSE THE STRING, not by the key's name — see
+    AUTHORED_URL_FILES for the one file whose `url` is a repo constant.
 
 Severities (a PUBLISHED link's worst severity is WARN):
   * gone — no DNS, or 404/410/451                                       [FAIL]
@@ -391,6 +393,25 @@ AUTHORED, PUBLISHED = "authored", "published"
 # belongs in this set.
 PUBLISHED_KEYS = {"url", "profileUrl"}
 
+# THE ONE FILE WHERE `url` MEANS THE OPPOSITE, and it took six broken links to
+# find (2026-08-29). wi/data/app/county-board-directory.json holds one link per
+# Wisconsin county to its own board page, and every one of them is a CONSTANT
+# hand-picked in wi/scripts/build_wi_county_board_directory.py — that builder's
+# docstring spends three paragraphs on why they could not be derived. So they
+# are this repo's to fix, exactly like a `primaryLink` on a card, and the test
+# above filed all 72 of them as somebody else's address on the strength of the
+# key's NAME. Six were dead: an IIS placeholder (Fond du Lac), two GoDaddy
+# parking landers (Kewaunee, Rusk), a "this site has permanently moved"
+# sentence (Dodge), and two hosts that reset (Barron, Shawano) — every one a
+# FAIL capped to WARN and lost in a monthly list, until a reader reported one.
+#
+# Iowa's ia-county-board-directory.json is NOT here and the near-identical name
+# is the trap: ia_county_directory_scraper.py copies each county's website out
+# of the Iowa State Association of Counties' member directory, so that `url` is
+# a third party's own address and PUBLISHED is right for it. The question is
+# never what a file is called — it is who chose the string.
+AUTHORED_URL_FILES = {"county-board-directory.json"}
+
 
 def from_pages(names):
     """URLs cited in the repo's authored HTML pages, with the line each sits on.
@@ -451,7 +472,7 @@ def from_app_data(directory):
                     walk(v, where + "/" + str(i), key)
             elif isinstance(node, str) and node.startswith(("http://", "https://")):
                 out[node].append("%s/%s%s" % (rel_dir, name, where))
-                if key not in PUBLISHED_KEYS:
+                if key not in PUBLISHED_KEYS or name in AUTHORED_URL_FILES:
                     authored.add(node)
 
         walk(payload, "", "")

@@ -27,15 +27,54 @@ Richland's msa-ps.com — and a card built from that list would have sent five
 counties' readers to a consultancy captioned as their county board. Four more
 contact domains host no website at all: Columbia, Crawford and Sauk are
 MAIL-ONLY (no A record, live MX) and Iron's serves a certificate for another
-name and 404s. Every URL below was fetched: 58 answer 200, 11 answer 403 to a
-datacenter client while serving browsers normally, Barron and Shawano answer
-503 to this client with DNS resolving, and Taylor sits behind an sgcaptcha
-challenge that a person passes and no automation here tries to.
+name and 404s. Every URL below was fetched AND READ (re-measured 2026-08-29):
+59 answer 200 with the county's own page, 12 answer 403 to a datacenter client
+while serving browsers normally, and Taylor sits behind an sgcaptcha challenge
+that a person passes and no automation here tries to.
+
+THAT SWEEP READ STATUS CODES AND NEVER READ WHAT ANSWERED (corrected
+2026-08-29)
+-----------------------------------------------------------------------
+It was provoked by one report — the operator noticing that Fond du Lac's
+`http://fdlco.wi.gov/` needed https — and six of the seventy-two were wrong,
+every one of them a link that PASSED the sweep that built this table:
+
+  * Fond du Lac's `http://fdlco.wi.gov/` answered 200 with 703 bytes of the
+    stock "IIS Windows Server" placeholder. The county is on
+    `https://www.fdlco.wi.gov/`, which this repo already carried in
+    wi-county-clerks.json and wi-circuit-judges.json — so the one table that
+    sent readers anywhere had the only copy of the wrong host.
+  * Kewaunee's `kewauneeco.com` and Rusk's `ruskcountywi.gov` answered 200
+    with a 114-byte script that sends a browser to `/lander` — a GoDaddy
+    PARKING page (`_trfd.push({ap:"parking"})`, img1.wsimg.com/parking-lander).
+  * Dodge's `co.dodge.wi.us` answered 200 with 261 bytes reading "This site
+    has permanently moved. Please redirect your browser to co.dodge.wi.gov" —
+    a sentence, not a redirect: nothing forwards a reader.
+  * Barron and Shawano were recorded above as answering 503. They reset the
+    connection, and neither is the county: barroncountywi.gov and
+    co.shawano.wi.us both serve their board pages to this client. A HOST IS
+    NOT A COUNTY (Illinois learned the same thing at Knox).
+
+Only ONE of the six was reachable-but-wrong in a way a status check could
+ever have seen. The other five are the hollow-page class scripts/
+validate_card_links.py already measures for the Illinois cards and that this
+table was built without: A 200 IS NOT A PAGE. Anything added here is fetched
+AND READ.
+
+The three parked/dead hosts were also findable with no network at all, which
+is why `_cross_check_scraper_hosts` below is now a gate: wi_county_board_
+scraper.py reads Kewaunee's, Rusk's and Shawano's supervisors WEEKLY, from
+kewauneeco.org, ruskcounty.org and co.shawano.wi.us. Two tables in this repo
+named different hosts for the same county's board, the working one was right
+all three times, and nothing compared them.
 
 `seats` is the county's district count as SHIPPED — read back from the built
 geometry rather than restated here, so the two can never disagree. The
 counties marked below are the ones whose own board page independently named
-districts 1..n matching that count when swept.
+districts 1..n matching that count when swept. Fond du Lac's mark is the one
+read from an Internet Archive snapshot (2026-05-11) rather than live: its
+Akamai edge refuses this client, and the page is paginated — "1 - 20 of 25
+items" over districts 1..25, the count the shipped geometry carries.
 
 Usage:
     python3 wi/scripts/build_wi_county_board_directory.py
@@ -45,6 +84,7 @@ Usage:
 import json
 import os
 import sys
+import urllib.parse
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 APP_DATA_DIR = os.path.join(REPO_ROOT, "data", "app")
@@ -57,7 +97,7 @@ EXPECT_COUNTIES = 72
 COUNTY_SITES = {
     "55001": ("Adams", "https://www.co.adams.wi.us/"),
     "55003": ("Ashland", "https://ashlandcountywi.gov/"),
-    "55005": ("Barron", "https://co.barron.wi.us/"),
+    "55005": ("Barron", "https://www.barroncountywi.gov/index.asp?SEC=%7bB7F5AB49-3697-4A2E-8327-26847A43F33E%7d&Type=B_BASIC"),  # its County Board page; co.barron.wi.us resets, see the docstring
     "55007": ("Bayfield", "https://bayfieldcounty.wi.gov/295/Board-of-Supervisors"),  # county page confirms 1..13
     "55009": ("Brown", "https://www.browncountywi.gov/government/county-board-of-supervisors/"),  # county page confirms 1..26
     "55011": ("Buffalo", "https://www.buffalocountywi.gov/"),
@@ -68,13 +108,13 @@ COUNTY_SITES = {
     "55021": ("Columbia", "https://www.co.columbia.wi.us/ColumbiaCounty/"),
     "55023": ("Crawford", "https://www.crawfordcountywi.gov/"),
     "55025": ("Dane", "https://board.danecounty.gov/Supervisors"),
-    "55027": ("Dodge", "https://co.dodge.wi.us/"),
+    "55027": ("Dodge", "https://www.co.dodge.wi.gov/government/county-board/members"),  # county page confirms 1..33
     "55029": ("Door", "https://co.door.wi.gov/"),
     "55031": ("Douglas", "https://douglascountywi.gov/"),
     "55033": ("Dunn", "https://dunncountywi.gov/supervisors"),  # county page confirms 1..29
     "55035": ("Eau Claire", "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"),  # county page confirms 1..29
     "55037": ("Florence", "https://www.florencecountywi.com/"),
-    "55039": ("Fond Du Lac", "http://fdlco.wi.gov/"),
+    "55039": ("Fond Du Lac", "https://www.fdlco.wi.gov/government/county-board-supervisors"),  # county page confirms 1..25
     "55041": ("Forest", "https://co.forest.wi.gov/"),
     "55043": ("Grant", "https://co.grant.wi.gov/"),  # county page confirms 1..17
     "55045": ("Green", "https://greencountywi.org/164/County-Board-of-Supervisors"),  # county page confirms 1..31
@@ -85,7 +125,7 @@ COUNTY_SITES = {
     "55055": ("Jefferson", "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"),  # county page confirms 1..30
     "55057": ("Juneau", "https://www.co.juneau.wi.gov/"),
     "55059": ("Kenosha", "https://www.kenoshacountywi.gov/142/County-Board-Supervisor-Districts"),  # county page confirms 1..23
-    "55061": ("Kewaunee", "https://kewauneeco.com/"),
+    "55061": ("Kewaunee", "https://www.kewauneeco.org/government/boards_and_committees/"),  # county page confirms 1..20
     "55063": ("La Crosse", "https://lacrossecounty.org/"),
     "55065": ("Lafayette", "https://lafayettecountywi.org/"),
     "55067": ("Langlade", "https://www.co.langlade.wi.us/"),
@@ -109,11 +149,11 @@ COUNTY_SITES = {
     "55101": ("Racine", "https://racinecounty.gov/"),
     "55103": ("Richland", "https://richlandcountywi.gov/"),
     "55105": ("Rock", "https://co.rock.wi.us/"),
-    "55107": ("Rusk", "https://ruskcountywi.gov/"),
+    "55107": ("Rusk", "https://ruskcounty.org/supervisors"),  # county page confirms 1..19
     "55109": ("St Croix", "https://sccwi.gov/"),
     "55111": ("Sauk", "https://www.co.sauk.wi.us/"),
     "55113": ("Sawyer", "https://www.sawyercounty.gov/"),
-    "55115": ("Shawano", "https://shawanocountywi.gov/"),
+    "55115": ("Shawano", "https://www.co.shawano.wi.us/county_board/"),  # county page confirms 1..27
     "55117": ("Sheboygan", "https://sheboygancounty.com/"),
     "55119": ("Taylor", "https://co.taylor.wi.us/"),
     "55121": ("Trempealeau", "https://co.trempealeau.wi.us/"),  # county page confirms 1..17
@@ -128,6 +168,54 @@ COUNTY_SITES = {
     "55139": ("Winnebago", "https://www.winnebagocountywi.gov/703/County-Board-of-Supervisors"),  # county page confirms 1..36
     "55141": ("Wood", "https://woodcountywi.gov/CountyBoard/"),  # county page confirms 1..19
 }
+
+
+def _cross_check_scraper_hosts():
+    """Where BOTH tables name a county's board page, they must name one host.
+
+    THE GATE THAT WOULD HAVE CAUGHT THREE OF THE SIX, offline and in a
+    millisecond. wi_county_board_scraper.py fetches Kewaunee's, Rusk's and
+    Shawano's supervisors every week and had their working hosts all along
+    (kewauneeco.org, ruskcounty.org, co.shawano.wi.us) while this table sent
+    readers to two GoDaddy parking landers and a host that resets. Two tables
+    in one repo named different hosts for the same county's board, the
+    scraped one was right three times out of three, and nothing compared them.
+
+    A leading `www.` is ignored on both sides — that is a CMS's habit, not a
+    disagreement. Only wi_county_board_scraper.COUNTIES is compared: its
+    ARCGIS_COUNTIES are feature services (arcgis.com is nobody's board page)
+    and DOCUMENT_ROSTERS is Taylor, whose host answers a captcha to everything.
+    A future county that genuinely needs two hosts fails here and gets a line
+    saying why, which is the point.
+    """
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    try:
+        from wi_county_board_scraper import COUNTIES as SCRAPED
+    except ImportError as e:  # pragma: no cover - the scraper is stdlib-only
+        raise RuntimeError("cannot import wi_county_board_scraper to cross-check "
+                           "hosts (%s)" % e)
+
+    def host(url):
+        h = urllib.parse.urlparse(url).netloc.lower()
+        return h[4:] if h.startswith("www.") else h
+
+    disagree = []
+    for fips, _name, _seats, _direction, scraped_url in SCRAPED:
+        if fips not in COUNTY_SITES:
+            continue
+        ours = COUNTY_SITES[fips][1]
+        if host(ours) != host(scraped_url):
+            disagree.append("  %s %s\n    directory: %s\n    scraper:   %s"
+                            % (fips, COUNTY_SITES[fips][0], ours, scraped_url))
+    if disagree:
+        raise RuntimeError(
+            "%d county/counties name different board hosts in this table and in "
+            "wi_county_board_scraper.COUNTIES. The scraper's host is the one "
+            "proven weekly, so check THIS table first — every case measured so "
+            "far was a dead or parked domain here:\n%s"
+            % (len(disagree), "\n".join(disagree)))
+    print("cross-check: %d counties in both tables agree on the board's host"
+          % sum(1 for r in SCRAPED if r[0] in COUNTY_SITES), file=sys.stderr)
 
 
 def main():
@@ -155,6 +243,8 @@ def main():
                                % (fips, names[fips], name))
         if not url.startswith("https://") and not url.startswith("http://"):
             raise RuntimeError("county %s has no usable URL: %r" % (fips, url))
+
+    _cross_check_scraper_hosts()
 
     directory = {
         fips: {"county": name, "seats": seats[fips], "url": url}
