@@ -25,6 +25,26 @@ their rows, and the card prints it rather than letting a dated snapshot read
 like the weekly re-read the other thirty-two get. A county whose live page
 answers on a later run loses the flag in the scraper, so the field disappears
 here by itself.
+Thirty-four of Wisconsin's 72 counties publish a district-keyed member list;
+the other 38 are recorded in the Data gaps panel and their cards keep linking
+the county board rather than naming anybody. See the scraper's docstring for
+what each of the other 38 actually publishes.
+
+CONTACT RIDES ONLY WHERE ITS COUNTY PUBLISHED IT, which is why these rows are
+not uniform and should not be made uniform. Thirty counties publish a name and
+a district and nothing else. Milwaukee and Racine carry an e-mail on their own
+GIS features (and Milwaukee a member web page). Kenosha's Clerk prints a phone
+AND an e-mail for all 23 seats in the county's own Directory of Public
+Officials, and the county's board page links each supervisor's profile — the
+fullest rows in the file. Taylor's carried document has both too.
+
+THE PHONE PASSTHROUGH WAS MISSING AND TAYLOR PAID FOR IT: its 17 numbers were
+read off the county's directory, carried in the scraper's own table, and
+dropped here — published data going nowhere, the same shape as the e-mails
+that sat in this file unrendered until the card learned to show them. An
+absent field means the county does not publish it; it must never mean this
+builder dropped it, and check_roster_retention.py holds that line per source
+from the first day a field ships.
 
 Usage:
     python3 wi/scripts/build_wi_county_board_roster.py
@@ -102,11 +122,14 @@ def main():
                 row["name"] = member["name"]
                 if member["role"]:
                     row["role"] = member["role"]
-                # the two county-GIS rosters carry contact on the feature —
-                # fields the page-scraped counties never publish; each rides
-                # only where its county published it
+                # contact rides only where its county published it (see the
+                # docstring) — the two county-GIS rosters carry it on their
+                # features, Kenosha's and Taylor's on their counties' own
+                # documents, and the 30 page-scraped counties publish none
                 if member.get("email"):
                     row["email"] = member["email"]
+                if member.get("phone"):
+                    row["phone"] = member["phone"]
                 if member.get("url"):
                     row["profileUrl"] = member["url"]
             roster[key] = row

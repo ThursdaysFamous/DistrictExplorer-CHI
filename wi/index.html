@@ -8639,14 +8639,20 @@ function initWisconsinExplorer() {
    *
    * THE SUPERVISOR IS NAMED WHERE A COUNTY PUBLISHES ONE, AND NOWHERE ELSE.
    * Wisconsin publishes no statewide roster, so the people come from each
-   * county's own page: 34 of the 72 yield a district-keyed member list
-   * (745 seats) — 31 read off the county's own board page, Milwaukee and
-   * Racine off their own GIS layers, and Taylor carried from a document
-   * because its host serves only a captcha. The other 38 do not — two
-   * publish district MAPS with no name on them, and the rest are unreadable
-   * or publish prose. A district in an unnamed county keeps the honest card:
-   * the district, and a link to the county board. A seat the county itself
-   * says is empty renders as VACANT, which is a fact rather than a gap
+   * county's own surface: 34 of the 72 pair a district with a person somewhere
+   * this project can reach (742 seats) — 30 board pages, Milwaukee's and
+   * Racine's own GIS layers, Kenosha's Clerk's Directory of Public Officials
+   * fetched every run and witnessed against the county board page, and
+   * Taylor's carried from a page an operator read behind a captcha — and the
+   * other 38 do not, some publishing district MAPS with no name on them and
+   * the rest unreadable or prose. A district in an unnamed county keeps the
+   * honest card: the district, and a link to the county board. A seat the
+   * county itself says is empty renders as VACANT, which is a fact rather
+   * than a gap.
+   *
+   * CONTACT IS NOT UNIFORM AND IS NOT MADE UNIFORM: 79 seats carry an e-mail,
+   * 40 a phone and 41 the county's own profile page, because that is exactly
+   * what those counties publish. An absent field renders nothing
    * (wi/scripts/wi_county_board_scraper.py records what each county
    * publishes). ---------- */
   var loadSupervisoryDistricts = makeCached(function () {
@@ -8710,42 +8716,41 @@ function initWisconsinExplorer() {
         ? "District " + String(result.district) : "Unknown district";
     },
     render: function (result) {
-      var rows = [];
-      rows.push({
+      var wrap = cardEl("div", "card-flush");
+      var member = result.member;
+      var lead = [{
         label: "County",
         value: result.county ? String(result.county) + " County" : "Unknown county",
         primary: true
-      });
-      var member = result.member;
+      }];
       if (member && member.vacant) {
         // The county says nobody holds this seat. Saying so is the honest
         // answer; omitting the row would read as "we could not find out".
-        rows.push({ label: "Supervisor", value: "Vacant" });
-      } else if (member && member.name) {
-        rows.push({
-          label: member.role ? "Supervisor (" + String(member.role) + ")" : "Supervisor",
-          value: String(member.name)
-        });
+        lead.push({ label: "Supervisor", value: "Vacant" });
+      }
+      wrap.appendChild(renderFieldStack(lead));
+      // The supervisor is a PERSON row rather than a field row so the contact
+      // their county publishes actually reaches a reader: 79 of the 742 seats
+      // carry an e-mail, 40 a phone and 41 the county's own profile page.
+      // Those fields were shipping in data/app and rendering nowhere — and
+      // Taylor's phones were not even reaching data/app, dropped by a roster
+      // builder that had no phone passthrough. A county that publishes only a
+      // name still renders only a name — absent fields render nothing.
+      if (member && !member.vacant && member.name) {
+        var person = { name: String(member.name), badge: "Supervisor" };
+        if (member.role) person.note = String(member.role);
+        if (member.phone) person.phone = String(member.phone);
+        if (member.email) person.email = String(member.email);
+        var profile = safeHttpUrl(member.profileUrl);
+        if (profile) person.links = [{ label: "Supervisor profile", url: profile }];
+        wrap.appendChild(renderPersonRows([person]));
       }
       if (result.seats) {
-        rows.push({ label: "Board", value: String(result.seats) + " supervisory districts" });
+        wrap.appendChild(renderFieldStack([
+          { label: "Board", value: String(result.seats) + " supervisory districts" }
+        ]));
       }
-      // A DATED capture, said so. Most named counties here are re-read weekly
-      // from their own page; two are not, because their hosts refuse every
-      // automated client (Taylor answers a captcha, Lafayette a Cloudflare
-      // challenge), so their names come from a capture of that same page on a
-      // stated day. Without this row those cards would look exactly like the
-      // ones that ARE re-read weekly, which is the difference between a fact
-      // and a claim about how fresh the fact is.
-      if (member && member.asOf) {
-        rows.push({
-          label: "As of",
-          value: "From " + String(member.asOf) + ". The county's website " +
-            "refuses automated readers, so this name is a dated capture " +
-            "rather than the weekly re-read the other named counties get."
-        });
-      }
-      return renderFieldStack(rows);
+      return wrap;
     },
     primaryLink: function (result) {
       // Prefer the page the supervisor's own name was read from, so a reader

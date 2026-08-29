@@ -28,6 +28,12 @@ certifi==2026.7.22
 # directory, Kane's and Kendall's clerk yearbooks). Layout mode is required,
 # not optional: those documents are multi-column, and a line-flattened
 # extraction glues the right-hand column onto the left.
+#
+# ALSO the one Wisconsin county whose board roster is a document rather than a
+# page: wi/scripts/wi_county_board_scraper.py reads Kenosha's Directory of
+# Public Officials, whose board section is single-column and needs only the
+# plain extraction. Its weekly workflow installs this package, which
+# scripts/validate_workflow_deps.py enforces against that module-scope import.
 pypdf==6.14.2
 
 # Word-POSITION extraction for LaSalle's municipality-officials directory.
@@ -94,6 +100,12 @@ pyogrio==0.13.0
 # re-deriving the cells by clustering x was measured to split "REX E." from
 # "GOBLE". PyMuPDF's get_text("dict") returns the county's own cells directly,
 # which is the difference between a parsed name and half of one.
+#
+# It also reads a PDF's GEOREFERENCING, which nothing else here does:
+# wi/scripts/verify_kenosha_supervisory_map.py needs both the page's /VP
+# viewport and /Measure /GEO objects AND each label's position to check the
+# county's own adopted district map against the shipped LTSB geometry. That is
+# an operator verification, not a workflow step.
 pymupdf==1.28.2
 
 # The Wisconsin Elections Commission sends its statewide polling-place list as

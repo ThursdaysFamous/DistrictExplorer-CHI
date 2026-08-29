@@ -3,6 +3,9 @@
 Scrape county board supervisors from the 31 Wisconsin counties that publish a
 district-keyed member list. Stage 1 of the pair; build_wi_county_board_roster.py
 turns the intermediate JSON into data/app/county-board-members.json.
+Scrape county board supervisors from the 34 Wisconsin counties whose roster
+this file can reach. Stage 1 of the pair; build_wi_county_board_roster.py turns
+the intermediate JSON into data/app/county-board-members.json.
 
 WHY ONLY THIRTY-FOUR OF SEVENTY-TWO
 -----------------------------------
@@ -53,6 +56,40 @@ layers. The rest are not oversights and are recorded as such:
     reads 16/16. THAT IS WHY ITS ENTRY CARRIES A `live` READING WHERE
     TAYLOR'S CANNOT: Taylor has no host to try, and Lafayette has a page that
     parses the moment its challenge lifts.
+a district with a person on a PAGE a parser can read, Milwaukee and Racine
+publish theirs as attributes on their own GIS layers, Kenosha publishes its in
+a DOCUMENT this file fetches and witnesses every run
+(WITNESSED_DOCUMENT_COUNTIES), and Taylor's is CARRIED from a document an
+operator read once behind a captcha (DOCUMENT_ROSTERS). Those last two are not
+the same thing and the difference is stated where they are defined. The other
+38 are not oversights and are recorded as such:
+
+  * Ozaukee publishes district MAPS — a page per district with a PDF and no
+    name on it anywhere. It was checked three pages deep. This file used to
+    claim 23 counties; that count came from a sweep that tested district
+    NUMBERS, and numbers are what a map index has.
+  * KENOSHA WAS IN THAT BUCKET UNTIL 2026-08-29 AND ITS RECORD NAMED THE WRONG
+    PAGE. The description above is accurate about
+    /142/County-Board-Supervisor-Districts — an index of 23 links to 23 PDF
+    maps with nobody's name on it — and is not the county's roster page.
+    /113/County-Board-of-Supervisors is, and it publishes all 23 seats as
+    "District N" followed by the supervisor's name, resolving 23 of 23 under
+    the plain `after` reading with no new code. TWO SLUGS ONE WORD APART, one
+    of them a map index and one of them the answer: when a county's record
+    says "checked the board page", check WHICH board page.
+  * Marinette publishes 29 of its 30 seats. District 26 is an unnumbered
+    "VACANT SEAT" row in an alphabetical list, and assigning it by elimination
+    would be an inference the county never wrote, so the county stays out.
+  * The rest could not be read: 9 answer 403 to a datacenter client and hold
+    it against browser headers (Marathon, La Crosse, Outagamie, Fond du Lac,
+    Lafayette, Lincoln, Monroe, Rock, Sheboygan), Taylor sits behind an
+    sgcaptcha challenge answering 202 (an access control, not an obstacle to
+    route around), Forest does not resolve, and the remainder publish their
+    members as PDFs, images or prose with no district column. That last
+    clause is the load-bearing one and Kenosha is why: the disqualifier is
+    "no district column", never "PDF". A document that pairs a district with
+    a person is a source (see WITNESSED_DOCUMENT_COUNTIES); one that lists
+    names alphabetically is not, whatever it is served as.
 
     TAYLOR IS NOT A "PUBLISHES NOTHING" COUNTY, and the bucket above said so
     only because nothing here can SEE the page. It publishes a County Board
@@ -233,6 +270,32 @@ Iowa marks no chair and no vacancy, which matters to the officer builder rather
 than to this one: the Blue Book's Iowa chair, John M Meyers, sits at district
 14, so its weekly reconciliation CONFIRMS the dated book row instead of
 withholding it.
+KENOSHA WAS THE TENTH, AND WHAT IT ADDS IS A ROUTE (2026-08-29)
+----------------------------------------------------------------
+Its own miss is recorded in the bucket list above — the wrong board page. What
+it adds to this file is the route: the county's Clerk publishes MORE than the
+board page does, in a DOCUMENT rather than on a page. The annual Directory of
+Public Officials (a 107-page PDF) prints the same 23 districts with a PHONE and
+an E-MAIL each, and marks the Chair and Vice-Chair on their own rows. No other
+county here publishes contact for its board at all.
+
+TWO KINDS OF DOCUMENT LIVE IN THIS FILE NOW AND THEY ARE OPPOSITES. Taylor's
+roster is CARRIED (DOCUMENT_ROSTERS): read once by an operator in a browser
+because a captcha fronts every automated client, never re-read by a run, and
+the output SAYS SO on every record. Kenosha's is WITNESSED
+(WITNESSED_DOCUMENT_COUNTIES): fetched fresh every run, cross-checked against
+the county's own board page name-for-name, and no more stale than any page
+county here. A record carrying `carried_from_document` is the first kind; the
+absence of that flag is the second. Do not merge the two strategies because
+both say "document" — the flag is a currency claim a reader sees.
+
+THE STABLE URL IS A COUNTY PAGE ID, NEVER THE DOCUMENT'S OWN ADDRESS. The PDF
+lives at /DocumentCenter/View/<edition>/County-Directory, and <edition> changes
+with each year's directory — that URL freezes on the 2026-2027 edition and
+would go on being fetched, successfully, forever. /1018/County-Directory-PDF is
+the county's own page for "the current directory" and 302s to whichever edition
+is live, so the run log prints the edition it landed on and an edition change is
+visible instead of silent.
 
 THE READING DIRECTION IS PINNED PER COUNTY, NOT DETECTED
 --------------------------------------------------------
@@ -388,6 +451,7 @@ Usage:
 import datetime
 import gzip
 import html as html_lib
+import io
 import json
 import os
 import re
@@ -397,6 +461,13 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+
+# For the one county whose roster is a document this file FETCHES (see
+# WITNESSED_DOCUMENT_COUNTIES; DOCUMENT_ROSTERS needs nothing, its text is
+# already here). Imported at module scope on purpose: scripts/validate_workflow_deps.py
+# reads these imports and fails the merge if the weekly workflow's pip line
+# does not install pypdf, which is the gate that keeps this dependency honest.
+from pypdf import PdfReader
 
 DEFAULT_OUT = os.path.join(os.path.dirname(__file__), ".cache", "wi_county_boards_raw.json")
 UA = {
@@ -969,7 +1040,13 @@ def vacant_districts(lines, seats, strategy="after"):
     return out
 
 
-def fetch(url, timeout=45):
+def fetch_bytes(url, timeout=45):
+    """Raw bytes plus THE URL THAT ANSWERED, which is not always the one asked.
+
+    Kenosha's directory is addressed by a stable county page id that 302s to
+    whichever DocumentCenter edition is current; returning the resolved URL is
+    what lets the run log name the edition it actually read.
+    """
     lax = ssl.create_default_context()
     lax.check_hostname = False
     lax.verify_mode = ssl.CERT_NONE
@@ -978,7 +1055,7 @@ def fetch(url, timeout=45):
         try:
             req = urllib.request.Request(url, headers=UA)
             with urllib.request.urlopen(req, timeout=timeout, context=ctx) as r:
-                return r.read().decode("utf-8", "replace")
+                return r.read(), r.geturl()
         except Exception as e:      # noqa: BLE001 - reachability probe
             last = e
     raise RuntimeError("could not fetch %s (%s)" % (url, last))
@@ -1094,6 +1171,8 @@ def fetch_or_archive(url, fips, county):
               % (county, live_error, stamp[:4], stamp[4:6], stamp[6:8]),
               file=sys.stderr)
         return page, "archive:" + stamp
+def fetch(url, timeout=45):
+    return fetch_bytes(url, timeout)[0].decode("utf-8", "replace")
 
 
 # COUNTIES WHOSE ROSTER RIDES THEIR OWN ARCGIS LAYER, NOT A PAGE. The
@@ -1584,6 +1663,232 @@ def scrape_constituent_county(spec):
               file=sys.stderr)
     return out
 
+# --- COUNTIES WHOSE ROSTER IS A DOCUMENT THIS FILE FETCHES AND WITNESSES ------
+# NOT DOCUMENT_ROSTERS, which is the OPPOSITE arrangement: that table carries a
+# roster an operator read once in a browser because a captcha fronts the host,
+# marks every record `carried_from_document` and never re-reads it. These entries
+# are FETCHED FRESH EVERY RUN and cross-checked against a second county surface,
+# so they carry no such flag and no such caveat. Two routes, one word, opposite
+# currency claims — keep them apart.
+#
+# Kenosha's Clerk publishes an annual Directory of Public Officials — a 107-page
+# PDF whose County Board section prints each district beside its supervisor's
+# NAME, PHONE and E-MAIL, and marks the Chair and Vice-Chair on their own rows.
+# Only Taylor's carried directory (DOCUMENT_ROSTERS) is as rich; no county whose
+# roster comes off a PAGE publishes contact for its board at all.
+#
+# A document is a weaker thing to depend on than a page, so it ships only under
+# a witness: the county's own board page carries the same 23 districts and the
+# same 23 names, read with the plain `after` reading every page county uses.
+# ALL 23 MUST AGREE OR THE COUNTY SHIPS NOTHING — the same all-or-nothing rule
+# scrape_county holds, with the two surfaces checking each other rather than a
+# reading direction checking itself.
+#
+# THE ROLES ARE HELD TO A SEPARATE, WEAKER GATE, and that split is deliberate.
+# A directory is printed once a year; boards elect their chair every April, so
+# the document is exactly the surface that can be a year stale about who chairs
+# it — and the county card's board chair is reconciled against this roster, so a
+# stale role here would supersede the Blue Book with something older still. The
+# board page states its leadership in a sentence of prose ("Supervisor X is the
+# Chairman and Supervisor Y is the Vice Chairman for the ... term"), so the
+# roles ship only when that sentence names the same two people. If the sentence
+# is reworded past this reader, the NAMES still ship and the roles are withheld
+# with the reason printed — a re-worded sentence must not cost a county its
+# whole roster, and an unwitnessed chair must not reach a card.
+#
+# THE PROFILE LINKS ARE PAIRED BY BLOCK, NOT BY POSITION. Each supervisor is one
+# <p> on the board page holding one /Directory.aspx?EID=<n> link, the district
+# and the name, so the link is read from the same block as the district it
+# belongs to and a seat whose block does not resolve simply gets no link. Two
+# reasons not to do it any other way, both measured on this page: District 7 is
+# marked up as TWO anchors to one EID either side of a <br> where every other
+# seat is one anchor, so an anchor-per-supervisor rule finds 22 of 23; and the
+# image alt attributes — the obvious second pairing — carry the county's own
+# typos, spelling District 9 "John Morissey" and District 23 "Aaron Karrow"
+# against the visible text's "Morrissey" and "Karow". THE ALT TEXT WOULD HAVE
+# WITNESSED THE DISTRICT AND CORRUPTED THE NAME.
+WITNESSED_DOCUMENT_COUNTIES = [
+    {
+        "fips": "55059", "name": "Kenosha", "seats": 23,
+        # STABLE county page id -> 302 -> the current DocumentCenter edition;
+        # never the /DocumentCenter/View/<edition>/ address, which freezes.
+        "document": "https://www.kenoshacountywi.gov/1018/County-Directory-PDF",
+        # the document's board section, sliced between two headings it prints
+        # exactly once each in this order — "BOARD OF SUPERVISORS" occurs again
+        # inside "COMMITTEES OF THE KENOSHA COUNTY BOARD OF SUPERVISORS", which
+        # is precisely where the section has to stop: the committee lists name
+        # supervisors as committee CHAIRS, a role that is not the board's.
+        "section": ("BOARD OF SUPERVISORS", "COMMITTEES OF THE"),
+        "witness": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors",
+        # the reader lands on the page, not on a 900 KB PDF; both publish every
+        # name the card shows
+        "source_url": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors",
+        "profile_prefix": "https://www.kenoshacountywi.gov",
+    },
+]
+
+# "1. William Grady ....... 262-652-2020" for districts 1-14 and "15 Dave
+# Geertsen ....... 262-515-3334" for 15-23: THE SAME DOCUMENT NUMBERS ITS ROWS
+# TWO WAYS, so the period is optional or a reader gets 14 of 23. The leader run
+# is optional too, and is not always dots — two rows use U+2026 ellipses with no
+# space before the phone at all ("7. Daniel Gaschke…………262-902-7028").
+DOC_ROW = re.compile(r"^(\d{1,2})[.)]?\s+(.+?)\s*"
+                     r"(\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4})\s*$")
+DOC_LEADER_TAIL = re.compile(r"[\s.…]+$")
+DOC_EMAIL = re.compile(r"(?i)^e-?\s?mail:?\s*(\S+@\S+)$")
+# "Supervisor Mark Nordigian is the Chairman and Supervisor John Franco is the
+# Vice Chairman for the 2026-2028 County Board term."
+LEADERSHIP = re.compile(
+    r"(?i)supervisor\s+(.+?)\s+is\s+the\s+chair(?:man|person|woman)?\b"
+    r".{0,80}?supervisor\s+(.+?)\s+is\s+the\s+vice[\s-]?chair(?:man|person|woman)?\b")
+# one supervisor's block on the board page: a <p> holding exactly one profile
+# link, the district and the name
+DOC_BLOCK = re.compile(r"(?is)<p\b[^>]*>(.*?)</p>")
+DOC_PROFILE = re.compile(r"(?i)href=\"(/Directory\.aspx\?EID=\d+)\"")
+DOC_DISTNAME = re.compile(r"(?i)^District\s*(\d{1,2})\s+(.+)$")
+
+
+def document_rows(pdf_bytes, section):
+    """District -> {name, role, phone, email} out of the Clerk's directory.
+
+    A row needs a PHONE to be recognised, which is how the directory writes
+    every seat it fills, so a VACANT seat would not parse and its district
+    would go missing — taking the whole county out through the count gate
+    below rather than shipping 22 of 23. That is deliberate and it is the same
+    all-or-nothing rule scrape_county holds, but it is NOT the vacancy handling
+    the page counties have: this county has no vacancy today, and the day it
+    has one the run fails naming the missing district, which is a person
+    reading the directory rather than a silent short roster.
+    """
+    reader = PdfReader(io.BytesIO(pdf_bytes))
+    whole = "\n".join(page.extract_text() or "" for page in reader.pages)
+    try:
+        start = whole.index(section[0])
+        end = whole.index(section[1])
+    except ValueError as e:
+        raise RuntimeError("the directory no longer prints %r/%r — re-read it "
+                           "before shipping (%s)" % (section[0], section[1], e))
+    if not start < end:
+        raise RuntimeError("the directory's %r heading now follows %r — the "
+                           "board section is not where this reader slices it"
+                           % (section[0], section[1]))
+    lines = [" ".join(x.split()) for x in whole[start:end].split("\n")]
+    rows, last = {}, None
+    for line in [x for x in lines if x]:
+        m = DOC_ROW.match(line)
+        if m:
+            d = int(m.group(1))
+            member, role = clean(DOC_LEADER_TAIL.sub("", m.group(2)))
+            if not is_name(member):
+                last = None
+                continue
+            rows[d] = {"name": member, "vacant": False, "role": role,
+                       "phone": m.group(3).strip()}
+            last = d
+            continue
+        em = DOC_EMAIL.match(line)
+        # the address sits on the row BELOW its member and nowhere else, so it
+        # is only ever attached to the row just read — never searched for
+        if em and last is not None:
+            rows[last]["email"] = em.group(1)
+            last = None
+    return rows
+
+
+def witness_profiles(page_html, prefix):
+    """District -> (name, profile url) read one supervisor block at a time."""
+    out = {}
+    for inner in DOC_BLOCK.findall(page_html):
+        links = set(DOC_PROFILE.findall(inner))
+        if len(links) != 1:
+            continue
+        text = " ".join(html_lib.unescape(_TAG.sub(" ", inner)).split())
+        m = DOC_DISTNAME.match(text)
+        if not m:
+            continue
+        d = int(m.group(1))
+        if d in out:            # two blocks claim one district: trust neither
+            out[d] = None
+            continue
+        out[d] = (clean(m.group(2))[0], prefix + links.pop())
+    return {d: v for d, v in out.items() if v}
+
+
+def scrape_witnessed_document(spec):
+    """A roster read from a county DOCUMENT and witnessed against its page."""
+    pdf_bytes, edition = fetch_bytes(spec["document"], timeout=90)
+    print("  doc  %-12s edition %s (%d KB)"
+          % (spec["name"], edition, len(pdf_bytes) // 1024), file=sys.stderr)
+    rows = document_rows(pdf_bytes, spec["section"])
+    seats = spec["seats"]
+    want = set(range(1, seats + 1))
+    if set(rows) != want:
+        raise RuntimeError("%s: the directory resolved %d of %d districts "
+                           "(missing %s) — re-read the document"
+                           % (spec["name"], len(rows), seats,
+                              sorted(want - set(rows))))
+
+    page = fetch(spec["witness"])
+    lines = to_lines(page)
+    witness = _windowed(lines, WINDOW_AFTER)
+    if set(witness) != want:
+        raise RuntimeError("%s: the witness page resolved %d of %d districts "
+                           "(missing %s) — the two surfaces can no longer check "
+                           "each other, so neither ships"
+                           % (spec["name"], len(witness), seats,
+                              sorted(want - set(witness))))
+    differ = [(d, rows[d]["name"], witness[d][0]) for d in sorted(want)
+              if rows[d]["name"] != witness[d][0]]
+    if differ:
+        raise RuntimeError(
+            "%s: the directory and the board page name different supervisors "
+            "(%s) — one of the two is stale and this scraper cannot tell which"
+            % (spec["name"], "; ".join("D%d %r vs %r" % x for x in differ)))
+
+    # roles: shipped only where the page's own leadership sentence agrees.
+    # Exactly one row may be marked chair and one vice-chair; anything else is
+    # the document saying something this reader does not understand.
+    def marked_as(vice):
+        who = [v["name"] for v in rows.values() if v.get("role")
+               and bool(re.match(r"(?i)vice", v["role"])) == vice]
+        return who[0] if len(who) == 1 else None
+
+    doc_chair, doc_vice = marked_as(False), marked_as(True)
+    stated = LEADERSHIP.search(" ".join(lines))
+    if not stated:
+        print("  note %-12s the board page no longer states its leadership in a "
+              "sentence this reader parses — roles withheld" % spec["name"],
+              file=sys.stderr)
+        confirmed = False
+    else:
+        chair, vice = clean(stated.group(1))[0], clean(stated.group(2))[0]
+        confirmed = (doc_chair is not None and doc_vice is not None
+                     and chair == doc_chair and vice == doc_vice)
+        if not confirmed:
+            print("  note %-12s the board page states chair %r / vice-chair %r "
+                  "where the directory marks %r / %r — roles withheld"
+                  % (spec["name"], chair, vice, doc_chair, doc_vice),
+                  file=sys.stderr)
+    if confirmed:
+        print("  role %-12s chair %s, vice-chair %s (both witnessed on the "
+              "county's own board page)" % (spec["name"], doc_chair, doc_vice),
+              file=sys.stderr)
+    else:
+        for row in rows.values():
+            row["role"] = None
+
+    profiles = witness_profiles(page, spec["profile_prefix"])
+    linked = 0
+    for d, row in rows.items():
+        found = profiles.get(d)
+        # paired on the NAME the block itself carries, so a block that has
+        # shifted takes its own link with it rather than someone else's
+        if found and found[0] == row["name"]:
+            row["url"] = found[1]
+            linked += 1
+    print("  link %-12s %d of %d supervisors carry the county's own profile page"
+          % (spec["name"], linked, seats), file=sys.stderr)
+    return {str(d): rows[d] for d in sorted(rows)}
 
 # --- officers published ABOVE the district list ------------------------------
 # Juneau and Oneida name their chair and vice-chairs in a block of their own,
@@ -1766,6 +2071,8 @@ def main():
     jobs = [(c["fips"], c["name"], c["seats"], "arcgis", c) for c in ARCGIS_COUNTIES]
     jobs += [(d["fips"], d["name"], d["seats"], "document", d) for d in DOCUMENT_ROSTERS]
     jobs += [(c["fips"], c["name"], c["seats"], "constituent", c) for c in CONSTITUENT_COUNTIES]
+    jobs += [(c["fips"], c["name"], c["seats"], "witnessed-document", c)
+             for c in WITNESSED_DOCUMENT_COUNTIES]
     jobs += [(fips, name, seats, strategy, url) for fips, name, seats, strategy, url in COUNTIES]
     for fips, name, seats, strategy, src in jobs:
         if only and fips != only:
@@ -1783,6 +2090,9 @@ def main():
                 read_from = "document" if carried else "live"
             elif strategy == "constituent":
                 districts = scrape_constituent_county(src)
+                source_url, read_from = src["source_url"], "live"
+            elif strategy == "witnessed-document":
+                districts = scrape_witnessed_document(src)
                 source_url, read_from = src["source_url"], "live"
             else:
                 districts, read_from = scrape_county(fips, name, seats, strategy, src)
@@ -1815,7 +2125,8 @@ def main():
     print("wrote %s: %d/%d counties, %d seats%s"
           % (out_path, len(counties),
              len(COUNTIES) + len(ARCGIS_COUNTIES) + len(DOCUMENT_ROSTERS)
-             + len(CONSTITUENT_COUNTIES), total,
+             + len(CONSTITUENT_COUNTIES)
+             + len(WITNESSED_DOCUMENT_COUNTIES), total,
              ", %d county/counties missed" % len(failures) if failures else ""),
           file=sys.stderr)
 

@@ -275,7 +275,7 @@ PROVENANCE = [
         "app_file": "county-board-members.json",
         "source_url": "https://www.browncountywi.gov/government/county-board-of-supervisors/",
         "note": (
-            "The supervisor roster — 29 counties' own board pages plus two county GIS layers (rows above), scraped weekly by "
+            "The supervisor roster — 29 counties' own board pages, two county GIS layers (rows above) and Kenosha's directory document (row below), refreshed weekly by "
             "update-wi-county-board-roster.yml with each county's reading direction "
             "pinned (the full URL table is COUNTIES in wi_county_board_scraper.py). "
             "Two representative pages are probed — Brown, the largest launch-set "
@@ -296,6 +296,39 @@ PROVENANCE = [
             "which is why a sweep of county sites recorded Dane as publishing "
             "nothing for a fortnight. Probed here so the distinction stays "
             "measured rather than remembered."
+        ),
+    },
+    {
+        "layer": "county-board",
+        "app_file": "county-board-members.json",
+        "source_url": "https://www.kenoshacountywi.gov/1018/County-Directory-PDF",
+        "note": (
+            "Kenosha's 23 supervisors come from the Clerk's own Directory of "
+            "Public Officials — the file's one FETCHED document, as against "
+            "Taylor's carried one below, and re-read on every weekly run. "
+            "THE STABLE PAGE ID IS THE "
+            "POINT OF PROBING THIS: the document itself lives at a "
+            "/DocumentCenter/View/<edition>/ address that freezes on the edition "
+            "it names, and this id is the county's own page for whichever edition "
+            "is current, so it redirects as the annual directory is republished. "
+            "Its going unreachable is the news; the weekly scrape already fails "
+            "loudly if the document's board section reshapes."
+        ),
+    },
+    {
+        "layer": "county-board",
+        "app_file": "county-board-members.json",
+        "source_url": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors",
+        "note": (
+            "The WITNESS for the row above: the county board's own page, which "
+            "names the same 23 supervisors and states the board's leadership in "
+            "prose. The scraper ships nothing for Kenosha unless the two surfaces "
+            "agree name-for-name, and withholds the Chair and Vice-Chair roles "
+            "unless this page's leadership sentence confirms them, so this URL is "
+            "load-bearing rather than decorative. It is also the card's own link, "
+            "and it is NOT the county's map index at "
+            "/142/County-Board-Supervisor-Districts, which names nobody and which "
+            "this gap record mistook for the roster page for a month."
         ),
     },
     {
