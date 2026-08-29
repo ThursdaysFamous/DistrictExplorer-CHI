@@ -175,6 +175,32 @@ def main():
             "scraper and read its skip reasons before loosening anything"
             % (len(directory), total_districts, MIN_COUNTIES, MIN_DISTRICTS))
 
+    # A COUNTY THAT SHIPPED LAST WEEK MAY NOT SIMPLY VANISH. The floors above
+    # are sized for the FILE (12 of 17 counties), so ONE county dropping out
+    # clears them with room to spare -- and a dropped county here is a whole
+    # board deleted from the app, in a diff that reads like housekeeping. It
+    # happened: on 2026-08-29 a weekly run lost Grundy County's five
+    # supervisors to a single failed fetch, and every guard in this pipeline
+    # stayed green. The scraper now retries what waiting can fix; this reads
+    # the file it is about to overwrite and refuses to drop a county silently.
+    #
+    # A county that genuinely stops publishing is a decision somebody makes:
+    # --allow-drop <County>, in the run that makes it.
+    argv = sys.argv[1:]
+    allowed_drops = {argv[i + 1] for i, a in enumerate(argv) if a == "--allow-drop"}
+    try:
+        with open(OUT) as f:
+            was = {rec["county"]: len(rec["districts"]) for rec in json.load(f).values()}
+    except (OSError, ValueError):
+        was = {}
+    gone = sorted(set(was) - {r["county"] for r in directory.values()} - allowed_drops)
+    if gone:
+        raise RuntimeError(
+            "%s shipped last time and keyed nothing this time -- that is a page to "
+            "re-read, not a diff to merge. The scraper's own skip reason for each is "
+            "above; pass --allow-drop to drop a county deliberately"
+            % ", ".join("%s (%d districts)" % (c, was[c]) for c in gone))
+
     # Structural refusal: only these two fields may ship on a person. No
     # address, ever -- and no phone, because the only number any of these
     # publishers gives is the board office's, which rides the county level.

@@ -83,6 +83,33 @@
   },
   "sourceUrl": "https://www.franklincountyia.gov/government/board_of_supervisors/index.php"
  },
+ "075": {
+  "boardPhone": "(319) 824-5813",
+  "county": "Grundy",
+  "districts": {
+   "1": {
+    "name": "LJ Kopsa",
+    "party": "Republican"
+   },
+   "2": {
+    "name": "Heidi Nederhoff",
+    "party": "Republican"
+   },
+   "3": {
+    "name": "Vic Vandehaar",
+    "party": "Republican"
+   },
+   "4": {
+    "name": "Mark Schildroth",
+    "party": "Republican"
+   },
+   "5": {
+    "name": "Jeffrey Pabst",
+    "party": "Republican"
+   }
+  },
+  "sourceUrl": "https://www.grundycountyiowa.gov/departments/supervisors"
+ },
  "079": {
   "boardPhone": "(515) 832-9530",
   "county": "Hamilton",

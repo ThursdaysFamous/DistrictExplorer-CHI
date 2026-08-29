@@ -151,15 +151,40 @@ def strip_tags(markup):
     return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", markup)))
 
 
-def fetch(url):
-    try:
-        resp = requests.get(url, headers=HEADERS, timeout=REQUEST_TIMEOUT,
-                            allow_redirects=True)
-        # 202 is what an sgcaptcha challenge answers with, and it is never a
-        # document. Nothing here tries to defeat a challenge.
-        return resp.text if resp.status_code == 200 else None
-    except requests.RequestException:
-        return None
+def fetch(url, attempts=3):
+    """The page, or None. Retries only what waiting can fix.
+
+    A COUNTY MUST NOT LEAVE THIS FILE BECAUSE ONE REQUEST FAILED. This function
+    used to return None on any exception and on any non-200, with no retry, and
+    a skipped county is silently dropped from the roster the builder writes —
+    which is exactly what happened to Grundy County on 2026-08-29: five
+    supervisors deleted from a green PR while grundycountyiowa.gov was up the
+    whole time, still naming all five beside their district numbers. So a
+    connection error, a timeout, a 429 and a 5xx are waited out; a 403, a 404
+    and the 202 an sgcaptcha challenge answers with are not, because a refusal,
+    a missing page and an access control are not fixed by asking again. (Nothing
+    here tries to defeat a challenge.)
+    """
+    delay = 3.0
+    for attempt in range(attempts):
+        try:
+            resp = requests.get(url, headers=HEADERS, timeout=REQUEST_TIMEOUT,
+                                allow_redirects=True)
+            if resp.status_code == 200:
+                return resp.text
+            if resp.status_code != 429 and resp.status_code < 500:
+                return None
+            why = "HTTP %d" % resp.status_code
+        except requests.RequestException as e:
+            why = str(e)
+        if attempt == attempts - 1:
+            print("  fetch  %s gave up after %d attempt(s): %s"
+                  % (url, attempts, why), file=sys.stderr)
+            return None
+        print("  retry  %s (%s) in %.0fs" % (url, why, delay), file=sys.stderr)
+        time.sleep(delay)
+        delay *= 3
+    return None
 
 
 def candidate_pages(home):
