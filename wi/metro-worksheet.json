@@ -346,7 +346,7 @@
             "url": "https://services9.arcgis.com/cqHJZMbXoaOT0XrP/arcgis/rest/services/Trempealeau_County_County_Board_Supervisor_Districts_2021_2031_WFL1/FeatureServer/3"
           }
         ],
-        "people": "For 32 of the 72 counties, the supervisor holding the district — 29 from each county's own board page and two (Milwaukee, Racine) read as attributes off the county's own GIS layer, Milwaukee's witnessed on every run against the county's Legistar API (county-board-members.json, refreshed weekly by CI as a reviewed PR); a seat the county marks empty renders as vacant. Nine of the 29 arrived on 2026-08-27 from a re-sweep of the 50 counties this project had recorded as publishing nothing: Dane's roster sits on the BOARD's own host rather than the county's, and Oneida, Price and Trempealeau print a district COLUMN, which this reader could not see because it needed the word beside the number. Taylor's seventeen ride a dated document read from its own directory page, because its host answers a captcha to every automated client and no weekly re-read is possible. The other 40 counties publish no district-keyed member list this can read, so no name is shown and the card links the county board — Wisconsin has no statewide roster of county supervisors.",
+        "people": "For 33 of the 72 counties, the supervisor holding the district — 30 from each county's own board page and two (Milwaukee, Racine) read as attributes off the county's own GIS layer, Milwaukee's witnessed on every run against the county's Legistar API (county-board-members.json, refreshed weekly by CI as a reviewed PR); a seat the county marks empty renders as vacant. Nine of the 29 arrived on 2026-08-27 from a re-sweep of the 50 counties this project had recorded as publishing nothing: Dane's roster sits on the BOARD's own host rather than the county's, and Oneida, Price and Trempealeau print a district COLUMN, which this reader could not see because it needed the word beside the number. Taylor's seventeen ride a dated document read from its own directory page, because its host answers a captcha to every automated client and no weekly re-read is possible. Monroe's sixteen joined on 2026-08-29, and its record was the correction: the county's HTTP 403 had been re-measured four times by varying the user-agent, when what its edge wanted was the headers a browser attaches to an ordinary page navigation — its list was public the whole time. The other 39 counties publish no district-keyed member list this can read, so no name is shown and the card links the county board — Wisconsin has no statewide roster of county supervisors.",
         "applies": "Wisconsin — statewide, all 72 counties."
       }
     },
@@ -1427,8 +1427,8 @@
       },
       {
         "file": "county-board-members.json",
-        "min_keys": 660,
-        "note": "County board supervisors for the 32 counties whose district-keyed member list this can obtain (689 seats) — 29 scraped from board pages, Milwaukee and Racine read off their own GIS layers (Milwaukee Legistar-witnessed). Built by wi/scripts/build_wi_county_board_roster.py, checked seat-for-seat against the shipped district geometry; refreshed weekly by update-wi-county-board-roster.yml, and Taylor carried from its own directory page as a dated document because its host answers a captcha to every automated client. The other 40 counties name nobody — their cards link the county board instead."
+        "min_keys": 676,
+        "note": "County board supervisors for the 33 counties whose district-keyed member list this can obtain (705 seats) — 30 scraped from board pages, Milwaukee and Racine read off their own GIS layers (Milwaukee Legistar-witnessed). Built by wi/scripts/build_wi_county_board_roster.py, checked seat-for-seat against the shipped district geometry; refreshed weekly by update-wi-county-board-roster.yml, and Taylor carried from its own directory page as a dated document because its host answers a captcha to every automated client. Monroe reads its own table with the browser navigation headers its Akamai edge requires (its 403 measured the request, not the county). The other 39 counties name nobody — their cards link the county board instead."
       },
       {
         "file": "wi-circuit-judges.json",
@@ -1940,7 +1940,7 @@
     },
     {
       "file": "update-wi-county-board-roster.yml",
-      "purpose": "County board supervisors for the 31 counties that publish a readable member list",
+      "purpose": "County board supervisors for the 33 counties whose member list can be resolved",
       "schedule": "Thu 14:30 UTC"
     },
     {
@@ -2074,7 +2074,7 @@
         "label": "county-board seats tracked weekly",
         "file": "data/app/county-board-members.json",
         "metric": "keys",
-        "note": "in the 32 counties whose district-keyed roster this can obtain"
+        "note": "in the counties whose district-keyed roster this can obtain; the rest are named in the Data gaps panel"
       },
       {
         "label": "circuit courts with their full bench named",
@@ -2084,6 +2084,11 @@
       }
     ],
     "entries": [
+      {
+        "date": "2026-08-29",
+        "title": "Monroe County's supervisors, and a refusal that measured the wrong thing",
+        "body": "The county board card now names the supervisor for each of Monroe County's sixteen districts, with the county e-mail address published for that seat. The county has published that list all along. This deployment had recorded Monroe's website as refusing automated readers, and had re-measured that refusal four separate times — from a browser user-agent, from this project's own, from no user-agent at all, and over plain http. Every one of those probes changed the same thing and left the rest of the request alone. The county's edge was not reading the user-agent: it was looking for the handful of headers a browser attaches to an ordinary page navigation, and a request carrying them is served the same page a person sees, from the same machine that had been refused. Re-probing the eight other counties filed under that refusal found four more that answer — Marathon, Outagamie, Rock and Sheboygan, 128 seats between them, now builds waiting on a reading rather than blocks. What ships here is read as a table rather than as lines, because the page carries a month of calendar dates above it and a line-reader would have been keying on a calendar: the columns are located by their own header names, and each row states its district twice — in the District cell and in the address the county maintains for that seat — with the two required to agree."
+      },
       {
         "date": "2026-08-27",
         "title": "Where you vote, everywhere in Wisconsin",

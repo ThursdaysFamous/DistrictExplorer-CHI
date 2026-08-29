@@ -275,7 +275,7 @@ PROVENANCE = [
         "app_file": "county-board-members.json",
         "source_url": "https://www.browncountywi.gov/government/county-board-of-supervisors/",
         "note": (
-            "The supervisor roster — 29 counties' own board pages plus two county GIS layers (rows above), scraped weekly by "
+            "The supervisor roster — 30 counties' own board pages plus two county GIS layers (rows above), scraped weekly by "
             "update-wi-county-board-roster.yml with each county's reading direction "
             "pinned (the full URL table is COUNTIES in wi_county_board_scraper.py). "
             "Two representative pages are probed — Brown, the largest launch-set "
@@ -312,6 +312,27 @@ PROVENANCE = [
             "the check INVERTS: a refusal reads OK and this host becoming readable "
             "is the WARN, because that is the state a human can act on — it would "
             "mean the document route can be retired for a weekly scrape."
+        ),
+    },
+    {
+        "layer": "county-board",
+        "app_file": "county-board-members.json",
+        "source_url": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/"
+                      "districts-supervisors",
+        "blocked": "Akamai \"Access Denied\" to THIS checker's client and not to the "
+                   "scraper: the same page answers HTTP 200 (153 KB, all sixteen "
+                   "supervisors) to wi_county_board_scraper.py's urllib fetch with the "
+                   "header set a Chrome navigation sends, and is read that way weekly. "
+                   "Measured 2026-08-29: `requests` is refused with byte-identical "
+                   "headers, so what the edge scores sits below the header layer.",
+        "note": (
+            "Monroe's Districts & Supervisors table — the county states each seat's "
+            "district twice (the District cell and the district.NN@ address it "
+            "publishes for that seat) and the scraper requires the two to agree. "
+            "Recorded as EXPECTED-UNREACHABLE so this monthly report does not call a "
+            "link dead that the weekly roster run reads; the INVERSION means this "
+            "host answering here is the WARN, and that WARN would mean the "
+            "per-county header exception can go."
         ),
     },
     {

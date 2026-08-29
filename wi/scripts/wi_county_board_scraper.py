@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """
-Scrape county board supervisors from the 29 Wisconsin counties that publish a
+Scrape county board supervisors from the 30 Wisconsin counties that publish a
 district-keyed member list. Stage 1 of the pair; build_wi_county_board_roster.py
 turns the intermediate JSON into data/app/county-board-members.json.
 
-WHY ONLY TWENTY-NINE OF SEVENTY-TWO
------------------------------------
+WHY ONLY THIRTY OF SEVENTY-TWO
+------------------------------
 Wisconsin publishes county board DISTRICTS statewide (Wis. Stat. 5.15(4)(br)1,
 see build_wi_supervisory_districts.py) and publishes the PEOPLE in them
-nowhere: each county names its own supervisors, 72 different ways. Twenty-nine
-pair a district with a person in a form a parser can read (plus Milwaukee and
+nowhere: each county names its own supervisors, 72 different ways. Thirty pair
+a district with a person in a form a parser can read (plus Milwaukee and
 Racine off their own GIS layers, below). The rest are not oversights and are
 recorded as such:
 
@@ -20,12 +20,32 @@ recorded as such:
   * Marinette publishes 29 of its 30 seats. District 26 is an unnumbered
     "VACANT SEAT" row in an alphabetical list, and assigning it by elimination
     would be an inference the county never wrote, so the county stays out.
-  * The rest could not be read: 9 answer 403 to a datacenter client and hold
-    it against browser headers (Marathon, La Crosse, Outagamie, Fond du Lac,
-    Lafayette, Lincoln, Monroe, Rock, Sheboygan), Taylor sits behind an
-    sgcaptcha challenge answering 202 (an access control, not an obstacle to
-    route around), Forest does not resolve, and the remainder publish their
-    members as PDFs, images or prose with no district column.
+  * The rest could not be read: 3 answer 403 to this client (La Crosse,
+    Lincoln, Lafayette), 4 answer 200 and simply have no pinned reading yet
+    (Marathon, Outagamie, Rock, Sheboygan — see the correction below), Taylor
+    sits behind an sgcaptcha challenge answering 202 (an access control, not
+    an obstacle to route around), Forest does not resolve, and the remainder
+    publish their members as PDFs, images or prose with no district column.
+
+    THAT 403 BUCKET SAID "AND HOLD IT AGAINST BROWSER HEADERS" AND WAS WRONG
+    ABOUT FIVE OF THE NINE COUNTIES IN IT (2026-08-29). It listed Marathon,
+    La Crosse, Outagamie, Fond du Lac, Lafayette, Lincoln, Monroe, Rock and
+    Sheboygan, and "browser headers" had meant the three this file sends: a
+    User-Agent, an Accept and an Accept-Language. Monroe's edge is Akamai bot
+    management (`server: AkamaiGHost`, an errors.edgesuite.net reference id on
+    the deny page) and it scores the WHOLE request rather than the UA: those
+    three headers are refused from any User-Agent, and so is UA + all four
+    Sec-Fetch-* headers, while UA + Accept + Accept-Language + Sec-Fetch-*
+    together — what an ordinary Chrome navigation sends — is served 200 with
+    the full 153 KB page, from this same datacenter address. Re-probing the
+    other eight with that set the same afternoon: MARATHON, OUTAGAMIE, ROCK
+    and SHEBOYGAN also answer 200 (128 seats between them, unread here only
+    for want of a pinned reading), La Crosse, Lincoln and Lafayette still
+    answer 403, and Fond du Lac answers 200 either way with a 703-byte stub.
+    A 403 IS A MEASUREMENT OF THE REQUEST THAT WAS SENT, NOT OF THE COUNTY —
+    the Coles/Gallatin lesson (an incomplete TLS chain read as an absent
+    host) in a second guise, and worth re-running against any county in this
+    file recorded as refusing.
 
     TAYLOR IS NOT A "PUBLISHES NOTHING" COUNTY, and the bucket above said so
     only because nothing here can SEE the page. It publishes a County Board
@@ -103,6 +123,27 @@ by the duplicate-name guard below, and neither ships. They are a separate
 strategy rather than a change to `_windowed` so the twenty counties already
 shipping keep byte-identical behaviour.
 
+MONROE READS ITS TABLE AS A TABLE (added 2026-08-29)
+----------------------------------------------------
+Monroe publishes a real HTML table — District | Municipal Ward | Supervisor |
+Address | Phone | Email, one row per seat — and none of the five line readings
+above is safe on it. Its ward cells run to six lines, which is past
+COLUMN_SPAN, and the page carries a MONTH'S EVENT CALENDAR above the table:
+seventy-odd bare numerals in the district range, each followed by a time and
+an event title. `_column` would be reading a calendar for the numbers it keys
+on, and one month's event named after a person would seat that person.
+
+So `_monroe` reads the ROW, and locates its columns BY THEIR HEADER NAMES
+rather than by position, so a column reordered upstream cannot shift a roster
+and a column renamed fails loudly. Two witnesses per row: the District cell
+and the local part of the row's own e-mail address
+(district.07@co.monroe.wi.us), which the county maintains per seat — they must
+agree, or the row is refused. Home addresses and phone numbers sit in that
+table and are NOT carried: the addresses are supervisors' houses (the standing
+fleet rule), and this instance's roster file has no phone field for the numbers
+to ride — they are personal numbers printed beside those homes, and Taylor's
+are dropped by the same builder for the same reason.
+
 A COUNTY THAT DOES NOT FULLY RESOLVE YIELDS NOTHING. Partial output is worse
 than none here: a card showing 18 of 21 districts reads as a complete board
 with three empty seats.
@@ -137,6 +178,7 @@ Usage:
     python3 wi/scripts/wi_county_board_scraper.py [--out PATH] [--only FIPS]
 """
 
+import gzip
 import html as html_lib
 import json
 import os
@@ -154,6 +196,36 @@ UA = {
     "Accept": "text/html,application/xhtml+xml,*/*;q=0.8",
     "Accept-Language": "en-US,en;q=0.9",
 }
+
+# The headers a Chrome NAVIGATION sends, for the counties whose edge refuses
+# the three above. Monroe is the measured case (see the docstring): its Akamai
+# front answers 403 to UA-plus-Accept-plus-Accept-Language from any User-Agent
+# and 200 to this set, from the same address — the difference is the Fetch
+# Metadata headers a browser attaches to a top-level navigation, which nothing
+# in this file was sending.
+#
+# THIS IS A SECOND HEADER SET, NOT A REPLACEMENT, and deliberately: what a
+# scraper sends changes how a site treats it (scripts/scraper_common.py's
+# docstring records the fleet ruling), so the 29 counties that already ship
+# keep the exact bytes their weekly runs were built on, and a county moves to
+# this set only with its own run as the witness.
+BROWSER = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                  "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,"
+              "image/avif,image/webp,image/apng,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Accept-Encoding": "gzip",
+    "sec-ch-ua": '"Chromium";v="126", "Not;A=Brand";v="24"',
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": '"Windows"',
+    "Sec-Fetch-Dest": "document",
+    "Sec-Fetch-Mode": "navigate",
+    "Sec-Fetch-Site": "none",
+    "Sec-Fetch-User": "?1",
+    "Upgrade-Insecure-Requests": "1",
+}
+BROWSER_HEADER_COUNTIES = {"55081"}     # Monroe — measured 2026-08-29
 
 # (county FIPS, name as LTSB spells it, seats, reading direction, page)
 COUNTIES = [
@@ -218,7 +290,14 @@ COUNTIES = [
      "https://www.co.shawano.wi.us/county_board/"),
     ("55121", "Trempealeau", 17, "column-before",
      "https://co.trempealeau.wi.us/government/agendas_minutes/standing_committees/"
-     "trempealeau_county_board_of_supervisors.php"),]
+     "trempealeau_county_board_of_supervisors.php"),
+    # --- 2026-08-29: the county whose 403 was the request, not the county ---
+    # Read with BROWSER (see BROWSER_HEADER_COUNTIES) and as a TABLE (see
+    # `_monroe`). robots.txt allows this path to every agent; only /scripts,
+    # /admin and *.asmx are disallowed.
+    ("55081", "Monroe", 16, "table",
+     "https://www.co.monroe.wi.us/government/county-board-of-supervisors/"
+     "districts-supervisors"),]
 
 # --- text shaping -------------------------------------------------------------
 # nav is NOT boilerplate everywhere: Grant County publishes its entire board in
@@ -440,6 +519,75 @@ def _windowed_strict(lines, offsets):
     return out, vacant
 
 
+# --- the sixth shape: a real TABLE, read as rows --------------------------------
+# Every reading above works on the page's LINES, which is what a list, a run of
+# prose or a CMS's stack of divs leaves behind. Monroe leaves a table, and reading
+# its lines is unsafe twice over: its ward cells run to six lines (past
+# COLUMN_SPAN, so `_column` walks out of the row) and an events calendar above it
+# prints seventy-odd bare numerals in the district range, each followed by a time
+# and an event title — a month whose calendar named a person would seat that
+# person.
+#
+# So the row is read as a row, and its columns are located BY HEADER NAME: a
+# column reordered upstream cannot shift a roster, and a column renamed or
+# dropped fails loudly instead of quietly reading the wrong cell. Each row states
+# its district TWICE — the District cell, and the local part of the county e-mail
+# address it publishes for that seat (district.07@co.monroe.wi.us) — and the two
+# must agree, which is the same two-witnesses stance the pinned reading
+# directions take, expressed in the data the county already maintains.
+TABLE = re.compile(r"(?is)<table\b.*?</table>")
+TABLE_ROW = re.compile(r"(?is)<tr\b[^>]*>(.*?)</tr>")
+TABLE_CELL = re.compile(r"(?is)<t([dh])\b[^>]*>(.*?)</t\1>")
+MONROE_COLUMNS = ("district", "supervisor", "email")
+MONROE_EMAIL = re.compile(r"(?i)^district\.(\d{1,2})@co\.monroe\.wi\.us$")
+
+
+def _monroe(page_html):
+    """District -> (name, role), plus the county e-mail published per seat."""
+    for table in TABLE.findall(page_html):
+        rows = [[to_lines(cell) for _, cell in TABLE_CELL.findall(row)]
+                for row in TABLE_ROW.findall(table)]
+        header, body = None, []
+        for i, cells in enumerate(rows):
+            heads = [c[0].lower() if c else "" for c in cells]
+            if all(want in heads for want in MONROE_COLUMNS):
+                header = {name: j for j, name in enumerate(heads)}
+                body = rows[i + 1:]
+                break
+        if header is None:
+            continue
+        found, vacant, contact = {}, set(), {}
+        for cells in body:
+            if len(cells) <= max(header.values()):
+                continue
+            key = cells[header["district"]]
+            who = cells[header["supervisor"]]
+            mail = cells[header["email"]]
+            if not key or not (who or mail):
+                continue                    # the table's own blank spacer row
+            num = BARE_NUM.match(key[0].strip())
+            if not num:
+                raise RuntimeError("Monroe: district cell %r is not a number" % key[0])
+            d = int(num.group(1))
+            said = MONROE_EMAIL.match(mail[0]) if mail else None
+            if not said or int(said.group(1)) != d:
+                raise RuntimeError(
+                    "Monroe: district %d's row publishes %r — the row's two "
+                    "statements of its own district disagree, so the table has "
+                    "reshaped; re-read it before shipping"
+                    % (d, mail[0] if mail else None))
+            if who and VACANT.search(who[0]):
+                vacant.add(d)
+                continue
+            if not who or not is_name(who[0]):
+                continue                    # the count guard names the seat
+            found[d] = clean(who[0])
+            contact[d] = {"email": mail[0].lower()}
+        return found, vacant, contact
+    raise RuntimeError("Monroe: no table on the page heads columns %s — the page "
+                       "has changed shape" % (MONROE_COLUMNS,))
+
+
 READINGS = {
     "same-line": _same_line,
     "before": lambda ls: _windowed(ls, WINDOW_BEFORE),
@@ -464,18 +612,48 @@ def vacant_districts(lines, seats):
     return out
 
 
-def fetch(url, timeout=45):
+def fetch(url, headers=UA, timeout=45, attempts=4):
+    """GET the page, retrying only what waiting can fix.
+
+    429 IS RATE LIMITING AND NOT A REFUSAL, and this file had no answer for it:
+    Winnebago's Cloudflare front rate-limits by address, so two runs close
+    together dropped its 36 seats out of the roster entirely for that run — a
+    county vanishing from the shipped file because of pacing, which reads on
+    the weekly PR exactly like a county whose page reshaped. 429 and 5xx are
+    therefore waited out (a numeric Retry-After is honoured, capped, so a
+    hostile value cannot hang CI); 403 and 404 are not, because a refusal or a
+    moved page is not fixed by waiting.
+    """
     lax = ssl.create_default_context()
     lax.check_hostname = False
     lax.verify_mode = ssl.CERT_NONE
     last = None
-    for ctx in (None, lax):
-        try:
-            req = urllib.request.Request(url, headers=UA)
-            with urllib.request.urlopen(req, timeout=timeout, context=ctx) as r:
-                return r.read().decode("utf-8", "replace")
-        except Exception as e:      # noqa: BLE001 - reachability probe
-            last = e
+    for attempt in range(attempts):
+        for ctx in (None, lax):
+            try:
+                req = urllib.request.Request(url, headers=headers)
+                with urllib.request.urlopen(req, timeout=timeout, context=ctx) as r:
+                    body = r.read()
+                    # BROWSER asks for gzip (a browser navigation does, and the
+                    # header set is scored as a whole); urllib never unwraps it.
+                    if (r.headers.get("Content-Encoding") or "").lower() == "gzip":
+                        body = gzip.decompress(body)
+                    return body.decode("utf-8", "replace")
+            except urllib.error.HTTPError as e:
+                last = e
+                if e.code == 429 or e.code >= 500:
+                    break           # a wait fixes this; a second TLS context cannot
+            except Exception as e:  # noqa: BLE001 - reachability probe
+                last = e
+        waitable = isinstance(last, urllib.error.HTTPError) and (
+            last.code == 429 or last.code >= 500)
+        if not waitable or attempt == attempts - 1:
+            break
+        after = (last.headers.get("Retry-After") or "").strip()
+        delay = min(float(after), 30.0) if after.isdigit() else 5.0 * 3 ** attempt
+        print("  wait HTTP %d from %s — retrying in %.0fs"
+              % (last.code, url, delay), file=sys.stderr)
+        time.sleep(delay)
     raise RuntimeError("could not fetch %s (%s)" % (url, last))
 
 
@@ -695,6 +873,23 @@ def scrape_arcgis_county(spec):
 # THE JOIN IS ON A FULL NAME AND MUST BE UNIQUE, and every join PRINTS. A role
 # guessed onto the wrong supervisor is worse than no role at all.
 OFFICER_LINE = re.compile(r"^\s*(%s)\s*(?:[-–—:]\s*(.+))?$" % _ROLE, re.I)
+# Monroe heads its two officers "County Board Chair" and "County Board
+# Vice-Chair", which `_ROLE` (County? + ordinal? + Vice? + Chair) cannot match,
+# so it gets a heading pattern one word wider — PINNED TO ITSELF, the way every
+# reading direction in this file is pinned, and for a reason that was measured
+# rather than assumed. Run fleet-wide it moved three counties, and one of them
+# moved WRONG: Dunn's page ends with a welcome letter to new supervisors,
+# signed "Kelly McCullough / County Board Chairman", while the county's own
+# roster on the same page marks "Chair - Randy L. Prochnow" at district 24. The
+# wider pattern read the SIGNATURE as the county's statement of who chairs the
+# board, which would have marked two chairs in one county and stopped the
+# officer builder outright. A SIGNATURE IS NOT A ROSTER, and a role guessed
+# onto the wrong supervisor is worse than no role at all — so the widening
+# reaches exactly the county whose officer block was read.
+OFFICER_LINE_BOARD = re.compile(
+    r"^\s*((?:County\s+)?(?:Board\s+)?(?:(?:1st|2nd|First|Second)\s+)?"
+    r"(?:Vice[\s\-]?)?Chair(?:man|person|woman)?)\s*(?:[-–—:]\s*(.+))?$", re.I)
+OFFICER_LINE_BY_COUNTY = {"55081": OFFICER_LINE_BOARD}      # Monroe
 # str.title() turns "1st Vice Chair" into "1St Vice Chair" — it upper-cases the
 # letter after every digit. Ordinals keep their own casing.
 _ORDINAL = re.compile(r"^\d+(?:st|nd|rd|th)$", re.I)
@@ -705,14 +900,14 @@ def role_case(text):
                     for w in text.split())
 
 
-def attach_officer_roles(lines, districts, county):
+def attach_officer_roles(lines, districts, county, officer_line=OFFICER_LINE):
     """Give a member the role their county states in its officers block."""
     by_name = {}
     for d, row in districts.items():
         if row.get("name"):
             by_name.setdefault(row["name"], []).append(d)
     for i, line in enumerate(lines):
-        m = OFFICER_LINE.match(line)
+        m = officer_line.match(line)
         if not m:
             continue
         role = role_case(m.group(1))
@@ -761,8 +956,14 @@ def attach_officer_roles(lines, districts, county):
 
 def scrape_county(fips, name, seats, strategy, url):
     """All seats or nothing — see the module docstring."""
-    lines = to_lines(fetch(url))
-    if strategy in STRICT_READINGS:
+    page = fetch(url, BROWSER if fips in BROWSER_HEADER_COUNTIES else UA)
+    lines = to_lines(page)
+    contact = {}
+    if strategy == "table":
+        # the table reader works on the MARKUP: its whole point is that the
+        # row boundaries the lines threw away are what makes the page safe
+        found, vacant, contact = _monroe(page)
+    elif strategy in STRICT_READINGS:
         found, vacant = STRICT_READINGS[strategy](lines)
     elif strategy in COLUMN_READINGS:
         # A column page names no district beside a seat, so `vacant_districts`
@@ -793,7 +994,12 @@ def scrape_county(fips, name, seats, strategy, url):
         else:
             member, role = found[d]
             out[str(d)] = {"name": member, "vacant": False, "role": role}
-    return attach_officer_roles(lines, out, name)
+            # only where the county publishes it beside the seat: Monroe's
+            # district.NN@ address is the same cell the district witness above
+            # was read from
+            out[str(d)].update(contact.get(d, {}))
+    return attach_officer_roles(lines, out, name,
+                                OFFICER_LINE_BY_COUNTY.get(fips, OFFICER_LINE))
 
 
 def main():

@@ -350,6 +350,23 @@ EXPECTED_UNREACHABLE = {
         "unchanged) — the wi mpd-district card links MPD's own district pages for "
         "readers; browsers pass, automation is refused, and the captain names "
         "behind it are why that card names no one (gap mpd-district-leadership)",
+    # THE SECOND ENTRY HERE THAT IS NOT A REFUSAL, and it is listed for exactly
+    # the reason the Coles one is: this probe cannot see a page that is open.
+    # Monroe County's board roster is READ WEEKLY off this host by
+    # wi/scripts/wi_county_board_scraper.py — HTTP 200, 153 KB, all sixteen
+    # supervisors — over urllib with the header set a Chrome navigation sends
+    # (User-Agent + Accept + Accept-Language + the four Sec-Fetch-*). Measured
+    # 2026-08-29: `requests` is refused by the same host with BYTE-IDENTICAL
+    # headers, with and without ALPN, so whatever the edge is scoring sits
+    # below the header layer and this checker's client cannot pass it. Adding
+    # the Sec-Fetch headers to HEADERS above was tried first and does not help,
+    # which is why they are not there. If this ever answers, the WARN is the
+    # news that the probe itself has stopped needing the exception.
+    "co.monroe.wi.us":
+        "Akamai \"Access Denied\" to this checker's client — NOT a block on the "
+        "project: the county's board page answers HTTP 200 to the roster "
+        "scraper's own urllib fetch with browser navigation headers, and its "
+        "sixteen supervisors ship from it weekly",
 }
 
 # Some hosts publish nothing at `/` by design (the tile CDNs cited in the map
