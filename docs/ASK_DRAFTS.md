@@ -590,14 +590,26 @@ no.
 
 | WRITE TO                                   | WHO                                            | WHY THIS ADDRESS                                                                     |
 |--------------------------------------------|------------------------------------------------|--------------------------------------------------------------------------------------|
-| `gis@jodaviesscountyil.gov`                | GIS/IT department — Joe Kratcha, IT/GIS Director | The county publishes a departmental GIS address, not personal ones. Kratcha wrote the 2026-08-17 authorization and the county directory still lists him in post. |
-| `countyadministrator@jodaviesscountyil.gov` (cc) | Angela Kaiser, County Administrator       | The "and the county" half: a licence amendment is an administrative record, not only a GIS one. |
+| `jkratcha@jodaviesscountyil.gov`           | Joe Kratcha, IT/GIS Director                     | He wrote the 2026-08-17 authorization, so he is the person who can say whether it travelled. The county directory still lists him in post. |
+| `dlascala@jodaviesscountyil.gov` (cc)      | Diane LaScala, GIS                               | Quoted, invoiced and delivered the shapefile; closed the original thread. |
+| `gis@jodaviesscountyil.gov` (cc)           | GIS/IT department mailbox                        | The address the original ask went to, and the one the county publishes. Keeps the request in the office record rather than one inbox. |
+| `akaiser@jodaviesscountyil.gov` (cc)       | Angela Kaiser, County Administrator               | The "and the county" half: a licence amendment is an administrative record, not only a GIS one. **Optional** — she was never on this thread, and adding an administrator to a routine confirmation can make it read as an escalation, which is the failure mode this ask is written to avoid. Drop her if a quiet yes is likelier without her. |
 
-**If the original 2026-08-17 thread is still in the operator's mailbox, reply on it
-instead** and cc the two addresses above. A reply on the existing thread carries the
-licence number, the delivery and Kratcha's own wording as context, which is worth more
-than any restatement below. Diane LaScala, who delivered the files, is **no longer listed
-in the county directory** — do not address her by name without checking.
+**The original 2026-08-17 thread exists and a reply on it is the route** — subject
+*"County board district boundaries — public release, or a digital data order?"*, eleven
+messages, ending 2026-08-17 18:43Z. Replying there carries the licence number, the
+delivery and Kratcha's own wording as context, which is worth more than any restatement
+below. The thread also supplies the personal addresses the county's public directory does
+not: **jkratcha@jodaviesscountyil.gov** (Kratcha) and **dlascala@jodaviesscountyil.gov**
+(Diane LaScala, who quoted, invoiced and delivered the files, and who closed the thread).
+
+CORRECTION, 2026-08-29. An earlier version of this section said LaScala was "no longer
+listed in the county directory" and warned against addressing her by name. **That was an
+inference from an absence, and it was wrong.** The county's public directory lists 41
+addresses and carries neither `dlascala@` nor `jkratcha@` — it publishes office mailboxes
+and department heads, not GIS staff — so it is not evidence about anybody's employment,
+and the thread shows her active in the role twelve days before that claim was written.
+A directory that does not list someone has not said they left.
 
 > **Subject:** Jo Daviess board districts — same site, new domain (licence #008382)
 >
