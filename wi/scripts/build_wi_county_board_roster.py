@@ -29,6 +29,7 @@ here by itself.
 Usage:
     python3 wi/scripts/build_wi_county_board_roster.py
     python3 wi/scripts/build_wi_county_board_roster.py --check
+    python3 wi/scripts/build_wi_county_board_roster.py --allow-drop Rock
 """
 
 import json
@@ -48,7 +49,9 @@ MIN_SEATS = 706        # 735 today (663 page-scraped + Milwaukee 18 + Racine 21
 
 
 def main():
-    check_only = "--check" in sys.argv[1:]
+    argv = sys.argv[1:]
+    check_only = "--check" in argv
+    allowed_drops = {argv[i + 1] for i, a in enumerate(argv) if a == "--allow-drop"}
     with open(GEOMETRY) as f:
         geo = json.load(f)
     drawn = {}
@@ -111,6 +114,26 @@ def main():
 
     if total < MIN_SEATS:
         raise RuntimeError("%d seats resolved, floor is %d" % (total, MIN_SEATS))
+
+    # See the docstring: the floors above are a fleet-sized net, and one county
+    # falling out of a 34-county file slips straight through it.
+    was = shipped_counties()
+    gone = sorted(set(was) - {e["county"] for e in counties.values()} - allowed_drops)
+    if gone:
+        raise RuntimeError(
+            "%s shipped last time and resolved nothing this time (%s) — that is a "
+            "page to re-read, not a diff to merge; pass --allow-drop to drop a "
+            "county deliberately"
+            % (", ".join("%s (%d seats)" % (c, was[c]) for c in gone),
+               raw.get("failures") or "no failure recorded"))
+
+    for fips, entry in sorted(counties.items()):
+        # A county read from anywhere but its own live page says so on the log,
+        # so the weekly PR's reviewer can see which rung of the ladder answered.
+        read_from = entry.get("read_from", "live")
+        if read_from.startswith("archive:"):
+            print("  %s: read from the Internet Archive capture of %s"
+                  % (entry["county"], read_from.split(":", 1)[1][:8]), file=sys.stderr)
 
     payload = json.dumps(roster, indent=1, sort_keys=True) + "\n"
     dated = sorted({r["county"] for r in roster.values() if r.get("asOf")})

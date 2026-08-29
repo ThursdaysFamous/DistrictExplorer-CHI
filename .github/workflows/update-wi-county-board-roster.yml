@@ -2,8 +2,8 @@ name: Update WI county board roster
 
 # Weekly refresh of the Wisconsin county board supervisors
 # (wi/data/app/county-board-members.json, read by wi/index.html's County Board
-# District card). Re-scrapes the 31 counties that publish a readable
-# district-keyed member list — 29 board pages plus Milwaukee's and Racine's
+# District card). Re-scrapes the 32 counties that publish a readable
+# district-keyed member list — 30 board pages plus Milwaukee's and Racine's
 # own GIS layers (Milwaukee witnessed against the county's Legistar API) — and, if anything changed, opens a PR rather than committing to
 # main — officeholder data should get a human look before it ships.
 #
@@ -16,7 +16,14 @@ name: Update WI county board roster
 # The scraper reads each county's page with its reading direction PINNED, and a
 # county whose page has reshaped fails its own count guard and is SKIPPED for
 # that run rather than yielding a shifted roster. So a drop in the county count
-# here is the signal to go and re-read that county's page, not a flake.
+# here is the signal to go and re-read that county's page, not a flake — and
+# the builder now refuses to write when a county that shipped before resolves
+# nothing, so that signal cannot be merged as a quiet deletion.
+#
+# One county (Rock) is read from the Internet Archive: its own host answers 403
+# to this client on every path. The ladder still asks the county live first on
+# every run, refuses any capture older than the April meeting that seated the
+# board, and prints which rung answered on the build log.
 
 on:
   schedule:
@@ -48,12 +55,13 @@ jobs:
 
       # Stdlib only — the scraper fetches with urllib and the builder reads the
       # shipped geometry off disk.
-      - name: Scrape the 31 counties that publish a readable member list
+      - name: Scrape the 32 counties that publish a readable member list
         run: python3 wi/scripts/wi_county_board_scraper.py
 
-      # Refuses to write below its floors (30 counties, 661 seats) and checks
+      # Refuses to write below its floors (30 counties, 674 seats), checks
       # every county's seats against the district geometry actually shipped, so
-      # the two publishers have to agree before this lands.
+      # the two publishers have to agree before this lands, and refuses to drop
+      # a county that shipped last week.
       - name: Rebuild the county board roster
         run: python3 wi/scripts/build_wi_county_board_roster.py
 
