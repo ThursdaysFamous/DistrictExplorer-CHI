@@ -2511,120 +2511,205 @@
   "name": "Joanne Lazansky",
   "sourceUrl": "https://www.kewauneeco.org/government/boards_and_committees/"
  },
- "5506501": {
-  "asOf": "the county's own page, captured 2026-08-29",
-  "county": "Lafayette",
+ "5507101": {
+  "county": "Manitowoc",
   "district": 1,
-  "name": "Larry Ludlum",
-  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+  "email": "jameslillibridge@manitowoccountywi.gov",
+  "name": "James Lillibridge",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/james-lillibridge/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
  },
- "5506502": {
-  "asOf": "the county's own page, captured 2026-08-29",
-  "county": "Lafayette",
+ "5507102": {
+  "county": "Manitowoc",
   "district": 2,
-  "name": "Mark Pinch",
-  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+  "email": "greggwolf@manitowoccountywi.gov",
+  "name": "Gregg Wolf",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/gregg-wolf/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
  },
- "5506503": {
-  "asOf": "the county's own page, captured 2026-08-29",
-  "county": "Lafayette",
+ "5507103": {
+  "county": "Manitowoc",
   "district": 3,
-  "name": "Jack Sauer",
-  "role": "Chairman",
-  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+  "email": "ritametzger@manitowoccountywi.gov",
+  "name": "Rita Metzger",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/rita-metzger",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
  },
- "5506504": {
-  "asOf": "the county's own page, captured 2026-08-29",
-  "county": "Lafayette",
+ "5507104": {
+  "county": "Manitowoc",
   "district": 4,
-  "name": "John E. Reichling",
-  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+  "email": "danielheilman@manitowoccountywi.gov",
+  "name": "Dan Heilman",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/dan-heilman/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
  },
- "5506505": {
-  "asOf": "the county's own page, captured 2026-08-29",
-  "county": "Lafayette",
+ "5507105": {
+  "county": "Manitowoc",
   "district": 5,
-  "name": "Luke McGuire",
-  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+  "email": "jillpope@manitowoccountywi.gov",
+  "name": "Jill Pope",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/jill-pope/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
  },
- "5506506": {
-  "asOf": "the county's own page, captured 2026-08-29",
-  "county": "Lafayette",
+ "5507106": {
+  "county": "Manitowoc",
   "district": 6,
-  "name": "Jeff Berget",
-  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+  "email": "christophermcdonell@manitowoccountywi.gov",
+  "name": "Chris McDonell",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/chris-mcdonell/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
  },
- "5506507": {
-  "asOf": "the county's own page, captured 2026-08-29",
-  "county": "Lafayette",
+ "5507107": {
+  "county": "Manitowoc",
   "district": 7,
-  "name": "Bob Boyle",
-  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+  "email": "scottschiesl@manitowoccountywi.gov",
+  "name": "Scott Schiesl",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/scott-schiesl/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
  },
- "5506508": {
-  "asOf": "the county's own page, captured 2026-08-29",
-  "county": "Lafayette",
+ "5507108": {
+  "county": "Manitowoc",
   "district": 8,
-  "name": "Jed Gant",
-  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+  "email": "sup.paulhacker@manitowoccountywi.gov",
+  "name": "Paul Hacker",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/paul-hacker/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
  },
- "5506509": {
-  "asOf": "the county's own page, captured 2026-08-29",
-  "county": "Lafayette",
+ "5507109": {
+  "county": "Manitowoc",
   "district": 9,
-  "name": "Joe Schutte",
-  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+  "email": "kensitkiewitz@manitowoccountywi.gov",
+  "name": "Ken Sitkiewitz",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/ken-sitkiewitz",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
  },
- "5506510": {
-  "asOf": "the county's own page, captured 2026-08-29",
-  "county": "Lafayette",
+ "5507110": {
+  "county": "Manitowoc",
   "district": 10,
-  "name": "Gary Benson",
-  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+  "email": "donzimmer@manitowoccountywi.gov",
+  "name": "Don Zimmer",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/don-zimmer",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
  },
- "5506511": {
-  "asOf": "the county's own page, captured 2026-08-29",
-  "county": "Lafayette",
+ "5507111": {
+  "county": "Manitowoc",
   "district": 11,
-  "name": "Donna Flannery",
-  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+  "email": "christopherdallas@manitowoccountywi.gov",
+  "name": "Chris Dallas",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/chris-dallas/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
  },
- "5506512": {
-  "asOf": "the county's own page, captured 2026-08-29",
-  "county": "Lafayette",
+ "5507112": {
+  "county": "Manitowoc",
   "district": 12,
-  "name": "Carmen McDonald",
-  "role": "2nd Vice Chair",
-  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+  "email": "kevinbehnke@manitowoccountywi.gov",
+  "name": "Kevin Behnke",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/kevin-behnke",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
  },
- "5506513": {
-  "asOf": "the county's own page, captured 2026-08-29",
-  "county": "Lafayette",
+ "5507113": {
+  "county": "Manitowoc",
   "district": 13,
-  "name": "Lee A. Gill",
-  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+  "email": "jonneils@manitowoccountywi.gov",
+  "name": "Jonathan Neils",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/jonathan-neils",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
  },
- "5506514": {
-  "asOf": "the county's own page, captured 2026-08-29",
-  "county": "Lafayette",
+ "5507114": {
+  "county": "Manitowoc",
   "district": 14,
-  "name": "Emmett Reilly",
-  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+  "email": "larrybonde@manitowoccountywi.gov",
+  "name": "Larry Bonde",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/larry-bonde/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
  },
- "5506515": {
-  "asOf": "the county's own page, captured 2026-08-29",
-  "county": "Lafayette",
+ "5507115": {
+  "county": "Manitowoc",
   "district": 15,
-  "name": "Scott Pedley",
-  "role": "1st Vice Chair",
-  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+  "email": "dylanhammel@manitowoccountywi.gov",
+  "name": "Dylan Hammel",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/dylan-hammel/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
  },
- "5506516": {
-  "asOf": "the county's own page, captured 2026-08-29",
-  "county": "Lafayette",
+ "5507116": {
+  "county": "Manitowoc",
   "district": 16,
-  "name": "David Halloran",
-  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+  "email": "bradbusse@manitowoccountywi.gov",
+  "name": "Brad Busse",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/brad-busse/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507117": {
+  "county": "Manitowoc",
+  "district": 17,
+  "email": "susiemaresh@manitowoccountywi.gov",
+  "name": "Susie Maresh",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/susie-maresh",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507118": {
+  "county": "Manitowoc",
+  "district": 18,
+  "email": "gregriederer@manitowoccountywi.gov",
+  "name": "Greg Riederer",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/greg-riederer/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507119": {
+  "county": "Manitowoc",
+  "district": 19,
+  "email": "shaesortwell@manitowoccountywi.gov",
+  "name": "Shae Sortwell",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/shae-sortwell/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507120": {
+  "county": "Manitowoc",
+  "district": 20,
+  "email": "andrewschwerma@manitowoccountywi.gov",
+  "name": "Andrew Schwerma",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/andrew-schwerma/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507121": {
+  "county": "Manitowoc",
+  "district": 21,
+  "email": "matthewphipps@manitowoccountywi.gov",
+  "name": "Matthew Phipps",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/matthew-phipps/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507122": {
+  "county": "Manitowoc",
+  "district": 22,
+  "email": "mikegrambow@manitowoccountywi.gov",
+  "name": "Mike Grambow",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/mike-grambow/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507123": {
+  "county": "Manitowoc",
+  "district": 23,
+  "email": "dougklein@manitowoccountywi.gov",
+  "name": "Douglas Klein",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/douglas-klein",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507124": {
+  "county": "Manitowoc",
+  "district": 24,
+  "email": "donweiss@manitowoccountywi.gov",
+  "name": "Don Weiss",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/don-weiss/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507125": {
+  "county": "Manitowoc",
+  "district": 25,
+  "email": "bonnieshimulunas@manitowoccountywi.gov",
+  "name": "Bonnie Shimulunas",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/bonnie-shimulunas",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
  },
  "5507501": {
   "county": "Marinette",

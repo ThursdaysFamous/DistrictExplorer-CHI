@@ -8710,9 +8710,17 @@ function initWisconsinExplorer() {
         ? "District " + String(result.district) : "Unknown district";
     },
     render: function (result) {
+      // Card convention: identity -> officeholder -> contact -> link. The
+      // supervisor renders as a PERSON row rather than a field row, which is
+      // what lets a way to reach them ride along: four counties' rosters
+      // carry an e-mail (Milwaukee and Racine off their own GIS layers,
+      // Taylor from its document, Manitowoc from a page per supervisor) and
+      // two carry that supervisor's own page, none of which this card used
+      // to render. Contact data a layer's source publishes belongs on the
+      // card, not only in the dataset.
       var wrap = cardEl("div", "card-flush");
       var member = result.member;
-      var head = [{
+      var identity = [{
         label: "County",
         value: result.county ? String(result.county) + " County" : "Unknown county",
         primary: true
@@ -8720,30 +8728,25 @@ function initWisconsinExplorer() {
       if (member && member.vacant) {
         // The county says nobody holds this seat. Saying so is the honest
         // answer; omitting the row would read as "we could not find out".
-        head.push({ label: "Supervisor", value: "Vacant" });
+        identity.push({ label: "Supervisor", value: "Vacant" });
       }
-      wrap.appendChild(renderFieldStack(head));
-      // THE CONTACT A COUNTY PUBLISHES IS PART OF THE ANSWER, and it was
-      // riding in the file without ever reaching the card: 86 county mailboxes,
-      // 46 phones and 18 profile pages. The fleet's card order is identifier,
-      // then the person, then how to reach them, so the supervisor renders as
-      // a person row and each field appears only where its county published it
-      // (renderPersonRows draws nothing for an absent field — no placeholders).
+      wrap.appendChild(renderFieldStack(identity));
       if (member && !member.vacant && member.name) {
         var person = {
           name: String(member.name),
-          badge: member.role ? String(member.role) : "Supervisor",
-          phone: member.phone ? String(member.phone) : null,
-          email: member.email ? String(member.email) : null
+          badge: member.role ? "Supervisor · " + String(member.role) : "Supervisor"
         };
-        var profile = safeHttpUrl(member.profileUrl);
-        if (profile) person.links = [{ label: "Profile", url: profile }];
+        if (member.email) person.email = String(member.email);
+        if (member.profileUrl) {
+          person.links = [{ label: "Profile", url: member.profileUrl }];
+        }
         wrap.appendChild(renderPersonRows([person]));
       }
       if (result.seats) {
-        wrap.appendChild(renderFieldStack([
-          { label: "Board", value: String(result.seats) + " supervisory districts" }
-        ]));
+        wrap.appendChild(renderFieldStack([{
+          label: "Board",
+          value: String(result.seats) + " supervisory districts"
+        }]));
       }
       return wrap;
     },

@@ -23,6 +23,8 @@ FOUR ROUTES, AND WHICH ONE A COUNTY TAKES IS A MEASUREMENT
 
 WHY ONLY THIRTY-FOUR OF SEVENTY-TWO
 -----------------------------------
+WHY ONLY THIRTY-ONE OF SEVENTY-TWO
+----------------------------------
 Wisconsin publishes county board DISTRICTS statewide (Wis. Stat. 5.15(4)(br)1,
 see build_wi_supervisory_districts.py) and publishes the PEOPLE in them
 nowhere: each county names its own supervisors, 72 different ways. Thirty pair
@@ -491,6 +493,20 @@ which the FIELDED_PINS comment sets out: the e-mail on each row checks that
 row's own name, and the ward composition checks the county's district NUMBERING
 against LTSB's, the one thing no other county in this file can prove.
 
+A sixth joined on 2026-08-29 with Manitowoc, and it is the one shape none of
+the five could see:
+
+    numbered-line   "1        Lillibridge, James"   — see `_numbered_line`
+
+The number and the name are on ONE line, and the word "district" is nowhere
+near them: Manitowoc says it once in a column header ("District Number Name")
+and then prints bare numerals beside the names. That is `_column`'s page
+written on one line instead of two, so `DIST` cannot see it (no word) and
+`BARE_NUM` cannot either (the cell is not a lone numeral). Requiring BOTH
+halves — a leading 1-2 digit number AND a remainder that reads as a name — is
+what makes a bare-number reading safe here, and it is why this is its own
+strategy rather than a loosening of `_column`.
+
 The strict readings exist because a district whose own row yields no readable
 name reaches past the next heading and takes ITS name: Rusk prints an INDEX of
 nineteen bare "District #N" links above its roster, and Richland's rows end in
@@ -650,6 +666,80 @@ after it. Save Page Now is asked for a new copy on every run, the copy's age
 is checked before it is parsed, and the pages must have been captured close
 together. A county that cannot be read FRESHLY is skipped for that run,
 exactly like a county whose page has reshaped.
+MANITOWOC PUBLISHES A PAGE PER SUPERVISOR, AND IT IS WORTH FETCHING (2026-08-29)
+-------------------------------------------------------------------------------
+Every row of Manitowoc's list links a personnel page for that supervisor, and
+each of those pages carries three things the list does not:
+
+  * "Supervisory District: N" — the county stating the SAME pairing a second
+    time, on a page written by a different part of its own site. Nothing here
+    infers Manitowoc's pairing (the number is on the name's own line), so the
+    witness is not load-bearing; it is a tripwire, and a DISAGREEMENT is fatal
+    while an absence only prints — failing the county over its SECONDARY pages
+    would delete twenty-five supervisors the list page still names. The whole
+    file exists because a roster can be full, plausible and shifted by one.
+  * a county e-mail on the county's own domain — the contact the card exists to
+    surface, for a board that publishes nothing else machine-readable.
+  * the page itself, which ships as `profileUrl`.
+
+THE E-MAILS ARE OBFUSCATED TWICE AND BOTH LAYERS ARE THE PAGE'S OWN. Cloudflare
+rewrites the `mailto:` into a `data-cfemail` hex blob whose first byte is an XOR
+key — the markup that silently emptied Brown County's (Illinois) seven addresses
+and is decoded all over this fleet. Decoding it here yields
+`09x5ry1yy18s1635@x9w1qvnv77vpwqln1.3vo`, which is not a mistake: underneath
+sits the site theme's OWN scramble, undone in the browser by the
+`replace-html-with-email` handler on every one of those links. It reverses the
+36-character alphabet "a…z0…9" — a↔9, i↔1, m↔x, o↔v, punctuation untouched —
+and it is an involution, so `unscramble` is its own inverse and
+`jameslillibridge@manitowoccountywi.gov` comes back out.
+
+TWO LAYERS OF OBFUSCATION IS STILL A PUBLISHED ADDRESS. Both layers run in
+every visitor's browser and neither is an access control: the page is served
+whole to any client, and the county gives its supervisors addresses on
+`manitowoccountywi.gov` precisely so constituents can write to them. Compare
+Taylor above, where a captcha IS an access control and is not defeated. As
+everywhere in this fleet, markup-present-but-nothing-decoded is a HARD FAILURE
+rather than a quietly empty column.
+
+THE STREET ADDRESS AND TELEPHONE ON THOSE PAGES ARE NOT READ. They are
+supervisors' homes and home lines ("2514 S 8th St", a residential number), and
+this fleet does not publish where an official lives — the same rule Taylor's
+document roster, Warren's parser and Madison's and Peoria's builders follow. No
+Wisconsin board roster carries a phone field at all.
+
+NO CHAIR IS MARKED FOR MANITOWOC, AND THAT IS MEASURED RATHER THAN MISSED. Three
+county-published surfaces were read on 2026-08-29 and none of them marks a chair
+in a form this file can use:
+
+  * the 25 personnel pages all title their subject "County Board Supervisor" —
+    the title IS read (`PROFILE_TITLE`), so a chair the county labels on their
+    own page would attach itself; today none is;
+  * the county's own 2025-26 directory PDF (printed September 2025) names
+    "Chairperson of the County Board  Tyler Martell", and the Wisconsin Blue
+    Book (April 2025) agrees — but Martell is not among the 25 supervisors the
+    county publishes today, and neither is the directory's Second Vice-Chair.
+    Both documents predate the April 2026 spring election that reseated the
+    board;
+  * the board's landing page carries a "Chairman Welcome Letter" signed
+    "Matthew Phipps", who IS a sitting supervisor (district 21), above a board
+    photograph uploaded in June 2026.
+
+That last one is the county saying something real, and it is still not used: the
+role would come from a page TITLE and the name from a SIGNATURE six paragraphs
+below it, which is an inference about document structure, not a label beside a
+name — and a letter left up through a chair rotation would ship the wrong chair
+silently. A role guessed onto the wrong supervisor is worse than no role at all.
+The consequence is deliberate and is an improvement: with no marked chair and
+the Blue Book's chair ABSENT from a complete roster,
+build_wi_county_officer_roster.py withholds Tyler Martell instead of naming a
+man who has left the board. THAT LANDS ON THE NEXT WEEKLY RUN, not in the
+commit that added this county: the officer rebuild needs the Blue Book PDF
+re-parsed and all 44 open county officer pages re-read, and doing either from a
+vantage that reaches fewer counties than the runner does would ship a worse
+file than the one already committed. update-wi-county-board-roster.yml runs
+both steps beside this scrape every Thursday. To supersede the withhold rather
+than merely earn it, Manitowoc needs a source that labels its chair beside
+their own name and can be re-read every week.
 
 Vacancies are DATA, not misses. Winnebago district 33 ("Vacant Vacant"),
 Shawano 5, Oneida 1 and Rusk 3 and 13 are seats the counties themselves say
@@ -827,7 +917,12 @@ COUNTIES = [
     # /admin and *.asmx are disallowed.
     ("55081", "Monroe", 16, "table",
      "https://www.co.monroe.wi.us/government/county-board-of-supervisors/"
-     "districts-supervisors"),]
+     "districts-supervisors"),
+    # --- 2026-08-29: the sixth page shape, and the first county that links a
+    # page per supervisor (see the docstring and `attach_profiles`) ---
+    ("55071", "Manitowoc", 25, "numbered-line",
+     "https://manitowoccountywi.gov/departments/county-board-of-supervisors/"
+     "supervisor-list/"),]
 
 # Counties whose own host refuses this client on every path and every header,
 # whose page the Internet Archive nonetheless holds. The ladder still asks the
@@ -1583,6 +1678,40 @@ def _monroe(page_html):
         return found, vacant, contact
     raise RuntimeError("Monroe: no table on the page heads columns %s — the page "
                        "has changed shape" % (MONROE_COLUMNS,))
+# --- the sixth shape: a bare number and a name on ONE line ---------------------
+# Manitowoc writes `_column`'s table on one line per seat:
+#
+#     District Number    Name              (the header, said once)
+#     1                  Lillibridge, James
+#     2                  Wolf, Gregg
+#
+# `DIST` needs the word beside the number and `BARE_NUM` needs the numeral
+# alone in its cell, so all five earlier readings are blind to it. BOTH halves
+# are required here — a leading 1-2 digit number AND a remainder that reads as
+# a name — because a bare number on its own matches half the footer of any
+# county site ("1010 S. 8th Street" does not, but only by luck of the digit
+# count, and `is_name` is what actually makes this safe).
+#
+# It reports its own vacancies for the same reason `_column` does: a page that
+# never says "district" beside a seat is invisible to `vacant_districts`.
+NUMBERED_LINE = re.compile(r"^#?\s*(\d{1,2})\s+(.+)$")
+
+
+def _numbered_line(lines, seats):
+    out, vacant = {}, set()
+    for line in lines:
+        m = NUMBERED_LINE.match(line.strip())
+        if not m:
+            continue
+        d = int(m.group(1))
+        rest = m.group(2).strip()
+        if not (1 <= d <= seats) or d in out or d in vacant:
+            continue
+        if VACANT.search(rest):
+            vacant.add(d)
+        elif _reads_as_name(rest):
+            out[d] = clean(rest)
+    return out, vacant
 
 
 READINGS = {
@@ -3388,6 +3517,164 @@ def scrape_fielded_county(fips, county, seats, url):
             row["phone"] = found[d]["phone"]
         out[str(d)] = row
     return out
+# --- COUNTIES THAT LINK A PAGE PER SUPERVISOR ---------------------------------
+# Manitowoc, and so far only Manitowoc. Every row of its list is an anchor whose
+# href is that supervisor's own personnel page, so the district and the link
+# arrive TOGETHER — nothing is matched up by position, which is what makes
+# fetching twenty-five more pages a safe thing to do rather than a second place
+# for a roster to shift by one.
+#
+# What the personnel page adds: a second statement of the district (a tripwire,
+# not the source — see the docstring), a county e-mail, the page itself as
+# `profileUrl`, and the person's own job title, which is where a chair would be
+# labelled if the county ever labelled one. What it deliberately does NOT add is
+# the home address and home telephone printed beside them.
+PROFILE_COUNTIES = {"55071"}                    # Manitowoc
+PROFILE_ROW = re.compile(r'<a\s[^>]*href="([^"]+)"[^>]*>\s*(\d{1,2})\s+([^<]+?)\s*</a>')
+# the supervisor's OWN block: a page-wide <h1>/<h2> search would read a banner
+# heading as somebody's name or title
+PROFILE_BLOCK = re.compile(r'(?is)<article[^>]*class="[^"]*team-member[^"]*"[^>]*>(.*?)</article>')
+PROFILE_DISTRICT = re.compile(r"(?i)Supervisory\s+District:\s*(\d{1,2})")
+PROFILE_NAME = re.compile(r"(?is)<h1[^>]*>\s*(.*?)\s*</h1>")
+PROFILE_TITLE = re.compile(r"(?is)<h2[^>]*>\s*(.*?)\s*</h2>")
+# Of 25. FALLING BELOW THIS PRINTS A NOTE AND DOES NOT FAIL THE COUNTY, and the
+# asymmetry is deliberate: the names come from the LIST page, which has its own
+# all-seats-or-nothing guard, so failing Manitowoc because its personnel pages
+# stopped carrying an e-mail would delete twenty-five supervisors from the card
+# over a CONTACT field. A field that stops being published is exactly what
+# check_roster_retention.py measures, and it fails the weekly PR — a human look
+# — rather than dropping the county. What DOES fail here is the pair of things
+# that would otherwise be silent and wrong: a personnel page naming a different
+# district than the list, and obfuscation markup that decodes to nothing.
+PROFILE_MIN = 20
+CFEMAIL = re.compile(r'data-cfemail="([0-9a-fA-F]{4,})"')
+EMAIL_SHAPE = re.compile(r"^[a-z0-9][a-z0-9._%+-]*@[a-z0-9][a-z0-9.-]*\.[a-z]{2,}$", re.I)
+# The site's own scramble, undone in every visitor's browser by the handler on
+# the class="replace-html-with-email" links: the 36-character alphabet reversed.
+# It is an involution, so this function is its own inverse. Case is CARRIED
+# rather than folded — every Manitowoc address is lower-case today, and
+# lower-casing one that is not would be this project rewriting somebody's
+# contact detail.
+SCRAMBLE_ALPHABET = "abcdefghijklmnopqrstuvwxyz0123456789"
+
+
+def cf_decode(token):
+    """Cloudflare's e-mail obfuscation: first byte is the XOR key."""
+    raw = bytes.fromhex(token)
+    return "".join(chr(c ^ raw[0]) for c in raw[1:])
+
+
+def unscramble(text):
+    out = []
+    for ch in text:
+        i = SCRAMBLE_ALPHABET.find(ch.lower())
+        if i < 0:
+            out.append(ch)                  # "@", ".", "-" and friends pass through
+            continue
+        mapped = SCRAMBLE_ALPHABET[len(SCRAMBLE_ALPHABET) - 1 - i]
+        out.append(mapped.upper() if ch.isupper() else mapped)
+    return "".join(out)
+
+
+def profile_email(page_html):
+    """(address_or_None, whether the obfuscation markup was there at all).
+
+    Two layers, both the page's own and both run in every visitor's browser;
+    see the docstring for why decoding them is reading a published address and
+    not defeating an access control. Markup present and nothing decoded is a
+    hard failure at the call site — that is the exact way Brown County's seven
+    addresses went silently empty.
+    """
+    m = CFEMAIL.search(page_html or "")
+    if not m:
+        return None, False
+    try:
+        address = unscramble(cf_decode(m.group(1))).strip()
+    except ValueError:
+        return None, True
+    return (address if EMAIL_SHAPE.match(address) else None), True
+
+
+def _surname(person):
+    toks = [t for t in re.split(r"[^A-Za-z]+", person or "") if len(t) > 1]
+    return toks[-1].lower() if toks else ""
+
+
+def attach_profiles(page, list_url, districts, county):
+    """Add e-mail, profileUrl and the county's own job title from each
+    supervisor's personnel page, and fail loudly if it names another district."""
+    links = {}
+    for href, num, label in PROFILE_ROW.findall(page):
+        d = str(int(num))
+        row = districts.get(d)
+        if not row or not row.get("name") or d in links:
+            continue
+        # the anchor must be the row this reading already produced, or it is
+        # some other numbered link on the page and is none of our business
+        if _surname(clean(html_lib.unescape(label))[0]) == _surname(row["name"]):
+            links[d] = urllib.parse.urljoin(list_url, href)
+    seen = {"district": 0, "email": 0, "markup": 0, "title": 0}
+    for n, d in enumerate(sorted(links, key=int)):
+        row = districts[d]
+        if n:
+            time.sleep(0.5)         # 25 pages of somebody else's server
+        try:
+            profile = fetch(links[d])
+        except Exception as e:      # noqa: BLE001 - one page never fails the county
+            print("  note %-12s district %s: profile page unreadable (%s)"
+                  % (county, d, e), file=sys.stderr)
+            continue
+        block = PROFILE_BLOCK.search(profile)
+        block = block.group(1) if block else ""
+        m = PROFILE_DISTRICT.search(block or profile)
+        if m:
+            seen["district"] += 1
+            if int(m.group(1)) != int(d):
+                raise RuntimeError(
+                    "%s: the list files %s under district %s and their own page "
+                    "says district %s — the two county surfaces disagree, ship "
+                    "neither" % (county, row["name"], d, m.group(1)))
+        who = PROFILE_NAME.search(block)
+        if who:
+            page_name = " ".join(_TAG.sub(" ", who.group(1)).split())
+            if _surname(page_name) != _surname(row["name"]):
+                raise RuntimeError(
+                    "%s: district %s links a page for %r, not %r"
+                    % (county, d, page_name, row["name"]))
+        title = PROFILE_TITLE.search(block)
+        if title:
+            stated = split_role(" ".join(_TAG.sub(" ", title.group(1)).split()))[1]
+            if stated and not row.get("role"):
+                row["role"] = stated
+                seen["title"] += 1
+                print("  role %-12s district %s: %s -> %s (their own page)"
+                      % (county, d, row["name"], stated), file=sys.stderr)
+        # the district is looked for page-wide because a wrong one FAILS, but
+        # the address is read from this supervisor's own block ONLY: a
+        # page-wide search would happily ship a footer's webmaster address as
+        # somebody's contact, and a block that stops matching should empty the
+        # column for the retention gate to catch, never fill it with a guess.
+        address, markup = profile_email(block)
+        seen["markup"] += 1 if markup else 0
+        if address:
+            row["email"] = address
+            seen["email"] += 1
+        row["url"] = links[d]
+    if seen["markup"] and not seen["email"]:
+        raise RuntimeError(
+            "%s: %d personnel pages carry the e-mail obfuscation markup and not "
+            "one address decoded — the encoding has changed; a silently empty "
+            "contact column is the failure this check exists for"
+            % (county, seen["markup"]))
+    for field in ("district", "email"):
+        if seen[field] < PROFILE_MIN:
+            print("  note %-12s only %d of %d personnel pages state a %s — the "
+                  "county still ships on its list page; retention gates the field"
+                  % (county, seen[field], len(links), field), file=sys.stderr)
+    print("  prof %-12s %d pages: %d districts witnessed, %d e-mails, %d titled"
+          % (county, len(links), seen["district"], seen["email"], seen["title"]),
+          file=sys.stderr)
+    return districts
 
 
 def scrape_county(fips, name, seats, strategy, url):
@@ -3415,6 +3702,8 @@ def scrape_county(fips, name, seats, strategy, url):
         found, vacant, contacts = _monroe(page_html)
     elif strategy in STRICT_READINGS:
         found, vacant = STRICT_READINGS[strategy](lines)
+    elif strategy == "numbered-line":
+        found, vacant = _numbered_line(lines, seats)
     elif strategy in COLUMN_READINGS:
         # A column page names no district beside a seat, so `vacant_districts`
         # (which keys off the WORD) can never see its vacancies; the column
@@ -3430,6 +3719,10 @@ def scrape_county(fips, name, seats, strategy, url):
     if fips in ELIMINATION_VACANCY:
         eliminate = lambda f, v: eliminated_vacancy(lines, seats, f, v, name)  # noqa: E731
     out = _resolve(name, seats, strategy, found, vacant, contacts, eliminate)
+    if fips in PROFILE_COUNTIES:
+        # Manitowoc links a page per supervisor; the contact it publishes lives
+        # there and nowhere on the list page.
+        attach_profiles(page_html, url, out, name)
     if strategy == "same-line-lead":
         # Lafayette names its officers "Name, Role" in a block above the seat
         # list; the "Role - Name" reader below cannot see that shape.
