@@ -14,8 +14,10 @@ paginated constituent DIRECTORY that needs its own fetch shape (see
 CONSTITUENT_COUNTIES), and Milwaukee and Racine publish theirs on their own GIS
 layers. The rest are not oversights and are recorded as such:
 
-  * Kenosha and Ozaukee publish district MAPS — a page per district with a PDF
-    and no name on it anywhere. They were checked three pages deep apiece.
+  * Kenosha and Oconto publish district MAPS — a page per district with a PDF
+    and no name on it anywhere. Both were re-checked 2026-08-29 and both
+    records held; Ozaukee was in this bullet until the same day, when the
+    board's own page turned out to name all 26 (see COUNTIES).
     This file used to claim 23 counties; that count came from a sweep that
     tested district NUMBERS, and numbers are what a map index has.
   * Marinette publishes 29 of its 30 seats by number; the thirtieth is an
@@ -73,6 +75,99 @@ layers. The rest are not oversights and are recorded as such:
     all-seats-or-nothing rule applies — 12 of 17 would read as a complete
     board with five empty seats. Nothing is shipped for Taylor until 13-17
     are in hand.
+
+OZAUKEE WAS NEVER A MAP-ONLY COUNTY (2026-08-29)
+-------------------------------------------------
+Ozaukee was named in the map-index bullet above for four days — it is not
+there now — as one of the counties that publish "district MAPS ... and no name
+on it anywhere", checked "three pages deep". It
+publishes all twenty-six supervisors in one district-keyed HTML TABLE at
+ozaukeecounty.gov/701/County-Board — District Map / Name / Address / Phone /
+Email, one row per seat — and it ships from that page under the ordinary
+`column-after` reading, with no new code.
+
+WHAT WENT WRONG IS THE SAME THING THAT WENT WRONG WITH DANE, ONE LEVEL DOWN.
+Dane's lesson was recorded as "ask the BOARD's own HOST": its roster is on
+board.danecounty.gov rather than the county domain. Ozaukee is on the county's
+own host, so that rule reported nothing wrong — the miss is that the URL this
+project already held for Ozaukee, in build_wi_county_board_directory.py, is
+/2206/Supervisory-District-Maps. THAT PAGE IS EXACTLY WHAT THE OLD RECORD
+DESCRIBES: a map index, a PDF per district, no person on it. The county's
+BOARD page is a different page on the same host, and the sweep that wrote the
+record never reached it. So the rule generalises past the host: ASK THE
+BOARD'S OWN PAGE. A county filed under "publishes maps" is a county whose MAP
+page was read, which is not evidence about its board page.
+
+Whether the table was also there when the record was written could not be
+established from here: web.archive.org holds a snapshot of /701/County-Board
+from 2025-09-28, and this sandbox's egress policy blocks that host (the
+availability API on archive.org answers; the snapshot itself does not). So
+this entry does NOT claim the old check was careless — only that the page it
+describes is the maps page, and that the board page reads cleanly today.
+
+KENOSHA AND OCONTO WERE RE-CHECKED THE SAME DAY AND BOTH RECORDS HELD, which
+is what bounds the correction to one county. Oconto's board page is a pure
+index of 31 district PDFs with no person on it. Kenosha's own board pages link
+"Who is my County Board Supervisor?", which sounds like the missing roster and
+is a POINTER TO A LOOKUP TOOL ("Where Do I Vote and Who are My
+Representatives?") carrying no roster of its own. Neither county yields a
+single name-shaped line outside site navigation under any of the five
+readings. They stay out on measurement, not on inheritance.
+
+FOUR TRAPS ON OZAUKEE'S PAGE, THREE OF WHICH WOULD SHIP SILENTLY
+----------------------------------------------------------------
+  * A STRAY EMPTY <table> IS NESTED IN DISTRICT 9's PHONE CELL
+    (`<table class="style4" id="table20"></table>262-377-7650`, CMS editor
+    debris). A non-greedy `<table>.*?</table>` match therefore closes the
+    outer table on the INNER one's tag and returns EIGHT rows of twenty-six —
+    a clean-looking parse that drops two thirds of the board. `to_lines`
+    strips tags rather than parsing the table, so this scraper never sees it;
+    it is recorded because reaching for the row structure (to pick up the
+    phone or e-mail columns) walks straight into it, and because eight
+    plausible rows is precisely the partial output the all-seats-or-nothing
+    rule exists to refuse.
+
+  * THE ADDRESS COLUMN READS AS A NAME. "Belgium, WI" passes `is_name`, and
+    `clean` flips it on the comma to "WI Belgium". Under `column-before` the
+    page resolves 25 of 26 seats, reports NO vacancy, and fills the roster
+    with mangled place names — a full, confident, entirely wrong answer, and a
+    live demonstration of why the reading direction is PINNED per county
+    rather than detected. `column-after` reaches the Name cell first and never
+    sees the address.
+
+  * THE E-MAIL COLUMN NAMES THE WRONG PEOPLE. Most rows link a CivicPlus
+    contact FORM rather than an address, and the form slugs were not renamed
+    when seats changed hands: District 3 (Marcia Nosko) links
+    Email-Supervisor-Barbara-Jobs-223 and District 5 (Scott R. Fischer) links
+    Email-Supervisor-Donald-Clark-225. A slug is not a name source.
+
+  * SOME ROWS CARRY HIDDEN mailto: LINKS WITH EMPTY ANCHOR TEXT — invisible to
+    a reader of the page, and a mixture of county addresses, private ones
+    (gmail/aol/att.net), and at least one PREDECESSOR's: District 7's row
+    holds Tony Matera's own tmatera@co.ozaukee.wi.us AND
+    dbecker@x-celtooling.com, a private business address for someone not in
+    office. No rule picks the right one — "prefer the county domain" works for
+    District 7 and fails District 6 and 8, which carry only private
+    addresses — so NO E-MAIL SHIPS FOR OZAUKEE. The county's own contact
+    surface is the board page, which the card already links.
+
+  Phone is not carried either, and for a plainer reason: five of the
+  twenty-six rows print 262-284-9411, which is the county's MAIN SWITCHBOARD
+  (it is the number in the site footer), so the column is not a per-supervisor
+  fact. The card renders neither field today in any case.
+
+WHAT WITNESSES THE OZAUKEE ROSTER
+----------------------------------
+Every one of the 25 named seats was confirmed against a SECOND county surface
+on 2026-08-29: each row's Name cell links that supervisor's own profile page,
+and all 25 state their district in their own text (District 1 Bichler ...
+District 26 Foy) and repeat the member's surname — so a row shift of the kind
+`column-before` produces would have been caught by 25 disagreements rather
+than by eye. District 21, which the table marks Vacant, is the ONLY row with
+no profile link, corroborating the vacancy independently of the word. Those
+pages are a verification run by hand, not a weekly fetch: the shipped source
+stays the one board page, and the builder's existing gate against the LTSB
+geometry (26 districts, numbered 1..26) is what re-checks the shape each week.
 
 NINE OF THOSE "UNREADABLE" COUNTIES WERE PUBLISHING ALL ALONG (2026-08-27)
 --------------------------------------------------------------------------
@@ -383,7 +478,14 @@ COUNTIES = [
      "https://www.co.rock.wi.us/government/county-board-of-supervisors"),
     # --- 2026-08-29: the county whose own home page links no path to it ---
     ("55049", "Iowa", 21, "same-line-or-next",
-     "https://www.iowacountywi.gov/departments/countyboard/county-board-members"),]
+     "https://www.iowacountywi.gov/departments/countyboard/county-board-members"),
+    # --- 2026-08-29: the county this file spent four days calling map-only ---
+    # The BOARD page, not the /2206/Supervisory-District-Maps page the
+    # directory holds. `column-after` is load-bearing: read the other way the
+    # page yields a full 25-seat roster built out of the ADDRESS column, with
+    # the vacancy silently gone. See the Ozaukee section of the docstring.
+    ("55089", "Ozaukee", 26, "column-after",
+     "https://ozaukeecounty.gov/701/County-Board"),]
 
 # Counties whose own host refuses this client on every path and every header,
 # whose page the Internet Archive nonetheless holds. The ladder still asks the
