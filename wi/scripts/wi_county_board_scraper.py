@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
 """
-Scrape county board supervisors from the 29 Wisconsin counties that publish a
+Scrape county board supervisors from the 31 Wisconsin counties that publish a
 district-keyed member list. Stage 1 of the pair; build_wi_county_board_roster.py
 turns the intermediate JSON into data/app/county-board-members.json.
 
-WHY ONLY TWENTY-NINE OF SEVENTY-TWO
+WHY ONLY THIRTY-FOUR OF SEVENTY-TWO
 -----------------------------------
 Wisconsin publishes county board DISTRICTS statewide (Wis. Stat. 5.15(4)(br)1,
 see build_wi_supervisory_districts.py) and publishes the PEOPLE in them
-nowhere: each county names its own supervisors, 72 different ways. Twenty-nine
-pair a district with a person in a form a parser can read (plus Milwaukee and
-Racine off their own GIS layers, below). The rest are not oversights and are
-recorded as such:
+nowhere: each county names its own supervisors, 72 different ways. Thirty pair
+a district with a person in a form a parser can read, Dodge does it in a
+paginated constituent DIRECTORY that needs its own fetch shape (see
+CONSTITUENT_COUNTIES), and Milwaukee and Racine publish theirs on their own GIS
+layers. The rest are not oversights and are recorded as such:
 
   * Kenosha and Ozaukee publish district MAPS — a page per district with a PDF
     and no name on it anywhere. They were checked three pages deep apiece.
@@ -20,22 +21,17 @@ recorded as such:
   * Marinette publishes 29 of its 30 seats. District 26 is an unnumbered
     "VACANT SEAT" row in an alphabetical list, and assigning it by elimination
     would be an inference the county never wrote, so the county stays out.
-  * Dodge publishes all 33 seats district-keyed ("County Board Supervisor,
-    District 32") and is out for a reason that is neither the county's nor the
-    reader's: its Finalsite directory PAGINATES at twelve, and `?const_page=2`
-    is decoration — the server returns page one for every value of it, so a
-    fetch of that URL can only ever see 12 of 33 and the all-seats-or-nothing
-    rule below applies. Reaching 13-33 means driving the module's own request,
-    which is a new fetch shape rather than a row in the table above.
-
-    IT WAS FILED UNDER "publishes prose" UNTIL 2026-08-29, AND THAT WAS NEVER
-    MEASURED AGAINST THE COUNTY. The sweep asked co.dodge.wi.us, which had
-    become a 261-byte "This site has permanently moved" stub answering HTTP
-    200; the county is at www.co.dodge.wi.gov. A sweep that reads a STATUS
-    CODE cannot tell a county that publishes nothing from a county that
-    published a forwarding note, so both land in the same bucket — the Knox
-    shape in Illinois, where a blocked WEBSITE was recorded as a blocked
-    COUNTY. build_wi_county_board_directory.py --probe reads the body.
+  * Dodge WAS in this bucket until 2026-08-29, filed under "publishes prose",
+    and that was never measured against the county. The sweep asked
+    co.dodge.wi.us, which had become a 261-byte "This site has permanently
+    moved" stub answering HTTP 200; the county is at www.co.dodge.wi.gov and
+    publishes all 33 seats district-keyed. A sweep that reads a STATUS CODE
+    cannot tell a county that publishes nothing from a county that published a
+    forwarding note, so both land in the same bucket — the Knox shape in
+    Illinois, where a blocked WEBSITE was recorded as a blocked COUNTY. It
+    ships now; see CONSTITUENT_COUNTIES for the fetch shape its directory
+    needed, and build_wi_county_board_directory.py --probe for the sweep that
+    reads the body rather than the status code.
   * The rest could not be read: 9 answer 403 to a datacenter client and hold
     it against browser headers (Marathon, La Crosse, Outagamie, Fond du Lac,
     Lafayette, Lincoln, Monroe, Rock, Sheboygan), Taylor sits behind an
@@ -724,6 +720,210 @@ def scrape_arcgis_county(spec):
     return {str(d): rows[d] for d in sorted(rows)}
 
 
+# COUNTIES WHOSE ROSTER IS A PAGINATED CONSTITUENT DIRECTORY, NOT A PAGE OF TEXT.
+#
+# DODGE (2026-08-29). Its board page publishes all 33 seats district-keyed
+# ("County Board Supervisor, District 32") in a Finalsite constituent
+# directory, and the whole county was recorded here as "publishes prose" until
+# a reader reported that co.dodge.wi.us had moved. That host was answering
+# HTTP 200 with a 261-byte "This site has permanently moved" stub, so a sweep
+# reading STATUS CODES could not tell a county that publishes nothing from one
+# that published a forwarding note.
+#
+# THE DIRECTORY PAGINATES AT TWELVE, which is why this is a separate strategy
+# and not a row in COUNTIES. Three things about it were measured rather than
+# assumed, and each was wrong on the first guess:
+#
+#   * `?const_page=2` ON THE PAGE ITSELF IS DECORATION. The server returns page
+#     one for every value of it, so a single fetch of the members URL sees 12
+#     of 33 — and 12 seats of a 33-seat board is exactly what the
+#     all-seats-or-nothing rule exists to refuse.
+#   * The pagination works on the ELEMENT endpoint (/fs/elements/<id>) and
+#     ONLY when `const_search_group_ids` rides along. Without the group id that
+#     endpoint also returns page one, silently and with a 200.
+#   * NEITHER ID IS PINNED. Both are discovered from the members page on every
+#     run — the directory element by its own `fsConstituent fsDirectory` class,
+#     the group id from the county's own search form — so a site rebuild that
+#     renumbers elements keeps working, and a page carrying two directories
+#     fails loudly instead of scraping whichever came first.
+#
+# THE E-MAILS ARE OBFUSCATED and would otherwise have shipped as nothing at
+# all: each address is written as a reversed-string JavaScript call
+# (`FS.util.insertEmail(id, "su.iw.egdod.oc", "23tcirtsid")` is
+# district32@co.dodge.wi.us). That is the Brown County shape from Illinois —
+# seven addresses emptied silently when a county switched on Cloudflare's
+# mailto obfuscation — so it is decoded, never dropped.
+#
+# THEY ARE ALSO DERIVABLE, AND ARE NOT DERIVED. Every address is
+# district<N>@co.dodge.wi.us, so the district number in the address is a free
+# CHECK on the row it was read from: an address whose number disagrees with
+# its own row means the page has reshuffled under the parser, and the county
+# fails rather than shipping a supervisor someone else's contact. An address
+# that is not a district alias at all (a personal one) ships as published.
+#
+# The mail domain is the OLD one and that is correct: co.dodge.wi.us carries
+# live MX and is what the county's own clerk page still prints. A web domain
+# and a mail domain move separately.
+CONSTITUENT_COUNTIES = [
+    {
+        "fips": "55027", "name": "Dodge", "seats": 33,
+        "page_url": "https://www.co.dodge.wi.gov/government/county-board/members",
+        "source_url": "https://www.co.dodge.wi.gov/government/county-board/members",
+    },
+]
+_DIR_ELEMENT = re.compile(r'<div class="fsElement fsConstituent fsDirectory[^"]*" id="fsEl_(\d+)"')
+_GROUP_ID = re.compile(r'name="const_search_group_ids" value="(\d+)"')
+_PAGE_LABEL = re.compile(r'fsPaginationLabel">\s*showing\s+(\d+)\s*-\s*(\d+)\s+of\s+(\d+)')
+_ITEM = re.compile(r'<div class="fsConstituentItem"(.*?)(?=<div class="fsConstituentItem"|\Z)', re.S)
+_FULL_NAME = re.compile(r'class="fsFullName">\s*(?:<[^>]*>\s*)*([^<]+?)\s*</a>', re.S)
+_TITLES = re.compile(r'<div class="fsTitles">(.*?)</div>', re.S)
+# FS.util.insertEmail(elementId, reversedDomain, reversedLocalPart, ...)
+_INSERT_EMAIL = re.compile(r'insertEmail\(\s*"[^"]*"\s*,\s*"([^"]+)"\s*,\s*"([^"]+)"')
+_DISTRICT_ALIAS = re.compile(r"^district(\d{1,2})$", re.I)
+CONSTITUENT_PAGE_CAP = 12          # 12 per page; a 33-seat board needs 3
+
+
+def _constituent_items(page_html):
+    """-> {district: {'name': str, 'email': str|None}} for ONE fetched page."""
+    out = {}
+    for m in _ITEM.finditer(page_html):
+        chunk = m.group(1)
+        nm = _FULL_NAME.search(chunk)
+        ti = _TITLES.search(chunk)
+        if not nm or not ti:
+            continue
+        titles = " ".join(html_lib.unescape(_TAG.sub(" ", ti.group(1))).split())
+        dm = DIST.search(titles)
+        if not dm:
+            continue
+        row = {"name": " ".join(html_lib.unescape(nm.group(1)).split()), "email": None}
+        em = _INSERT_EMAIL.search(chunk)
+        if em:
+            row["email"] = "%s@%s" % (em.group(2)[::-1], em.group(1)[::-1])
+        out[int(dm.group(1))] = row
+    return out
+
+
+def _constituent_officers(page_html, county):
+    """-> {district: role}. The county states the DISTRICT beside each officer,
+    so the join is on the file's own key rather than on a name — which is the
+    stronger join and is also the only one available here: the officer cards
+    say "Dave Frohling" where the directory says "David Frohling"."""
+    out = {}
+    for sec in re.findall(r'<section class="fsElement fsContent"[^>]*>(.*?)</section>',
+                          page_html, re.S):
+        title = re.search(r'<h2 class="fsElementTitle"[^>]*>(.*?)</h2>', sec, re.S)
+        if not title:
+            continue
+        role = " ".join(html_lib.unescape(_TAG.sub(" ", title.group(1))).split())
+        if not re.fullmatch(_ROLE, role, re.I):
+            continue
+        dm = DIST.search(" ".join(_TAG.sub(" ", sec).split()))
+        if not dm:
+            print("  note %-12s officer block %r names no district — not attached"
+                  % (county, role), file=sys.stderr)
+            continue
+        d = int(dm.group(1))
+        if d in out:
+            raise RuntimeError("%s: two officer blocks claim district %d" % (county, d))
+        out[d] = role_case(role)
+    return out
+
+
+def _surname(name):
+    toks = [t for t in re.split(r"[^A-Za-z]+", name) if len(t) > 1]
+    return toks[-1].lower() if toks else ""
+
+
+def scrape_constituent_county(spec):
+    """All seats or nothing, read from a paginated Finalsite directory."""
+    county = spec["name"]
+    page = fetch(spec["page_url"])
+    els = sorted(set(_DIR_ELEMENT.findall(page)))
+    gids = sorted(set(_GROUP_ID.findall(page)))
+    if len(els) != 1 or len(gids) != 1:
+        raise RuntimeError("%s: the page carries %d constituent director(ies) and %d "
+                           "search group(s) — expected one of each; re-read it before "
+                           "moving this entry" % (county, len(els), len(gids)))
+    root = spec["page_url"].split("/", 3)
+    base = "%s//%s/fs/elements/%s" % (root[0], root[2], els[0])
+    label = _PAGE_LABEL.search(page)
+    if not label:
+        raise RuntimeError("%s: the directory states no total — it may have stopped "
+                           "paginating; re-read it" % county)
+    total = int(label.group(3))
+    if total != spec["seats"]:
+        raise RuntimeError("%s: the directory holds %d constituents and the board seats "
+                           "%d — one of the two has changed"
+                           % (county, total, spec["seats"]))
+
+    found = {}
+    pages = -(-total // CONSTITUENT_PAGE_CAP)
+    for n in range(1, pages + 1):
+        got = _constituent_items(
+            fetch("%s?const_page=%d&const_search_group_ids=%s" % (base, n, gids[0])))
+        if not got:
+            raise RuntimeError("%s: page %d of %d parsed no members — the group id no "
+                               "longer paginates this directory" % (county, n, pages))
+        for d, row in got.items():
+            if d in found and found[d] != row:
+                raise RuntimeError("%s: district %d appears twice with different "
+                                   "members (%r, %r)" % (county, d, found[d], row))
+            found[d] = row
+    want = set(range(1, spec["seats"] + 1))
+    if set(found) != want:
+        raise RuntimeError("%s: the directory resolved %d of %d districts (missing %s)"
+                           % (county, len(found), spec["seats"],
+                              sorted(want - set(found))))
+    names = [r["name"] for r in found.values()]
+    if len(set(names)) != len(names):
+        dupes = sorted({n for n in names if names.count(n) > 1})
+        raise RuntimeError("%s: the same person is filed under two districts (%s)"
+                           % (county, dupes))
+
+    out = {}
+    for d in sorted(found):
+        row = {"name": found[d]["name"], "vacant": False, "role": None}
+        email = found[d]["email"]
+        if email:
+            alias = _DISTRICT_ALIAS.match(email.split("@")[0])
+            if alias and int(alias.group(1)) != d:
+                raise RuntimeError(
+                    "%s: district %d's row carries %s — the address names another "
+                    "district, so the page has reshuffled under this parser"
+                    % (county, d, email))
+            row["email"] = email
+        out[str(d)] = row
+
+    for d, role in sorted(_constituent_officers(page, county).items()):
+        if str(d) not in out:
+            raise RuntimeError("%s: an officer block names district %d, which the "
+                               "directory does not" % (county, d))
+        listed = out[str(d)]["name"]
+        block_name = None
+        for sec in re.findall(r'<section class="fsElement fsContent"[^>]*>(.*?)</section>',
+                              page, re.S):
+            if not re.search(r"District\s*%d\b" % d, _TAG.sub(" ", sec)):
+                continue
+            h5 = re.search(r"<h5[^>]*>(.*?)(?:<br|</h5>)", sec, re.S)
+            if h5:
+                block_name = " ".join(html_lib.unescape(_TAG.sub(" ", h5.group(1))).split())
+            break
+        if block_name and _surname(block_name) != _surname(listed):
+            raise RuntimeError(
+                "%s: the %s block names %r and the directory puts %r in district %d — "
+                "the officer cards and the member list disagree, ship neither"
+                % (county, role, block_name, listed, d))
+        if block_name and block_name != listed:
+            print("  note %-12s district %s: officer card says %r, member list says %r "
+                  "— shipping the member list" % (county, d, block_name, listed),
+                  file=sys.stderr)
+        out[str(d)]["role"] = role
+        print("  role %-12s district %s: %s -> %s" % (county, d, listed, role),
+              file=sys.stderr)
+    return out
+
+
 # --- officers published ABOVE the district list ------------------------------
 # Juneau and Oneida name their chair and vice-chairs in a block of their own,
 # separate from the district rows, so the roles never reach a member through
@@ -883,6 +1083,7 @@ def main():
     counties, failures = {}, []
     jobs = [(c["fips"], c["name"], c["seats"], "arcgis", c) for c in ARCGIS_COUNTIES]
     jobs += [(d["fips"], d["name"], d["seats"], "document", d) for d in DOCUMENT_ROSTERS]
+    jobs += [(c["fips"], c["name"], c["seats"], "constituent", c) for c in CONSTITUENT_COUNTIES]
     jobs += [(fips, name, seats, strategy, url) for fips, name, seats, strategy, url in COUNTIES]
     for fips, name, seats, strategy, src in jobs:
         if only and fips != only:
@@ -893,6 +1094,9 @@ def main():
                 source_url = src["source_url"]
             elif strategy == "document":
                 districts = document_county(src)
+                source_url = src["source_url"]
+            elif strategy == "constituent":
+                districts = scrape_constituent_county(src)
                 source_url = src["source_url"]
             else:
                 districts = scrape_county(fips, name, seats, strategy, src)
@@ -919,7 +1123,8 @@ def main():
     total = sum(c["seats"] for c in counties.values())
     print("wrote %s: %d/%d counties, %d seats%s"
           % (out_path, len(counties),
-             len(COUNTIES) + len(ARCGIS_COUNTIES) + len(DOCUMENT_ROSTERS), total,
+             len(COUNTIES) + len(ARCGIS_COUNTIES) + len(DOCUMENT_ROSTERS)
+             + len(CONSTITUENT_COUNTIES), total,
              ", %d county/counties missed" % len(failures) if failures else ""),
           file=sys.stderr)
 
