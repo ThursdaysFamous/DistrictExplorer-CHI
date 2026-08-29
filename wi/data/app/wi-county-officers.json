@@ -2124,6 +2124,8 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "Lee Schlenvogt",
+   "source": "county-board-page",
+   "sourceUrl": "https://ozaukeecounty.gov/701/County-Board",
    "seats": 26
   },
   "executive": {
@@ -3093,14 +3095,17 @@
   },
   "sheriff": {
    "name": "Dennis Stuart",
-   "party": "Republican"
+   "party": "Republican",
+   "url": "https://www.washburnsheriff.org/",
+   "phone": "(715) 468-4700",
+   "checked": true
   },
   "coroner": {
    "name": "Angela Pank",
    "party": "Republican",
    "title": "Coroner"
   },
-  "contactChecked": 4
+  "contactChecked": 5
  },
  "55131": {
   "county": "Washington",

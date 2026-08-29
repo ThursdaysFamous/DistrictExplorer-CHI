@@ -2033,6 +2033,164 @@
   "name": "Ted Cushing",
   "sourceUrl": "https://www.oneidacountywi.gov/government/cb/"
  },
+ "5508901": {
+  "county": "Ozaukee",
+  "district": 1,
+  "name": "Thomas R. Bichler",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508902": {
+  "county": "Ozaukee",
+  "district": 2,
+  "name": "Bruce S. Paape",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508903": {
+  "county": "Ozaukee",
+  "district": 3,
+  "name": "Marcia Nosko",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508904": {
+  "county": "Ozaukee",
+  "district": 4,
+  "name": "Lee Schlenvogt",
+  "role": "Chairperson",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508905": {
+  "county": "Ozaukee",
+  "district": 5,
+  "name": "Scott R. Fischer",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508906": {
+  "county": "Ozaukee",
+  "district": 6,
+  "name": "Richard C. Nelson",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508907": {
+  "county": "Ozaukee",
+  "district": 7,
+  "name": "Tony Matera",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508908": {
+  "county": "Ozaukee",
+  "district": 8,
+  "name": "Dave Larson",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508909": {
+  "county": "Ozaukee",
+  "district": 9,
+  "name": "Tom Grabow",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508910": {
+  "county": "Ozaukee",
+  "district": 10,
+  "name": "Daniel E. Vogel",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508911": {
+  "county": "Ozaukee",
+  "district": 11,
+  "name": "Kevin Kennedy",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508912": {
+  "county": "Ozaukee",
+  "district": 12,
+  "name": "Melissa Custer",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508913": {
+  "county": "Ozaukee",
+  "district": 13,
+  "name": "Todd Ambs",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508914": {
+  "county": "Ozaukee",
+  "district": 14,
+  "name": "Derek DeMent",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508915": {
+  "county": "Ozaukee",
+  "district": 15,
+  "name": "Timothy Maguire",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508916": {
+  "county": "Ozaukee",
+  "district": 16,
+  "name": "Connie Kincaide",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508917": {
+  "county": "Ozaukee",
+  "district": 17,
+  "name": "Jack Arnett",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508918": {
+  "county": "Ozaukee",
+  "district": 18,
+  "name": "Eric Stelter",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508919": {
+  "county": "Ozaukee",
+  "district": 19,
+  "name": "Jennifer Mackinnon",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508920": {
+  "county": "Ozaukee",
+  "district": 20,
+  "name": "Monis Khan",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508921": {
+  "county": "Ozaukee",
+  "district": 21,
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board",
+  "vacant": true
+ },
+ "5508922": {
+  "county": "Ozaukee",
+  "district": 22,
+  "name": "Rob Holyoke",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508923": {
+  "county": "Ozaukee",
+  "district": 23,
+  "name": "Kurt Schoessow",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508924": {
+  "county": "Ozaukee",
+  "district": 24,
+  "name": "Jeffrey Hansher",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508925": {
+  "county": "Ozaukee",
+  "district": 25,
+  "name": "Matthew Dolsky",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508926": {
+  "county": "Ozaukee",
+  "district": 26,
+  "name": "Patrick Foy",
+  "role": "Vice-Chairperson",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
  "5509501": {
   "county": "Polk",
   "district": 1,

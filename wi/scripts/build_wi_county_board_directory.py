@@ -100,7 +100,11 @@ COUNTY_SITES = {
     "55083": ("Oconto", "https://www.ocontocountywi.gov/307/County-Board-Supervisory-District-Maps"),  # county page confirms 1..31
     "55085": ("Oneida", "https://www.oneidacountywi.gov/"),
     "55087": ("Outagamie", "https://www.outagamie.gov/"),
-    "55089": ("Ozaukee", "https://ozaukeecounty.gov/2206/Supervisory-District-Maps"),  # county page confirms 1..26
+    # The BOARD page, not the /2206/Supervisory-District-Maps page this row
+    # used to hold: the maps page is what made Ozaukee look map-only for four
+    # days (wi_county_board_scraper.py). It names all 26 districts AND their
+    # supervisors, so it confirms the count and is where the roster is read.
+    "55089": ("Ozaukee", "https://ozaukeecounty.gov/701/County-Board"),  # county page confirms 1..26
     "55091": ("Pepin", "https://www.co.pepin.wi.us/"),
     "55093": ("Pierce", "https://co.pierce.wi.us/"),
     "55095": ("Polk", "https://www.polkcountywi.gov/government/county_board_of_supervisors/index.php"),  # county page confirms 1..15

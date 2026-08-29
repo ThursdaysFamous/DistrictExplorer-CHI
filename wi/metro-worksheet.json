@@ -2074,7 +2074,7 @@
         "label": "county-board seats tracked weekly",
         "file": "data/app/county-board-members.json",
         "metric": "keys",
-        "note": "in the 32 counties whose district-keyed roster this can obtain"
+        "note": "in every county whose district-keyed roster this can obtain"
       },
       {
         "label": "circuit courts with their full bench named",
