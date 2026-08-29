@@ -2086,6 +2086,8 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "Dan Gabrielson",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors",
    "seats": 36
   },
   "executive": {
