@@ -498,6 +498,13 @@ def check_published_counts(served):
 
     Wisconsin's own "72 counties" is untouched: it never says "Illinois", and
     the bare "<n> counties." form is only read out of metros.json's il entry.
+
+    funding.json is scanned too, and it is the reason this docstring gained a
+    fourth surface. It is a FLOSS/fund manifest served at
+    districtry.com/funding.json — reader-facing by construction, since a funder
+    reads it — but it is JSON, so the HTML sweep below cannot see it, and its
+    project description states the served count outright. A number published to
+    a funding directory is exactly the kind that must not drift.
     """
     bad = []
 
@@ -556,6 +563,39 @@ def check_published_counts(served):
             if int(m.group(1)) != served:
                 bad.append("%s: says %s Illinois counties, derived is %d"
                            % (rel, m.group(1), served))
+
+    # 3. the FLOSS/fund manifest. Every string value is swept rather than one
+    # named field: the count sits in the project description today, and a
+    # reworded manifest that moves it into a plan's description would silently
+    # leave this gate reading a field that no longer carries the claim.
+    funding = os.path.join(REPO_ROOT, "funding.json")
+    if os.path.exists(funding):
+        with open(funding, encoding="utf-8") as f:
+            manifest = json.load(f)
+
+        def strings(node):
+            if isinstance(node, str):
+                yield node
+            elif isinstance(node, dict):
+                for v in node.values():
+                    for out in strings(v):
+                        yield out
+            elif isinstance(node, list):
+                for v in node:
+                    for out in strings(v):
+                        yield out
+
+        seen = False
+        for value in strings(manifest):
+            for m in re.finditer(r"(\d+)\s+Illinois\s+counties", value):
+                seen = True
+                if int(m.group(1)) != served:
+                    bad.append("funding.json: says %s Illinois counties, "
+                               "derived is %d" % (m.group(1), served))
+        if not seen:
+            bad.append("funding.json: no '<n> Illinois counties' claim found — "
+                       "this gate reads the served count there, so a reword "
+                       "that drops the phrase leaves the manifest unguarded")
     return bad
 
 
