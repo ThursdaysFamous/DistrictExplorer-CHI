@@ -31,6 +31,24 @@ OUT = os.path.join(REPO_ROOT, "data", "app", "wi-circuit-judges.json")
 EXPECT_CIRCUITS = 69
 MIN_JUDGES = 240
 
+# THE CLERK LINK IS THE STATE'S, AND THE STATE'S CAN GO STALE. `clerkUrl` is
+# whatever wicourts.gov's judges table links for that county, which is right
+# nearly everywhere and is not maintained against the counties' own moves.
+# Dodge County moved to www.co.dodge.wi.gov in 2026 and wicourts still links
+# the pre-move path, which the new site answers with a SOFT 404 — HTTP 200 at
+# /404-page-not-found, so neither this builder nor validate_card_links.py sees
+# anything wrong while the card sends a reader to a "Page Not Found".
+#
+# An override is pinned per circuit rather than the file being hand-edited,
+# because the weekly refresh would put the dead path straight back. Each entry
+# names the replacement page the COUNTY publishes, and `--audit-overrides`
+# prints any whose upstream has caught up so the entry can be dropped.
+CLERK_URL_OVERRIDES = {
+    # wicourts links /departments/departments-a-d/clerk-of-courts (soft 404);
+    # the county's Courts page links this one. Checked 2026-08-29.
+    "dodge": "https://www.co.dodge.wi.gov/courts-clerk",
+}
+
 
 def fold(name):
     return "".join(ch for ch in name.lower() if ch.isalpha() or ch == " ").split()
@@ -56,6 +74,9 @@ def main():
     def county_fold(name):
         return "".join(ch for ch in name.lower() if ch.isalnum())
     contact = {county_fold(k): v for k, v in raw["contact"].items()}
+    unknown = sorted(set(CLERK_URL_OVERRIDES) - set(circuits))
+    if unknown:
+        raise SystemExit("clerk URL override names no such circuit: %s" % ", ".join(unknown))
     if len(circuits) != EXPECT_CIRCUITS:
         raise SystemExit("scrape carries %d circuits, expected %d" % (len(circuits), EXPECT_CIRCUITS))
 
@@ -105,7 +126,9 @@ def main():
             "judges": judges,
             "courthouses": courthouses[:4],
         }
-        if c.get("clerkUrl"):
+        if key in CLERK_URL_OVERRIDES:
+            entry["sourceUrl"] = CLERK_URL_OVERRIDES[key]
+        elif c.get("clerkUrl"):
             entry["sourceUrl"] = c["clerkUrl"]
         out[key] = entry
 
@@ -117,6 +140,13 @@ def main():
     enriched = sum(1 for c in out.values() for j in c["judges"] if "phone" in j)
     print("wrote %s — %d circuits, %d judges (%d with a direct phone), %.0f KB"
           % (OUT, len(out), total, enriched, os.path.getsize(OUT) / 1024.0))
+    for key, url in sorted(CLERK_URL_OVERRIDES.items()):
+        upstream = circuits.get(key, {}).get("clerkUrl")
+        if upstream == url:
+            print("  override %s is now redundant — wicourts links %s; drop it"
+                  % (key, url))
+        else:
+            print("  override %s -> %s (wicourts still links %s)" % (key, url, upstream))
 
 
 if __name__ == "__main__":
