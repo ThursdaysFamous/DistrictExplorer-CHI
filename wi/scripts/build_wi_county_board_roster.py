@@ -11,12 +11,12 @@ That is what stops a county's page reorganising into a plausible-but-wrong
 number of members — the two files were built from different publishers (the
 county's own page, and LTSB's statewide filing) and have to agree.
 
-Thirty-three of Wisconsin's 72 counties now yield a district-keyed member
-list — 30 read off the county's own board page, Milwaukee and Racine off their
+Thirty-four of Wisconsin's 72 counties now yield a district-keyed member
+list — 31 read off the county's own board page, Milwaukee and Racine off their
 own GIS layers, and Taylor carried from a document because its host answers
-only a captcha. The other 39 are recorded in the Data gaps panel and their
+only a captcha. The other 38 are recorded in the Data gaps panel and their
 cards keep linking the county board rather than naming anybody. See the
-scraper's docstring for what each of the other 39 actually publishes.
+scraper's docstring for what each of the other 38 actually publishes.
 
 Usage:
     python3 wi/scripts/build_wi_county_board_roster.py
@@ -33,8 +33,8 @@ GEOMETRY = os.path.join(APP_DATA_DIR, "county-supervisory-districts.json")
 RAW = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache", "wi_county_boards_raw.json")
 OUT = os.path.join(APP_DATA_DIR, "county-board-members.json")
 
-MIN_COUNTIES = 31      # 33 ship one (30 pages + 2 county GIS layers + Taylor by document); tolerates two dark
-MIN_SEATS = 686        # 715 today (659 page-scraped + Milwaukee 18 + Racine 21 + Taylor 17)
+MIN_COUNTIES = 32      # 34 ship one (31 pages + 2 county GIS layers + Taylor by document); tolerates two dark
+MIN_SEATS = 716        # 745 today (689 page-scraped + Milwaukee 18 + Racine 21 + Taylor 17)
 
 
 def main():
