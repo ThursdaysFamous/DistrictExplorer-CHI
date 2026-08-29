@@ -21,6 +21,7 @@
   },
   "supervisorsWithheld": "the county directory lists 4, and Iowa Code 331.201 allows only 3 or 5",
   "treasurer": {
+   "email": "treas@adaircountyiowa.org",
    "name": "Brenda Wallace",
    "party": "Republican",
    "phone": "(641) 743-2312"
@@ -72,6 +73,7 @@
    }
   ],
   "treasurer": {
+   "email": "Treas1@AdamsCounty.Iowa.Gov",
    "name": "Holly Schafer",
    "phone": "(641) 322-3210"
   }
@@ -114,6 +116,7 @@
    }
   ],
   "treasurer": {
+   "email": "treas@allamakeecounty.iowa.gov",
    "name": "Nicki Smedsrud",
    "party": "Republican",
    "phone": "(563) 568-3793"
@@ -156,6 +159,7 @@
    }
   ],
   "treasurer": {
+   "email": "jsalstrand@appanoosecounty.net",
    "name": "Jennifer Salstrand",
    "party": "Republican",
    "phone": "(641) 856-3097"
@@ -199,6 +203,7 @@
    }
   ],
   "treasurer": {
+   "email": "treasurer@auduboncountyia.gov",
    "name": "Debbie Campbell",
    "party": "Democratic",
    "phone": "(712) 563-2293"
@@ -240,6 +245,7 @@
    }
   ],
   "treasurer": {
+   "email": "bctreas@bentoncountyia.gov",
    "name": "Melinda Schoettmer",
    "party": "Republican",
    "phone": "(319) 472-2450"
@@ -291,6 +297,7 @@
    }
   ],
   "treasurer": {
+   "email": "treasurer@blackhawkcounty.iowa.gov",
    "name": "Lynda Hintzman",
    "party": "Republican",
    "phone": "(319) 833-3013"
@@ -333,6 +340,7 @@
    }
   ],
   "treasurer": {
+   "email": "lnovak@boonecounty.iowa.gov",
    "name": "Lauren Novak",
    "party": "Republican",
    "phone": "(515) 433-0510"
@@ -376,6 +384,7 @@
    }
   ],
   "treasurer": {
+   "email": "treas.mv@co.bremer.ia.us",
    "name": "Adam Hoffman",
    "party": "Republican",
    "phone": "(319) 352-0242"
@@ -419,6 +428,7 @@
    }
   ],
   "treasurer": {
+   "email": "treasurer@co.buchanan.ia.us",
    "name": "Gina Mether",
    "party": "Republican",
    "phone": "(319) 334-4340"
@@ -512,6 +522,7 @@
    }
   ],
   "treasurer": {
+   "email": "treasurer@butlercounty.iowa.gov",
    "name": "Roxie Nicolaus",
    "party": "Republican",
    "phone": "(319) 346-6626"
@@ -706,6 +717,7 @@
    }
   ],
   "treasurer": {
+   "email": "sdelaney@cedarcounty.iowa.gov",
    "name": "Sandy Delaney",
    "party": "Democratic",
    "phone": "(563) 886-2557"
@@ -749,6 +761,7 @@
    }
   ],
   "treasurer": {
+   "email": "nfessler@cerrogordo.gov",
    "name": "Nikki Fessler",
    "party": "Republican",
    "phone": "(641) 421-3033"
@@ -800,6 +813,7 @@
    }
   ],
   "treasurer": {
+   "email": "cherokeetreas@co.cherokee.ia.us",
    "name": "Jodi B. Mongan",
    "party": "Republican",
    "phone": "(712) 225-6740"
@@ -894,6 +908,7 @@
    }
   ],
   "treasurer": {
+   "email": "jsmith@clarkecountyiowa.org",
    "name": "Jessica Smith",
    "party": "Republican",
    "phone": "(641) 342-3311"
@@ -944,6 +959,7 @@
    }
   ],
   "treasurer": {
+   "email": "lblack@claycounty.iowa.gov",
    "name": "LeAnn Black",
    "party": "Republican",
    "phone": "(712) 262-2179"
@@ -987,6 +1003,7 @@
    }
   ],
   "treasurer": {
+   "email": "treasurersoffice@claytoncountyia.gov",
    "name": "Linda Zuercher",
    "party": "Republican",
    "phone": "(563) 245-1807"
@@ -1030,6 +1047,7 @@
    }
   ],
   "treasurer": {
+   "email": "djohnson@clintoncounty-ia.gov",
    "name": "Dustin Johnson",
    "party": "Republican",
    "phone": "(563) 244-0573"
@@ -1081,6 +1099,7 @@
    }
   ],
   "treasurer": {
+   "email": "Treasurer@crawfordcounty.iowa.gov",
    "name": "Sheri Neddermeyer",
    "party": "Republican",
    "phone": "(712) 263-2648"
@@ -1162,6 +1181,7 @@
    }
   ],
   "treasurer": {
+   "email": "johnsonm@daviscountyiowa.org",
    "name": "Mike Johnson",
    "party": "Republican",
    "phone": "(641) 664-2155"
@@ -1289,6 +1309,7 @@
    }
   ],
   "treasurer": {
+   "email": "nalleyj@dmcounty.com",
    "name": "Janelle Nalley-Londquist",
    "party": "Democratic",
    "phone": "(319) 753-8252"
@@ -1381,6 +1402,7 @@
    }
   ],
   "treasurer": {
+   "email": "treasurer@dubuquecountyiowa.gov",
    "name": "Michael Clasen",
    "party": "Republican",
    "phone": "(563) 589-4436"
@@ -1472,6 +1494,7 @@
    }
   ],
   "treasurer": {
+   "email": "treasurer@co.fayette.ia.us",
    "name": "Kyle Jacobsen",
    "party": "Republican",
    "phone": "(563) 422-3787"
@@ -1584,6 +1607,7 @@
    }
   ],
   "treasurer": {
+   "email": "asnyder@co.fremont.ia.us",
    "name": "Alise Snyder",
    "party": "Republican",
    "phone": "(712) 374-2122"
@@ -1779,6 +1803,7 @@
    }
   ],
   "treasurer": {
+   "email": "mmatteson@hamiltoncounty.org",
    "name": "Matt Matteson",
    "party": "Republican",
    "phone": "(515) 832-9540"
@@ -1822,6 +1847,7 @@
    }
   ],
   "treasurer": {
+   "email": "linda.juhl@hancockcountyia.org",
    "name": "Linda Juhl",
    "party": "Republican",
    "phone": "(641) 923-3122"
@@ -1906,6 +1932,7 @@
    }
   ],
   "treasurer": {
+   "email": "treasurer@harrisoncounty.iowa.gov",
    "name": "Shelia Phillips",
    "party": "Republican",
    "phone": "(712) 644-2750"
@@ -1928,6 +1955,7 @@
   },
   "supervisorsWithheld": "the county directory lists 4, and Iowa Code 331.201 allows only 3 or 5",
   "treasurer": {
+   "email": "ksloan@henrycountyiowa.us",
    "name": "Kellie Sloan",
    "party": "Republican",
    "phone": "(319) 385-0763"
@@ -1970,6 +1998,7 @@
    }
   ],
   "treasurer": {
+   "email": "chron@howardcounty.iowa.gov",
    "name": "Christine Hron",
    "party": "Republican",
    "phone": "(563) 547-9211"
@@ -1991,6 +2020,7 @@
   },
   "supervisorsWithheld": "the county directory lists 6, and Iowa Code 331.201 allows only 3 or 5",
   "treasurer": {
+   "email": "jpettinger@humboldtcountyia.org",
    "name": "Jana Pettinger",
    "party": "Republican",
    "phone": "(515) 332-1681"
@@ -2085,6 +2115,7 @@
    }
   ],
   "treasurer": {
+   "email": "treasurer@iowacounty.iowa.gov",
    "name": "Michelle Sims",
    "party": "Republican",
    "phone": "(319) 642-3921"
@@ -2128,6 +2159,7 @@
    }
   ],
   "treasurer": {
+   "email": "bgerlach@jacksoncounty.iowa.gov",
    "name": "Beth Gerlach",
    "party": "Republican",
    "phone": "(563) 652-5649"
@@ -2165,6 +2197,7 @@
    }
   ],
   "treasurer": {
+   "email": "dbishop@jasperia.org",
    "name": "Doug Bishop",
    "party": "Democratic",
    "phone": "(641) 792-7731"
@@ -2208,6 +2241,7 @@
    }
   ],
   "treasurer": {
+   "email": "treasurer@jeffersoncountyia.com",
    "name": "Mark Myers",
    "party": "Democratic",
    "phone": "(641) 472-2349"
@@ -2304,6 +2338,7 @@
    }
   ],
   "treasurer": {
+   "email": "treasurer@jonescountyiowa.gov",
    "name": "Amy Picray",
    "party": "Republican",
    "phone": "(319) 462-3559"
@@ -2320,6 +2355,7 @@
    "phone": "(641) 622-2540"
   },
   "sheriff": {
+   "email": "sheriff@keokukcounty.iowa.gov",
    "name": "Casey Hinnah",
    "party": "Republican",
    "phone": "(641) 622-2727"
@@ -2340,6 +2376,7 @@
    }
   ],
   "treasurer": {
+   "email": "treasurer@keokukcounty.iowa.gov",
    "name": "Christine Edmundson Long",
    "party": "Republican",
    "phone": "(641) 622-2421"
@@ -2390,6 +2427,7 @@
    }
   ],
   "treasurer": {
+   "email": "treasurer@kossuthcounty.iowa.gov",
    "name": "Nick Rahm",
    "party": "Democratic",
    "phone": "(515) 295-3404"
@@ -2567,6 +2605,7 @@
    }
   ],
   "treasurer": {
+   "email": "gwinnh@lucasco.org",
    "name": "Hanna Gwinn",
    "party": "Republican",
    "phone": "(641) 774-5213"
@@ -2618,6 +2657,7 @@
    }
   ],
   "treasurer": {
+   "email": "sknobloch@co.lyon.ia.us",
    "name": "Stacy Knobloch",
    "party": "Republican",
    "phone": "(712) 472-8500"
@@ -2660,6 +2700,7 @@
    }
   ],
   "treasurer": {
+   "email": "cotreasurer@madisoncounty.iowa.gov",
    "name": "Kylee Barber",
    "party": "Republican",
    "phone": "(515) 462-1542"
@@ -2703,6 +2744,7 @@
    }
   ],
   "treasurer": {
+   "email": "treasurer@mahaskacountyia.gov",
    "name": "Shauna Hol",
    "party": "Republican",
    "phone": "(641) 673-5482"
@@ -2785,6 +2827,7 @@
    }
   ],
   "treasurer": {
+   "email": "treasurersoffice@marshallcountyia.gov",
    "name": "Deann S. Tomlinson",
    "party": "Republican",
    "phone": "(641) 844-2730"
@@ -2828,6 +2871,7 @@
    }
   ],
   "treasurer": {
+   "email": "treasurer@millscountyiowa.gov",
    "name": "Melissa Loghry",
    "party": "Republican",
    "phone": "(712) 527-4419"
@@ -2878,6 +2922,7 @@
    }
   ],
   "treasurer": {
+   "email": "spaulus@mitchellcoia.us",
    "name": "Shannon Paulus",
    "party": "Democratic",
    "phone": "(641) 832-3940"
@@ -2919,6 +2964,7 @@
    }
   ],
   "treasurer": {
+   "email": "treasurer@mononacountyiowa.gov",
    "name": "Abby Riesberg",
    "party": "Republican",
    "phone": "(712) 433-2347"
@@ -2940,6 +2986,7 @@
    "phone": "(641) 932-5164"
   },
   "sheriff": {
+   "email": "jworth@monroecounty.iowa.gov",
    "name": "Joe Worth",
    "phone": "(641) 932-7815"
   },
@@ -2960,6 +3007,7 @@
    }
   ],
   "treasurer": {
+   "email": "fpowless@monroecounty.iowa",
    "name": "Faith Powless",
    "party": "Republican",
    "phone": "(641) 932-5011"
@@ -3061,6 +3109,7 @@
    }
   ],
   "treasurer": {
+   "email": "treasurer@muscatinecountyiowa.gov",
    "name": "Amy Zybarth",
    "party": "Republican",
    "phone": "(563) 263-7113"
@@ -3202,6 +3251,7 @@
    }
   ],
   "treasurer": {
+   "email": "adow@co.page.ia.us",
    "name": "Angie Dow",
    "party": "Republican",
    "phone": "(712) 542-5322"
@@ -3302,6 +3352,7 @@
    }
   ],
   "treasurer": {
+   "email": "treasurer@plymouthcountyiowa.gov",
    "name": "Shelly Sitzmann",
    "party": "Republican",
    "phone": "(712) 546-7078"
@@ -3372,6 +3423,7 @@
    "phone": "(515) 286-3160"
   },
   "sheriff": {
+   "email": "polkcounty.sheriff@polkcountyiowa.gov",
    "name": "Kevin Schneider",
    "party": "Democratic",
    "phone": "(515) 286-3814"
@@ -3491,6 +3543,7 @@
    }
   ],
   "treasurer": {
+   "email": "janderson@poweshiekcountyiowa.gov",
    "name": "Jennifer Anderson",
    "party": "Republican",
    "phone": "(641) 623-5128"
@@ -3554,6 +3607,7 @@
    "phone": "(712) 662-7789"
   },
   "sheriff": {
+   "email": "sacso@saccountyiowa.gov",
    "name": "Katie Stange",
    "phone": "(712) 662-7127"
   },
@@ -3573,6 +3627,7 @@
    }
   ],
   "treasurer": {
+   "email": "tinar@saccountyiowa.gov",
    "name": "Tina Roth",
    "party": "Republican",
    "phone": "(712) 662-7411"
@@ -3624,6 +3679,7 @@
    }
   ],
   "treasurer": {
+   "email": "treasurer@scottcountyiowa.gov",
    "name": "Tony G. Knobbe",
    "party": "Republican",
    "phone": "(563) 326-8664"
@@ -3667,6 +3723,7 @@
    }
   ],
   "treasurer": {
+   "email": "cblum@shelbycounty.iowa.gov",
    "name": "Carolyn Blum",
    "party": "Republican",
    "phone": "(712) 755-5847"
@@ -3718,6 +3775,7 @@
    }
   ],
   "treasurer": {
+   "email": "treasurer@siouxcounty.org",
    "name": "Dan Zomermaand",
    "party": "Republican",
    "phone": "(712) 737-3505"
@@ -3760,6 +3818,7 @@
    }
   ],
   "treasurer": {
+   "email": "treasurer@storycountyiowa.gov",
    "name": "Ted Rasmusson",
    "party": "Democratic",
    "phone": "(515) 382-7331"
@@ -3787,6 +3846,7 @@
   },
   "supervisorsWithheld": "the county directory lists 4, and Iowa Code 331.201 allows only 3 or 5",
   "treasurer": {
+   "email": "akriegel@tamacounty.org",
    "name": "Amanda Kriegel",
    "party": "Republican",
    "phone": "(641) 484-3141"
@@ -3828,6 +3888,7 @@
    }
   ],
   "treasurer": {
+   "email": "712-523-2384treasurer@taylorcounty.iowa.gov",
    "name": "Dana Davis",
    "party": "Republican",
    "phone": "(712) 523-2080"
@@ -3871,6 +3932,7 @@
    }
   ],
   "treasurer": {
+   "email": "kbusch@unioncountyiowa.gov",
    "name": "Kelly Busch",
    "party": "Republican",
    "phone": "(641) 782-1710"
@@ -3913,6 +3975,7 @@
    }
   ],
   "treasurer": {
+   "email": "lwhitten@vanburencounty.iowa.gov",
    "name": "Linda Whitten",
    "party": "Democratic",
    "phone": "(319) 293-3110"
@@ -3983,6 +4046,7 @@
   },
   "supervisorsWithheld": "the county directory lists 5, and the supervisor-district geometry seats 3",
   "treasurer": {
+   "email": "treasurer@warrencountyia.org",
    "name": "Andrea Semple",
    "party": "Republican",
    "phone": "(515) 690-9240"
@@ -4032,6 +4096,7 @@
    }
   ],
   "treasurer": {
+   "email": "treasurer@co.washington.ia.us",
    "name": "Jeff Garrett",
    "party": "Independent",
    "phone": "(319) 653-7721"
@@ -4125,6 +4190,7 @@
    }
   ],
   "treasurer": {
+   "email": "brenda.angstrom@webstercountyia.gov",
    "name": "Brenda Angstrom",
    "party": "Democratic",
    "phone": "(515) 573-2731"
@@ -4168,6 +4234,7 @@
    }
   ],
   "treasurer": {
+   "email": "treasurer@winnebagocountyiowa.gov",
    "name": "Julie Swenson",
    "party": "Republican",
    "phone": "(641) 585-2322"
@@ -4219,6 +4286,7 @@
    }
   ],
   "treasurer": {
+   "email": "treasurer@co.winneshiek.ia.us",
    "name": "Tim Smock",
    "party": "No party",
    "phone": "(563) 382-3753"
@@ -4308,6 +4376,7 @@
    }
   ],
   "treasurer": {
+   "email": "treasurer@worthcountyiowa.gov",
    "name": "Jake Hanson",
    "party": "Republican",
    "phone": "(641) 324-2942"

@@ -211,6 +211,18 @@ PROVENANCE = [
     },
     {
         "layer": "county",
+        "app_file": "ia-county-officers.json",
+        "source_url": "https://www.iowatreasurers.org/index.php?module=treashome&idCounty=1",
+        "note": "The Iowa county treasurers' own state site, ONE OF TWO sources for the treasurer's e-mail address -- the office no statewide directory carries one for (the ISAC portal has no e-mail column at all: re-checked 2026-08-29, zero mailto and zero @ on a county page). ITS PER-COUNTY PAGES SERVE THE WRONG COUNTY, WITH NO ERROR AND NO 404, AND THAT IS WHY NOTHING IS KEYED ON idCounty ALONE. Swept all 99 ids 2026-08-29: eight serve another county's page outright (Buchanan/Johnson/Linn/Montgomery/Poweshiek get Clarke; Floyd/Iowa/Polk get byte-identical Jefferson pages), and three more serve the right page carrying Jefferson's address anyway (Dallas, Kossuth, Muscatine) -- so the page-level county check is necessary and NOT sufficient, and the address's DOMAIN must also fit the county. Probed here at idCounty=1 (Adair) as a reachability check only.",
+    },
+    {
+        "layer": "county",
+        "app_file": "ia-county-officers.json",
+        "source_url": "https://www.adaircounty.iowa.gov/",
+        "note": "A representative COUNTY OWN SITE (Adair), the other source for treasurer and sheriff e-mail addresses. An address ships only if the officeholder's own name is in its local part (witnessed) or its form is the office's mailbox -- a page window is NOT a witness, and the first version of that probe returned a DEPUTY's personal address in four of the first seven counties tried (Appanoose, Boone, Bremer, Buchanan). Built by ia/scripts/ia_county_officer_email_scraper.py, refreshed weekly by update-ia-county-officers-roster.yml; 65 of 99 treasurers and 87 of 98 sheriffs carry an address as of 2026-08-29.",
+    },
+    {
+        "layer": "county",
         "app_file": "metro-outline.json",
         "source_url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer/1",
         "note": "The whole-state outline for the coverage wash, pre-built by ia/scripts/build_metro_outline.py — dissolved from all 99 counties' geometry on the same layer as state-counties.json, not fetched as a separate state polygon (so a future partial-coverage narrowing needs only a smaller METRO_COUNTY_FIPS, the Wisconsin precedent).",
