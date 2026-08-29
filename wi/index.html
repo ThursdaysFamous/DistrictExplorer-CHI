@@ -8698,27 +8698,45 @@ function initWisconsinExplorer() {
         ? "District " + String(result.district) : "Unknown district";
     },
     render: function (result) {
-      var rows = [];
-      rows.push({
+      // Card convention: identity -> officeholder -> contact -> link. The
+      // supervisor renders as a PERSON row rather than a field row, which is
+      // what lets a way to reach them ride along: four counties' rosters
+      // carry an e-mail (Milwaukee and Racine off their own GIS layers,
+      // Taylor from its document, Manitowoc from a page per supervisor) and
+      // two carry that supervisor's own page, none of which this card used
+      // to render. Contact data a layer's source publishes belongs on the
+      // card, not only in the dataset.
+      var wrap = cardEl("div", "card-flush");
+      var member = result.member;
+      var identity = [{
         label: "County",
         value: result.county ? String(result.county) + " County" : "Unknown county",
         primary: true
-      });
-      var member = result.member;
+      }];
       if (member && member.vacant) {
         // The county says nobody holds this seat. Saying so is the honest
         // answer; omitting the row would read as "we could not find out".
-        rows.push({ label: "Supervisor", value: "Vacant" });
-      } else if (member && member.name) {
-        rows.push({
-          label: member.role ? "Supervisor (" + String(member.role) + ")" : "Supervisor",
-          value: String(member.name)
-        });
+        identity.push({ label: "Supervisor", value: "Vacant" });
+      }
+      wrap.appendChild(renderFieldStack(identity));
+      if (member && !member.vacant && member.name) {
+        var person = {
+          name: String(member.name),
+          badge: member.role ? "Supervisor · " + String(member.role) : "Supervisor"
+        };
+        if (member.email) person.email = String(member.email);
+        if (member.profileUrl) {
+          person.links = [{ label: "Profile", url: member.profileUrl }];
+        }
+        wrap.appendChild(renderPersonRows([person]));
       }
       if (result.seats) {
-        rows.push({ label: "Board", value: String(result.seats) + " supervisory districts" });
+        wrap.appendChild(renderFieldStack([{
+          label: "Board",
+          value: String(result.seats) + " supervisory districts"
+        }]));
       }
-      return renderFieldStack(rows);
+      return wrap;
     },
     primaryLink: function (result) {
       // Prefer the page the supervisor's own name was read from, so a reader
