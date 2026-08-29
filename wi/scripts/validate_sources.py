@@ -428,6 +428,27 @@ PROVENANCE = [
         ),
     },
     {
+        "layer": "county-board",
+        "app_file": "county-board-members.json",
+        "source_url": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/"
+                      "districts-supervisors",
+        "blocked": "Akamai \"Access Denied\" to THIS checker's client and not to the "
+                   "scraper: the same page answers HTTP 200 (153 KB, all sixteen "
+                   "supervisors) to wi_county_board_scraper.py's urllib fetch with the "
+                   "header set a Chrome navigation sends, and is read that way weekly. "
+                   "Measured 2026-08-29: `requests` is refused with byte-identical "
+                   "headers, so what the edge scores sits below the header layer.",
+        "note": (
+            "Monroe's Districts & Supervisors table — the county states each seat's "
+            "district twice (the District cell and the district.NN@ address it "
+            "publishes for that seat) and the scraper requires the two to agree. "
+            "Recorded as EXPECTED-UNREACHABLE so this monthly report does not call a "
+            "link dead that the weekly roster run reads; the INVERSION means this "
+            "host answering here is the WARN, and that WARN would mean the "
+            "per-county header exception can go."
+        ),
+    },
+    {
         "layer": "school-site",
         "app_file": "school-sites.json",
         "source_url": "https://services8.arcgis.com/o4NJgD3NfeHnWy06/arcgis/rest/services/Wisconsin_Public_Schools/FeatureServer/20",

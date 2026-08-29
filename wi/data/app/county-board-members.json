@@ -3053,6 +3053,120 @@
   "profileUrl": "https://county.milwaukee.gov/EN/Board-of-Supervisors/Members/Deanna-Alexander-18th-District",
   "sourceUrl": "https://services2.arcgis.com/s1wgJQKbKJihhhaT/arcgis/rest/services/Milwaukee_County_Supervisory_Districts/FeatureServer/46"
  },
+ "5508101": {
+  "county": "Monroe",
+  "district": 1,
+  "email": "district.01@co.monroe.wi.us",
+  "name": "Cedric Schnitzler",
+  "role": "County Board Chair",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508102": {
+  "county": "Monroe",
+  "district": 2,
+  "email": "district.02@co.monroe.wi.us",
+  "name": "David Pierce",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508103": {
+  "county": "Monroe",
+  "district": 3,
+  "email": "district.03@co.monroe.wi.us",
+  "name": "Nodji VanWychen",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508104": {
+  "county": "Monroe",
+  "district": 4,
+  "email": "district.04@co.monroe.wi.us",
+  "name": "Jason Jandt",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508105": {
+  "county": "Monroe",
+  "district": 5,
+  "email": "district.05@co.monroe.wi.us",
+  "name": "Wallace Habhegger",
+  "role": "County Board Vice-Chair",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508106": {
+  "county": "Monroe",
+  "district": 6,
+  "email": "district.06@co.monroe.wi.us",
+  "name": "David Kuderer",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508107": {
+  "county": "Monroe",
+  "district": 7,
+  "email": "district.07@co.monroe.wi.us",
+  "name": "Toni Wissestad",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508108": {
+  "county": "Monroe",
+  "district": 8,
+  "email": "district.08@co.monroe.wi.us",
+  "name": "Zachariah Zebell",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508109": {
+  "county": "Monroe",
+  "district": 9,
+  "email": "district.09@co.monroe.wi.us",
+  "name": "Todd Sparks",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508110": {
+  "county": "Monroe",
+  "district": 10,
+  "email": "district.10@co.monroe.wi.us",
+  "name": "Mary Cook",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508111": {
+  "county": "Monroe",
+  "district": 11,
+  "email": "district.11@co.monroe.wi.us",
+  "name": "Adam Balz",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508112": {
+  "county": "Monroe",
+  "district": 12,
+  "email": "district.12@co.monroe.wi.us",
+  "name": "Eric Devine",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508113": {
+  "county": "Monroe",
+  "district": 13,
+  "email": "district.13@co.monroe.wi.us",
+  "name": "Remy Gomez",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508114": {
+  "county": "Monroe",
+  "district": 14,
+  "email": "district.14@co.monroe.wi.us",
+  "name": "James Kuhn",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508115": {
+  "county": "Monroe",
+  "district": 15,
+  "email": "district.15@co.monroe.wi.us",
+  "name": "Joey Esterline",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508116": {
+  "county": "Monroe",
+  "district": 16,
+  "email": "district.16@co.monroe.wi.us",
+  "name": "Doug Rogalla",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
  "5508501": {
   "county": "Oneida",
   "district": 1,

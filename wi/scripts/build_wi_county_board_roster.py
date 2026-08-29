@@ -65,6 +65,10 @@ on 2026-08-29 — its own commit calls a county e-mail and phone official contac
 details that ship — and this builder wrote email and profileUrl and silently
 left the phone behind, so seventeen numbers sat in the scraper's cache and
 never reached a reader. Sauk arriving with thirty more is what surfaced it.
+Thirty-four of Wisconsin's 72 counties can be resolved to a district-keyed
+member list; the other 38 are recorded in the Data gaps panel and their cards
+keep linking the county board rather than naming anybody. See the scraper's
+docstring for what each of the other 38 actually publishes.
 
 Usage:
     python3 wi/scripts/build_wi_county_board_roster.py

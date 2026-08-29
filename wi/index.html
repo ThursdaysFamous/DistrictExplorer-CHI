@@ -8639,15 +8639,16 @@ function initWisconsinExplorer() {
    *
    * THE SUPERVISOR IS NAMED WHERE A COUNTY PUBLISHES ONE, AND NOWHERE ELSE.
    * Wisconsin publishes no statewide roster, so the people come from each
-   * county's own surface: 34 of the 72 can be obtained (750 seats — 31 board
-   * pages, Milwaukee and Racine off their own GIS layers, Taylor as a dated
-   * document), and the other 38 cannot — two publish district MAPS with no
-   * name on them, and the rest are unreadable or publish prose. A district in
-   * an unnamed county keeps the honest card: the district, and a link to the
-   * county board. A seat the county itself says is empty renders as VACANT,
-   * which is a fact rather than a gap. Contact renders only where its county
-   * published it, per field (wi/scripts/wi_county_board_scraper.py records
-   * what each county publishes). ---------- */
+   * county's own source: 34 of the 72 resolve to a district-keyed member list
+   * (735 seats) — 31 board pages a parser can read, Milwaukee's and Racine's
+   * own GIS layers, and Taylor's directory carried as a dated document — and
+   * the other 38 do not: three publish district MAPS with no name on them,
+   * and the rest are unreadable or publish prose. A district in an unnamed
+   * county keeps the honest card:
+   * the district, and a link to the county board. A seat the county itself
+   * says is empty renders as VACANT, which is a fact rather than a gap
+   * (wi/scripts/wi_county_board_scraper.py records what each county
+   * publishes). ---------- */
   var loadSupervisoryDistricts = makeCached(function () {
     return fetchJSONWithRetry("data/app/county-supervisory-districts.json", {}, 2);
   });
