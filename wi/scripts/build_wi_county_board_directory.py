@@ -214,7 +214,7 @@ COUNTY_SITES = {
     "55105": ("Rock", "https://co.rock.wi.us/"),
     "55107": ("Rusk", "https://ruskcounty.org/supervisors"),  # county page confirms 1..19
     "55109": ("St Croix", "https://sccwi.gov/"),
-    "55111": ("Sauk", "https://www.co.sauk.wi.us/"),
+    "55111": ("Sauk", "https://www.co.sauk.wi.us/countyboard/sauk-county-board-members"),
     "55113": ("Sawyer", "https://www.sawyercounty.gov/"),
     "55115": ("Shawano", "https://www.co.shawano.wi.us/county_board/"),  # county page confirms 1..27
     "55117": ("Sheboygan", "https://sheboygancounty.com/"),
@@ -315,8 +315,18 @@ def _cross_check_scraper_hosts():
     ARCGIS_COUNTIES are feature services (arcgis.com is nobody's board page)
     and DOCUMENT_ROSTERS is Taylor, whose host answers a captcha to everything.
     A future county that genuinely needs two hosts fails here and gets a line
-    saying why, which is the point.
+    saying why, which is the point. SAUK IS THE FIRST, and it is a real two-host
+    county rather than a stale entry: co.sauk.wi.us/countyboard/... is the board
+    page a reader is sent to, and it links its own membership as a "Committee
+    Database" served by the county's Domino application on
+    saukdomino.co.sauk.wi.us — the FIELDED table the scraper reads. Both hosts
+    are the county's, both answer 200, and each is right for its own job, so the
+    exception is named here with its reason rather than either URL being bent to
+    match the other.
     """
+    TWO_HOST_COUNTIES = {
+        "55111": "the board page and the county's own Domino membership database",
+    }
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     try:
         from wi_county_board_scraper import COUNTIES as SCRAPED
@@ -330,7 +340,7 @@ def _cross_check_scraper_hosts():
 
     disagree = []
     for fips, _name, _seats, _direction, scraped_url in SCRAPED:
-        if fips not in COUNTY_SITES:
+        if fips not in COUNTY_SITES or fips in TWO_HOST_COUNTIES:
             continue
         ours = COUNTY_SITES[fips][1]
         if host(ours) != host(scraped_url):

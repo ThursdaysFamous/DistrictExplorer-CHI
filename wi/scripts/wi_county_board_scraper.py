@@ -1209,10 +1209,8 @@ COUNTIES = [
     # phone, county e-mail and committee. Its host is in HONEST_UA_HOSTS.
     ("55087", "Outagamie", 36, "after",
      "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"),
-    # --- the 2026-08-29 header fix: a county recorded unreadable for a year ---
-    ("55117", "Sheboygan", 25, "after",
-     "https://www.sheboygancounty.com/departments/county-board/"
-     "county-board-supervisors"),]
+    # --- the 2026-08-29 header fix: a county recorded unreadable for a year ---,
+]
 
 # Counties whose own host refuses this client on every path and every header,
 # whose page the Internet Archive nonetheless holds. The ladder still asks the
@@ -1296,9 +1294,6 @@ SPLIT_LETTER = re.compile(r"\b([A-Z])\s+([a-z]{2,})")
 # reading) and `attach_officer_roles` (a county's own officers block). It
 # lives up here so the first of those can reach it: `split_role` used a bare
 # .title() and shipped Polk's "1St"/"2Nd" vice chairs to the card.
-_ORDINAL = re.compile(r"^\d+(?:st|nd|rd|th)$", re.I)
-
-
 def role_case(text):
     return " ".join(w.lower() if _ORDINAL.match(w) else w.title()
                     for w in text.split())
@@ -1937,8 +1932,6 @@ def _fielded(lines):
 # must agree, which is the same two-witnesses stance the pinned reading
 # directions take, expressed in the data the county already maintains.
 TABLE = re.compile(r"(?is)<table\b.*?</table>")
-TABLE_ROW = re.compile(r"(?is)<tr\b[^>]*>(.*?)</tr>")
-TABLE_CELL = re.compile(r"(?is)<t([dh])\b[^>]*>(.*?)</t\1>")
 MONROE_COLUMNS = ("district", "supervisor", "email")
 MONROE_EMAIL = re.compile(r"(?i)^district\.(\d{1,2})@co\.monroe\.wi\.us$")
 
@@ -2184,41 +2177,6 @@ def _archive_json(url, tries=5):
             time.sleep(5 * (attempt + 1))
     raise RuntimeError("the Internet Archive did not answer %s (%s)" % (url, last))
 
-
-def fetch_archived(url):
-    """(page html, capture timestamp) from the newest capture that post-dates
-    the sitting board — never an older one."""
-    rows = _archive_json(CDX % urllib.parse.quote(url, safe=""))
-    stamps = sorted(r[0] for r in rows[1:]) if rows and rows[0][0] == "timestamp" \
-        else sorted(r[0] for r in rows)
-    if not stamps:
-        raise RuntimeError("no archived capture of %s" % url)
-    seated = board_seated_on().strftime("%Y%m%d")
-    newest = stamps[-1]
-    if newest[:8] < seated:
-        raise RuntimeError(
-            "the newest archived capture of %s is %s, older than the %s "
-            "organizational meeting that seated this board (Wis. Stat. "
-            "59.10(3)(d)) — it names a board that no longer sits"
-            % (url, newest[:8], seated))
-    req = urllib.request.Request(SNAPSHOT % (newest, url), headers=ARCHIVE_UA)
-    last = None
-    for attempt in range(5):
-        try:
-            with urllib.request.urlopen(req, timeout=90) as r:
-                # `id_` replays the ORIGINAL bytes, original Content-Encoding
-                # and all, whatever this client asked for — so a page the county
-                # served gzipped comes back gzipped. Decoding that as text
-                # yields 30 KB of mojibake in which every reading finds nothing
-                # and the count guard blames the county for changing shape.
-                body = r.read()
-                if body[:2] == b"\x1f\x8b":
-                    body = gzip.decompress(body)
-                return body.decode("utf-8", "replace"), newest
-        except Exception as e:      # noqa: BLE001 - retried; the Archive
-            last = e                # answers 503 for minutes at a time
-            time.sleep(5 * (attempt + 1))
-    raise RuntimeError("could not read the %s capture of %s (%s)" % (newest, url, last))
 
 
 def fetch_or_archive(url, fips, county, headers=UA):
@@ -2664,6 +2622,18 @@ def _snapshot_age_days(ts):
     return (datetime.datetime.now(datetime.timezone.utc) - taken).days
 
 
+def _cdx_latest(url):
+    """The newest 200 capture CDX lists, or None. The availability API and CDX
+    do not always agree about what the Archive holds, so both are asked."""
+    try:
+        rows = _archive_json(CDX % urllib.parse.quote(url, safe=""))
+    except Exception:                       # noqa: BLE001 - reachability probe
+        return None
+    stamps = sorted(r[0] for r in rows[1:]) if rows and rows[0][0] == "timestamp" \
+        else sorted(r[0] for r in rows)
+    return stamps[-1] if stamps else None
+
+
 def fetch_archived(url):
     """(html, timestamp) for the county's page, read through the Archive.
 
@@ -2672,9 +2642,20 @@ def fetch_archived(url):
     stale archive fails the county loudly instead of shipping old officeholders
     behind a current-looking card.
     """
-    ts = _spn_save(url) or _wayback_latest(url)
+    ts = _spn_save(url) or _wayback_latest(url) or _cdx_latest(url)
     if ts is None:
         raise RuntimeError("no archive snapshot available for %s" % url)
+    # WIS. STAT. 59.10(3)(d): supervisors take office at the third-Tuesday-in-
+    # April organizational meeting, so a capture older than the sitting board's
+    # own seating names a board that no longer sits — a different question from
+    # the age ceiling below, and the one that actually protects the names.
+    seated = board_seated_on().strftime("%Y%m%d")
+    if ts[:8] < seated:
+        raise RuntimeError(
+            "the newest archived capture of %s is %s, older than the %s "
+            "organizational meeting that seated this board (Wis. Stat. "
+            "59.10(3)(d)) — it names a board that no longer sits"
+            % (url, ts[:8], seated))
     age = _snapshot_age_days(ts)
     if age > WAYBACK_MAX_AGE_DAYS:
         raise RuntimeError(
@@ -2716,7 +2697,6 @@ _ENTRY = re.compile(r'(?is)<h2[^>]*class="[^"]*detail-title[^"]*"[^>]*>(.*?)</h2
                     r'(?:<ul[^>]*class="[^"]*detail-list[^"]*"[^>]*>(.*?)</ul>)?')
 _FIELD = re.compile(r'(?is)<span[^>]*detail-list-label[^>]*>(.*?)</span>\s*'
                     r'<span[^>]*detail-list-value[^>]*>(.*?)</span>')
-_MAILTO = re.compile(r'(?i)href="mailto:([^"]+)"')
 _PAGER = re.compile(r"(\d+)\s*[-–]\s*(\d+)\s+of\s+(\d+)\s+items")
 # A SUFFIX IS NEVER ONE LETTER, and that rule cost a name. The county writes
 # "Sippel, James V." — a middle initial — and a suffix pattern that accepted a
@@ -2941,15 +2921,6 @@ PDF_ROLE = re.compile(
 PDF_WARDLINE = re.compile(r"(?i)(\b(?:towns?|cities|city|villages?)\s+of\b|\bwards?\s+\d)")
 
 
-def fetch_bytes(url, timeout=90):
-    """As fetch(), but for a document: no decode, and the STATUS is checked."""
-    req = urllib.request.Request(url, headers=UA)
-    with urllib.request.urlopen(req, timeout=timeout) as r:
-        if r.status != 200:
-            raise RuntimeError("%s answered HTTP %s" % (url, r.status))
-        return r.read()
-
-
 def pdf_lines(blob):
     """The directory's text, one line per printed line.
 
@@ -2976,7 +2947,8 @@ def scrape_pdf_county(spec):
                            "renamed its directory; re-read the page"
                            % (spec["name"], spec["link_text"], spec["page"]))
     doc_url = link.group(1)
-    blob = fetch_bytes("https://drive.google.com/uc?export=download&id=" + link.group(2))
+    blob = fetch_bytes("https://drive.google.com/uc?export=download&id=" + link.group(2),
+                       timeout=90)[0]
     if not blob.startswith(b"%PDF"):
         raise RuntimeError("%s: %s did not return a PDF (%d bytes, starts %r) — "
                            "a Drive interstitial is the usual cause"
@@ -3440,11 +3412,6 @@ def _constituent_officers(page_html, county):
     return out
 
 
-def _surname(name):
-    toks = [t for t in re.split(r"[^A-Za-z]+", name) if len(t) > 1]
-    return toks[-1].lower() if toks else ""
-
-
 def scrape_constituent_county(spec):
     """All seats or nothing, read from a paginated Finalsite directory."""
     county = spec["name"]
@@ -3816,7 +3783,7 @@ SPLIT_OFFICER = re.compile(r"^\s*:\s*")
 
 
 def attach_officer_roles(lines, districts, county, name_side=None,
-                         officer_line=OFFICER_LINE):
+                         officer_line=OFFICER_LINE, source_url=None):
     """Give a member the role their county states in its officers block.
 
     `source_url` is set only where the role came off a DIFFERENT page from the
@@ -4511,9 +4478,12 @@ def main():
             elif strategy == "archive":
                 districts, archived_at = scrape_archive_county(src)
                 source_url = src["source_url"]
-                # `stamps` is one capture timestamp per directory page read;
-                # the log names the newest, the JSON keeps them all
-                read_from = "archive:" + (max(archived_at) if archived_at else "?")
+                # One capture timestamp per directory page read, and None
+                # where the COUNTY served that page itself. All-None is the
+                # good case — the block lifted — so it reads as the live read
+                # it was rather than as an archive hop with no date.
+                stamps = [t for t in (archived_at or []) if t]
+                read_from = "archive:" + max(stamps) if stamps else "live"
             elif strategy == "document":
                 districts, carried = document_county(src)
                 source_url = src["source_url"]

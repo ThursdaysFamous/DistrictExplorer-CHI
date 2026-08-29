@@ -113,17 +113,17 @@
       "label": "Technical College District",
       "group": "schools",
       "area_rank": 3,
-      "rank_note": "16 WTCS districts tiling the state's land (avg ~10,600 km\u00b2) \u2014 between the U.S. House districts and the State Senate; Lake Winnebago and the Great Lakes are honestly inside none",
+      "rank_note": "16 WTCS districts tiling the state's land (avg ~10,600 km²) — between the U.S. House districts and the State Senate; Lake Winnebago and the Great Lakes are honestly inside none",
       "source": {
-        "answers": "The Wisconsin Technical College System district containing the point \u2014 the technical college your property tax funds (Wis. Stat. ch. 38). Identity-only, deliberately: the district board is APPOINTED (Wis. Stat. 38.08), not elected, and the card says so and names no one.",
+        "answers": "The Wisconsin Technical College System district containing the point — the technical college your property tax funds (Wis. Stat. ch. 38). Identity-only, deliberately: the district board is APPOINTED (Wis. Stat. 38.08), not elected, and the card says so and names no one.",
         "boundary": [
           {
-            "label": "Wisconsin DPI \u2014 Technical College Districts (the shipped school-site and library builds' own org, same reference-use licence), pre-built by wi/scripts/build_wi_wtcs_districts.py under five gates: exactly 16, a seat witness pinning each college's home city inside its own district, no overlaps, and the union's one lawful hole being Lake Winnebago \u2014 the layer's 2019 title notwithstanding, the content is current (it carries Northwood, the 2021 rename)",
+            "label": "Wisconsin DPI — Technical College Districts (the shipped school-site and library builds' own org, same reference-use licence), pre-built by wi/scripts/build_wi_wtcs_districts.py under five gates: exactly 16, a seat witness pinning each college's home city inside its own district, no overlaps, and the union's one lawful hole being Lake Winnebago — the layer's 2019 title notwithstanding, the content is current (it carries Northwood, the 2021 rename)",
             "url": "https://services8.arcgis.com/o4NJgD3NfeHnWy06/arcgis/rest/services/WI_Technical_College_Regions_2019/FeatureServer/0"
           }
         ],
-        "people": "None, deliberately: the board is appointed under Wis. Stat. 38.08, so there is no officeholder a voter elects \u2014 the card links the system's own site instead.",
-        "applies": "Statewide \u2014 every land point sits in exactly one district; open water (the Great Lakes, Lake Winnebago) honestly in none."
+        "people": "None, deliberately: the board is appointed under Wis. Stat. 38.08, so there is no officeholder a voter elects — the card links the system's own site instead.",
+        "applies": "Statewide — every land point sits in exactly one district; open water (the Great Lakes, Lake Winnebago) honestly in none."
       }
     },
     {
@@ -346,7 +346,7 @@
             "url": "https://services9.arcgis.com/cqHJZMbXoaOT0XrP/arcgis/rest/services/Trempealeau_County_County_Board_Supervisor_Districts_2021_2031_WFL1/FeatureServer/3"
           }
         ],
-        "people": "For 34 of the 72 counties, the supervisor holding the district — 31 from each county's own board page and two (Milwaukee, Racine) read as attributes off the county's own GIS layer, Milwaukee's witnessed on every run against the county's Legistar API (county-board-members.json, refreshed weekly by CI as a reviewed PR); a seat the county marks empty renders as vacant. Nine of the 29 arrived on 2026-08-27 from a re-sweep of the 50 counties this project had recorded as publishing nothing: Dane's roster sits on the BOARD's own host rather than the county's, and Oneida, Price and Trempealeau print a district COLUMN, which this reader could not see because it needed the word beside the number. Taylor's seventeen ride a dated document read from its own directory page, because its host answers a captcha to every automated client and no weekly re-read is possible. Sheboygan joined on 2026-08-29 with a county e-mail, a contact phone and a page of their own for each of its 25 supervisors, and its card names the chair the county's own board page states; it had been recorded as refusing browser headers, and the headers were the ones at fault. The other 38 counties publish no district-keyed member list this can read, so no name is shown and the card links the county board — Wisconsin has no statewide roster of county supervisors.",
+        "people": "For 50 of the 72 counties, the supervisor holding the district — 40 read from each county's own board page, Milwaukee and Racine off their own GIS layers (Milwaukee Legistar-witnessed on every run), Fond du Lac through the Internet Archive with the county asked first and the capture's age gated, Dodge from its paginated constituent directory, Kenosha's and Adams's from directory PDFs, Columbia's from the table its listing page frames from a second county host, and Taylor, Lafayette and La Crosse as dated documents behind challenges this project does not defeat (county-board-members.json, 1,139 seats, refreshed weekly by CI as a reviewed PR); a seat the county marks empty renders as vacant, and ten do. The other 22 counties publish no district-keyed member list this can read, so no name is shown and the card links the county board — Wisconsin has no statewide roster of county supervisors.",
         "applies": "Wisconsin — statewide, all 72 counties."
       }
     },
@@ -411,7 +411,7 @@
       "area_rank": 19,
       "rank_note": "Milwaukee's seven police districts — a seventh of the city each, the largest of the city-scoped tier; the fleet's second city police-district layer",
       "source": {
-        "answers": "The Milwaukee Police Department district covering the point, with its commanding officer named from the city's own per-district page and the district's phone from the city Directory \u2014 checked weekly. A district whose page names no officer would say so on the card rather than guessing. Outside Milwaukee the layer hides; no statewide who-polices-here boundary publisher exists (that concept's statewide candidate is the NG911 service-boundary route, recorded in the guidebook).",
+        "answers": "The Milwaukee Police Department district covering the point, with its commanding officer named from the city's own per-district page and the district's phone from the city Directory — checked weekly. A district whose page names no officer would say so on the card rather than guessing. Outside Milwaukee the layer hides; no statewide who-polices-here boundary publisher exists (that concept's statewide candidate is the NG911 service-boundary route, recorded in the guidebook).",
         "boundary": [
           {
             "label": "City of Milwaukee — MPD districts, the city's own ArcGIS layer (CC-BY), server-reprojected and pre-built by wi/scripts/build_milwaukee_city_layers.py",
@@ -422,7 +422,7 @@
             "url": "https://data.milwaukee.gov/dataset/milwaukee-police-district"
           }
         ],
-        "people": "Each district's commanding officer from the city's OWN per-district page (city.milwaukee.gov/police/districts/District-1..7), with the district phone paired from the city Directory page's tel: links \u2014 scraped weekly by update-mpd-captains-roster.yml (mpd_captains_scraper.py, the heading-anchored parse whose rank pattern tolerates District 2's measured 'Captai n' markup split; floors: all 7 districts, at least 6 named, a name under two districts refuses; TWO measured markup shapes \u2014 the officer h3, and District 4's empty h3 with the name in the contact block's own paragraph link). The phase-3 record said the city refuses automated readers \u2014 TRUE OF THE SANDBOX ONLY, measured 2026-08-27: the pages answer the weekly workflow's runners plain, which is the scraper's vantage. A district whose page names nobody ships null and its card states the absence.",
+        "people": "Each district's commanding officer from the city's OWN per-district page (city.milwaukee.gov/police/districts/District-1..7), with the district phone paired from the city Directory page's tel: links — scraped weekly by update-mpd-captains-roster.yml (mpd_captains_scraper.py, the heading-anchored parse whose rank pattern tolerates District 2's measured 'Captai n' markup split; floors: all 7 districts, at least 6 named, a name under two districts refuses; TWO measured markup shapes — the officer h3, and District 4's empty h3 with the name in the contact block's own paragraph link). The phase-3 record said the city refuses automated readers — TRUE OF THE SANDBOX ONLY, measured 2026-08-27: the pages answer the weekly workflow's runners plain, which is the scraper's vantage. A district whose page names nobody ships null and its card states the absence.",
         "applies": "City of Milwaukee only — the layer hides everywhere else."
       }
     },
@@ -506,7 +506,7 @@
             "url": "https://services1.arcgis.com/FDsAtKBk8Hy4cAH0/arcgis/rest/services/WI_Municipal_Wards_Current/FeatureServer/0"
           }
         ],
-        "people": "A ward elects no officeholder of its own — it is the unit election administration assigns. The card DOES name your polling place, from three sources in preference order. STATEWIDE it is the Wisconsin Elections Commission's own list, which the Commission sent on request after its website's Cloudflare challenge had been recorded as a block — a challenge on a website is not a refusal by the agency behind it (wi/scripts/build_wi_polling_places.py, 3,623 reporting units, 2,475 places, shipped as 72 per-county files; 7,131 of LTSB's 7,161 wards paired, 99.58%). That list is PROVISIONAL until the Commission publishes its November edition, and the card says so in the reader's own sentence, names the election, dates the pull, and RETIRES the pairing once the election date has passed — a per-election list that outlives its election looks current and is not. The 29 wards in 12 municipalities the Commission's file omits fall back to the MyVote lookup and are the Data gaps panel's `ward-polling-places` record. THE TWO CITIES THAT PUBLISH THEIR OWN PAIRING STAY FIRST, because the municipality runs the election. INSIDE MILWAUKEE (phase 4 PR 3): the city publishes its own ward-to-polling-place dataset (CC-BY), whose ward numbers are gated equal to LTSB's Milwaukee wards and whose every pair is witnessed against the city's own REST layer (wi/scripts/build_mke_polling_places.py, mke-polling-places.json) \u2014 name, address, the city's entrance and parking guidance, and the dataset edition stated on the card, with MyVote linked as the confirmation route because polling places move between elections. MADISON is the second city: its open-data server publishes the pairing as ONE layer \u2014 a polling point per ward, 137 rows \u2014 whose ward keys are gated equal to LTSB's Madison wards AND the city's own ward layer (wi/scripts/build_madison_polling_places.py, madison-polling-places.json); the layer publishes no edition date, so each build dates the pairing as the day it was read.",
+        "people": "A ward elects no officeholder of its own — it is the unit election administration assigns. The card DOES name your polling place, from three sources in preference order. STATEWIDE it is the Wisconsin Elections Commission's own list, which the Commission sent on request after its website's Cloudflare challenge had been recorded as a block — a challenge on a website is not a refusal by the agency behind it (wi/scripts/build_wi_polling_places.py, 3,623 reporting units, 2,475 places, shipped as 72 per-county files; 7,131 of LTSB's 7,161 wards paired, 99.58%). That list is PROVISIONAL until the Commission publishes its November edition, and the card says so in the reader's own sentence, names the election, dates the pull, and RETIRES the pairing once the election date has passed — a per-election list that outlives its election looks current and is not. The 29 wards in 12 municipalities the Commission's file omits fall back to the MyVote lookup and are the Data gaps panel's `ward-polling-places` record. THE TWO CITIES THAT PUBLISH THEIR OWN PAIRING STAY FIRST, because the municipality runs the election. INSIDE MILWAUKEE (phase 4 PR 3): the city publishes its own ward-to-polling-place dataset (CC-BY), whose ward numbers are gated equal to LTSB's Milwaukee wards and whose every pair is witnessed against the city's own REST layer (wi/scripts/build_mke_polling_places.py, mke-polling-places.json) — name, address, the city's entrance and parking guidance, and the dataset edition stated on the card, with MyVote linked as the confirmation route because polling places move between elections. MADISON is the second city: its open-data server publishes the pairing as ONE layer — a polling point per ward, 137 rows — whose ward keys are gated equal to LTSB's Madison wards AND the city's own ward layer (wi/scripts/build_madison_polling_places.py, madison-polling-places.json); the layer publishes no edition date, so each build dates the pairing as the day it was read.",
         "applies": "Wisconsin — statewide."
       }
     },
@@ -754,504 +754,504 @@
         "file": "adams-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Adams County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Adams County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "ashland-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Ashland County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Ashland County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "barron-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Barron County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Barron County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "bayfield-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Bayfield County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Bayfield County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "brown-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Brown County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Brown County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "buffalo-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Buffalo County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Buffalo County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "burnett-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Burnett County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Burnett County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "calumet-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Calumet County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Calumet County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "chippewa-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Chippewa County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Chippewa County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "clark-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Clark County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Clark County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "columbia-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Columbia County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Columbia County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "crawford-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Crawford County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Crawford County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "dane-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Dane County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Dane County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "dodge-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Dodge County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Dodge County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "door-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Door County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Door County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "douglas-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Douglas County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Douglas County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "dunn-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Dunn County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Dunn County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "eau-claire-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Eau Claire County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Eau Claire County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "florence-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Florence County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Florence County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "fond-du-lac-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Fond du Lac County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Fond du Lac County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "forest-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Forest County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Forest County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "grant-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Grant County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Grant County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "green-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Green County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Green County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "green-lake-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Green Lake County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Green Lake County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "iowa-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Iowa County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Iowa County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "iron-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Iron County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Iron County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "jackson-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Jackson County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Jackson County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "jefferson-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Jefferson County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Jefferson County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "juneau-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Juneau County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Juneau County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "kenosha-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Kenosha County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Kenosha County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "kewaunee-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Kewaunee County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Kewaunee County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "la-crosse-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "La Crosse County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "La Crosse County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "lafayette-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Lafayette County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Lafayette County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "langlade-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Langlade County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Langlade County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "lincoln-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Lincoln County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Lincoln County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "manitowoc-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Manitowoc County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Manitowoc County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "marathon-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Marathon County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Marathon County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "marinette-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Marinette County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Marinette County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "marquette-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Marquette County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Marquette County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "menominee-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Menominee County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Menominee County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "milwaukee-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Milwaukee County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Milwaukee County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "monroe-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Monroe County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Monroe County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "oconto-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Oconto County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Oconto County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "oneida-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Oneida County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Oneida County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "outagamie-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Outagamie County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Outagamie County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "ozaukee-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Ozaukee County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Ozaukee County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "pepin-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Pepin County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Pepin County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "pierce-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Pierce County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Pierce County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "polk-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Polk County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Polk County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "portage-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Portage County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Portage County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "price-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Price County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Price County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "racine-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Racine County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Racine County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "richland-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Richland County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Richland County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "rock-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Rock County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Rock County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "rusk-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Rusk County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Rusk County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "sauk-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Sauk County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Sauk County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "sawyer-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Sawyer County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Sawyer County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "shawano-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Shawano County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Shawano County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "sheboygan-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Sheboygan County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Sheboygan County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "st-croix-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "St. Croix County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "St. Croix County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "taylor-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Taylor County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Taylor County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "trempealeau-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Trempealeau County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Trempealeau County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "vernon-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Vernon County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Vernon County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "vilas-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Vilas County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Vilas County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "walworth-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Walworth County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Walworth County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "washburn-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Washburn County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Washburn County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "washington-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Washington County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Washington County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "waukesha-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Waukesha County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Waukesha County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "waupaca-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Waupaca County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Waupaca County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "waushara-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Waushara County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Waushara County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "winnebago-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Winnebago County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Winnebago County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
         "file": "wood-county-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "Wood County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) \u2014 lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
+        "note": "Wood County containment outline (wi/scripts/build_wi_county_outlines.py, sliced from state-counties.json) — lets a Data gaps record name this county so the panel leads with the gaps that apply here.",
         "dynamic_reference": true
       },
       {
@@ -1427,8 +1427,8 @@
       },
       {
         "file": "county-board-members.json",
-        "min_keys": 715,
-        "note": "County board supervisors for the 34 counties whose district-keyed member list this can obtain (744 seats) — 31 scraped from board pages, Milwaukee and Racine read off their own GIS layers (Milwaukee Legistar-witnessed). Built by wi/scripts/build_wi_county_board_roster.py, checked seat-for-seat against the shipped district geometry; refreshed weekly by update-wi-county-board-roster.yml, and Taylor carried from its own directory page as a dated document because its host answers a captcha to every automated client. The other 38 counties name nobody — their cards link the county board instead."
+        "min_keys": 1100,
+        "note": "County board supervisors for the 50 counties whose district-keyed member list this can obtain (1,139 seats, 1,129 named and 10 the counties themselves mark vacant) — 40 read from each county's own board page, Milwaukee and Racine off their own GIS layers (Milwaukee Legistar-witnessed on every run), Fond du Lac through the Internet Archive with the county asked first and the capture's age gated, Dodge from its paginated constituent directory, Kenosha's and Adams's from directory PDFs, Columbia's from the table its listing page frames from a second county host, and Taylor, Lafayette and La Crosse as dated documents behind challenges this project does not defeat. Built by wi/scripts/build_wi_county_board_roster.py, checked seat-for-seat against the shipped district geometry and refused outright if a county that shipped last week resolves nothing this week. The other 22 counties name nobody — their cards link the county board instead."
       },
       {
         "file": "wi-circuit-judges.json",
@@ -1940,7 +1940,7 @@
     },
     {
       "file": "update-wi-county-board-roster.yml",
-      "purpose": "County board supervisors for the 34 counties whose member list can be resolved",
+      "purpose": "County board supervisors for the 50 counties whose member list can be resolved",
       "schedule": "Thu 14:30 UTC"
     },
     {
@@ -2043,16 +2043,71 @@
     ]
   },
   "metro_explorers": [
-    { "id": "chicago", "label": "Illinois", "url": "https://districtry.com/il/", "emoji": "🌭", "explorer_name": "districtry Illinois",
-      "bbox": { "minLng": -91.52, "minLat": 36.96, "maxLng": -87.01, "maxLat": 42.51 } },
-    { "id": "nyc", "label": "New York City", "url": "https://districtry.com/ny/", "emoji": "🗽", "explorer_name": "districtry New York City",
-      "bbox": { "minLng": -74.3, "minLat": 40.45, "maxLng": -73.6, "maxLat": 41.0 } },
-    { "id": "sf", "label": "San Francisco", "url": "https://districtry.com/ca/", "emoji": "🌉", "explorer_name": "districtry San Francisco",
-      "bbox": { "minLng": -122.6, "minLat": 37.6, "maxLng": -122.3, "maxLat": 37.95 } },
-    { "id": "wisconsin", "label": "Wisconsin", "url": "https://districtry.com/wi/", "emoji": "🧀", "explorer_name": "districtry Wisconsin",
-      "bbox": { "minLng": -92.89, "minLat": 42.49, "maxLng": -86.25, "maxLat": 47.31 } },
-    { "id": "iowa", "label": "Iowa", "url": "https://districtry.com/ia/", "emoji": "🌽", "explorer_name": "districtry Iowa",
-      "bbox": { "minLng": -96.64, "minLat": 40.37, "maxLng": -90.14, "maxLat": 43.5 } }
+    {
+      "id": "chicago",
+      "label": "Illinois",
+      "url": "https://districtry.com/il/",
+      "emoji": "🌭",
+      "explorer_name": "districtry Illinois",
+      "bbox": {
+        "minLng": -91.52,
+        "minLat": 36.96,
+        "maxLng": -87.01,
+        "maxLat": 42.51
+      }
+    },
+    {
+      "id": "nyc",
+      "label": "New York City",
+      "url": "https://districtry.com/ny/",
+      "emoji": "🗽",
+      "explorer_name": "districtry New York City",
+      "bbox": {
+        "minLng": -74.3,
+        "minLat": 40.45,
+        "maxLng": -73.6,
+        "maxLat": 41.0
+      }
+    },
+    {
+      "id": "sf",
+      "label": "San Francisco",
+      "url": "https://districtry.com/ca/",
+      "emoji": "🌉",
+      "explorer_name": "districtry San Francisco",
+      "bbox": {
+        "minLng": -122.6,
+        "minLat": 37.6,
+        "maxLng": -122.3,
+        "maxLat": 37.95
+      }
+    },
+    {
+      "id": "wisconsin",
+      "label": "Wisconsin",
+      "url": "https://districtry.com/wi/",
+      "emoji": "🧀",
+      "explorer_name": "districtry Wisconsin",
+      "bbox": {
+        "minLng": -92.89,
+        "minLat": 42.49,
+        "maxLng": -86.25,
+        "maxLat": 47.31
+      }
+    },
+    {
+      "id": "iowa",
+      "label": "Iowa",
+      "url": "https://districtry.com/ia/",
+      "emoji": "🌽",
+      "explorer_name": "districtry Iowa",
+      "bbox": {
+        "minLng": -96.64,
+        "minLat": 40.37,
+        "maxLng": -90.14,
+        "maxLat": 43.5
+      }
+    }
   ],
   "history_page": {
     "file": "history.html",
@@ -2074,7 +2129,7 @@
         "label": "county-board seats named on the card",
         "file": "data/app/county-board-members.json",
         "metric": "keys",
-        "note": "in the 34 counties whose district-keyed roster this can obtain"
+        "note": "in the 50 counties whose district-keyed roster this can obtain"
       },
       {
         "label": "circuit courts with their full bench named",
@@ -2086,8 +2141,8 @@
     "entries": [
       {
         "date": "2026-08-29",
-        "title": "Sheboygan's supervisors, and the header that was hiding them",
-        "body": "Click anywhere in Sheboygan County and the board card now names the supervisor holding your district, with the county e-mail and contact phone the county publishes for them and a link to their own page — the 34th of Wisconsin's 72 counties whose roster this app can obtain, and the first to arrive with contact for every seat. It should have arrived a year ago. Sheboygan was one of nine counties this project had recorded as answering a flat refusal that holds against browser headers, and the headers being held against were never a browser's: they claimed to be Chrome and sent none of the client hints Chrome always sends alongside that claim, which is the self-contradiction the county's bot filter was scoring. Corrected, the page answers first time, every time — and so do seven more counties whose absence was ours rather than theirs, though none of the seven publishes a list this app can read whole yet. Two silent traps came with the county and are worth as much as the roster. Its Elected Officials page lists six offices on one page, and reading each officer's phone the way this app reads a one-officer page returned the PREVIOUS officer's number for four of five — every one a plausible county number, none of them right. And its board page states the chair and vice chair in an alternating list that the role reader is built to refuse rather than guess at, so the vice chair attached and the chair quietly did not. Both are fixed by reading forward from the name the page actually names, and by pinning the direction rather than detecting it."
+        "title": "Seventeen more counties name your supervisor",
+        "body": "Click anywhere in Adams, Columbia, Crawford, Dodge, Fond du Lac, Green Lake, Iowa, Kenosha, La Crosse, Lafayette, Manitowoc, Monroe, Outagamie, Ozaukee, Rock, Sauk or Sheboygan County and the board card now names the supervisor holding your district — often with the county e-mail and phone that county publishes for them. That takes the app from 33 of Wisconsin's 72 counties to 50, and from 719 named seats to 1,139. Almost none of it was a county starting to publish something new. Six were reading as blocked because of how this app asked: three answer a client that sends the header set a real browser sends, and Outagamie answers the opposite — its edge refuses anything claiming to be a browser and serves a client that says honestly what it is. Two are read through the Internet Archive, with the county's own server tried first every week and the copy's age checked before any name is used. Two publish their roster as a PDF, which is a format and never a reason not to read it. Three had pages nobody had looked at behind a note saying there was nothing to look at, and one county had simply moved house — its old address answered politely with a forwarding note, which an automated check could not tell from a county that publishes nothing. Where a county's site is behind a challenge this app does not try to defeat, its supervisors ride a dated capture and the card says so rather than implying a weekly check. Twenty-two counties still name nobody, and the data-gaps panel says which and why."
       },
       {
         "date": "2026-08-27",
@@ -2097,17 +2152,17 @@
       {
         "date": "2026-08-27",
         "title": "The data-gaps panel learns where you are standing",
-        "body": "The panel that lists what this map cannot tell you now leads with the gaps that apply where you clicked, the way the Illinois deployment already did. It could not before, and the reason was invisible: every Wisconsin gap was recorded without the counties it applies to, and the county shapes needed to test a click against them were never built \u2014 so a reader standing on Milwaukee City Hall, having clicked, was told to click a spot on the map first. All seventy-two county shapes are now sliced from the county map this app already ships, so the two can never drift apart, and every gap names the counties it genuinely affects: the five with no fire-and-rescue filings, the fifty with no published board roster, the thirteen whose city ward filings are incomplete. Two statewide gaps are tagged to every county on purpose, because at county resolution it is better to mention a gap that does not quite reach your block than to tell you nothing is missing when something is. The misleading sentence was a fleet-wide fault and is fixed for every state at once."
+        "body": "The panel that lists what this map cannot tell you now leads with the gaps that apply where you clicked, the way the Illinois deployment already did. It could not before, and the reason was invisible: every Wisconsin gap was recorded without the counties it applies to, and the county shapes needed to test a click against them were never built — so a reader standing on Milwaukee City Hall, having clicked, was told to click a spot on the map first. All seventy-two county shapes are now sliced from the county map this app already ships, so the two can never drift apart, and every gap names the counties it genuinely affects: the five with no fire-and-rescue filings, the fifty with no published board roster, the thirteen whose city ward filings are incomplete. Two statewide gaps are tagged to every county on purpose, because at county resolution it is better to mention a gap that does not quite reach your block than to tell you nothing is missing when something is. The misleading sentence was a fleet-wide fault and is fixed for every state at once."
       },
       {
         "date": "2026-08-27",
         "title": "The police district card learns its captains' names",
-        "body": "Milwaukee's police-district card now names each district's commanding officer and phone number, read weekly from the city's own per-district pages \u2014 the first roster in this deployment whose source can only be reached from the project's scheduled infrastructure, never from a development machine, so the first copy was carried over from the weekly check's own verified run. All seven districts name their captain, and getting the seventh took reading the city's markup three ways: District 2's page splits the word Captain in half, the phone directory hides the district number in a way that once keyed every phone to District 2, and District 4 leaves its officer heading empty with the name in a link below it \u2014 each caught and pinned before any name shipped, so a page naming nobody would say so on the card rather than guess. Names never publish without review: every weekly change arrives as a proposed update a person reads first."
+        "body": "Milwaukee's police-district card now names each district's commanding officer and phone number, read weekly from the city's own per-district pages — the first roster in this deployment whose source can only be reached from the project's scheduled infrastructure, never from a development machine, so the first copy was carried over from the weekly check's own verified run. All seven districts name their captain, and getting the seventh took reading the city's markup three ways: District 2's page splits the word Captain in half, the phone directory hides the district number in a way that once keyed every phone to District 2, and District 4 leaves its officer heading empty with the name in a link below it — each caught and pinned before any name shipped, so a page naming nobody would say so on the card rather than guess. Names never publish without review: every weekly change arrives as a proposed update a person reads first."
       },
       {
         "date": "2026-08-27",
         "title": "Madison wards learn where they vote",
-        "body": "The ward card now names the polling place for each of Madison's 137 wards \u2014 the building, its address, and a map pin \u2014 the second city to gain the pairing after Milwaukee. Madison publishes it as one layer on the city's own open-data server: a polling point per ward, carrying the ward number, the building name, and the street address. The build shipped because the ward numbering agrees three ways \u2014 the polling layer, the city's own ward boundary layer, and the state ward file all name the same 137 wards exactly \u2014 and because every point lands inside Madison. One honesty note is stated on the card: the city's layer publishes no edition date, so the pairing is dated as the day it was read, and the state's MyVote lookup stays linked as the confirmation route. Outside these two cities the answer is unchanged: the statewide pairing sits behind surfaces that refuse automated readers, now an open ask to the state's election commission."
+        "body": "The ward card now names the polling place for each of Madison's 137 wards — the building, its address, and a map pin — the second city to gain the pairing after Milwaukee. Madison publishes it as one layer on the city's own open-data server: a polling point per ward, carrying the ward number, the building name, and the street address. The build shipped because the ward numbering agrees three ways — the polling layer, the city's own ward boundary layer, and the state ward file all name the same 137 wards exactly — and because every point lands inside Madison. One honesty note is stated on the card: the city's layer publishes no edition date, so the pairing is dated as the day it was read, and the state's MyVote lookup stays linked as the confirmation route. Outside these two cities the answer is unchanged: the statewide pairing sits behind surfaces that refuse automated readers, now an open ask to the state's election commission."
       },
       {
         "date": "2026-08-27",

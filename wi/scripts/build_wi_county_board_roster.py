@@ -86,10 +86,27 @@ GEOMETRY = os.path.join(APP_DATA_DIR, "county-supervisory-districts.json")
 RAW = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache", "wi_county_boards_raw.json")
 OUT = os.path.join(APP_DATA_DIR, "county-board-members.json")
 
-MIN_COUNTIES = 32      # 34 ship one (30 pages + 2 county GIS layers + Taylor and
-                       # Lafayette by document); tolerates two of the live ones dark
-MIN_SEATS = 706        # 735 today (663 page-scraped + Milwaukee 18 + Racine 21
-                       # + Taylor 17 + Lafayette 16)
+MIN_COUNTIES = 48      # 50 ship one (40 board pages + 2 county GIS layers + Fond du
+                       # Lac through the Internet Archive + Dodge's constituent
+                       # directory + Kenosha's witnessed directory PDF + Adams's
+                       # directory PDF + Columbia's framed table + Taylor,
+                       # Lafayette and La Crosse by document); tolerates two dark
+MIN_SEATS = 1066       # 1139 today; the tolerance is the two largest boards
+                       # (Dane 37 + Outagamie 36) going dark in one run, which is
+                       # what a floor is for — it is never lowered to fit a result
+
+
+def shipped_counties():
+    """{county name: seats} as the file on disk has them, or {} if it is new."""
+    try:
+        with open(OUT) as f:
+            shipped = json.load(f)
+    except (OSError, ValueError):
+        return {}
+    out = {}
+    for row in shipped.values():
+        out[row["county"]] = out.get(row["county"], 0) + 1
+    return out
 
 
 def main():
