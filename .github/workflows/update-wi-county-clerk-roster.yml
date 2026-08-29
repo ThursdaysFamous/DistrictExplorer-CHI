@@ -41,17 +41,8 @@ jobs:
         with:
           python-version: "3.x"
 
-      # pdfplumber reads the Blue Book's officer tables. pypdf is NOT used by
-      # anything in this workflow and is installed because it is in the import
-      # CLOSURE: wi_county_officer_contact_scraper.py imports four INDEXROLL_*
-      # regexes from wi_county_board_scraper.py, which imports pypdf at module
-      # scope for Kenosha's directory PDF, so `import` alone needs the package
-      # present. validate_workflow_deps.py fails the merge without this line —
-      # correctly, because the job would die on the import. The honest fix is to
-      # stop the closure needing it (those four regexes want a small shared
-      # module of their own); until then this line is the truth about the job.
       - name: Install dependencies
-        run: pip install -c wi/scripts/requirements.txt pdfplumber pypdf
+        run: pip install -c wi/scripts/requirements.txt pdfplumber
 
       - name: Scrape the Blue Book table and the clerks' association
         run: python3 wi/scripts/wi_county_clerk_scraper.py

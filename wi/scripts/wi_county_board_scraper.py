@@ -833,13 +833,6 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-# For the one county whose roster is a document this file FETCHES (see
-# WITNESSED_DOCUMENT_COUNTIES; DOCUMENT_ROSTERS needs nothing, its text is
-# already here). Imported at module scope on purpose: scripts/validate_workflow_deps.py
-# reads these imports and fails the merge if the weekly workflow's pip line
-# does not install pypdf, which is the gate that keeps this dependency honest.
-from pypdf import PdfReader
-
 DEFAULT_OUT = os.path.join(os.path.dirname(__file__), ".cache", "wi_county_boards_raw.json")
 # A CHROMIUM USER-AGENT WITHOUT CHROMIUM'S CLIENT HINTS IS A CLIENT THAT
 # CONTRADICTS ITSELF, and Akamai's bot manager scores exactly that. This dict
@@ -3448,6 +3441,20 @@ def document_rows(pdf_bytes, section):
     has one the run fails naming the missing district, which is a person
     reading the directory rather than a silent short roster.
     """
+    # IMPORTED HERE, NOT AT MODULE SCOPE, and the difference is a CI failure.
+    # It sat at the top of this file on the reasoning that
+    # scripts/validate_workflow_deps.py reads imports and would fail the merge
+    # if the weekly workflow stopped installing pypdf. It reads this one too —
+    # that validator folds a script's FUNCTION-LOCAL imports in for the entry
+    # point a workflow actually executes, which this file is, so the gate is
+    # unchanged. What module scope additionally did was charge the dependency to
+    # everything that merely IMPORTS this module: the county-clerk workflow,
+    # which wants four regexes from here, and smoke-test.yml's stdlib-only
+    # `build_wi_county_board_directory.py --check`, which imports COUNTIES to
+    # cross-check hosts and died on `No module named pypdf`. A lazy import costs
+    # an importer nothing, which is the whole reason the validator draws the
+    # line where it does.
+    from pypdf import PdfReader           # noqa: PLC0415 — see above
     reader = PdfReader(io.BytesIO(pdf_bytes))
     whole = "\n".join(page.extract_text() or "" for page in reader.pages)
     try:
