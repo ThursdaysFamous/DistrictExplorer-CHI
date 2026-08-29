@@ -346,7 +346,7 @@
             "url": "https://services9.arcgis.com/cqHJZMbXoaOT0XrP/arcgis/rest/services/Trempealeau_County_County_Board_Supervisor_Districts_2021_2031_WFL1/FeatureServer/3"
           }
         ],
-        "people": "For 31 of the 72 counties, the supervisor holding the district — 29 from each county's own board page and two (Milwaukee, Racine) read as attributes off the county's own GIS layer, Milwaukee's witnessed on every run against the county's Legistar API (county-board-members.json, refreshed weekly by CI as a reviewed PR); a seat the county marks empty renders as vacant. Nine of the 29 arrived on 2026-08-27 from a re-sweep of the 50 counties this project had recorded as publishing nothing: Dane's roster sits on the BOARD's own host rather than the county's, and Oneida, Price and Trempealeau print a district COLUMN, which this reader could not see because it needed the word beside the number. The other 41 counties publish no district-keyed member list this can read, so no name is shown and the card links the county board — Wisconsin has no statewide roster of county supervisors.",
+        "people": "For 32 of the 72 counties, the supervisor holding the district — 29 from each county's own board page and two (Milwaukee, Racine) read as attributes off the county's own GIS layer, Milwaukee's witnessed on every run against the county's Legistar API (county-board-members.json, refreshed weekly by CI as a reviewed PR); a seat the county marks empty renders as vacant. Lafayette is the 32nd and the only one that is not a weekly re-read: its host answers a Cloudflare managed challenge, so its sixteen seats ship from a dated capture of the county's own board page and the card states that date instead of implying a weekly check — the live page is re-tried on every run and the note retires itself the day it answers. Nine of the 29 arrived on 2026-08-27 from a re-sweep of the 50 counties this project had recorded as publishing nothing: Dane's roster sits on the BOARD's own host rather than the county's, and Oneida, Price and Trempealeau print a district COLUMN, which this reader could not see because it needed the word beside the number. The other 40 counties publish no district-keyed member list this can read, so no name is shown and the card links the county board — Wisconsin has no statewide roster of county supervisors.",
         "applies": "Wisconsin — statewide, all 72 counties."
       }
     },
@@ -1427,8 +1427,8 @@
       },
       {
         "file": "county-board-members.json",
-        "min_keys": 645,
-        "note": "County board supervisors for the 31 counties that publish a district-keyed member list a client can read (672 seats) — 29 scraped from board pages, Milwaukee and Racine read off their own GIS layers (Milwaukee Legistar-witnessed). Built by wi/scripts/build_wi_county_board_roster.py, checked seat-for-seat against the shipped district geometry; refreshed weekly by update-wi-county-board-roster.yml. The other 41 counties name nobody — their cards link the county board instead."
+        "min_keys": 661,
+        "note": "County board supervisors for the 32 counties whose district-keyed member list this project can read (688 seats) — 29 scraped from board pages, Milwaukee and Racine read off their own GIS layers (Milwaukee Legistar-witnessed), and Lafayette carried as a DATED CAPTURE of its own board page because its host answers a Cloudflare challenge (the scraper re-tries it live every run; those rows carry asOf and the card prints it). Built by wi/scripts/build_wi_county_board_roster.py, checked seat-for-seat against the shipped district geometry; refreshed weekly by update-wi-county-board-roster.yml. The other 40 counties name nobody — their cards link the county board instead."
       },
       {
         "file": "wi-circuit-judges.json",
@@ -2071,10 +2071,10 @@
         "note": "sheriffs, DAs, treasurers, clerks of court, registers of deeds, executives, examiners"
       },
       {
-        "label": "county-board seats tracked weekly",
+        "label": "county-board seats named on the card",
         "file": "data/app/county-board-members.json",
         "metric": "keys",
-        "note": "in the 31 counties that publish a district-keyed roster"
+        "note": "read from the counties' own board pages, re-read weekly wherever a county's host answers this project"
       },
       {
         "label": "circuit courts with their full bench named",
@@ -2084,6 +2084,11 @@
       }
     ],
     "entries": [
+      {
+        "date": "2026-08-29",
+        "title": "Lafayette County’s sixteen supervisors, and a block that described a website",
+        "body": "Lafayette County’s board card now names your supervisor. It had been filed for weeks under “could not be read” — a phrase this project wrote about the county when what it had measured was the county’s web host, which answers every automated reader with a challenge page and still does. The page behind it lists all sixteen seats in the plainest form of any county in the state: the person, their office, then their district. That shape was the second reason it stayed dark, and this one was entirely ours — the reader that pairs a name with a district throws away any line ending in the word “Supervisor”, because on every other county’s page that word marks a heading rather than a person. A fifth way of reading a board page now handles it, and takes the chairman’s title off his own row while it is there. The names come from a capture of the county’s page taken on a stated day rather than from this week’s read, so every card says exactly that instead of looking like the thirty-one counties whose rosters are re-checked every Thursday; the county’s own page is still tried on each of those runs, and the day it answers the note disappears by itself. Fifteen of the sixteen names are independently confirmed by the Internet Archive’s copy of the same page, and the one that differs is a seat that genuinely changed hands — which is why an old copy is a witness and never a source."
+      },
       {
         "date": "2026-08-27",
         "title": "Where you vote, everywhere in Wisconsin",

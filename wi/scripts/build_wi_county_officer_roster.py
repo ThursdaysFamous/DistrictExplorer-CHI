@@ -253,6 +253,14 @@ def main():
                              "source": "county-board-page"}
                 if page.get("sourceUrl"):
                     new_chair["sourceUrl"] = page["sourceUrl"]
+                # A county whose board rows are a DATED CAPTURE rather than
+                # this week's read hands its date along, and the card prints
+                # that instead of "verified weekly". The chair still
+                # supersedes the Blue Book, because a capture taken this month
+                # is newer than the book's April 2025 snapshot either way —
+                # what changes is only what the card is entitled to claim.
+                if page.get("asOf"):
+                    new_chair["asOf"] = page["asOf"]
                 if "seats" in chair:
                     new_chair["seats"] = chair["seats"]
                 chair = new_chair

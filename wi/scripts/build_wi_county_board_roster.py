@@ -11,10 +11,19 @@ That is what stops a county's page reorganising into a plausible-but-wrong
 number of members — the two files were built from different publishers (the
 county's own page, and LTSB's statewide filing) and have to agree.
 
-Twenty of Wisconsin's 72 counties publish a district-keyed member list; the
-other 52 are recorded in the Data gaps panel and their cards keep linking the
-county board rather than naming anybody. See the scraper's docstring for what
-each of the other 52 actually publishes.
+Thirty-one of Wisconsin's 72 counties publish a district-keyed member list this
+client can read; the other 41 are recorded in the Data gaps panel and their
+cards keep linking the county board rather than naming anybody. See the
+scraper's docstring for what each of them actually publishes.
+
+LAFAYETTE IS THE THIRTY-SECOND AND THE ONLY ONE CARRIED AS A DATED DOCUMENT.
+Its page publishes all sixteen seats and its host answers this project with a
+Cloudflare managed challenge, so the rows come from a capture of that page and
+say so: the scraper hands over `asOf` and `sourceDocument` beside the members,
+this builder stamps `asOf` on every one of that county's rows, and the card
+prints it rather than letting a dated snapshot read like a weekly re-read. The
+scraper still tries the live page every run and will drop both fields the day
+it answers.
 
 Usage:
     python3 wi/scripts/build_wi_county_board_roster.py
@@ -31,8 +40,10 @@ GEOMETRY = os.path.join(APP_DATA_DIR, "county-supervisory-districts.json")
 RAW = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache", "wi_county_boards_raw.json")
 OUT = os.path.join(APP_DATA_DIR, "county-board-members.json")
 
-MIN_COUNTIES = 29      # 31 ship one (29 pages + 2 county GIS layers); tolerates two dark
-MIN_SEATS = 645        # 672 today (633 page-scraped + Milwaukee 18 + Racine 21)
+MIN_COUNTIES = 30      # 32 ship one (29 pages + 2 county GIS layers + Lafayette's
+                       # dated document); tolerates two of the live ones going dark
+MIN_SEATS = 661        # 688 today (633 page-scraped + Milwaukee 18 + Racine 21
+                       # + Lafayette 16)
 
 
 def main():
@@ -73,6 +84,16 @@ def main():
             key = "%s%02d" % (fips, int(d))
             row = {"county": entry["county"], "district": int(d),
                    "sourceUrl": entry["source_url"]}
+            # Present only for a county whose rows came from a document rather
+            # than from this run's read of its page — the card shows the date
+            # instead of implying a weekly re-read, and the officer builder
+            # carries it onto the county card's board chair for the same
+            # reason. `asOf` names the page and the day it was captured, and
+            # `sourceUrl` is that page, so the pair is the whole provenance a
+            # reader needs; the exact document lives in the scraper's
+            # DOCUMENT_COUNTIES entry and on its NOT RE-READ line, not here.
+            if entry.get("asOf"):
+                row["asOf"] = entry["asOf"]
             if member["vacant"]:
                 row["vacant"] = True
                 vacant += 1
@@ -94,8 +115,11 @@ def main():
         raise RuntimeError("%d seats resolved, floor is %d" % (total, MIN_SEATS))
 
     payload = json.dumps(roster, indent=1, sort_keys=True) + "\n"
-    print("county-board-members: %d counties, %d seats (%d named, %d vacant)"
-          % (len(counties), total, total - vacant, vacant), file=sys.stderr)
+    dated = sorted({r["county"] for r in roster.values() if r.get("asOf")})
+    print("county-board-members: %d counties, %d seats (%d named, %d vacant)%s"
+          % (len(counties), total, total - vacant, vacant,
+             "; dated document: %s" % ", ".join(dated) if dated else ""),
+          file=sys.stderr)
     if check_only:
         try:
             with open(OUT) as f:

@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """
 Scrape county board supervisors from the 29 Wisconsin counties that publish a
-district-keyed member list. Stage 1 of the pair; build_wi_county_board_roster.py
-turns the intermediate JSON into data/app/county-board-members.json.
+district-keyed member list a client here can read, plus Milwaukee's and Racine's
+own GIS layers and Lafayette's dated capture. Stage 1 of the pair;
+build_wi_county_board_roster.py turns the intermediate JSON into
+data/app/county-board-members.json.
 
 WHY ONLY TWENTY-NINE OF SEVENTY-TWO
 -----------------------------------
@@ -20,12 +22,20 @@ recorded as such:
   * Marinette publishes 29 of its 30 seats. District 26 is an unnumbered
     "VACANT SEAT" row in an alphabetical list, and assigning it by elimination
     would be an inference the county never wrote, so the county stays out.
-  * The rest could not be read: 9 answer 403 to a datacenter client and hold
+  * The rest could not be read: 8 answer 403 to a datacenter client and hold
     it against browser headers (Marathon, La Crosse, Outagamie, Fond du Lac,
-    Lafayette, Lincoln, Monroe, Rock, Sheboygan), Taylor sits behind an
-    sgcaptcha challenge answering 202 (an access control, not an obstacle to
-    route around), Forest does not resolve, and the remainder publish their
-    members as PDFs, images or prose with no district column.
+    Lincoln, Monroe, Rock, Sheboygan), Taylor sits behind an sgcaptcha
+    challenge answering 202 (an access control, not an obstacle to route
+    around), Forest does not resolve, and the remainder publish their members
+    as PDFs, images or prose with no district column.
+  * LAFAYETTE WAS THE NINTH OF THOSE 403s AND IS NOW THE ONE COUNTY CARRIED AS
+    A DATED CAPTURE — see DOCUMENT_COUNTIES. Its refusal was re-measured
+    2026-08-29 and is real (a Cloudflare managed challenge, bare host and www,
+    browser headers), but the record had gone one step further than the
+    measurement: the county was filed under "could not be read" when what
+    could not be read was its HOST. The page itself publishes all sixteen
+    seats in the plainest shape on this list, which the Internet Archive's own
+    2025-02-14 capture of it shows and which `_same_line_lead` reads 16/16.
 
 NINE OF THOSE "UNREADABLE" COUNTIES WERE PUBLISHING ALL ALONG (2026-08-27)
 --------------------------------------------------------------------------
@@ -73,6 +83,15 @@ same way:
     -strict     as before/after, but the scan STOPS at the next district line
                 (Richland, Rusk, Shawano) — see `_windowed_strict`
 
+A fifth joined on 2026-08-29 with Lafayette:
+
+    same-line-lead
+                the name FIRST and the district LAST, the office between them
+                ("Larry Ludlum- Supervisor District #1") — see
+                `_same_line_lead`. It is the only reading that recovers a ROLE
+                from the seat's own row, because it is the only one that reads
+                the words between the person and the district.
+
 The strict readings exist because a district whose own row yields no readable
 name reaches past the next heading and takes ITS name: Rusk prints an INDEX of
 nineteen bare "District #N" links above its roster, and Richland's rows end in
@@ -115,6 +134,7 @@ Usage:
     python3 wi/scripts/wi_county_board_scraper.py [--out PATH] [--only FIPS]
 """
 
+import datetime
 import html as html_lib
 import json
 import os
@@ -418,6 +438,110 @@ def _windowed_strict(lines, offsets):
     return out, vacant
 
 
+# --- the fifth shape: the office BETWEEN the name and the district -------------
+# Lafayette writes each seat as one line with the person FIRST and the district
+# LAST, the office sitting between them:
+#
+#     Larry Ludlum- Supervisor District #1
+#     Jack Sauer- County Board Chairman District #3
+#
+# `_same_line` strips the district and tests what is left, and what is left ends
+# in "Supervisor" — a word `BAD` rejects, and rightly: it is the word that makes
+# a heading a heading everywhere else. So the county read as publishing nothing
+# while publishing all sixteen seats in the plainest form on this list. The
+# reading takes the text BEFORE the district and strips the office off its tail,
+# which is also where the ROLE is: the chairman's own row says so, where every
+# other county on this list needs `attach_officer_roles` to reach a block
+# further up the page.
+_OFFICE_ROLE = r"(?:(?:County\s+)?Board\s+)?%s" % _ROLE
+LEAD_OFFICE = re.compile(r"^(?P<name>.+?)[\s,\-\u2013\u2014]+(?P<office>(?:Supervisor|%s))\s*$"
+                         % _OFFICE_ROLE, re.I)
+
+
+def office_role(office):
+    """The office as a ROLE, or None when it is the plain seat.
+
+    Every member of a county board is a supervisor, so "Supervisor" is the
+    office and not a role — shipping it as one would put "Supervisor
+    (Supervisor)" on the card. Anything else is trimmed to the words that
+    distinguish it ("County Board Chairman" -> "Chairman"), which is the
+    vocabulary the other counties' rows already use and the vocabulary
+    build_wi_county_officer_roster.py's `marks_chair` reads.
+    """
+    office = " ".join(office.split())
+    if office.lower() == "supervisor":
+        return None
+    return role_case(re.sub(r"(?i)^(?:county\s+)?(?:board\s+)?", "", office))
+
+
+def _same_line_lead(lines):
+    out, vacant = {}, set()
+    for line in lines:
+        m = DIST.search(line)
+        if not m:
+            continue
+        d = int(m.group(1))
+        if d in out or d in vacant:
+            continue
+        # DIST consumes the separator before "district", so the head is the
+        # whole of the line the county wrote before naming the district.
+        head = line[:m.start()].strip(" \t\u2013\u2014-:\u2022,")
+        if VACANT.search(head):
+            vacant.add(d)
+            continue
+        om = LEAD_OFFICE.match(head)
+        if not om or not _reads_as_name(om.group("name")):
+            continue
+        who, role = clean(om.group("name"))
+        out[d] = (who, role or office_role(om.group("office")))
+    return out, vacant
+
+
+# Lafayette's chair and both vice-chairs are named again in an administration
+# block above the seat list, as "Name, Role" — the reverse of the "Role - Name"
+# shape `attach_officer_roles` reads, and unreachable by it. This is a separate
+# pass rather than a widening of that function so the counties already shipping
+# keep byte-identical behaviour, and it obeys the same two rules: the join is on
+# a UNIQUE FULL NAME, and every join prints.
+#
+# The role must match to the END of its own line, which is what keeps the
+# county's own rules text out of it: "Memorial Hospital Compensation Oversight
+# Committee (Cty Bd Chair, First Vice Chair and 3 Cty Bd members...)" carries
+# both the comma and the words and is not a roster row. It is also what drops
+# "Carla M Jacobson, County Clerk" — the clerk is not a supervisor, and the
+# county's own clerk record is a different file.
+NAMED_OFFICER = re.compile(r"^(?P<name>[^,]{4,44}),\s*(?P<role>%s)\s*$"
+                           % _OFFICE_ROLE, re.I)
+
+
+def attach_named_officer_roles(lines, districts, county):
+    by_name = {}
+    for d, row in districts.items():
+        if row.get("name"):
+            by_name.setdefault(row["name"], []).append(d)
+    for line in lines:
+        m = NAMED_OFFICER.match(line)
+        if not m or not is_name(m.group("name")):
+            continue
+        role = office_role(m.group("role"))
+        if not role:
+            continue
+        who = clean(m.group("name"))[0]
+        hits = by_name.get(who)
+        if not hits:
+            continue                    # named above the list but not on it
+        if len(hits) > 1:
+            print("  note %-12s %r holds %d districts \u2014 role %r not attached"
+                  % (county, who, len(hits), role), file=sys.stderr)
+            continue
+        if districts[hits[0]].get("role"):
+            continue                    # the seat's own row already said so
+        districts[hits[0]]["role"] = role
+        print("  role %-12s district %s: %s -> %s"
+              % (county, hits[0], who, role), file=sys.stderr)
+    return districts
+
+
 READINGS = {
     "same-line": _same_line,
     "before": lambda ls: _windowed(ls, WINDOW_BEFORE),
@@ -426,6 +550,7 @@ READINGS = {
 STRICT_READINGS = {
     "before-strict": lambda ls: _windowed_strict(ls, WINDOW_BEFORE),
     "after-strict": lambda ls: _windowed_strict(ls, WINDOW_AFTER),
+    "same-line-lead": _same_line_lead,
 }
 COLUMN_READINGS = {"column-after": True, "column-before": False}
 
@@ -497,6 +622,89 @@ ARCGIS_COUNTIES = [
                         "services/County_Board_of_Supervisors_WFL1/FeatureServer/0"),
     },
 ]
+
+
+# COUNTIES WHOSE PAGE THIS CLIENT CANNOT REACH AND WHOSE ROSTER IS THEREFORE
+# CARRIED AS A DATED DOCUMENT — the Illinois fleet's DOCUMENT_ROSTERS shape
+# (scripts/il_county_commissioners_scraper.py), arriving here for the first time.
+#
+# THE LIVE PAGE IS STILL TRIED FIRST, EVERY RUN, and that is the whole point of
+# putting these here rather than hard-coding a file. Twice now this project has
+# recorded a block that turned out to describe its own vantage: city.milwaukee.gov
+# "refuses every automated client this project can send" was true of the sandbox
+# and false of a GitHub runner (mpd_captains_scraper.py), and the Elections
+# Commission's Cloudflare challenge was measured for a fortnight before the
+# agency behind it simply sent the file. So the day this county answers, the
+# pinned reading runs, the roster refreshes weekly like everyone else's, and the
+# run says the document can be retired. Until then the document ships with its
+# age printed on every run and its date on the card.
+DOCUMENT_COUNTIES = [
+    {
+        "fips": "55065", "name": "Lafayette", "seats": 16,
+        # The reading is NOT a guess. It was written against, and passes 16/16
+        # on, the Internet Archive's own capture of this exact page
+        # (web.archive.org/web/20250214045938/https://www.lafayettecountywi.org/bos),
+        # which is also what witnesses the names below.
+        "strategy": "same-line-lead",
+        "source_url": "https://www.lafayettecountywi.org/bos",
+        "document": "PDF capture of the county's own Board of Supervisors page "
+                    "(lafayettecountywi.org/bos), supplied 2026-08-29",
+        "verified": "2026-08-29",
+        "as_of": "the county's own Board of Supervisors page, captured 2026-08-29",
+        # MEASURED 2026-08-29, bare host and www, with full browser headers:
+        # HTTP 403 carrying Cloudflare's own "Just a moment..." interstitial.
+        # That is a managed challenge, which is an access control; nothing here
+        # attempts to defeat one. The 2026-08-27 re-sweep filed this county
+        # under "answers 403 to a datacenter client and holds it against browser
+        # headers", which was and remains accurate about THIS vantage.
+        "blocker": "Cloudflare managed challenge (HTTP 403) to every client "
+                   "this project can send, measured 2026-08-29",
+        # Districts 1-15 are confirmed by the Internet Archive's 2025-02-14
+        # capture of this same page, name for name. District 16 is the one seat
+        # that has turned over since (the capture has Rita R. Buchholz), which
+        # is precisely why the capture is a witness for the fifteen and never a
+        # source for the sixteenth. The chair is independently witnessed by the
+        # Wisconsin Blue Book 2025-26, which also names Jack Sauer, and the
+        # clerk the document names (Carla M Jacobson) is the clerk this repo
+        # already carries for 55065 from the clerks' association.
+        #
+        # Roles are the page's own: District 3's seat row says "County Board
+        # Chairman", and the administration block above the list names the two
+        # vice-chairs.
+        "members": [
+            (1, "Larry Ludlum", None),
+            (2, "Mark Pinch", None),
+            (3, "Jack Sauer", "Chairman"),
+            (4, "John E. Reichling", None),
+            (5, "Luke McGuire", None),
+            (6, "Jeff Berget", None),
+            (7, "Bob Boyle", None),
+            (8, "Jed Gant", None),
+            (9, "Joe Schutte", None),
+            (10, "Gary Benson", None),
+            (11, "Donna Flannery", None),
+            (12, "Carmen McDonald", "2nd Vice Chair"),
+            (13, "Lee A. Gill", None),
+            (14, "Emmett Reilly", None),
+            (15, "Scott Pedley", "1st Vice Chair"),
+            (16, "David Halloran", None),
+        ],
+    },
+]
+
+
+def document_districts(spec):
+    """The document's rows in the same shape a scrape produces."""
+    seen = [d for d, _, _ in spec["members"]]
+    if sorted(seen) != list(range(1, spec["seats"] + 1)):
+        raise RuntimeError("%s: the document carries districts %s against %d seats"
+                           % (spec["name"], sorted(seen), spec["seats"]))
+    names = [n for _, n, _ in spec["members"]]
+    if len(set(names)) != len(names):
+        raise RuntimeError("%s: the document files one person under two districts"
+                           % spec["name"])
+    return {str(d): {"name": n, "vacant": False, "role": r}
+            for d, n, r in spec["members"]}
 
 
 def _fetch_json(url):
@@ -689,6 +897,10 @@ def scrape_county(fips, name, seats, strategy, url):
         else:
             member, role = found[d]
             out[str(d)] = {"name": member, "vacant": False, "role": role}
+    if strategy == "same-line-lead":
+        # Lafayette names its officers "Name, Role" in a block above the seat
+        # list; the "Role - Name" reader below cannot see that shape.
+        return attach_named_officer_roles(lines, out, name)
     return attach_officer_roles(lines, out, name)
 
 
@@ -721,12 +933,44 @@ def main():
         print("  ok   %-12s %d seats%s" % (name, seats, " (%d vacant)" % vac if vac else ""),
               file=sys.stderr)
 
+    # The document counties: LIVE FIRST, every run — see DOCUMENT_COUNTIES.
+    for spec in DOCUMENT_COUNTIES:
+        if only and spec["fips"] != only:
+            continue
+        entry = {"county": spec["name"], "seats": spec["seats"],
+                 "source_url": spec["source_url"], "scraped_at": scraped_at}
+        try:
+            entry["districts"] = scrape_county(spec["fips"], spec["name"],
+                                               spec["seats"], spec["strategy"],
+                                               spec["source_url"])
+            print("  ok   %-12s %d seats READ LIVE \u2014 the page answered this "
+                  "run, so its DOCUMENT_COUNTIES entry can be retired and the "
+                  "county moved to COUNTIES with the '%s' reading"
+                  % (spec["name"], spec["seats"], spec["strategy"]), file=sys.stderr)
+        except Exception as e:      # noqa: BLE001 - the block is the expected case
+            entry["districts"] = document_districts(spec)
+            entry["asOf"] = spec["as_of"]
+            entry["sourceDocument"] = spec["document"]
+            entry["verified"] = spec["verified"]
+            age = ""
+            try:
+                verified = datetime.date.fromisoformat(spec["verified"])
+                age = ", %d days old" % (datetime.date.today() - verified).days
+            except ValueError:
+                pass
+            print("  NOT RE-READ %-6s %s \u2014 its %d seats come from %s%s. "
+                  "Live attempt: %s"
+                  % (spec["name"], spec["blocker"], spec["seats"],
+                     spec["document"], age, e), file=sys.stderr)
+        counties[spec["fips"]] = entry
+
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     with open(out_path, "w") as f:
         json.dump({"counties": counties, "failures": failures}, f, indent=2, ensure_ascii=False)
     total = sum(c["seats"] for c in counties.values())
     print("wrote %s: %d/%d counties, %d seats%s"
-          % (out_path, len(counties), len(COUNTIES) + len(ARCGIS_COUNTIES), total,
+          % (out_path, len(counties),
+             len(COUNTIES) + len(ARCGIS_COUNTIES) + len(DOCUMENT_COUNTIES), total,
              ", %d county/counties missed" % len(failures) if failures else ""),
           file=sys.stderr)
 

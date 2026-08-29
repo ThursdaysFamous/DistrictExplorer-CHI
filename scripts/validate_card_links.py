@@ -350,6 +350,22 @@ EXPECTED_UNREACHABLE = {
         "unchanged) — the wi mpd-district card links MPD's own district pages for "
         "readers; browsers pass, automation is refused, and the captain names "
         "behind it are why that card names no one (gap mpd-district-leadership)",
+    # THE ENTRY WHOSE "REACHABLE again" WARN HAS SOMETHING SPECIFIC TO DO. The
+    # wi county-board card names Lafayette's sixteen supervisors from a DATED
+    # CAPTURE of the page this host serves, because the host will not serve it
+    # to an automated reader; every card there says so. Measured 2026-08-29 on
+    # both the bare and www hosts with full browser headers: HTTP 403,
+    # `cf-mitigated: challenge`, `server: cloudflare`, a cf-ray, and the
+    # "Just a moment..." interstitial — the site talking, not this sandbox's
+    # proxy. If this host starts answering, the WARN is not paperwork: the
+    # weekly scraper already re-tries the live page on every run, and the day
+    # it succeeds Lafayette moves from DOCUMENT_COUNTIES to COUNTIES and its
+    # capture date leaves the card.
+    "lafayettecountywi.org":
+        "Cloudflare managed challenge (cf-mitigated: challenge, \"Just a moment...\") "
+        "— the wi county-board card links the county's own board page for readers "
+        "and carries its sixteen supervisors as a dated capture; browsers pass, "
+        "automation is refused",
 }
 
 # Some hosts publish nothing at `/` by design (the tile CDNs cited in the map

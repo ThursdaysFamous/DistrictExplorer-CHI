@@ -299,6 +299,34 @@ PROVENANCE = [
         ),
     },
     {
+        "layer": "county-board",
+        "app_file": "county-board-members.json",
+        "source_url": "https://www.lafayettecountywi.org/bos",
+        # THE INVERSION, AND THE ONE HERE WITH A CONCRETE NEXT STEP. Lafayette's
+        # sixteen supervisors are the only rows in county-board-members.json
+        # that are not a weekly re-read: this host answers a Cloudflare managed
+        # challenge, so they ship from a dated capture of the page below and
+        # every card says so. Refusal is therefore the EXPECTED state and reads
+        # OK; REACHABLE is the WARN, and it means the weekly scraper's live
+        # attempt (it tries this page on every run) can start succeeding — at
+        # which point the county moves from DOCUMENT_COUNTIES to COUNTIES in
+        # wi_county_board_scraper.py and the capture date leaves the card.
+        "blocked": ("Cloudflare managed challenge (cf-mitigated: challenge, "
+                    "\"Just a moment...\") to plain clients on both the bare and "
+                    "www hosts, browser headers included — measured 2026-08-29"),
+        "note": (
+            "Lafayette's sixteen supervisors, the instance's one DATED-CAPTURE "
+            "roster. The page publishes every seat in the shape "
+            "\"Larry Ludlum- Supervisor District #1\" — the person, the office, "
+            "then the district — which the `same-line-lead` reading resolves "
+            "16/16 and which none of the four older readings could see at all, "
+            "because they test the text AFTER the district and it ends in the "
+            "word every other county uses as a heading. Fifteen of the sixteen "
+            "names are witnessed against the Internet Archive's capture of the "
+            "same page; the chair against the Blue Book."
+        ),
+    },
+    {
         "layer": "school-site",
         "app_file": "school-sites.json",
         "source_url": "https://services8.arcgis.com/o4NJgD3NfeHnWy06/arcgis/rest/services/Wisconsin_Public_Schools/FeatureServer/20",

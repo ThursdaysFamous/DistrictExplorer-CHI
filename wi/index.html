@@ -8555,10 +8555,17 @@ function initWisconsinExplorer() {
         // page marks a chair that name shipped instead and the row says so.
         var chairSuperseded = o.chair && o.chair.source === "county-board-page";
         if (chairSuperseded) {
+          // A chair whose roster row is a dated capture says so instead: the
+          // page is still the source, but "verified weekly" would be a claim
+          // about this deployment that is only true where the county's host
+          // answers it.
+          var chairNote = o.chair.asOf
+            ? "From " + String(o.chair.asOf) + ", not re-read weekly"
+            : "From the county's own board page (verified weekly)";
           for (var rj = 0; rj < rows.length; rj++) {
             if (rows[rj].badge === "Board Chair") {
               rows[rj].note = (rows[rj].note ? rows[rj].note + " · " : "") +
-                "From the county's own board page (verified weekly)";
+                chairNote;
             }
           }
         }
@@ -8585,8 +8592,11 @@ function initWisconsinExplorer() {
             " — the most recent open statewide publication of these offices; " +
             "appointments and vacancies since then may not appear.";
           if (chairSuperseded) {
-            asOfNote += " The board chair is the exception: it is read weekly " +
-              "from the county's own board page.";
+            asOfNote += o.chair.asOf
+              ? " The board chair is the exception: it comes from " +
+                String(o.chair.asOf) + "."
+              : " The board chair is the exception: it is read weekly " +
+                "from the county's own board page.";
           }
           if (o.contactChecked) {
             asOfNote += " The rows showing a phone number or office-page " +
@@ -8717,6 +8727,20 @@ function initWisconsinExplorer() {
       }
       if (result.seats) {
         rows.push({ label: "Board", value: String(result.seats) + " supervisory districts" });
+      }
+      // A DATED capture, said so. Every other named county here is re-read
+      // weekly from its own page; Lafayette's host answers this project with a
+      // Cloudflare challenge, so its names come from a capture of that same
+      // page on a stated day. Without this row the card would look exactly
+      // like the thirty-one that ARE re-read weekly, which is the difference
+      // between a fact and a claim about how fresh the fact is.
+      if (member && member.asOf) {
+        rows.push({
+          label: "As of",
+          value: "From " + String(member.asOf) + ". The county's website " +
+            "refuses automated readers, so this name is a dated capture " +
+            "rather than the weekly re-read the other named counties get."
+        });
       }
       return renderFieldStack(rows);
     },
