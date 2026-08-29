@@ -101,6 +101,23 @@ run. Every entry in EXPECTED_UNREACHABLE was confirmed to be the SITE talking:
 a Cloudflare "Just a moment…" challenge or an Akamai "Access Denied" page,
 served with that CDN's own headers.
 
+AND THAT CONFIRMATION IS NOT THE WHOLE TEST, which is what `urllib_get` below
+now exists for. The site talking is not the same as the site refusing
+EVERYBODY: measured 2026-08-29, www.sheboygancounty.com answers this probe's
+`requests` session an Akamai 403 and a stdlib `urllib` client HTTP 200, with
+BYTE-IDENTICAL headers — the discriminator is urllib3's TLS ClientHello, below
+HTTP, which no header change reaches. So a 403 (never a 202) gets one second
+opinion from a different stack before it is believed. EXPECT THAT TO MOVE
+SEVERAL LISTED HOSTS TO "REACHABLE AGAIN", AND THAT IS THE POINT of the
+inversion rather than a defect in it: on the first run after this change,
+mchenrycountyil.gov, kendallcountyil.gov, lakecountyil.gov, adamscountyil.gov,
+chicagoelections.gov and myvote.wi.gov all answered a stdlib client 200 —
+McHenry's and Lake's serving their real 120 KB county home pages. Four of
+those are counties whose rosters this repo hand-maintains BECAUSE they were
+recorded as refusing all automated fetch, so the WARN is a real thing for a
+human to act on. city.milwaukee.gov and the three incomplete-chain hosts are
+unmoved.
+
 This script never edits anything. Like validate_sources.py it reports, and
 .github/workflows/validate-sources.yml folds its report into the same monthly
 tracking issue.
@@ -121,6 +138,7 @@ import socket
 import sys
 import time
 import urllib.parse
+import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from scraper_common import UA_CHROME_WIN_126  # noqa: E402  (shared machinery — do not fork)
 
@@ -688,8 +706,13 @@ def meta_refresh_target(text, url):
     return urllib.parse.urljoin(url, at.group(1).strip()) if at else None
 
 
-def peek_body(url):
+def peek_body(url, via_stdlib=False):
     """(size, first few KB of text) for an HTML-ish answer, else None.
+
+    `via_stdlib` fetches through the stdlib client instead, for a host that
+    answers this probe's `requests` session a refusal and a stdlib one the
+    page (see `urllib_get`). Without it a site whose 403 the probe just looked
+    past reads as HOLLOW instead — the body measured is the refusal page.
 
     Reads at most HOLLOW_PEEK_BYTES so a megabyte PDF costs nothing, and
     measures only HTML-ish answers — a 400-byte SVG or a small PDF is a
@@ -697,6 +720,22 @@ def peek_body(url):
     one; otherwise the peeked length is the measurement, which is exact for
     anything this small.
     """
+    if via_stdlib:
+        try:
+            req = urllib.request.Request(url, headers=SCRAPER_HEADERS)
+            with urllib.request.urlopen(req, timeout=HTTP_TIMEOUT) as r:
+                ctype = (r.headers.get("Content-Type") or "").lower()
+                if ctype and "html" not in ctype and "text/plain" not in ctype:
+                    return None
+                head = r.read(HOLLOW_PEEK_BYTES) or b""
+                declared = r.headers.get("Content-Length")
+        except Exception:
+            return None
+        try:
+            size = int(declared) if declared is not None else len(head)
+        except (TypeError, ValueError):
+            size = len(head)
+        return size, head.decode("utf-8", "replace")
     try:
         resp = requests.get(url, headers=headers_for(url), timeout=HTTP_TIMEOUT,
                             allow_redirects=True, stream=True)
@@ -719,7 +758,7 @@ def peek_body(url):
     return size, head.decode("utf-8", "replace")
 
 
-def hollow_body(url, followed=False):
+def hollow_body(url, followed=False, via_stdlib=False):
     """Does this 200 actually carry a page? Returns a detail string, or None.
 
     A SMALL PAGE THAT IS A META REFRESH IS NOT HOLLOW — it is a redirect, and
@@ -737,7 +776,7 @@ def hollow_body(url, followed=False):
     fine, the same failing-open posture peek_body already takes — this test
     creates FAILs, so it errs quiet.
     """
-    peeked = peek_body(url)
+    peeked = peek_body(url, via_stdlib=via_stdlib)
     if peeked is None:
         return None
     size, raw = peeked
@@ -745,7 +784,7 @@ def hollow_body(url, followed=False):
         return None
     target = None if followed else meta_refresh_target(raw, url)
     if target:
-        onward = hollow_body(target, followed=True)
+        onward = hollow_body(target, followed=True, via_stdlib=via_stdlib)
         return None if onward is None else "%s, via a meta refresh to %s" % (onward, target)
     text = raw.lower()
     for marker, what in HOLLOW_MARKERS:
@@ -755,6 +794,32 @@ def hollow_body(url, followed=False):
         return "HTTP 200 with a COMPLETELY EMPTY body"
     return ("HTTP 200, only %d bytes — too small to be a page, and it carries no "
             "marker naming what it is" % size)
+
+
+# The second opinion for a 403: a different HTTP stack, with the client hints
+# a real Chromium sends. See its one caller in `probe` for the measurement.
+SCRAPER_HEADERS = {
+    "User-Agent": UA_CHROME_WIN_126,
+    "Accept": "text/html,application/xhtml+xml,application/pdf,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Accept-Encoding": "identity",
+    "sec-ch-ua": '"Chromium";v="126", "Not;A=Brand";v="24"',
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": '"Windows"',
+}
+
+
+def urllib_get(url):
+    """(status, final_url) if a stdlib client gets a clean answer, else None."""
+    try:
+        req = urllib.request.Request(url, headers=SCRAPER_HEADERS)
+        with urllib.request.urlopen(req, timeout=HTTP_TIMEOUT) as resp:
+            if resp.status >= 400 or resp.status == 202:
+                return None
+            resp.read(1)
+            return resp.status, resp.url
+    except Exception:      # noqa: BLE001 - a second opinion that fails is no opinion
+        return None
 
 
 def probe(url, resolved=None):
@@ -825,6 +890,28 @@ def probe(url, resolved=None):
         except Exception:
             pass
 
+    if result and result["state"] == "blocked" and result.get("detail") != "HTTP 202 — bot-management interstitial":
+        # A REFUSAL BY THIS PROBE IS NOT ALWAYS A REFUSAL BY THE SITE, and the
+        # discriminator can sit below HTTP. Measured 2026-08-29 on
+        # www.sheboygancounty.com, whose Akamai bot manager answers stdlib
+        # `urllib` 200 and `requests` 403 with BYTE-IDENTICAL headers — the
+        # scraper reads that county every week while this probe called all 28
+        # of its links blocked. urllib3's TLS ClientHello differs from the
+        # stdlib ssl module's and the manager fingerprints it, so header
+        # tweaks reproduce nothing; the second opinion has to be a different
+        # stack. It also wants the Sec-CH-UA client hints a real Chromium
+        # sends beside its UA (wi/scripts/wi_county_board_scraper.py's UA
+        # comment carries the leave-one-out measurement). Only a 403/401 is
+        # retried, and only once — 202 stays blocked, because an interstitial
+        # is a document about the block rather than a fingerprint of us.
+        second = urllib_get(url)
+        if second is not None:
+            result = {"state": "ok", "stdlib": True,
+                      "detail": "%s to this probe, HTTP %d to a stdlib client "
+                                "(a client fingerprint, not a refusal)"
+                                % (result["detail"], second[0]),
+                      "final": second[1]}
+
     if result and result["state"] == "unreachable" and (result.get("detail") or "").startswith("HTTP 5"):
         # One retry, then believe it. A monthly probe should not report a
         # restart as a dead link.
@@ -851,7 +938,7 @@ def probe(url, resolved=None):
     # Last, because it is the only test that needs the BODY: a link can answer
     # 200 and still show a reader nothing at all (see the docstring).
     if result and result["state"] == "ok":
-        hollow = hollow_body(url)
+        hollow = hollow_body(url, via_stdlib=bool(result.get("stdlib")))
         if hollow:
             result = {"state": "hollow", "detail": hollow, "final": result.get("final")}
     return result or {"state": "unreachable", "detail": "no response"}

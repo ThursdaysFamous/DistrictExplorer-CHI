@@ -414,6 +414,64 @@ geometry (26 districts, numbered 1..26) is what re-checks the shape each week.
     formatting. STREET ADDRESSES ARE NOT CARRIED — the page prints a home
     address for every supervisor, and a supervisor's house is not an office
     location (the rule Taylor set).
+  * The rest could not be read: Lincoln answers 403, and the remainder
+    publish their members as PDFs, images or prose with no district column —
+    but see the next section before trusting that list, because eight of the
+    nine counties it used to hold turned out to answer.
+
+WHAT THE HEADER FIX RETIRED (2026-08-29)
+----------------------------------------
+A bucket of NINE counties sat here under the sentence "answer 403 to a
+datacenter client and hold it against browser headers", and that sentence was
+wrong about the headers, not about the counties. See the UA dict below for the
+measurement. Re-probed with the corrected client, EIGHT OF THE NINE ANSWER:
+Sheboygan (which ships here), Marathon, Outagamie, Fond du Lac, Monroe and
+Rock consistently, La Crosse and Lafayette intermittently. Only LINCOLN still
+refuses.
+
+THE OTHER SEVEN ARE NOT IN THE TABLE, and this is what was measured of each on
+2026-08-29 so the next pass reads a measurement rather than re-deriving one:
+
+  * ROCK (/government/county-board-of-supervisors) resolves 29 of 29 seats
+    under `before`, `after` AND both strict readings. That is exactly the
+    ambiguity this file pins directions to avoid, so Rock's direction has to
+    come from READING the page — never from whichever reading resolves.
+  * FOND DU LAC (/government/county-board-supervisors on the WWW host)
+    resolves 20 of 25 as `same-line`. Partial is not shippable, so the five it
+    misses are the question.
+  * MONROE (/government/county-board-of-supervisors/districts-supervisors) is
+    a COLUMN page: 13 of 16 forward, 15 of 16 backward. Neither is complete.
+  * MARATHON and OUTAGAMIE answer, and the board pages their own front pages
+    link yield no district-keyed reading at all — each needs its member list
+    LOCATED before anything can be said about its shape.
+  * LA CROSSE and LAFAYETTE answered one probe and refused the next within the
+    same hour. That is the class Outagamie was already recorded under, and a
+    roster this client cannot re-verify weekly does not ship.
+
+Fond du Lac carries one more measurement worth keeping: the county-board
+DIRECTORY had it at `http://fdlco.wi.gov/`, which answers 200 with a default
+"IIS Windows Server" placeholder — 703 bytes, no county content. The county is
+on the WWW host over HTTPS. A 200 is not a page.
+
+TAYLOR: A CAPTCHA HIDING A DIRECTORY
+------------------------------------
+Taylor was filed under "publishes nothing readable" only because nothing here
+can SEE the page. It publishes a County Board directory at
+co.taylor.wi.us/directory/county-board/ that is district-keyed and carries a
+name, a county e-mail, a street address and a phone per supervisor — richer
+than most of the counties that do ship. The block is the host, not the county:
+every path on co.taylor.wi.us answers HTTP 202 with a 196-byte meta-refresh to
+`/.well-known/sgcaptcha/` and an `sg-captcha: challenge` header, and the three
+other Taylor hosts tried (taylorcountywi.gov, its www, and gis.co.taylor.wi.us)
+do not resolve at all. A captcha is an access control and is not defeated here,
+so NO WEEKLY SCRAPE OF TAYLOR IS POSSIBLE: its seventeen seats ride
+DOCUMENT_ROSTERS below, read from that page in an ordinary browser by the
+operator, printing a dated NOT RE-READ line every run (the Edwards/Wabash
+pattern in Illinois's il_county_commissioners_scraper.py) — never this table.
+
+The first paste covered districts 1-12 of 17 and the all-seats-or-nothing rule
+held the county back until 13-17 arrived: 12 of 17 would have read as a
+complete board with five empty seats.
 
 NINE OF THOSE "UNREADABLE" COUNTIES WERE PUBLISHING ALL ALONG (2026-08-27)
 --------------------------------------------------------------------------
@@ -654,6 +712,14 @@ halves — a leading 1-2 digit number AND a remainder that reads as a name — i
 what makes a bare-number reading safe here, and it is why this is its own
 strategy rather than a loosening of `_column`.
 
+THE OFFICERS BLOCK IS PINNED THE SAME WAY, and for the same reason one page
+later: `attach_officer_roles` DETECTS its direction and refuses when both
+neighbours read as names, which is right for a page with one officer and blind
+to an alternating "name / role / name / role" run — Sheboygan's chair sits
+between two names and was silently dropped while its vice chair attached.
+OFFICER_PAGES pins that county's direction, and its URL besides, because a
+county may state its officers on a page other than its district list.
+
 The strict readings exist because a district whose own row yields no readable
 name reaches past the next heading and takes ITS name: Rusk prints an INDEX of
 nineteen bare "District #N" links above its roster, and Richland's rows end in
@@ -690,7 +756,9 @@ are dropped by the same builder for the same reason.
 
 A COUNTY THAT DOES NOT FULLY RESOLVE YIELDS NOTHING. Partial output is worse
 than none here: a card showing 18 of 21 districts reads as a complete board
-with three empty seats.
+with three empty seats. The same rule governs the per-supervisor CONTACT a
+county publishes (MEMBER_PAGES), with floors set to catch a page template
+reshaping rather than one supervisor's row changing.
 
 OFFICERS PUBLISHED ABOVE THE DISTRICT LIST (added 2026-08-27)
 --------------------------------------------------------------
@@ -922,11 +990,41 @@ import urllib.request
 from pypdf import PdfReader
 
 DEFAULT_OUT = os.path.join(os.path.dirname(__file__), ".cache", "wi_county_boards_raw.json")
+# A CHROMIUM USER-AGENT WITHOUT CHROMIUM'S CLIENT HINTS IS A CLIENT THAT
+# CONTRADICTS ITSELF, and Akamai's bot manager scores exactly that. This dict
+# used to carry the first three headers alone, and nine counties were recorded
+# below as answering 403 "and holding it against browser headers" — but every
+# real Chromium sends `Sec-CH-UA`, `Sec-CH-UA-Mobile` and `Sec-CH-UA-Platform`
+# beside that UA, and an `Accept-Encoding` of some kind, so the header set was
+# never a browser's. Measured on Sheboygan 2026-08-29 by leave-one-out over a
+# full Chrome header set: the UA string is not the variable (the old
+# Chrome/124.0 string works unchanged once the hints are present) and neither
+# is anything Sec-Fetch-*; adding the three hints plus Accept-Encoding turns a
+# reproducible 403 into a reproducible 200. Re-probing the other eight
+# recorded counties the same day, seven more answered — see WHAT THE HEADER FIX
+# RETIRED above, including why the first re-probe read as four.
+#
+# `Accept-Encoding: identity` rather than gzip on purpose: urllib does not
+# decompress for you, and `fetch` below decodes the body as text. The header's
+# PRESENCE is what the scorer wants; its value is free.
+#
+# THE HEADERS ARE NOT THE WHOLE FINGERPRINT, and the difference is worth
+# knowing before anyone ports this fix into another tool: with these exact
+# headers Sheboygan's host answers stdlib `urllib` 200 and `requests` 403.
+# curl behaves like urllib. The discriminator is below HTTP — urllib3's TLS
+# ClientHello differs from the stdlib ssl module's and the manager
+# fingerprints it — so copying this dict into a requests-based script
+# reproduces nothing. wi/scripts/validate_sources.py probes these two rows
+# through their own `scraper_get` for exactly that reason.
 UA = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
                   "(KHTML, like Gecko) Chrome/124.0 Safari/537.36",
     "Accept": "text/html,application/xhtml+xml,*/*;q=0.8",
     "Accept-Language": "en-US,en;q=0.9",
+    "Accept-Encoding": "identity",
+    "sec-ch-ua": '"Chromium";v="124", "Not;A=Brand";v="24"',
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": '"Windows"',
 }
 
 # The headers a Chrome NAVIGATION sends, for the counties whose edge refuses
@@ -1054,6 +1152,10 @@ COUNTIES = [
      "https://ruskcounty.org/supervisors"),
     ("55115", "Shawano", 27, "before-strict",
      "https://www.co.shawano.wi.us/county_board/"),
+    # --- the 2026-08-29 header fix: a county recorded unreadable for a year ---
+    ("55117", "Sheboygan", 25, "after",
+     "https://www.sheboygancounty.com/departments/county-board/"
+     "county-board-supervisors"),
     ("55121", "Trempealeau", 17, "column-before",
      "https://co.trempealeau.wi.us/government/agendas_minutes/standing_committees/"
      "trempealeau_county_board_of_supervisors.php"),
@@ -1106,7 +1208,11 @@ COUNTIES = [
     # Reads `after`: "District 1" / "Cathy Thompson" / the district's map link,
     # phone, county e-mail and committee. Its host is in HONEST_UA_HOSTS.
     ("55087", "Outagamie", 36, "after",
-     "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"),]
+     "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"),
+    # --- the 2026-08-29 header fix: a county recorded unreadable for a year ---
+    ("55117", "Sheboygan", 25, "after",
+     "https://www.sheboygancounty.com/departments/county-board/"
+     "county-board-supervisors"),]
 
 # Counties whose own host refuses this client on every path and every header,
 # whose page the Internet Archive nonetheless holds. The ladder still asks the
@@ -3665,6 +3771,23 @@ def scrape_witnessed_document(spec):
 #
 # THE JOIN IS ON A FULL NAME AND MUST BE UNIQUE, and every join PRINTS. A role
 # guessed onto the wrong supervisor is worse than no role at all.
+#
+# A COUNTY MAY PUBLISH ITS OFFICERS ON A DIFFERENT PAGE FROM ITS DISTRICT LIST.
+# Sheboygan's roster table names 25 supervisors and no officer at all; its
+# County Board landing page — the roster page's own parent — prints
+# "Keith Abler / Chairperson / Curt Brauer / Vice Chairperson". So the officer
+# scan takes its OWN page here, fetched separately, while the districts still
+# come from the roster page. `reading` pins the direction the same way every
+# roster reading in this file is pinned, and for the same reason: see
+# `attach_officer_roles`. It is the SAME field Rock pins in OFFICER_NAME_SIDE,
+# under that field's name: Sheboygan arrived calling it "above"/"below" and Rock
+# "before"/"after", and two names for one mechanism is how a reader comes to
+# believe there are two.
+OFFICER_PAGES = {
+    "55117": {"url": "https://www.sheboygancounty.com/departments/county-board/",
+              "name_side": "before"},
+}
+
 OFFICER_LINE = re.compile(r"^\s*(%s)\s*(?:[-–—:]\s*(.+))?$" % _ROLE, re.I)
 # Monroe heads its two officers "County Board Chair" and "County Board
 # Vice-Chair", which `_ROLE` (County? + ordinal? + Vice? + Chair) cannot match,
@@ -3695,6 +3818,9 @@ SPLIT_OFFICER = re.compile(r"^\s*:\s*")
 def attach_officer_roles(lines, districts, county, name_side=None,
                          officer_line=OFFICER_LINE):
     """Give a member the role their county states in its officers block.
+
+    `source_url` is set only where the role came off a DIFFERENT page from the
+    district list, and lands on the row as `role_url`.
 
     `name_side` pins which neighbour of a bare role line carries its name, for
     the counties that print officers as a run of consecutive name/role pairs —
@@ -3769,6 +3895,12 @@ def attach_officer_roles(lines, districts, county, name_side=None,
             if districts[d].get("role"):
                 break                       # the row already said so
             districts[d]["role"] = role
+            if source_url:
+                # the role came off a DIFFERENT page from the district list, so
+                # the row records where — the officer builder links a
+                # superseded chair to where the county states it, and
+                # Sheboygan's roster table states no officer at all
+                districts[d]["role_url"] = source_url
             print("  role %-12s district %s: %s -> %s"
                   % (county, d, who, role), file=sys.stderr)
             break
@@ -3788,6 +3920,96 @@ def attach_officer_roles(lines, districts, county, name_side=None,
 # vacancies, or loses a second row, the county fails its count guard as before
 # and nothing is inferred.
 ELIMINATION_VACANCY = {"55075"}      # Marinette
+
+# COUNTIES THAT PUBLISH A PAGE PER SUPERVISOR. Sheboygan's roster table links
+# each name to its own district page, and that page — not the table — carries
+# the county e-mail and the contact phone. Twenty-five extra fetches a week buy
+# 24 official e-mail addresses on a file that carried 56 in total before them,
+# so the trade is worth making; nothing else in this table needs it.
+#
+# THE ADDRESS ON THOSE PAGES IS NOT CARRIED, and that is the same rule Taylor's
+# document roster states: the "Contact Information" block leads with the
+# supervisor's HOME ("W6259 Hammann Road", "N185 County Road DE"), and a
+# supervisor's house is not an office location. The published contact phone and
+# the county e-mail are official contact details and do ship.
+#
+# THE PAGE IS A WITNESS BEFORE IT IS A SOURCE. A district page is used only if
+# its own heading names the person the table filed under that district — a
+# fold on first name + surname, because the two surfaces style the same person
+# apart (the table's "Thomas G. Wegner" is the page's "Thomas Wegner"). The
+# NAME always comes from the table; the page only ever adds contact.
+#
+# THE FLOORS DETECT A RESHAPE, NOT AN EDIT. A supervisor genuinely without a
+# published e-mail moves these by one (district 3 has none today); a page
+# template changing moves all 25 at once. Below a floor the county fails its
+# run rather than shipping a thin contact set, because the roster retention
+# gate CANNOT catch this one: county-board-members.json has more than 200
+# top-level keys, so that gate measures it file-level, and Sheboygan's 24
+# e-mails vanishing reads there as 80 -> 56 — a 30% dip that passes every
+# threshold it has. A guard has to live where the field does.
+MEMBER_PAGES = {
+    "55117": {
+        "url": "https://www.sheboygancounty.com/departments/county-board/"
+               "county-board-supervisors/district-%d",
+        # only the COUNTY's own domain: a supervisor's page can carry a
+        # personal or employer address too, and that is not an office contact
+        "email_domain": "@sheboygancounty.com",
+        # measured 2026-08-29: 25 witnessed, 24 e-mails, 25 phones
+        "floors": {"witness": 23, "email": 20, "phone": 22},
+    },
+}
+_MAILTO = re.compile(r"(?i)mailto:([^\"'?<>\s]+)")
+_PHONE = re.compile(r"Phone:\s*(\(?\d{3}\)?[\s.-]*\d{3}[-.\s]?\d{4})")
+# The heading is "<Name> - District <n>"; anchored on the district number so a
+# page that lists several people can only ever answer for its own district.
+_MEMBER_HEADING = "(?:^|[>\\s])([A-Z][^|<>\\n]{2,42}?)\\s*[-\u2013\u2014]\\s*District\\s+%d\\b"
+
+
+def member_pages(spec, districts, county):
+    """Add the contact each supervisor's OWN page publishes, witnessed by it."""
+    got = {"witness": 0, "email": 0, "phone": 0}
+    for key, row in sorted(districts.items(), key=lambda kv: int(kv[0])):
+        if row.get("vacant") or not row.get("name"):
+            continue
+        url = spec["url"] % int(key)
+        try:
+            page = fetch(url)
+        except Exception as e:      # noqa: BLE001 - one page never fails the county
+            print("  note %-12s district %s page unfetched (%s)"
+                  % (county, key, e), file=sys.stderr)
+            continue
+        flat = " ".join(html_lib.unescape(_TAG.sub(" ", page)).split())
+        m = re.search(_MEMBER_HEADING % int(key), flat)
+        if not m or _fold_person(m.group(1)) != _fold_person(row["name"]):
+            print("  note %-12s district %s page names %r, the table names %r "
+                  "— no contact taken"
+                  % (county, key, (m.group(1).strip() if m else None), row["name"]),
+                  file=sys.stderr)
+            continue
+        got["witness"] += 1
+        row["url"] = url
+        domain = spec["email_domain"].lower()
+        mail = [a for a in _MAILTO.findall(html_lib.unescape(page))
+                if a.lower().endswith(domain)]
+        if mail:
+            row["email"] = mail[0]
+            got["email"] += 1
+        phone = _PHONE.search(flat)
+        if phone:
+            row["phone"] = " ".join(phone.group(1).split())
+            got["phone"] += 1
+        time.sleep(0.3)
+    print("  pages %-12s %d witnessed, %d e-mails, %d phones of %d seats"
+          % (county, got["witness"], got["email"], got["phone"], len(districts)),
+          file=sys.stderr)
+    short = {k: (got[k], v) for k, v in spec["floors"].items() if got[k] < v}
+    if short:
+        raise RuntimeError(
+            "%s: the per-supervisor pages resolved %s against the pinned floors "
+            "— the page template has changed shape; re-read one before shipping"
+            % (county, ", ".join("%s %d (floor %d)" % (k, a, b)
+                                 for k, (a, b) in sorted(short.items()))))
+    return districts
 
 
 def eliminated_vacancy(lines, seats, found, vacant, county):
@@ -4209,10 +4431,21 @@ def scrape_county(fips, name, seats, strategy, url):
         # Manitowoc links a page per supervisor; the contact it publishes lives
         # there and nowhere on the list page.
         attach_profiles(page_html, url, out, name)
+    if fips in MEMBER_PAGES:
+        out = member_pages(MEMBER_PAGES[fips], out, name)
     if strategy == "same-line-lead":
         # Lafayette names its officers "Name, Role" in a block above the seat
         # list; the "Role - Name" reader below cannot see that shape.
         return attach_named_officer_roles(lines, out, name), read_from
+    officers = OFFICER_PAGES.get(fips)
+    if officers:
+        # the county states its officers somewhere other than the page its
+        # district list came from, so the officer scan takes THAT page and the
+        # row records where the role was read
+        return attach_officer_roles(
+            to_lines(fetch(officers["url"], headers_for(fips, officers["url"]))),
+            out, name, officers.get("name_side"),
+            OFFICER_LINE_BY_COUNTY.get(fips, OFFICER_LINE), officers["url"]), read_from
     return attach_officer_roles(lines, out, name, OFFICER_NAME_SIDE.get(fips),
                                 OFFICER_LINE_BY_COUNTY.get(fips, OFFICER_LINE)), read_from
 

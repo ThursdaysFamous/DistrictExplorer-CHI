@@ -159,6 +159,17 @@ def main():
                 # contact detail and does ship, and this loop copied `email`
                 # and `url` and nothing else. Adding a field to the scraper is
                 # not adding it to the app — the two halves have to agree.
+                    # where the county STATES the role, when that is not the
+                    # page the district list came from (Sheboygan names its
+                    # chair on the board's landing page, not its roster table)
+                    if member.get("role_url"):
+                        row["roleSourceUrl"] = member["role_url"]
+                # Contact rides only where its county published it: the two
+                # county-GIS rosters carry it as feature attributes, Taylor's
+                # comes with its document, and Sheboygan's off the page each
+                # supervisor has of their own. A supervisor's ADDRESS is never
+                # among these even where the county prints one — it is their
+                # home, not an office (the scraper's MEMBER_PAGES comment).
                 if member.get("email"):
                     row["email"] = member["email"]
                 if member.get("phone"):

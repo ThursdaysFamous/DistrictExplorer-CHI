@@ -291,6 +291,13 @@ def main():
                 # what changes is only what the card is entitled to claim.
                 if page.get("asOf"):
                     new_chair["asOf"] = page["asOf"]
+                # `roleSourceUrl` when the county states the chair somewhere
+                # other than its district list — a reader checking the title
+                # has to land where the title is published, not merely on a
+                # page of the same county's board
+                page_url = page.get("roleSourceUrl") or page.get("sourceUrl")
+                if page_url:
+                    new_chair["sourceUrl"] = page_url
                 if "seats" in chair:
                     new_chair["seats"] = chair["seats"]
                 chair = new_chair
