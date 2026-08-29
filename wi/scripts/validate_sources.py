@@ -273,6 +273,23 @@ PROVENANCE = [
     {
         "layer": "county-board",
         "app_file": "county-board-members.json",
+        "source_url": "https://www.co.adams.wi.us/government/county-board",
+        "note": (
+            "Adams's 20 supervisors, the one roster that rides a DOCUMENT and "
+            "still scrapes weekly: the county clerk publishes a public "
+            "directory PDF with a text layer, and this page is where the county "
+            "links it. THE PAGE IS THE ROW BECAUSE THE FILE IS NOT STABLE — the "
+            "clerk republishes each edition at a new Drive id, so the scraper "
+            "resolves the `County Directory` link here on every run rather than "
+            "pinning a file, and this page going dead (or losing that link) is "
+            "the signal. Note this host serves a full 259 KB of site chrome on "
+            "a 404, so a body-length probe cannot tell a live page from a "
+            "missing one; the status is what counts."
+        ),
+    },
+    {
+        "layer": "county-board",
+        "app_file": "county-board-members.json",
         "source_url": "https://www.browncountywi.gov/government/county-board-of-supervisors/",
         "note": (
             "The supervisor roster — 29 counties' own board pages plus two county GIS layers (rows above), scraped weekly by "

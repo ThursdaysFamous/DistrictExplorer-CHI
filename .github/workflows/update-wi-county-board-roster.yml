@@ -2,10 +2,13 @@ name: Update WI county board roster
 
 # Weekly refresh of the Wisconsin county board supervisors
 # (wi/data/app/county-board-members.json, read by wi/index.html's County Board
-# District card). Re-scrapes the 31 counties that publish a readable
-# district-keyed member list — 20 board pages plus Milwaukee's and Racine's
-# own GIS layers (Milwaukee witnessed against the county's Legistar API) — and, if anything changed, opens a PR rather than committing to
-# main — officeholder data should get a human look before it ships.
+# District card). Re-scrapes the 33 counties that publish a readable
+# district-keyed member list — 29 board pages, Milwaukee's and Racine's own GIS
+# layers (Milwaukee witnessed against the county's Legistar API), Taylor's
+# roster carried as a dated document because its host answers a captcha, and
+# Adams's read out of the county clerk's own published directory PDF — and, if
+# anything changed, opens a PR rather than committing to main — officeholder
+# data should get a human look before it ships.
 #
 # The scraper reads each county's page with its reading direction PINNED, and a
 # county whose page has reshaped fails its own count guard and is SKIPPED for
@@ -35,17 +38,21 @@ jobs:
         with:
           python-version: "3.x"
 
-      # The board scraper itself is stdlib; pdfplumber is for the officer
-      # step below, which re-parses the Blue Book's officer tables.
+      # pypdf is the board scraper's own dependency now: Adams publishes its
+      # roster as a directory PDF, and the parse needs pypdf's LAYOUT mode (a
+      # flattened read returns that document one word per line and loses the
+      # only thing that matters — that a supervisor's name, phone and mailbox
+      # share a printed line). pdfplumber is for the officer step below, which
+      # re-parses the Blue Book's officer tables.
       - name: Install dependencies
-        run: pip install -c wi/scripts/requirements.txt pdfplumber
+        run: pip install -c wi/scripts/requirements.txt pdfplumber pypdf
 
-      # Stdlib only — the scraper fetches with urllib and the builder reads the
-      # shipped geometry off disk.
-      - name: Scrape the 31 counties that publish a readable member list
+      # Otherwise stdlib — the scraper fetches with urllib and the builder reads
+      # the shipped geometry off disk.
+      - name: Scrape the 33 counties that publish a readable member list
         run: python3 wi/scripts/wi_county_board_scraper.py
 
-      # Refuses to write below its floors (29 counties, 645 seats) and checks
+      # Refuses to write below its floors (31 counties, 680 seats) and checks
       # every county's seats against the district geometry actually shipped, so
       # the two publishers have to agree before this lands.
       - name: Rebuild the county board roster

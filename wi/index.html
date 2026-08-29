@@ -8629,8 +8629,10 @@ function initWisconsinExplorer() {
    *
    * THE SUPERVISOR IS NAMED WHERE A COUNTY PUBLISHES ONE, AND NOWHERE ELSE.
    * Wisconsin publishes no statewide roster, so the people come from each
-   * county's own page: 20 of the 72 publish a district-keyed member list a
-   * parser can read (437 seats), and the other 52 do not — three publish
+   * county's own surface: 33 of the 72 publish a district-keyed member list
+   * this can read (709 seats) — 29 board pages, Milwaukee's and Racine's own
+   * GIS layers, Taylor's directory page as a dated document, and Adams's
+   * clerk-published directory PDF — and the other 39 do not: three publish
    * district MAPS with no name on them, and the rest are unreadable or
    * publish prose. A district in an unnamed county keeps the honest card:
    * the district, and a link to the county board. A seat the county itself
@@ -8698,27 +8700,45 @@ function initWisconsinExplorer() {
         ? "District " + String(result.district) : "Unknown district";
     },
     render: function (result) {
-      var rows = [];
-      rows.push({
+      // County -> supervisor -> board size, the fleet's card order (identity,
+      // then the person, then context). The supervisor sits between the two
+      // field stacks rather than inside one because a NAMED supervisor is a
+      // PERSON row: the counties that publish contact publish it per
+      // supervisor — Adams's and Taylor's directories carry a county mailbox
+      // and a phone, Milwaukee's and Racine's GIS layers an e-mail and
+      // Milwaukee's a profile page — and a field stack has nowhere to put a
+      // tel: or a mailto:. The contact line is null when empty, so the 29
+      // counties that publish only a name render exactly as they did before.
+      var wrap = cardEl("div", "card-flush");
+      var member = result.member;
+      var rows = [{
         label: "County",
         value: result.county ? String(result.county) + " County" : "Unknown county",
         primary: true
-      });
-      var member = result.member;
+      }];
       if (member && member.vacant) {
         // The county says nobody holds this seat. Saying so is the honest
         // answer; omitting the row would read as "we could not find out".
         rows.push({ label: "Supervisor", value: "Vacant" });
-      } else if (member && member.name) {
-        rows.push({
-          label: member.role ? "Supervisor (" + String(member.role) + ")" : "Supervisor",
-          value: String(member.name)
-        });
+      }
+      wrap.appendChild(renderFieldStack(rows));
+      if (member && !member.vacant && member.name) {
+        wrap.appendChild(renderPersonRows([{
+          name: String(member.name),
+          badge: member.role ? String(member.role) : null,
+          phone: member.phone ? String(member.phone) : null,
+          email: member.email ? String(member.email) : null,
+          links: member.profileUrl
+            ? [{ label: "Profile", url: member.profileUrl }]
+            : null
+        }]));
       }
       if (result.seats) {
-        rows.push({ label: "Board", value: String(result.seats) + " supervisory districts" });
+        wrap.appendChild(renderFieldStack([
+          { label: "Board", value: String(result.seats) + " supervisory districts" }
+        ]));
       }
-      return renderFieldStack(rows);
+      return wrap;
     },
     primaryLink: function (result) {
       // Prefer the page the supervisor's own name was read from, so a reader
