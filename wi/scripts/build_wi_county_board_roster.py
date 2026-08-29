@@ -11,21 +11,21 @@ That is what stops a county's page reorganising into a plausible-but-wrong
 number of members — the two files were built from different publishers (the
 county's own page, and LTSB's statewide filing) and have to agree.
 
-Thirty-two of Wisconsin's 72 counties publish a district-keyed member list; the
-other 40 are recorded in the Data gaps panel and their cards keep linking the
-county board rather than naming anybody. See the scraper's docstring for what
-each of the other 40 actually publishes.
+Thirty-four of Wisconsin's 72 counties have a district-keyed member list this
+can obtain; the other 38 are recorded in the Data gaps panel and their cards
+keep linking the county board rather than naming anybody. See the scraper's
+docstring for what each of the other 38 actually publishes.
 
 A COUNTY THAT SHIPPED LAST WEEK MAY NOT VANISH QUIETLY. The scraper is built so
 that one county's bad day never fails the run — which is right for the scrape
 and wrong for the file, because a county that silently drops out takes its
 whole board off the map and leaves a diff that reads like a routine refresh.
-The floors below cannot catch it (losing 29 of 701 seats clears both), and
-neither can the repo's roster-retention gate, which measures this file whole
-because it carries more than 200 top-level keys. So the builder compares the
-new roster against the SHIPPED one county by county and refuses to write when
-one disappears. Dropping a county on purpose is `--allow-drop <County>`, which
-says so on the record instead of in a silence.
+The floors below cannot catch it (losing Price's 13 of 748 seats clears both),
+and neither can the repo's roster-retention gate, which measures this file
+whole because it carries more than 200 top-level keys. So the builder compares
+the new roster against the SHIPPED one county by county and refuses to write
+when one disappears. Dropping a county on purpose is `--allow-drop <County>`,
+which says so on the record instead of in a silence.
 
 Usage:
     python3 wi/scripts/build_wi_county_board_roster.py
@@ -43,8 +43,8 @@ GEOMETRY = os.path.join(APP_DATA_DIR, "county-supervisory-districts.json")
 RAW = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache", "wi_county_boards_raw.json")
 OUT = os.path.join(APP_DATA_DIR, "county-board-members.json")
 
-MIN_COUNTIES = 30      # 32 ship one (30 pages + 2 county GIS layers); tolerates two dark
-MIN_SEATS = 674        # 701 today (662 page-scraped + Milwaukee 18 + Racine 21)
+MIN_COUNTIES = 32      # 34 ship one (31 pages + 2 county GIS layers + Taylor by document); tolerates two dark
+MIN_SEATS = 719        # 748 today (692 page-scraped + Milwaukee 18 + Racine 21 + Taylor 17)
 
 
 def shipped_counties():
@@ -121,7 +121,7 @@ def main():
         raise RuntimeError("%d seats resolved, floor is %d" % (total, MIN_SEATS))
 
     # See the docstring: the floors above are a fleet-sized net, and one county
-    # falling out of a 32-county file slips straight through it.
+    # falling out of a 34-county file slips straight through it.
     was = shipped_counties()
     gone = sorted(set(was) - {e["county"] for e in counties.values()} - allowed_drops)
     if gone:
@@ -136,9 +136,9 @@ def main():
         # A county read from anywhere but its own live page says so on the log,
         # so the weekly PR's reviewer can see which rung of the ladder answered.
         read_from = entry.get("read_from", "live")
-        if read_from != "live":
+        if read_from.startswith("archive:"):
             print("  %s: read from the Internet Archive capture of %s"
-                  % (entry["county"], read_from.split(":", 1)[-1][:8]), file=sys.stderr)
+                  % (entry["county"], read_from.split(":", 1)[1][:8]), file=sys.stderr)
 
     payload = json.dumps(roster, indent=1, sort_keys=True) + "\n"
     print("county-board-members: %d counties, %d seats (%d named, %d vacant)"

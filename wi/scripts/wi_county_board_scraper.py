@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-Scrape county board supervisors from the 30 Wisconsin counties that publish a
+Scrape county board supervisors from the 31 Wisconsin counties that publish a
 district-keyed member list. Stage 1 of the pair; build_wi_county_board_roster.py
 turns the intermediate JSON into data/app/county-board-members.json.
 
-WHY ONLY THIRTY OF SEVENTY-TWO
-------------------------------
+WHY ONLY THIRTY-ONE OF SEVENTY-TWO
+----------------------------------
 Wisconsin publishes county board DISTRICTS statewide (Wis. Stat. 5.15(4)(br)1,
 see build_wi_supervisory_districts.py) and publishes the PEOPLE in them
-nowhere: each county names its own supervisors, 72 different ways. Thirty
+nowhere: each county names its own supervisors, 72 different ways. Thirty-one
 pair a district with a person in a form a parser can read (plus Milwaukee and
 Racine off their own GIS layers, below). The rest are not oversights and are
 recorded as such:
@@ -22,13 +22,34 @@ recorded as such:
     would be an inference the county never wrote, so the county stays out.
   * The rest could not be read: 8 answer 403 to a datacenter client and hold
     it against browser headers (Marathon, La Crosse, Outagamie, Fond du Lac,
-    Lafayette, Lincoln, Monroe, Sheboygan), Taylor sits behind an
+    Lafayette, Lincoln, Monroe, Sheboygan) — Rock was the ninth and is no
+    longer one of them, see A REFUSED SITE IS NOT A REFUSED PAGE below —
+    Taylor sits behind an
     sgcaptcha challenge answering 202 (an access control, not an obstacle to
     route around), Forest does not resolve, and the remainder publish their
     members as PDFs, images or prose with no district column.
 
-  * Rock was the ninth of those 403s and is no longer one of them — see
-    A REFUSED SITE IS NOT A REFUSED PAGE below.
+    TAYLOR IS NOT A "PUBLISHES NOTHING" COUNTY, and the bucket above said so
+    only because nothing here can SEE the page. It publishes a County Board
+    directory at co.taylor.wi.us/directory/county-board/ that is
+    district-keyed and carries a name, a county e-mail, a street address and
+    a phone per supervisor — richer than most of the counties that do ship.
+    The block is the host, not the county: every path on co.taylor.wi.us
+    answers HTTP 202 with a 196-byte meta-refresh to
+    `/.well-known/sgcaptcha/` and an `sg-captcha: challenge` header, and the
+    three other Taylor hosts tried (taylorcountywi.gov, its www, and
+    gis.co.taylor.wi.us) do not resolve at all. A captcha is an access
+    control and is not defeated here, so NO WEEKLY SCRAPE OF TAYLOR IS
+    POSSIBLE: if its roster ever ships it must ride a document-carried
+    route with a dated not-re-read line (the Edwards/Wabash pattern in
+    Illinois's il_county_commissioners_scraper.py), never this table.
+
+    WHAT IS KNOWN OF ITS CONTENTS CAME FROM THE OPERATOR'S OWN BROWSER
+    (2026-08-29) and is INCOMPLETE: districts 1-12 of 17. The shipped LTSB
+    geometry numbers Taylor 1..17, so the roster does not resolve and the
+    all-seats-or-nothing rule applies — 12 of 17 would read as a complete
+    board with five empty seats. Nothing is shipped for Taylor until 13-17
+    are in hand.
 
 NINE OF THOSE "UNREADABLE" COUNTIES WERE PUBLISHING ALL ALONG (2026-08-27)
 --------------------------------------------------------------------------
@@ -146,6 +167,13 @@ counties, with the rung that answered recorded on the county's own entry
 (`read_from`, which carries the capture's timestamp) instead of being passed
 off as a live read.
 
+THIS IS NOT TAYLOR'S CASE AND MUST NOT BECOME IT. Taylor rides
+DOCUMENT_ROSTERS because a captcha admits only a human, so its roster cannot
+be re-read by anything here and says so, dated, on every run. Rock's page is
+re-fetched in full on every run — from the Archive rather than the county, but
+fetched, parsed and count-guarded exactly like the other thirty. A capture is
+a fetch; a document in this file is not.
+
 Two things keep that honest.
 
   THE LADDER STARTS LIVE. `fetch_or_archive` asks the county first, every run,
@@ -251,6 +279,8 @@ COUNTIES = [
      "https://www.co.juneau.wi.gov/government/county_board_supervisors/index.php"),
     ("55061", "Kewaunee", 20, "before",
      "https://www.kewauneeco.org/government/boards_and_committees/"),
+    ("55075", "Marinette", 30, "same-line",
+     "https://www.marinettecountywi.gov/county_board/"),
     ("55085", "Oneida", 21, "column-after",
      "https://www.oneidacountywi.gov/government/cb/"),
     ("55099", "Price", 13, "column-after",
@@ -558,14 +588,37 @@ STRICT_READINGS = {
 COLUMN_READINGS = {"column-after": True, "column-before": False}
 
 
-def vacant_districts(lines, seats):
+def vacant_districts(lines, seats, strategy="after"):
+    """Districts the county itself marks empty, read from the district's OWN row.
+
+    ON A `same-line` PAGE THE WINDOW IS THE LINE, and that is not a nicety.
+    Marinette lists "Trygve Rhude - District 22", then his wards, then the
+    next row — which is its unnumbered "VACANT SEAT". A three-line lookahead
+    reached across the row boundary (the ward line in between says nothing
+    about a district, so stopping at the next district heading does not help)
+    and filed District 22 as vacant, ERASING A SITTING SUPERVISOR — silently,
+    because the seat count still came to 30 and every guard stayed green.
+    A page that puts name and district on one line states a vacancy there too.
+    For the other readings the window survives, now stopping at the next
+    district line. Measured 2026-08-29 while adding Marinette.
+    """
     out = set()
     for i, line in enumerate(lines):
         m = DIST.search(line)
         if not m:
             continue
         d = int(m.group(1))
-        if 1 <= d <= seats and VACANT.search(" ".join(lines[i:i + 3])):
+        if not (1 <= d <= seats):
+            continue
+        window = [line]
+        if strategy != "same-line":
+            # a page that puts the name on its own line may put the vacancy
+            # there too; one that puts both on the district line never does
+            for j in range(i + 1, min(i + 3, len(lines))):
+                if DIST.search(lines[j]):
+                    break           # the next district's row: never borrow it
+                window.append(lines[j])
+        if VACANT.search(" ".join(window)):
             out.add(d)
     return out
 
@@ -589,7 +642,8 @@ def fetch(url, timeout=45):
 # For the counties in ARCHIVE_READ only: their own host refuses this client on
 # every path and header, and the Internet Archive holds the page they refuse to
 # hand over. See the docstring for why that is a network refusal rather than
-# something to fix in the request, and for the two rules below.
+# something to fix in the request, for the two rules below, and for why this is
+# a FETCH and never the document route DOCUMENT_ROSTERS carries.
 CDX = ("https://web.archive.org/cdx/search/cdx?url=%s&output=json"
        "&fl=timestamp,statuscode&filter=statuscode:200&limit=-10")
 SNAPSHOT = "https://web.archive.org/web/%sid_/%s"     # id_ = the original bytes
@@ -736,6 +790,88 @@ ARCGIS_COUNTIES = [
                         "services/County_Board_of_Supervisors_WFL1/FeatureServer/0"),
     },
 ]
+
+
+# COUNTIES WHOSE ROSTER RIDES A DOCUMENT, NOT A FETCH. Illinois's
+# il_county_commissioners_scraper.py carries Edwards and Wabash this way, for
+# the same reason: the county publishes the list and nothing here can read it,
+# so pretending a weekly check happens would be the lie. Each run prints a NOT
+# RE-READ line naming the source and its age instead.
+#
+# TAYLOR (2026-08-29). co.taylor.wi.us publishes a district-keyed County Board
+# directory at /directory/county-board/ — name, county e-mail, street address
+# and phone for all seventeen districts, richer than most counties that ship.
+# Every path on that host answers HTTP 202 with a 196-byte meta-refresh to
+# `/.well-known/sgcaptcha/`; a captcha is an access control and is not defeated
+# here, and the three other Taylor hosts tried do not resolve at all. The
+# contents below were read from that page by the OPERATOR in an ordinary
+# browser and handed over — a human reading a public page is the route the
+# challenge permits, and it is why this is a document and not a scrape.
+#
+# THE STREET ADDRESSES ARE DELIBERATELY NOT CARRIED. They are supervisors'
+# homes (rural routes, "W5895 Jolly Ave."), and this fleet's standing rule is
+# that a home address never ships even when the source publishes it; a
+# supervisor's house is not an office location. Name, county e-mail and phone
+# are official contact details and do.
+DOCUMENT_ROSTERS = [
+    {
+        "fips": "55119", "name": "Taylor", "seats": 17,
+        "read_on": "2026-08-29",
+        "source_url": "https://co.taylor.wi.us/directory/county-board/",
+        "how": "read from the county's own directory page in a browser by the "
+               "operator; the host answers a captcha to every automated client",
+        # district -> (name, e-mail, phone)
+        "members": {
+            "1": ("Lisa Carbaugh", "lisa.carbaugh@co.taylor.wi.us", "715-965-1980"),
+            "2": ("Tim Hansen", "tim.hansen@co.taylor.wi.us", "715-965-7662"),
+            "3": ("Susan Swiantek", "sue.swiantek@co.taylor.wi.us", "715-560-9409"),
+            "4": ("Michael Bub", "michael.bub@co.taylor.wi.us", "715-965-7748"),
+            "5": ("Loren (Jim) Metz", "jim.metz@co.taylor.wi.us", "715-748-0740"),
+            "6": ("Scott Mildbrand", "scott.mildbrand@co.taylor.wi.us", "715-748-3988"),
+            "7": ("Lorie Floyd", "lorie.floyd@co.taylor.wi.us", "608-412-2974"),
+            "8": ("Charles Zenner", "chuck.zenner@co.taylor.wi.us", "715-678-2172"),
+            "9": ("Diane J. Albrecht", "diane.albrecht@co.taylor.wi.us", "715-748-5471"),
+            "10": ("Catherine Lemke", "catherine.lemke@co.taylor.wi.us", "715-748-5694"),
+            "11": ("James Gebauer", "jim.gebauer@co.taylor.wi.us", "715-748-4871"),
+            "12": ("Rollie Thums", "rollie.thums@co.taylor.wi.us", "715-427-5809"),
+            "13": ("Harvey 'Bud' Suckow", "bud.suckow@co.taylor.wi.us", "715-897-4514"),
+            "14": ("Karen Cummings", "karen.cummings@co.taylor.wi.us", "715-668-5226"),
+            "15": ("Lynette Rosemeyer", "lynn.rosemeyer@co.taylor.wi.us", "715-827-0027"),
+            "16": ("Darrell Thompson", "darrell.thompson@co.taylor.wi.us", "715-644-8285"),
+            "17": ("Rodney Adams", "rod.adams@co.taylor.wi.us", "715-678-2397"),
+        },
+    },
+]
+
+
+def document_county(spec):
+    """A roster carried from a document, with its age stated on every run."""
+    import datetime
+    read = datetime.date(*map(int, spec["read_on"].split("-")))
+    age = (datetime.date.today() - read).days
+    print("  NOT RE-READ %-12s %d seats from a document read %s (%d days ago)"
+          % (spec["name"], spec["seats"], spec["read_on"], age), file=sys.stderr)
+    members = spec["members"]
+    want = {str(d) for d in range(1, spec["seats"] + 1)}
+    if set(members) != want:
+        missing = sorted(int(k) for k in want - set(members))
+        raise RuntimeError("%s: the document carries %d of %d districts (missing %s)"
+                           % (spec["name"], len(members), spec["seats"], missing))
+    names = [v[0] for v in members.values()]
+    if len(set(names)) != len(names):
+        dupes = sorted({n for n in names if names.count(n) > 1})
+        raise RuntimeError("%s: the same person is filed under two districts (%s)"
+                           % (spec["name"], dupes))
+    out = {}
+    for d in range(1, spec["seats"] + 1):
+        name, email, phone = members[str(d)]
+        row = {"name": name, "vacant": False, "role": None}
+        if email:
+            row["email"] = email
+        if phone:
+            row["phone"] = phone
+        out[str(d)] = row
+    return out
 
 
 def _fetch_json(url):
@@ -908,6 +1044,39 @@ def attach_officer_roles(lines, districts, county, name_side=None):
     return districts
 
 
+# COUNTIES WHOSE ONE VACANCY CARRIES NO DISTRICT NUMBER. Marinette lists its
+# board alphabetically by surname, every row "Name - District N" except one
+# that reads only "VACANT SEAT" with the ward description beneath it. Twenty-
+# nine districts are named, one is not, and the county states one empty seat.
+#
+# ASSIGNING THAT SEAT IS AN INFERENCE, and it is opt-in per county rather than
+# a general rule because a page that drops a numbered row for any OTHER reason
+# would otherwise get a silently invented vacancy. The gate is arithmetic and
+# is checked on every run: EXACTLY ONE district unclaimed AND EXACTLY ONE
+# vacancy line that carries no district number. If the page ever names two
+# vacancies, or loses a second row, the county fails its count guard as before
+# and nothing is inferred.
+ELIMINATION_VACANCY = {"55075"}      # Marinette
+
+
+def eliminated_vacancy(lines, seats, found, vacant, county):
+    """The single unclaimed district, when the page states a single unnumbered
+    vacancy. Returns the district number, or None when the arithmetic does not
+    force it."""
+    unclaimed = [d for d in range(1, seats + 1) if d not in found and d not in vacant]
+    if len(unclaimed) != 1:
+        return None
+    loose = [l for l in lines if VACANT.search(l) and not DIST.search(l)]
+    if len(loose) != 1:
+        print("  note %-12s %d unnumbered vacancy line(s) for %d unclaimed district(s)"
+              " — nothing inferred" % (county, len(loose), len(unclaimed)), file=sys.stderr)
+        return None
+    print("  infer %-12s district %d is the county's one unnumbered %r row "
+          "(29 of 30 numbered, one vacancy stated)"
+          % (county, unclaimed[0], loose[0].strip()), file=sys.stderr)
+    return unclaimed[0]
+
+
 def scrape_county(fips, name, seats, strategy, url):
     """All seats or nothing — see the module docstring."""
     page_html, read_from = fetch_or_archive(url, fips, name)
@@ -922,10 +1091,14 @@ def scrape_county(fips, name, seats, strategy, url):
         # reader reports them from the cell it actually lands on instead.
         found, vacant = _column(lines, seats, COLUMN_READINGS[strategy])
     else:
-        vacant = vacant_districts(lines, seats)
+        vacant = vacant_districts(lines, seats, strategy)
         found = READINGS[strategy](lines)
     for d in vacant:
         found.pop(d, None)          # the county says the seat is empty; believe it
+    if fips in ELIMINATION_VACANCY:
+        d = eliminated_vacancy(lines, seats, found, vacant, name)
+        if d is not None:
+            vacant.add(d)
     covered = set(found) | vacant
     if covered != set(range(1, seats + 1)):
         missing = sorted(set(range(1, seats + 1)) - covered)
@@ -956,6 +1129,7 @@ def main():
 
     counties, failures = {}, []
     jobs = [(c["fips"], c["name"], c["seats"], "arcgis", c) for c in ARCGIS_COUNTIES]
+    jobs += [(d["fips"], d["name"], d["seats"], "document", d) for d in DOCUMENT_ROSTERS]
     jobs += [(fips, name, seats, strategy, url) for fips, name, seats, strategy, url in COUNTIES]
     for fips, name, seats, strategy, src in jobs:
         if only and fips != only:
@@ -964,6 +1138,9 @@ def main():
             if strategy == "arcgis":
                 districts = scrape_arcgis_county(src)
                 source_url, read_from = src["source_url"], "live"
+            elif strategy == "document":
+                districts = document_county(src)
+                source_url, read_from = src["source_url"], "document"
             else:
                 districts, read_from = scrape_county(fips, name, seats, strategy, src)
                 source_url = src
@@ -974,10 +1151,16 @@ def main():
         counties[fips] = {"county": name, "seats": seats, "source_url": source_url,
                           "scraped_at": scraped_at, "read_from": read_from,
                           "districts": districts}
+        if strategy == "document":
+            # the file must SAY the roster was not re-read this run; a reader
+            # of the JSON should never have to know which table it came from
+            counties[fips]["carried_from_document"] = True
+            counties[fips]["read_on"] = src["read_on"]
+            counties[fips]["how"] = src["how"]
         vac = sum(1 for d in districts.values() if d["vacant"])
         print("  ok   %-12s %d seats%s%s"
               % (name, seats, " (%d vacant)" % vac if vac else "",
-                 "" if read_from == "live" else " [%s]" % read_from),
+                 "" if read_from in ("live", "document") else " [%s]" % read_from),
               file=sys.stderr)
 
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
@@ -985,7 +1168,8 @@ def main():
         json.dump({"counties": counties, "failures": failures}, f, indent=2, ensure_ascii=False)
     total = sum(c["seats"] for c in counties.values())
     print("wrote %s: %d/%d counties, %d seats%s"
-          % (out_path, len(counties), len(COUNTIES) + len(ARCGIS_COUNTIES), total,
+          % (out_path, len(counties),
+             len(COUNTIES) + len(ARCGIS_COUNTIES) + len(DOCUMENT_ROSTERS), total,
              ", %d county/counties missed" % len(failures) if failures else ""),
           file=sys.stderr)
 

@@ -299,6 +299,22 @@ PROVENANCE = [
         ),
     },
     {
+        "layer": "county-board",
+        "app_file": "county-board-members.json",
+        "source_url": "https://co.taylor.wi.us/directory/county-board/",
+        "blocked": "sg-captcha challenge on every path (HTTP 202 + meta-refresh to "
+                   "/.well-known/sgcaptcha/); a captcha is an access control and is "
+                   "not defeated here. Taylor's seventeen supervisors ship as a DATED "
+                   "DOCUMENT read from this page in a browser, not as a scrape.",
+        "note": (
+            "Taylor's County Board directory — district-keyed with name, county "
+            "e-mail and phone per supervisor. Recorded as EXPECTED-UNREACHABLE, so "
+            "the check INVERTS: a refusal reads OK and this host becoming readable "
+            "is the WARN, because that is the state a human can act on — it would "
+            "mean the document route can be retired for a weekly scrape."
+        ),
+    },
+    {
         "layer": "school-site",
         "app_file": "school-sites.json",
         "source_url": "https://services8.arcgis.com/o4NJgD3NfeHnWy06/arcgis/rest/services/Wisconsin_Public_Schools/FeatureServer/20",

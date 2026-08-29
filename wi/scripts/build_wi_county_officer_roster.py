@@ -52,12 +52,12 @@ changed her surname. So, per county, in order:
     naming someone the county's own roster no longer seats fails the
     honesty rules, and inventing the successor would too.
 
-The 40 counties with no published roster keep the dated book row — there
+The 38 counties with no published roster keep the dated book row — there
 is nothing to reconcile against. (That was 50 until the 2026-08-27
-re-sweep and 41 until Rock joined on 2026-08-29; the set is READ from the
-shipped roster file, never listed here, so ten counties' chairs began
-reconciling with no change to this code.) Every decision prints on the
-build log.
+re-sweep and 41 until Taylor, Marinette and Rock joined on 2026-08-29;
+the set is READ from the shipped roster file, never listed here, so twelve
+counties' chairs began reconciling with no change to this code.) Every
+decision prints on the build log.
 
 The Menominee/Shawano DA rows carry the book's own footnote — one
 prosecutorial unit, one district attorney (Wis. Stat. ch. 978) — and the
@@ -82,6 +82,7 @@ until the next Blue Book edition re-bases the file.
 
 import json
 import os
+import re
 import sys
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -150,16 +151,43 @@ _SUFFIXES = {"jr", "sr", "ii", "iii", "iv"}
 _HONORIFICS = {"dr", "mr", "mrs", "ms", "hon", "rev"}
 
 
+_NICKNAME = re.compile(r"\(([^)]{1,24})\)")
+
+
 def surname_initial(name):
+    keys = surname_initials(name)
+    return min(keys) if keys else None
+
+
+def surname_initials(name):
+    """EVERY (first-initial, surname) a publisher might key this person by.
+
+    A county that prints a nickname in parentheses names the same person the
+    Blue Book calls by it: Taylor's directory has "LOREN (JIM) METZ" at
+    district 5 where the book's chair is "Jim Metz", and Richland publishes
+    "Melvin (Bob) Frank". Keying only on the first token gives ('l','metz'),
+    misses the book's ('j','metz'), and WITHHOLDS a sitting chair — which
+    `on_board` below calls the worse of the two errors, since a false match
+    merely keeps the dated book row. So a parenthesised nickname yields its
+    own key alongside the plain one.
+    """
+    nicks = [n.strip() for n in _NICKNAME.findall(name)]
+    bare = _NICKNAME.sub(" ", name)
     parts = [p for p in "".join(ch if ch.isalpha() or ch.isspace() else " "
-                                for ch in name).split()]
+                                for ch in bare).split()]
     while len(parts) > 1 and parts[0].lower() in _HONORIFICS:
         parts.pop(0)
     while len(parts) > 1 and parts[-1].lower() in _SUFFIXES:
         parts.pop()
     if not parts:
-        return None
-    return (parts[0][0].lower(), parts[-1].lower())
+        return set()
+    surname = parts[-1].lower()
+    keys = {(parts[0][0].lower(), surname)}
+    for nick in nicks:
+        letters = "".join(ch for ch in nick if ch.isalpha())
+        if letters:
+            keys.add((letters[0].lower(), surname))
+    return keys
 
 
 def on_board(bb_name, roster_names):
@@ -169,8 +197,8 @@ def on_board(bb_name, roster_names):
     # J/Steve Nass, Tom/THOMAS KRAMER, Robert C/Robert Keeney). A false match
     # keeps the dated book row (today's behavior); a false miss would wrongly
     # WITHHOLD a sitting chair, which is the worse error.
-    key = surname_initial(bb_name)
-    return key is not None and any(surname_initial(n) == key for n in roster_names)
+    keys = surname_initials(bb_name)
+    return bool(keys) and any(keys & surname_initials(n) for n in roster_names)
 
 
 # The book prints "Vacant" in an empty office's cell and the first parse
@@ -355,7 +383,7 @@ def main():
                     checked += 1
                 continue
             if "name" in c and \
-               surname_initial(c["name"]) != surname_initial(rec["name"]):
+               not (surname_initials(c["name"]) & surname_initials(rec["name"])):
                 # the county's directory names a different person: the
                 # county's name ships, the book's party code is withheld
                 # (the clerk rule), the office title is kept

@@ -465,6 +465,51 @@ def from_app_data(directory):
     return out, authored
 
 
+def from_funding_manifest():
+    """Every http(s) URL in the root funding.json, all of them AUTHORED.
+
+    This is not read through from_app_data, and the reason is PUBLISHED_KEYS.
+    There, a `url` key means "a village's website exactly as its county clerk
+    published it" — somebody else's address, capped at WARN because there is
+    nothing this repo can do about it. In a FLOSS/fund manifest `url` means
+    the opposite: an address this repo wrote about itself. Running the manifest
+    through that reader would file every one of its URLs as somebody else's.
+
+    Two of them carry weight beyond being links. The spec requires a wellKnown
+    pointer for any URL whose hostname differs from the manifest's own — a file
+    on THAT host naming the manifest it authorises — so a funding directory
+    resolves them to decide whether this project may solicit funding on behalf
+    of overberg.co and of the GitHub repository. If one 404s the manifest stops
+    verifying, and nothing else in this repo would notice.
+
+    Returns (citations, authored_urls).
+    """
+    out = collections.defaultdict(list)
+    path = os.path.join(REPO_ROOT, "funding.json")
+    if not os.path.exists(path):
+        return out, set()
+    try:
+        with open(path, encoding="utf-8") as f:
+            payload = json.load(f)
+    except (ValueError, OSError) as e:
+        print("validate_card_links: could not read funding.json (%s)" % e,
+              file=sys.stderr)
+        return out, set()
+
+    def walk(node, where):
+        if isinstance(node, dict):
+            for k, v in node.items():
+                walk(v, where + "/" + str(k))
+        elif isinstance(node, list):
+            for i, v in enumerate(node):
+                walk(v, where + "/" + str(i))
+        elif isinstance(node, str) and node.startswith(("http://", "https://")):
+            out[node].append("funding.json%s" % where)
+
+    walk(payload, "")
+    return out, set(out)
+
+
 def collect():
     """All cited URLs, plus each one's origin.
 
@@ -485,6 +530,9 @@ def collect():
         app_urls, app_authored = from_app_data(directory)
         authored |= app_authored
         sources.append(app_urls)
+    funding_urls, funding_authored = from_funding_manifest()
+    authored |= funding_authored
+    sources.append(funding_urls)
     for source in sources:
         for url, where in source.items():
             cites[url].extend(where)
