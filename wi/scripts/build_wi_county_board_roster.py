@@ -11,20 +11,26 @@ That is what stops a county's page reorganising into a plausible-but-wrong
 number of members — the two files were built from different publishers (the
 county's own page, and LTSB's statewide filing) and have to agree.
 
-Thirty-two of Wisconsin's 72 counties publish a district-keyed member list; the
-other 40 are recorded in the Data gaps panel and their cards keep linking the
-county board rather than naming anybody. See the scraper's docstring for what
-each of the other 40 actually publishes.
+Thirty-four of Wisconsin's 72 counties publish a district-keyed member list;
+the other 38 are recorded in the Data gaps panel and their cards keep linking
+the county board rather than naming anybody. See the scraper's docstring for
+what each of the other 38 actually publishes.
 
 CONTACT RIDES ONLY WHERE ITS COUNTY PUBLISHED IT, which is why these rows are
-not uniform and should not be made uniform. Twenty-nine counties publish a name
-and a district and nothing else. Milwaukee and Racine carry an e-mail on their
-own GIS features (and Milwaukee a member web page). Kenosha's Clerk prints a
-phone AND an e-mail for all 23 seats in the county's own Directory of Public
-Officials, and the county's board page links each supervisor's profile — so its
-rows are the fullest in the file. An absent field here means the county does not
-publish it; it never means the builder dropped it, and check_roster_retention.py
-is what holds that line per source from the first day a field ships.
+not uniform and should not be made uniform. Thirty counties publish a name and
+a district and nothing else. Milwaukee and Racine carry an e-mail on their own
+GIS features (and Milwaukee a member web page). Kenosha's Clerk prints a phone
+AND an e-mail for all 23 seats in the county's own Directory of Public
+Officials, and the county's board page links each supervisor's profile — the
+fullest rows in the file. Taylor's carried document has both too.
+
+THE PHONE PASSTHROUGH WAS MISSING AND TAYLOR PAID FOR IT: its 17 numbers were
+read off the county's directory, carried in the scraper's own table, and
+dropped here — published data going nowhere, the same shape as the e-mails
+that sat in this file unrendered until the card learned to show them. An
+absent field means the county does not publish it; it must never mean this
+builder dropped it, and check_roster_retention.py holds that line per source
+from the first day a field ships.
 
 Usage:
     python3 wi/scripts/build_wi_county_board_roster.py
@@ -41,10 +47,10 @@ GEOMETRY = os.path.join(APP_DATA_DIR, "county-supervisory-districts.json")
 RAW = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache", "wi_county_boards_raw.json")
 OUT = os.path.join(APP_DATA_DIR, "county-board-members.json")
 
-MIN_COUNTIES = 30      # 32 ship one (29 pages + 2 county GIS layers + Kenosha's
-                       # directory document); tolerates two dark
-MIN_SEATS = 668        # 695 today (633 page-scraped + Milwaukee 18 + Racine 21
-                       # + Kenosha 23)
+MIN_COUNTIES = 32      # 34 ship one (30 pages + 2 county GIS layers + Taylor
+                       # carried by document + Kenosha witnessed); tolerates two dark
+MIN_SEATS = 713        # 742 today (663 page-scraped + Milwaukee 18 + Racine 21
+                       # + Taylor 17 + Kenosha 23)
 
 
 def main():
@@ -93,9 +99,9 @@ def main():
                 if member["role"]:
                     row["role"] = member["role"]
                 # contact rides only where its county published it (see the
-                # docstring) — the two county-GIS rosters carry it on the
-                # feature, Kenosha's on the Clerk's own directory, and the
-                # 29 page-scraped counties publish none of it
+                # docstring) — the two county-GIS rosters carry it on their
+                # features, Kenosha's and Taylor's on their counties' own
+                # documents, and the 30 page-scraped counties publish none
                 if member.get("email"):
                     row["email"] = member["email"]
                 if member.get("phone"):

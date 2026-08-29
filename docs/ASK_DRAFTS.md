@@ -557,3 +557,105 @@ Generated from the shipped rosters and the 2026-08-29 probe, so every name, numb
 > <YOUR NAME>
 > <YOUR E-MAIL>
 
+
+---
+
+## Ask 6 — Jo Daviess County, Illinois: display permission under the site's new domain
+
+**This is the only ask in this file that is not about getting data.** The data is already
+here, lawfully: `il/data/app/jo-daviess-county-board-districts.json` is built from the
+county's own board-district shapefile, purchased 2026-08-17 under Jo Daviess County GIS
+Digital Data License Agreement **#008382** ($33.50, invoice 008382), and displayed under
+a separate written authorization from IT/GIS Director **Joe Kratcha** the same day. That
+authorization is what makes the file publishable, and it names one thing:
+
+> "…granting you permission to display the requested Jo Daviess County Board District
+> boundaries to be provided in shapefile format on your website: **chidistricts.com** for
+> public viewing." — e-mail of 2026-08-17 13:49Z
+
+**The site has since been renamed.** chidistricts.com is now districtry.com; the old
+domain 301-redirects to the new one and it is the same site, same operator, same use.
+Nothing about the display changed — but the permission names a domain, and the honest
+reading is that a permission naming a domain says what it says. `LICENSE-DATA.md` records
+exactly that, states that the permission has not been re-sought under the new name, and
+excludes this one file from the project's ODbL grant so nothing sweeps the county's data
+into an open licence. **This ask closes that gap.**
+
+Nothing is blocked on the answer and the county is not being asked to reconsider anything
+it already decided — which is worth saying plainly in the mail, because an office that
+reads this as "re-litigate the licence" is more likely to say nothing at all than to say
+no.
+
+### Recipients
+
+| WRITE TO                                   | WHO                                            | WHY THIS ADDRESS                                                                     |
+|--------------------------------------------|------------------------------------------------|--------------------------------------------------------------------------------------|
+| `gis@jodaviesscountyil.gov`                | GIS/IT department — Joe Kratcha, IT/GIS Director | The county publishes a departmental GIS address, not personal ones. Kratcha wrote the 2026-08-17 authorization and the county directory still lists him in post. |
+| `countyadministrator@jodaviesscountyil.gov` (cc) | Angela Kaiser, County Administrator       | The "and the county" half: a licence amendment is an administrative record, not only a GIS one. |
+
+**If the original 2026-08-17 thread is still in the operator's mailbox, reply on it
+instead** and cc the two addresses above. A reply on the existing thread carries the
+licence number, the delivery and Kratcha's own wording as context, which is worth more
+than any restatement below. Diane LaScala, who delivered the files, is **no longer listed
+in the county directory** — do not address her by name without checking.
+
+> **Subject:** Jo Daviess board districts — same site, new domain (licence #008382)
+>
+> Dear Joe Kratcha,
+>
+> Last August your office sold me a copy of the county's board-district shapefile under
+> Digital Data License Agreement #008382, and you kindly followed it with written
+> authorization to display those boundaries on my website, chidistricts.com, for public
+> viewing. I have honoured both: the shapefile itself has never been republished or
+> passed on, the site shows only a simplified display copy, and Jo Daviess County GIS is
+> credited by name on the card every time a visitor lands in one of your districts.
+>
+> I am writing about one small thing. **The site has been renamed.** chidistricts.com is
+> now **districtry.com** — the same site, run by the same person, doing the same thing;
+> the old address redirects to the new one. Your authorization names chidistricts.com
+> specifically, so rather than quietly assume it carries over, I would like to ask you to
+> confirm it.
+>
+> **A one-line reply saying the 2026-08-17 authorization applies to districtry.com is all
+> I need.** If your office would prefer to issue a fresh authorization naming the new
+> domain, or to have me complete a form, I am glad to do whichever is easier for you.
+>
+> Nothing has changed about the use itself, and to be explicit about what it is and is
+> not:
+>
+> - The boundaries are shown on a free public map. Nothing is sold, there is no
+>   advertising, and there is no charge to anyone for anything.
+> - **The shapefile is not redistributed.** It has never been committed to the project's
+>   public code repository and is not downloadable from the site — only a simplified
+>   version for on-screen display, as your authorization contemplates.
+> - The county is credited as the source wherever those boundaries appear.
+> - The project as a whole was recently given an open licence, and I specifically
+>   **excluded** your county's data from it, so that nothing there can be read as
+>   re-licensing material that belongs to Jo Daviess County. That exclusion names licence
+>   #008382 and your authorization directly.
+>
+> If your office would rather the boundaries came down, please just say so and I will
+> remove them — the page will point readers to the county's own board page instead. I
+> would much rather have a clear no on record than leave an unanswered question sitting
+> under a live map.
+>
+> Thank you again for the help last summer; it made Jo Daviess one of the few counties in
+> this part of the state whose actual board districts a resident can look up.
+>
+> With thanks,
+> <YOUR NAME>
+> <YOUR E-MAIL>
+
+### On a yes, or a no
+
+* **Yes** → record the date and the wording in `docs/DATA_LAYER_GUIDEBOOK.md`'s Jo Daviess
+  entry, and update the two places that currently record the domain gap: the
+  §3 note in `LICENSE-DATA.md` and the `SOURCE_LABEL` string in
+  `scripts/build_jodaviess_board_districts.py` (which is shipped into the data file and
+  rendered on the card).
+* **No, or take it down** → the file comes out of `il/data/app/`, the dispatch entry goes,
+  and the gap record `jo-daviess-county-board-districts` reopens citing the withdrawal.
+  That is a real outcome and the ask should not pretend otherwise.
+* **Silence** → follow up at ~3 weeks and again 2 weeks later, per this file's cadence,
+  before recording the route unresponsive. The display continues meanwhile: the existing
+  authorization was given for this site and has not been withdrawn.

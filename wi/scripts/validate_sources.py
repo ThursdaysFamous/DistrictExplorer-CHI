@@ -304,8 +304,9 @@ PROVENANCE = [
         "source_url": "https://www.kenoshacountywi.gov/1018/County-Directory-PDF",
         "note": (
             "Kenosha's 23 supervisors come from the Clerk's own Directory of "
-            "Public Officials, the file's one DOCUMENT source and its only one "
-            "carrying a phone and an e-mail per seat. THE STABLE PAGE ID IS THE "
+            "Public Officials — the file's one FETCHED document, as against "
+            "Taylor's carried one below, and re-read on every weekly run. "
+            "THE STABLE PAGE ID IS THE "
             "POINT OF PROBING THIS: the document itself lives at a "
             "/DocumentCenter/View/<edition>/ address that freezes on the edition "
             "it names, and this id is the county's own page for whichever edition "
@@ -328,6 +329,22 @@ PROVENANCE = [
             "and it is NOT the county's map index at "
             "/142/County-Board-Supervisor-Districts, which names nobody and which "
             "this gap record mistook for the roster page for a month."
+        ),
+    },
+    {
+        "layer": "county-board",
+        "app_file": "county-board-members.json",
+        "source_url": "https://co.taylor.wi.us/directory/county-board/",
+        "blocked": "sg-captcha challenge on every path (HTTP 202 + meta-refresh to "
+                   "/.well-known/sgcaptcha/); a captcha is an access control and is "
+                   "not defeated here. Taylor's seventeen supervisors ship as a DATED "
+                   "DOCUMENT read from this page in a browser, not as a scrape.",
+        "note": (
+            "Taylor's County Board directory — district-keyed with name, county "
+            "e-mail and phone per supervisor. Recorded as EXPECTED-UNREACHABLE, so "
+            "the check INVERTS: a refusal reads OK and this host becoming readable "
+            "is the WARN, because that is the state a human can act on — it would "
+            "mean the document route can be retired for a weekly scrape."
         ),
     },
     {

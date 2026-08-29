@@ -1,0 +1,96 @@
+{
+  "version": "v1.0.0",
+
+  "entity": {
+    "type": "individual",
+    "role": "owner",
+    "name": "Adam Overberg",
+    "email": "adam@overberg.co",
+    "description": "Independent developer and sole maintainer of districtry, a free civic-district lookup covering Illinois, Wisconsin, Iowa, New York City and San Francisco. The project is unfunded and run at personal cost.",
+    "webpageUrl": {
+      "url": "https://overberg.co/",
+      "wellKnown": "https://overberg.co/.well-known/funding-manifest-urls"
+    }
+  },
+
+  "projects": [
+    {
+      "guid": "districtry",
+      "name": "districtry",
+      "description": "A dependency-light static web app that answers one question for any point in its coverage: which civic districts contain it, and who represents you there. It reports every boundary at once — wards, county boards, state and federal legislative districts, judicial subcircuits, police districts and beats, school attendance zones, townships, municipalities and special districts — and names the officeholder wherever a published roster can be verified. Five places are live: Illinois, all 72 counties of Wisconsin, all 99 counties of Iowa, New York City and San Francisco. Behind it is the part that is actually hard: an automated pipeline that scrapes, rebuilds and gates county-level boundary and roster data from several hundred separate government publishers, most of which have no API, and some of which publish only a scanned map or answer only by e-mail. 91 Illinois counties are served, out of 102. Every layer names the publisher its boundary came from and where its officeholder names come from; every absence is recorded as a public gap record rather than left silently missing; and an officeholder is never guessed — where no verifiable roster exists the app links the official body instead. Those rules are enforced by tests in CI, not by convention.",
+      "webpageUrl": {
+        "url": "https://districtry.com/"
+      },
+      "repositoryUrl": {
+        "url": "https://github.com/ThursdaysFamous/districtry",
+        "wellKnown": "https://github.com/ThursdaysFamous/districtry/raw/refs/heads/main/.well-known/funding-manifest-urls"
+      },
+      "licenses": [
+        "spdx:Apache-2.0",
+        "spdx:ODbL-1.0"
+      ],
+      "tags": [
+        "maps",
+        "data",
+        "data-visualization",
+        "information-management",
+        "knowledge",
+        "web-development"
+      ]
+    }
+  ],
+
+  "funding": {
+    "channels": [
+      {
+        "guid": "github-sponsors",
+        "type": "payment-provider",
+        "address": "https://github.com/sponsors/ThursdaysFamous",
+        "description": "GitHub Sponsors — the project's only current funding channel."
+      }
+    ],
+
+    "plans": [
+      {
+        "guid": "maintenance",
+        "status": "active",
+        "name": "Keep the rosters current",
+        "description": "The recurring cost of the project is not building layers, it is keeping people's names right. Elected officials resign, get appointed and are replaced between elections, and county websites are redesigned without notice. This plan funds the weekly scraper runs, the repairs when a publisher changes, and the human review every roster change goes through before it ships.",
+        "amount": 24000,
+        "currency": "USD",
+        "frequency": "yearly",
+        "channels": ["github-sponsors"]
+      },
+      {
+        "guid": "coverage",
+        "status": "active",
+        "name": "Extend coverage to the places that have no lookup at all",
+        "description": "Eleven Illinois counties remain unserved, each with a recorded reason for why. Beyond them, most US states have no free, complete district lookup that reaches local offices. This plan funds new county and state coverage, including the counties whose boundaries exist only as a scanned map, behind a paid GIS licence, or in a clerk's filing cabinet.",
+        "amount": 40000,
+        "currency": "USD",
+        "frequency": "yearly",
+        "channels": ["github-sponsors"]
+      },
+      {
+        "guid": "any",
+        "status": "active",
+        "name": "Any amount",
+        "description": "Contributions of any size toward hosting, domains and maintenance.",
+        "amount": 0,
+        "currency": "USD",
+        "frequency": "one-time",
+        "channels": ["github-sponsors"]
+      }
+    ],
+
+    "history": [
+      {
+        "year": 2026,
+        "currency": "USD",
+        "income": 0,
+        "expenses": 0,
+        "description": "No funding received to date. The project has never had a sponsor, grant or advertiser. Its published sponsorship policy (https://districtry.com/sponsorship.html) rules out advertising networks and any sponsorship that could change an answer the tool gives or buy visibility based on where a visitor lives."
+      }
+    ]
+  }
+}
