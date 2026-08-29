@@ -223,6 +223,36 @@ HEADERS = {
     "User-Agent": UA_CHROME_WIN_126,
     "Accept": "text/html,application/xhtml+xml,application/pdf,*/*;q=0.8",
 }
+# THE INVERSION OF THE COMMENT ABOVE, AND IT IS NOT HYPOTHETICAL. A few hosts
+# refuse the browser UA precisely BECAUSE it is one: an Akamai bot rule that
+# denies any client claiming to be a browser it cannot fingerprint as one, and
+# serves the same page to a client that says what it is. Probed the same minute
+# on www.outagamie.gov, every Mozilla/-prefixed string (Chrome, Firefox,
+# Safari, bare Mozilla/5.0, Googlebot's) gets Akamai's 445-byte Access Denied
+# and curl's, urllib's and this one get the page.
+#
+# So this is the opposite of EXPECTED_UNREACHABLE: the host is NOT blocked, and
+# recording it there would file a live county board page as a permanent refusal
+# and then WARN if it ever "recovered". Pinned per host and kept in step with
+# HONEST_UA_HOSTS in wi/scripts/wi_county_board_scraper.py, which reads
+# Outagamie's 36 supervisors from this same page every week.
+HONEST_UA = {
+    "User-Agent": "districtry-link-check/1.0 (+https://districtry.com/)",
+    "Accept": HEADERS["Accept"],
+}
+HONEST_UA_HOSTS = {
+    "www.outagamie.gov": "Akamai denies any browser UA it cannot fingerprint; "
+                         "an honest client string is served the page",
+}
+
+
+def headers_for(url):
+    """The browser UA, except on hosts measured to refuse exactly that."""
+    try:
+        host = (urllib.parse.urlparse(url).hostname or "").lower()
+    except ValueError:
+        return HEADERS
+    return HONEST_UA if host in HONEST_UA_HOSTS else HEADERS
 
 GONE_STATUSES = {404, 410, 451}
 # 403/401 is a refusal — a standing posture. 429 is deliberately NOT here: it
@@ -668,7 +698,7 @@ def peek_body(url):
     anything this small.
     """
     try:
-        resp = requests.get(url, headers=HEADERS, timeout=HTTP_TIMEOUT,
+        resp = requests.get(url, headers=headers_for(url), timeout=HTTP_TIMEOUT,
                             allow_redirects=True, stream=True)
     except Exception:
         return None  # the probe's own retry ladder owns transport failures
@@ -745,7 +775,7 @@ def probe(url, resolved=None):
     result = None
     for method in ("head", "get"):
         try:
-            resp = requests.request(method, url, headers=HEADERS, timeout=HTTP_TIMEOUT,
+            resp = requests.request(method, url, headers=headers_for(url), timeout=HTTP_TIMEOUT,
                                     allow_redirects=True, stream=(method == "get"))
         except Exception as e:
             result = {"state": "unreachable", "detail": "%s: %s" % (type(e).__name__, e)}
@@ -783,7 +813,7 @@ def probe(url, resolved=None):
         # this rare, so the pause costs one host a few seconds at most.
         time.sleep(RATE_LIMIT_PAUSE)
         try:
-            resp = requests.get(url, headers=HEADERS, timeout=HTTP_TIMEOUT,
+            resp = requests.get(url, headers=headers_for(url), timeout=HTTP_TIMEOUT,
                                 allow_redirects=True, stream=True)
             resp.close()
             if resp.status_code < 400:
@@ -799,7 +829,7 @@ def probe(url, resolved=None):
         # One retry, then believe it. A monthly probe should not report a
         # restart as a dead link.
         try:
-            resp = requests.get(url, headers=HEADERS, timeout=HTTP_TIMEOUT,
+            resp = requests.get(url, headers=headers_for(url), timeout=HTTP_TIMEOUT,
                                 allow_redirects=True, stream=True)
             resp.close()
             if resp.status_code < 400:

@@ -138,6 +138,9 @@ the same thing and the difference is stated where they are defined. The other
   * The rest could not be read: 9 answer 403 to a datacenter client and hold
     it against browser headers (Marathon, La Crosse, Outagamie, Fond du Lac,
     Lafayette, Lincoln, Monroe, Rock, Sheboygan), Taylor sits behind an
+  * The rest could not be read: 8 answer 403 to a datacenter client and hold
+    it against browser headers (Marathon, La Crosse, Fond du Lac, Lafayette,
+    Lincoln, Monroe, Rock, Sheboygan), Taylor sits behind an
     sgcaptcha challenge answering 202 (an access control, not an obstacle to
     route around), Forest does not resolve, and the remainder publish their
     members as PDFs, images or prose with no district column. That last
@@ -426,6 +429,48 @@ carries contact at all (the builder ships `email`/`profileUrl` only where a
 county GIS feature or the Taylor document supplied them), so a phone-only
 Crawford row would be the first of its kind and the card has no contact row to
 render it in. It is left in the county's page rather than in this file.
+OUTAGAMIE: THE BROWSER USER-AGENT WAS THE BLOCK (2026-08-29)
+-----------------------------------------------------------
+Outagamie's 36 seats were recorded in the 403 bucket above, and the note by
+ARCGIS_COUNTIES said its site "answered one probe on 2026-08-25 and refused
+every later one (HTTP 403 across UAs)". Both halves were measured; the
+conclusion drawn from them was wrong, because "across UAs" meant across
+BROWSER UAs, and this scraper only ever sends one of those.
+
+www.outagamie.gov is fronted by Akamai (`Server-Timing: ak_p`, an
+errors.edgesuite.net reference in the deny body) with a rule that refuses any
+client CLAIMING to be a browser it cannot fingerprint as one. Measured the
+same minute, same host, same path:
+
+    User-Agent: Mozilla/5.0 (... Chrome/124.0 ...)   -> HTTP 403 Access Denied
+    User-Agent: Mozilla/5.0 (... Firefox/127.0)      -> HTTP 403 Access Denied
+    User-Agent: Mozilla/5.0 (... Safari/605.1.15)    -> HTTP 403 Access Denied
+    User-Agent: Mozilla/5.0                          -> HTTP 403 Access Denied
+    User-Agent: Mozilla/5.0 (compatible; Googlebot/2.1; ...) -> HTTP 403
+    User-Agent: curl/8.5.0                           -> HTTP 200, full roster
+    User-Agent: Python-urllib/3.11                   -> HTTP 200, full roster
+    no User-Agent at all                             -> HTTP 200, full roster
+
+Every denial is a `Mozilla/`-prefixed string and every success is an honest
+one; the three passing shapes return byte-comparable pages (36 districts, 36
+county e-mail addresses). The one 2026-08-25 probe that DID answer will have
+been a default-UA request, and every "later one" a spoofed-browser retry —
+which is exactly the pattern the record preserved without reading it.
+
+SO THE SPOOFED CHROME STRING IN `UA` WAS ITSELF THE CAUSE, and a UA meant to
+look ordinary is not a neutral default: on a bot-managed edge it is the single
+most suspicious thing a datacenter client can say. `HONEST_UA_HOSTS` pins the
+hosts that are served an honest client string instead — per HOST, because the
+rule belongs to the edge and not to the county's page shape, and pinned rather
+than detected so a weekly run sends the same bytes every week.
+
+THE FINDING IS BOUNDED, and was tested rather than generalised: all eight
+counties left in that bucket were re-probed with both UAs on 2026-08-29, and
+seven of them (Marathon, La Crosse, Lafayette, Lincoln, Monroe, Rock,
+Sheboygan) answer 403 to BOTH, so their blocks are real and stay recorded. The
+eighth, Fond du Lac, answers 200 to both and is a different question — its
+front door serves a 703-byte shell, which is why its board was never read from
+it. ONE COUNTY MOVED; THE BUCKET WAS NOT WRONG ABOUT THE REST.
 
 THE READING DIRECTION IS PINNED PER COUNTY, NOT DETECTED
 --------------------------------------------------------
@@ -811,6 +856,38 @@ BROWSER = {
     "Upgrade-Insecure-Requests": "1",
 }
 BROWSER_HEADER_COUNTIES = {"55081"}     # Monroe — measured 2026-08-29
+# HOSTS SERVED AN HONEST CLIENT STRING INSTEAD OF THE BROWSER ONE ABOVE.
+# See the docstring's Outagamie section: www.outagamie.gov sits behind an
+# Akamai rule that denies any `Mozilla/`-prefixed UA it cannot fingerprint as
+# a real browser, and serves the same page to a client that says what it is.
+# The pin is per HOST because the rule belongs to the edge rather than to the
+# county's page shape, and it is PINNED rather than negotiated at runtime so a
+# weekly run sends identical bytes every week — a UA ladder that retried on
+# 403 would make the request that actually worked invisible in the log.
+HONEST_UA = dict(UA, **{
+    "User-Agent": "districtry-roster-bot/1.0 (+https://districtry.com/; "
+                  "weekly county board roster refresh)",
+})
+HONEST_UA_HOSTS = {"www.outagamie.gov"}
+
+
+
+def headers_for(fips, url):
+    """The header set this county's page is asked with — pinned, never negotiated.
+
+    Two counties' edges refuse the plain client for opposite reasons, so there
+    are two exceptions and they cannot be collapsed: Monroe's Akamai rule wants
+    the header set a Chrome NAVIGATION sends (BROWSER), and Outagamie's denies
+    any `Mozilla/`-prefixed UA and serves a client that says what it is
+    (HONEST_UA). Both are pinned so a weekly run sends identical bytes every
+    week — a ladder that retried on 403 would hide which request actually
+    worked.
+    """
+    if urllib.parse.urlsplit(url).hostname in HONEST_UA_HOSTS:
+        return HONEST_UA
+    if fips in BROWSER_HEADER_COUNTIES:
+        return BROWSER
+    return UA
 
 # (county FIPS, name as LTSB spells it, seats, reading direction, page)
 COUNTIES = [
@@ -922,7 +999,12 @@ COUNTIES = [
     # page per supervisor (see the docstring and `attach_profiles`) ---
     ("55071", "Manitowoc", 25, "numbered-line",
      "https://manitowoccountywi.gov/departments/county-board-of-supervisors/"
-     "supervisor-list/"),]
+     "supervisor-list/"),
+    # --- 2026-08-29: the browser UA was the block, see the docstring ---
+    # Reads `after`: "District 1" / "Cathy Thompson" / the district's map link,
+    # phone, county e-mail and committee. Its host is in HONEST_UA_HOSTS.
+    ("55087", "Outagamie", 36, "after",
+     "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"),]
 
 # Counties whose own host refuses this client on every path and every header,
 # whose page the Internet Archive nonetheless holds. The ladder still asks the
@@ -974,9 +1056,28 @@ SUFFIX = re.compile(r"^(?:I{1,3}|IV|Jr\.?|Sr\.?)$", re.I)
 LEAD = re.compile(r"^(?:supervisory|supervisor|county|board|member)\b[\s\-–—:]*", re.I)
 # Roles arrive attached to the name in every shape a county can think of.
 _ROLE = r"(?:County\s+)?(?:(?:1st|2nd|First|Second)\s+)?(?:Vice[\s\-]?)?Chair(?:man|person|woman)?"
-ROLE_PAREN = re.compile(r"\s*\((%s)\)\s*" % _ROLE, re.I)
-ROLE_LEAD = re.compile(r"^(%s)\b[\s\-–—:,]*" % _ROLE, re.I)
-ROLE_TAIL = re.compile(r"[\s,\-–—]+(%s)\s*$" % _ROLE, re.I)
+# THE SAME ROLE, PLUS THE WORD `Board`, AND ONLY WHERE IT IS WRITTEN ONTO A
+# PERSON'S OWN NAME. Outagamie spells the office out in full on the member's
+# row — "Dan Gabrielson, County Board Chairperson" — and without `Board`
+# ROLE_TAIL strips only "Chairperson", leaving "Dan Gabrielson, County Board",
+# which `is_name` then rejects on its own BAD words (`county`, `board`). So the
+# CHAIR of a 36-seat board was the one seat that would not resolve, and the
+# all-seats-or-nothing rule correctly refused the whole county for it.
+#
+# IT IS DELIBERATELY NOT GIVEN TO `OFFICER_LINE`, which matches a role standing
+# ALONE on its own line, and that boundary was measured rather than guessed.
+# Widening both at once made Dunn mark TWO chairs and the officer builder stop
+# the build, which is the guard working: Dunn's district 24 row reads "Chair -
+# Randy L. Prochnow", and four hundred lines below the roster a WELCOME LETTER
+# to new supervisors is signed "Kelly McCullough / County Board Chairman". A
+# bare role line in running prose is a signature, not a roster row, and a
+# signature block can outlive its signer — so a role only counts here when the
+# county wrote it beside the name it belongs to, or in an officers block whose
+# shape `OFFICER_LINE` already recognised.
+_ROLE_ATTACHED = r"(?:County\s+)?(?:Board\s+)?(?:(?:1st|2nd|First|Second)\s+)?(?:Vice[\s\-]?)?Chair(?:man|person|woman)?"
+ROLE_PAREN = re.compile(r"\s*\((%s)\)\s*" % _ROLE_ATTACHED, re.I)
+ROLE_LEAD = re.compile(r"^(%s)\b[\s\-–—:,]*" % _ROLE_ATTACHED, re.I)
+ROLE_TAIL = re.compile(r"[\s,\-–—]+(%s)\s*$" % _ROLE_ATTACHED, re.I)
 VACANT = re.compile(r"(?i)\bvacan(?:t|cy)\b")
 SPLIT_LETTER = re.compile(r"\b([A-Z])\s+([a-z]{2,})")
 
@@ -1785,6 +1886,8 @@ def fetch_bytes(url, headers=UA, timeout=45, attempts=4):
     lax = ssl.create_default_context()
     lax.check_hostname = False
     lax.verify_mode = ssl.CERT_NONE
+    host = urllib.parse.urlsplit(url).hostname or ""
+    headers = HONEST_UA if host in HONEST_UA_HOSTS else UA
     last = None
     for attempt in range(attempts):
         for ctx in (None, lax):
@@ -1945,10 +2048,14 @@ def fetch(url, headers=UA, timeout=45, attempts=4):
 # filter is silently ignored server-side (filter client-side) and its end
 # dates can be aspirational.
 #
-# Outagamie is DELIBERATELY not here: its board moved to outagamie.gov,
-# which answered one probe on 2026-08-25 and refused every later one
-# (HTTP 403 across UAs) — the gap record carries both measurements, and a
-# roster this client cannot re-verify weekly does not ship.
+# OUTAGAMIE USED TO BE EXCLUDED HERE, on the grounds that outagamie.gov
+# "answered one probe on 2026-08-25 and refused every later one (HTTP 403
+# across UAs)" and that a roster this client cannot re-verify weekly does not
+# ship. The reachability half of that was wrong and the shipping rule was
+# right: the 403s were the edge refusing this scraper's SPOOFED BROWSER UA,
+# the county serves the page to an honest one, and Outagamie now rides
+# COUNTIES like any other weekly page (the docstring carries the whole
+# measurement). It needs no GIS layer.
 ARCGIS_COUNTIES = [
     {
         "fips": "55079", "name": "Milwaukee", "seats": 18,
@@ -3212,6 +3319,10 @@ OFFICER_LINE_BY_COUNTY = {"55081": OFFICER_LINE_BOARD}      # Monroe
 # str.title() turns "1st Vice Chair" into "1St Vice Chair" — it upper-cases the
 # letter after every digit. Ordinals keep their own casing.
 _ORDINAL = re.compile(r"^\d+(?:st|nd|rd|th)$", re.I)
+# Only a COLON. A leading dash also joins two lines on some pages, but it is
+# equally the bullet of an unrelated row ("- District 5"), and a separator that
+# can mean either is not evidence of anything.
+SPLIT_OFFICER = re.compile(r"^\s*:\s*")
 
 
 def attach_officer_roles(lines, districts, county, name_side=None,
@@ -3260,6 +3371,15 @@ def attach_officer_roles(lines, districts, county, name_side=None,
         elif name_side:
             pinned = before if name_side == "before" else after
             cands = [pinned] if is_name(pinned) else []
+        elif SPLIT_OFFICER.match(lines[i + 1] if i + 1 < len(lines) else ""):
+            # "Role: Name" written as one line by the county and cut in two by
+            # the markup: Outagamie's block is <strong>Vice-Chairperson</strong>
+            # ": Rick Lautenschlager", and `to_lines` breaks on </strong>. The
+            # COLON is what makes this unambiguous — it is the tail of the
+            # county's own sentence, not a neighbouring row — so this case is
+            # taken before the two-neighbour scan below, which would read the
+            # block's consecutive officers as ambiguous and attach nothing.
+            cands = [SPLIT_OFFICER.sub("", lines[i + 1], count=1)]
         else:
             b_ok, a_ok = is_name(before), is_name(after)
             if b_ok and a_ok:
@@ -3683,8 +3803,7 @@ def scrape_county(fips, name, seats, strategy, url):
         # Sauk's page names no district NEAR a name; it labels its own fields,
         # so the whole page is read at once rather than as a line list.
         return scrape_fielded_county(fips, name, seats, url), "live"
-    page_html, read_from = fetch_or_archive(
-        url, fips, name, BROWSER if fips in BROWSER_HEADER_COUNTIES else UA)
+    page_html, read_from = fetch_or_archive(url, fips, name, headers_for(fips, url))
     if strategy == "indexroll":
         # A structured page carries the role in the person's own block, so it
         # needs no `attach_officer_roles` pass over the flattened lines — and

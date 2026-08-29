@@ -3381,163 +3381,223 @@
   "name": "Ted Cushing",
   "sourceUrl": "https://www.oneidacountywi.gov/government/cb/"
  },
- "5508901": {
-  "county": "Ozaukee",
+ "5508701": {
+  "county": "Outagamie",
   "district": 1,
-  "name": "Thomas R. Bichler",
-  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+  "name": "Cathy Thompson",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
  },
- "5508902": {
-  "county": "Ozaukee",
+ "5508702": {
+  "county": "Outagamie",
   "district": 2,
-  "name": "Bruce S. Paape",
-  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+  "name": "Dana Johnson",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
  },
- "5508903": {
-  "county": "Ozaukee",
+ "5508703": {
+  "county": "Outagamie",
   "district": 3,
-  "name": "Marcia Nosko",
-  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+  "name": "Amy Ristow",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
  },
- "5508904": {
-  "county": "Ozaukee",
+ "5508704": {
+  "county": "Outagamie",
   "district": 4,
-  "name": "Lee Schlenvogt",
-  "role": "Chairperson",
-  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+  "name": "Katrin Patience",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
  },
- "5508905": {
-  "county": "Ozaukee",
+ "5508705": {
+  "county": "Outagamie",
   "district": 5,
-  "name": "Scott R. Fischer",
-  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+  "name": "Dan Gabrielson",
+  "role": "County Board Chairperson",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
  },
- "5508906": {
-  "county": "Ozaukee",
+ "5508706": {
+  "county": "Outagamie",
   "district": 6,
-  "name": "Richard C. Nelson",
-  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+  "name": "John Kostelny",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
  },
- "5508907": {
-  "county": "Ozaukee",
+ "5508707": {
+  "county": "Outagamie",
   "district": 7,
-  "name": "Tony Matera",
-  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+  "name": "Lee Hammen",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
  },
- "5508908": {
-  "county": "Ozaukee",
+ "5508708": {
+  "county": "Outagamie",
   "district": 8,
-  "name": "Dave Larson",
-  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+  "name": "Karen Lawrence",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
  },
- "5508909": {
-  "county": "Ozaukee",
+ "5508709": {
+  "county": "Outagamie",
   "district": 9,
-  "name": "Tom Grabow",
-  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+  "name": "Justin Krueger",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
  },
- "5508910": {
-  "county": "Ozaukee",
+ "5508710": {
+  "county": "Outagamie",
   "district": 10,
-  "name": "Daniel E. Vogel",
-  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+  "name": "Christine Lamers",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
  },
- "5508911": {
-  "county": "Ozaukee",
+ "5508711": {
+  "county": "Outagamie",
   "district": 11,
-  "name": "Kevin Kennedy",
-  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+  "name": "Ryan Ferguson",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
  },
- "5508912": {
-  "county": "Ozaukee",
+ "5508712": {
+  "county": "Outagamie",
   "district": 12,
-  "name": "Melissa Custer",
-  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+  "name": "Jeffrey McCabe",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
  },
- "5508913": {
-  "county": "Ozaukee",
+ "5508713": {
+  "county": "Outagamie",
   "district": 13,
-  "name": "Todd Ambs",
-  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+  "name": "Jason Wegand",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
  },
- "5508914": {
-  "county": "Ozaukee",
+ "5508714": {
+  "county": "Outagamie",
   "district": 14,
-  "name": "Derek DeMent",
-  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+  "name": "Timothy Hermes",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
  },
- "5508915": {
-  "county": "Ozaukee",
+ "5508715": {
+  "county": "Outagamie",
   "district": 15,
-  "name": "Timothy Maguire",
-  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+  "name": "Sara MacDonald",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
  },
- "5508916": {
-  "county": "Ozaukee",
+ "5508716": {
+  "county": "Outagamie",
   "district": 16,
-  "name": "Connie Kincaide",
-  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+  "name": "Jerry Zabronsky",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
  },
- "5508917": {
-  "county": "Ozaukee",
+ "5508717": {
+  "county": "Outagamie",
   "district": 17,
-  "name": "Jack Arnett",
-  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+  "name": "Chris Croatt",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
  },
- "5508918": {
-  "county": "Ozaukee",
+ "5508718": {
+  "county": "Outagamie",
   "district": 18,
-  "name": "Eric Stelter",
-  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+  "name": "Cathy Spears",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
  },
- "5508919": {
-  "county": "Ozaukee",
+ "5508719": {
+  "county": "Outagamie",
   "district": 19,
-  "name": "Jennifer Mackinnon",
-  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+  "name": "Jayme Heiser",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
  },
- "5508920": {
-  "county": "Ozaukee",
+ "5508720": {
+  "county": "Outagamie",
   "district": 20,
-  "name": "Monis Khan",
-  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+  "name": "Mark Mitchell",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
  },
- "5508921": {
-  "county": "Ozaukee",
+ "5508721": {
+  "county": "Outagamie",
   "district": 21,
-  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board",
-  "vacant": true
+  "name": "John Cuff",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
  },
- "5508922": {
-  "county": "Ozaukee",
+ "5508722": {
+  "county": "Outagamie",
   "district": 22,
-  "name": "Rob Holyoke",
-  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+  "name": "Joy Hagen",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
  },
- "5508923": {
-  "county": "Ozaukee",
+ "5508723": {
+  "county": "Outagamie",
   "district": 23,
-  "name": "Kurt Schoessow",
-  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+  "name": "Ronald Klemp",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
  },
- "5508924": {
-  "county": "Ozaukee",
+ "5508724": {
+  "county": "Outagamie",
   "district": 24,
-  "name": "Jeffrey Hansher",
-  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+  "name": "Steve Thiede",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
  },
- "5508925": {
-  "county": "Ozaukee",
+ "5508725": {
+  "county": "Outagamie",
   "district": 25,
-  "name": "Matthew Dolsky",
-  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+  "name": "Carla Hales",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
  },
- "5508926": {
-  "county": "Ozaukee",
+ "5508726": {
+  "county": "Outagamie",
   "district": 26,
-  "name": "Patrick Foy",
+  "name": "Sarah Weinberg",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508727": {
+  "county": "Outagamie",
+  "district": 27,
+  "name": "Dean Culbertson",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508728": {
+  "county": "Outagamie",
+  "district": 28,
+  "name": "Yvonne Monfils",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508729": {
+  "county": "Outagamie",
+  "district": 29,
+  "name": "Jayson Winterfeldt",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508730": {
+  "county": "Outagamie",
+  "district": 30,
+  "name": "Daniel Nejedlo",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508731": {
+  "county": "Outagamie",
+  "district": 31,
+  "name": "Dennis Clegg",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508732": {
+  "county": "Outagamie",
+  "district": 32,
+  "name": "Pamela Saulnier",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508733": {
+  "county": "Outagamie",
+  "district": 33,
+  "name": "Debbie Vander Heiden",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508734": {
+  "county": "Outagamie",
+  "district": 34,
+  "name": "Patrick Amerson",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508735": {
+  "county": "Outagamie",
+  "district": 35,
+  "name": "Dustin Koury",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508736": {
+  "county": "Outagamie",
+  "district": 36,
+  "name": "Rick Lautenschlager",
   "role": "Vice-Chairperson",
-  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
  },
  "5509501": {
   "county": "Polk",
