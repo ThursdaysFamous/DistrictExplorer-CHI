@@ -261,6 +261,20 @@ VACANT = re.compile(r"(?i)\bvacan(?:t|cy)\b")
 SPLIT_LETTER = re.compile(r"\b([A-Z])\s+([a-z]{2,})")
 
 
+# str.title() turns "1st Vice Chair" into "1St Vice Chair" — it upper-cases the
+# letter after every digit. Ordinals keep their own casing. BOTH role paths
+# case through here — `split_role` (a role attached to the name it is
+# reading) and `attach_officer_roles` (a county's own officers block). It
+# lives up here so the first of those can reach it: `split_role` used a bare
+# .title() and shipped Polk's "1St"/"2Nd" vice chairs to the card.
+_ORDINAL = re.compile(r"^\d+(?:st|nd|rd|th)$", re.I)
+
+
+def role_case(text):
+    return " ".join(w.lower() if _ORDINAL.match(w) else w.title()
+                    for w in text.split())
+
+
 def repair(name):
     """Rejoin a capital split off its own word by markup ("T homas" -> "Thomas")."""
     return SPLIT_LETTER.sub(r"\1\2", name)
@@ -278,7 +292,7 @@ def split_role(text):
     m = ROLE_TAIL.search(text)
     if m:
         role, text = role or m.group(1), ROLE_TAIL.sub("", text)
-    return " ".join(text.split()), (" ".join(role.split()).title() if role else None)
+    return " ".join(text.split()), (role_case(" ".join(role.split())) if role else None)
 
 
 def is_name(text):
@@ -720,14 +734,6 @@ def scrape_arcgis_county(spec):
 # THE JOIN IS ON A FULL NAME AND MUST BE UNIQUE, and every join PRINTS. A role
 # guessed onto the wrong supervisor is worse than no role at all.
 OFFICER_LINE = re.compile(r"^\s*(%s)\s*(?:[-–—:]\s*(.+))?$" % _ROLE, re.I)
-# str.title() turns "1st Vice Chair" into "1St Vice Chair" — it upper-cases the
-# letter after every digit. Ordinals keep their own casing.
-_ORDINAL = re.compile(r"^\d+(?:st|nd|rd|th)$", re.I)
-
-
-def role_case(text):
-    return " ".join(w.lower() if _ORDINAL.match(w) else w.title()
-                    for w in text.split())
 
 
 def attach_officer_roles(lines, districts, county):
