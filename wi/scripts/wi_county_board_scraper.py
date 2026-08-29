@@ -1,257 +1,115 @@
 #!/usr/bin/env python3
 """
-Scrape county board supervisors from the 31 Wisconsin counties that publish a
-district-keyed member list. Stage 1 of the pair; build_wi_county_board_roster.py
-turns the intermediate JSON into data/app/county-board-members.json.
-Scrape county board supervisors from the 34 Wisconsin counties whose roster
-this file can reach. Stage 1 of the pair; build_wi_county_board_roster.py turns
-the intermediate JSON into data/app/county-board-members.json.
+Scrape county board supervisors from the 50 Wisconsin counties whose roster this
+file can reach. Stage 1 of the pair; build_wi_county_board_roster.py turns the
+intermediate JSON into data/app/county-board-members.json.
 
-FOUR ROUTES, AND WHICH ONE A COUNTY TAKES IS A MEASUREMENT
-----------------------------------------------------------
-  * COUNTIES          - 30 counties whose own board page pairs a district with
-                        a person, each page's reading direction PINNED;
-  * ARCGIS_COUNTIES   - Milwaukee and Racine, whose SITES refuse this client
-                        and whose own GIS layers carry the roster as feature
-                        attributes;
-  * PDF_COUNTIES      - Adams, whose clerk publishes the roster as a directory
-                        PDF with a text layer, linked from the county's own
-                        site and fetchable, so it is re-read weekly like a page;
-  * DOCUMENT_ROSTERS  - Taylor alone, whose host answers a captcha to every
-                        automated client, so its roster is carried as a dated
-                        document with a NOT RE-READ line on every run.
+EIGHT ROUTES, AND WHICH ONE A COUNTY TAKES IS A MEASUREMENT
+-----------------------------------------------------------
+  * COUNTIES                    - 40 counties whose own board page pairs a
+                                  district with a person, each page's reading
+                                  direction PINNED;
+  * ARCGIS_COUNTIES             - Milwaukee and Racine, whose SITES refuse this
+                                  client and whose own GIS layers carry the
+                                  roster as feature attributes;
+  * ARCHIVE_COUNTIES            - Fond du Lac, whose host denies this client and
+                                  whose public page the Internet Archive holds;
+                                  the county is still asked FIRST every run and
+                                  the copy's age is gated before any name is used;
+  * CONSTITUENT_COUNTIES        - Dodge, whose 33 seats sit in a paginated
+                                  constituent directory needing its own fetch;
+  * WITNESSED_DOCUMENT_COUNTIES - Kenosha, whose Clerk publishes the roster in a
+                                  directory PDF this file FETCHES and cross-checks
+                                  against the board's own page every run;
+  * PDF_COUNTIES                - Adams, whose directory PDF is fetchable and
+                                  district-keyed, so it is re-read weekly like a page;
+  * FRAMED_TABLE_COUNTIES       - Columbia, whose listing page is a shell around
+                                  an iframe onto a second county host;
+  * DOCUMENT_ROSTERS            - Taylor, Lafayette and La Crosse, whose hosts
+                                  answer a captcha or a Cloudflare challenge, so
+                                  their rosters are carried as dated documents
+                                  with a NOT RE-READ line every run. Lafayette
+                                  additionally re-tries its live page each run,
+                                  because that page PARSES the moment the
+                                  challenge lifts.
 
-WHY ONLY THIRTY-FOUR OF SEVENTY-TWO
------------------------------------
-WHY ONLY THIRTY-ONE OF SEVENTY-TWO
-----------------------------------
+The last two are not the same arrangement and the difference is stated where
+each is defined: a WITNESSED document is fetched and checked every week; a
+CARRIED one was read once, by a person, through an access control this file does
+not try to defeat.
+
+WHY ONLY FIFTY OF SEVENTY-TWO
+-----------------------------
 Wisconsin publishes county board DISTRICTS statewide (Wis. Stat. 5.15(4)(br)1,
-see build_wi_supervisory_districts.py) and publishes the PEOPLE in them
-nowhere: each county names its own supervisors, 72 different ways. Thirty pair
-a district with a person in a form a parser can read, Dodge does it in a
-paginated constituent DIRECTORY that needs its own fetch shape (see
-CONSTITUENT_COUNTIES), and Milwaukee and Racine publish theirs on their own GIS
-layers. The rest are not oversights and are recorded as such:
-WHY ONLY THIRTY-ONE OF SEVENTY-TWO
-----------------------------------
-Wisconsin publishes county board DISTRICTS statewide (Wis. Stat. 5.15(4)(br)1,
-see build_wi_supervisory_districts.py) and publishes the PEOPLE in them
-WHY ONLY THIRTY-ONE OF SEVENTY-TWO
-----------------------------------
-Wisconsin publishes county board DISTRICTS statewide (Wis. Stat. 5.15(4)(br)1,
-see build_wi_supervisory_districts.py) and publishes the PEOPLE in them
-WHY ONLY THIRTY-ONE OF SEVENTY-TWO
-----------------------------------
-Wisconsin publishes county board DISTRICTS statewide (Wis. Stat. 5.15(4)(br)1,
-see build_wi_supervisory_districts.py) and publishes the PEOPLE in them
-nowhere: each county names its own supervisors, 72 different ways. Thirty-one
-pair a district with a person in a form a parser can read (plus Milwaukee and
-Racine off their own GIS layers, and Taylor by document, below). The rest are
-not oversights and are recorded as such:
-nowhere: each county names its own supervisors, 72 different ways. THIRTY
-pair a district with a person in a form a parser can read on a PAGE (plus
-Milwaukee and Racine off their own GIS layers, Adams out of its own directory
-PDF, and Taylor by document — all below). The rest are not oversights and are
-recorded as such:
-nowhere: each county names its own supervisors, 72 different ways. THIRTY
-pair a district with a person in a form these readings can parse, plus
-Milwaukee and Racine off their own GIS layers, Columbia out of the table its
-listing page frames from a second host, and Taylor from a dated document —
-each of those four routes below. The rest are not oversights and are recorded
-as such:
+see build_wi_supervisory_districts.py) and publishes the PEOPLE in them nowhere:
+each county names its own supervisors, 72 different ways. Fifty are reachable by
+one of the eight routes above. The other 22 are not oversights and are recorded
+as such — and the record is worth reading before adding to it, because on
+2026-08-29 seventeen counties joined at once and ALMOST NONE OF THEM HAD STARTED
+PUBLISHING ANYTHING NEW. What changed was this file:
 
-  * Kenosha and Oconto publish district MAPS — a page per district with a PDF
-    and no name on it anywhere. Both were re-checked 2026-08-29 and both
-    records held; Ozaukee was in this bullet until the same day, when the
-    board's own page turned out to name all 26 (see COUNTIES).
-    This file used to claim 23 counties; that count came from a sweep that
-    tested district NUMBERS, and numbers are what a map index has.
-  * Marinette publishes 29 of its 30 seats by number; the thirtieth is an
-    unnumbered "VACANT SEAT" row in an alphabetical list. It SHIPS since
-    2026-08-29, district 26 assigned by elimination under the arithmetic gate
-    in ELIMINATION_VACANCY below — opt-in per county, never a general rule.
-  * Dodge WAS in this bucket until 2026-08-29, filed under "publishes prose",
-    and that was never measured against the county. The sweep asked
-    co.dodge.wi.us, which had become a 261-byte "This site has permanently
-    moved" stub answering HTTP 200; the county is at www.co.dodge.wi.gov and
-    publishes all 33 seats district-keyed. A sweep that reads a STATUS CODE
-    cannot tell a county that publishes nothing from a county that published a
-    forwarding note, so both land in the same bucket — the Knox shape in
-    Illinois, where a blocked WEBSITE was recorded as a blocked COUNTY. It
-    ships now; see CONSTITUENT_COUNTIES for the fetch shape its directory
-    needed, and build_wi_county_board_directory.py --probe for the sweep that
-    reads the body rather than the status code.
-  * The rest could not be read: 7 answer 403 to a datacenter client and hold
-    it against browser headers (Marathon, La Crosse, Outagamie, Fond du Lac,
-    Lincoln, Monroe, Sheboygan) — Rock was one of them until 2026-08-29,
-    see A REFUSED SITE IS NOT A REFUSED PAGE below — Taylor sits behind an sgcaptcha
-    challenge answering 202 (an access control, not an obstacle to route
-    around), Forest does not resolve, and the remainder publish their members
-    as PDFs, images or prose with no district column.
+  * MARATHON answers 200 with the header set an ordinary Chrome navigation
+    sends, and is unread here only for want of a pinned reading. It is the last
+    of the four counties that measurement freed (Outagamie, Rock and Sheboygan
+    were the others, and all three now ship).
+  * LINCOLN answers a Cloudflare managed challenge on every path and header
+    tried. A challenge is an access control and is not defeated here.
+  * FOREST does not resolve at all.
+  * OCONTO publishes district MAPS — a page per district with a PDF and no name
+    on it anywhere, re-checked 2026-08-29 and the record held. Kenosha and
+    Ozaukee were in this bullet until the same day; Ozaukee's BOARD page names
+    all 26, and Kenosha's Clerk publishes a district-keyed directory. This file
+    once claimed 23 counties on a sweep that tested district NUMBERS, and
+    numbers are what a map index has. TEST FOR THE PEOPLE.
+  * The remaining 18 publish their members as images or prose with no district
+    column on the pages their own sites point to.
 
-    LAFAYETTE WAS THE NINTH OF THOSE 403s AND NOW RIDES DOCUMENT_ROSTERS.
-    Its refusal was re-measured 2026-08-29 and is real (a Cloudflare managed
-    challenge, bare host and www, browser headers), but the record had gone
-    one step past the measurement: the county was filed under "could not be
-    read" when what could not be read was its HOST. The page publishes all
-    sixteen seats in the plainest shape on this list, which the Internet
-    Archive's own 2025-02-14 capture of it shows and which `_same_line_lead`
-    reads 16/16. THAT IS WHY ITS ENTRY CARRIES A `live` READING WHERE
-    TAYLOR'S CANNOT: Taylor has no host to try, and Lafayette has a page that
-    parses the moment its challenge lifts.
-a district with a person on a PAGE a parser can read, Milwaukee and Racine
-publish theirs as attributes on their own GIS layers, Kenosha publishes its in
-a DOCUMENT this file fetches and witnesses every run
-(WITNESSED_DOCUMENT_COUNTIES), and Taylor's is CARRIED from a document an
-operator read once behind a captcha (DOCUMENT_ROSTERS). Those last two are not
-the same thing and the difference is stated where they are defined. The other
-38 are not oversights and are recorded as such:
+FIVE WAYS THAT LIST HAS BEEN WRONG, EACH FOUND BY CHECKING RATHER THAN GUESSING
+-------------------------------------------------------------------------------
+  1. A 403 MEASURES THE REQUEST, NOT THE COUNTY. The bucket used to say nine
+     counties answer 403 "and hold it against browser headers", where browser
+     headers meant the three this file sent: a User-Agent, an Accept and an
+     Accept-Language. Monroe's Akamai bot management scores the WHOLE request:
+     those three are refused from any User-Agent, and so is UA plus all four
+     Sec-Fetch-* headers, while UA + Accept + Accept-Language + Sec-Fetch-*
+     together — what an ordinary Chrome navigation sends — is served the full
+     153 KB page from this same datacenter address. Five of the nine were wrong.
+     And Outagamie is the OPPOSITE case: its edge denies any `Mozilla/`-prefixed
+     user-agent and serves a client that says honestly what it is, which is the
+     one county where the browser string WAS the block. See HONEST_UA_HOSTS and
+     BROWSER_HEADER_COUNTIES — both PINNED per host, never negotiated, so a
+     weekly run sends identical bytes and the log says which request worked.
+  2. A PDF IS A FORMAT, NOT A BLOCKER. "Publishes a PDF" sat in the unreadable
+     bucket until Adams, and the disqualifier was always "no district column".
+     The question is whether the document carries a TEXT LAYER and a district
+     beside each name. Adams's does, and had for as long as this file existed.
+     OPEN THE FILE BEFORE FILING THE COUNTY. Adams then looks like Taylor and is
+     not: nothing blocks Adams, so Adams SCRAPES where Taylor is CARRIED. Sort a
+     county by what the client can reach, never by what the source is made of.
+  3. A LISTING PAGE THAT READS AS EMPTY MAY BE FRAMING THE ANSWER. Columbia
+     publishes all 28 seats with a profile page per supervisor and its chair and
+     both vice chairs named — a fuller list than most counties already shipping —
+     and this scraper could not see one character, because the page is a shell
+     around an <iframe> onto a second host with the name split across a First
+     Name cell and a Last Name cell. "The page carries no name" and "the county
+     publishes no name" are different measurements.
+  4. CHECK WHICH BOARD PAGE. Kenosha's record described
+     /142/County-Board-Supervisor-Districts — an index of 23 links to 23 PDF
+     maps with nobody's name on it — accurately, and that is not the county's
+     roster page. /113/County-Board-of-Supervisors is, and it names all 23. Two
+     slugs one word apart, one a map index and one the answer.
+  5. READ THE BODY, NOT THE STATUS CODE. Dodge was filed under "publishes
+     prose"; co.dodge.wi.us had become a 261-byte "This site has permanently
+     moved" stub answering HTTP 200, and the county is at www.co.dodge.wi.gov
+     publishing all 33 seats district-keyed. A sweep that reads a status code
+     cannot tell a county that publishes nothing from a county that left a
+     forwarding note. See build_wi_county_board_directory.py --probe.
 
-  * Ozaukee publishes district MAPS — a page per district with a PDF and no
-    name on it anywhere. It was checked three pages deep. This file used to
-    claim 23 counties; that count came from a sweep that tested district
-    NUMBERS, and numbers are what a map index has.
-  * KENOSHA WAS IN THAT BUCKET UNTIL 2026-08-29 AND ITS RECORD NAMED THE WRONG
-    PAGE. The description above is accurate about
-    /142/County-Board-Supervisor-Districts — an index of 23 links to 23 PDF
-    maps with nobody's name on it — and is not the county's roster page.
-    /113/County-Board-of-Supervisors is, and it publishes all 23 seats as
-    "District N" followed by the supervisor's name, resolving 23 of 23 under
-    the plain `after` reading with no new code. TWO SLUGS ONE WORD APART, one
-    of them a map index and one of them the answer: when a county's record
-    says "checked the board page", check WHICH board page.
-  * Marinette publishes 29 of its 30 seats. District 26 is an unnumbered
-    "VACANT SEAT" row in an alphabetical list, and assigning it by elimination
-    would be an inference the county never wrote, so the county stays out.
-  * Marinette published 29 of its 30 seats and stayed out for it: District 26
-    is an unnumbered "VACANT SEAT" row in an alphabetical list, and assigning
-    it by elimination is an inference the county never wrote. It SHIPPED on
-    2026-08-29 under the opt-in, arithmetic-gated ELIMINATION_VACANCY rule
-    below; this bullet is the reason it could not before.
-  * Marinette used to be here, and now ships: it publishes 29 of its 30 seats,
-    District 26 being an unnumbered "VACANT SEAT" row in an alphabetical list.
-    Assigning it IS an inference, so it is opt-in per county and gated on
-    arithmetic — see ELIMINATION_VACANCY.
-  * Marinette used to be in this list and no longer is. It publishes 29 of
-    its 30 seats plus one unnumbered "VACANT SEAT" row, and District 26 is
-    assigned by elimination — an opt-in inference gated on arithmetic
-    (ELIMINATION_VACANCY, far below), not a general rule.
-  * Marinette publishes 29 of its 30 seats: District 26 is an unnumbered
-    "VACANT SEAT" row in an alphabetical list. It kept the county out until
-    2026-08-29, when `eliminated_vacancy` made assigning that one seat an
-    arithmetic gate rather than a guess — it ships, and this bullet stays as
-    the record of why it did not.
-  * Marinette publishes 29 of its 30 seats by number; District 26 is an
-    unnumbered "VACANT SEAT" row in an alphabetical list. That inference is
-    now made, opt-in and gated on arithmetic re-checked every run — see
-    ELIMINATION_VACANCY — so the county ships; it stayed out until 2026-08-29.
-  * The rest could not be read: 9 answer 403 to a datacenter client and hold
-    it against browser headers (Marathon, La Crosse, Outagamie, Fond du Lac,
-    Lafayette, Lincoln, Monroe, Rock, Sheboygan), Taylor sits behind an
-  * The rest could not be read: 8 answer 403 to a datacenter client and hold
-    it against browser headers (Marathon, La Crosse, Fond du Lac, Lafayette,
-    Lincoln, Monroe, Rock, Sheboygan), Taylor sits behind an
-    sgcaptcha challenge answering 202 (an access control, not an obstacle to
-    route around), Forest does not resolve, and the remainder publish their
-    members as PDFs, images or prose with no district column. That last
-    clause is the load-bearing one and Kenosha is why: the disqualifier is
-    "no district column", never "PDF". A document that pairs a district with
-    a person is a source (see WITNESSED_DOCUMENT_COUNTIES); one that lists
-    names alphabetically is not, whatever it is served as.
-    members as PDFs, images or prose with no district column.
-    FOND DU LAC LEFT THAT BUCKET ON 2026-08-29 WITHOUT ITS BLOCK LIFTING —
-    the 403 is still there and still measured; what changed is that the page
-    behind it is now read through the Internet Archive. See ARCHIVE_COUNTIES.
-    members as images or prose with no district column.
-
-    "PUBLISHES A PDF" SAT IN THAT BUCKET UNTIL ADAMS AND SHOULD NOT HAVE.
-    A PDF is a FORMAT, not a blocker: the question is whether it carries a
-    TEXT LAYER and a district column, and a county filed under the word was
-    being refused before anyone opened the document. Adams's carries both,
-    and it had been sitting behind that word for as long as this file has
-    existed. Open the file before filing the county.
-  * Marinette used to sit here for publishing 29 of its 30 seats — district 26
-    is an unnumbered "VACANT SEAT" row in an alphabetical list. It ships since
-    2026-08-29 with that seat assigned by elimination, opt-in per county and
-    gated on arithmetic re-checked every run (`ELIMINATION_VACANCY`).
-  * The rest could not be read: 3 answer 403 to this client (La Crosse,
-    Lincoln, Lafayette), 4 answer 200 and simply have no pinned reading yet
-    (Marathon, Outagamie, Rock, Sheboygan — see the correction below), Taylor
-    sits behind an sgcaptcha challenge answering 202 (an access control, not
-    an obstacle to route around), Forest does not resolve, and the remainder
-    publish their members as PDFs, images or prose with no district column.
-
-    THAT 403 BUCKET SAID "AND HOLD IT AGAINST BROWSER HEADERS" AND WAS WRONG
-    ABOUT FIVE OF THE NINE COUNTIES IN IT (2026-08-29). It listed Marathon,
-    La Crosse, Outagamie, Fond du Lac, Lafayette, Lincoln, Monroe, Rock and
-    Sheboygan, and "browser headers" had meant the three this file sends: a
-    User-Agent, an Accept and an Accept-Language. Monroe's edge is Akamai bot
-    management (`server: AkamaiGHost`, an errors.edgesuite.net reference id on
-    the deny page) and it scores the WHOLE request rather than the UA: those
-    three headers are refused from any User-Agent, and so is UA + all four
-    Sec-Fetch-* headers, while UA + Accept + Accept-Language + Sec-Fetch-*
-    together — what an ordinary Chrome navigation sends — is served 200 with
-    the full 153 KB page, from this same datacenter address. Re-probing the
-    other eight with that set the same afternoon: MARATHON, OUTAGAMIE, ROCK
-    and SHEBOYGAN also answer 200 (128 seats between them, unread here only
-    for want of a pinned reading), La Crosse, Lincoln and Lafayette still
-    answer 403, and Fond du Lac answers 200 either way with a 703-byte stub.
-    A 403 IS A MEASUREMENT OF THE REQUEST THAT WAS SENT, NOT OF THE COUNTY —
-    the Coles/Gallatin lesson (an incomplete TLS chain read as an absent
-    host) in a second guise, and worth re-running against any county in this
-    file recorded as refusing.
-  * Marinette publishes 29 of its 30 numbered seats plus one unnumbered
-    "VACANT SEAT" row, and now SHIPS: the arithmetic forces the assignment
-    (exactly one district unclaimed, exactly one vacancy line carrying no
-    number), which is opt-in per county — see ELIMINATION_VACANCY below.
-  * The rest could not be read: 8 answer 403 to a datacenter client and hold
-    it against browser headers (Marathon, Outagamie, Fond du Lac, Lafayette,
-    Lincoln, Monroe, Rock, Sheboygan), La Crosse answers 403 the same way
-    and ships anyway (below), Taylor sits behind an sgcaptcha challenge
-    answering 202 (an access control, not an obstacle to route around),
-    Forest does not resolve, and the remainder publish their members as
-    PDFs, images or prose with no district column.
-
-    NEITHER COLUMBIA NOR TAYLOR WAS A "PUBLISHES NOTHING" COUNTY, and that
-    last bucket held both of them until each was actually looked at. Columbia
-    publishes all 28 of its seats with a profile page per supervisor and its
-    chair and both vice chairs named in a block of their own — a fuller list
-    than most counties already shipping — and this scraper could not see a
-    character of it, because the page is a shell around an <iframe> onto a
-    second host and the name inside is split across a First Name cell and a
-    Last Name cell. See FRAMED_TABLE_COUNTIES. WHEN A LISTING PAGE READS AS
-    EMPTY, LOOK FOR WHAT IT FRAMES: a county's roster host need not be a page
-    the county links in prose, and "the page carries no name" and "the county
-    publishes no name" are not the same measurement.
-
-    TAYLOR IS NOT A "PUBLISHES NOTHING" COUNTY EITHER, and the bucket said so
-    only because nothing here can SEE the page. It publishes a County Board
-    directory at co.taylor.wi.us/directory/county-board/ that is
-    district-keyed and carries a name, a county e-mail, a street address and
-    a phone per supervisor — richer than most of the counties that do ship.
-    The block is the host, not the county: every path on co.taylor.wi.us
-    answers HTTP 202 with a 196-byte meta-refresh to
-    `/.well-known/sgcaptcha/` and an `sg-captcha: challenge` header, and the
-    three other Taylor hosts tried (taylorcountywi.gov, its www, and
-    gis.co.taylor.wi.us) do not resolve at all. A captcha is an access
-    control and is not defeated here, so NO WEEKLY SCRAPE OF TAYLOR IS
-    POSSIBLE: if its roster ever ships it must ride a document-carried
-    route with a dated not-re-read line (the Edwards/Wabash pattern in
-    Illinois's il_county_commissioners_scraper.py), never this table.
-
-    WHAT IS KNOWN OF ITS CONTENTS CAME FROM THE OPERATOR'S OWN BROWSER
-    (2026-08-29). The first paste covered districts 1-12 of 17 and the
-    all-seats-or-nothing rule held the county back until 13-17 arrived — 12
-    of 17 would have read as a complete board with five empty seats. All
-    seventeen are in DOCUMENT_ROSTERS below.
-
-    ADAMS LOOKS LIKE TAYLOR AND IS NOT. Both publish their board in a
-    document rather than on a page, which is why they sat in the same
-    bucket; the difference is that nothing blocks Adams. Its county site
-    answers 200, the directory it links downloads unauthenticated, and the
-    whole route is open to this client — so Adams SCRAPES (PDF_COUNTIES)
-    where Taylor is CARRIED (DOCUMENT_ROSTERS). Sort a county by what the
-    client can reach, never by what the source is made of.
+MARINETTE IS THE ONE INFERENCE THIS FILE MAKES, and it is opt-in per county:
+the board page numbers 29 of 30 seats and prints one unnumbered "VACANT SEAT"
+row, so district 26 is assigned by elimination — gated on arithmetic re-checked
+every run (EXACTLY one district unclaimed AND EXACTLY one unnumbered vacancy
+line), never a general rule. See ELIMINATION_VACANCY.
 
 OZAUKEE WAS NEVER A MAP-ONLY COUNTY (2026-08-29)
 -------------------------------------------------
@@ -537,8 +395,8 @@ Iowa marks no chair and no vacancy, which matters to the officer builder rather
 than to this one: the Blue Book's Iowa chair, John M Meyers, sits at district
 14, so its weekly reconciliation CONFIRMS the dated book row instead of
 withholding it.
-KENOSHA WAS THE TENTH, AND WHAT IT ADDS IS A ROUTE (2026-08-29)
-----------------------------------------------------------------
+KENOSHA'S OWN CLERK PUBLISHES MORE THAN ITS BOARD PAGE DOES (2026-08-29)
+------------------------------------------------------------------------
 Its own miss is recorded in the bucket list above — the wrong board page. What
 it adds to this file is the route: the county's Clerk publishes MORE than the
 board page does, in a DOCUMENT rather than on a page. The annual Directory of
@@ -563,8 +421,8 @@ would go on being fetched, successfully, forever. /1018/County-Directory-PDF is
 the county's own page for "the current directory" and 302s to whichever edition
 is live, so the run log prints the edition it landed on and an edition change is
 visible instead of silent.
-CRAWFORD MAKES IT THIRTY-ONE, AND ITS RECORD WAS WRONG (2026-08-29)
---------------------------------------------------------------------
+CRAWFORD'S "PUBLISHES NOTHING" RECORD WAS OURS (2026-08-29)
+-----------------------------------------------------------
 Crawford was one of ten counties the 2026-08-27 re-sweep left in the bucket
 "publish no district-keyed list on the pages their own sites point to". Its own
 site points at one: www.crawfordcountywi.gov/boardsupervisors carries all
@@ -845,17 +703,10 @@ Two things keep that honest.
 The chair the page names is a third witness on top of that: the Wisconsin Blue
 Book (April 2025) already had Kevin Leavy as Rock's board chair, independently
 of the county's own page, and the officer builder reconciles the two.
-A COUNTY'S ROSTER NOW ARRIVES BY ONE OF FOUR CARRIERS (2026-08-29)
-------------------------------------------------------------------
-COUNTIES is the original and still the biggest: a page this client can fetch,
-read by one of five pinned line readings. ARCGIS_COUNTIES reads Milwaukee's and
-Racine's supervisors off their own GIS layers, because those two counties'
-SITES refuse this client while their GIS does not. DOCUMENT_ROSTERS carries
-Taylor, whose every host answers a captcha, from a page the operator read in a
-browser — with a NOT RE-READ line and the document's age printed every run,
-because pretending a weekly check happens would be the lie.
-
-ARCHIVE_COUNTIES is the fourth and it is the one that needs its reasoning
+WHERE THE ARCHIVE ROUTE SITS AMONG THE EIGHT (2026-08-29)
+---------------------------------------------------------
+The eight carriers are listed at the top of this file. ARCHIVE_COUNTIES is the
+one that needs its reasoning
 stated. Fond du Lac's directory is richer than most of the pages that already
 ship — name, district, county e-mail and phone for all twenty-five seats, the
 Chair and both Vice Chairs titled — and www.fdlco.wi.gov answers this client

@@ -11,64 +11,37 @@ That is what stops a county's page reorganising into a plausible-but-wrong
 number of members — the two files were built from different publishers (the
 county's own page, and LTSB's statewide filing) and have to agree.
 
-Thirty-four of Wisconsin's 72 counties have a district-keyed member list this
-project can carry; the other 38 are recorded in the Data gaps panel and their
-cards keep linking the county board rather than naming anybody. See the
-scraper's docstring for what each of them actually publishes.
+Fifty of Wisconsin's 72 counties have a district-keyed member list this project
+can reach, by one of the eight routes the scraper's docstring sets out; the
+other 22 are recorded in the Data gaps panel and their cards keep linking the
+county board rather than naming anybody.
 
-TWO OF THE THIRTY-FOUR ARE CARRIED FROM A DOCUMENT, NOT RE-READ WEEKLY, AND
-THE CARD HAS TO SAY SO. Taylor's host answers a captcha and Lafayette's a
-Cloudflare challenge, so their rows come from a dated capture of each county's
-own page. The scraper marks those counties `carried_from_document` with the
-day they were read; this builder turns that into an `asOf` on every one of
+AND A COUNTY THAT SHIPPED LAST WEEK MAY NOT SIMPLY VANISH. The floors below are
+a fleet-sized net and one county falling out of a fifty-county file goes
+straight through it — a whole board quietly deleted, every count guard green,
+the diff looking like housekeeping. So the previous shipped file is read back
+and any county that resolved nothing this run fails the build by name. Dropping
+one deliberately takes `--allow-drop <County>`, which is a decision somebody
+makes rather than a silence.
+
+THREE OF THE FIFTY ARE CARRIED FROM A DOCUMENT, NOT RE-READ WEEKLY, AND THE
+CARD HAS TO SAY SO. Taylor's host answers a captcha, and Lafayette's and La
+Crosse's a Cloudflare challenge, so their rows come from a dated capture of each
+county's own page. The scraper marks those counties `carried_from_document` with
+the day they were read; this builder turns that into an `asOf` on every one of
 their rows, and the card prints it rather than letting a dated snapshot read
-like the weekly re-read the other thirty-two get. A county whose live page
+like the weekly re-read the other forty-seven get. A county whose live page
 answers on a later run loses the flag in the scraper, so the field disappears
-here by itself.
-Thirty-four of Wisconsin's 72 counties publish a district-keyed member list;
-the other 38 are recorded in the Data gaps panel and their cards keep linking
-the county board rather than naming anybody. See the scraper's docstring for
-what each of the other 38 actually publishes.
+here by itself — which is exactly what Fond du Lac did on the first run after
+its own archive route shipped.
 
 CONTACT RIDES ONLY WHERE ITS COUNTY PUBLISHED IT, which is why these rows are
-not uniform and should not be made uniform. Thirty counties publish a name and
-a district and nothing else. Milwaukee and Racine carry an e-mail on their own
-GIS features (and Milwaukee a member web page). Kenosha's Clerk prints a phone
-AND an e-mail for all 23 seats in the county's own Directory of Public
-Officials, and the county's board page links each supervisor's profile — the
-fullest rows in the file. Taylor's carried document has both too.
-
-THE PHONE PASSTHROUGH WAS MISSING AND TAYLOR PAID FOR IT: its 17 numbers were
-read off the county's directory, carried in the scraper's own table, and
-dropped here — published data going nowhere, the same shape as the e-mails
-that sat in this file unrendered until the card learned to show them. An
-absent field means the county does not publish it; it must never mean this
-builder dropped it, and check_roster_retention.py holds that line per source
-from the first day a field ships.
-can obtain; the other 38 are recorded in the Data gaps panel and their cards
-keep linking the county board rather than naming anybody. See the scraper's
-docstring for what each of the other 38 actually publishes.
-Thirty-four of Wisconsin's 72 counties publish a district-keyed member list
-this client can obtain; the other 38 are recorded in the Data gaps panel and
-their cards keep linking the county board rather than naming anybody. See the
-scraper's docstring for what each of the other 38 actually publishes.
-Thirty-four of Wisconsin's 72 counties' district-keyed member lists can be
-obtained; the other 38 are recorded in the Data gaps panel and their cards keep
-linking the county board rather than naming anybody. See the scraper's
-docstring for what each of the other 38 actually publishes.
-
-CONTACT RIDES ONLY WHERE ITS COUNTY PUBLISHED IT. A county that names a
-supervisor's county mailbox, office phone or profile page gets those on the
-card; a county that names only a person gets a name. THE PHONE WAS BEING
-DROPPED HERE: Taylor's document rows have carried one since the county joined
-on 2026-08-29 — its own commit calls a county e-mail and phone official contact
-details that ship — and this builder wrote email and profileUrl and silently
-left the phone behind, so seventeen numbers sat in the scraper's cache and
-never reached a reader. Sauk arriving with thirty more is what surfaced it.
-Thirty-four of Wisconsin's 72 counties can be resolved to a district-keyed
-member list; the other 38 are recorded in the Data gaps panel and their cards
-keep linking the county board rather than naming anybody. See the scraper's
-docstring for what each of the other 38 actually publishes.
+not uniform and should not be made uniform. Most counties publish a name and a
+district and nothing else; some publish a county mailbox, an office phone or a
+profile page beside the seat, and those ride. An absent field renders nothing
+rather than a placeholder. `phone` was collected by the scraper and silently
+dropped here for a while: ADDING A FIELD TO THE SCRAPER IS NOT ADDING IT TO THE
+APP — the two halves have to agree.
 
 Usage:
     python3 wi/scripts/build_wi_county_board_roster.py

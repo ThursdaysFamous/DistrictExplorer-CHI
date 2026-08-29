@@ -2,31 +2,14 @@ name: Update WI county board roster
 
 # Weekly refresh of the Wisconsin county board supervisors
 # (wi/data/app/county-board-members.json, read by wi/index.html's County Board
-# District card). Re-scrapes every county that publishes a readable
-# district-keyed member list, by whichever of the four carriers reaches it —
-# board pages, Milwaukee's and Racine's own GIS layers (Milwaukee witnessed
-# against the county's Legistar API), Taylor's operator-read document, and
-# Fond du Lac's page through the Internet Archive — and, if anything changed,
-# opens a PR rather than committing to main — officeholder data should get a
-# human look before it ships.
-#
-# TWO MORE COUNTIES SHIP WITHOUT BEING RE-READ HERE. Taylor's host answers a
-# captcha and La Crosse's a Cloudflare block to every automated client, so their
-# rosters ride DOCUMENT_ROSTERS in the scraper and the run prints a NOT RE-READ
-# line with each document's age instead of pretending to refresh it. That age is
-# the thing to watch after an April election (wi/WATCH.md).
-#
-# The scraper reads each county's page with its reading direction PINNED, and a
-# county whose page has reshaped fails its own count guard and is SKIPPED for
-# that run rather than yielding a shifted roster. So a drop in the county count
-# here is the signal to go and re-read that county's page, not a flake — and
-# the builder now refuses to write when a county that shipped before resolves
-# nothing, so that signal cannot be merged as a quiet deletion.
-#
-# One county (Rock) is read from the Internet Archive: its own host answers 403
-# to this client on every path. The ladder still asks the county live first on
-# every run, refuses any capture older than the April meeting that seated the
-# board, and prints which rung answered on the build log.
+# District card). Re-scrapes the 50 counties whose district-keyed member list
+# this can reach, by whichever of the eight carriers reaches it — 40 board
+# pages, Milwaukee's and Racine's own GIS layers (Milwaukee witnessed against
+# the county's Legistar API), Fond du Lac through the Internet Archive, Dodge's
+# constituent directory, Kenosha's and Adams's directory PDFs, Columbia's framed
+# table, and Taylor's, Lafayette's and La Crosse's dated documents — and, if
+# anything changed, opens a PR rather than committing to
+# main — officeholder data should get a human look before it ships.
 
 on:
   schedule:
