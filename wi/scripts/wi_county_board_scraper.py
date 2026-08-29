@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-Scrape county board supervisors from the 30 Wisconsin counties that publish a
+Scrape county board supervisors from the 31 Wisconsin counties that publish a
 district-keyed member list. Stage 1 of the pair; build_wi_county_board_roster.py
 turns the intermediate JSON into data/app/county-board-members.json.
 
-WHY ONLY THIRTY OF SEVENTY-TWO
-------------------------------
+WHY ONLY THIRTY-ONE OF SEVENTY-TWO
+----------------------------------
 Wisconsin publishes county board DISTRICTS statewide (Wis. Stat. 5.15(4)(br)1,
 see build_wi_supervisory_districts.py) and publishes the PEOPLE in them
-nowhere: each county names its own supervisors, 72 different ways. Thirty
+nowhere: each county names its own supervisors, 72 different ways. Thirty-one
 pair a district with a person in a form a parser can read (plus Milwaukee and
 Racine off their own GIS layers, below). The rest are not oversights and are
 recorded as such:
@@ -17,9 +17,11 @@ recorded as such:
     and no name on it anywhere. They were checked three pages deep apiece.
     This file used to claim 23 counties; that count came from a sweep that
     tested district NUMBERS, and numbers are what a map index has.
-  * Marinette publishes 29 of its 30 seats. District 26 is an unnumbered
-    "VACANT SEAT" row in an alphabetical list, and assigning it by elimination
-    would be an inference the county never wrote, so the county stays out.
+  * Marinette published 29 of its 30 seats and stayed out for it: District 26
+    is an unnumbered "VACANT SEAT" row in an alphabetical list, and assigning
+    it by elimination is an inference the county never wrote. It SHIPPED on
+    2026-08-29 under the opt-in, arithmetic-gated ELIMINATION_VACANCY rule
+    below; this bullet is the reason it could not before.
   * The rest could not be read: 9 answer 403 to a datacenter client and hold
     it against browser headers (Marathon, La Crosse, Outagamie, Fond du Lac,
     Lafayette, Lincoln, Monroe, Rock, Sheboygan), Taylor sits behind an
@@ -71,8 +73,8 @@ e-mail was being drafted to the county for a list it publishes.
   countyofdane.com this project's own clerk file carries. ASK THE BOARD'S OWN
   HOST BEFORE RECORDING THAT A COUNTY PUBLISHES NOTHING.
 
-CRAWFORD MAKES IT THIRTY, AND ITS RECORD WAS WRONG (2026-08-29)
-----------------------------------------------------------------
+CRAWFORD MAKES IT THIRTY-ONE, AND ITS RECORD WAS WRONG (2026-08-29)
+--------------------------------------------------------------------
 Crawford was one of ten counties the 2026-08-27 re-sweep left in the bucket
 "publish no district-keyed list on the pages their own sites point to". Its own
 site points at one: www.crawfordcountywi.gov/boardsupervisors carries all
@@ -233,6 +235,8 @@ COUNTIES = [
      "https://www.co.juneau.wi.gov/government/county_board_supervisors/index.php"),
     ("55061", "Kewaunee", 20, "before",
      "https://www.kewauneeco.org/government/boards_and_committees/"),
+    ("55075", "Marinette", 30, "same-line",
+     "https://www.marinettecountywi.gov/county_board/"),
     ("55085", "Oneida", 21, "column-after",
      "https://www.oneidacountywi.gov/government/cb/"),
     ("55099", "Price", 13, "column-after",
@@ -486,14 +490,37 @@ STRICT_READINGS = {
 COLUMN_READINGS = {"column-after": True, "column-before": False}
 
 
-def vacant_districts(lines, seats):
+def vacant_districts(lines, seats, strategy="after"):
+    """Districts the county itself marks empty, read from the district's OWN row.
+
+    ON A `same-line` PAGE THE WINDOW IS THE LINE, and that is not a nicety.
+    Marinette lists "Trygve Rhude - District 22", then his wards, then the
+    next row — which is its unnumbered "VACANT SEAT". A three-line lookahead
+    reached across the row boundary (the ward line in between says nothing
+    about a district, so stopping at the next district heading does not help)
+    and filed District 22 as vacant, ERASING A SITTING SUPERVISOR — silently,
+    because the seat count still came to 30 and every guard stayed green.
+    A page that puts name and district on one line states a vacancy there too.
+    For the other readings the window survives, now stopping at the next
+    district line. Measured 2026-08-29 while adding Marinette.
+    """
     out = set()
     for i, line in enumerate(lines):
         m = DIST.search(line)
         if not m:
             continue
         d = int(m.group(1))
-        if 1 <= d <= seats and VACANT.search(" ".join(lines[i:i + 3])):
+        if not (1 <= d <= seats):
+            continue
+        window = [line]
+        if strategy != "same-line":
+            # a page that puts the name on its own line may put the vacancy
+            # there too; one that puts both on the district line never does
+            for j in range(i + 1, min(i + 3, len(lines))):
+                if DIST.search(lines[j]):
+                    break           # the next district's row: never borrow it
+                window.append(lines[j])
+        if VACANT.search(" ".join(window)):
             out.add(d)
     return out
 
@@ -793,6 +820,39 @@ def attach_officer_roles(lines, districts, county):
     return districts
 
 
+# COUNTIES WHOSE ONE VACANCY CARRIES NO DISTRICT NUMBER. Marinette lists its
+# board alphabetically by surname, every row "Name - District N" except one
+# that reads only "VACANT SEAT" with the ward description beneath it. Twenty-
+# nine districts are named, one is not, and the county states one empty seat.
+#
+# ASSIGNING THAT SEAT IS AN INFERENCE, and it is opt-in per county rather than
+# a general rule because a page that drops a numbered row for any OTHER reason
+# would otherwise get a silently invented vacancy. The gate is arithmetic and
+# is checked on every run: EXACTLY ONE district unclaimed AND EXACTLY ONE
+# vacancy line that carries no district number. If the page ever names two
+# vacancies, or loses a second row, the county fails its count guard as before
+# and nothing is inferred.
+ELIMINATION_VACANCY = {"55075"}      # Marinette
+
+
+def eliminated_vacancy(lines, seats, found, vacant, county):
+    """The single unclaimed district, when the page states a single unnumbered
+    vacancy. Returns the district number, or None when the arithmetic does not
+    force it."""
+    unclaimed = [d for d in range(1, seats + 1) if d not in found and d not in vacant]
+    if len(unclaimed) != 1:
+        return None
+    loose = [l for l in lines if VACANT.search(l) and not DIST.search(l)]
+    if len(loose) != 1:
+        print("  note %-12s %d unnumbered vacancy line(s) for %d unclaimed district(s)"
+              " — nothing inferred" % (county, len(loose), len(unclaimed)), file=sys.stderr)
+        return None
+    print("  infer %-12s district %d is the county's one unnumbered %r row "
+          "(29 of 30 numbered, one vacancy stated)"
+          % (county, unclaimed[0], loose[0].strip()), file=sys.stderr)
+    return unclaimed[0]
+
+
 def scrape_county(fips, name, seats, strategy, url):
     """All seats or nothing — see the module docstring."""
     lines = to_lines(fetch(url))
@@ -804,10 +864,14 @@ def scrape_county(fips, name, seats, strategy, url):
         # reader reports them from the cell it actually lands on instead.
         found, vacant = _column(lines, seats, COLUMN_READINGS[strategy])
     else:
-        vacant = vacant_districts(lines, seats)
+        vacant = vacant_districts(lines, seats, strategy)
         found = READINGS[strategy](lines)
     for d in vacant:
         found.pop(d, None)          # the county says the seat is empty; believe it
+    if fips in ELIMINATION_VACANCY:
+        d = eliminated_vacancy(lines, seats, found, vacant, name)
+        if d is not None:
+            vacant.add(d)
     covered = set(found) | vacant
     if covered != set(range(1, seats + 1)):
         missing = sorted(set(range(1, seats + 1)) - covered)
