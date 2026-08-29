@@ -4341,6 +4341,36 @@ future work, recorded here rather than implied).
 `white-county-board` is retired; `white-special-districts` succeeds it,
 carrying forward the fragile-mail note and the "one map file" measurement.
 
+### 2026-08-29: the Jo Daviess permission names a domain the site no longer uses — asked
+
+Licensing the project (Apache-2.0 for the code, ODbL 1.0 for the data) forced a
+question the rename had left sitting. Kratcha's 2026-08-17 authorization permits
+display "on your website: chidistricts.com for public viewing". The site is
+districtry.com now — same site, same operator, same use, old domain redirecting
+— but A PERMISSION THAT NAMES A DOMAIN SAYS WHAT IT NAMES, and assuming it
+travelled would have been the project inventing a fact about somebody else's
+licence.
+
+So `LICENSE-DATA.md` excludes this one file from the ODbL grant by name and
+records the domain gap rather than papering over it, and the confirmation was
+asked for on the ORIGINAL thread on 29 Aug — to Kratcha, cc LaScala, the gis@
+mailbox and County Administrator Angela Kaiser. Follow-ups 19 Sep and 3 Oct
+before the route is called unresponsive, which would be a claim about the ask
+and never about the permission: the authorization was given for this site and
+has not been withdrawn, so the display continues meanwhile.
+
+**A CORRECTION SHIPPED WITH THE ASK, and it is the reusable part.** The draft
+first warned against addressing Diane LaScala by name because she was "no longer
+listed in the county directory". That directory carries 41 addresses and neither
+`dlascala@` nor `jkratcha@` — it publishes office mailboxes and department
+heads, not GIS staff — so it was never capable of saying what was read out of
+it, and the licence thread shows her quoting, invoicing, delivering the files
+and closing the conversation twelve days earlier. **A DIRECTORY THAT DOES NOT
+LIST SOMEONE HAS NOT SAID THEY LEFT.** Same shape as Knox (a website refusing a
+client read as the county being blocked) and Vermilion (a Clerk having no GIS
+read as the county having none), and the first time this project has made it
+about a PERSON rather than a dataset.
+
 ### 2026-08-17, night: Jo Daviess ships as the 63rd county — the first boundary this project ever BOUGHT, and the first licence-gated county cleared
 
 `jo-daviess-county-board-districts` was the gap no free route could close, and

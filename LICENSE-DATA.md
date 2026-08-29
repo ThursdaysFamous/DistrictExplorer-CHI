@@ -58,8 +58,11 @@ website: chidistricts.com for public viewing" (e-mail of 2026-08-17).
 
 That permission names `chidistricts.com`, which was this site's domain when it
 was granted and which now redirects to `districtry.com` — the same site, renamed.
-The permission has not been re-sought under the new name, and this file does not
-claim more than the county actually wrote.
+**Confirmation that it carries over to the new name was requested from the
+county's IT/GIS Director on 2026-08-29 and has not yet been answered.** Until it
+is, this file claims no more than the county actually wrote: the authorization
+on record names the old domain. If the county declines or asks for the
+boundaries to come down, that is a real outcome and this file will say so.
 
 That authorization is a display permission, not a redistribution permission.
 So:
