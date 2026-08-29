@@ -836,9 +836,23 @@ Iowa Code 331.206 plan 3. Iowa's position was better than the Illinois case that
 the rule — it has certified proof of each county's method in the Legislature's own
 `PLANTYPE` — it simply was not using it on that card. `supervisorPlan` now rides the
 roster (read back from the shipped geometry, where `seats` already comes from) and every
-list is qualified: plans 1 and 2 say every voter votes on every seat, plan 3 says one of
-these supervisors represents you and not the whole board. **Jones County, which is absent
-from the state's district layer, claims NEITHER method** rather than defaulting to one.
+list is qualified: plans 1 and 2 say every voter votes on every seat, and plan 3 says one
+of these is your supervisor rather than all of them. **Jones County, which is absent from
+the state's district layer, claims NEITHER method** rather than defaulting to one.
+
+**AMENDED 2026-08-28 — QUALIFYING A LIST IS NOT THE SAME AS HELPING SOMEONE READ IT.** The
+first plan-3 wording was *"one of these supervisors represents you, not the whole board"*.
+It is true, it satisfies the rule above, and in the 18 plan 3 counties whose districts are
+NOT keyed it is a dead end: it tells a reader the list in front of them cannot answer their
+question and stops. The fix is not softer wording, it is the next step — **all 40 plan 3
+counties ship numbered district geometry**, so the County Supervisor District card names the
+district a reader is in whether or not anyone has keyed its supervisors, and its own footer
+links that county's board page (present for all 18). So the note is now conditional on
+keying rather than on the plan alone: a keyed county explains its district badges, and an
+unkeyed one adds a second row in the card's own *"Not shown — <reason>"* idiom naming the
+limitation and where to go. It also counts the board rather than assuming five ("one of
+these three is your supervisor" in a 3-seat county). The general rule: **when a card cannot
+answer the reader's question, say what it cannot answer AND what in the app can.**
 
 Two smaller improvements came with it: where phase 3 PR 2 keyed a county's districts, each
 name now carries the district it holds and the board is ordered by district rather than by

@@ -8410,10 +8410,56 @@ function initIowaExplorer() {
     "PLAN 1": "Elected at large — every voter in the county votes on every seat.",
     "PLAN 2": "Elected countywide — every voter votes on every seat, though each " +
       "supervisor must live in a different district.",
-    "PLAN 3": "Elected by district — one of these supervisors represents you, not the whole board.",
     "TRANSITIONING": "This county is moving from at-large to district elections " +
       "(Senate File 75); the board below is the one sitting now."
   };
+  // Iowa Code 331.201 puts a board at three members or five, so these are the
+  // only two words needed; the numeral is a fallback that should never render.
+  var IA_SEAT_WORD = { 3: "three", 5: "five" };
+  /* Plan 3 has no fixed note, because the useful thing to say depends on
+   * whether THIS county's districts are keyed.
+   *
+   * The wording this replaced — "one of these supervisors represents you, not
+   * the whole board" — was true and was a dead end: it told a reader the list
+   * in front of them could not answer their question and stopped there. In the
+   * 18 plan 3 counties that publish no district beside a name, that is every
+   * reader of this card.
+   *
+   * WHAT THE APP CAN STILL SAY IS THE DISTRICT ITSELF. All 40 plan 3 counties
+   * ship numbered district geometry, so the County Supervisor District card
+   * names the district a reader is in whether or not anyone has keyed its
+   * supervisors — and its own footer links that county's board page, which is
+   * where the pairing lives when the county publishes one at all. So the
+   * unkeyed case gets a next step instead of a full stop, in the card's own
+   * "Not shown — <reason>" idiom. */
+  function iaBoardElectionRows(plan, seats, allKeyed) {
+    if (plan !== "PLAN 3") {
+      var note = IA_BOARD_PLAN_NOTE[plan];
+      return note ? [{ label: "Election", value: note }] : [];
+    }
+    if (allKeyed) {
+      return [{
+        label: "Election",
+        value: "Elected by district — the badge on each name is the district that " +
+          "supervisor holds. The County Supervisor District card names the district " +
+          "you are in."
+      }];
+    }
+    var word = IA_SEAT_WORD[seats] || String(seats);
+    return [
+      {
+        label: "Election",
+        value: "Elected by district — one of these " + word + " is your supervisor, " +
+          "not all " + word + "."
+      },
+      {
+        label: "Your supervisor",
+        value: "Not shown — this county publishes no district beside its supervisors' " +
+          "names. The County Supervisor District card names the district you are in, " +
+          "and links the county's own board page."
+      }
+    ];
+  }
   // The other five elected county offices, in the order Iowa Code ch. 331
   // names them. The auditor is not here: it ships from its own file above
   // (Iowa Code 47.2 makes it the county's commissioner of elections) and
@@ -8518,10 +8564,6 @@ function initIowaExplorer() {
         var supervisors = officers.supervisors;
         if (supervisors && supervisors.length) {
           wrap.appendChild(renderSectionLabel("BOARD OF SUPERVISORS"));
-          var planNote = IA_BOARD_PLAN_NOTE[officers.supervisorPlan];
-          if (planNote) {
-            wrap.appendChild(renderFieldStack([{ label: "Election", value: planNote }]));
-          }
           // Where this county's districts are keyed (phase 3 PR 2), each name
           // carries the district it holds, so a plan-3 reader can find theirs
           // instead of reading five names and guessing.
@@ -8533,10 +8575,17 @@ function initIowaExplorer() {
               if (rec && rec.name) byName[String(rec.name)] = d;
             });
           }
+          // computed BEFORE the note, because what is worth telling a plan-3
+          // reader depends on whether their county's seats carry a district
+          var allKeyed = supervisors.length > 0 &&
+            supervisors.every(function (m) { return byName[String(m.name)]; });
+          var planRows = iaBoardElectionRows(officers.supervisorPlan,
+            supervisors.length, allKeyed);
+          if (planRows.length) wrap.appendChild(renderFieldStack(planRows));
           // where every seat is keyed, order by district rather than by
           // surname — a plan-3 reader is looking for a number, not a name
           var ordered = supervisors.slice();
-          if (ordered.length && ordered.every(function (m) { return byName[String(m.name)]; })) {
+          if (allKeyed) {
             ordered.sort(function (a, b) {
               return parseInt(byName[String(a.name)], 10) - parseInt(byName[String(b.name)], 10);
             });

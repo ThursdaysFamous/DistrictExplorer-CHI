@@ -1619,6 +1619,26 @@ the two overlap Part 5 is the shorter statement of the same rule.
   times implies five direct lines that do not exist, so it is hoisted to the board
   office and shown once. The test is mechanical — collect the distinct numbers, and
   if exactly one covers the whole board, it belongs to the board.
+- **A HONEST CAVEAT THAT LEAVES THE READER NOWHERE IS STILL A DEAD END. Say what the
+  card cannot answer AND what in the app can.** The whole-board rule above makes a card
+  qualify a list it cannot key — Iowa's plan 3 counties got *"one of these supervisors
+  represents you, not the whole board"*. That is true, it satisfies the rule, and for the
+  18 plan 3 counties whose districts nobody has keyed it is the entire answer a reader
+  gets: the list in front of them cannot resolve their question, full stop. Correct and
+  useless is a real failure mode, and it is easy to ship because every honesty check
+  passes.
+  **Concretely:** before settling on a caveat, ask what the app still knows. Iowa's answer
+  was sitting one card away — all 40 plan 3 counties ship NUMBERED district geometry, so
+  the County Supervisor District card names the reader's district whether or not anyone
+  keyed its supervisors, and its own footer links that county's board page. So the note
+  became conditional on KEYING rather than on the plan: a keyed county explains its
+  district badges, an unkeyed one adds a second row in the card's own "Not shown —
+  <reason>" idiom that names the limitation and points at the card that does answer. Two
+  smaller things fell out of writing it properly — it counts the board rather than
+  assuming five ("one of these three" in a 3-seat county), and the keyed/unkeyed test is
+  computed from the data rather than from the plan, so a county that gains a keying starts
+  reading correctly with no copy edit.
+
 - **FIX THE ROSTER, THEN FIX EVERY CARD THAT READS IT — the count is not always one.**
   Iowa applied the switchboard rule above to `ia-county-officers.json` and its County
   card and called it done, while a SECOND file carried the same people onto a second
