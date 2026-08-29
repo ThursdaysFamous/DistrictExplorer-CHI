@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-Scrape county board supervisors from the 29 Wisconsin counties that publish a
+Scrape county board supervisors from the 30 Wisconsin counties that publish a
 district-keyed member list. Stage 1 of the pair; build_wi_county_board_roster.py
 turns the intermediate JSON into data/app/county-board-members.json.
 
-WHY ONLY TWENTY-NINE OF SEVENTY-TWO
------------------------------------
+WHY ONLY THIRTY OF SEVENTY-TWO
+------------------------------
 Wisconsin publishes county board DISTRICTS statewide (Wis. Stat. 5.15(4)(br)1,
 see build_wi_supervisory_districts.py) and publishes the PEOPLE in them
-nowhere: each county names its own supervisors, 72 different ways. Twenty-nine
+nowhere: each county names its own supervisors, 72 different ways. Thirty
 pair a district with a person in a form a parser can read (plus Milwaukee and
 Racine off their own GIS layers, below). The rest are not oversights and are
 recorded as such:
@@ -71,6 +71,33 @@ e-mail was being drafted to the county for a list it publishes.
   countyofdane.com this project's own clerk file carries. ASK THE BOARD'S OWN
   HOST BEFORE RECORDING THAT A COUNTY PUBLISHES NOTHING.
 
+CRAWFORD MAKES IT THIRTY, AND ITS RECORD WAS WRONG (2026-08-29)
+----------------------------------------------------------------
+Crawford was one of ten counties the 2026-08-27 re-sweep left in the bucket
+"publish no district-keyed list on the pages their own sites point to". Its own
+site points at one: www.crawfordcountywi.gov/boardsupervisors carries all
+seventeen districts, each as a "District N - <the wards it covers>" heading
+followed by "Supervisor", the supervisor's name, a phone, and a street address.
+Seventeen of seventeen resolve under both the plain and the strict `after`
+readings, and they name the same people.
+
+WHAT THE SWEEP COULD HAVE MISSED IT ON is measurable and worth pinning: the
+county's front page links that page ONCE, and the anchor text is the word
+"Government". Only the HREF says board. A link harvest scored on link TEXT
+never sees it; one scored on the URL does. Which of the two the sweep did is
+not recorded here, so the durable rule is to score BOTH — and the previous
+domain lesson does not apply, since the clerk association's crawfordcountywi.ORG
+redirects to the .gov and serves the same page.
+
+THE PHONE AND THE ADDRESS ARE NOT CARRIED. The address is the supervisor's
+home ("53201 Kuhn Drive"), and a home address never ships here even when the
+source publishes it — the Taylor rule. The phone would ship under that same
+rule, and does not for a different reason: nothing in the page-scraped path
+carries contact at all (the builder ships `email`/`profileUrl` only where a
+county GIS feature or the Taylor document supplied them), so a phone-only
+Crawford row would be the first of its kind and the card has no contact row to
+render it in. It is left in the county's page rather than in this file.
+
 THE READING DIRECTION IS PINNED PER COUNTY, NOT DETECTED
 --------------------------------------------------------
 Three page shapes carry the same information:
@@ -93,7 +120,7 @@ same way:
     column      a District COLUMN of bare numerals (Oneida, Price,
                 Trempealeau) — see `_column`
     -strict     as before/after, but the scan STOPS at the next district line
-                (Richland, Rusk, Shawano) — see `_windowed_strict`
+                (Crawford, Richland, Rusk, Shawano) — see `_windowed_strict`
 
 The strict readings exist because a district whose own row yields no readable
 name reaches past the next heading and takes ITS name: Rusk prints an INDEX of
@@ -218,7 +245,14 @@ COUNTIES = [
      "https://www.co.shawano.wi.us/county_board/"),
     ("55121", "Trempealeau", 17, "column-before",
      "https://co.trempealeau.wi.us/government/agendas_minutes/standing_committees/"
-     "trempealeau_county_board_of_supervisors.php"),]
+     "trempealeau_county_board_of_supervisors.php"),
+    # --- 2026-08-29: Crawford, an eleventh county whose "publishes nothing"
+    # record was ours. Its page is `after` in shape (District heading, the word
+    # "Supervisor", then the name) and pinned STRICT: a district whose block
+    # loses its name must fail the count guard, never reach nine lines down
+    # into its neighbour's. Both readings resolve 17/17 and agree.
+    ("55023", "Crawford", 17, "after-strict",
+     "https://www.crawfordcountywi.gov/boardsupervisors"),]
 
 # --- text shaping -------------------------------------------------------------
 # nav is NOT boilerplate everywhere: Grant County publishes its entire board in

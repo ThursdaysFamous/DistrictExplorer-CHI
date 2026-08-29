@@ -275,7 +275,7 @@ PROVENANCE = [
         "app_file": "county-board-members.json",
         "source_url": "https://www.browncountywi.gov/government/county-board-of-supervisors/",
         "note": (
-            "The supervisor roster — 29 counties' own board pages plus two county GIS layers (rows above), scraped weekly by "
+            "The supervisor roster — 30 counties' own board pages plus two county GIS layers (rows above) and Taylor's dated document, scraped weekly by "
             "update-wi-county-board-roster.yml with each county's reading direction "
             "pinned (the full URL table is COUNTIES in wi_county_board_scraper.py). "
             "Two representative pages are probed — Brown, the largest launch-set "
