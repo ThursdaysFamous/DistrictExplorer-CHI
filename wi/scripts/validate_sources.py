@@ -334,6 +334,27 @@ PROVENANCE = [
     {
         "layer": "county-board",
         "app_file": "county-board-members.json",
+        "source_url": "https://www.fdlco.wi.gov/government/county-board-supervisors",
+        "blocked": "AkamaiGHost \"Access Denied\" on every path, every user-agent and "
+                   "both schemes — a client-fingerprint block on a datacenter "
+                   "address, not a refusal to publish. Fond du Lac's twenty-five "
+                   "supervisors ship anyway, read from the Internet Archive's copy "
+                   "of this same public page (ARCHIVE_COUNTIES in "
+                   "wi_county_board_scraper.py), with the copy's age gated.",
+        "note": (
+            "Fond du Lac's County Board Supervisors directory — district-keyed "
+            "with name, county e-mail and phone per supervisor, and the Chair and "
+            "both Vice Chairs titled. THE INVERSION MATTERS MORE HERE THAN "
+            "ANYWHERE ELSE IN THIS FILE: this host answering again would not "
+            "merely be tidy news, it is the event that retires the archive hop, "
+            "because the scraper already tries the county's own server first on "
+            "every run and only falls through on a block. A WARN on this row is "
+            "an instruction to delete code."
+        ),
+    },
+    {
+        "layer": "county-board",
+        "app_file": "county-board-members.json",
         "source_url": "https://co.taylor.wi.us/directory/county-board/",
         "blocked": "sg-captcha challenge on every path (HTTP 202 + meta-refresh to "
                    "/.well-known/sgcaptcha/); a captcha is an access control and is "

@@ -2,13 +2,13 @@ name: Update WI county board roster
 
 # Weekly refresh of the Wisconsin county board supervisors
 # (wi/data/app/county-board-members.json, read by wi/index.html's County Board
-# District card). Refreshes the 34 counties whose district-keyed member list
-# this can reach — 30 board pages, Milwaukee's and Racine's own GIS layers
-# (Milwaukee witnessed against the county's Legistar API), Kenosha's Clerk's
-# Directory of Public Officials fetched and witnessed against the county board
-# page, and Taylor's carried from a document because its host answers a captcha
-# — and, if anything changed, opens a PR rather than committing to
-# main — officeholder data should get a human look before it ships.
+# District card). Re-scrapes every county that publishes a readable
+# district-keyed member list, by whichever of the four carriers reaches it —
+# board pages, Milwaukee's and Racine's own GIS layers (Milwaukee witnessed
+# against the county's Legistar API), Taylor's operator-read document, and
+# Fond du Lac's page through the Internet Archive — and, if anything changed,
+# opens a PR rather than committing to main — officeholder data should get a
+# human look before it ships.
 #
 # The scraper reads each county's page with its reading direction PINNED, and a
 # county whose page has reshaped fails its own count guard and is SKIPPED for
@@ -56,10 +56,22 @@ jobs:
 
       # The scraper fetches with urllib and the builder reads the shipped
       # geometry off disk; pypdf (above) is its only third-party import.
-      - name: Refresh the 34 counties whose member list this can reach
+      #
+      # The archive.org keys are OPTIONAL and only Fond du Lac uses them: its
+      # page is Akamai-denied to this client and is read through the Internet
+      # Archive, which means asking Save Page Now for a fresh copy each run.
+      # Anonymous saves work but share the runner's address with every other
+      # project on it, so an API key is the difference between a fresh capture
+      # and falling back to whatever the crawler last took. Absent keys are not
+      # an error; a copy too old to trust fails THAT COUNTY loudly instead.
+      - name: Scrape the counties that publish a readable member list
+        env:
+          ARCHIVE_SPN_ACCESS_KEY: ${{ secrets.ARCHIVE_SPN_ACCESS_KEY }}
+          ARCHIVE_SPN_SECRET_KEY: ${{ secrets.ARCHIVE_SPN_SECRET_KEY }}
         run: python3 wi/scripts/wi_county_board_scraper.py
 
-      # Refuses to write below its floors (32 counties, 713 seats) and checks
+      # Refuses to write below its floors (see the builder's MIN_* constants,
+      # set to tolerate a county or two going dark on any given run) and checks
       # every county's seats against the district geometry actually shipped, so
       # the two publishers have to agree before this lands, and refuses to drop
       # a county that shipped last week.

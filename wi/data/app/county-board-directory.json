@@ -12,7 +12,7 @@
  "55005": {
   "county": "Barron",
   "seats": 29,
-  "url": "https://co.barron.wi.us/"
+  "url": "https://www.barroncountywi.gov/index.asp?SEC=%7bB7F5AB49-3697-4A2E-8327-26847A43F33E%7d&Type=B_BASIC"
  },
  "55007": {
   "county": "Bayfield",
@@ -97,7 +97,7 @@
  "55039": {
   "county": "Fond Du Lac",
   "seats": 25,
-  "url": "https://www.fdlco.wi.gov/"
+  "url": "https://www.fdlco.wi.gov/government/county-board-supervisors"
  },
  "55041": {
   "county": "Forest",
@@ -292,7 +292,7 @@
  "55115": {
   "county": "Shawano",
   "seats": 27,
-  "url": "https://shawanocountywi.gov/"
+  "url": "https://www.co.shawano.wi.us/county_board/"
  },
  "55117": {
   "county": "Sheboygan",

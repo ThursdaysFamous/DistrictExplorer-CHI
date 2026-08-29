@@ -125,10 +125,12 @@ def main():
                 row["name"] = member["name"]
                 if member["role"]:
                     row["role"] = member["role"]
-                # contact rides only where its county published it (see the
-                # docstring) — the two county-GIS rosters carry it on their
-                # features, Kenosha's and Taylor's on their counties' own
-                # documents, and the 30 page-scraped counties publish none
+                # CONTACT RIDES ONLY WHERE ITS COUNTY PUBLISHED IT. This
+                # started as the two county-GIS rosters' feature attributes,
+                # which is why the comment here used to say the page-scraped
+                # counties never publish contact — three now do, and `phone`
+                # was reaching this builder from Taylor's document roster and
+                # being dropped on the floor for want of these two lines.
                 if member.get("email"):
                     row["email"] = member["email"]
                 if member.get("phone"):
