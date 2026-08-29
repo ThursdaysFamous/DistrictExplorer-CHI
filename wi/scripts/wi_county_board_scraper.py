@@ -7,6 +7,20 @@ Scrape county board supervisors from the 34 Wisconsin counties whose roster
 this file can reach. Stage 1 of the pair; build_wi_county_board_roster.py turns
 the intermediate JSON into data/app/county-board-members.json.
 
+FOUR ROUTES, AND WHICH ONE A COUNTY TAKES IS A MEASUREMENT
+----------------------------------------------------------
+  * COUNTIES          - 30 counties whose own board page pairs a district with
+                        a person, each page's reading direction PINNED;
+  * ARCGIS_COUNTIES   - Milwaukee and Racine, whose SITES refuse this client
+                        and whose own GIS layers carry the roster as feature
+                        attributes;
+  * PDF_COUNTIES      - Adams, whose clerk publishes the roster as a directory
+                        PDF with a text layer, linked from the county's own
+                        site and fetchable, so it is re-read weekly like a page;
+  * DOCUMENT_ROSTERS  - Taylor alone, whose host answers a captcha to every
+                        automated client, so its roster is carried as a dated
+                        document with a NOT RE-READ line on every run.
+
 WHY ONLY THIRTY-FOUR OF SEVENTY-TWO
 -----------------------------------
 Wisconsin publishes county board DISTRICTS statewide (Wis. Stat. 5.15(4)(br)1,
@@ -24,6 +38,11 @@ nowhere: each county names its own supervisors, 72 different ways. Thirty-one
 pair a district with a person in a form a parser can read (plus Milwaukee and
 Racine off their own GIS layers, and Taylor by document, below). The rest are
 not oversights and are recorded as such:
+nowhere: each county names its own supervisors, 72 different ways. THIRTY
+pair a district with a person in a form a parser can read on a PAGE (plus
+Milwaukee and Racine off their own GIS layers, Adams out of its own directory
+PDF, and Taylor by document — all below). The rest are not oversights and are
+recorded as such:
 
   * Kenosha and Oconto publish district MAPS — a page per district with a PDF
     and no name on it anywhere. Both were re-checked 2026-08-29 and both
@@ -97,6 +116,10 @@ the same thing and the difference is stated where they are defined. The other
     District 26 being an unnumbered "VACANT SEAT" row in an alphabetical list.
     Assigning it IS an inference, so it is opt-in per county and gated on
     arithmetic — see ELIMINATION_VACANCY.
+  * Marinette used to be in this list and no longer is. It publishes 29 of
+    its 30 seats plus one unnumbered "VACANT SEAT" row, and District 26 is
+    assigned by elimination — an opt-in inference gated on arithmetic
+    (ELIMINATION_VACANCY, far below), not a general rule.
   * The rest could not be read: 9 answer 403 to a datacenter client and hold
     it against browser headers (Marathon, La Crosse, Outagamie, Fond du Lac,
     Lafayette, Lincoln, Monroe, Rock, Sheboygan), Taylor sits behind an
@@ -111,6 +134,14 @@ the same thing and the difference is stated where they are defined. The other
     FOND DU LAC LEFT THAT BUCKET ON 2026-08-29 WITHOUT ITS BLOCK LIFTING —
     the 403 is still there and still measured; what changed is that the page
     behind it is now read through the Internet Archive. See ARCHIVE_COUNTIES.
+    members as images or prose with no district column.
+
+    "PUBLISHES A PDF" SAT IN THAT BUCKET UNTIL ADAMS AND SHOULD NOT HAVE.
+    A PDF is a FORMAT, not a blocker: the question is whether it carries a
+    TEXT LAYER and a district column, and a county filed under the word was
+    being refused before anyone opened the document. Adams's carries both,
+    and it had been sitting behind that word for as long as this file has
+    existed. Open the file before filing the county.
 
     TAYLOR IS NOT A "PUBLISHES NOTHING" COUNTY, and the bucket above said so
     only because nothing here can SEE the page. It publishes a County Board
@@ -128,11 +159,18 @@ the same thing and the difference is stated where they are defined. The other
     Illinois's il_county_commissioners_scraper.py), never this table.
 
     WHAT IS KNOWN OF ITS CONTENTS CAME FROM THE OPERATOR'S OWN BROWSER
-    (2026-08-29) and is INCOMPLETE: districts 1-12 of 17. The shipped LTSB
-    geometry numbers Taylor 1..17, so the roster does not resolve and the
-    all-seats-or-nothing rule applies — 12 of 17 would read as a complete
-    board with five empty seats. Nothing is shipped for Taylor until 13-17
-    are in hand.
+    (2026-08-29). The first paste covered districts 1-12 of 17 and the
+    all-seats-or-nothing rule held the county back until 13-17 arrived — 12
+    of 17 would have read as a complete board with five empty seats. All
+    seventeen are in DOCUMENT_ROSTERS below.
+
+    ADAMS LOOKS LIKE TAYLOR AND IS NOT. Both publish their board in a
+    document rather than on a page, which is why they sat in the same
+    bucket; the difference is that nothing blocks Adams. Its county site
+    answers 200, the directory it links downloads unauthenticated, and the
+    whole route is open to this client — so Adams SCRAPES (PDF_COUNTIES)
+    where Taylor is CARRIED (DOCUMENT_ROSTERS). Sort a county by what the
+    client can reach, never by what the source is made of.
 
 OZAUKEE WAS NEVER A MAP-ONLY COUNTY (2026-08-29)
 -------------------------------------------------
@@ -2005,6 +2043,197 @@ def scrape_archive_county(spec):
     return {str(d): members[d] for d in sorted(members)}, stamps
 
 
+# --- Adams: a roster that rides a PDF the county publishes ---------------------
+# THE ONE COUNTY WHOSE MEMBER LIST IS A DOCUMENT AND STILL SCRAPES WEEKLY.
+# Adams was filed under this file's "publish members as PDFs, images or prose"
+# bucket, and the gaps record's `wanted` line said outright that "a district
+# map, a PDF or an alphabetical list with no district column cannot be used".
+# That rule is right about the first and third and WRONG ABOUT THE MIDDLE ONE,
+# which is the finding: a PDF is a FORMAT, not a blocker. The question is
+# whether it carries a TEXT LAYER and a district column, and Adams's carries
+# both — twenty `DISTRICT <n>` headings, each with the supervisor's name, a
+# county mailbox and a phone (the Menard lesson in Illinois, one state over:
+# look for the text layer before reaching for the raster methods).
+#
+# NOTHING HERE IS HAND-CARRIED, which is what separates this from
+# DOCUMENT_ROSTERS below. The county clerk's "2026 Public Directory" is linked
+# as `County Directory` from the county's own site, and both hops are open to
+# an ordinary client: www.co.adams.wi.us answers 200, and the Drive file it
+# points at downloads unauthenticated. So the run RESOLVES THE LINK EVERY WEEK
+# rather than pinning a file id — the clerk republishes the directory under a
+# NEW Drive id each edition (this one is dated 28 August 2026 on its own cover),
+# and a pinned id would go on serving the superseded edition forever with no
+# error, which is the Socrata-dataset failure this project already guards
+# elsewhere. The link text is the contract; if it moves, the county fails its
+# guard and is skipped for that run, which is a page to re-read, not a flake.
+#
+# A TRAP ON THIS HOST, recorded because it defeats the obvious check: it is a
+# Google Sites site, and a MISSING page answers HTTP 404 with a full 259 KB of
+# site chrome. A probe that reads the body length, or that follows redirects
+# and looks for content, calls that page healthy. Check the STATUS.
+#
+# THE DISTRICT MAILBOX IS THE WITNESS, and it is why this county needs no
+# pinned reading direction like the HTML ones above. Every supervisor's contact
+# line carries `district<n>@co.adams.wi.us` (six of the twenty punctuate it
+# `district.<n>@`), so the document states each seat's number a SECOND time, in
+# a string the layout engine cannot reorder. The parser reads the number from
+# the heading and asserts the mailbox agrees — the before/after ambiguity that
+# yields "a full, plausible, entirely wrong roster" on the page-scraped
+# counties cannot survive that check.
+#
+# THE STREET ADDRESSES ARE DELIBERATELY NOT CARRIED, the same rule Taylor's
+# entry states below: they are supervisors' homes, and a home address never
+# ships even where the source publishes it. Name, county mailbox and phone are
+# official contact details and do.
+PDF_COUNTIES = [
+    {
+        "fips": "55001", "name": "Adams", "seats": 20,
+        # the page that LINKS the directory, and the page a reader is sent to:
+        # the names are published in a document, and this is where the county
+        # publishes the document
+        "page": "https://www.co.adams.wi.us/government/county-board",
+        "source_url": "https://www.co.adams.wi.us/government/county-board",
+        "link_text": "County Directory",
+        "mailbox": r"district\.?(\d{1,2})@co\.adams\.wi\.us",
+    },
+]
+
+# a template, not a pattern: the link TEXT is what identifies the document, so
+# it is escaped in per county rather than baked in here
+DRIVE_LINK = (r'href="(https://drive\.google\.com/file/d/([A-Za-z0-9_-]{20,})'
+              r'/[^"]*)"[^>]*>\s*%s\s*<')
+DIST_HEAD = re.compile(r"^\s*DISTRICT\s+(\d{1,2})\s*$")
+# "608-547-2688", and Adams prints one as "715-781- 0354" — a space the
+# extractor keeps and a reader never sees
+PDF_PHONE = re.compile(r"\b(\d{3})[-\s.]\s?(\d{3})[-\s.]\s?(\d{4})\b")
+# "Jerry Poehler, 1st Vice Chair" / "Rick Pease, County Board Chair"
+PDF_ROLE = re.compile(
+    r",\s*((?:County\s+Board\s+)?(?:(?:1st|2nd)\s+)?(?:Vice\s+)?"
+    r"Chair(?:man|person|woman)?)\s*$", re.I)
+# A ward-composition line ("Town of Jackson Ward 2 & Town of New Haven Ward 1")
+# sits between the heading and the name and is never a person. It is matched on
+# "<municipality> of" or "Ward <n>" rather than on the bare words: WARD IS ALSO
+# A SURNAME, and a plain \bwards?\b would skip a supervisor named Ward on the
+# walk-back and take whatever line sat above them.
+PDF_WARDLINE = re.compile(r"(?i)(\b(?:towns?|cities|city|villages?)\s+of\b|\bwards?\s+\d)")
+
+
+def fetch_bytes(url, timeout=90):
+    """As fetch(), but for a document: no decode, and the STATUS is checked."""
+    req = urllib.request.Request(url, headers=UA)
+    with urllib.request.urlopen(req, timeout=timeout) as r:
+        if r.status != 200:
+            raise RuntimeError("%s answered HTTP %s" % (url, r.status))
+        return r.read()
+
+
+def pdf_lines(blob):
+    """The directory's text, one line per printed line.
+
+    Layout mode is required, not optional. A flattened read returns this
+    document one WORD per line (its text operators are per-word), which loses
+    the only thing the parser needs: that a supervisor's name, phone and
+    mailbox share a printed line.
+    """
+    import io
+    import pypdf                      # pinned in wi/scripts/requirements.txt
+    reader = pypdf.PdfReader(io.BytesIO(blob))
+    lines = []
+    for page in reader.pages:
+        lines += (page.extract_text(extraction_mode="layout") or "").split("\n")
+    return [re.sub(r"\s+", " ", ln).strip() for ln in lines]
+
+
+def scrape_pdf_county(spec):
+    """All seats or nothing, with the county's own mailbox as the witness."""
+    page = fetch(spec["page"])
+    link = re.search(DRIVE_LINK % re.escape(spec["link_text"]), page)
+    if not link:
+        raise RuntimeError("%s: no %r link on %s — the county has moved or "
+                           "renamed its directory; re-read the page"
+                           % (spec["name"], spec["link_text"], spec["page"]))
+    doc_url = link.group(1)
+    blob = fetch_bytes("https://drive.google.com/uc?export=download&id=" + link.group(2))
+    if not blob.startswith(b"%PDF"):
+        raise RuntimeError("%s: %s did not return a PDF (%d bytes, starts %r) — "
+                           "a Drive interstitial is the usual cause"
+                           % (spec["name"], doc_url, len(blob), blob[:16]))
+    lines = pdf_lines(blob)
+    mailbox = re.compile(spec["mailbox"], re.I)
+
+    heads = [(i, int(m.group(1)))
+             for i, ln in enumerate(lines) for m in [DIST_HEAD.match(ln)] if m]
+    # The City of Adams's aldermanic districts are in the same document under
+    # the same word, but print their members on the heading's own line, so the
+    # anchored heading above never matches them. Guard it anyway: a reshaped
+    # document that starts matching them would otherwise ship city alderpersons
+    # as county supervisors.
+    if len(heads) != spec["seats"]:
+        raise RuntimeError("%s: the directory carries %d 'DISTRICT n' headings "
+                           "and the board seats %d — re-read %s"
+                           % (spec["name"], len(heads), spec["seats"], doc_url))
+
+    seen = [d for _, d in heads]
+    if sorted(seen) != list(range(1, spec["seats"] + 1)):
+        # a repeated or skipped heading would collapse in `out` below and lose a
+        # seat silently; the builder's geometry check would catch it one stage
+        # later, but the document is what has changed and should say so
+        raise RuntimeError("%s: the directory's headings are %s, not 1..%d — "
+                           "re-read %s" % (spec["name"], seen, spec["seats"], doc_url))
+
+    out = {}
+    for n, (i, district) in enumerate(heads):
+        end = heads[n + 1][0] if n + 1 < len(heads) else len(lines)
+        block = lines[i + 1:end]
+        at = next((k for k, ln in enumerate(block) if mailbox.search(ln)), None)
+        if at is None:
+            raise RuntimeError("%s: district %d carries no county mailbox — the "
+                               "directory has reshaped; re-read %s"
+                               % (spec["name"], district, doc_url))
+        m = mailbox.search(block[at])
+        if int(m.group(1)) != district:
+            # the document numbering itself disagrees; never guess which is right
+            raise RuntimeError("%s: the heading says district %d and the mailbox "
+                               "on that seat's line says %s (%s) — re-read %s"
+                               % (spec["name"], district, m.group(1),
+                                  m.group(0), doc_url))
+        line = block[at]
+        phone_m = PDF_PHONE.search(line)
+        phone = "-".join(phone_m.groups()) if phone_m else None
+        cut = min(phone_m.start() if phone_m else len(line), m.start())
+        name = line[:cut].strip(" ,;")
+        if not name:
+            # Two of the twenty print the name on its own line above the
+            # contact line (both carry a second phone: "608-254-5971 or
+            # 608-432-1971"), so walk back past the ward composition.
+            k = at - 1
+            while k >= 0 and (not block[k] or PDF_WARDLINE.search(block[k])):
+                k -= 1
+            name = block[k].strip() if k >= 0 else ""
+        role = None
+        role_m = PDF_ROLE.search(name)
+        if role_m:
+            role = role_case(role_m.group(1))
+            name = name[:role_m.start()].strip(" ,")
+        name = repair(clean(name)[0])
+        if not is_name(name):
+            raise RuntimeError("%s: district %d resolved to %r, which does not "
+                               "read as a name — re-read %s"
+                               % (spec["name"], district, name, doc_url))
+        row = {"name": name, "vacant": False, "role": role,
+               "email": m.group(0).lower()}
+        if phone:
+            row["phone"] = phone
+        out[str(district)] = row
+
+    names = [r["name"] for r in out.values()]
+    if len(set(names)) != len(names):
+        dupes = sorted({n for n in names if names.count(n) > 1})
+        raise RuntimeError("%s: the same person is filed under two districts (%s)"
+                           % (spec["name"], dupes))
+    return out, doc_url
+
+
 def _fetch_json(url):
     req = urllib.request.Request(url, headers=UA)
     ctx = ssl.create_default_context()
@@ -2711,6 +2940,7 @@ def main():
     jobs += [(c["fips"], c["name"], c["seats"], "constituent", c) for c in CONSTITUENT_COUNTIES]
     jobs += [(c["fips"], c["name"], c["seats"], "witnessed-document", c)
              for c in WITNESSED_DOCUMENT_COUNTIES]
+    jobs += [(d["fips"], d["name"], d["seats"], "pdf", d) for d in PDF_COUNTIES]
     jobs += [(fips, name, seats, strategy, url) for fips, name, seats, strategy, url in COUNTIES]
     for fips, name, seats, strategy, src in jobs:
         if only and fips != only:
@@ -2718,6 +2948,7 @@ def main():
         carried = False
         try:
             archived_at = None
+            doc_url = None
             if strategy == "arcgis":
                 districts = scrape_arcgis_county(src)
                 source_url, read_from = src["source_url"], "live"
@@ -2739,6 +2970,9 @@ def main():
             elif strategy == "witnessed-document":
                 districts = scrape_witnessed_document(src)
                 source_url, read_from = src["source_url"], "live"
+            elif strategy == "pdf":
+                districts, doc_url = scrape_pdf_county(src)
+                source_url, read_from = src["source_url"], "live"
             else:
                 districts, read_from = scrape_county(fips, name, seats, strategy, src)
                 source_url = src
@@ -2749,6 +2983,10 @@ def main():
         counties[fips] = {"county": name, "seats": seats, "source_url": source_url,
                           "scraped_at": scraped_at, "read_from": read_from,
                           "districts": districts}
+        if strategy == "pdf":
+            # the roster IS re-read every run — the edition it was read from is
+            # recorded so a reader of the JSON can see which one answered
+            counties[fips]["document_url"] = doc_url
         if carried:
             # the file must SAY the roster was not re-read this run; a reader
             # of the JSON should never have to know which table it came from.
@@ -2780,7 +3018,8 @@ def main():
              len(COUNTIES) + len(ARCGIS_COUNTIES) + len(DOCUMENT_ROSTERS)
              + len(ARCHIVE_COUNTIES)
              + len(CONSTITUENT_COUNTIES)
-             + len(WITNESSED_DOCUMENT_COUNTIES), total,
+             + len(WITNESSED_DOCUMENT_COUNTIES)
+             + len(PDF_COUNTIES), total,
              ", %d county/counties missed" % len(failures) if failures else ""),
           file=sys.stderr)
 

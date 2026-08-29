@@ -129,12 +129,19 @@ def main():
                 row["name"] = member["name"]
                 if member["role"]:
                     row["role"] = member["role"]
-                # CONTACT RIDES ONLY WHERE ITS COUNTY PUBLISHED IT. This
-                # started as the two county-GIS rosters' feature attributes,
-                # which is why the comment here used to say the page-scraped
-                # counties never publish contact — three now do, and `phone`
-                # was reaching this builder from Taylor's document roster and
-                # being dropped on the floor for want of these two lines.
+                # CONTACT RIDES ONLY WHERE ITS COUNTY PUBLISHED IT. The two
+                # county-GIS rosters carry an e-mail (and Milwaukee a profile
+                # link) on the feature; Taylor's document and Adams's directory
+                # carry an e-mail and a phone. The page-scraped counties publish
+                # none of it, and an absent field renders nothing rather than a
+                # placeholder.
+                #
+                # `phone` USED TO BE COLLECTED AND SILENTLY DROPPED HERE: the
+                # scraper has carried Taylor's seventeen numbers since the day
+                # it shipped, its own comment saying a phone is an official
+                # contact detail and does ship, and this loop copied `email`
+                # and `url` and nothing else. Adding a field to the scraper is
+                # not adding it to the app — the two halves have to agree.
                 if member.get("email"):
                     row["email"] = member["email"]
                 if member.get("phone"):

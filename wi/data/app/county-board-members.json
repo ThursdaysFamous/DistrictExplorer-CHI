@@ -1,4 +1,167 @@
 {
+ "5500101": {
+  "county": "Adams",
+  "district": 1,
+  "email": "district1@co.adams.wi.us",
+  "name": "Jay L. Churco",
+  "phone": "608-434-3930",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500102": {
+  "county": "Adams",
+  "district": 2,
+  "email": "district2@co.adams.wi.us",
+  "name": "Jerry Poehler",
+  "phone": "608-254-5971",
+  "role": "1st Vice Chair",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500103": {
+  "county": "Adams",
+  "district": 3,
+  "email": "district3@co.adams.wi.us",
+  "name": "Rocky J. Gilner",
+  "phone": "608-432-4192",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500104": {
+  "county": "Adams",
+  "district": 4,
+  "email": "district4@co.adams.wi.us",
+  "name": "Larry Borud",
+  "phone": "608-547-3942",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500105": {
+  "county": "Adams",
+  "district": 5,
+  "email": "district5@co.adams.wi.us",
+  "name": "Scott Pease",
+  "phone": "608-547-9333",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500106": {
+  "county": "Adams",
+  "district": 6,
+  "email": "district.6@co.adams.wi.us",
+  "name": "Chuck Kotlowski",
+  "phone": "608-547-2688",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500107": {
+  "county": "Adams",
+  "district": 7,
+  "email": "district7@co.adams.wi.us",
+  "name": "David Grabarski",
+  "phone": "608-547-7747",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500108": {
+  "county": "Adams",
+  "district": 8,
+  "email": "district8@co.adams.wi.us",
+  "name": "John Dolezal",
+  "phone": "651-249-5877",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500109": {
+  "county": "Adams",
+  "district": 9,
+  "email": "district.9@co.adams.wi.us",
+  "name": "Hannah Eggersdorf",
+  "phone": "608-474-0451",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500110": {
+  "county": "Adams",
+  "district": 10,
+  "email": "district.10@co.adams.wi.us",
+  "name": "Austin Eggersdorf",
+  "phone": "608-474-0820",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500111": {
+  "county": "Adams",
+  "district": 11,
+  "email": "district.11@co.adams.wi.us",
+  "name": "Karla Braunsky",
+  "phone": "715-897-2302",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500112": {
+  "county": "Adams",
+  "district": 12,
+  "email": "district12@co.adams.wi.us",
+  "name": "Marge Edwards",
+  "phone": "608-547-2439",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500113": {
+  "county": "Adams",
+  "district": 13,
+  "email": "district13@co.adams.wi.us",
+  "name": "Rick Pease",
+  "phone": "608-547-0171",
+  "role": "County Board Chair",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500114": {
+  "county": "Adams",
+  "district": 14,
+  "email": "district.14@co.adams.wi.us",
+  "name": "Robert Theim",
+  "phone": "715-347-2089",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500115": {
+  "county": "Adams",
+  "district": 15,
+  "email": "district15@co.adams.wi.us",
+  "name": "Danny Shelton",
+  "phone": "915-204-2535",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500116": {
+  "county": "Adams",
+  "district": 16,
+  "email": "district.16@co.adams.wi.us",
+  "name": "Bruce Bubba Bain",
+  "phone": "608-564-7537",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500117": {
+  "county": "Adams",
+  "district": 17,
+  "email": "district17@co.adams.wi.us",
+  "name": "Gordon Carlson",
+  "phone": "715-421-6773",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500118": {
+  "county": "Adams",
+  "district": 18,
+  "email": "district18@co.adams.wi.us",
+  "name": "Mark Samelstad",
+  "phone": "715-781-0354",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500119": {
+  "county": "Adams",
+  "district": 19,
+  "email": "district19@co.adams.wi.us",
+  "name": "Michael Baker",
+  "phone": "414-507-9775",
+  "role": "2nd Vice Chair",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500120": {
+  "county": "Adams",
+  "district": 20,
+  "email": "district20@co.adams.wi.us",
+  "name": "Philip A. McLaughlin",
+  "phone": "715-325-7329",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
  "5500701": {
   "county": "Bayfield",
   "district": 1,
