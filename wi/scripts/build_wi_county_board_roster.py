@@ -31,8 +31,8 @@ GEOMETRY = os.path.join(APP_DATA_DIR, "county-supervisory-districts.json")
 RAW = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache", "wi_county_boards_raw.json")
 OUT = os.path.join(APP_DATA_DIR, "county-board-members.json")
 
-MIN_COUNTIES = 30      # 32 ship one (29 pages + 2 county GIS layers + Taylor by document); tolerates two dark
-MIN_SEATS = 660        # 689 today (633 page-scraped + Milwaukee 18 + Racine 21 + Taylor 17)
+MIN_COUNTIES = 31      # 33 ship one (30 pages + 2 county GIS layers + Taylor by document); tolerates two dark
+MIN_SEATS = 690        # 719 today (663 page-scraped + Milwaukee 18 + Racine 21 + Taylor 17)
 
 
 def main():
