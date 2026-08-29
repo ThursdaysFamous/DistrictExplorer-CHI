@@ -288,6 +288,13 @@ EXPECTED_UNREACHABLE = {
     "chicagoelections.gov":
         "Cloudflare managed challenge — the Board of Election Commissioners' site "
         "refuses non-browser clients; the early-voting file is hand-transcribed",
+    "co.rock.wi.us":
+        "Akamai \"Access Denied\" — measured 2026-08-29 on the board page, the front "
+        "door, robots.txt and sitemap.xml alike, under a Chrome UA, a named-bot UA and "
+        "curl's default (server: AkamaiGHost, x-reference-error, errors.edgesuite.net "
+        "in the body, so it is the SITE talking). A browser loads it fine, which is why "
+        "the card still links it; the county's 29 supervisors are read from the "
+        "Internet Archive instead (wi/scripts/wi_county_board_scraper.py's ladder)",
     # THE ONE ENTRY HERE THAT IS NOT A REFUSAL. Read the reason before treating
     # it as one: this county is not blocking anybody. Its server sends only its
     # leaf certificate and never the GoDaddy intermediate that signed it, so

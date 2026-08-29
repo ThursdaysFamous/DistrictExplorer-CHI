@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-Scrape county board supervisors from the 29 Wisconsin counties that publish a
+Scrape county board supervisors from the 30 Wisconsin counties that publish a
 district-keyed member list. Stage 1 of the pair; build_wi_county_board_roster.py
 turns the intermediate JSON into data/app/county-board-members.json.
 
-WHY ONLY TWENTY-NINE OF SEVENTY-TWO
------------------------------------
+WHY ONLY THIRTY OF SEVENTY-TWO
+------------------------------
 Wisconsin publishes county board DISTRICTS statewide (Wis. Stat. 5.15(4)(br)1,
 see build_wi_supervisory_districts.py) and publishes the PEOPLE in them
-nowhere: each county names its own supervisors, 72 different ways. Twenty-nine
+nowhere: each county names its own supervisors, 72 different ways. Thirty
 pair a district with a person in a form a parser can read (plus Milwaukee and
 Racine off their own GIS layers, below). The rest are not oversights and are
 recorded as such:
@@ -20,12 +20,15 @@ recorded as such:
   * Marinette publishes 29 of its 30 seats. District 26 is an unnumbered
     "VACANT SEAT" row in an alphabetical list, and assigning it by elimination
     would be an inference the county never wrote, so the county stays out.
-  * The rest could not be read: 9 answer 403 to a datacenter client and hold
+  * The rest could not be read: 8 answer 403 to a datacenter client and hold
     it against browser headers (Marathon, La Crosse, Outagamie, Fond du Lac,
-    Lafayette, Lincoln, Monroe, Rock, Sheboygan), Taylor sits behind an
+    Lafayette, Lincoln, Monroe, Sheboygan), Taylor sits behind an
     sgcaptcha challenge answering 202 (an access control, not an obstacle to
     route around), Forest does not resolve, and the remainder publish their
     members as PDFs, images or prose with no district column.
+
+  * Rock was the ninth of those 403s and is no longer one of them — see
+    A REFUSED SITE IS NOT A REFUSED PAGE below.
 
 NINE OF THOSE "UNREADABLE" COUNTIES WERE PUBLISHING ALL ALONG (2026-08-27)
 --------------------------------------------------------------------------
@@ -103,6 +106,67 @@ the same before/after ambiguity the rest of this file pins per county — see
 its comment for the three cases and for Jefferson, which a forward-only first
 draft filed one seat off.
 
+A SIXTH SHAPE, AND THE ONE THAT NEEDS NO DIRECTION AT ALL (2026-08-29)
+----------------------------------------------------------------------
+    row         a TABLE ROW pairing the two cells (Rock) — see `_rows`
+
+Rock County publishes its board as a Granicus staff-directory TABLE, one
+`<tr>` per supervisor holding `<td>Fleming, Patricia</td><td>District 01
+Supervisor</td>`. Flattened to lines that reads as a `before` page — and it is
+the sharpest example this file has of why the flattening is dangerous. The
+`after` reading of the SAME page also resolves 29 of 29, names 29 DIFFERENT
+people, every one of them their neighbour's supervisor, and files the site's
+own footer — "Website design by Granicus" — as District 29. Both readings pass
+every count guard; only the duplicate-name guard would have anything to say,
+and it has nothing, because a shift by one duplicates nobody.
+
+So Rock is not read by pinning a direction around the ambiguity. The county
+wrote the pairing in a ROW, and `_rows` reads it there, where the ambiguity
+does not arise: one district per row, one name per row, or the row is skipped
+and the count guard fails loudly. THE ROW READING IS THE FIRST CHOICE FOR ANY
+COUNTY WHOSE PAGE IS A TABLE; the line readings remain for the pages that are
+lists and prose.
+
+A REFUSED SITE IS NOT A REFUSED PAGE: ROCK AND THE ARCHIVE LADDER (2026-08-29)
+------------------------------------------------------------------------------
+co.rock.wi.us answers HTTP 403 from AkamaiGHost to EVERY request this project
+can make: the board page, the front door, robots.txt and sitemap.xml alike,
+under a Chrome user-agent, under a named bot user-agent and under curl's
+default. A block that covers robots.txt is not a page refusing a reader and
+not a header this client got wrong — it is the edge refusing this client's
+network, and there is nothing about the request to fix. (The county's own GIS
+is a separate host and publishes no supervisor names anyway: its supervisory
+district service is an internal `.lan` URL, and its public service sits on
+port 8443, which this project's egress does not reach.)
+
+What the county publishes is nonetheless PUBLIC and ARCHIVED. The Internet
+Archive holds the board page, so Rock is read from the newest capture rather
+than not at all — the "engine ladder" the fleet already runs for blocked
+counties, with the rung that answered recorded on the county's own entry
+(`read_from`, which carries the capture's timestamp) instead of being passed
+off as a live read.
+
+Two things keep that honest.
+
+  THE LADDER STARTS LIVE. `fetch_or_archive` asks the county first, every run,
+  and only falls to the Archive on a refusal. The day Akamai stops refusing,
+  Rock reads live with no code change, and the run log says which rung answered.
+
+  A CAPTURE MUST POST-DATE THE BOARD IT NAMES. Wis. Stat. 59.10(3)(d) elects
+  every supervisor in this class of county "for 2-year terms at the election to
+  be held on the first Tuesday in April in even-numbered years", to "take office
+  on the 3rd Tuesday in April of that year" — so a capture older than the most
+  recent 3rd Tuesday in April of an even year shows a board that no longer
+  sits. `board_seated_on` computes that date and the fetch REFUSES an older
+  capture rather than shipping a stale roster under a current-looking card.
+  Rock's board was seated 21 April 2026; the captures of 2026-06-04 and
+  2026-08-14 both clear it, agree with each other on all 29 districts and on
+  all three officers, and the second is what ships.
+
+The chair the page names is a third witness on top of that: the Wisconsin Blue
+Book (April 2025) already had Kevin Leavy as Rock's board chair, independently
+of the county's own page, and the officer builder reconciles the two.
+
 Vacancies are DATA, not misses. Winnebago district 33 ("Vacant Vacant"),
 Shawano 5, Oneida 1 and Rusk 3 and 13 are seats the counties themselves say
 nobody holds; they ship as vacant, and a vacancy overrides any name the search
@@ -115,6 +179,8 @@ Usage:
     python3 wi/scripts/wi_county_board_scraper.py [--out PATH] [--only FIPS]
 """
 
+import datetime
+import gzip
 import html as html_lib
 import json
 import os
@@ -123,6 +189,7 @@ import ssl
 import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 
 DEFAULT_OUT = os.path.join(os.path.dirname(__file__), ".cache", "wi_county_boards_raw.json")
@@ -196,7 +263,29 @@ COUNTIES = [
      "https://www.co.shawano.wi.us/county_board/"),
     ("55121", "Trempealeau", 17, "column-before",
      "https://co.trempealeau.wi.us/government/agendas_minutes/standing_committees/"
-     "trempealeau_county_board_of_supervisors.php"),]
+     "trempealeau_county_board_of_supervisors.php"),
+    # --- 2026-08-29: the county whose SITE refuses this client and whose PAGE
+    # does not — read from the Internet Archive, see the docstring's ladder ---
+    ("55105", "Rock", 29, "row",
+     "https://www.co.rock.wi.us/government/county-board-of-supervisors"),]
+
+# Counties whose own host refuses this client on every path and every header,
+# whose page the Internet Archive nonetheless holds. The ladder still asks the
+# county FIRST on every run (`fetch_or_archive`); this only says where to look
+# when it refuses, and what the refusal measured as.
+ARCHIVE_READ = {
+    "55105": "co.rock.wi.us answers 403 from AkamaiGHost on every path, "
+             "including robots.txt, under every user-agent tried",
+}
+
+# The officer block's reading direction, pinned per county, for the counties
+# whose officers sit in a run of consecutive name/role pairs. Rock prints
+# "Kevin Leavy / Chair / Barbara Tillman / Vice Chair / Ron Woodman / Second
+# Vice Chair": every role line has a name on BOTH sides, which is the case
+# `attach_officer_roles` deliberately refuses to guess at. The county's own
+# table settles it — its Staff column precedes its Title column — so the side
+# is PINNED here rather than detected, exactly as the district readings are.
+OFFICER_NAME_SIDE = {"55105": "before"}
 
 # --- text shaping -------------------------------------------------------------
 # nav is NOT boilerplate everywhere: Grant County publishes its entire board in
@@ -418,6 +507,45 @@ def _windowed_strict(lines, offsets):
     return out, vacant
 
 
+# --- the sixth shape: a TABLE ROW ---------------------------------------------
+# The five readings above all pair a district with a name by POSITION in a
+# flattened line list, which is why four of them have to pin a direction. A
+# page that writes the pairing into a table row does not need one — Rock's
+# markup is literally
+#
+#     <tr><td>Fleming, Patricia</td><td>District 01 Supervisor</td>
+#         <td>County Board</td><td>(608) 719-7943</td><td>Email</td></tr>
+#
+# so the district and its supervisor are in the same row, in whichever order
+# the county likes. Read there, a shift by one cannot happen; read as lines,
+# Rock's `after` reading resolves all 29 seats, names everybody's neighbour
+# and files the page footer as District 29 (see the docstring).
+#
+# ONE DISTRICT AND ONE NAME PER ROW, OR THE ROW IS SKIPPED. A row that carries
+# two of either is ambiguous, and a skipped row fails the caller's count guard
+# loudly — which is the whole point of not guessing.
+_ROW = re.compile(r"(?is)<tr[^>]*>(.*?)</tr>")
+
+
+def _rows(page_html, seats):
+    out, vacant = {}, set()
+    for row_html in _ROW.findall(page_html):
+        cells = to_lines(row_html)
+        dists = {int(m.group(1)) for m in (DIST.search(c) for c in cells) if m}
+        if len(dists) != 1:
+            continue
+        d = dists.pop()
+        if not (1 <= d <= seats) or d in out or d in vacant:
+            continue
+        if any(VACANT.search(c) for c in cells):
+            vacant.add(d)
+            continue
+        named = [c for c in cells if not DIST.search(c) and _reads_as_name(c)]
+        if len(named) == 1:
+            out[d] = clean(named[0])
+    return out, vacant
+
+
 READINGS = {
     "same-line": _same_line,
     "before": lambda ls: _windowed(ls, WINDOW_BEFORE),
@@ -455,6 +583,117 @@ def fetch(url, timeout=45):
         except Exception as e:      # noqa: BLE001 - reachability probe
             last = e
     raise RuntimeError("could not fetch %s (%s)" % (url, last))
+
+
+# --- the archive ladder ------------------------------------------------------
+# For the counties in ARCHIVE_READ only: their own host refuses this client on
+# every path and header, and the Internet Archive holds the page they refuse to
+# hand over. See the docstring for why that is a network refusal rather than
+# something to fix in the request, and for the two rules below.
+CDX = ("https://web.archive.org/cdx/search/cdx?url=%s&output=json"
+       "&fl=timestamp,statuscode&filter=statuscode:200&limit=-10")
+SNAPSHOT = "https://web.archive.org/web/%sid_/%s"     # id_ = the original bytes
+# THE ARCHIVE IS ASKED AS THIS PROJECT, NOT AS A BROWSER, and that is load
+# bearing rather than manners: web.archive.org answers its own "Temporarily
+# Offline" page with HTTP 503 to the shared Chrome user-agent `UA` carries,
+# and 200 to a client that says who it is (measured 2026-08-29 — the same
+# capture, same second, 503 as Chrome and 200 as anything named). `UA` exists
+# for county CMSs that refuse non-browser clients; it is the wrong header
+# here, and sending it reads as an outage that is not one.
+ARCHIVE_UA = {"User-Agent": "districtry-county-board-scraper/1.0 "
+                            "(+https://districtry.com; civic boundary data)"}
+
+
+def board_seated_on(today=None):
+    """The date the sitting county board took office.
+
+    Wis. Stat. 59.10(3)(d): supervisors are "elected for 2-year terms at the
+    election to be held on the first Tuesday in April in even-numbered years"
+    and "take office on the 3rd Tuesday in April of that year". So a page
+    describes the board that sits NOW only if it is at least as new as that
+    date — which is what makes this a usable guard on an archived capture
+    rather than an arbitrary age limit.
+    """
+    today = today or datetime.date.today()
+    year = today.year if today.year % 2 == 0 else today.year - 1
+    while True:
+        seated = datetime.date(year, 4, 15)
+        seated += datetime.timedelta(days=(1 - seated.weekday()) % 7)   # 3rd Tue
+        if seated <= today:
+            return seated
+        year -= 2               # April of this even year has not happened yet
+
+
+assert board_seated_on(datetime.date(2026, 8, 29)) == datetime.date(2026, 4, 21)
+assert board_seated_on(datetime.date(2026, 4, 20)) == datetime.date(2024, 4, 16)
+assert board_seated_on(datetime.date(2025, 1, 1)) == datetime.date(2024, 4, 16)
+
+
+def _archive_json(url, tries=5):
+    """The Archive answers 503 while it is down; back off rather than give up."""
+    last = None
+    for attempt in range(tries):
+        try:
+            req = urllib.request.Request(url, headers=ARCHIVE_UA)
+            with urllib.request.urlopen(req, timeout=60) as r:
+                return json.load(r)
+        except Exception as e:      # noqa: BLE001 - reachability, retried below
+            last = e
+            time.sleep(5 * (attempt + 1))
+    raise RuntimeError("the Internet Archive did not answer %s (%s)" % (url, last))
+
+
+def fetch_archived(url):
+    """(page html, capture timestamp) from the newest capture that post-dates
+    the sitting board — never an older one."""
+    rows = _archive_json(CDX % urllib.parse.quote(url, safe=""))
+    stamps = sorted(r[0] for r in rows[1:]) if rows and rows[0][0] == "timestamp" \
+        else sorted(r[0] for r in rows)
+    if not stamps:
+        raise RuntimeError("no archived capture of %s" % url)
+    seated = board_seated_on().strftime("%Y%m%d")
+    newest = stamps[-1]
+    if newest[:8] < seated:
+        raise RuntimeError(
+            "the newest archived capture of %s is %s, older than the %s "
+            "organizational meeting that seated this board (Wis. Stat. "
+            "59.10(3)(d)) — it names a board that no longer sits"
+            % (url, newest[:8], seated))
+    req = urllib.request.Request(SNAPSHOT % (newest, url), headers=ARCHIVE_UA)
+    last = None
+    for attempt in range(5):
+        try:
+            with urllib.request.urlopen(req, timeout=90) as r:
+                # `id_` replays the ORIGINAL bytes, original Content-Encoding
+                # and all, whatever this client asked for — so a page the county
+                # served gzipped comes back gzipped. Decoding that as text
+                # yields 30 KB of mojibake in which every reading finds nothing
+                # and the count guard blames the county for changing shape.
+                body = r.read()
+                if body[:2] == b"\x1f\x8b":
+                    body = gzip.decompress(body)
+                return body.decode("utf-8", "replace"), newest
+        except Exception as e:      # noqa: BLE001 - retried; the Archive
+            last = e                # answers 503 for minutes at a time
+            time.sleep(5 * (attempt + 1))
+    raise RuntimeError("could not read the %s capture of %s (%s)" % (newest, url, last))
+
+
+def fetch_or_archive(url, fips, county):
+    """(page html, how it was read). LIVE FIRST, ALWAYS — a county that stops
+    refusing this client starts reading live with no code change, and the run
+    log says which rung answered either way."""
+    try:
+        return fetch(url), "live"
+    except Exception as live_error:     # noqa: BLE001 - the refusal is the point
+        if fips not in ARCHIVE_READ:
+            raise
+        page, stamp = fetch_archived(url)
+        print("  note %-12s live read refused (%s); read the Internet Archive "
+              "capture of %s-%s-%s instead"
+              % (county, live_error, stamp[:4], stamp[4:6], stamp[6:8]),
+              file=sys.stderr)
+        return page, "archive:" + stamp
 
 
 # COUNTIES WHOSE ROSTER RIDES THEIR OWN ARCGIS LAYER, NOT A PAGE. The
@@ -601,8 +840,15 @@ def role_case(text):
                     for w in text.split())
 
 
-def attach_officer_roles(lines, districts, county):
-    """Give a member the role their county states in its officers block."""
+def attach_officer_roles(lines, districts, county, name_side=None):
+    """Give a member the role their county states in its officers block.
+
+    `name_side` pins which neighbour of a bare role line carries its name, for
+    the counties that print officers as a run of consecutive name/role pairs —
+    where both neighbours read as names and the ambiguous case below would
+    otherwise attach nothing. Pinned per county in OFFICER_NAME_SIDE, never
+    detected, for the same reason the district readings are.
+    """
     by_name = {}
     for d, row in districts.items():
         if row.get("name"):
@@ -621,13 +867,20 @@ def attach_officer_roles(lines, districts, county):
         #   * the role line carries its own name  -> use it, and never look
         #     further; Juneau lists three officers in consecutive lines, so a
         #     fall-through files each role under the NEXT officer's name;
+        #   * the county pins a side (OFFICER_NAME_SIDE) -> that neighbour, and
+        #     only that one; Rock's three officers are consecutive name/role
+        #     pairs, so every role line has a name on both sides and the
+        #     ambiguous case below would attach none of them;
         #   * exactly ONE neighbouring line reads as a name -> that one;
         #   * BOTH neighbours read as names -> ambiguous, attach nothing.
+        before = lines[i - 1] if i > 0 else ""
+        after = lines[i + 1] if i + 1 < len(lines) else ""
         if m.group(2):
             cands = [m.group(2)]
+        elif name_side:
+            pinned = before if name_side == "before" else after
+            cands = [pinned] if is_name(pinned) else []
         else:
-            before = lines[i - 1] if i > 0 else ""
-            after = lines[i + 1] if i + 1 < len(lines) else ""
             b_ok, a_ok = is_name(before), is_name(after)
             if b_ok and a_ok:
                 print("  note %-12s role %r sits between two names (%r, %r) — "
@@ -657,8 +910,11 @@ def attach_officer_roles(lines, districts, county):
 
 def scrape_county(fips, name, seats, strategy, url):
     """All seats or nothing — see the module docstring."""
-    lines = to_lines(fetch(url))
-    if strategy in STRICT_READINGS:
+    page_html, read_from = fetch_or_archive(url, fips, name)
+    lines = to_lines(page_html)
+    if strategy == "row":
+        found, vacant = _rows(page_html, seats)
+    elif strategy in STRICT_READINGS:
         found, vacant = STRICT_READINGS[strategy](lines)
     elif strategy in COLUMN_READINGS:
         # A column page names no district beside a seat, so `vacant_districts`
@@ -689,7 +945,7 @@ def scrape_county(fips, name, seats, strategy, url):
         else:
             member, role = found[d]
             out[str(d)] = {"name": member, "vacant": False, "role": role}
-    return attach_officer_roles(lines, out, name)
+    return attach_officer_roles(lines, out, name, OFFICER_NAME_SIDE.get(fips)), read_from
 
 
 def main():
@@ -707,18 +963,21 @@ def main():
         try:
             if strategy == "arcgis":
                 districts = scrape_arcgis_county(src)
-                source_url = src["source_url"]
+                source_url, read_from = src["source_url"], "live"
             else:
-                districts = scrape_county(fips, name, seats, strategy, src)
+                districts, read_from = scrape_county(fips, name, seats, strategy, src)
                 source_url = src
         except Exception as e:      # noqa: BLE001 - one county never fails the run
             failures.append("%s (%s): %s" % (name, fips, e))
             print("  MISS %-12s %s" % (name, e), file=sys.stderr)
             continue
         counties[fips] = {"county": name, "seats": seats, "source_url": source_url,
-                          "scraped_at": scraped_at, "districts": districts}
+                          "scraped_at": scraped_at, "read_from": read_from,
+                          "districts": districts}
         vac = sum(1 for d in districts.values() if d["vacant"])
-        print("  ok   %-12s %d seats%s" % (name, seats, " (%d vacant)" % vac if vac else ""),
+        print("  ok   %-12s %d seats%s%s"
+              % (name, seats, " (%d vacant)" % vac if vac else "",
+                 "" if read_from == "live" else " [%s]" % read_from),
               file=sys.stderr)
 
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
