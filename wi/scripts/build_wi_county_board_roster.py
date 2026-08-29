@@ -45,6 +45,9 @@ that sat in this file unrendered until the card learned to show them. An
 absent field means the county does not publish it; it must never mean this
 builder dropped it, and check_roster_retention.py holds that line per source
 from the first day a field ships.
+can obtain; the other 38 are recorded in the Data gaps panel and their cards
+keep linking the county board rather than naming anybody. See the scraper's
+docstring for what each of the other 38 actually publishes.
 
 Usage:
     python3 wi/scripts/build_wi_county_board_roster.py

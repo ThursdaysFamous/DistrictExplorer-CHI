@@ -2107,6 +2107,15 @@ at county scale and at state scale, and it has been expensive every time.
   BOARD's. A county board, a school board, a court system and an election authority are
   each capable of having their own subdomain, their own CMS, and their own vocabulary.
   **When a sweep of "the county's website" returns nothing, that is a fact about one host.**
+- **A link harvest scores the HREF, not only the words on the link.** Crawford County
+  (WI) stayed in that same "publishes nothing" bucket for two more days, and its front
+  page had been linking the whole seventeen-district roster the entire time — under a nav
+  item whose anchor text reads *Government*. Only the address says board
+  (`/boardsupervisors`). A body has no obligation to label its link the way a sweep
+  searches for it, so score the URL and the text, and follow a promising path even when
+  its wording is generic. Check the redirect before blaming the domain, too: the clerks'
+  association publishes this county as a `.org` that serves the `.gov`'s own page, so the
+  host was never what stood in the way.
 - **RE-READ YOUR OWN RECORDS BEFORE RE-PROBING THE WORLD.** All nine of those recoveries
   came out of files this project had already written, not out of any new source. The
   trigger was a builder docstring that cited a county's board page as the authority for

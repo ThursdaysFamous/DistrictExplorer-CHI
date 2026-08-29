@@ -80,6 +80,11 @@ the same thing and the difference is stated where they are defined. The other
   * Marinette publishes 29 of its 30 seats. District 26 is an unnumbered
     "VACANT SEAT" row in an alphabetical list, and assigning it by elimination
     would be an inference the county never wrote, so the county stays out.
+  * Marinette published 29 of its 30 seats and stayed out for it: District 26
+    is an unnumbered "VACANT SEAT" row in an alphabetical list, and assigning
+    it by elimination is an inference the county never wrote. It SHIPPED on
+    2026-08-29 under the opt-in, arithmetic-gated ELIMINATION_VACANCY rule
+    below; this bullet is the reason it could not before.
   * The rest could not be read: 9 answer 403 to a datacenter client and hold
     it against browser headers (Marathon, La Crosse, Outagamie, Fond du Lac,
     Lafayette, Lincoln, Monroe, Rock, Sheboygan), Taylor sits behind an
@@ -296,6 +301,32 @@ would go on being fetched, successfully, forever. /1018/County-Directory-PDF is
 the county's own page for "the current directory" and 302s to whichever edition
 is live, so the run log prints the edition it landed on and an edition change is
 visible instead of silent.
+CRAWFORD MAKES IT THIRTY-ONE, AND ITS RECORD WAS WRONG (2026-08-29)
+--------------------------------------------------------------------
+Crawford was one of ten counties the 2026-08-27 re-sweep left in the bucket
+"publish no district-keyed list on the pages their own sites point to". Its own
+site points at one: www.crawfordcountywi.gov/boardsupervisors carries all
+seventeen districts, each as a "District N - <the wards it covers>" heading
+followed by "Supervisor", the supervisor's name, a phone, and a street address.
+Seventeen of seventeen resolve under both the plain and the strict `after`
+readings, and they name the same people.
+
+WHAT THE SWEEP COULD HAVE MISSED IT ON is measurable and worth pinning: the
+county's front page links that page ONCE, and the anchor text is the word
+"Government". Only the HREF says board. A link harvest scored on link TEXT
+never sees it; one scored on the URL does. Which of the two the sweep did is
+not recorded here, so the durable rule is to score BOTH — and the previous
+domain lesson does not apply, since the clerk association's crawfordcountywi.ORG
+redirects to the .gov and serves the same page.
+
+THE PHONE AND THE ADDRESS ARE NOT CARRIED. The address is the supervisor's
+home ("53201 Kuhn Drive"), and a home address never ships here even when the
+source publishes it — the Taylor rule. The phone would ship under that same
+rule, and does not for a different reason: nothing in the page-scraped path
+carries contact at all (the builder ships `email`/`profileUrl` only where a
+county GIS feature or the Taylor document supplied them), so a phone-only
+Crawford row would be the first of its kind and the card has no contact row to
+render it in. It is left in the county's page rather than in this file.
 
 THE READING DIRECTION IS PINNED PER COUNTY, NOT DETECTED
 --------------------------------------------------------
@@ -319,7 +350,7 @@ same way:
     column      a District COLUMN of bare numerals (Oneida, Price,
                 Trempealeau) — see `_column`
     -strict     as before/after, but the scan STOPS at the next district line
-                (Richland, Rusk, Shawano) — see `_windowed_strict`
+                (Crawford, Richland, Rusk, Shawano) — see `_windowed_strict`
 
 A fifth joined on 2026-08-29 with Lafayette:
 
@@ -556,7 +587,14 @@ COUNTIES = [
     # page yields a full 25-seat roster built out of the ADDRESS column, with
     # the vacancy silently gone. See the Ozaukee section of the docstring.
     ("55089", "Ozaukee", 26, "column-after",
-     "https://ozaukeecounty.gov/701/County-Board"),]
+     "https://ozaukeecounty.gov/701/County-Board"),
+    # --- 2026-08-29: Crawford, an eleventh county whose "publishes nothing"
+    # record was ours. Its page is `after` in shape (District heading, the word
+    # "Supervisor", then the name) and pinned STRICT: a district whose block
+    # loses its name must fail the count guard, never reach nine lines down
+    # into its neighbour's. Both readings resolve 17/17 and agree.
+    ("55023", "Crawford", 17, "after-strict",
+     "https://www.crawfordcountywi.gov/boardsupervisors"),]
 
 # Counties whose own host refuses this client on every path and every header,
 # whose page the Internet Archive nonetheless holds. The ladder still asks the
