@@ -1,0 +1,63 @@
+Districtry
+Copyright 2026 Adam Overberg
+
+Licensed under the Apache License, Version 2.0. See LICENSE.
+
+==========================================================================
+The code and the data are licensed separately
+==========================================================================
+
+The databases this project assembles and ships -- everything under */data/
+-- are licensed under the Open Database License (ODbL) v1.0, with the scope
+and the exclusions set out in LICENSE-DATA.md. Read that file before
+redistributing data from this repository: one shipped file is excluded from
+the grant because this project has no right to relicense it.
+
+==========================================================================
+Third-party software
+==========================================================================
+
+Vendored in this repository, verbatim:
+
+  @maplibre/maplibre-gl-leaflet v0.1.4 -- ISC License, (c) MapLibre
+  contributors and the mapbox-gl-leaflet authors it forked. At
+  */vendor/leaflet-maplibre-gl.js. Vendored rather than CDN-loaded because
+  cdnjs does not carry the package.
+  https://github.com/maplibre/maplibre-gl-leaflet
+
+  Barlow and Barlow Condensed -- SIL Open Font License 1.1. At fonts/,
+  self-hosted from Google Fonts by scripts/build_fonts.py.
+  https://fonts.google.com/specimen/Barlow
+
+Loaded at runtime from a CDN; no source is vendored here:
+
+  Leaflet 1.9.4 -- BSD 2-Clause License, (c) Volodymyr Agafonkin and
+  CloudMade. https://leafletjs.com
+
+  MapLibre GL JS 5.24.0 -- BSD 3-Clause License, (c) MapLibre contributors.
+  https://maplibre.org
+
+==========================================================================
+Third-party data
+==========================================================================
+
+U.S. Census Bureau TIGER/Line and TIGERweb -- works of the United States
+government, public domain.
+
+State, county and municipal public records from Illinois, Wisconsin, Iowa,
+New York and California state agencies, county clerks, county GIS offices,
+election authorities and municipal websites. Each layer's publisher is
+named on the relevant sources.html page and in the builder script that
+produced its file.
+
+Jo Daviess County GIS board-district boundaries -- purchased under Digital
+Data License Agreement #008382 (2026-08-17) and displayed with the county's
+written permission. DISPLAY ONLY; NOT REDISTRIBUTABLE, and excluded from
+the ODbL grant. See LICENSE-DATA.md.
+
+CARTO basemap tiles, built from OpenStreetMap data, (c) OpenStreetMap
+contributors, ODbL; (c) CARTO. Fetched at runtime under CARTO's terms and
+not redistributed here. https://carto.com/attributions
+
+Photon and Nominatim geocoding, running on OpenStreetMap data, ODbL.
+Queried at runtime; responses are not stored.

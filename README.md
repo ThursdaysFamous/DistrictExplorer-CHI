@@ -193,6 +193,36 @@ ca/                                  SAN FRANCISCO — same shape as il/
 
 [`docs/EXPANSION_GUIDE.md`](docs/EXPANSION_GUIDE.md) — the State Expansion Guide — is the primary guide for standing up a new state instance, deepening one county by county and city by city, or adding a new concept; its Part 5 collects what Illinois's 91 counties and Wisconsin's four phases taught. Start there. [`docs/DATA_LAYER_GUIDEBOOK.md`](docs/DATA_LAYER_GUIDEBOOK.md) is the fleet-wide layer inventory (what exists where, recorded parity debts, the backlog). Officeholder data is never guessed and a county is never added on a hunch — every roster and every boundary in this repo traces to a named, checkable public source.
 
+## Licence
+
+The code and the data are licensed separately, because this project holds
+different rights in each.
+
+**Code — [Apache License 2.0](LICENSE).** Everything that produces the apps: the
+inline app source, the shared `engine/` blocks, every builder, scraper,
+generator and gate under `scripts/`, and the CI workflows. Apache-2.0 rather
+than MIT for its explicit patent grant and its requirement that a modified file
+say it was changed — both worth having on civic infrastructure someone else may
+fork for their own state.
+
+**Data — [Open Database License (ODbL) v1.0](LICENSE-DATA.md).** Everything
+under `*/data/`: the shipped `data/app/` files each app fetches at runtime, and
+the intermediate and source files they are built from.
+
+The split matters, and so does its limit. Almost nothing here is original
+observation — the contribution is the *compilation*: deciding which public
+records answer a question, fetching them, reconciling them against each other,
+and assembling the result into something queryable. The ODbL grant is over that
+compilation. **It is not a grant over the underlying records, which are not this
+project's to give.** Census geometry is public domain; state, county and
+municipal records are public records this project asserts no ownership of; and
+one shipped file — Jo Daviess County's board districts, purchased under a
+licence that permits display and forbids redistribution — is **excluded from the
+grant entirely.** If you are redistributing this data in bulk, read
+[`LICENSE-DATA.md`](LICENSE-DATA.md) first and drop that file.
+
+Third-party components and their licences are listed in [`NOTICE`](NOTICE).
+
 ## Not for legal or official use
 
 Boundary and roster data come from public sources that explicitly disclaim legal precision. Always confirm district assignments and officeholders with the relevant government office before relying on them for anything official.
