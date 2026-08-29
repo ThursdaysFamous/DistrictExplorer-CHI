@@ -1120,6 +1120,8 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "David Abendroth",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/",
    "seats": 19
   },
   "executive": {
@@ -1129,28 +1131,47 @@
   },
   "treasurer": {
    "name": "Jessica McLean",
-   "party": "Republican"
+   "party": "Republican",
+   "url": "https://www.greenlakecountywi.gov/officials_type/elected-officials/",
+   "phone": "920-294-4018",
+   "email": "treasurer@greenlakecountywi.gov",
+   "checked": true
   },
   "clerkOfCircuitCourt": {
-   "name": "Amy Thoma",
-   "party": "Republican"
+   "name": "Amy S Thoma",
+   "party": "Republican",
+   "url": "https://www.greenlakecountywi.gov/officials_type/elected-officials/",
+   "phone": "920-294-4142",
+   "checked": true
   },
   "registerOfDeeds": {
    "name": "Renee Thiem-Korth",
-   "party": "Republican"
+   "party": "Republican",
+   "url": "https://www.greenlakecountywi.gov/officials_type/elected-officials/",
+   "phone": "920-294-4021",
+   "email": "rod@greenlakecountywi.gov",
+   "checked": true
   },
   "districtAttorney": {
    "name": "Gerise Laspisa",
-   "party": "Republican"
+   "party": "Republican",
+   "url": "https://www.greenlakecountywi.gov/officials_type/elected-officials/",
+   "phone": "920-294-4046",
+   "checked": true
   },
   "sheriff": {
    "name": "Mark Podoll",
-   "party": "Republican"
+   "party": "Republican",
+   "url": "https://www.greenlakecountywi.gov/officials_type/elected-officials/",
+   "phone": "920-294-4134",
+   "email": "sheriff@greenlakecountywi.gov",
+   "checked": true
   },
   "coroner": {
    "name": "Thomas Wastart II",
    "title": "Medical Examiner (appointed)"
-  }
+  },
+  "contactChecked": 5
  },
  "55049": {
   "county": "Iowa",

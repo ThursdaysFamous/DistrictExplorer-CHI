@@ -1561,131 +1561,151 @@
   "name": "Kathy Pennington",
   "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
  },
- "5504901": {
-  "county": "Iowa",
+ "5504701": {
+  "county": "Green Lake",
   "district": 1,
-  "name": "Chuck Weigel",
-  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+  "email": "nhoffmann@greenlakecountywi.gov",
+  "name": "Nancy Hoffmann",
+  "phone": "608-697-7996",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
  },
- "5504902": {
-  "county": "Iowa",
+ "5504702": {
+  "county": "Green Lake",
   "district": 2,
-  "name": "Ingmar Nelson",
-  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+  "email": "cbuss@greenlakecountywi.gov",
+  "name": "Charles Buss",
+  "phone": "920-767-1518",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
  },
- "5504903": {
-  "county": "Iowa",
+ "5504703": {
+  "county": "Green Lake",
   "district": 3,
-  "name": "Jody Putz Miller",
-  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+  "email": "abrendemihl@greenlakecountywi.gov",
+  "name": "Andy Brendemihl",
+  "phone": "920-767-1939",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
  },
- "5504904": {
-  "county": "Iowa",
+ "5504704": {
+  "county": "Green Lake",
   "district": 4,
-  "name": "Anthony Wood",
-  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+  "email": "dabendroth@greenlakecountywi.gov",
+  "name": "David Abendroth",
+  "phone": "920-896-2494",
+  "role": "Chairman",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
  },
- "5504905": {
-  "county": "Iowa",
+ "5504705": {
+  "county": "Green Lake",
   "district": 5,
-  "name": "Nicole Welsh",
-  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+  "email": "mskivington@greenlakecountywi.gov",
+  "name": "Mike Skivington",
+  "phone": "920-915-0248",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
  },
- "5504906": {
-  "county": "Iowa",
+ "5504706": {
+  "county": "Green Lake",
   "district": 6,
-  "name": "David Gollon",
-  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+  "email": "bfloeter@greenlakecountywi.gov",
+  "name": "Brian Floeter",
+  "phone": "920-229-0067",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
  },
- "5504907": {
-  "county": "Iowa",
+ "5504707": {
+  "county": "Green Lake",
   "district": 7,
-  "name": "Bruce Paull",
-  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/",
+  "vacant": true
  },
- "5504908": {
-  "county": "Iowa",
+ "5504708": {
+  "county": "Green Lake",
   "district": 8,
-  "name": "Joan Davis",
-  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+  "email": "nhiestand@greenlakecountywi.gov",
+  "name": "Nancy Hiestand",
+  "phone": "920-539-0833",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
  },
- "5504909": {
-  "county": "Iowa",
+ "5504709": {
+  "county": "Green Lake",
   "district": 9,
-  "name": "Dody Cockeram",
-  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+  "email": "bboutwell@greenlakecountywi.gov",
+  "name": "William Boutwell",
+  "phone": "920-539-6386",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
  },
- "5504910": {
-  "county": "Iowa",
+ "5504710": {
+  "county": "Green Lake",
   "district": 10,
-  "name": "Brad Stevens",
-  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+  "email": "lmirrfrank@greenlakecountywi.gov",
+  "name": "LuAnn Mirr-Frank",
+  "phone": "920-279-7956",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
  },
- "5504911": {
-  "county": "Iowa",
+ "5504711": {
+  "county": "Green Lake",
   "district": 11,
-  "name": "Adam Stucki",
-  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+  "email": "hreabe@greenlakecountywi.gov",
+  "name": "Harley Reabe",
+  "phone": "920-294-0824",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
  },
- "5504912": {
-  "county": "Iowa",
+ "5504712": {
+  "county": "Green Lake",
   "district": 12,
-  "name": "Keith Hurlbert",
-  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+  "email": "cwielgosh@greenlakecountywi.gov",
+  "name": "Charlie Wielgosh",
+  "phone": "920-229-3808",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
  },
- "5504913": {
-  "county": "Iowa",
+ "5504713": {
+  "county": "Green Lake",
   "district": 13,
-  "name": "Richard Rolfsmeyer",
-  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+  "name": "Don Lenz",
+  "phone": "920-539-5281",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
  },
- "5504914": {
-  "county": "Iowa",
+ "5504714": {
+  "county": "Green Lake",
   "district": 14,
-  "name": "John M. Meyers",
-  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+  "email": "dmulder@greenlakecountywi.gov",
+  "name": "Dennis Mulder",
+  "phone": "920-570-4505",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
  },
- "5504915": {
-  "county": "Iowa",
+ "5504715": {
+  "county": "Green Lake",
   "district": 15,
-  "name": "Tim Lease",
-  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/",
+  "vacant": true
  },
- "5504916": {
-  "county": "Iowa",
+ "5504716": {
+  "county": "Green Lake",
   "district": 16,
-  "name": "Gerald Galle",
-  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+  "email": "jgonyo@greenlakecountywi.gov",
+  "name": "Joe Gonyo",
+  "phone": "920-229-1240",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
  },
- "5504917": {
-  "county": "Iowa",
+ "5504717": {
+  "county": "Green Lake",
   "district": 17,
-  "name": "Don Gander",
-  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+  "name": "Robert Grim",
+  "phone": "414-534-0087",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
  },
- "5504918": {
-  "county": "Iowa",
+ "5504718": {
+  "county": "Green Lake",
   "district": 18,
-  "name": "Molly Conkey",
-  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+  "name": "Sara Allen",
+  "phone": "920-290-9030",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
  },
- "5504919": {
-  "county": "Iowa",
+ "5504719": {
+  "county": "Green Lake",
   "district": 19,
-  "name": "Don Leix",
-  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
- },
- "5504920": {
-  "county": "Iowa",
-  "district": 20,
-  "name": "Mel Masters",
-  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
- },
- "5504921": {
-  "county": "Iowa",
-  "district": 21,
-  "name": "Kevin Butteris",
-  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+  "email": "gthom@greenlakecountywi.gov",
+  "name": "Gene Thom",
+  "phone": "920-361-0305",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
  },
  "5505501": {
   "county": "Jefferson",

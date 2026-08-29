@@ -8639,13 +8639,10 @@ function initWisconsinExplorer() {
    *
    * THE SUPERVISOR IS NAMED WHERE A COUNTY PUBLISHES ONE, AND NOWHERE ELSE.
    * Wisconsin publishes no statewide roster, so the people come from each
-   * county's own surface: 34 of the 72 have a district-keyed member list
-   * this can obtain (736 seats) — 31 from board pages a parser can read,
-   * Milwaukee and Racine as attributes on their own county GIS layers, and
-   * Taylor from its own directory page carried as a dated document because
-   * its host answers a captcha. The other 38 do not — three publish district
-   * MAPS with no name on them, and the rest are unreadable from here or
-   * publish prose. A district in an unnamed county keeps the honest card:
+   * county's own page: 33 of the 72 publish a district-keyed member list
+   * this client can obtain (708 seats), and the other 39 do not — three
+   * publish district MAPS with no name on them, and the rest are unreadable
+   * or publish prose. A district in an unnamed county keeps the honest card:
    * the district, and a link to the county board. A seat the county itself
    * says is empty renders as VACANT, which is a fact rather than a gap
    * (wi/scripts/wi_county_board_scraper.py records what each county
@@ -8744,6 +8741,27 @@ function initWisconsinExplorer() {
         wrap.appendChild(renderFieldStack([
           { label: "Board", value: String(result.seats) + " supervisory districts" }
         ]));
+      }
+      var wrap = renderFieldStack(rows);
+      // Contact rides the card only where the supervisor's own county
+      // published it beside their name — four counties do (Milwaukee's and
+      // Racine's GIS layers, Taylor's directory, Green Lake's per-supervisor
+      // blocks) and the other twenty-nine publish a name alone. Until this
+      // row existed the four were shipping contact into a file nothing read,
+      // which is the fleet's card-order rule broken quietly rather than
+      // loudly. A supervisor's HOME address is never among it, even where a
+      // county prints one (wi/scripts/wi_county_board_scraper.py).
+      if (member && !member.vacant) {
+        var profile = safeHttpUrl(member.profileUrl);
+        var contact = cardContactLine({
+          phone: member.phone ? String(member.phone) : null,
+          email: member.email ? String(member.email) : null,
+          links: profile ? [{ label: "Profile", url: profile }] : []
+        });
+        if (contact) {
+          contact.classList.add("card-row-b");
+          wrap.appendChild(contact);
+        }
       }
       return wrap;
     },
