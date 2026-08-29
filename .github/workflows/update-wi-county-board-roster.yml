@@ -10,6 +10,12 @@ name: Update WI county board roster
 # opens a PR rather than committing to main — officeholder data should get a
 # human look before it ships.
 #
+# TWO MORE COUNTIES SHIP WITHOUT BEING RE-READ HERE. Taylor's host answers a
+# captcha and La Crosse's a Cloudflare block to every automated client, so their
+# rosters ride DOCUMENT_ROSTERS in the scraper and the run prints a NOT RE-READ
+# line with each document's age instead of pretending to refresh it. That age is
+# the thing to watch after an April election (wi/WATCH.md).
+#
 # The scraper reads each county's page with its reading direction PINNED, and a
 # county whose page has reshaped fails its own count guard and is SKIPPED for
 # that run rather than yielding a shifted roster. So a drop in the county count

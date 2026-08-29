@@ -190,6 +190,17 @@ the same thing and the difference is stated where they are defined. The other
     the Coles/Gallatin lesson (an incomplete TLS chain read as an absent
     host) in a second guise, and worth re-running against any county in this
     file recorded as refusing.
+  * Marinette publishes 29 of its 30 numbered seats plus one unnumbered
+    "VACANT SEAT" row, and now SHIPS: the arithmetic forces the assignment
+    (exactly one district unclaimed, exactly one vacancy line carrying no
+    number), which is opt-in per county — see ELIMINATION_VACANCY below.
+  * The rest could not be read: 8 answer 403 to a datacenter client and hold
+    it against browser headers (Marathon, Outagamie, Fond du Lac, Lafayette,
+    Lincoln, Monroe, Rock, Sheboygan), La Crosse answers 403 the same way
+    and ships anyway (below), Taylor sits behind an sgcaptcha challenge
+    answering 202 (an access control, not an obstacle to route around),
+    Forest does not resolve, and the remainder publish their members as
+    PDFs, images or prose with no district column.
 
     TAYLOR IS NOT A "PUBLISHES NOTHING" COUNTY, and the bucket above said so
     only because nothing here can SEE the page. It publishes a County Board
@@ -312,6 +323,75 @@ no profile link, corroborating the vacancy independently of the word. Those
 pages are a verification run by hand, not a weekly fetch: the shipped source
 stays the one board page, and the builder's existing gate against the LTSB
 geometry (26 districts, numbered 1..26) is what re-checks the shape each week.
+    ITS CONTENTS CAME FROM THE OPERATOR'S OWN BROWSER (2026-08-29). The
+    first read covered districts 1-12 of 17 and the all-seats-or-nothing
+    rule held Taylor back until 13-17 arrived; all seventeen ship now, from
+    DOCUMENT_ROSTERS below.
+
+    LA CROSSE IS THE SAME FINDING BEHIND A DIFFERENT DOOR (2026-08-29), and
+    it is why the 403 bucket above is worth re-testing county by county
+    rather than believed. lacrossecounty.org/countyboard/members publishes
+    all thirty districts, each with a name, a phone, a photo, committee
+    assignments and a biography, and marks its board officers — the richest
+    county board page in the fleet. Nothing here can read it: Cloudflare
+    answers 403 ("Sorry, you have been blocked") to every path on the host,
+    gis.lacrossecounty.org included, and it holds from two independent
+    networks, so this is the site's own bot rule rather than one client's
+    address. THAT IS A DIFFERENT CLOUDFLARE PRODUCT FROM THE ONE THE GAP
+    RECORD ASSUMED: Lafayette and Lincoln serve "Just a moment..." (5,561
+    and 5,556 bytes), an interactive challenge a real browser might pass,
+    where La Crosse serves "Attention Required! | Cloudflare" at 5,492
+    bytes. Seventy bytes apart, and only one of them leaves a route open.
+
+    Every other route was measured shut before the document was asked for,
+    and each is worth stating so nobody re-walks it:
+
+      * the county's ArcGIS Online org (services.arcgis.com/YTojcvpJ9GpgYxjF)
+        answers fine and carries 174 public services — the Douglas move of
+        asking the ORG rather than the viewer. Its Supervisor Districts layer
+        has thirty features and no supervisor on any of them; the county's
+        people are simply not in its GIS.
+      * lacrossecounty.legistar.com resolves and its Web API answers
+        "LegistarConnectionString setting is not set up in InSite for client:
+        lacrossecounty" — a tenant that was never provisioned, not a portal
+        that is merely empty.
+      * no second county domain exists (co.la-crosse.wi.us, lacrossecounty.gov
+        and six more do not resolve), and no election-results vendor carries
+        the county.
+      * THE ARCHIVE HAS THE PAGE AND IT CANNOT BE USED. Its last capture of
+        /countyboard/members is 2025-10-11, which is the 2024-2026 board, and
+        Wisconsin reseats every county board at the April election of each
+        even year — the April 2026 election demonstrably moved seats
+        (district 4 Freedland -> Allen, district 6 Mathu -> Rauschnot). A
+        stale roster reads exactly like a current one, which is the whole
+        reason to say no to it.
+
+    So La Crosse rides DOCUMENT_ROSTERS on Taylor's route, with the same
+    dated NOT RE-READ line every run.
+
+    TWO OF ITS FIVE TITLE LINES ARE NOT BOARD OFFICES. The page prints a
+    title under five supervisors' names: "1st Vice Chair" (district 3),
+    "2nd Vice Chair" (district 10), "Chair, Executive" (13), "Chair,
+    Planning, Resources & Development" (29) and "Chair, Health & Human
+    Services" (30). Only the first three are board officers; the last two
+    are COMMITTEE chairs, and a title-keyed read ships three chairs for a
+    board that has one. The discriminator is the comma: "Chair, <committee>"
+    where the committee is a standing committee. District 13 reads that way
+    too and is the real one — the board chair chairs the Executive Committee
+    ex officio, her own biography says "I'm honored and humbled to serve as
+    County Board Chair", and the Blue Book (April 2025) independently names
+    Tina Tryggestad as La Crosse's chair. Which is why `roles` below is a
+    SEPARATE map from `members`: the transcription of the page and the
+    judgement about what a title means are different acts, and only the
+    second one can be wrong. `document_county` refuses more than one chair.
+
+    NO E-MAIL ADDRESS SHIPS FOR LA CROSSE and that is the page, not the
+    read: it renders each supervisor's address as a bare "Email" link with
+    no address in the text, the same shape as Brown County's obfuscated
+    mailtos. Phones are carried verbatim, in the county's own inconsistent
+    formatting. STREET ADDRESSES ARE NOT CARRIED — the page prints a home
+    address for every supervisor, and a supervisor's house is not an office
+    location (the rule Taylor set).
 
 NINE OF THOSE "UNREADABLE" COUNTIES WERE PUBLISHING ALL ALONG (2026-08-27)
 --------------------------------------------------------------------------
@@ -2181,7 +2261,66 @@ DOCUMENT_ROSTERS = [
             "16": ("David Halloran", None, None),
         },
     },
+    {
+        "fips": "55063", "name": "La Crosse", "seats": 30,
+        "read_on": "2026-08-29",
+        "source_url": "https://lacrossecounty.org/countyboard/members",
+        "how": "read from the county's own members page in a browser by the "
+               "operator; Cloudflare answers 403 to every automated client "
+               "on every path of the host",
+        # The BOARD offices only. Two more supervisors carry a title on the
+        # same page and both are standing-committee chairs, not board
+        # officers — see the docstring; shipping them would give the board
+        # three chairs, which document_county refuses outright.
+        "roles": {"3": "1st Vice Chair", "10": "2nd Vice Chair", "13": "Chair"},
+        # district -> (name, e-mail, phone). The page publishes no e-mail
+        # address in its text (a bare "Email" link per member), so every
+        # e-mail here is empty and none ships. Phones are the county's own,
+        # verbatim, spacing and all.
+        "members": {
+            "1": ("Kelly Leibold", "", "507 272 5408"),
+            "2": ("Ralph Geary", "", "608-519-6175"),
+            "3": ("David Pierce", "", "608-343-1031"),
+            "4": ("Kathy Allen", "", ""),
+            "5": ('Emily "Em" Anderson', "", "262-744-4982"),
+            "6": ("Grant Mathu", "", "(608) 518-0368"),
+            "7": ("Beth Piggush", "", "860-371-0130"),
+            "8": ("Peggy Isola", "", "608-519-7365"),
+            "9": ("Angie Manke", "", ""),
+            "10": ("Kim Cable", "", ""),
+            "11": ("Patrick Scheller", "", "608-769-8502"),
+            "12": ("Randy Erickson", "", "608-519-6292"),
+            "13": ("Tina Tryggestad", "", "608-790-2912"),
+            "14": ("Steve Duffrin", "", "608-780-2247"),
+            "15": ("Monica Kruse", "", "608-738-9195"),
+            "16": ("Dan Ferries", "", "608-780-7282"),
+            "17": ("Lia Manock", "", "608-315-2855"),
+            "18": ("Joanna Drazkowski", "", "612-387-8820"),
+            "19": ("Anna McBride", "", "608-385-6701"),
+            "20": ("Steve Doyle", "", "608-783-1204"),
+            "21": ("Jeff Fimreite", "", "608-780-9966"),
+            "22": ("Joe Kovacevich", "", "608-215-0664"),
+            "23": ("Joseph (Joe) Carty", "", "608-799-3701"),
+            "24": ("Kristie Tweed", "", "608-317-1331"),
+            "25": ('Dennis "Jake" Jacobsen', "", "1-715-572-7948"),
+            "26": ("Beth Arentz-Clements", "", ""),
+            "27": ("Paul Wuensch", "", "608-386-7830"),
+            "28": ("Ron Rothering", "", "608-780-3086"),
+            "29": ("Ken Schlimgen", "", "608-786-4382"),
+            "30": ("Dillon Mader", "", "608-792-6650"),
+        },
+    },
 ]
+
+
+def marks_chair(role):
+    """The board-officer test, identical to build_wi_county_officer_roster.py's:
+    "Chair"/"Chairwoman" mark the chair, "1st/2nd Vice Chair" never do."""
+    f = " ".join(str(role or "").lower().split())
+    return "chair" in f and "vice" not in f
+
+
+assert marks_chair("Chair") and not marks_chair("1st Vice Chair")
 
 
 def document_county(spec):
@@ -2228,7 +2367,20 @@ def document_county(spec):
         dupes = sorted({n for n in names if names.count(n) > 1})
         raise RuntimeError("%s: the same person is filed under two districts (%s)"
                            % (spec["name"], dupes))
-    roles = spec.get("roles") or {}
+    # Board offices are declared apart from the transcription, so a title the
+    # county prints beside a name never becomes a role by merely being there.
+    roles = spec.get("roles", {})
+    stray = sorted(set(roles) - set(members), key=lambda d: int(d) if d.isdigit() else 0)
+    if stray:
+        raise RuntimeError("%s: a role is filed under district(s) %s, which the "
+                           "board does not have" % (spec["name"], stray))
+    chairs = sorted(d for d, r in roles.items() if marks_chair(r))
+    if len(chairs) > 1:
+        # La Crosse prints "Chair, <standing committee>" in the same slot as
+        # its board chair's title; a board has one chair, so two here means a
+        # committee chair was read as an officer.
+        raise RuntimeError("%s: %d districts are marked chair (%s) — a board has one"
+                           % (spec["name"], len(chairs), chairs))
     out = {}
     for d in range(1, spec["seats"] + 1):
         name, email, phone = members[str(d)]
