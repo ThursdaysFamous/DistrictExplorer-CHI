@@ -74,7 +74,12 @@ COUNTY_SITES = {
     "55033": ("Dunn", "https://dunncountywi.gov/supervisors"),  # county page confirms 1..29
     "55035": ("Eau Claire", "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"),  # county page confirms 1..29
     "55037": ("Florence", "https://www.florencecountywi.com/"),
-    "55039": ("Fond Du Lac", "http://fdlco.wi.gov/"),
+    # http://fdlco.wi.gov/ answers 200 with a default "IIS Windows Server"
+    # placeholder — 703 bytes, no county content — so the card footer linked
+    # a blank page for as long as this row has existed. A 200 is not a page.
+    # Measured 2026-08-29 while re-probing the counties this instance had
+    # recorded as refusing browser headers.
+    "55039": ("Fond Du Lac", "https://www.fdlco.wi.gov/"),
     "55041": ("Forest", "https://co.forest.wi.gov/"),
     "55043": ("Grant", "https://co.grant.wi.gov/"),  # county page confirms 1..17
     "55045": ("Green", "https://greencountywi.org/164/County-Board-of-Supervisors"),  # county page confirms 1..31

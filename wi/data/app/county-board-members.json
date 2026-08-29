@@ -3085,11 +3085,240 @@
   "name": "Steve Pollock",
   "sourceUrl": "https://www.co.shawano.wi.us/county_board/"
  },
+ "5511701": {
+  "county": "Sheboygan",
+  "district": 1,
+  "email": "brian.smith@sheboygancounty.com",
+  "name": "Brian Smith",
+  "phone": "(414) 581-5353",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-1",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511702": {
+  "county": "Sheboygan",
+  "district": 2,
+  "email": "paul.gruber@sheboygancounty.com",
+  "name": "Paul Gruber",
+  "phone": "(920) 207-4719",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-2",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511703": {
+  "county": "Sheboygan",
+  "district": 3,
+  "name": "Kurt Jensen",
+  "phone": "(608) 225-0692",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-3",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511704": {
+  "county": "Sheboygan",
+  "district": 4,
+  "email": "marilyn.montemayor@sheboygancounty.com",
+  "name": "Marilyn Montemayor",
+  "phone": "(920) 912-5855",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-4",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511705": {
+  "county": "Sheboygan",
+  "district": 5,
+  "email": "rebecca.clarke@sheboygancounty.com",
+  "name": "Rebecca Clarke",
+  "phone": "(920) 395-6609",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-5",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511706": {
+  "county": "Sheboygan",
+  "district": 6,
+  "email": "henry.nelson@sheboygancounty.com",
+  "name": "Henry Nelson",
+  "phone": "(920) 457-6766",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-6",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511707": {
+  "county": "Sheboygan",
+  "district": 7,
+  "email": "drew.phillips@sheboygancounty.com",
+  "name": "Drew R. Phillips",
+  "phone": "(920) 459-3637",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-7",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511708": {
+  "county": "Sheboygan",
+  "district": 8,
+  "email": "vern.koch@sheboygancounty.com",
+  "name": "Vernon C. Koch",
+  "phone": "(920) 334-0017",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-8",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511709": {
+  "county": "Sheboygan",
+  "district": 9,
+  "email": "wendy.schobert@sheboygancounty.com",
+  "name": "Wendy A. Schobert",
+  "phone": "(920) 917-4333",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-9",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511710": {
+  "county": "Sheboygan",
+  "district": 10,
+  "email": "curt.brauer@sheboygancounty.com",
+  "name": "Curt Brauer",
+  "phone": "(414) 514-3567",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-10",
+  "role": "Vice Chairperson",
+  "roleSourceUrl": "https://www.sheboygancounty.com/departments/county-board/",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511711": {
+  "county": "Sheboygan",
+  "district": 11,
+  "email": "gerald.jorgensen@sheboygancounty.com",
+  "name": "Gerald Jorgensen",
+  "phone": "(920) 452-7048",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-11",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511712": {
+  "county": "Sheboygan",
+  "district": 12,
+  "email": "suzanne.speltz@sheboygancounty.com",
+  "name": "Suzanne Speltz",
+  "phone": "(920) 786-2202",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-12",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511713": {
+  "county": "Sheboygan",
+  "district": 13,
+  "email": "charlette.nennig@sheboygancounty.com",
+  "name": "Charlette Nennig",
+  "phone": "(920) 912-6093",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-13",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511714": {
+  "county": "Sheboygan",
+  "district": 14,
+  "email": "Keith.Abler@SheboyganCounty.com",
+  "name": "Keith Abler",
+  "phone": "(920) 207-9351",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-14",
+  "role": "Chairperson",
+  "roleSourceUrl": "https://www.sheboygancounty.com/departments/county-board/",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511715": {
+  "county": "Sheboygan",
+  "district": 15,
+  "email": "joseph.liebau@sheboygancounty.com",
+  "name": "Joe Liebau Jr",
+  "phone": "(920) 450-1791",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-15",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511716": {
+  "county": "Sheboygan",
+  "district": 16,
+  "email": "john.nelson@sheboygancounty.com",
+  "name": "John Nelson",
+  "phone": "(920) 980-2539",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-16",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511717": {
+  "county": "Sheboygan",
+  "district": 17,
+  "email": "Thomas.Wegner@SheboyganCounty.com",
+  "name": "Thomas G. Wegner",
+  "phone": "(920) 892-4629",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-17",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511718": {
+  "county": "Sheboygan",
+  "district": 18,
+  "email": "christian.ellis@sheboygancounty.com",
+  "name": "Christian Ellis",
+  "phone": "(920) 207-1138",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-18",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511719": {
+  "county": "Sheboygan",
+  "district": 19,
+  "email": "stephanie.arndt@sheboygancounty.com",
+  "name": "Stephanie Arndt",
+  "phone": "(920) 287-4975",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-19",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511720": {
+  "county": "Sheboygan",
+  "district": 20,
+  "email": "carl.nonhof@sheboygancounty.com",
+  "name": "Carl Nonhof",
+  "phone": "(920) 459-7990",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-20",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511721": {
+  "county": "Sheboygan",
+  "district": 21,
+  "email": "jon.kuhlow@sheboygancounty.com",
+  "name": "Jon Kuhlow",
+  "phone": "(920) 917-8353",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-21",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511722": {
+  "county": "Sheboygan",
+  "district": 22,
+  "email": "jay.vanderweele@sheboygancounty.com",
+  "name": "Jay Vander Weele",
+  "phone": "(920) 946-4812",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-22",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511723": {
+  "county": "Sheboygan",
+  "district": 23,
+  "email": "jackie.veldman@sheboygancounty.com",
+  "name": "Jackie Veldman",
+  "phone": "(920) 980-3093",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-23",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511724": {
+  "county": "Sheboygan",
+  "district": 24,
+  "email": "William.Goehring@SheboyganCounty.com",
+  "name": "William C. Goehring",
+  "phone": "(920) 994-4749",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-24",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511725": {
+  "county": "Sheboygan",
+  "district": 25,
+  "email": "david.otte@sheboygancounty.com",
+  "name": "David Otte",
+  "phone": "(920) 246-2103",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-25",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
  "5511901": {
   "county": "Taylor",
   "district": 1,
   "email": "lisa.carbaugh@co.taylor.wi.us",
   "name": "Lisa Carbaugh",
+  "phone": "715-965-1980",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511902": {
@@ -3097,6 +3326,7 @@
   "district": 2,
   "email": "tim.hansen@co.taylor.wi.us",
   "name": "Tim Hansen",
+  "phone": "715-965-7662",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511903": {
@@ -3104,6 +3334,7 @@
   "district": 3,
   "email": "sue.swiantek@co.taylor.wi.us",
   "name": "Susan Swiantek",
+  "phone": "715-560-9409",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511904": {
@@ -3111,6 +3342,7 @@
   "district": 4,
   "email": "michael.bub@co.taylor.wi.us",
   "name": "Michael Bub",
+  "phone": "715-965-7748",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511905": {
@@ -3118,6 +3350,7 @@
   "district": 5,
   "email": "jim.metz@co.taylor.wi.us",
   "name": "Loren (Jim) Metz",
+  "phone": "715-748-0740",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511906": {
@@ -3125,6 +3358,7 @@
   "district": 6,
   "email": "scott.mildbrand@co.taylor.wi.us",
   "name": "Scott Mildbrand",
+  "phone": "715-748-3988",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511907": {
@@ -3132,6 +3366,7 @@
   "district": 7,
   "email": "lorie.floyd@co.taylor.wi.us",
   "name": "Lorie Floyd",
+  "phone": "608-412-2974",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511908": {
@@ -3139,6 +3374,7 @@
   "district": 8,
   "email": "chuck.zenner@co.taylor.wi.us",
   "name": "Charles Zenner",
+  "phone": "715-678-2172",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511909": {
@@ -3146,6 +3382,7 @@
   "district": 9,
   "email": "diane.albrecht@co.taylor.wi.us",
   "name": "Diane J. Albrecht",
+  "phone": "715-748-5471",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511910": {
@@ -3153,6 +3390,7 @@
   "district": 10,
   "email": "catherine.lemke@co.taylor.wi.us",
   "name": "Catherine Lemke",
+  "phone": "715-748-5694",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511911": {
@@ -3160,6 +3398,7 @@
   "district": 11,
   "email": "jim.gebauer@co.taylor.wi.us",
   "name": "James Gebauer",
+  "phone": "715-748-4871",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511912": {
@@ -3167,6 +3406,7 @@
   "district": 12,
   "email": "rollie.thums@co.taylor.wi.us",
   "name": "Rollie Thums",
+  "phone": "715-427-5809",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511913": {
@@ -3174,6 +3414,7 @@
   "district": 13,
   "email": "bud.suckow@co.taylor.wi.us",
   "name": "Harvey 'Bud' Suckow",
+  "phone": "715-897-4514",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511914": {
@@ -3181,6 +3422,7 @@
   "district": 14,
   "email": "karen.cummings@co.taylor.wi.us",
   "name": "Karen Cummings",
+  "phone": "715-668-5226",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511915": {
@@ -3188,6 +3430,7 @@
   "district": 15,
   "email": "lynn.rosemeyer@co.taylor.wi.us",
   "name": "Lynette Rosemeyer",
+  "phone": "715-827-0027",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511916": {
@@ -3195,6 +3438,7 @@
   "district": 16,
   "email": "darrell.thompson@co.taylor.wi.us",
   "name": "Darrell Thompson",
+  "phone": "715-644-8285",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511917": {
@@ -3202,6 +3446,7 @@
   "district": 17,
   "email": "rod.adams@co.taylor.wi.us",
   "name": "Rodney Adams",
+  "phone": "715-678-2397",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5512101": {

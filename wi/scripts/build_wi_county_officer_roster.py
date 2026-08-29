@@ -52,7 +52,7 @@ changed her surname. So, per county, in order:
     naming someone the county's own roster no longer seats fails the
     honesty rules, and inventing the successor would too.
 
-The 41 counties with no published roster keep the dated book row — there
+The 38 counties with no published roster keep the dated book row — there
 is nothing to reconcile against. (That was 50 until the 2026-08-27
 re-sweep; the set is READ from the shipped roster file, never listed here,
 so nine counties' chairs began reconciling with no change to this code.) Every decision prints on the build log.
@@ -279,8 +279,13 @@ def main():
                                                     page["name"]))
                 new_chair = {"name": page["name"],
                              "source": "county-board-page"}
-                if page.get("sourceUrl"):
-                    new_chair["sourceUrl"] = page["sourceUrl"]
+                # `roleSourceUrl` when the county states the chair somewhere
+                # other than its district list — a reader checking the title
+                # has to land where the title is published, not merely on a
+                # page of the same county's board
+                page_url = page.get("roleSourceUrl") or page.get("sourceUrl")
+                if page_url:
+                    new_chair["sourceUrl"] = page_url
                 if "seats" in chair:
                     new_chair["seats"] = chair["seats"]
                 chair = new_chair

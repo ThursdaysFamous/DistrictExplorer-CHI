@@ -8698,27 +8698,38 @@ function initWisconsinExplorer() {
         ? "District " + String(result.district) : "Unknown district";
     },
     render: function (result) {
-      var rows = [];
-      rows.push({
+      var wrap = cardEl("div", "card-flush");
+      wrap.appendChild(renderFieldStack([{
         label: "County",
         value: result.county ? String(result.county) + " County" : "Unknown county",
         primary: true
-      });
+      }]));
       var member = result.member;
       if (member && member.vacant) {
         // The county says nobody holds this seat. Saying so is the honest
         // answer; omitting the row would read as "we could not find out".
-        rows.push({ label: "Supervisor", value: "Vacant" });
+        wrap.appendChild(renderFieldStack([{ label: "Supervisor", value: "Vacant" }]));
       } else if (member && member.name) {
-        rows.push({
-          label: member.role ? "Supervisor (" + String(member.role) + ")" : "Supervisor",
-          value: String(member.name)
-        });
+        // A PERSON ROW RATHER THAN A LABEL/VALUE ONE, because the contact a
+        // county publishes has to reach the reader: Milwaukee, Racine and
+        // Taylor have shipped supervisor e-mail addresses since they joined
+        // and the card rendered none of them, and Sheboygan adds a phone and
+        // a per-supervisor page besides. Absent fields render nothing, so a
+        // county that publishes only a name looks as it did.
+        var person = { name: String(member.name), badge: "Supervisor" };
+        if (member.role) person.note = String(member.role);
+        if (member.phone) person.phone = String(member.phone);
+        if (member.email) person.email = String(member.email);
+        var profile = safeHttpUrl(member.profileUrl);
+        if (profile) person.links = [{ label: "Supervisor page", url: profile }];
+        wrap.appendChild(renderPersonRows([person]));
       }
       if (result.seats) {
-        rows.push({ label: "Board", value: String(result.seats) + " supervisory districts" });
+        wrap.appendChild(renderFieldStack([
+          { label: "Board", value: String(result.seats) + " supervisory districts" }
+        ]));
       }
-      return renderFieldStack(rows);
+      return wrap;
     },
     primaryLink: function (result) {
       // Prefer the page the supervisor's own name was read from, so a reader

@@ -346,7 +346,7 @@
             "url": "https://services9.arcgis.com/cqHJZMbXoaOT0XrP/arcgis/rest/services/Trempealeau_County_County_Board_Supervisor_Districts_2021_2031_WFL1/FeatureServer/3"
           }
         ],
-        "people": "For 33 of the 72 counties, the supervisor holding the district — 30 from each county's own board page and two (Milwaukee, Racine) read as attributes off the county's own GIS layer, Milwaukee's witnessed on every run against the county's Legistar API (county-board-members.json, refreshed weekly by CI as a reviewed PR); a seat the county marks empty renders as vacant. Nine of the 29 arrived on 2026-08-27 from a re-sweep of the 50 counties this project had recorded as publishing nothing: Dane's roster sits on the BOARD's own host rather than the county's, and Oneida, Price and Trempealeau print a district COLUMN, which this reader could not see because it needed the word beside the number. Taylor's seventeen ride a dated document read from its own directory page, because its host answers a captcha to every automated client and no weekly re-read is possible. The other 39 counties publish no district-keyed member list this can read, so no name is shown and the card links the county board — Wisconsin has no statewide roster of county supervisors.",
+        "people": "For 34 of the 72 counties, the supervisor holding the district — 31 from each county's own board page and two (Milwaukee, Racine) read as attributes off the county's own GIS layer, Milwaukee's witnessed on every run against the county's Legistar API (county-board-members.json, refreshed weekly by CI as a reviewed PR); a seat the county marks empty renders as vacant. Nine of the 29 arrived on 2026-08-27 from a re-sweep of the 50 counties this project had recorded as publishing nothing: Dane's roster sits on the BOARD's own host rather than the county's, and Oneida, Price and Trempealeau print a district COLUMN, which this reader could not see because it needed the word beside the number. Taylor's seventeen ride a dated document read from its own directory page, because its host answers a captcha to every automated client and no weekly re-read is possible. Sheboygan joined on 2026-08-29 with a county e-mail, a contact phone and a page of their own for each of its 25 supervisors, and its card names the chair the county's own board page states; it had been recorded as refusing browser headers, and the headers were the ones at fault. The other 38 counties publish no district-keyed member list this can read, so no name is shown and the card links the county board — Wisconsin has no statewide roster of county supervisors.",
         "applies": "Wisconsin — statewide, all 72 counties."
       }
     },
@@ -1427,8 +1427,8 @@
       },
       {
         "file": "county-board-members.json",
-        "min_keys": 690,
-        "note": "County board supervisors for the 33 counties whose district-keyed member list this can obtain (719 seats) — 30 scraped from board pages, Milwaukee and Racine read off their own GIS layers (Milwaukee Legistar-witnessed). Built by wi/scripts/build_wi_county_board_roster.py, checked seat-for-seat against the shipped district geometry; refreshed weekly by update-wi-county-board-roster.yml, and Taylor carried from its own directory page as a dated document because its host answers a captcha to every automated client. The other 39 counties name nobody — their cards link the county board instead."
+        "min_keys": 715,
+        "note": "County board supervisors for the 34 counties whose district-keyed member list this can obtain (744 seats) — 31 scraped from board pages, Milwaukee and Racine read off their own GIS layers (Milwaukee Legistar-witnessed). Built by wi/scripts/build_wi_county_board_roster.py, checked seat-for-seat against the shipped district geometry; refreshed weekly by update-wi-county-board-roster.yml, and Taylor carried from its own directory page as a dated document because its host answers a captcha to every automated client. The other 38 counties name nobody — their cards link the county board instead."
       },
       {
         "file": "wi-circuit-judges.json",
@@ -2074,7 +2074,7 @@
         "label": "county-board seats tracked weekly",
         "file": "data/app/county-board-members.json",
         "metric": "keys",
-        "note": "in the 33 counties whose district-keyed roster this can obtain"
+        "note": "in the 34 counties whose district-keyed roster this can obtain"
       },
       {
         "label": "circuit courts with their full bench named",
@@ -2084,6 +2084,11 @@
       }
     ],
     "entries": [
+      {
+        "date": "2026-08-29",
+        "title": "Sheboygan's supervisors, and the header that was hiding them",
+        "body": "Click anywhere in Sheboygan County and the board card now names the supervisor holding your district, with the county e-mail and contact phone the county publishes for them and a link to their own page — the 34th of Wisconsin's 72 counties whose roster this app can obtain, and the first to arrive with contact for every seat. It should have arrived a year ago. Sheboygan was one of nine counties this project had recorded as answering a flat refusal that holds against browser headers, and the headers being held against were never a browser's: they claimed to be Chrome and sent none of the client hints Chrome always sends alongside that claim, which is the self-contradiction the county's bot filter was scoring. Corrected, the page answers first time, every time — and so do seven more counties whose absence was ours rather than theirs, though none of the seven publishes a list this app can read whole yet. Two silent traps came with the county and are worth as much as the roster. Its Elected Officials page lists six offices on one page, and reading each officer's phone the way this app reads a one-officer page returned the PREVIOUS officer's number for four of five — every one a plausible county number, none of them right. And its board page states the chair and vice chair in an alternating list that the role reader is built to refuse rather than guess at, so the vice chair attached and the chair quietly did not. Both are fixed by reading forward from the name the page actually names, and by pinning the direction rather than detecting it."
+      },
       {
         "date": "2026-08-27",
         "title": "Where you vote, everywhere in Wisconsin",
