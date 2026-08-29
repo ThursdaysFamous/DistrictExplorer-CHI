@@ -11,19 +11,20 @@ That is what stops a county's page reorganising into a plausible-but-wrong
 number of members — the two files were built from different publishers (the
 county's own page, and LTSB's statewide filing) and have to agree.
 
-Thirty-one of Wisconsin's 72 counties publish a district-keyed member list this
-client can read; the other 41 are recorded in the Data gaps panel and their
+Thirty-four of Wisconsin's 72 counties have a district-keyed member list this
+project can carry; the other 38 are recorded in the Data gaps panel and their
 cards keep linking the county board rather than naming anybody. See the
 scraper's docstring for what each of them actually publishes.
 
-LAFAYETTE IS THE THIRTY-SECOND AND THE ONLY ONE CARRIED AS A DATED DOCUMENT.
-Its page publishes all sixteen seats and its host answers this project with a
-Cloudflare managed challenge, so the rows come from a capture of that page and
-say so: the scraper hands over `asOf` and `sourceDocument` beside the members,
-this builder stamps `asOf` on every one of that county's rows, and the card
-prints it rather than letting a dated snapshot read like a weekly re-read. The
-scraper still tries the live page every run and will drop both fields the day
-it answers.
+TWO OF THE THIRTY-FOUR ARE CARRIED FROM A DOCUMENT, NOT RE-READ WEEKLY, AND
+THE CARD HAS TO SAY SO. Taylor's host answers a captcha and Lafayette's a
+Cloudflare challenge, so their rows come from a dated capture of each county's
+own page. The scraper marks those counties `carried_from_document` with the
+day they were read; this builder turns that into an `asOf` on every one of
+their rows, and the card prints it rather than letting a dated snapshot read
+like the weekly re-read the other thirty-two get. A county whose live page
+answers on a later run loses the flag in the scraper, so the field disappears
+here by itself.
 
 Usage:
     python3 wi/scripts/build_wi_county_board_roster.py
@@ -40,10 +41,10 @@ GEOMETRY = os.path.join(APP_DATA_DIR, "county-supervisory-districts.json")
 RAW = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache", "wi_county_boards_raw.json")
 OUT = os.path.join(APP_DATA_DIR, "county-board-members.json")
 
-MIN_COUNTIES = 30      # 32 ship one (29 pages + 2 county GIS layers + Lafayette's
-                       # dated document); tolerates two of the live ones going dark
-MIN_SEATS = 661        # 688 today (633 page-scraped + Milwaukee 18 + Racine 21
-                       # + Lafayette 16)
+MIN_COUNTIES = 32      # 34 ship one (30 pages + 2 county GIS layers + Taylor and
+                       # Lafayette by document); tolerates two of the live ones dark
+MIN_SEATS = 706        # 735 today (663 page-scraped + Milwaukee 18 + Racine 21
+                       # + Taylor 17 + Lafayette 16)
 
 
 def main():
@@ -84,16 +85,13 @@ def main():
             key = "%s%02d" % (fips, int(d))
             row = {"county": entry["county"], "district": int(d),
                    "sourceUrl": entry["source_url"]}
-            # Present only for a county whose rows came from a document rather
-            # than from this run's read of its page — the card shows the date
-            # instead of implying a weekly re-read, and the officer builder
-            # carries it onto the county card's board chair for the same
-            # reason. `asOf` names the page and the day it was captured, and
-            # `sourceUrl` is that page, so the pair is the whole provenance a
-            # reader needs; the exact document lives in the scraper's
-            # DOCUMENT_COUNTIES entry and on its NOT RE-READ line, not here.
-            if entry.get("asOf"):
-                row["asOf"] = entry["asOf"]
+            # Present only for a county the scraper marked as carried from a
+            # document rather than read this run. `sourceUrl` is still the
+            # page the names came from, so the pair is the whole provenance a
+            # reader needs; the exact route lives in the scraper's
+            # DOCUMENT_ROSTERS entry and on its NOT RE-READ line.
+            if entry.get("carried_from_document"):
+                row["asOf"] = "the county's own page, captured %s" % entry["read_on"]
             if member["vacant"]:
                 row["vacant"] = True
                 vacant += 1
@@ -118,7 +116,7 @@ def main():
     dated = sorted({r["county"] for r in roster.values() if r.get("asOf")})
     print("county-board-members: %d counties, %d seats (%d named, %d vacant)%s"
           % (len(counties), total, total - vacant, vacant,
-             "; dated document: %s" % ", ".join(dated) if dated else ""),
+             "; carried from a document: %s" % ", ".join(dated) if dated else ""),
           file=sys.stderr)
     if check_only:
         try:

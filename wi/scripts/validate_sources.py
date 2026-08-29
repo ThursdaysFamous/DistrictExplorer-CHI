@@ -301,29 +301,43 @@ PROVENANCE = [
     {
         "layer": "county-board",
         "app_file": "county-board-members.json",
+        "source_url": "https://co.taylor.wi.us/directory/county-board/",
+        "blocked": "sg-captcha challenge on every path (HTTP 202 + meta-refresh to "
+                   "/.well-known/sgcaptcha/); a captcha is an access control and is "
+                   "not defeated here. Taylor's seventeen supervisors ship as a DATED "
+                   "DOCUMENT read from this page in a browser, not as a scrape.",
+        "note": (
+            "Taylor's County Board directory — district-keyed with name, county "
+            "e-mail and phone per supervisor. Recorded as EXPECTED-UNREACHABLE, so "
+            "the check INVERTS: a refusal reads OK and this host becoming readable "
+            "is the WARN, because that is the state a human can act on — it would "
+            "mean the document route can be retired for a weekly scrape."
+        ),
+    },
+    {
+        "layer": "county-board",
+        "app_file": "county-board-members.json",
         "source_url": "https://www.lafayettecountywi.org/bos",
-        # THE INVERSION, AND THE ONE HERE WITH A CONCRETE NEXT STEP. Lafayette's
-        # sixteen supervisors are the only rows in county-board-members.json
-        # that are not a weekly re-read: this host answers a Cloudflare managed
-        # challenge, so they ship from a dated capture of the page below and
-        # every card says so. Refusal is therefore the EXPECTED state and reads
-        # OK; REACHABLE is the WARN, and it means the weekly scraper's live
-        # attempt (it tries this page on every run) can start succeeding — at
-        # which point the county moves from DOCUMENT_COUNTIES to COUNTIES in
-        # wi_county_board_scraper.py and the capture date leaves the card.
+        # THE SAME INVERSION AS TAYLOR ABOVE, with one difference that matters:
+        # this county's page PARSES. `same-line-lead` reads all sixteen seats
+        # off it 16/16 (verified against the Internet Archive's own capture),
+        # and the weekly scraper pins that reading on Lafayette's
+        # DOCUMENT_ROSTERS entry and RE-TRIES THE LIVE PAGE ON EVERY RUN. So a
+        # WARN here is not paperwork: it means the live attempt can start
+        # succeeding, and the county moves to COUNTIES with its capture date
+        # leaving the card by itself.
         "blocked": ("Cloudflare managed challenge (cf-mitigated: challenge, "
                     "\"Just a moment...\") to plain clients on both the bare and "
                     "www hosts, browser headers included — measured 2026-08-29"),
         "note": (
-            "Lafayette's sixteen supervisors, the instance's one DATED-CAPTURE "
-            "roster. The page publishes every seat in the shape "
-            "\"Larry Ludlum- Supervisor District #1\" — the person, the office, "
-            "then the district — which the `same-line-lead` reading resolves "
-            "16/16 and which none of the four older readings could see at all, "
+            "Lafayette's Board of Supervisors page — sixteen seats written "
+            "\"Larry Ludlum- Supervisor District #1\", the person, the office, "
+            "then the district, which none of the four older readings could see "
             "because they test the text AFTER the district and it ends in the "
             "word every other county uses as a heading. Fifteen of the sixteen "
-            "names are witnessed against the Internet Archive's capture of the "
-            "same page; the chair against the Blue Book."
+            "names are witnessed against the Internet Archive's capture of this "
+            "page; the chair against the Blue Book. Recorded EXPECTED-UNREACHABLE "
+            "on the same inverted terms as Taylor."
         ),
     },
     {

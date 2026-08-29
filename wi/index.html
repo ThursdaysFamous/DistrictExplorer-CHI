@@ -8728,12 +8728,13 @@ function initWisconsinExplorer() {
       if (result.seats) {
         rows.push({ label: "Board", value: String(result.seats) + " supervisory districts" });
       }
-      // A DATED capture, said so. Every other named county here is re-read
-      // weekly from its own page; Lafayette's host answers this project with a
-      // Cloudflare challenge, so its names come from a capture of that same
-      // page on a stated day. Without this row the card would look exactly
-      // like the thirty-one that ARE re-read weekly, which is the difference
-      // between a fact and a claim about how fresh the fact is.
+      // A DATED capture, said so. Most named counties here are re-read weekly
+      // from their own page; two are not, because their hosts refuse every
+      // automated client (Taylor answers a captcha, Lafayette a Cloudflare
+      // challenge), so their names come from a capture of that same page on a
+      // stated day. Without this row those cards would look exactly like the
+      // ones that ARE re-read weekly, which is the difference between a fact
+      // and a claim about how fresh the fact is.
       if (member && member.asOf) {
         rows.push({
           label: "As of",
