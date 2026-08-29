@@ -224,6 +224,16 @@ jobs:
             echo "::error::the coverage map fetches outline(s) the assemble did not publish:$missing"
             exit 1
           fi
+          # The FLOSS/fund manifest and its wellKnown proof. rsync -a copies
+          # dotfolders (which is why .git/.github/.claude are excluded above),
+          # so both ship today — but neither has a loud failure mode. A dropped
+          # funding.json 404s a URL published to a funding directory, and a
+          # dropped .well-known stops the manifest VERIFYING while the manifest
+          # itself still serves and still looks right: the spec resolves that
+          # file to decide whether this project may solicit funding on behalf of
+          # the hosts it names. Both are asserted rather than assumed.
+          test -f _site/funding.json || { echo "::error::assemble produced no root funding.json"; exit 1; }
+          test -f _site/.well-known/funding-manifest-urls || { echo "::error::assemble dropped .well-known/funding-manifest-urls — the funding manifest cannot verify without it"; exit 1; }
           for unpublished in engine; do
             test ! -e "_site/$unpublished" || { echo "::error::$unpublished leaked into the published tree"; exit 1; }
           done

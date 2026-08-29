@@ -499,6 +499,17 @@ def check_published_counts(served):
     Wisconsin's own "72 counties" is untouched: it never says "Illinois", and
     the bare "<n> counties." form is only read out of metros.json's il entry.
 
+    THE FLEET TABLE'S ROWS are checked as well as its Illinois count, and the
+    reason is Iowa. This gate read the Illinois row's number and nothing else,
+    so when Iowa shipped as the fifth instance README went on saying "four
+    instances" with no Iowa row at all, and every check in the repo stayed
+    green — the number it watched had not moved. A count that is right about
+    the row it reads says nothing about a row that is missing. So metros.json
+    is the roster: every instance must have a table row naming its landing name
+    and its URL, and the prose count of instances must equal how many there
+    are. The row's "Covers" prose stays hand-written; only its existence and
+    its identity are derived.
+
     funding.json is scanned too, and it is the reason this docstring gained a
     fourth surface. It is a FLOSS/fund manifest served at
     districtry.com/funding.json — reader-facing by construction, since a funder
@@ -564,7 +575,31 @@ def check_published_counts(served):
                 bad.append("%s: says %s Illinois counties, derived is %d"
                            % (rel, m.group(1), served))
 
-    # 3. the FLOSS/fund manifest. Every string value is swept rather than one
+    # 3. README's fleet table — a row per instance, and the prose count.
+    # Read from metros.json, which is the fleet's own manifest: the landing
+    # page, the coverage map and the privacy page are all generated from it, so
+    # an instance that is live is in it by construction.
+    with open(readme, encoding="utf-8") as f:
+        readme_text = f.read()
+    words = {1: "one", 2: "two", 3: "three", 4: "four", 5: "five",
+             6: "six", 7: "seven", 8: "eight", 9: "nine", 10: "ten"}
+    for e in entries:
+        name, url = e.get("landing_name", ""), e.get("url", "")
+        row = [ln for ln in readme_text.splitlines()
+               if ln.startswith("| **%s**" % name)]
+        if not row:
+            bad.append("README.md: no fleet-table row for %s, which metros.json "
+                       "lists as live at %s" % (name, url))
+        elif url and url not in row[0]:
+            bad.append("README.md: the %s row does not link %s" % (name, url))
+    want = words.get(len(entries), str(len(entries)))
+    for m in re.finditer(r"\b(one|two|three|four|five|six|seven|eight|nine|ten)\s+instances\b",
+                         readme_text):
+        if m.group(1) != want:
+            bad.append("README.md: says '%s instances', metros.json lists %d"
+                       % (m.group(1), len(entries)))
+
+    # 4. the FLOSS/fund manifest. Every string value is swept rather than one
     # named field: the count sits in the project description today, and a
     # reworded manifest that moves it into a plan's description would silently
     # leave this gate reading a field that no longer carries the claim.
