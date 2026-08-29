@@ -46,10 +46,16 @@ by two features is an interior border and is dropped; survivors chain back into
 closed rings. Doing it here means the browser ships one feature with no interior
 edges left to cancel. Disjoint regions fall out of the same walk — each closed
 ring is chained independently — and group_rings() nests them into a MultiPolygon.
-Wisconsin's 20 roster counties exercise that path from day one: the shipped
-file is a MultiPolygon of 9 separate regions, each verified by anchor, not by
-eye — a region mis-nested as a hole renders identically and answers False to
-every containment test inside it (the reference fork's island lesson).
+Wisconsin's roster counties exercise that path from day one — the file was a
+MultiPolygon of 9 separate regions when 20 counties shipped — and the count
+moves in BOTH directions as counties join. Both moves landed on 2026-08-29:
+Iowa merged two regions into one, because it borders served Grant and Richland
+on one side and served Dane and Green on the other, and Marinette opened a new
+detached one in the northeast. Five went to four went back to five.
+READ THE REGION COUNT FROM `--check`, NEVER FROM THIS SENTENCE. Each region is
+verified by anchor, not by eye — a region mis-nested as a hole renders
+identically and answers False to every containment test inside it (the
+reference fork's island lesson).
 
 Usage:
     python3 build_metro_outline.py                 # writes data/app/metro-outline.json
@@ -98,7 +104,8 @@ TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
 # answering because this list was not updated with them.
 METRO_COUNTY_FIPS = (
     "007", "009", "013", "025", "027", "033", "035", "043",
-    "045", "055", "057", "061", "075", "077", "079", "085",
+    "045", "049", "055", "057", "061", "075", "077", "079",
+    "085",
     "095", "097", "099", "101", "103", "107", "115", "119",
     "121", "123", "125", "127", "129", "131", "133", "137",
     "139", "141",
@@ -145,6 +152,7 @@ INSIDE = {
     "Eau Claire": (44.72335, -91.28595),
     "Grant": (42.85909, -90.76231),
     "Green": (42.67898, -89.60243),
+    "Iowa": (43.0113, -90.13346),
     "Jefferson": (43.02123, -88.77694),
     "Juneau": (43.94612, -90.13402),
     "Kewaunee": (44.50222, -87.3097),
@@ -187,7 +195,6 @@ OUTSIDE = {
     "Fond du Lac": (43.74103, -88.5229),
     "Forest": (45.72458, -88.86156),
     "Green Lake": (43.80746, -89.02684),
-    "Iowa": (43.0113, -90.13346),
     "Iron": (46.38983, -90.34647),
     "Jackson": (44.33432, -90.74153),
     "Kenosha": (42.5743, -87.66848),

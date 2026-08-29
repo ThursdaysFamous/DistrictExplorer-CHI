@@ -18,9 +18,10 @@ layers. The rest are not oversights and are recorded as such:
     and no name on it anywhere. They were checked three pages deep apiece.
     This file used to claim 23 counties; that count came from a sweep that
     tested district NUMBERS, and numbers are what a map index has.
-  * Marinette publishes 29 of its 30 seats. District 26 is an unnumbered
-    "VACANT SEAT" row in an alphabetical list, and assigning it by elimination
-    would be an inference the county never wrote, so the county stays out.
+  * Marinette publishes 29 of its 30 seats by number; the thirtieth is an
+    unnumbered "VACANT SEAT" row in an alphabetical list. It SHIPS since
+    2026-08-29, district 26 assigned by elimination under the arithmetic gate
+    in ELIMINATION_VACANCY below — opt-in per county, never a general rule.
   * Dodge WAS in this bucket until 2026-08-29, filed under "publishes prose",
     and that was never measured against the county. The sweep asked
     co.dodge.wi.us, which had become a 261-byte "This site has permanently
@@ -95,6 +96,49 @@ e-mail was being drafted to the county for a list it publishes.
   countyofdane.com this project's own clerk file carries. ASK THE BOARD'S OWN
   HOST BEFORE RECORDING THAT A COUNTY PUBLISHES NOTHING.
 
+IOWA COUNTY: THE PAGE ITS OWN HOME PAGE LINKS NO PATH TO (2026-08-29)
+---------------------------------------------------------------------
+Iowa was in the "publishes no district-keyed list on the pages their own sites
+point to" bucket, and that sentence was exactly true and still described this
+side of the wire. The county publishes all 21 districts at
+/departments/countyboard/county-board-members with a name, a per-district county
+e-mail alias and a phone on each — as rich as any page in this table — and
+www.iowacountywi.gov's home page carries NOT ONE anchor whose href contains
+"board", because its DEPARTMENTS menu is built by script. A harvest of a county
+home page's own links therefore finds no route to it at all, and the page sits
+two hops in behind a menu that only a browser assembles.
+
+That is the Dane lesson one turn further on. Dane said ask the BOARD's host as
+well as the county's; Iowa says a county's own site can HAVE the page and link
+it from nowhere a link harvest can see. Neither county was withholding
+anything.
+
+READ THE SITEMAP. It is the route that would have found this one and costs a
+single request: www.iowacountywi.gov/sitemap.xml lists 3,173 pages, and
+`/county-board-members` — a flat alias of the same page, serving the same 21
+supervisors — is one of them. A site whose menu is script-built still has to
+tell search engines what it publishes. (Its robots.txt allows this path to a
+general crawler: the `User-agent: *` block disallows only /calendar, /meetings,
+/media, /portal and a few others, and asks a crawl-delay of 5 seconds, which a
+weekly one-page fetch of this host meets by construction.)
+
+WHAT IS NOT CARRIED, AND WHY. The page prints three things per supervisor this
+table does not ship. The street addresses are supervisors' HOMES ("6067 Helena
+Rd."), and a home address never ships here even when the source publishes it —
+the same rule Taylor's document rides. The phone and the county e-mail alias
+(supervisor14@iowacounty.org, on the county's older domain) are official
+contact details and are simply not read: the county-board card renders a
+supervisor's name and nothing else, so the two GIS counties' e-mails already
+sit in the shipped file unread, and a new per-county contact reading with no
+reader is risk for nothing. If that card ever grows a contact line, Iowa's
+addresses are self-verifying — the number IN the alias must equal the district
+it is filed under — and this paragraph is the note saying where to start.
+
+Iowa marks no chair and no vacancy, which matters to the officer builder rather
+than to this one: the Blue Book's Iowa chair, John M Meyers, sits at district
+14, so its weekly reconciliation CONFIRMS the dated book row instead of
+withholding it.
+
 THE READING DIRECTION IS PINNED PER COUNTY, NOT DETECTED
 --------------------------------------------------------
 Three page shapes carry the same information:
@@ -137,6 +181,12 @@ an e-mail address. Both filed one person under two districts, both were caught
 by the duplicate-name guard below, and neither ships. They are a separate
 strategy rather than a change to `_windowed` so the twenty counties already
 shipping keep byte-identical behaviour.
+
+A sixth joined on 2026-08-29, and it is the first that is not one shape at all:
+
+    same-line-or-next
+                BOTH of the first two, in one page (Iowa) — see
+                `_same_line_or_next`
 
 A COUNTY THAT DOES NOT FULLY RESOLVE YIELDS NOTHING. Partial output is worse
 than none here: a card showing 18 of 21 districts reads as a complete board
@@ -330,7 +380,10 @@ COUNTIES = [
     # --- 2026-08-29: the county whose SITE refuses this client and whose PAGE
     # does not — read from the Internet Archive, see the docstring's ladder ---
     ("55105", "Rock", 29, "row",
-     "https://www.co.rock.wi.us/government/county-board-of-supervisors"),]
+     "https://www.co.rock.wi.us/government/county-board-of-supervisors"),
+    # --- 2026-08-29: the county whose own home page links no path to it ---
+    ("55049", "Iowa", 21, "same-line-or-next",
+     "https://www.iowacountywi.gov/departments/countyboard/county-board-members"),]
 
 # Counties whose own host refuses this client on every path and every header,
 # whose page the Internet Archive nonetheless holds. The ladder still asks the
@@ -715,15 +768,66 @@ def _rows(page_html, seats):
     return out, vacant
 
 
+# --- the sixth shape: same line OR the next one, in one page ------------------
+# Iowa County writes both. Fourteen of its districts print "District 1 - Chuck
+# Weigel"; the other seven print "District 3 -" and put the name on the line
+# below, because the county's editor bolded some names and not others and the
+# markup broke where it did. `same-line` resolves 14 of 21 and `after` resolves
+# 0 of 21 (every district's own block is address, phone and e-mail before the
+# next name appears), so neither pinned reading can read a page that mixes them.
+#
+# THE FALL-THROUGH IS ONE LINE AND ONLY FROM AN OTHERWISE EMPTY DISTRICT LINE.
+# That is what keeps it as safe as the pinned readings it sits beside: a
+# district line carrying ANY other text is taken at face value and never looked
+# past, so "District 1 Map" — the per-district map link that follows every
+# block — cannot reach forward into "District 2 - Ingmar Nelson" and file the
+# wrong person. A district whose own line is bare and whose next line is not a
+# name simply does not resolve, and the all-seats-or-nothing guard fails the
+# county loudly.
+def _same_line_or_next(lines):
+    out, vacant = {}, set()
+    for i, line in enumerate(lines):
+        m = DIST.search(line)
+        if not m:
+            continue
+        d = int(m.group(1))
+        if d in out or d in vacant:
+            continue                    # the heading wins; a later mention cannot move it
+        rest = re.sub(r"^[\s\-–—:•]+", "", DIST.sub(" ", line, count=1)).strip()
+        paren = re.fullmatch(r"\((.+)\)", rest)
+        if paren:
+            rest = paren.group(1).strip()
+        if VACANT.search(rest):
+            vacant.add(d)
+            continue
+        if _reads_as_name(rest):
+            out[d] = clean(rest)
+            continue
+        if rest:
+            continue                    # the line says something else — never look past it
+        nxt = lines[i + 1] if i + 1 < len(lines) else ""
+        if DIST.search(nxt):
+            continue                    # the next district's line: stop, never borrow
+        if VACANT.search(nxt):
+            vacant.add(d)
+        elif _reads_as_name(nxt):
+            out[d] = clean(nxt)
+    return out, vacant
+
+
 READINGS = {
     "same-line": _same_line,
     "before": lambda ls: _windowed(ls, WINDOW_BEFORE),
     "after": lambda ls: _windowed(ls, WINDOW_AFTER),
 }
+# The readings that STOP at the next district line, and therefore report their
+# own vacancies: the forward-only `vacant_districts` cannot see a vacancy the
+# page prints on the side it is not scanning.
 STRICT_READINGS = {
     "before-strict": lambda ls: _windowed_strict(ls, WINDOW_BEFORE),
     "after-strict": lambda ls: _windowed_strict(ls, WINDOW_AFTER),
     "same-line-lead": _same_line_lead,
+    "same-line-or-next": _same_line_or_next,
 }
 COLUMN_READINGS = {"column-after": True, "column-before": False}
 
