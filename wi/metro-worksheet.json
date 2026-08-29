@@ -1427,8 +1427,8 @@
       },
       {
         "file": "county-board-members.json",
-        "min_keys": 660,
-        "note": "County board supervisors for the 32 counties whose district-keyed member list this can obtain (689 seats) — 29 scraped from board pages, Milwaukee and Racine read off their own GIS layers (Milwaukee Legistar-witnessed). Built by wi/scripts/build_wi_county_board_roster.py, checked seat-for-seat against the shipped district geometry; refreshed weekly by update-wi-county-board-roster.yml, and Taylor carried from its own directory page as a dated document because its host answers a captcha to every automated client. The other 40 counties name nobody — their cards link the county board instead."
+        "min_keys": 679,
+        "note": "County board supervisors for the 33 counties whose district-keyed member list this can obtain (708 seats) — 30 scraped from board pages, Milwaukee and Racine read off their own GIS layers (Milwaukee Legistar-witnessed). Built by wi/scripts/build_wi_county_board_roster.py, checked seat-for-seat against the shipped district geometry; refreshed weekly by update-wi-county-board-roster.yml, and Taylor carried from its own directory page as a dated document because its host answers a captcha to every automated client. Green Lake is read as structured BLOCKS rather than by proximity, which is what lets its supervisors ship with the role, e-mail and phone the county prints inside each block. The other 39 counties name nobody — their cards link the county board instead."
       },
       {
         "file": "wi-circuit-judges.json",
@@ -1940,7 +1940,7 @@
     },
     {
       "file": "update-wi-county-board-roster.yml",
-      "purpose": "County board supervisors for the 31 counties that publish a readable member list",
+      "purpose": "County board supervisors for the 33 counties with an obtainable member list",
       "schedule": "Thu 14:30 UTC"
     },
     {
@@ -2074,7 +2074,7 @@
         "label": "county-board seats tracked weekly",
         "file": "data/app/county-board-members.json",
         "metric": "keys",
-        "note": "in the 32 counties whose district-keyed roster this can obtain"
+        "note": "in every county whose district-keyed roster this client can obtain; the rest are a standing recorded gap"
       },
       {
         "label": "circuit courts with their full bench named",
@@ -2084,6 +2084,11 @@
       }
     ],
     "entries": [
+      {
+        "date": "2026-08-29",
+        "title": "Green Lake's supervisors, and a reader that was already here",
+        "body": "The County Board District card now names all nineteen Green Lake County supervisors — seventeen people, the two seats the county itself marks vacant, and the board chairman marked as chairman — with the county e-mail and phone it publishes beside each name. Green Lake had been recorded as a county publishing nothing a program could read. It publishes the fullest supervisor list of any county in the state: a block per person carrying their district, their district's wards, their committees, the date they took the seat, and how to reach them. The reason it went unread is worth stating plainly. Every reading this project had needed the word “district” printed next to the number, and this page prints “District:” with a colon that lands the word on a different line — except for one reading, added two days earlier for a different set of counties, which resolves Green Lake's nineteen districts correctly against the same page. Nobody pointed it at the counties already written off. What ships instead reads each person's own block as a block, so a field belongs to a supervisor because it sits inside their entry rather than because it sits near it — the only shape that could also carry the chairman's title, the e-mail and the phone, none of which sit at a fixed distance from anything. Two things the county publishes are deliberately not shown: the home addresses printed beside each supervisor, which this project never ships for anyone, and one e-mail address that appears as the contact for three different supervisors at once and belongs to none of them by name — shipping it would hand a reader the wrong person's inbox. The same page shape on the county's Elected Officials page gave its sheriff, district attorney, treasurer, clerk of circuit court and register of deeds a checked office phone and a fresher name than the April 2025 Blue Book. Supervisor contact details had been reaching four counties' data files and no reader's screen; the card shows them now."
+      },
       {
         "date": "2026-08-27",
         "title": "Where you vote, everywhere in Wisconsin",

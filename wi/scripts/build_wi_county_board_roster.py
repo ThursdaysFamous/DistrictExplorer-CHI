@@ -11,10 +11,10 @@ That is what stops a county's page reorganising into a plausible-but-wrong
 number of members — the two files were built from different publishers (the
 county's own page, and LTSB's statewide filing) and have to agree.
 
-Twenty of Wisconsin's 72 counties publish a district-keyed member list; the
-other 52 are recorded in the Data gaps panel and their cards keep linking the
-county board rather than naming anybody. See the scraper's docstring for what
-each of the other 52 actually publishes.
+Thirty-three of Wisconsin's 72 counties publish a district-keyed member list
+this client can obtain; the other 39 are recorded in the Data gaps panel and
+their cards keep linking the county board rather than naming anybody. See the
+scraper's docstring for what each of the other 39 actually publishes.
 
 Usage:
     python3 wi/scripts/build_wi_county_board_roster.py
@@ -31,8 +31,8 @@ GEOMETRY = os.path.join(APP_DATA_DIR, "county-supervisory-districts.json")
 RAW = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache", "wi_county_boards_raw.json")
 OUT = os.path.join(APP_DATA_DIR, "county-board-members.json")
 
-MIN_COUNTIES = 30      # 32 ship one (29 pages + 2 county GIS layers + Taylor by document); tolerates two dark
-MIN_SEATS = 660        # 689 today (633 page-scraped + Milwaukee 18 + Racine 21 + Taylor 17)
+MIN_COUNTIES = 31      # 33 ship one (30 pages + 2 county GIS layers + Taylor by document); tolerates two dark
+MIN_SEATS = 679        # 708 today (652 page-scraped + Milwaukee 18 + Racine 21 + Taylor 17)
 
 
 def main():
@@ -80,11 +80,15 @@ def main():
                 row["name"] = member["name"]
                 if member["role"]:
                     row["role"] = member["role"]
-                # the two county-GIS rosters carry contact on the feature —
-                # fields the page-scraped counties never publish; each rides
-                # only where its county published it
+                # Contact rides only where its county published it: the two
+                # county-GIS rosters carry it as feature attributes, Taylor's
+                # document and Green Lake's per-supervisor blocks carry it
+                # beside the name. Most counties publish a name and nothing
+                # else, and those rows stay a name and nothing else.
                 if member.get("email"):
                     row["email"] = member["email"]
+                if member.get("phone"):
+                    row["phone"] = member["phone"]
                 if member.get("url"):
                     row["profileUrl"] = member["url"]
             roster[key] = row

@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """
-Scrape county board supervisors from the 29 Wisconsin counties that publish a
+Scrape county board supervisors from the 30 Wisconsin counties that publish a
 district-keyed member list. Stage 1 of the pair; build_wi_county_board_roster.py
 turns the intermediate JSON into data/app/county-board-members.json.
 
-WHY ONLY TWENTY-NINE OF SEVENTY-TWO
------------------------------------
+WHY ONLY THIRTY OF SEVENTY-TWO
+------------------------------
 Wisconsin publishes county board DISTRICTS statewide (Wis. Stat. 5.15(4)(br)1,
 see build_wi_supervisory_districts.py) and publishes the PEOPLE in them
-nowhere: each county names its own supervisors, 72 different ways. Twenty-nine
-pair a district with a person in a form a parser can read (plus Milwaukee and
-Racine off their own GIS layers, below). The rest are not oversights and are
-recorded as such:
+nowhere: each county names its own supervisors, 72 different ways. Thirty pair
+a district with a person in a form a parser can read (plus Milwaukee and
+Racine off their own GIS layers, and Taylor by document, below). The rest are
+not oversights and are recorded as such:
 
   * Kenosha and Ozaukee publish district MAPS — a page per district with a PDF
     and no name on it anywhere. They were checked three pages deep apiece.
@@ -94,6 +94,17 @@ same way:
                 Trempealeau) — see `_column`
     -strict     as before/after, but the scan STOPS at the next district line
                 (Richland, Rusk, Shawano) — see `_windowed_strict`
+
+A fifth joined 2026-08-29 and is NOT a direction at all:
+
+    indexroll   one self-contained BLOCK per person, so a field belongs to a
+                supervisor by CONTAINMENT rather than by proximity (Green
+                Lake) — see `_indexroll`
+
+That is the shape to look for first. A direction has to be pinned because a
+window can cross into a neighbour's row; a block cannot, and it is the only
+shape that carries the role, e-mail and phone that sit at no fixed distance
+from the district number.
 
 The strict readings exist because a district whose own row yields no readable
 name reaches past the next heading and takes ITS name: Rusk prints an INDEX of
@@ -218,7 +229,11 @@ COUNTIES = [
      "https://www.co.shawano.wi.us/county_board/"),
     ("55121", "Trempealeau", 17, "column-before",
      "https://co.trempealeau.wi.us/government/agendas_minutes/standing_committees/"
-     "trempealeau_county_board_of_supervisors.php"),]
+     "trempealeau_county_board_of_supervisors.php"),
+    # --- 2026-08-29: a county recorded as publishing nothing, publishing the
+    # richest list in the fleet. See INDEXROLL below.
+    ("55047", "Green Lake", 19, "indexroll",
+     "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"),]
 
 # --- text shaping -------------------------------------------------------------
 # nav is NOT boilerplate everywhere: Grant County publishes its entire board in
@@ -438,6 +453,140 @@ def _windowed_strict(lines, offsets):
                 out[d] = clean(lines[j])
                 break
     return out, vacant
+
+
+# --- the fifth shape: a STRUCTURED BLOCK PER OFFICIAL -------------------------
+# The four readings above all guess at DISTANCE: they find a district number
+# and reach outward for the nearest thing that reads like a name. That is what
+# a page written as prose or as a list forces, and every one of this file's
+# pinned directions exists because reaching outward can reach into the next
+# person's row.
+#
+# Green Lake does not force it. Its officials pages publish one self-contained
+# block per person, each carrying its own name, its own title, its own district
+# and its own contact:
+#
+#     <div class="indexRoll grid-row">
+#       <h2 class="indexRoll__head">Nancy Hoffmann</h2>
+#       <p class="indexRoll__sub">County Board Supervisor</p>
+#       <ul class="metaList"><li><span>District:</span> 1</li>
+#                            <li><span>District Area:</span> Village of ...</li></ul>
+#       <ul class="addrList"><li>N786 County Road H</li> ... </ul>
+#     </div>
+#
+# So nothing is inferred from adjacency: a field belongs to the person whose
+# block it sits in, and a reading direction cannot shift.
+#
+# WHY IT WAS RECORDED AS PUBLISHING NOTHING, MEASURED RATHER THAN GUESSED AT.
+# `DIST` needs the literal word "district" beside the number; this page writes
+# it as "<span>District:</span> 1", and `_BREAK` splits on `</span>`, so the
+# word and the number land on DIFFERENT LINES. All three word-based readings
+# and both strict variants therefore see a page with zero districts on it.
+# `column-before` DOES NOT: run against this page today it resolves all
+# nineteen — seventeen names and the two seats the county marks vacant. THE
+# READER THIS COUNTY NEEDED HAS BEEN IN THIS FILE SINCE 2026-08-27 AND NOBODY
+# POINTED IT AT GREEN LAKE, which makes the gap record a sweep that was not
+# re-run rather than a county that publishes nothing — Trempealeau's lesson,
+# a second time. (`column-after`, the same reader pinned the other way, finds
+# 2 of 19 and files the person BELOW each vacant seat into it; it fails the
+# count gate loudly, which is what that gate is for.)
+#
+# The structured reading still ships instead, because the column reading pairs
+# by adjacency and can only ever yield a NAME: the chairman's role, the county
+# e-mail and the phone all sit in the block and none of them sits at a fixed
+# distance. ASK WHETHER A PAGE IS STRUCTURED BEFORE ASKING WHICH DIRECTION TO
+# READ IT IN — and when a new page shape defeats the readings, RE-RUN THE
+# EXISTING ONES OVER THE COUNTIES ALREADY WRITTEN OFF.
+#
+# THE HOME ADDRESSES ARE DELIBERATELY NOT CARRIED. Each supervisor's block
+# publishes their house ("N786 County Road H, Dalton"); the fleet's standing
+# rule is that a home address never ships even where the source publishes it
+# (the same call Taylor's document roster records). The county e-mail and the
+# phone printed beside it are official contact details and do.
+INDEXROLL_BLOCK = re.compile(
+    r'(?s)<div class="indexRoll[ "].*?(?=<div class="indexRoll[ "]|</article>)')
+INDEXROLL_HEAD = re.compile(r'(?is)<h2[^>]*class="indexRoll__head"[^>]*>(.*?)</h2>')
+INDEXROLL_SUB = re.compile(r'(?is)<p[^>]*class="indexRoll__sub"[^>]*>(.*?)</p>')
+INDEXROLL_DIST = re.compile(r'(?is)<li>\s*<span>\s*District:\s*</span>\s*(\d{1,2})\s*</li>')
+INDEXROLL_ADDR = re.compile(r'(?is)<ul[^>]*class="addrList"[^>]*>(.*?)</ul>')
+# The county's markup gives these anchors a bare value rather than a tel:/mailto:
+# scheme, so they are read as the text they are.
+PHONE = re.compile(r"\d{3}[.\s-]\d{3}[.\s-]\d{4}")
+EMAIL = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+")
+# "County Board Chairman" — the role sits in the block's own subtitle, which is
+# why this county needs no `attach_officer_roles` pass. "County Board
+# Supervisor" is the office, not a role, and matches nothing here.
+SUB_ROLE = re.compile(
+    r"(?i)\b((?:1st|2nd|first|second)\s+)?(vice[\s-]?)?chair(?:man|person|woman)?\b")
+
+
+def _strip_tags(fragment):
+    return " ".join(html_lib.unescape(_TAG.sub(" ", fragment)).split())
+
+
+def _indexroll(page_html, seats):
+    """District -> (name, role, email, phone) read from each person's own block."""
+    found, vacant, contacts = {}, set(), {}
+    for block in INDEXROLL_BLOCK.findall(page_html):
+        head = INDEXROLL_HEAD.search(block)
+        dist = INDEXROLL_DIST.search(block)
+        if not head or not dist:
+            continue
+        d = int(dist.group(1))
+        if not (1 <= d <= seats) or d in found or d in vacant:
+            continue
+        name = _strip_tags(head.group(1))
+        if VACANT.search(name):
+            vacant.add(d)                   # the county says the seat is empty
+            continue
+        if not is_name(name):
+            continue
+        sub = INDEXROLL_SUB.search(block)
+        role = None
+        if sub:
+            m = SUB_ROLE.search(_strip_tags(sub.group(1)))
+            if m:
+                role = role_case(m.group(0))
+        found[d] = (clean(name)[0], role)
+        addr = INDEXROLL_ADDR.search(block)
+        if addr:
+            text = _strip_tags(addr.group(1))
+            row = {}
+            phones = PHONE.findall(text)
+            if phones:
+                row["phone"] = phones[0]
+                if len(phones) > 1:
+                    # Harley Reabe's block prints a landline and a cell in one
+                    # anchor. The first ships; the rest are named, not dropped
+                    # silently, so a second number never becomes an invisible loss.
+                    print("  note Green Lake  district %d publishes %d numbers "
+                          "(%s) — the first ships" % (d, len(phones), ", ".join(phones)),
+                          file=sys.stderr)
+            email = EMAIL.search(text)
+            if email:
+                row["email"] = email.group(0)
+            if row:
+                contacts[d] = row
+    # AN ADDRESS ON TWO DISTRICTS IS NOT A PERSONAL ADDRESS. Measured
+    # 2026-08-29: bhutchison@greenlakecountywi.gov is printed as the contact
+    # for districts 13, 17 and 18 (Don Lenz, Robert Grim, Sara Allen) — three
+    # different people, and a local part matching none of their names nor any
+    # official the county's own site names anywhere. Shipping it would give a
+    # reader the wrong person's inbox in the name of the one they looked up,
+    # so it ships for none of them and the measurement prints every run.
+    by_addr = {}
+    for d, row in contacts.items():
+        if row.get("email"):
+            by_addr.setdefault(row["email"].lower(), []).append(d)
+    for addr, ds in sorted(by_addr.items()):
+        if len(ds) > 1:
+            for d in ds:
+                contacts[d].pop("email", None)
+            print("  note Green Lake  %s is published for %d districts (%s) — "
+                  "not a personal address, dropped from all"
+                  % (addr, len(ds), ", ".join(str(x) for x in sorted(ds))),
+                  file=sys.stderr)
+    return found, vacant, contacts
 
 
 READINGS = {
@@ -761,7 +910,15 @@ def attach_officer_roles(lines, districts, county):
 
 def scrape_county(fips, name, seats, strategy, url):
     """All seats or nothing — see the module docstring."""
-    lines = to_lines(fetch(url))
+    page = fetch(url)
+    if strategy == "indexroll":
+        # A structured page carries the role in the person's own block, so it
+        # needs no `attach_officer_roles` pass over the flattened lines — and
+        # must not have one: that pass reads by adjacency, which is exactly the
+        # inference this shape removes.
+        found, vacant, contacts = _indexroll(page, seats)
+        return _resolve(name, seats, strategy, found, vacant, contacts)
+    lines = to_lines(page)
     if strategy in STRICT_READINGS:
         found, vacant = STRICT_READINGS[strategy](lines)
     elif strategy in COLUMN_READINGS:
@@ -772,6 +929,12 @@ def scrape_county(fips, name, seats, strategy, url):
     else:
         vacant = vacant_districts(lines, seats)
         found = READINGS[strategy](lines)
+    return attach_officer_roles(
+        lines, _resolve(name, seats, strategy, found, vacant, {}), name)
+
+
+def _resolve(name, seats, strategy, found, vacant, contacts):
+    """The gates every reading answers to: all seats, and no one twice."""
     for d in vacant:
         found.pop(d, None)          # the county says the seat is empty; believe it
     covered = set(found) | vacant
@@ -792,8 +955,10 @@ def scrape_county(fips, name, seats, strategy, url):
             out[str(d)] = {"name": None, "vacant": True, "role": None}
         else:
             member, role = found[d]
-            out[str(d)] = {"name": member, "vacant": False, "role": role}
-    return attach_officer_roles(lines, out, name)
+            row = {"name": member, "vacant": False, "role": role}
+            row.update(contacts.get(d, {}))
+            out[str(d)] = row
+    return out
 
 
 def main():

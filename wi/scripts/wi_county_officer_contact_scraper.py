@@ -18,6 +18,18 @@ each page PINNED, and writes an intermediate the officers builder merges:
     Contact (phone, e-mail) is taken only from a window around the name,
     never from the page at large — a department page carries many phones
     and shipping the wrong one is worse than shipping none.
+  * "indexroll" mode — a single OFFICIALS page carrying one
+    self-contained block per officer (name, exact title, and that
+    person's own contact list), parsed STRUCTURALLY like civicplus and
+    matched against the same per-office allow-sets. It exists because
+    "pages" mode cannot read a page like this safely: that mode takes
+    contact from a +/-350-character window around the witnessed surname,
+    and on a one-page roster the window runs into the NEXT officer's
+    block — measured on Green Lake, where the clerk of circuit court
+    publishes no e-mail and the window reaches the county clerk's.
+    A block boundary is not a distance guess (the board scraper's
+    `_indexroll` carries the same reasoning for the same county's
+    supervisors page, and this mode reuses its reader).
   * "civicplus" mode — the platform's one-page staff directory
     (directory.aspx), parsed STRUCTURALLY: each entry is a list item with
     the person's name and exact title(s). Titles are comma-split, the
@@ -320,6 +332,13 @@ COUNTIES = {
         "url": "https://www.sawyercounty.gov/Directory"},
     "St. Croix": {"mode": "civicplus", "floor": 5,
         "url": "https://sccwi.gov/Directory"},
+    # ---- 2026-08-29: Green Lake publishes every elected officer on ONE
+    # page, each in their own block with an exact title and their own
+    # phone/e-mail. Its County Clerk and Circuit Court Judge blocks match
+    # no office key here and are ignored — the clerk ships from
+    # wi-county-clerks.json and the bench from wi-circuit-judges.json.
+    "Green Lake": {"mode": "indexroll", "floor": 5,
+        "url": "https://www.greenlakecountywi.gov/officials_type/elected-officials/"},
 }
 
 TAG_STRIP = re.compile(r"<script[\s\S]*?</script>|<style[\s\S]*?</style>|<[^>]+>")
@@ -454,6 +473,65 @@ def scrape_civicplus(county, cfg, book):
     return out
 
 
+# The block markup is ONE county CMS's shape used by TWO of its pages — this
+# one and the supervisors page the board scraper reads — so it is defined once,
+# there, and imported here. A reskin then breaks one definition rather than two
+# that silently disagree.
+from wi_county_board_scraper import (          # noqa: E402 — same directory
+    INDEXROLL_ADDR, INDEXROLL_BLOCK, INDEXROLL_HEAD, INDEXROLL_SUB)
+
+
+def _block_text(fragment):
+    return re.sub(r"\s+", " ", htmllib.unescape(TAG_STRIP.sub(" ", fragment))).strip()
+
+
+def scrape_indexroll(county, cfg, book):
+    """One officials page, one block per officer — contact never crosses a block."""
+    raw = fetch(cfg["url"])
+    found = {}
+    for block in INDEXROLL_BLOCK.findall(raw):
+        head = INDEXROLL_HEAD.search(block)
+        sub = INDEXROLL_SUB.search(block)
+        if not head or not sub:
+            continue
+        name = _block_text(head.group(1))
+        if not name:
+            continue
+        entry = {"url": cfg["url"], "name": name}
+        addr = INDEXROLL_ADDR.search(block)
+        if addr:
+            # from THIS person's own contact list, never from the page at large
+            text = _block_text(addr.group(1))
+            phone = PHONE_RE.search(text)
+            if phone:
+                entry["phone"] = phone.group(0).strip()
+            email = EMAIL_RE.search(text)
+            if email:
+                entry["email"] = email.group(0)
+        for seg in _block_text(sub.group(1)).split(","):
+            seg = re.sub(r"^%s County " % re.escape(county), "", seg.strip())
+            for office, allowed in TITLE_SETS.items():
+                if seg in allowed:
+                    found.setdefault(office, {})[name] = dict(entry, title=seg)
+    out = {}
+    for office, people in found.items():
+        # same ambiguity rule as civicplus: two DISTINCT people under one
+        # title is a page this parser has misread, and skipping says so
+        groups = {}
+        for n in people:
+            first, sur = name_parts(n)
+            groups.setdefault((first[0].lower() if first else "",
+                               (sur or "").lower()), []).append(n)
+        if len(groups) > 1:
+            print("%s/%s: page names %d distinct people (%s) — ambiguous, "
+                  "skipped" % (county, office, len(groups), sorted(people)),
+                  file=sys.stderr)
+            continue
+        best = max(list(groups.values())[0], key=len)
+        out[office] = people[best]
+    return out
+
+
 INTERIM_EXEC_RE = re.compile(
     r"About\s+([A-Z][\w'.-]+(?:\s+[A-Z][\w'.-]+){1,2}?)\s+Interim\s+"
     r"(?:Waukesha\s+)?County\s+Executive")
@@ -496,6 +574,8 @@ def main():
                     exec_entry = scrape_interim_exec(county, cfg["interim_exec"])
                     if exec_entry:
                         entries["executive"] = exec_entry
+            elif cfg["mode"] == "indexroll":
+                entries = scrape_indexroll(county, cfg, book)
             else:
                 entries = scrape_civicplus(county, cfg, book)
         except RuntimeError as exc:
