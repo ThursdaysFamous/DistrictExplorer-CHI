@@ -27,10 +27,54 @@ Richland's msa-ps.com — and a card built from that list would have sent five
 counties' readers to a consultancy captioned as their county board. Four more
 contact domains host no website at all: Columbia, Crawford and Sauk are
 MAIL-ONLY (no A record, live MX) and Iron's serves a certificate for another
-name and 404s. Every URL below was fetched: 58 answer 200, 11 answer 403 to a
-datacenter client while serving browsers normally, Barron and Shawano answer
-503 to this client with DNS resolving, and Taylor sits behind an sgcaptcha
-challenge that a person passes and no automation here tries to.
+name and 404s. Every URL below was fetched, and `--probe` re-fetches them on
+demand: most answer 200, a dozen answer 403 to a datacenter client while
+serving browsers normally, a few refuse this client outright, and Taylor sits
+behind an sgcaptcha challenge that a person passes and no automation here
+tries to. Those tallies are deliberately not written down as numbers — they
+move with the counties' hosting and with whichever network runs the probe, and
+a hand-kept count in a comment is how a record starts lying.
+
+A 200 IS NOT PROOF THE COUNTY IS STILL THERE (measured 2026-08-29)
+------------------------------------------------------------------
+Five of these URLs answered HTTP 200 for an unknown number of weeks while
+serving no county at all, and nothing in the repo could have noticed: the link
+gate reads STATUS CODES, and every one of these was a clean 200. They were
+found only because a reader reported that Dodge County's website had moved,
+and the report generalised — the other four came out of sweeping the whole
+table for the same shape.
+
+  Dodge         co.dodge.wi.us          261 bytes: "This site has permanently
+                                        moved. Please redirect your browser to
+                                        http://co.dodge.wi.gov"
+  Kewaunee      kewauneeco.com          114 bytes of JavaScript redirecting to
+                                        a domain-parking /lander. The county is
+                                        on kewauneeco.ORG.
+  Rusk          ruskcountywi.gov        the same parking lander. The county is
+                                        on ruskcounty.org.
+  Fond Du Lac   fdlco.wi.gov (bare,     the stock "IIS Windows Server" splash.
+                over http)              The county is on www.fdlco.wi.gov,
+                                        which 403s this client and serves
+                                        browsers.
+  Pierce        co.pierce.wi.us (bare)  a noindex staff page titled "Pierce
+                                        County Internal", whose own first link
+                                        is "Back to Main" -> www.co.pierce.wi.us.
+
+Two of those are worse than a dead link rather than better: a parking lander is
+a page this project sent a reader to under the caption of their own county
+board. THE FAILURE IS SHARED BETWEEN THE STALE TABLE AND THE GATE THAT CANNOT
+SEE IT, so `--probe` reads the BODY — under 4 KB, or carrying one of the four
+measured stub markers, is a finding. It is an operator step and not CI: it
+needs the network, and 72 counties' hosts have their own bad days.
+
+EVERY REPLACEMENT HAS A SECOND WITNESS. data/app/wi-county-clerks.json is built
+from the Wisconsin County Clerks Association, an entirely separate publisher,
+and its `website` for all five is the host chosen here (its Rusk entry is
+ruskcounty.org while its own Rusk clerk e-mail is still @ruskcountywi.us, which
+is the same split Dodge has: THE MAIL DOMAIN AND THE WEB DOMAIN MOVE
+SEPARATELY, so a dead website is never evidence about an address). Dodge's own
+county clerk page still prints dvanegtern@co.dodge.wi.us, on the .gov site, so
+that address is current and is left alone.
 
 `seats` is the county's district count as SHIPPED — read back from the built
 geometry rather than restated here, so the two can never disagree. The
@@ -40,11 +84,16 @@ districts 1..n matching that count when swept.
 Usage:
     python3 wi/scripts/build_wi_county_board_directory.py
     python3 wi/scripts/build_wi_county_board_directory.py --check
+    python3 wi/scripts/build_wi_county_board_directory.py --probe   # operator, needs network
 """
 
 import json
 import os
+import re
+import ssl
 import sys
+import urllib.error
+import urllib.request
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 APP_DATA_DIR = os.path.join(REPO_ROOT, "data", "app")
@@ -68,13 +117,13 @@ COUNTY_SITES = {
     "55021": ("Columbia", "https://www.co.columbia.wi.us/ColumbiaCounty/"),
     "55023": ("Crawford", "https://www.crawfordcountywi.gov/"),
     "55025": ("Dane", "https://board.danecounty.gov/Supervisors"),
-    "55027": ("Dodge", "https://co.dodge.wi.us/"),
+    "55027": ("Dodge", "https://www.co.dodge.wi.gov/government/county-board/members"),  # county page confirms 1..33
     "55029": ("Door", "https://co.door.wi.gov/"),
     "55031": ("Douglas", "https://douglascountywi.gov/"),
     "55033": ("Dunn", "https://dunncountywi.gov/supervisors"),  # county page confirms 1..29
     "55035": ("Eau Claire", "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"),  # county page confirms 1..29
     "55037": ("Florence", "https://www.florencecountywi.com/"),
-    "55039": ("Fond Du Lac", "http://fdlco.wi.gov/"),
+    "55039": ("Fond Du Lac", "https://www.fdlco.wi.gov/"),
     "55041": ("Forest", "https://co.forest.wi.gov/"),
     "55043": ("Grant", "https://co.grant.wi.gov/"),  # county page confirms 1..17
     "55045": ("Green", "https://greencountywi.org/164/County-Board-of-Supervisors"),  # county page confirms 1..31
@@ -85,7 +134,7 @@ COUNTY_SITES = {
     "55055": ("Jefferson", "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"),  # county page confirms 1..30
     "55057": ("Juneau", "https://www.co.juneau.wi.gov/"),
     "55059": ("Kenosha", "https://www.kenoshacountywi.gov/142/County-Board-Supervisor-Districts"),  # county page confirms 1..23
-    "55061": ("Kewaunee", "https://kewauneeco.com/"),
+    "55061": ("Kewaunee", "https://www.kewauneeco.org/government/boards_and_committees/"),  # county page confirms 1..20
     "55063": ("La Crosse", "https://lacrossecounty.org/"),
     "55065": ("Lafayette", "https://lafayettecountywi.org/"),
     "55067": ("Langlade", "https://www.co.langlade.wi.us/"),
@@ -102,14 +151,14 @@ COUNTY_SITES = {
     "55087": ("Outagamie", "https://www.outagamie.gov/"),
     "55089": ("Ozaukee", "https://ozaukeecounty.gov/2206/Supervisory-District-Maps"),  # county page confirms 1..26
     "55091": ("Pepin", "https://www.co.pepin.wi.us/"),
-    "55093": ("Pierce", "https://co.pierce.wi.us/"),
+    "55093": ("Pierce", "https://www.co.pierce.wi.us/"),
     "55095": ("Polk", "https://www.polkcountywi.gov/government/county_board_of_supervisors/index.php"),  # county page confirms 1..15
     "55097": ("Portage", "https://www.co.portage.wi.gov/"),  # county page confirms 1..25
     "55099": ("Price", "https://co.price.wi.us/"),
     "55101": ("Racine", "https://racinecounty.gov/"),
     "55103": ("Richland", "https://richlandcountywi.gov/"),
     "55105": ("Rock", "https://co.rock.wi.us/"),
-    "55107": ("Rusk", "https://ruskcountywi.gov/"),
+    "55107": ("Rusk", "https://ruskcounty.org/supervisors"),  # county page confirms 1..19
     "55109": ("St Croix", "https://sccwi.gov/"),
     "55111": ("Sauk", "https://www.co.sauk.wi.us/"),
     "55113": ("Sawyer", "https://www.sawyercounty.gov/"),
@@ -130,7 +179,77 @@ COUNTY_SITES = {
 }
 
 
+# --- the --probe reader -------------------------------------------------------
+# WHY A STATUS CODE IS NOT AN ANSWER HERE. Five of these URLs answered HTTP 200
+# for weeks while serving no county at all (see the docstring), so this reads
+# the BODY. The markers below are the four shapes that were actually measured;
+# it reports rather than repairs, because which page replaces a dead one is a
+# judgement (a county home page, or the board page that confirms 1..n) and is
+# made by hand above.
+PROBE_UA = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                  "(KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,*/*;q=0.8",
+}
+# A real county site is tens of KB of navigation. Every stub measured was under
+# 4 KB and every live county over 20 KB, so the floor sits between them and is
+# reported, never enforced.
+PROBE_MIN_BYTES = 4000
+PROBE_STUBS = re.compile(
+    r"(?i)permanently moved|redirect your browser|/lander|iis windows server|"
+    r"page not found|domain (?:is )?for sale")
+
+
+def probe():
+    """Fetch every URL and say which are no longer the county's own site."""
+    findings = []
+    for fips, (name, url) in sorted(COUNTY_SITES.items(), key=lambda kv: kv[1][0]):
+        try:
+            req = urllib.request.Request(url, headers=PROBE_UA)
+            with urllib.request.urlopen(req, timeout=35,
+                                        context=ssl.create_default_context()) as r:
+                body = r.read(200000)
+                code = r.status
+        except urllib.error.HTTPError as e:
+            # A refusal is the county's host declining THIS client; it is not a
+            # stale URL and is not a finding. The docstring records the bucket.
+            # 429 is rate limiting, and a serial sweep of 72 hosts can cause
+            # it — back off and re-run that county rather than reading it as
+            # a block.
+            print("%-12s %-18s blocked (HTTP %s)%s"
+                  % (name, fips, e.code, " — rate limited, re-run" if e.code == 429 else ""),
+                  file=sys.stderr)
+            continue
+        except Exception as e:  # DNS, reset, timeout — same reasoning
+            print("%-12s %-18s unreachable (%s)" % (name, fips, type(e).__name__), file=sys.stderr)
+            continue
+        if code == 202:
+            # "Accepted" is never a document — it is what Taylor's sgcaptcha
+            # returns in front of a live page. An access control, not a stale
+            # URL (the same inversion validate_sources.py applies).
+            print("%-12s %-18s blocked (HTTP 202, challenge)" % (name, fips), file=sys.stderr)
+            continue
+        text = re.sub(r"(?is)<(script|style)[^>]*>.*?</\1>", " ", body.decode("utf-8", "replace"))
+        text = re.sub(r"\s+", " ", re.sub(r"(?s)<[^>]+>", " ", text)).strip()
+        stub = PROBE_STUBS.search(text) or PROBE_STUBS.search(body.decode("utf-8", "replace"))
+        if code == 200 and len(body) >= PROBE_MIN_BYTES and not stub:
+            print("%-12s %-18s ok (%d bytes)" % (name, fips, len(body)), file=sys.stderr)
+            continue
+        why = "matched %r" % stub.group(0) if stub else "%d bytes" % len(body)
+        findings.append((name, fips, url, why, text[:90]))
+        print("%-12s %-18s SUSPECT — HTTP %s, %s" % (name, fips, code, why), file=sys.stderr)
+    if findings:
+        print("\n%d URL(s) answer but are not the county's site:" % len(findings), file=sys.stderr)
+        for name, fips, url, why, text in findings:
+            print("  %s (%s) %s\n    %s | %s" % (name, fips, url, why, text), file=sys.stderr)
+        return 1
+    print("\nall %d URLs serve a county site" % len(COUNTY_SITES), file=sys.stderr)
+    return 0
+
+
 def main():
+    if "--probe" in sys.argv[1:]:
+        return probe()
     check_only = "--check" in sys.argv[1:]
     with open(GEOMETRY) as f:
         geo = json.load(f)
@@ -190,4 +309,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main() or 0)

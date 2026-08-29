@@ -20,6 +20,22 @@ recorded as such:
   * Marinette publishes 29 of its 30 seats. District 26 is an unnumbered
     "VACANT SEAT" row in an alphabetical list, and assigning it by elimination
     would be an inference the county never wrote, so the county stays out.
+  * Dodge publishes all 33 seats district-keyed ("County Board Supervisor,
+    District 32") and is out for a reason that is neither the county's nor the
+    reader's: its Finalsite directory PAGINATES at twelve, and `?const_page=2`
+    is decoration — the server returns page one for every value of it, so a
+    fetch of that URL can only ever see 12 of 33 and the all-seats-or-nothing
+    rule below applies. Reaching 13-33 means driving the module's own request,
+    which is a new fetch shape rather than a row in the table above.
+
+    IT WAS FILED UNDER "publishes prose" UNTIL 2026-08-29, AND THAT WAS NEVER
+    MEASURED AGAINST THE COUNTY. The sweep asked co.dodge.wi.us, which had
+    become a 261-byte "This site has permanently moved" stub answering HTTP
+    200; the county is at www.co.dodge.wi.gov. A sweep that reads a STATUS
+    CODE cannot tell a county that publishes nothing from a county that
+    published a forwarding note, so both land in the same bucket — the Knox
+    shape in Illinois, where a blocked WEBSITE was recorded as a blocked
+    COUNTY. build_wi_county_board_directory.py --probe reads the body.
   * The rest could not be read: 9 answer 403 to a datacenter client and hold
     it against browser headers (Marathon, La Crosse, Outagamie, Fond du Lac,
     Lafayette, Lincoln, Monroe, Rock, Sheboygan), Taylor sits behind an
