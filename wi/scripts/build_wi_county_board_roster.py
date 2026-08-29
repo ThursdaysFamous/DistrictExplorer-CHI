@@ -52,6 +52,19 @@ Thirty-four of Wisconsin's 72 counties publish a district-keyed member list
 this client can obtain; the other 38 are recorded in the Data gaps panel and
 their cards keep linking the county board rather than naming anybody. See the
 scraper's docstring for what each of the other 38 actually publishes.
+Thirty-four of Wisconsin's 72 counties' district-keyed member lists can be
+obtained; the other 38 are recorded in the Data gaps panel and their cards keep
+linking the county board rather than naming anybody. See the scraper's
+docstring for what each of the other 38 actually publishes.
+
+CONTACT RIDES ONLY WHERE ITS COUNTY PUBLISHED IT. A county that names a
+supervisor's county mailbox, office phone or profile page gets those on the
+card; a county that names only a person gets a name. THE PHONE WAS BEING
+DROPPED HERE: Taylor's document rows have carried one since the county joined
+on 2026-08-29 — its own commit calls a county e-mail and phone official contact
+details that ship — and this builder wrote email and profileUrl and silently
+left the phone behind, so seventeen numbers sat in the scraper's cache and
+never reached a reader. Sauk arriving with thirty more is what surfaced it.
 
 Usage:
     python3 wi/scripts/build_wi_county_board_roster.py

@@ -8639,16 +8639,15 @@ function initWisconsinExplorer() {
    *
    * THE SUPERVISOR IS NAMED WHERE A COUNTY PUBLISHES ONE, AND NOWHERE ELSE.
    * Wisconsin publishes no statewide roster, so the people come from each
-   * county's own surface: 34 of the 72 publish a district-keyed member list
-   * this can read (739 seats) — 30 board pages, Milwaukee's and Racine's own
-   * GIS layers, Taylor's directory page as a dated document, and Adams's
-   * clerk-published directory PDF — and the other 38 do not: three publish
-   * district MAPS with no name on them, and the rest are unreadable or
-   * publish prose. A district in an unnamed county keeps the honest card:
-   * the district, and a link to the county board. A seat the county itself
-   * says is empty renders as VACANT, which is a fact rather than a gap
-   * (wi/scripts/wi_county_board_scraper.py records what each county
-   * publishes). ---------- */
+   * county's own surface: 34 of the 72 can be obtained (750 seats — 31 board
+   * pages, Milwaukee and Racine off their own GIS layers, Taylor as a dated
+   * document), and the other 38 cannot — two publish district MAPS with no
+   * name on them, and the rest are unreadable or publish prose. A district in
+   * an unnamed county keeps the honest card: the district, and a link to the
+   * county board. A seat the county itself says is empty renders as VACANT,
+   * which is a fact rather than a gap. Contact renders only where its county
+   * published it, per field (wi/scripts/wi_county_board_scraper.py records
+   * what each county publishes). ---------- */
   var loadSupervisoryDistricts = makeCached(function () {
     return fetchJSONWithRetry("data/app/county-supervisory-districts.json", {}, 2);
   });
@@ -8710,18 +8709,9 @@ function initWisconsinExplorer() {
         ? "District " + String(result.district) : "Unknown district";
     },
     render: function (result) {
-      // County -> supervisor -> board size, the fleet's card order (identity,
-      // then the person, then context). The supervisor sits between the two
-      // field stacks rather than inside one because a NAMED supervisor is a
-      // PERSON row: the counties that publish contact publish it per
-      // supervisor — Adams's and Taylor's directories carry a county mailbox
-      // and a phone, Milwaukee's and Racine's GIS layers an e-mail and
-      // Milwaukee's a profile page — and a field stack has nowhere to put a
-      // tel: or a mailto:. The contact line is null when empty, so the 30
-      // counties that publish only a name render exactly as they did before.
       var wrap = cardEl("div", "card-flush");
       var member = result.member;
-      var rows = [{
+      var head = [{
         label: "County",
         value: result.county ? String(result.county) + " County" : "Unknown county",
         primary: true
@@ -8729,19 +8719,25 @@ function initWisconsinExplorer() {
       if (member && member.vacant) {
         // The county says nobody holds this seat. Saying so is the honest
         // answer; omitting the row would read as "we could not find out".
-        rows.push({ label: "Supervisor", value: "Vacant" });
+        head.push({ label: "Supervisor", value: "Vacant" });
       }
-      wrap.appendChild(renderFieldStack(rows));
+      wrap.appendChild(renderFieldStack(head));
+      // THE CONTACT A COUNTY PUBLISHES IS PART OF THE ANSWER, and it was
+      // riding in the file without ever reaching the card: 86 county mailboxes,
+      // 46 phones and 18 profile pages. The fleet's card order is identifier,
+      // then the person, then how to reach them, so the supervisor renders as
+      // a person row and each field appears only where its county published it
+      // (renderPersonRows draws nothing for an absent field — no placeholders).
       if (member && !member.vacant && member.name) {
-        wrap.appendChild(renderPersonRows([{
+        var person = {
           name: String(member.name),
-          badge: member.role ? String(member.role) : null,
+          badge: member.role ? String(member.role) : "Supervisor",
           phone: member.phone ? String(member.phone) : null,
-          email: member.email ? String(member.email) : null,
-          links: member.profileUrl
-            ? [{ label: "Profile", url: member.profileUrl }]
-            : null
-        }]));
+          email: member.email ? String(member.email) : null
+        };
+        var profile = safeHttpUrl(member.profileUrl);
+        if (profile) person.links = [{ label: "Profile", url: profile }];
+        wrap.appendChild(renderPersonRows([person]));
       }
       if (result.seats) {
         wrap.appendChild(renderFieldStack([
