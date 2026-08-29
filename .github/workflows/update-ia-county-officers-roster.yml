@@ -62,6 +62,13 @@ jobs:
       - name: Scrape the per-office directories (recorder, sheriff, attorney)
         run: python3 ia/scripts/ia_county_officer_sources_scraper.py
 
+      # The treasurer has NO statewide directory carrying an address (the ISAC
+      # portal has no e-mail column at all), and the ISSDA sheriff PDF has gaps,
+      # so those two offices' addresses come from the counties' own sites. ~114
+      # county pages at 0.6s apart, so this is the long step.
+      - name: Scrape treasurer and sheriff e-mail addresses from the county sites
+        run: python3 ia/scripts/ia_county_officer_email_scraper.py
+
       - name: Rebuild the county officer roster
         run: python3 ia/scripts/build_ia_county_officers.py
 

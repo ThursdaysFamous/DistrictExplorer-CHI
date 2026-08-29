@@ -79,6 +79,7 @@ COUNTIES = os.path.join(APP_DATA_DIR, "state-counties.json")
 BOARD_DIRECTORY = os.path.join(APP_DATA_DIR, "ia-county-board-directory.json")
 ISAC_CACHE = os.path.join(CACHE_DIR, "ia_county_officers.json")
 SOURCES_CACHE = os.path.join(CACHE_DIR, "ia_county_officer_sources.json")
+EMAILS_CACHE = os.path.join(CACHE_DIR, "ia_county_officer_emails.json")
 OUT = os.path.join(APP_DATA_DIR, "ia-county-officers.json")
 
 EXPECT_COUNTIES = 99
@@ -119,7 +120,10 @@ ENRICHED = ("recorder", "sheriff", "countyAttorney")
 # sheriff 99, county attorney 99, supervisor boards 92 of 99.
 MIN_PER_OFFICE = {"treasurer": 95, "recorder": 95, "sheriff": 95, "countyAttorney": 95}
 MIN_BOARDS = 88
-MIN_EMAILS = 250        # 99 recorder + 99 attorney + 84 sheriff = 282 measured
+MIN_EMAILS = 320        # measured 2026-08-29: 97 recorder + 97 attorney + 87
+                        # sheriff + 65 treasurer = 346. The floor sits above
+                        # 346 minus the treasurer block, so that source going
+                        # dark fails here rather than shipping silently.
 MIN_PHONES = 380
 # A divergence is one office in one county where ISAC and the office's own
 # directory name different people. 6 measured; the ceiling catches a source
@@ -285,6 +289,26 @@ def named_in(name, blob, officer_name):
                for w in name_tokens(blob) if len(w) >= 4 and w not in own)
 
 
+def email_witnesses(name, email):
+    """Does this address's local part carry THIS person's name?
+
+    Re-checked against the name the build actually ships, not the one the
+    scrape matched. A divergence resolution can change which of two publishers'
+    names wins after the address was gathered, and an address witnessed against
+    the loser belongs to somebody this card is not naming.
+    """
+    local = re.sub(r"[^a-z]", "", email.split("@")[0].lower())
+    toks = [t.lower() for t in re.findall(r"[A-Za-z]{3,}", name or "")]
+    if any(t in local for t in toks):
+        return True
+    parts = [t.lower() for t in re.findall(r"[A-Za-z]{2,}", name or "")]
+    if len(parts) >= 2:
+        for sur in parts[1:]:
+            if local.startswith(parts[0][0] + sur):
+                return True
+    return False
+
+
 def clean_phone(raw):
     """Keep a phone only if it really is one; never ship a fragment."""
     if not raw:
@@ -305,6 +329,14 @@ def main():
 
     isac = load(ISAC_CACHE, "ISAC officer cache")
     sources = load(SOURCES_CACHE, "per-office directory cache")
+    # Optional: the e-mail cache is a later addition and a build without it is
+    # the build as it was before, not a broken one.
+    try:
+        officer_emails = load(EMAILS_CACHE, "officer e-mail cache")
+    except RuntimeError:
+        officer_emails = {}
+        print("  no officer e-mail cache -- treasurer/sheriff addresses will be "
+              "absent (run ia_county_officer_email_scraper.py)", file=sys.stderr)
     board_dir = load(BOARD_DIRECTORY, "county board directory")
     # ia-county-board-directory.json is keyed by 3-digit county FIPS.
     seats_by_geoid = {"19" + k.zfill(3): v.get("seats")
@@ -321,6 +353,7 @@ def main():
     directory = {}
     filled = {k: 0 for k, _ in OFFICES}
     boards = withheld = divergences = mislabels = resolved = switchboards = 0
+    scraped_emails = unwitnessed = 0
     pins_used = set()
     withheld_detail = []
 
@@ -400,6 +433,25 @@ def main():
                 party = expand_party(isac_row["party"], county, key)
                 if party:
                     best["party"] = party
+
+            # ---- an address the county itself publishes, for the two offices
+            # no statewide directory carries one for. TWO WAYS IN AND NO THIRD:
+            # an OFFICE mailbox is the office's whoever holds it, and a personal
+            # one must carry the name THIS BUILD SHIPS.
+            if "email" not in best:
+                hit = (officer_emails.get(key) or {}).get(county) or {}
+                addr, why = hit.get("email"), hit.get("why")
+                if addr and why == "office":
+                    best["email"] = addr
+                    scraped_emails += 1
+                elif addr and email_witnesses(best["name"], addr):
+                    best["email"] = addr
+                    scraped_emails += 1
+                elif addr:
+                    unwitnessed += 1
+                    print("  %-13s %-15s %s was witnessed against a name this "
+                          "build does not ship (%r) -- dropped"
+                          % (county, key, addr, best["name"]), file=sys.stderr)
             entry[key] = best
             filled[key] += 1
 
@@ -507,6 +559,9 @@ def main():
 
     print("  switchboard phones hoisted off member rows: %d board(s)" % switchboards,
           file=sys.stderr)
+    print("  e-mails added from the counties' own sites / the treasurers' state "
+          "site: %d (+%d dropped as witnessed against a name not shipped)"
+          % (scraped_emails, unwitnessed), file=sys.stderr)
     print("ia-county-officers: %d counties | %s | boards %d, withheld %d | "
           "%d e-mails, %d phones | %d office(s) withheld for divergence, "
           "%d ISAC mislabel(s) corrected, %d pinned divergence(s)"
