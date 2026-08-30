@@ -68,9 +68,9 @@
    "name": "Wave 1 — The school board hook (Chicago, hand-written)",
    "when": "Day 1 (a Tuesday), 6:30–8:00am CT, all ten out before 8:15",
    "who": "Ten sends, one per outlet, each written by hand: Chalkbeat Chicago (the anchor), Block Club Chicago, WBEZ / Chicago Public Media, Chicago Sun-Times city desk, South Side Weekly (one send covering the Hyde Park Herald), City Bureau / Documenters, Illinois Answers Project, WTTW News / Chicago Tonight, City Cast Chicago (Hey Chicago newsletter), Chicago Public Square. Every address is the outlet's own published tips/news desk; a current byline is named in the first line, never in the To: field.",
-   "rationale": "This is the only pitch in the whole send that has a date attached. A rebrand is not a story; 'the board districts you vote in this November, from your address' is. Ten is the honest ceiling for one person writing genuinely different emails before 8am, and these ten are the rooms where a school-board lookup is on-beat rather than a curiosity — Chalkbeat and Block Club most of all.",
+   "rationale": "This is the only pitch in the whole send with a date attached. A rebrand is not a story; 'the school board subdistrict you vote in this November, from your address' is — and this is the first election in which every seat is on the ballot. Ten is the honest ceiling for one person writing genuinely different emails before 8am, and these ten are the rooms where a school-board lookup is on-beat rather than a curiosity — Chalkbeat and Block Club most of all. Say 20 subdistricts, never 21: the 21st seat is the citywide president, which no district lookup can answer.",
    "subject_line": "A free lookup for Chicago's new school board districts",
-   "lede": "Chicago voters elect school board members by district again this November, and districtry.com/il tells any resident which district they're in from a typed address — free, no account, no ads, no tracking. The same lookup returns every other district containing that point: ward and alder, police district and beat, CPS attendance zone, park and library district, state House and Senate, and judicial subcircuit."
+   "lede": "On November 3 Chicago elects its first fully elected school board, ending 30 years of mayoral control: one member in each of 20 subdistricts, plus a president elected citywide. districtry.com/il tells any resident which subdistrict they vote in from a typed address — free, no account, no ads, no tracking. The same lookup returns every other district containing that point: ward and alder, police district and beat, CPS attendance zone, park and library district, state House and Senate, and judicial subcircuit."
   },
   {
    "name": "Wave 2 — Chicago metro breadth, plus six specialist swaps",
@@ -246,7 +246,7 @@
    "beat": "Chicago Public Schools, the Board of Education, and the 2026 elected school board race",
    "tier": 1,
    "why": "The single strongest fit in the bucket, and the only one with a date attached. Chalkbeat's own 2026 hub confirms Nov. 3, 2026 is Chicago's first fully elected 21-member board after 30 years of mayoral control, and they are deep in it — 51 candidates filed, two districts unopposed, CTU endorsements, ballot challenges.",
-   "angle": "Chicagoans elect all 21 school board seats on Nov. 3 and most cannot name the district they vote in. Offer Chalkbeat a free, embeddable address lookup that returns the reader's board district instantly — the missing utility on their own election hub, updating the map they built in 2024 for the first election where every seat is on the ballot.",
+   "angle": "Chicago elects its first fully elected school board on Nov. 3 — one member in each of 20 subdistricts plus a citywide president — and most residents cannot name the subdistrict they vote in. Offer Chalkbeat a free, embeddable address lookup that returns it instantly: the missing utility on their own election hub, updating the map they built in 2024 for the first election where every seat is on the ballot.",
    "extra_angles": [],
    "send_to": {
     "value": "chicago.tips@chalkbeat.org",
@@ -1232,7 +1232,7 @@
    "beat": "Spanish-language news for Chicago's Latino communities — local politics, community affairs",
    "tier": 2,
    "why": "One of the largest Spanish-language papers in the Chicago area, part of ImpreMedia, free and home-delivered in Latino neighborhoods, and recently funded through Lenfest's Beyond Print program to reach new audiences — so they are actively looking for digital-service material.",
-   "angle": "Latino wards were among the most reshaped in the last remap, and the November ballot adds 21 school board seats in a district where Latino students are the largest group. Pitch the representation question — who actually holds each seat covering your block — and be upfront that a Spanish-language version does not exist yet, which turns the volunteer ask into a concrete one for t…",
+   "angle": "Latino wards were among the most reshaped in the last remap, and the November ballot carries all 21 school board seats — 20 by subdistrict, plus a citywide president — in a district where Latino students are the largest group. Pitch the representation question: who actually holds each seat covering your block. Be upfront that a Spanish-language version does not exist yet, which turns the volunteer ask into a concrete one.",
    "extra_angles": [],
    "send_to": {
     "value": "agenda@laraza.com",
@@ -8130,7 +8130,7 @@
    "beat": "K-12 education, school governance, school board elections",
    "tier": 2,
    "why": "Has already published on Chicago's school board races and framed the 2024 contest as a warm-up for 2026, when all 21 seats are on the ballot. The plan calls the elected school board the strongest single pitch, and Chalkbeat Chicago is currently carrying that angle alone at outlet level; The 74 gives it a national educa…",
-   "angle": "The elected-school-board district lookup, timed to the November 2026 election in which all 21 Chicago board seats are contested and most residents cannot name their district.",
+   "angle": "The elected-school-board subdistrict lookup, timed to the November 2026 election — Chicago's first fully elected board, all 21 seats contested across 20 subdistricts plus a citywide president, and most residents cannot name the one they vote in.",
    "extra_angles": [],
    "send_to": {
     "value": "feedback@the74million.org",
