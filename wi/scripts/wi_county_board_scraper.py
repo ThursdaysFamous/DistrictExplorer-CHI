@@ -241,10 +241,23 @@ geometry (26 districts, numbered 1..26) is what re-checks the shape each week.
       * THE ARCHIVE HAS THE PAGE AND IT CANNOT BE USED. Its last capture of
         /countyboard/members is 2025-10-11, which is the 2024-2026 board, and
         Wisconsin reseats every county board at the April election of each
-        even year — the April 2026 election demonstrably moved seats
-        (district 4 Freedland -> Allen, district 6 Mathu -> Rauschnot). A
-        stale roster reads exactly like a current one, which is the whole
-        reason to say no to it.
+        even year. The seat this file can still demonstrate moved is district
+        4, Freedland -> Kathy Allen, which is what the county's own current
+        page names. A stale roster reads exactly like a current one, which is
+        the whole reason to say no to it.
+
+        CORRECTED 2026-08-29: this bullet also offered "district 6 Mathu ->
+        Rauschnot" as a second demonstration, and it is contradicted by the
+        very document this county ships from — the page read that day names
+        GRANT MATHU in district 6, and so does the roster below. Whichever way
+        round the archived capture had it, the example cannot be doing the work
+        it was written to do, so it is struck rather than reversed: the archive
+        was unreachable from this project's network when the correction was
+        made (web.archive.org resets the connection), and asserting the
+        opposite direction would be swapping one unchecked claim for another.
+        A RECORD'S OWN EXAMPLES ARE CLAIMS AND HAVE TO SURVIVE THE SAME CHECK
+        AS THE DATA — this one contradicted the roster shipping beside it and
+        no gate compares the two.
 
     So La Crosse rides DOCUMENT_ROSTERS on Taylor's route, with the same
     dated NOT RE-READ line every run.
@@ -1007,6 +1020,19 @@ COUNTIES = [
     # does not — read from the Internet Archive, see the docstring's ladder ---
     ("55105", "Rock", 29, "row",
      "https://www.co.rock.wi.us/government/county-board-of-supervisors"),
+    # ROBOTS.TXT, MEASURED 2026-08-29 AND RECORDED RATHER THAN DISCOVERED
+    # TWICE. Two of the fifty counties publish a robots.txt with a site-wide
+    # Disallow aimed at AI crawlers by name — IOWA (anthropic-ai, ClaudeBot,
+    # Claude-Web, GPTBot, CCBot) and WAUSHARA (ClaudeBot, GPTBot, CCBot), which
+    # has been shipping since before this route existed. In BOTH files the
+    # `User-agent: *` group permits the board path (it disallows only
+    # /calendar, /meetings, /media, /portal, /311 and /newsletters) with
+    # crawl-delay 5, and this scraper is a weekly single-page civic fetch that
+    # claims to be none of the named agents. The operator's decision (2026-08-29)
+    # is to read the page the `*` group allows and to write the measurement down
+    # here, so the next person meets it as a recorded fact rather than as a
+    # surprise. A county that moves the board path under a Disallow, or that
+    # asks directly, is a different question and this note is where to start.
     # --- 2026-08-29: the county whose own home page links no path to it ---
     ("55049", "Iowa", 21, "same-line-or-next",
      "https://www.iowacountywi.gov/departments/countyboard/county-board-members"),
@@ -1499,12 +1525,26 @@ def _rows(page_html, seats):
 
 
 # --- the sixth shape: same line OR the next one, in one page ------------------
-# Iowa County writes both. Fourteen of its districts print "District 1 - Chuck
-# Weigel"; the other seven print "District 3 -" and put the name on the line
-# below, because the county's editor bolded some names and not others and the
-# markup broke where it did. `same-line` resolves 14 of 21 and `after` resolves
-# 0 of 21 (every district's own block is address, phone and e-mail before the
-# next name appears), so neither pinned reading can read a page that mixes them.
+# Iowa County writes both. SIXTEEN of its districts print "District 1 - Chuck
+# Weigel"; the other FIVE (3, 4, 5, 12 and 18) print "District 3 -" and put the
+# name on the line below, because the county's editor bolded some names and not
+# others and the markup broke where it did. `same-line` resolves those 16 and
+# stops.
+#
+# `after` IS WORSE THAN USELESS HERE RATHER THAN MERELY SHORT, and the
+# correction matters more than the original claim did. This comment first said
+# `after` resolves 0 of 21 "because every district's own block is address,
+# phone and e-mail before the next name appears". Re-measured against the live
+# page 2026-08-29: it resolves NINE, and FOUR OF THE NINE ARE THE WRONG PERSON
+# — a bare district line reaches forward past its own contact block into the
+# NEXT supervisor's name, so D2 files Jody Putz Miller (district 3's member),
+# D11 files Keith Hurlbert (district 12's), D17 files Molly Conkey (district
+# 18's), and D21 files "General Information", a page heading that passes
+# `is_name`. A reading that finds nothing is safe; a reading that names four
+# wrong people and still passes a count gate is the exact failure the
+# one-line fall-through below exists to prevent. THE ORIGINAL FIGURES DID NOT
+# REPRODUCE (14/7 measured as 16/5, 0-of-21 as 9-with-4-wrong) — a recorded
+# measurement is a claim and has to survive re-running.
 #
 # THE FALL-THROUGH IS ONE LINE AND ONLY FROM AN OTHERWISE EMPTY DISTRICT LINE.
 # That is what keeps it as safe as the pinned readings it sits beside: a
@@ -1912,7 +1952,7 @@ def vacant_districts(lines, seats, strategy="after"):
     return out
 
 
-def fetch_bytes(url, headers=UA, timeout=45, attempts=4):
+def fetch_bytes(url, headers=UA, timeout=45, attempts=4, allow_lax_tls=True):
     """Raw bytes plus THE URL THAT ANSWERED, which is not always the one asked.
 
     Kenosha's directory is addressed by a stable county page id that 302s to
@@ -2038,8 +2078,9 @@ def fetch_or_archive(url, fips, county, headers=UA):
               % (county, live_error, stamp[:4], stamp[4:6], stamp[6:8]),
               file=sys.stderr)
         return page, "archive:" + stamp
-def fetch(url, headers=UA, timeout=45, attempts=4):
-    return fetch_bytes(url, headers, timeout, attempts)[0].decode("utf-8", "replace")
+def fetch(url, headers=UA, timeout=45, attempts=4, allow_lax_tls=True):
+    return fetch_bytes(url, headers, timeout, attempts,
+                       allow_lax_tls)[0].decode("utf-8", "replace")
 
 
 # COUNTIES WHOSE ROSTER RIDES THEIR OWN ARCGIS LAYER, NOT A PAGE. The
@@ -2506,7 +2547,8 @@ def fetch_archived(url):
             "the newest archive copy of %s is %d days old (limit %d) and Save Page "
             "Now did not take a fresh one — refusing to ship officeholders read "
             "from it" % (url, age, WAYBACK_MAX_AGE_DAYS))
-    page = fetch(WAYBACK_RAW % (ts, url))
+    # verified TLS only: see fetch_bytes
+    page = fetch(WAYBACK_RAW % (ts, url), ARCHIVE_UA, allow_lax_tls=False)
     if BLOCK_PAGE.search(page):
         raise RuntimeError("the archived copy of %s is itself a block page (%s)"
                            % (url, ts))

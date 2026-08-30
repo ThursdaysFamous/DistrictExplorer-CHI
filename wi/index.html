@@ -8735,8 +8735,42 @@ function initWisconsinExplorer() {
         if (member.phone) person.phone = String(member.phone);
         if (member.email) person.email = String(member.email);
         var profile = safeHttpUrl(member.profileUrl);
-        if (profile) person.links = [{ label: "Supervisor page", url: profile }];
+        var links = [];
+        if (profile) links.push({ label: "Supervisor page", url: profile });
+        // Where the county publishes its board in a DOCUMENT rather than on a
+        // page, the name is checkable there and nowhere else — Adams's board
+        // page, which is this card's footer link, names none of its twenty
+        // supervisors. Naming the document is the difference between a reader
+        // being able to verify the name and being sent somewhere that cannot.
+        var doc = safeHttpUrl(member.documentUrl);
+        if (doc) links.push({ label: "County directory", url: doc });
+        if (links.length) person.links = links;
         wrap.appendChild(renderPersonRows([person]));
+      }
+      // A DATED capture, said so. Most named counties here are re-read weekly
+      // from their own page; three are not, because their hosts refuse every
+      // automated client (Taylor answers a captcha, Lafayette and La Crosse a
+      // Cloudflare challenge), so their names come from a capture of that same
+      // page on a stated day. Without this row those cards would look exactly
+      // like the ones that ARE re-read weekly, which is the difference between
+      // a fact and a claim about how fresh the fact is.
+      //
+      // THIS ROW WAS LOST IN A MERGE AND THAT IS THE REASON IT CARRIES A
+      // COMMENT THIS LONG. It shipped against the older field-stack card; the
+      // card was then rebuilt around renderPersonRows by two later changes, and
+      // the union of the two kept the new structure and dropped the row —
+      // leaving 63 dated seats reading as weekly re-reads while the builder
+      // went on writing `asOf` onto every one of them and its own docstring
+      // went on saying the card prints it. A field the app stops rendering is
+      // invisible to every gate in this repo: the data was still there, still
+      // correct, and still counted.
+      if (member && member.asOf) {
+        wrap.appendChild(renderFieldStack([{
+          label: "As of",
+          value: "From " + String(member.asOf) + ". The county's website " +
+            "refuses automated readers, so this name is a dated capture " +
+            "rather than the weekly re-read the other named counties get."
+        }]));
       }
       if (result.seats) {
         wrap.appendChild(renderFieldStack([

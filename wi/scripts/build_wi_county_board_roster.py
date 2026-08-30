@@ -166,6 +166,16 @@ def main():
                     row["phone"] = member["phone"]
                 if member.get("url"):
                     row["profileUrl"] = member["url"]
+            # THE PAGE THE NAMES WERE ACTUALLY READ FROM, where that is not
+            # `sourceUrl`. Adams's twenty supervisors come out of a directory
+            # PDF the county links; its board page — the county's own landing
+            # page and this row's sourceUrl — names none of them, so a reader
+            # who clicks through to check a name finds nothing to check it
+            # against. The scraper resolves and records the document it read;
+            # dropping that here left the card pointing at the one surface that
+            # could not corroborate it.
+            if entry.get("document_url"):
+                row["documentUrl"] = entry["document_url"]
             roster[key] = row
             total += 1
 
