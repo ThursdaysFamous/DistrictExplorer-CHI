@@ -19,6 +19,13 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 DATA = ROOT / "docs" / "press-list.json"
 OUT = ROOT / "docs" / "PRESS_LIST.md"
 
+def not_news(send_to):
+    """The agents classified some inboxes as `other` — billing support, a web administrator, a
+    talk-booking form. They are the only published route to that outlet, so they stay on the list,
+    but a press release sent to one is a misfire and the row has to say so."""
+    return (send_to or {}).get("purpose", "").strip().lower().startswith("other")
+
+
 STATE_MARK = {
     "CONFIRMED": "confirmed",
     "UNRECHECKED": "**unrechecked**",
@@ -49,8 +56,15 @@ def render(d):
     a("     Drift gate:  python3 scripts/build_press_list.py --check")
     a("     Re-verify:   python3 scripts/verify_press_list.py -->")
     a("")
+    n_nn = sum(1 for o in d["outlets"] if not_news(o["send_to"]))
     a(f"**{n_out} newsrooms and desks; {n_send} carry a send address, {n_conf} of those "
       f"mechanically confirmed on the page that publishes them. {n_t1} are tier 1.**")
+    a("")
+    a(f"{n_nn} of those addresses are marked **not a news inbox** — the outlet publishes no "
+      f"editorial address and this is its only published route (a general org inbox, an opinion "
+      f"desk, membership support, in one case a site administrator). They are kept because they "
+      f"are the way in, and flagged because a press release sent to one as though it were a city "
+      f"desk is a misfire. Write those as a short personal note, not a release.")
     a("")
     a(f"Compiled {d['verified_date']} for the launch release. Press contact "
       f"`{d['release']['press_contact']}` / {d['release']['press_phone']}; the volunteer ask goes "
@@ -148,7 +162,9 @@ def render(d):
             if o["also_known_as"]:
                 name += " <br>*(also " + esc(", ".join(o["also_known_as"])) + " — one inbox)*"
             a(f"| {o['tier']} | [{name}]({o['homepage']}) | {esc(o['medium'])} | "
-              f"`{s['value']}` <br>[source]({s['source_url']}) | {STATE_MARK.get(s['state'], s['state'])} | "
+              f"`{s['value']}` <br>[source]({s['source_url']}) | "
+              f"{STATE_MARK.get(s['state'], s['state'])}"
+              f"{' <br>**not a news inbox**' if not_news(s) else ''} | "
               f"{esc(o['angle'])} |")
         a("")
 
