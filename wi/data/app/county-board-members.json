@@ -1,4 +1,187 @@
 {
+ "5500101": {
+  "county": "Adams",
+  "district": 1,
+  "documentUrl": "https://drive.google.com/file/d/1kkYIPrUGd-ykkc4EgfVNPQIDvGrb1XoC/view?usp=drive_link",
+  "email": "district1@co.adams.wi.us",
+  "name": "Jay L. Churco",
+  "phone": "608-434-3930",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500102": {
+  "county": "Adams",
+  "district": 2,
+  "documentUrl": "https://drive.google.com/file/d/1kkYIPrUGd-ykkc4EgfVNPQIDvGrb1XoC/view?usp=drive_link",
+  "email": "district2@co.adams.wi.us",
+  "name": "Jerry Poehler",
+  "phone": "608-254-5971",
+  "role": "1st Vice Chair",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500103": {
+  "county": "Adams",
+  "district": 3,
+  "documentUrl": "https://drive.google.com/file/d/1kkYIPrUGd-ykkc4EgfVNPQIDvGrb1XoC/view?usp=drive_link",
+  "email": "district3@co.adams.wi.us",
+  "name": "Rocky J. Gilner",
+  "phone": "608-432-4192",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500104": {
+  "county": "Adams",
+  "district": 4,
+  "documentUrl": "https://drive.google.com/file/d/1kkYIPrUGd-ykkc4EgfVNPQIDvGrb1XoC/view?usp=drive_link",
+  "email": "district4@co.adams.wi.us",
+  "name": "Larry Borud",
+  "phone": "608-547-3942",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500105": {
+  "county": "Adams",
+  "district": 5,
+  "documentUrl": "https://drive.google.com/file/d/1kkYIPrUGd-ykkc4EgfVNPQIDvGrb1XoC/view?usp=drive_link",
+  "email": "district5@co.adams.wi.us",
+  "name": "Scott Pease",
+  "phone": "608-547-9333",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500106": {
+  "county": "Adams",
+  "district": 6,
+  "documentUrl": "https://drive.google.com/file/d/1kkYIPrUGd-ykkc4EgfVNPQIDvGrb1XoC/view?usp=drive_link",
+  "email": "district.6@co.adams.wi.us",
+  "name": "Chuck Kotlowski",
+  "phone": "608-547-2688",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500107": {
+  "county": "Adams",
+  "district": 7,
+  "documentUrl": "https://drive.google.com/file/d/1kkYIPrUGd-ykkc4EgfVNPQIDvGrb1XoC/view?usp=drive_link",
+  "email": "district7@co.adams.wi.us",
+  "name": "David Grabarski",
+  "phone": "608-547-7747",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500108": {
+  "county": "Adams",
+  "district": 8,
+  "documentUrl": "https://drive.google.com/file/d/1kkYIPrUGd-ykkc4EgfVNPQIDvGrb1XoC/view?usp=drive_link",
+  "email": "district8@co.adams.wi.us",
+  "name": "John Dolezal",
+  "phone": "651-249-5877",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500109": {
+  "county": "Adams",
+  "district": 9,
+  "documentUrl": "https://drive.google.com/file/d/1kkYIPrUGd-ykkc4EgfVNPQIDvGrb1XoC/view?usp=drive_link",
+  "email": "district.9@co.adams.wi.us",
+  "name": "Hannah Eggersdorf",
+  "phone": "608-474-0451",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500110": {
+  "county": "Adams",
+  "district": 10,
+  "documentUrl": "https://drive.google.com/file/d/1kkYIPrUGd-ykkc4EgfVNPQIDvGrb1XoC/view?usp=drive_link",
+  "email": "district.10@co.adams.wi.us",
+  "name": "Austin Eggersdorf",
+  "phone": "608-474-0820",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500111": {
+  "county": "Adams",
+  "district": 11,
+  "documentUrl": "https://drive.google.com/file/d/1kkYIPrUGd-ykkc4EgfVNPQIDvGrb1XoC/view?usp=drive_link",
+  "email": "district.11@co.adams.wi.us",
+  "name": "Karla Braunsky",
+  "phone": "715-897-2302",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500112": {
+  "county": "Adams",
+  "district": 12,
+  "documentUrl": "https://drive.google.com/file/d/1kkYIPrUGd-ykkc4EgfVNPQIDvGrb1XoC/view?usp=drive_link",
+  "email": "district12@co.adams.wi.us",
+  "name": "Marge Edwards",
+  "phone": "608-547-2439",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500113": {
+  "county": "Adams",
+  "district": 13,
+  "documentUrl": "https://drive.google.com/file/d/1kkYIPrUGd-ykkc4EgfVNPQIDvGrb1XoC/view?usp=drive_link",
+  "email": "district13@co.adams.wi.us",
+  "name": "Rick Pease",
+  "phone": "608-547-0171",
+  "role": "County Board Chair",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500114": {
+  "county": "Adams",
+  "district": 14,
+  "documentUrl": "https://drive.google.com/file/d/1kkYIPrUGd-ykkc4EgfVNPQIDvGrb1XoC/view?usp=drive_link",
+  "email": "district.14@co.adams.wi.us",
+  "name": "Robert Theim",
+  "phone": "715-347-2089",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500115": {
+  "county": "Adams",
+  "district": 15,
+  "documentUrl": "https://drive.google.com/file/d/1kkYIPrUGd-ykkc4EgfVNPQIDvGrb1XoC/view?usp=drive_link",
+  "email": "district15@co.adams.wi.us",
+  "name": "Danny Shelton",
+  "phone": "915-204-2535",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500116": {
+  "county": "Adams",
+  "district": 16,
+  "documentUrl": "https://drive.google.com/file/d/1kkYIPrUGd-ykkc4EgfVNPQIDvGrb1XoC/view?usp=drive_link",
+  "email": "district.16@co.adams.wi.us",
+  "name": "Bruce Bubba Bain",
+  "phone": "608-564-7537",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500117": {
+  "county": "Adams",
+  "district": 17,
+  "documentUrl": "https://drive.google.com/file/d/1kkYIPrUGd-ykkc4EgfVNPQIDvGrb1XoC/view?usp=drive_link",
+  "email": "district17@co.adams.wi.us",
+  "name": "Gordon Carlson",
+  "phone": "715-421-6773",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500118": {
+  "county": "Adams",
+  "district": 18,
+  "documentUrl": "https://drive.google.com/file/d/1kkYIPrUGd-ykkc4EgfVNPQIDvGrb1XoC/view?usp=drive_link",
+  "email": "district18@co.adams.wi.us",
+  "name": "Mark Samelstad",
+  "phone": "715-781-0354",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500119": {
+  "county": "Adams",
+  "district": 19,
+  "documentUrl": "https://drive.google.com/file/d/1kkYIPrUGd-ykkc4EgfVNPQIDvGrb1XoC/view?usp=drive_link",
+  "email": "district19@co.adams.wi.us",
+  "name": "Michael Baker",
+  "phone": "414-507-9775",
+  "role": "2nd Vice Chair",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
+ "5500120": {
+  "county": "Adams",
+  "district": 20,
+  "documentUrl": "https://drive.google.com/file/d/1kkYIPrUGd-ykkc4EgfVNPQIDvGrb1XoC/view?usp=drive_link",
+  "email": "district20@co.adams.wi.us",
+  "name": "Philip A. McLaughlin",
+  "phone": "715-325-7329",
+  "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
+ },
  "5500701": {
   "county": "Bayfield",
   "district": 1,
@@ -155,7 +338,7 @@
  "5500913": {
   "county": "Brown",
   "district": 13,
-  "name": "Jr., Norbert Dantinne",
+  "name": "Norbert Dantinne Jr.",
   "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
  },
  "5500914": {
@@ -362,6 +545,279 @@
   "district": 21,
   "name": "Randy Shimanski",
   "sourceUrl": "https://burnettcountywi.gov/264/Supervisors"
+ },
+ "5502101": {
+  "county": "Columbia",
+  "district": 1,
+  "name": "Connor Hartje",
+  "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing"
+ },
+ "5502102": {
+  "county": "Columbia",
+  "district": 2,
+  "name": "Matthew Bremer",
+  "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing"
+ },
+ "5502103": {
+  "county": "Columbia",
+  "district": 3,
+  "name": "Josiah Wynn",
+  "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing"
+ },
+ "5502104": {
+  "county": "Columbia",
+  "district": 4,
+  "name": "John R. Miller",
+  "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing"
+ },
+ "5502105": {
+  "county": "Columbia",
+  "district": 5,
+  "name": "Amy Schlinkert",
+  "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing"
+ },
+ "5502106": {
+  "county": "Columbia",
+  "district": 6,
+  "name": "Tim Henney",
+  "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing"
+ },
+ "5502107": {
+  "county": "Columbia",
+  "district": 7,
+  "name": "Rich Bailey",
+  "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing"
+ },
+ "5502108": {
+  "county": "Columbia",
+  "district": 8,
+  "name": "Jennifer Wagner",
+  "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing"
+ },
+ "5502109": {
+  "county": "Columbia",
+  "district": 9,
+  "name": "Char Holtan",
+  "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing"
+ },
+ "5502110": {
+  "county": "Columbia",
+  "district": 10,
+  "name": "Derek Granquist",
+  "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing"
+ },
+ "5502111": {
+  "county": "Columbia",
+  "district": 11,
+  "name": "Joel Winograd",
+  "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing"
+ },
+ "5502112": {
+  "county": "Columbia",
+  "district": 12,
+  "name": "Steven Balsiger",
+  "role": "Second Vice Chairperson",
+  "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing"
+ },
+ "5502113": {
+  "county": "Columbia",
+  "district": 13,
+  "name": "Brad Cook",
+  "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing"
+ },
+ "5502114": {
+  "county": "Columbia",
+  "district": 14,
+  "name": "Liz Miller",
+  "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing"
+ },
+ "5502115": {
+  "county": "Columbia",
+  "district": 15,
+  "name": "Andrew C. Kolberg",
+  "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing"
+ },
+ "5502116": {
+  "county": "Columbia",
+  "district": 16,
+  "name": "Denise J. Brusveen",
+  "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing"
+ },
+ "5502117": {
+  "county": "Columbia",
+  "district": 17,
+  "name": "David Faust",
+  "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing"
+ },
+ "5502118": {
+  "county": "Columbia",
+  "district": 18,
+  "name": "James D. Stilson",
+  "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing"
+ },
+ "5502119": {
+  "county": "Columbia",
+  "district": 19,
+  "name": "Keith F. Miller",
+  "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing"
+ },
+ "5502120": {
+  "county": "Columbia",
+  "district": 20,
+  "name": "Harold Schwoerer",
+  "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing"
+ },
+ "5502121": {
+  "county": "Columbia",
+  "district": 21,
+  "name": "Henry A. St. Maurice",
+  "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing"
+ },
+ "5502122": {
+  "county": "Columbia",
+  "district": 22,
+  "name": "Susan Schweitzer",
+  "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing"
+ },
+ "5502123": {
+  "county": "Columbia",
+  "district": 23,
+  "name": "David Mickelson",
+  "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing"
+ },
+ "5502124": {
+  "county": "Columbia",
+  "district": 24,
+  "name": "Nate Moll",
+  "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing"
+ },
+ "5502125": {
+  "county": "Columbia",
+  "district": 25,
+  "name": "Tess Carr",
+  "role": "First Vice Chairperson",
+  "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing"
+ },
+ "5502126": {
+  "county": "Columbia",
+  "district": 26,
+  "name": "Tom Dunn",
+  "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing"
+ },
+ "5502127": {
+  "county": "Columbia",
+  "district": 27,
+  "name": "Jeffrey A. Leckwee",
+  "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing"
+ },
+ "5502128": {
+  "county": "Columbia",
+  "district": 28,
+  "name": "Douglas Richmond",
+  "role": "Chairperson",
+  "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing"
+ },
+ "5502301": {
+  "county": "Crawford",
+  "district": 1,
+  "name": "Bruce Strnad",
+  "sourceUrl": "https://www.crawfordcountywi.gov/boardsupervisors"
+ },
+ "5502302": {
+  "county": "Crawford",
+  "district": 2,
+  "name": "Linda Munson",
+  "sourceUrl": "https://www.crawfordcountywi.gov/boardsupervisors"
+ },
+ "5502303": {
+  "county": "Crawford",
+  "district": 3,
+  "name": "Gary Koch",
+  "sourceUrl": "https://www.crawfordcountywi.gov/boardsupervisors"
+ },
+ "5502304": {
+  "county": "Crawford",
+  "district": 4,
+  "name": "Brad Steiner",
+  "sourceUrl": "https://www.crawfordcountywi.gov/boardsupervisors"
+ },
+ "5502305": {
+  "county": "Crawford",
+  "district": 5,
+  "name": "Mark Gilberts",
+  "sourceUrl": "https://www.crawfordcountywi.gov/boardsupervisors"
+ },
+ "5502306": {
+  "county": "Crawford",
+  "district": 6,
+  "name": "Carl Orr",
+  "sourceUrl": "https://www.crawfordcountywi.gov/boardsupervisors"
+ },
+ "5502307": {
+  "county": "Crawford",
+  "district": 7,
+  "name": "Al Thompson",
+  "sourceUrl": "https://www.crawfordcountywi.gov/boardsupervisors"
+ },
+ "5502308": {
+  "county": "Crawford",
+  "district": 8,
+  "name": "Mary Kuhn",
+  "sourceUrl": "https://www.crawfordcountywi.gov/boardsupervisors"
+ },
+ "5502309": {
+  "county": "Crawford",
+  "district": 9,
+  "name": "Harrison Heilman",
+  "sourceUrl": "https://www.crawfordcountywi.gov/boardsupervisors"
+ },
+ "5502310": {
+  "county": "Crawford",
+  "district": 10,
+  "name": "Craig Anderson",
+  "sourceUrl": "https://www.crawfordcountywi.gov/boardsupervisors"
+ },
+ "5502311": {
+  "county": "Crawford",
+  "district": 11,
+  "name": "Wayne Jerrett Jr",
+  "sourceUrl": "https://www.crawfordcountywi.gov/boardsupervisors"
+ },
+ "5502312": {
+  "county": "Crawford",
+  "district": 12,
+  "name": "Brian Reynolds",
+  "sourceUrl": "https://www.crawfordcountywi.gov/boardsupervisors"
+ },
+ "5502313": {
+  "county": "Crawford",
+  "district": 13,
+  "name": "Greg Russell",
+  "sourceUrl": "https://www.crawfordcountywi.gov/boardsupervisors"
+ },
+ "5502314": {
+  "county": "Crawford",
+  "district": 14,
+  "name": "Gari Lorenz",
+  "sourceUrl": "https://www.crawfordcountywi.gov/boardsupervisors"
+ },
+ "5502315": {
+  "county": "Crawford",
+  "district": 15,
+  "name": "Gerald Krachey",
+  "sourceUrl": "https://www.crawfordcountywi.gov/boardsupervisors"
+ },
+ "5502316": {
+  "county": "Crawford",
+  "district": 16,
+  "name": "Derek Flansburgh",
+  "sourceUrl": "https://www.crawfordcountywi.gov/boardsupervisors"
+ },
+ "5502317": {
+  "county": "Crawford",
+  "district": 17,
+  "name": "Tom Cornford",
+  "sourceUrl": "https://www.crawfordcountywi.gov/boardsupervisors"
  },
  "5502501": {
   "county": "Dane",
@@ -584,6 +1040,240 @@
   "district": 37,
   "name": "Kerry Marren",
   "sourceUrl": "https://board.danecounty.gov/Supervisors"
+ },
+ "5502701": {
+  "county": "Dodge",
+  "district": 1,
+  "email": "district1@co.dodge.wi.us",
+  "name": "Shannon Verbos",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502702": {
+  "county": "Dodge",
+  "district": 2,
+  "email": "district2@co.dodge.wi.us",
+  "name": "Mary Bobholz",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502703": {
+  "county": "Dodge",
+  "district": 3,
+  "email": "district3@co.dodge.wi.us",
+  "name": "Dale Macheel",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502704": {
+  "county": "Dodge",
+  "district": 4,
+  "email": "district4@co.dodge.wi.us",
+  "name": "John Kraus",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502705": {
+  "county": "Dodge",
+  "district": 5,
+  "email": "district5@co.dodge.wi.us",
+  "name": "Nancy Kavazanjian",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502706": {
+  "county": "Dodge",
+  "district": 6,
+  "email": "district6@co.dodge.wi.us",
+  "name": "Jeff Breselow",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502707": {
+  "county": "Dodge",
+  "district": 7,
+  "email": "district7@co.dodge.wi.us",
+  "name": "Rodger Frievalt",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502708": {
+  "county": "Dodge",
+  "district": 8,
+  "email": "district8@co.dodge.wi.us",
+  "name": "Donald Miller",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502709": {
+  "county": "Dodge",
+  "district": 9,
+  "email": "district9@co.dodge.wi.us",
+  "name": "Andrew Johnson",
+  "role": "Vice Chair",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502710": {
+  "county": "Dodge",
+  "district": 10,
+  "email": "district10@co.dodge.wi.us",
+  "name": "Daniel Siegmann",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502711": {
+  "county": "Dodge",
+  "district": 11,
+  "email": "district11@co.dodge.wi.us",
+  "name": "Nicholas Christian",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502712": {
+  "county": "Dodge",
+  "district": 12,
+  "email": "district12@co.dodge.wi.us",
+  "name": "Jody Steger",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502713": {
+  "county": "Dodge",
+  "district": 13,
+  "email": "district13@co.dodge.wi.us",
+  "name": "Karen Kuehl",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502714": {
+  "county": "Dodge",
+  "district": 14,
+  "email": "district14@co.dodge.wi.us",
+  "name": "Christine Churchill",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502715": {
+  "county": "Dodge",
+  "district": 15,
+  "email": "district15@co.dodge.wi.us",
+  "name": "Todd Ringle",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502716": {
+  "county": "Dodge",
+  "district": 16,
+  "email": "district16@co.dodge.wi.us",
+  "name": "Peter Scheerer",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502717": {
+  "county": "Dodge",
+  "district": 17,
+  "email": "district17@co.dodge.wi.us",
+  "name": "Larry Bischoff",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502718": {
+  "county": "Dodge",
+  "district": 18,
+  "email": "district18@co.dodge.wi.us",
+  "name": "Jeffrey Caine",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502719": {
+  "county": "Dodge",
+  "district": 19,
+  "email": "district19@co.dodge.wi.us",
+  "name": "Paul Conway",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502720": {
+  "county": "Dodge",
+  "district": 20,
+  "email": "district20@co.dodge.wi.us",
+  "name": "Steve Kauffeld",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502721": {
+  "county": "Dodge",
+  "district": 21,
+  "email": "district21@co.dodge.wi.us",
+  "name": "Cathy Houchin",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502722": {
+  "county": "Dodge",
+  "district": 22,
+  "email": "district22@co.dodge.wi.us",
+  "name": "Jenifer Hedrick",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502723": {
+  "county": "Dodge",
+  "district": 23,
+  "email": "district23@co.dodge.wi.us",
+  "name": "David Frohling",
+  "role": "Chairperson",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502724": {
+  "county": "Dodge",
+  "district": 24,
+  "email": "district24@co.dodge.wi.us",
+  "name": "David Beal",
+  "role": "2nd Vice Chair",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502725": {
+  "county": "Dodge",
+  "district": 25,
+  "email": "district25@co.dodge.wi.us",
+  "name": "Evan Meinel",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502726": {
+  "county": "Dodge",
+  "district": 26,
+  "email": "district26@co.dodge.wi.us",
+  "name": "Randy VandeZande",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502727": {
+  "county": "Dodge",
+  "district": 27,
+  "email": "district27@co.dodge.wi.us",
+  "name": "Marilyn Klobuchar",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502728": {
+  "county": "Dodge",
+  "district": 28,
+  "email": "district28@co.dodge.wi.us",
+  "name": "Donna Maly",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502729": {
+  "county": "Dodge",
+  "district": 29,
+  "email": "district29@co.dodge.wi.us",
+  "name": "Jayme Klockow",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502730": {
+  "county": "Dodge",
+  "district": 30,
+  "email": "district30@co.dodge.wi.us",
+  "name": "Haley Justmann",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502731": {
+  "county": "Dodge",
+  "district": 31,
+  "email": "district31@co.dodge.wi.us",
+  "name": "Kevin Burnett",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502732": {
+  "county": "Dodge",
+  "district": 32,
+  "email": "district32@co.dodge.wi.us",
+  "name": "Robert Ballweg",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
+ },
+ "5502733": {
+  "county": "Dodge",
+  "district": 33,
+  "email": "district33@co.dodge.wi.us",
+  "name": "Jeff Bierman",
+  "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members"
  },
  "5503301": {
   "county": "Dunn",
@@ -936,6 +1626,209 @@
   "name": "Bob Swanson",
   "sourceUrl": "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"
  },
+ "5503901": {
+  "county": "Fond Du Lac",
+  "district": 1,
+  "email": "katherine.griffith@fdlco.wi.gov",
+  "name": "Katherine B. Griffith",
+  "phone": "(920) 509-9607",
+  "sourceUrl": "https://www.fdlco.wi.gov/government/county-board-supervisors"
+ },
+ "5503902": {
+  "county": "Fond Du Lac",
+  "district": 2,
+  "email": "gary.will@fdlco.wi.gov",
+  "name": "Gary A. Will",
+  "phone": "(920) 229-0816",
+  "sourceUrl": "https://www.fdlco.wi.gov/government/county-board-supervisors"
+ },
+ "5503903": {
+  "county": "Fond Du Lac",
+  "district": 3,
+  "email": "karen.madigan@fdlco.wi.gov",
+  "name": "Karen Madigan",
+  "phone": "(920) 872-2003",
+  "sourceUrl": "https://www.fdlco.wi.gov/government/county-board-supervisors"
+ },
+ "5503904": {
+  "county": "Fond Du Lac",
+  "district": 4,
+  "email": "michael.will@fdlco.wi.gov",
+  "name": "Michael J. Will",
+  "phone": "(920) 375-2265",
+  "role": "Second Vice Chair",
+  "sourceUrl": "https://www.fdlco.wi.gov/government/county-board-supervisors"
+ },
+ "5503905": {
+  "county": "Fond Du Lac",
+  "district": 5,
+  "email": "jeffrey.montsma@fdlco.wi.gov",
+  "name": "Jeffrey N. Montsma",
+  "phone": "(920) 960-4644",
+  "sourceUrl": "https://www.fdlco.wi.gov/government/county-board-supervisors"
+ },
+ "5503906": {
+  "county": "Fond Du Lac",
+  "district": 6,
+  "email": "michael.beer@fdlco.wi.gov",
+  "name": "Michael C. Beer",
+  "phone": "(920) 948-6889",
+  "sourceUrl": "https://www.fdlco.wi.gov/government/county-board-supervisors"
+ },
+ "5503907": {
+  "county": "Fond Du Lac",
+  "district": 7,
+  "email": "jonathon.venhuizen@fdlco.wi.gov",
+  "name": "Jonathon E. Venhuizen",
+  "phone": "(920) 344-6313",
+  "sourceUrl": "https://www.fdlco.wi.gov/government/county-board-supervisors"
+ },
+ "5503908": {
+  "county": "Fond Du Lac",
+  "district": 8,
+  "email": "robert.simon@fdlco.wi.gov",
+  "name": "Robert J. Simon",
+  "phone": "(920) 904-1968",
+  "sourceUrl": "https://www.fdlco.wi.gov/government/county-board-supervisors"
+ },
+ "5503909": {
+  "county": "Fond Du Lac",
+  "district": 9,
+  "email": "thomas.dornbrook@fdlco.wi.gov",
+  "name": "Thomas E. Dornbrook",
+  "phone": "(920) 410-2484",
+  "sourceUrl": "https://www.fdlco.wi.gov/government/county-board-supervisors"
+ },
+ "5503910": {
+  "county": "Fond Du Lac",
+  "district": 10,
+  "email": "kenneth.depperman@fdlco.wi.gov",
+  "name": "Kenneth W. Depperman",
+  "phone": "(920) 960-2356",
+  "sourceUrl": "https://www.fdlco.wi.gov/government/county-board-supervisors"
+ },
+ "5503911": {
+  "county": "Fond Du Lac",
+  "district": 11,
+  "email": "steve.abel@fdlco.wi.gov",
+  "name": "Steven A. Abel",
+  "phone": "(920) 251-3737",
+  "role": "Chair",
+  "sourceUrl": "https://www.fdlco.wi.gov/government/county-board-supervisors"
+ },
+ "5503912": {
+  "county": "Fond Du Lac",
+  "district": 12,
+  "email": "james.sippel@fdlco.wi.gov",
+  "name": "James V. Sippel",
+  "phone": "(920) 901-6094",
+  "sourceUrl": "https://www.fdlco.wi.gov/government/county-board-supervisors"
+ },
+ "5503913": {
+  "county": "Fond Du Lac",
+  "district": 13,
+  "email": "john.rickert@fdlco.wi.gov",
+  "name": "John J. Rickert",
+  "phone": "(920) 921-4241",
+  "sourceUrl": "https://www.fdlco.wi.gov/government/county-board-supervisors"
+ },
+ "5503914": {
+  "county": "Fond Du Lac",
+  "district": 14,
+  "email": "michael.conley@fdlco.wi.gov",
+  "name": "Michael F. Conley",
+  "phone": "(920) 904-7844",
+  "sourceUrl": "https://www.fdlco.wi.gov/government/county-board-supervisors"
+ },
+ "5503915": {
+  "county": "Fond Du Lac",
+  "district": 15,
+  "email": "joseph.fenrick@fdlco.wi.gov",
+  "name": "Joseph M. Fenrick",
+  "phone": "(920) 948-3312",
+  "sourceUrl": "https://www.fdlco.wi.gov/government/county-board-supervisors"
+ },
+ "5503916": {
+  "county": "Fond Du Lac",
+  "district": 16,
+  "email": "michael.streetar@fdlco.wi.gov",
+  "name": "Michael J. Streetar",
+  "phone": "(920) 539-1126",
+  "sourceUrl": "https://www.fdlco.wi.gov/government/county-board-supervisors"
+ },
+ "5503917": {
+  "county": "Fond Du Lac",
+  "district": 17,
+  "email": "jay.myrechuck@fdlco.wi.gov",
+  "name": "Jay J. Myrechuck",
+  "phone": "(920) 263-8907",
+  "sourceUrl": "https://www.fdlco.wi.gov/government/county-board-supervisors"
+ },
+ "5503918": {
+  "county": "Fond Du Lac",
+  "district": 18,
+  "email": "scott.rodman@fdlco.wi.gov",
+  "name": "Scott D. Rodman",
+  "phone": "(920) 904-6666",
+  "sourceUrl": "https://www.fdlco.wi.gov/government/county-board-supervisors"
+ },
+ "5503919": {
+  "county": "Fond Du Lac",
+  "district": 19,
+  "email": "thomas.herlache@fdlco.wi.gov",
+  "name": "Thomas L. Herlache Jr.",
+  "phone": "(920) 621-7071",
+  "sourceUrl": "https://www.fdlco.wi.gov/government/county-board-supervisors"
+ },
+ "5503920": {
+  "county": "Fond Du Lac",
+  "district": 20,
+  "email": "tiffany.brault@fdlco.wi.gov",
+  "name": "Tiffany S. Brault",
+  "phone": "(920) 251-4209",
+  "sourceUrl": "https://www.fdlco.wi.gov/government/county-board-supervisors"
+ },
+ "5503921": {
+  "county": "Fond Du Lac",
+  "district": 21,
+  "email": "dean.will@fdlco.wi.gov",
+  "name": "Dean P. Will",
+  "phone": "(920) 579-2353",
+  "sourceUrl": "https://www.fdlco.wi.gov/government/county-board-supervisors"
+ },
+ "5503922": {
+  "county": "Fond Du Lac",
+  "district": 22,
+  "email": "caroline.janke@fdlco.wi.gov",
+  "name": "Caroline M. Janke",
+  "phone": "(920) 979-7954",
+  "sourceUrl": "https://www.fdlco.wi.gov/government/county-board-supervisors"
+ },
+ "5503923": {
+  "county": "Fond Du Lac",
+  "district": 23,
+  "email": "martin.ryan@fdlco.wi.gov",
+  "name": "Martin S. Ryan",
+  "phone": "(920) 251-9508",
+  "role": "First Vice Chair",
+  "sourceUrl": "https://www.fdlco.wi.gov/government/county-board-supervisors"
+ },
+ "5503924": {
+  "county": "Fond Du Lac",
+  "district": 24,
+  "email": "mary.hayes@fdlco.wi.gov",
+  "name": "Mary B. Hayes",
+  "phone": "(920) 921-8432",
+  "sourceUrl": "https://www.fdlco.wi.gov/government/county-board-supervisors"
+ },
+ "5503925": {
+  "county": "Fond Du Lac",
+  "district": 25,
+  "email": "angela.luehring@fdlco.wi.gov",
+  "name": "Angela C. Luehring",
+  "phone": "(920) 266-5828",
+  "sourceUrl": "https://www.fdlco.wi.gov/government/county-board-supervisors"
+ },
  "5504301": {
   "county": "Grant",
   "district": 1,
@@ -1224,6 +2117,278 @@
   "district": 31,
   "name": "Kathy Pennington",
   "sourceUrl": "https://greencountywi.org/164/County-Board-of-Supervisors"
+ },
+ "5504701": {
+  "county": "Green Lake",
+  "district": 1,
+  "email": "nhoffmann@greenlakecountywi.gov",
+  "name": "Nancy Hoffmann",
+  "phone": "608-697-7996",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
+ },
+ "5504702": {
+  "county": "Green Lake",
+  "district": 2,
+  "email": "cbuss@greenlakecountywi.gov",
+  "name": "Charles Buss",
+  "phone": "920-767-1518",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
+ },
+ "5504703": {
+  "county": "Green Lake",
+  "district": 3,
+  "email": "abrendemihl@greenlakecountywi.gov",
+  "name": "Andy Brendemihl",
+  "phone": "920-767-1939",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
+ },
+ "5504704": {
+  "county": "Green Lake",
+  "district": 4,
+  "email": "dabendroth@greenlakecountywi.gov",
+  "name": "David Abendroth",
+  "phone": "920-896-2494",
+  "role": "Chairman",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
+ },
+ "5504705": {
+  "county": "Green Lake",
+  "district": 5,
+  "email": "mskivington@greenlakecountywi.gov",
+  "name": "Mike Skivington",
+  "phone": "920-915-0248",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
+ },
+ "5504706": {
+  "county": "Green Lake",
+  "district": 6,
+  "email": "bfloeter@greenlakecountywi.gov",
+  "name": "Brian Floeter",
+  "phone": "920-229-0067",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
+ },
+ "5504707": {
+  "county": "Green Lake",
+  "district": 7,
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/",
+  "vacant": true
+ },
+ "5504708": {
+  "county": "Green Lake",
+  "district": 8,
+  "email": "nhiestand@greenlakecountywi.gov",
+  "name": "Nancy Hiestand",
+  "phone": "920-539-0833",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
+ },
+ "5504709": {
+  "county": "Green Lake",
+  "district": 9,
+  "email": "bboutwell@greenlakecountywi.gov",
+  "name": "William Boutwell",
+  "phone": "920-539-6386",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
+ },
+ "5504710": {
+  "county": "Green Lake",
+  "district": 10,
+  "email": "lmirrfrank@greenlakecountywi.gov",
+  "name": "LuAnn Mirr-Frank",
+  "phone": "920-279-7956",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
+ },
+ "5504711": {
+  "county": "Green Lake",
+  "district": 11,
+  "email": "hreabe@greenlakecountywi.gov",
+  "name": "Harley Reabe",
+  "phone": "920-294-0824",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
+ },
+ "5504712": {
+  "county": "Green Lake",
+  "district": 12,
+  "email": "cwielgosh@greenlakecountywi.gov",
+  "name": "Charlie Wielgosh",
+  "phone": "920-229-3808",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
+ },
+ "5504713": {
+  "county": "Green Lake",
+  "district": 13,
+  "name": "Don Lenz",
+  "phone": "920-539-5281",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
+ },
+ "5504714": {
+  "county": "Green Lake",
+  "district": 14,
+  "email": "dmulder@greenlakecountywi.gov",
+  "name": "Dennis Mulder",
+  "phone": "920-570-4505",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
+ },
+ "5504715": {
+  "county": "Green Lake",
+  "district": 15,
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/",
+  "vacant": true
+ },
+ "5504716": {
+  "county": "Green Lake",
+  "district": 16,
+  "email": "jgonyo@greenlakecountywi.gov",
+  "name": "Joe Gonyo",
+  "phone": "920-229-1240",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
+ },
+ "5504717": {
+  "county": "Green Lake",
+  "district": 17,
+  "name": "Robert Grim",
+  "phone": "414-534-0087",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
+ },
+ "5504718": {
+  "county": "Green Lake",
+  "district": 18,
+  "name": "Sara Allen",
+  "phone": "920-290-9030",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
+ },
+ "5504719": {
+  "county": "Green Lake",
+  "district": 19,
+  "email": "gthom@greenlakecountywi.gov",
+  "name": "Gene Thom",
+  "phone": "920-361-0305",
+  "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/"
+ },
+ "5504901": {
+  "county": "Iowa",
+  "district": 1,
+  "name": "Chuck Weigel",
+  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+ },
+ "5504902": {
+  "county": "Iowa",
+  "district": 2,
+  "name": "Ingmar Nelson",
+  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+ },
+ "5504903": {
+  "county": "Iowa",
+  "district": 3,
+  "name": "Jody Putz Miller",
+  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+ },
+ "5504904": {
+  "county": "Iowa",
+  "district": 4,
+  "name": "Anthony Wood",
+  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+ },
+ "5504905": {
+  "county": "Iowa",
+  "district": 5,
+  "name": "Nicole Welsh",
+  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+ },
+ "5504906": {
+  "county": "Iowa",
+  "district": 6,
+  "name": "David Gollon",
+  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+ },
+ "5504907": {
+  "county": "Iowa",
+  "district": 7,
+  "name": "Bruce Paull",
+  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+ },
+ "5504908": {
+  "county": "Iowa",
+  "district": 8,
+  "name": "Joan Davis",
+  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+ },
+ "5504909": {
+  "county": "Iowa",
+  "district": 9,
+  "name": "Dody Cockeram",
+  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+ },
+ "5504910": {
+  "county": "Iowa",
+  "district": 10,
+  "name": "Brad Stevens",
+  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+ },
+ "5504911": {
+  "county": "Iowa",
+  "district": 11,
+  "name": "Adam Stucki",
+  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+ },
+ "5504912": {
+  "county": "Iowa",
+  "district": 12,
+  "name": "Keith Hurlbert",
+  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+ },
+ "5504913": {
+  "county": "Iowa",
+  "district": 13,
+  "name": "Richard Rolfsmeyer",
+  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+ },
+ "5504914": {
+  "county": "Iowa",
+  "district": 14,
+  "name": "John M. Meyers",
+  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+ },
+ "5504915": {
+  "county": "Iowa",
+  "district": 15,
+  "name": "Tim Lease",
+  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+ },
+ "5504916": {
+  "county": "Iowa",
+  "district": 16,
+  "name": "Gerald Galle",
+  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+ },
+ "5504917": {
+  "county": "Iowa",
+  "district": 17,
+  "name": "Don Gander",
+  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+ },
+ "5504918": {
+  "county": "Iowa",
+  "district": 18,
+  "name": "Molly Conkey",
+  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+ },
+ "5504919": {
+  "county": "Iowa",
+  "district": 19,
+  "name": "Don Leix",
+  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+ },
+ "5504920": {
+  "county": "Iowa",
+  "district": 20,
+  "name": "Mel Masters",
+  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
+ },
+ "5504921": {
+  "county": "Iowa",
+  "district": 21,
+  "name": "Kevin Butteris",
+  "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
  },
  "5505501": {
   "county": "Jefferson",
@@ -1535,6 +2700,215 @@
   "role": "Chairperson",
   "sourceUrl": "https://www.co.juneau.wi.gov/government/county_board_supervisors/index.php"
  },
+ "5505901": {
+  "county": "Kenosha",
+  "district": 1,
+  "email": "william.grady@kenoshacountywi.gov",
+  "name": "William Grady",
+  "phone": "262-652-2020",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=455",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505902": {
+  "county": "Kenosha",
+  "district": 2,
+  "email": "stephanie.knezz@kenoshacountywi.gov",
+  "name": "Stephanie Knezz",
+  "phone": "309-502-1078",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=456",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505903": {
+  "county": "Kenosha",
+  "district": 3,
+  "email": "riki.tagliapietra@kenoshacountywi.gov",
+  "name": "Riki Tagliapietra",
+  "phone": "262-358-6104",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=552",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505904": {
+  "county": "Kenosha",
+  "district": 4,
+  "email": "laura.belsky@kenoshacountywi.gov",
+  "name": "Laura Belsky",
+  "phone": "262-705-5722",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=458",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505905": {
+  "county": "Kenosha",
+  "district": 5,
+  "email": "julia.robinson@kenoshacountywi.gov",
+  "name": "Julia Robinson",
+  "phone": "262-705-3235",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=479",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505906": {
+  "county": "Kenosha",
+  "district": 6,
+  "email": "dave.tarzon@kenoshacountywi.gov",
+  "name": "Dave Tarzon",
+  "phone": "773-474-3301",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=553",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505907": {
+  "county": "Kenosha",
+  "district": 7,
+  "email": "daniel.gaschke@kenoshacountywi.gov",
+  "name": "Daniel Gaschke",
+  "phone": "262-902-7028",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=308",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505908": {
+  "county": "Kenosha",
+  "district": 8,
+  "email": "sarah.kirby@kenoshacountywi.gov",
+  "name": "Sarah Kirby",
+  "phone": "262-286-1313",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=454",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505909": {
+  "county": "Kenosha",
+  "district": 9,
+  "email": "john.morrissey@kenoshacountywi.gov",
+  "name": "John Morrissey",
+  "phone": "262-945-7377",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=453",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505910": {
+  "county": "Kenosha",
+  "district": 10,
+  "email": "david.lux@kenoshacountywi.gov",
+  "name": "David Lux",
+  "phone": "262-496-5849",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=554",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505911": {
+  "county": "Kenosha",
+  "district": 11,
+  "email": "guida.brown@kenoshacountywi.gov",
+  "name": "Guida Brown",
+  "phone": "262-945-1865",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=460",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505912": {
+  "county": "Kenosha",
+  "district": 12,
+  "email": "gabe.nudo@kenoshacountywi.gov",
+  "name": "Gabe Nudo",
+  "phone": "262-620-2574",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=139",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505913": {
+  "county": "Kenosha",
+  "district": 13,
+  "email": "john.franco@kenoshacountywi.gov",
+  "name": "John Franco",
+  "phone": "262-857-6772",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=140",
+  "role": "Vice-Chair",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505914": {
+  "county": "Kenosha",
+  "district": 14,
+  "email": "tim.stocker@kenoshacountywi.gov",
+  "name": "Tim Stocker",
+  "phone": "262-652-1312",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=461",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505915": {
+  "county": "Kenosha",
+  "district": 15,
+  "email": "dave.geertsen@kenoshacountywi.gov",
+  "name": "Dave Geertsen",
+  "phone": "262-515-3334",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=134",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505916": {
+  "county": "Kenosha",
+  "district": 16,
+  "email": "jeff.cologna@kenoshacountywi.gov",
+  "name": "Jeff Cologna",
+  "phone": "262-771-6236",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=555",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505917": {
+  "county": "Kenosha",
+  "district": 17,
+  "email": "luke.pollock@kenoshacountywi.gov",
+  "name": "Luke Pollock",
+  "phone": "847-909-8662",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=556",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505918": {
+  "county": "Kenosha",
+  "district": 18,
+  "email": "eric.meadows@kenoshacountywi.gov",
+  "name": "Eric Meadows",
+  "phone": "262-960-4475",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=144",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505919": {
+  "county": "Kenosha",
+  "district": 19,
+  "email": "keith.gray@kenoshacountywi.gov",
+  "name": "Keith Gray",
+  "phone": "847-757-7885",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=146",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505920": {
+  "county": "Kenosha",
+  "district": 20,
+  "email": "john.poole@kenoshacountywi.gov",
+  "name": "John Poole",
+  "phone": "262-945-4502",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=147",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505921": {
+  "county": "Kenosha",
+  "district": 21,
+  "email": "mark.nordigian@kenoshacountywi.gov",
+  "name": "Mark Nordigian",
+  "phone": "262-705-2347",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=148",
+  "role": "Chair",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505922": {
+  "county": "Kenosha",
+  "district": 22,
+  "email": "erin.decker@kenoshacountywi.gov",
+  "name": "Erin Decker",
+  "phone": "262-885-6133",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=459",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
+ "5505923": {
+  "county": "Kenosha",
+  "district": 23,
+  "email": "aaron.karow@kenoshacountywi.gov",
+  "name": "Aaron Karow",
+  "phone": "262-620-8363",
+  "profileUrl": "https://www.kenoshacountywi.gov/Directory.aspx?EID=150",
+  "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors"
+ },
  "5506101": {
   "county": "Kewaunee",
   "district": 1,
@@ -1656,6 +3030,560 @@
   "district": 20,
   "name": "Joanne Lazansky",
   "sourceUrl": "https://www.kewauneeco.org/government/boards_and_committees/"
+ },
+ "5506301": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 1,
+  "name": "Kelly Leibold",
+  "phone": "507 272 5408",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506302": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 2,
+  "name": "Ralph Geary",
+  "phone": "608-519-6175",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506303": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 3,
+  "name": "David Pierce",
+  "phone": "608-343-1031",
+  "role": "1st Vice Chair",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506304": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 4,
+  "name": "Kathy Allen",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506305": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 5,
+  "name": "Emily \"Em\" Anderson",
+  "phone": "262-744-4982",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506306": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 6,
+  "name": "Grant Mathu",
+  "phone": "(608) 518-0368",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506307": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 7,
+  "name": "Beth Piggush",
+  "phone": "860-371-0130",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506308": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 8,
+  "name": "Peggy Isola",
+  "phone": "608-519-7365",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506309": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 9,
+  "name": "Angie Manke",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506310": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 10,
+  "name": "Kim Cable",
+  "role": "2nd Vice Chair",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506311": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 11,
+  "name": "Patrick Scheller",
+  "phone": "608-769-8502",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506312": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 12,
+  "name": "Randy Erickson",
+  "phone": "608-519-6292",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506313": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 13,
+  "name": "Tina Tryggestad",
+  "phone": "608-790-2912",
+  "role": "Chair",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506314": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 14,
+  "name": "Steve Duffrin",
+  "phone": "608-780-2247",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506315": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 15,
+  "name": "Monica Kruse",
+  "phone": "608-738-9195",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506316": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 16,
+  "name": "Dan Ferries",
+  "phone": "608-780-7282",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506317": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 17,
+  "name": "Lia Manock",
+  "phone": "608-315-2855",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506318": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 18,
+  "name": "Joanna Drazkowski",
+  "phone": "612-387-8820",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506319": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 19,
+  "name": "Anna McBride",
+  "phone": "608-385-6701",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506320": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 20,
+  "name": "Steve Doyle",
+  "phone": "608-783-1204",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506321": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 21,
+  "name": "Jeff Fimreite",
+  "phone": "608-780-9966",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506322": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 22,
+  "name": "Joe Kovacevich",
+  "phone": "608-215-0664",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506323": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 23,
+  "name": "Joseph (Joe) Carty",
+  "phone": "608-799-3701",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506324": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 24,
+  "name": "Kristie Tweed",
+  "phone": "608-317-1331",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506325": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 25,
+  "name": "Dennis \"Jake\" Jacobsen",
+  "phone": "1-715-572-7948",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506326": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 26,
+  "name": "Beth Arentz-Clements",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506327": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 27,
+  "name": "Paul Wuensch",
+  "phone": "608-386-7830",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506328": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 28,
+  "name": "Ron Rothering",
+  "phone": "608-780-3086",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506329": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 29,
+  "name": "Ken Schlimgen",
+  "phone": "608-786-4382",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506330": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "La Crosse",
+  "district": 30,
+  "name": "Dillon Mader",
+  "phone": "608-792-6650",
+  "sourceUrl": "https://lacrossecounty.org/countyboard/members"
+ },
+ "5506501": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "Lafayette",
+  "district": 1,
+  "name": "Larry Ludlum",
+  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+ },
+ "5506502": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "Lafayette",
+  "district": 2,
+  "name": "Mark Pinch",
+  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+ },
+ "5506503": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "Lafayette",
+  "district": 3,
+  "name": "Jack Sauer",
+  "role": "Chairman",
+  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+ },
+ "5506504": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "Lafayette",
+  "district": 4,
+  "name": "John E. Reichling",
+  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+ },
+ "5506505": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "Lafayette",
+  "district": 5,
+  "name": "Luke McGuire",
+  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+ },
+ "5506506": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "Lafayette",
+  "district": 6,
+  "name": "Jeff Berget",
+  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+ },
+ "5506507": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "Lafayette",
+  "district": 7,
+  "name": "Bob Boyle",
+  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+ },
+ "5506508": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "Lafayette",
+  "district": 8,
+  "name": "Jed Gant",
+  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+ },
+ "5506509": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "Lafayette",
+  "district": 9,
+  "name": "Joe Schutte",
+  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+ },
+ "5506510": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "Lafayette",
+  "district": 10,
+  "name": "Gary Benson",
+  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+ },
+ "5506511": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "Lafayette",
+  "district": 11,
+  "name": "Donna Flannery",
+  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+ },
+ "5506512": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "Lafayette",
+  "district": 12,
+  "name": "Carmen McDonald",
+  "role": "2nd Vice Chair",
+  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+ },
+ "5506513": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "Lafayette",
+  "district": 13,
+  "name": "Lee A. Gill",
+  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+ },
+ "5506514": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "Lafayette",
+  "district": 14,
+  "name": "Emmett Reilly",
+  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+ },
+ "5506515": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "Lafayette",
+  "district": 15,
+  "name": "Scott Pedley",
+  "role": "1st Vice Chair",
+  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+ },
+ "5506516": {
+  "asOf": "the county's own page, captured 2026-08-29",
+  "county": "Lafayette",
+  "district": 16,
+  "name": "David Halloran",
+  "sourceUrl": "https://www.lafayettecountywi.org/bos"
+ },
+ "5507101": {
+  "county": "Manitowoc",
+  "district": 1,
+  "email": "jameslillibridge@manitowoccountywi.gov",
+  "name": "James Lillibridge",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/james-lillibridge/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507102": {
+  "county": "Manitowoc",
+  "district": 2,
+  "email": "greggwolf@manitowoccountywi.gov",
+  "name": "Gregg Wolf",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/gregg-wolf/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507103": {
+  "county": "Manitowoc",
+  "district": 3,
+  "email": "ritametzger@manitowoccountywi.gov",
+  "name": "Rita Metzger",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/rita-metzger",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507104": {
+  "county": "Manitowoc",
+  "district": 4,
+  "email": "danielheilman@manitowoccountywi.gov",
+  "name": "Dan Heilman",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/dan-heilman/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507105": {
+  "county": "Manitowoc",
+  "district": 5,
+  "email": "jillpope@manitowoccountywi.gov",
+  "name": "Jill Pope",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/jill-pope/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507106": {
+  "county": "Manitowoc",
+  "district": 6,
+  "email": "christophermcdonell@manitowoccountywi.gov",
+  "name": "Chris McDonell",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/chris-mcdonell/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507107": {
+  "county": "Manitowoc",
+  "district": 7,
+  "email": "scottschiesl@manitowoccountywi.gov",
+  "name": "Scott Schiesl",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/scott-schiesl/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507108": {
+  "county": "Manitowoc",
+  "district": 8,
+  "email": "sup.paulhacker@manitowoccountywi.gov",
+  "name": "Paul Hacker",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/paul-hacker/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507109": {
+  "county": "Manitowoc",
+  "district": 9,
+  "email": "kensitkiewitz@manitowoccountywi.gov",
+  "name": "Ken Sitkiewitz",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/ken-sitkiewitz",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507110": {
+  "county": "Manitowoc",
+  "district": 10,
+  "email": "donzimmer@manitowoccountywi.gov",
+  "name": "Don Zimmer",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/don-zimmer",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507111": {
+  "county": "Manitowoc",
+  "district": 11,
+  "email": "christopherdallas@manitowoccountywi.gov",
+  "name": "Chris Dallas",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/chris-dallas/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507112": {
+  "county": "Manitowoc",
+  "district": 12,
+  "email": "kevinbehnke@manitowoccountywi.gov",
+  "name": "Kevin Behnke",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/kevin-behnke",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507113": {
+  "county": "Manitowoc",
+  "district": 13,
+  "email": "jonneils@manitowoccountywi.gov",
+  "name": "Jonathan Neils",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/jonathan-neils",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507114": {
+  "county": "Manitowoc",
+  "district": 14,
+  "email": "larrybonde@manitowoccountywi.gov",
+  "name": "Larry Bonde",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/larry-bonde/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507115": {
+  "county": "Manitowoc",
+  "district": 15,
+  "email": "dylanhammel@manitowoccountywi.gov",
+  "name": "Dylan Hammel",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/dylan-hammel/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507116": {
+  "county": "Manitowoc",
+  "district": 16,
+  "email": "bradbusse@manitowoccountywi.gov",
+  "name": "Brad Busse",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/brad-busse/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507117": {
+  "county": "Manitowoc",
+  "district": 17,
+  "email": "susiemaresh@manitowoccountywi.gov",
+  "name": "Susie Maresh",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/susie-maresh",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507118": {
+  "county": "Manitowoc",
+  "district": 18,
+  "email": "gregriederer@manitowoccountywi.gov",
+  "name": "Greg Riederer",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/greg-riederer/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507119": {
+  "county": "Manitowoc",
+  "district": 19,
+  "email": "shaesortwell@manitowoccountywi.gov",
+  "name": "Shae Sortwell",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/shae-sortwell/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507120": {
+  "county": "Manitowoc",
+  "district": 20,
+  "email": "andrewschwerma@manitowoccountywi.gov",
+  "name": "Andrew Schwerma",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/andrew-schwerma/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507121": {
+  "county": "Manitowoc",
+  "district": 21,
+  "email": "matthewphipps@manitowoccountywi.gov",
+  "name": "Matthew Phipps",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/matthew-phipps/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507122": {
+  "county": "Manitowoc",
+  "district": 22,
+  "email": "mikegrambow@manitowoccountywi.gov",
+  "name": "Mike Grambow",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/mike-grambow/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507123": {
+  "county": "Manitowoc",
+  "district": 23,
+  "email": "dougklein@manitowoccountywi.gov",
+  "name": "Douglas Klein",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/douglas-klein",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507124": {
+  "county": "Manitowoc",
+  "district": 24,
+  "email": "donweiss@manitowoccountywi.gov",
+  "name": "Don Weiss",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/don-weiss/",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
+ },
+ "5507125": {
+  "county": "Manitowoc",
+  "district": 25,
+  "email": "bonnieshimulunas@manitowoccountywi.gov",
+  "name": "Bonnie Shimulunas",
+  "profileUrl": "https://manitowoccountywi.gov/personnel/bonnie-shimulunas",
+  "sourceUrl": "https://manitowoccountywi.gov/departments/county-board-of-supervisors/supervisor-list/"
  },
  "5507501": {
   "county": "Marinette",
@@ -2084,6 +4012,120 @@
   "profileUrl": "https://county.milwaukee.gov/EN/Board-of-Supervisors/Members/Deanna-Alexander-18th-District",
   "sourceUrl": "https://services2.arcgis.com/s1wgJQKbKJihhhaT/arcgis/rest/services/Milwaukee_County_Supervisory_Districts/FeatureServer/46"
  },
+ "5508101": {
+  "county": "Monroe",
+  "district": 1,
+  "email": "district.01@co.monroe.wi.us",
+  "name": "Cedric Schnitzler",
+  "role": "County Board Chair",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508102": {
+  "county": "Monroe",
+  "district": 2,
+  "email": "district.02@co.monroe.wi.us",
+  "name": "David Pierce",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508103": {
+  "county": "Monroe",
+  "district": 3,
+  "email": "district.03@co.monroe.wi.us",
+  "name": "Nodji VanWychen",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508104": {
+  "county": "Monroe",
+  "district": 4,
+  "email": "district.04@co.monroe.wi.us",
+  "name": "Jason Jandt",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508105": {
+  "county": "Monroe",
+  "district": 5,
+  "email": "district.05@co.monroe.wi.us",
+  "name": "Wallace Habhegger",
+  "role": "County Board Vice-Chair",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508106": {
+  "county": "Monroe",
+  "district": 6,
+  "email": "district.06@co.monroe.wi.us",
+  "name": "David Kuderer",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508107": {
+  "county": "Monroe",
+  "district": 7,
+  "email": "district.07@co.monroe.wi.us",
+  "name": "Toni Wissestad",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508108": {
+  "county": "Monroe",
+  "district": 8,
+  "email": "district.08@co.monroe.wi.us",
+  "name": "Zachariah Zebell",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508109": {
+  "county": "Monroe",
+  "district": 9,
+  "email": "district.09@co.monroe.wi.us",
+  "name": "Todd Sparks",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508110": {
+  "county": "Monroe",
+  "district": 10,
+  "email": "district.10@co.monroe.wi.us",
+  "name": "Mary Cook",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508111": {
+  "county": "Monroe",
+  "district": 11,
+  "email": "district.11@co.monroe.wi.us",
+  "name": "Adam Balz",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508112": {
+  "county": "Monroe",
+  "district": 12,
+  "email": "district.12@co.monroe.wi.us",
+  "name": "Eric Devine",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508113": {
+  "county": "Monroe",
+  "district": 13,
+  "email": "district.13@co.monroe.wi.us",
+  "name": "Remy Gomez",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508114": {
+  "county": "Monroe",
+  "district": 14,
+  "email": "district.14@co.monroe.wi.us",
+  "name": "James Kuhn",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508115": {
+  "county": "Monroe",
+  "district": 15,
+  "email": "district.15@co.monroe.wi.us",
+  "name": "Joey Esterline",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
+ "5508116": {
+  "county": "Monroe",
+  "district": 16,
+  "email": "district.16@co.monroe.wi.us",
+  "name": "Doug Rogalla",
+  "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors"
+ },
  "5508501": {
   "county": "Oneida",
   "district": 1,
@@ -2213,6 +4255,382 @@
   "name": "Ted Cushing",
   "sourceUrl": "https://www.oneidacountywi.gov/government/cb/"
  },
+ "5508701": {
+  "county": "Outagamie",
+  "district": 1,
+  "name": "Cathy Thompson",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508702": {
+  "county": "Outagamie",
+  "district": 2,
+  "name": "Dana Johnson",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508703": {
+  "county": "Outagamie",
+  "district": 3,
+  "name": "Amy Ristow",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508704": {
+  "county": "Outagamie",
+  "district": 4,
+  "name": "Katrin Patience",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508705": {
+  "county": "Outagamie",
+  "district": 5,
+  "name": "Dan Gabrielson",
+  "role": "County Board Chairperson",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508706": {
+  "county": "Outagamie",
+  "district": 6,
+  "name": "John Kostelny",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508707": {
+  "county": "Outagamie",
+  "district": 7,
+  "name": "Lee Hammen",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508708": {
+  "county": "Outagamie",
+  "district": 8,
+  "name": "Karen Lawrence",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508709": {
+  "county": "Outagamie",
+  "district": 9,
+  "name": "Justin Krueger",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508710": {
+  "county": "Outagamie",
+  "district": 10,
+  "name": "Christine Lamers",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508711": {
+  "county": "Outagamie",
+  "district": 11,
+  "name": "Ryan Ferguson",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508712": {
+  "county": "Outagamie",
+  "district": 12,
+  "name": "Jeffrey McCabe",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508713": {
+  "county": "Outagamie",
+  "district": 13,
+  "name": "Jason Wegand",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508714": {
+  "county": "Outagamie",
+  "district": 14,
+  "name": "Timothy Hermes",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508715": {
+  "county": "Outagamie",
+  "district": 15,
+  "name": "Sara MacDonald",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508716": {
+  "county": "Outagamie",
+  "district": 16,
+  "name": "Jerry Zabronsky",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508717": {
+  "county": "Outagamie",
+  "district": 17,
+  "name": "Chris Croatt",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508718": {
+  "county": "Outagamie",
+  "district": 18,
+  "name": "Cathy Spears",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508719": {
+  "county": "Outagamie",
+  "district": 19,
+  "name": "Jayme Heiser",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508720": {
+  "county": "Outagamie",
+  "district": 20,
+  "name": "Mark Mitchell",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508721": {
+  "county": "Outagamie",
+  "district": 21,
+  "name": "John Cuff",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508722": {
+  "county": "Outagamie",
+  "district": 22,
+  "name": "Joy Hagen",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508723": {
+  "county": "Outagamie",
+  "district": 23,
+  "name": "Ronald Klemp",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508724": {
+  "county": "Outagamie",
+  "district": 24,
+  "name": "Steve Thiede",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508725": {
+  "county": "Outagamie",
+  "district": 25,
+  "name": "Carla Hales",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508726": {
+  "county": "Outagamie",
+  "district": 26,
+  "name": "Sarah Weinberg",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508727": {
+  "county": "Outagamie",
+  "district": 27,
+  "name": "Dean Culbertson",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508728": {
+  "county": "Outagamie",
+  "district": 28,
+  "name": "Yvonne Monfils",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508729": {
+  "county": "Outagamie",
+  "district": 29,
+  "name": "Jayson Winterfeldt",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508730": {
+  "county": "Outagamie",
+  "district": 30,
+  "name": "Daniel Nejedlo",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508731": {
+  "county": "Outagamie",
+  "district": 31,
+  "name": "Dennis Clegg",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508732": {
+  "county": "Outagamie",
+  "district": 32,
+  "name": "Pamela Saulnier",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508733": {
+  "county": "Outagamie",
+  "district": 33,
+  "name": "Debbie Vander Heiden",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508734": {
+  "county": "Outagamie",
+  "district": 34,
+  "name": "Patrick Amerson",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508735": {
+  "county": "Outagamie",
+  "district": 35,
+  "name": "Dustin Koury",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508736": {
+  "county": "Outagamie",
+  "district": 36,
+  "name": "Rick Lautenschlager",
+  "role": "Vice-Chairperson",
+  "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"
+ },
+ "5508901": {
+  "county": "Ozaukee",
+  "district": 1,
+  "name": "Thomas R. Bichler",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508902": {
+  "county": "Ozaukee",
+  "district": 2,
+  "name": "Bruce S. Paape",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508903": {
+  "county": "Ozaukee",
+  "district": 3,
+  "name": "Marcia Nosko",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508904": {
+  "county": "Ozaukee",
+  "district": 4,
+  "name": "Lee Schlenvogt",
+  "role": "Chairperson",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508905": {
+  "county": "Ozaukee",
+  "district": 5,
+  "name": "Scott R. Fischer",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508906": {
+  "county": "Ozaukee",
+  "district": 6,
+  "name": "Richard C. Nelson",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508907": {
+  "county": "Ozaukee",
+  "district": 7,
+  "name": "Tony Matera",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508908": {
+  "county": "Ozaukee",
+  "district": 8,
+  "name": "Dave Larson",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508909": {
+  "county": "Ozaukee",
+  "district": 9,
+  "name": "Tom Grabow",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508910": {
+  "county": "Ozaukee",
+  "district": 10,
+  "name": "Daniel E. Vogel",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508911": {
+  "county": "Ozaukee",
+  "district": 11,
+  "name": "Kevin Kennedy",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508912": {
+  "county": "Ozaukee",
+  "district": 12,
+  "name": "Melissa Custer",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508913": {
+  "county": "Ozaukee",
+  "district": 13,
+  "name": "Todd Ambs",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508914": {
+  "county": "Ozaukee",
+  "district": 14,
+  "name": "Derek DeMent",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508915": {
+  "county": "Ozaukee",
+  "district": 15,
+  "name": "Timothy Maguire",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508916": {
+  "county": "Ozaukee",
+  "district": 16,
+  "name": "Connie Kincaide",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508917": {
+  "county": "Ozaukee",
+  "district": 17,
+  "name": "Jack Arnett",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508918": {
+  "county": "Ozaukee",
+  "district": 18,
+  "name": "Eric Stelter",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508919": {
+  "county": "Ozaukee",
+  "district": 19,
+  "name": "Jennifer Mackinnon",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508920": {
+  "county": "Ozaukee",
+  "district": 20,
+  "name": "Monis Khan",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508921": {
+  "county": "Ozaukee",
+  "district": 21,
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board",
+  "vacant": true
+ },
+ "5508922": {
+  "county": "Ozaukee",
+  "district": 22,
+  "name": "Rob Holyoke",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508923": {
+  "county": "Ozaukee",
+  "district": 23,
+  "name": "Kurt Schoessow",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508924": {
+  "county": "Ozaukee",
+  "district": 24,
+  "name": "Jeffrey Hansher",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508925": {
+  "county": "Ozaukee",
+  "district": 25,
+  "name": "Matthew Dolsky",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
+ "5508926": {
+  "county": "Ozaukee",
+  "district": 26,
+  "name": "Patrick Foy",
+  "role": "Vice-Chairperson",
+  "sourceUrl": "https://ozaukeecounty.gov/701/County-Board"
+ },
  "5509501": {
   "county": "Polk",
   "district": 1,
@@ -2277,7 +4695,7 @@
   "county": "Polk",
   "district": 11,
   "name": "Jay Luke",
-  "role": "2Nd Vice Chair",
+  "role": "2nd Vice Chair",
   "sourceUrl": "https://www.polkcountywi.gov/government/county_board_of_supervisors/index.php"
  },
  "5509512": {
@@ -2303,7 +4721,7 @@
   "county": "Polk",
   "district": 15,
   "name": "John Bonneprise",
-  "role": "1St Vice Chair",
+  "role": "1st Vice Chair",
   "sourceUrl": "https://www.polkcountywi.gov/government/county_board_of_supervisors/index.php"
  },
  "5509701": {
@@ -2807,6 +5225,183 @@
   "name": "Daniel J. McGuire",
   "sourceUrl": "https://richlandcountywi.gov/index.asp?SEC=DB387A4E-E124-4584-B32C-2C95880C63F0"
  },
+ "5510501": {
+  "county": "Rock",
+  "district": 1,
+  "name": "Patricia Fleming",
+  "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors"
+ },
+ "5510502": {
+  "county": "Rock",
+  "district": 2,
+  "name": "Doug Sutter",
+  "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors"
+ },
+ "5510503": {
+  "county": "Rock",
+  "district": 3,
+  "name": "Leanne Cantwell",
+  "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors"
+ },
+ "5510504": {
+  "county": "Rock",
+  "district": 4,
+  "name": "Christine Fugelseth",
+  "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors"
+ },
+ "5510505": {
+  "county": "Rock",
+  "district": 5,
+  "name": "Ken Smith",
+  "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors"
+ },
+ "5510506": {
+  "county": "Rock",
+  "district": 6,
+  "name": "Steven Brown",
+  "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors"
+ },
+ "5510507": {
+  "county": "Rock",
+  "district": 7,
+  "name": "Ron Woodman",
+  "role": "Second Vice Chair",
+  "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors"
+ },
+ "5510508": {
+  "county": "Rock",
+  "district": 8,
+  "name": "Bryce O'Leary",
+  "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors"
+ },
+ "5510509": {
+  "county": "Rock",
+  "district": 9,
+  "name": "Lou Peer",
+  "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors"
+ },
+ "5510510": {
+  "county": "Rock",
+  "district": 10,
+  "name": "Brian Knudson",
+  "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors"
+ },
+ "5510511": {
+  "county": "Rock",
+  "district": 11,
+  "name": "Brandon Buchanan",
+  "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors"
+ },
+ "5510512": {
+  "county": "Rock",
+  "district": 12,
+  "name": "Rodolfo Abarca",
+  "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors"
+ },
+ "5510513": {
+  "county": "Rock",
+  "district": 13,
+  "name": "Nikita Ford",
+  "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors"
+ },
+ "5510514": {
+  "county": "Rock",
+  "district": 14,
+  "name": "Philip Gorman",
+  "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors"
+ },
+ "5510515": {
+  "county": "Rock",
+  "district": 15,
+  "name": "Kevin Leavy",
+  "role": "Chair",
+  "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors"
+ },
+ "5510516": {
+  "county": "Rock",
+  "district": 16,
+  "name": "Willow Wallis",
+  "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors"
+ },
+ "5510517": {
+  "county": "Rock",
+  "district": 17,
+  "name": "Kim Schneider",
+  "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors"
+ },
+ "5510518": {
+  "county": "Rock",
+  "district": 18,
+  "name": "RJ Sutterlin",
+  "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors"
+ },
+ "5510519": {
+  "county": "Rock",
+  "district": 19,
+  "name": "Brent Waters",
+  "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors"
+ },
+ "5510520": {
+  "county": "Rock",
+  "district": 20,
+  "name": "Garrik Harwick",
+  "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors"
+ },
+ "5510521": {
+  "county": "Rock",
+  "district": 21,
+  "name": "Mark Bobzien",
+  "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors"
+ },
+ "5510522": {
+  "county": "Rock",
+  "district": 22,
+  "name": "Mike Schwarz",
+  "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors"
+ },
+ "5510523": {
+  "county": "Rock",
+  "district": 23,
+  "name": "Barbara Tillman",
+  "role": "Vice Chair",
+  "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors"
+ },
+ "5510524": {
+  "county": "Rock",
+  "district": 24,
+  "name": "Madeline Heise",
+  "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors"
+ },
+ "5510525": {
+  "county": "Rock",
+  "district": 25,
+  "name": "Richard Bostwick",
+  "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors"
+ },
+ "5510526": {
+  "county": "Rock",
+  "district": 26,
+  "name": "Erica Boehlke",
+  "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors"
+ },
+ "5510527": {
+  "county": "Rock",
+  "district": 27,
+  "name": "Tom Brien",
+  "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors"
+ },
+ "5510528": {
+  "county": "Rock",
+  "district": 28,
+  "name": "Sandy Welch",
+  "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors"
+ },
+ "5510529": {
+  "county": "Rock",
+  "district": 29,
+  "name": "Kathy Schulz",
+  "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors"
+ },
  "5510701": {
   "county": "Rusk",
   "district": 1,
@@ -2922,6 +5517,251 @@
   "name": "Ron Freeman",
   "role": "Chairman",
   "sourceUrl": "https://ruskcounty.org/supervisors"
+ },
+ "5511101": {
+  "county": "Sauk",
+  "district": 1,
+  "email": "wally.czuprynko@saukcountywi.gov",
+  "name": "Wally Czuprynko",
+  "phone": "608-432-5123",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511102": {
+  "county": "Sauk",
+  "district": 2,
+  "email": "terry.spencer@saukcountywi.gov",
+  "name": "Terry M. Spencer",
+  "phone": "608-963-8572",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511103": {
+  "county": "Sauk",
+  "district": 3,
+  "email": "brock.pelton@saukcountywi.gov",
+  "name": "Brock Pelton",
+  "phone": "608-415-8565",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511104": {
+  "county": "Sauk",
+  "district": 4,
+  "email": "palmer.schroeder@saukcountywi.gov",
+  "name": "Palmer Schroeder",
+  "phone": "608-393-1022",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511105": {
+  "county": "Sauk",
+  "district": 5,
+  "email": "peter.kinsman@saukcountywi.gov",
+  "name": "Peter Kinsman",
+  "phone": "608-344-8988",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511106": {
+  "county": "Sauk",
+  "district": 6,
+  "email": "rebecca.klitzke@saukcountywi.gov",
+  "name": "Rebecca Klitzke",
+  "phone": "608-524-5644",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511107": {
+  "county": "Sauk",
+  "district": 7,
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp",
+  "vacant": true
+ },
+ "5511108": {
+  "county": "Sauk",
+  "district": 8,
+  "email": "john.deitrich@saukcountywi.gov",
+  "name": "John M. Deitrich",
+  "phone": "(608) 415-3829",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511109": {
+  "county": "Sauk",
+  "district": 9,
+  "email": "mark.waldon@saukcountywi.gov",
+  "name": "Mark Waldon",
+  "phone": "608-495-0070",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511110": {
+  "county": "Sauk",
+  "district": 10,
+  "email": "marty.krueger@saukcountywi.gov",
+  "name": "Marty Krueger",
+  "phone": "608-963-3565",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511111": {
+  "county": "Sauk",
+  "district": 11,
+  "email": "michael.leuth@saukcountywi.gov",
+  "name": "Michael Leuth",
+  "phone": "608-415-1792",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511112": {
+  "county": "Sauk",
+  "district": 12,
+  "email": "david.clemens@saukcountywi.gov",
+  "name": "David Clemens",
+  "phone": "608-408-8941",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511113": {
+  "county": "Sauk",
+  "district": 13,
+  "email": "robert.prosser@saukcountywi.gov",
+  "name": "Robert Prosser",
+  "phone": "815-218-3693",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511114": {
+  "county": "Sauk",
+  "district": 14,
+  "email": "bobby.hansen@saukcountywi.gov",
+  "name": "Bobby Hansen",
+  "phone": "319-530-3959",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511115": {
+  "county": "Sauk",
+  "district": 15,
+  "email": "richard.cross@saukcountywi.gov",
+  "name": "Richard Cross",
+  "phone": "608-512-8086",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511116": {
+  "county": "Sauk",
+  "district": 16,
+  "email": "thomas.dorner@saukcountywi.gov",
+  "name": "Thomas Dorner",
+  "phone": "608-408-0147",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511117": {
+  "county": "Sauk",
+  "district": 17,
+  "email": "joan.fordham@saukcountywi.gov",
+  "name": "Joan Fordham",
+  "phone": "608-356-8927",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511118": {
+  "county": "Sauk",
+  "district": 18,
+  "email": "sam.pocernich@saukcountywi.gov",
+  "name": "Sam Pocernich",
+  "phone": "608-692-9323",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511119": {
+  "county": "Sauk",
+  "district": 19,
+  "email": "jeff.sederstrom@saukcountywi.gov",
+  "name": "Jeff Sederstrom",
+  "phone": "608-356-7567",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511120": {
+  "county": "Sauk",
+  "district": 20,
+  "email": "timothy.mccumber@saukcountywi.gov",
+  "name": "Timothy McCumber",
+  "phone": "608-963-6581",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511121": {
+  "county": "Sauk",
+  "district": 21,
+  "email": "bernadette.greenwood@saukcountywi.gov",
+  "name": "Bernadette Greenwood",
+  "phone": "608-448-6684",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511122": {
+  "county": "Sauk",
+  "district": 22,
+  "email": "jeff.nachreiner@saukcountywi.gov",
+  "name": "Jeff Nachreiner",
+  "phone": "608-546-2287",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511123": {
+  "county": "Sauk",
+  "district": 23,
+  "email": "ray.ring@saukcountywi.gov",
+  "name": "Ray Ring",
+  "phone": "608-588-4073",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511124": {
+  "county": "Sauk",
+  "district": 24,
+  "email": "gaile.burchill@saukcountywi.gov",
+  "name": "Gaile Burchill",
+  "phone": "608-588-0008",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511125": {
+  "county": "Sauk",
+  "district": 25,
+  "email": "brian.peper@saukcountywi.gov",
+  "name": "Brian L. Peper",
+  "phone": "608-415-3751",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511126": {
+  "county": "Sauk",
+  "district": 26,
+  "email": "brandon.lohr@saukcountywi.gov",
+  "name": "Brandon Lohr",
+  "phone": "608-370-0755",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511127": {
+  "county": "Sauk",
+  "district": 27,
+  "email": "scott.alexander@saukcountywi.gov",
+  "name": "Scott Kevin Alexander",
+  "phone": "608-408-3870",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511128": {
+  "county": "Sauk",
+  "district": 28,
+  "email": "susie.tatone@saukcountywi.gov",
+  "name": "Susie Tatone",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511129": {
+  "county": "Sauk",
+  "district": 29,
+  "email": "aaron.evert@saukcountywi.gov",
+  "name": "Aaron Evert",
+  "phone": "608-963-4067",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511130": {
+  "county": "Sauk",
+  "district": 30,
+  "email": "joel.chrisler@saukcountywi.gov",
+  "name": "Joel Chrisler",
+  "phone": "608-712-5975",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511131": {
+  "county": "Sauk",
+  "district": 31,
+  "email": "andy.arntsen@saukcountywi.gov",
+  "name": "Andy Arntsen",
+  "phone": "608-386-8181",
+  "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
  },
  "5511501": {
   "county": "Shawano",
@@ -3085,123 +5925,385 @@
   "name": "Steve Pollock",
   "sourceUrl": "https://www.co.shawano.wi.us/county_board/"
  },
+ "5511701": {
+  "county": "Sheboygan",
+  "district": 1,
+  "email": "brian.smith@sheboygancounty.com",
+  "name": "Brian Smith",
+  "phone": "(414) 581-5353",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-1",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511702": {
+  "county": "Sheboygan",
+  "district": 2,
+  "email": "paul.gruber@sheboygancounty.com",
+  "name": "Paul Gruber",
+  "phone": "(920) 207-4719",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-2",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511703": {
+  "county": "Sheboygan",
+  "district": 3,
+  "name": "Kurt Jensen",
+  "phone": "(608) 225-0692",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-3",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511704": {
+  "county": "Sheboygan",
+  "district": 4,
+  "email": "marilyn.montemayor@sheboygancounty.com",
+  "name": "Marilyn Montemayor",
+  "phone": "(920) 912-5855",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-4",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511705": {
+  "county": "Sheboygan",
+  "district": 5,
+  "email": "rebecca.clarke@sheboygancounty.com",
+  "name": "Rebecca Clarke",
+  "phone": "(920) 395-6609",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-5",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511706": {
+  "county": "Sheboygan",
+  "district": 6,
+  "email": "henry.nelson@sheboygancounty.com",
+  "name": "Henry Nelson",
+  "phone": "(920) 457-6766",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-6",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511707": {
+  "county": "Sheboygan",
+  "district": 7,
+  "email": "drew.phillips@sheboygancounty.com",
+  "name": "Drew R. Phillips",
+  "phone": "(920) 459-3637",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-7",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511708": {
+  "county": "Sheboygan",
+  "district": 8,
+  "email": "vern.koch@sheboygancounty.com",
+  "name": "Vernon C. Koch",
+  "phone": "(920) 334-0017",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-8",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511709": {
+  "county": "Sheboygan",
+  "district": 9,
+  "email": "wendy.schobert@sheboygancounty.com",
+  "name": "Wendy A. Schobert",
+  "phone": "(920) 917-4333",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-9",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511710": {
+  "county": "Sheboygan",
+  "district": 10,
+  "email": "curt.brauer@sheboygancounty.com",
+  "name": "Curt Brauer",
+  "phone": "(414) 514-3567",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-10",
+  "role": "Vice Chairperson",
+  "roleSourceUrl": "https://www.sheboygancounty.com/departments/county-board/",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511711": {
+  "county": "Sheboygan",
+  "district": 11,
+  "email": "gerald.jorgensen@sheboygancounty.com",
+  "name": "Gerald Jorgensen",
+  "phone": "(920) 452-7048",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-11",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511712": {
+  "county": "Sheboygan",
+  "district": 12,
+  "email": "suzanne.speltz@sheboygancounty.com",
+  "name": "Suzanne Speltz",
+  "phone": "(920) 786-2202",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-12",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511713": {
+  "county": "Sheboygan",
+  "district": 13,
+  "email": "charlette.nennig@sheboygancounty.com",
+  "name": "Charlette Nennig",
+  "phone": "(920) 912-6093",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-13",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511714": {
+  "county": "Sheboygan",
+  "district": 14,
+  "email": "Keith.Abler@SheboyganCounty.com",
+  "name": "Keith Abler",
+  "phone": "(920) 207-9351",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-14",
+  "role": "Chairperson",
+  "roleSourceUrl": "https://www.sheboygancounty.com/departments/county-board/",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511715": {
+  "county": "Sheboygan",
+  "district": 15,
+  "email": "joseph.liebau@sheboygancounty.com",
+  "name": "Joe Liebau Jr",
+  "phone": "(920) 450-1791",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-15",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511716": {
+  "county": "Sheboygan",
+  "district": 16,
+  "email": "john.nelson@sheboygancounty.com",
+  "name": "John Nelson",
+  "phone": "(920) 980-2539",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-16",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511717": {
+  "county": "Sheboygan",
+  "district": 17,
+  "email": "Thomas.Wegner@SheboyganCounty.com",
+  "name": "Thomas G. Wegner",
+  "phone": "(920) 892-4629",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-17",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511718": {
+  "county": "Sheboygan",
+  "district": 18,
+  "email": "christian.ellis@sheboygancounty.com",
+  "name": "Christian Ellis",
+  "phone": "(920) 207-1138",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-18",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511719": {
+  "county": "Sheboygan",
+  "district": 19,
+  "email": "stephanie.arndt@sheboygancounty.com",
+  "name": "Stephanie Arndt",
+  "phone": "(920) 287-4975",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-19",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511720": {
+  "county": "Sheboygan",
+  "district": 20,
+  "email": "carl.nonhof@sheboygancounty.com",
+  "name": "Carl Nonhof",
+  "phone": "(920) 459-7990",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-20",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511721": {
+  "county": "Sheboygan",
+  "district": 21,
+  "email": "jon.kuhlow@sheboygancounty.com",
+  "name": "Jon Kuhlow",
+  "phone": "(920) 917-8353",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-21",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511722": {
+  "county": "Sheboygan",
+  "district": 22,
+  "email": "jay.vanderweele@sheboygancounty.com",
+  "name": "Jay Vander Weele",
+  "phone": "(920) 946-4812",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-22",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511723": {
+  "county": "Sheboygan",
+  "district": 23,
+  "email": "jackie.veldman@sheboygancounty.com",
+  "name": "Jackie Veldman",
+  "phone": "(920) 980-3093",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-23",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511724": {
+  "county": "Sheboygan",
+  "district": 24,
+  "email": "William.Goehring@SheboyganCounty.com",
+  "name": "William C. Goehring",
+  "phone": "(920) 994-4749",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-24",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
+ "5511725": {
+  "county": "Sheboygan",
+  "district": 25,
+  "email": "david.otte@sheboygancounty.com",
+  "name": "David Otte",
+  "phone": "(920) 246-2103",
+  "profileUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors/district-25",
+  "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/county-board-supervisors"
+ },
  "5511901": {
+  "asOf": "the county's own page, captured 2026-08-29",
   "county": "Taylor",
   "district": 1,
   "email": "lisa.carbaugh@co.taylor.wi.us",
   "name": "Lisa Carbaugh",
+  "phone": "715-965-1980",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511902": {
+  "asOf": "the county's own page, captured 2026-08-29",
   "county": "Taylor",
   "district": 2,
   "email": "tim.hansen@co.taylor.wi.us",
   "name": "Tim Hansen",
+  "phone": "715-965-7662",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511903": {
+  "asOf": "the county's own page, captured 2026-08-29",
   "county": "Taylor",
   "district": 3,
   "email": "sue.swiantek@co.taylor.wi.us",
   "name": "Susan Swiantek",
+  "phone": "715-560-9409",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511904": {
+  "asOf": "the county's own page, captured 2026-08-29",
   "county": "Taylor",
   "district": 4,
   "email": "michael.bub@co.taylor.wi.us",
   "name": "Michael Bub",
+  "phone": "715-965-7748",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511905": {
+  "asOf": "the county's own page, captured 2026-08-29",
   "county": "Taylor",
   "district": 5,
   "email": "jim.metz@co.taylor.wi.us",
   "name": "Loren (Jim) Metz",
+  "phone": "715-748-0740",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511906": {
+  "asOf": "the county's own page, captured 2026-08-29",
   "county": "Taylor",
   "district": 6,
   "email": "scott.mildbrand@co.taylor.wi.us",
   "name": "Scott Mildbrand",
+  "phone": "715-748-3988",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511907": {
+  "asOf": "the county's own page, captured 2026-08-29",
   "county": "Taylor",
   "district": 7,
   "email": "lorie.floyd@co.taylor.wi.us",
   "name": "Lorie Floyd",
+  "phone": "608-412-2974",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511908": {
+  "asOf": "the county's own page, captured 2026-08-29",
   "county": "Taylor",
   "district": 8,
   "email": "chuck.zenner@co.taylor.wi.us",
   "name": "Charles Zenner",
+  "phone": "715-678-2172",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511909": {
+  "asOf": "the county's own page, captured 2026-08-29",
   "county": "Taylor",
   "district": 9,
   "email": "diane.albrecht@co.taylor.wi.us",
   "name": "Diane J. Albrecht",
+  "phone": "715-748-5471",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511910": {
+  "asOf": "the county's own page, captured 2026-08-29",
   "county": "Taylor",
   "district": 10,
   "email": "catherine.lemke@co.taylor.wi.us",
   "name": "Catherine Lemke",
+  "phone": "715-748-5694",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511911": {
+  "asOf": "the county's own page, captured 2026-08-29",
   "county": "Taylor",
   "district": 11,
   "email": "jim.gebauer@co.taylor.wi.us",
   "name": "James Gebauer",
+  "phone": "715-748-4871",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511912": {
+  "asOf": "the county's own page, captured 2026-08-29",
   "county": "Taylor",
   "district": 12,
   "email": "rollie.thums@co.taylor.wi.us",
   "name": "Rollie Thums",
+  "phone": "715-427-5809",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511913": {
+  "asOf": "the county's own page, captured 2026-08-29",
   "county": "Taylor",
   "district": 13,
   "email": "bud.suckow@co.taylor.wi.us",
   "name": "Harvey 'Bud' Suckow",
+  "phone": "715-897-4514",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511914": {
+  "asOf": "the county's own page, captured 2026-08-29",
   "county": "Taylor",
   "district": 14,
   "email": "karen.cummings@co.taylor.wi.us",
   "name": "Karen Cummings",
+  "phone": "715-668-5226",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511915": {
+  "asOf": "the county's own page, captured 2026-08-29",
   "county": "Taylor",
   "district": 15,
   "email": "lynn.rosemeyer@co.taylor.wi.us",
   "name": "Lynette Rosemeyer",
+  "phone": "715-827-0027",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511916": {
+  "asOf": "the county's own page, captured 2026-08-29",
   "county": "Taylor",
   "district": 16,
   "email": "darrell.thompson@co.taylor.wi.us",
   "name": "Darrell Thompson",
+  "phone": "715-644-8285",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5511917": {
+  "asOf": "the county's own page, captured 2026-08-29",
   "county": "Taylor",
   "district": 17,
   "email": "rod.adams@co.taylor.wi.us",
   "name": "Rodney Adams",
+  "phone": "715-678-2397",
   "sourceUrl": "https://co.taylor.wi.us/directory/county-board/"
  },
  "5512101": {

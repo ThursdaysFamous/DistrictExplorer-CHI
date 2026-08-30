@@ -46,10 +46,16 @@ by two features is an interior border and is dropped; survivors chain back into
 closed rings. Doing it here means the browser ships one feature with no interior
 edges left to cancel. Disjoint regions fall out of the same walk — each closed
 ring is chained independently — and group_rings() nests them into a MultiPolygon.
-Wisconsin's 20 roster counties exercise that path from day one: the shipped
-file is a MultiPolygon of 9 separate regions, each verified by anchor, not by
-eye — a region mis-nested as a hole renders identically and answers False to
-every containment test inside it (the reference fork's island lesson).
+Wisconsin's roster counties exercise that path from day one — the file was a
+MultiPolygon of 9 separate regions when 20 counties shipped — and the count
+moves in BOTH directions as counties join. Both moves landed on 2026-08-29:
+Iowa merged two regions into one, because it borders served Grant and Richland
+on one side and served Dane and Green on the other, and Marinette opened a new
+detached one in the northeast. Five went to four went back to five.
+READ THE REGION COUNT FROM `--check`, NEVER FROM THIS SENTENCE. Each region is
+verified by anchor, not by eye — a region mis-nested as a hole renders
+identically and answers False to every containment test inside it (the
+reference fork's island lesson).
 
 Usage:
     python3 build_metro_outline.py                 # writes data/app/metro-outline.json
@@ -97,10 +103,13 @@ TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
 # the other — the reference instance greyed out four counties whose layers were
 # answering because this list was not updated with them.
 METRO_COUNTY_FIPS = (
-    "007", "009", "013", "025", "033", "035", "043", "045",
-    "055", "057", "061", "075", "077", "079", "085", "095",
-    "097", "099", "101", "103", "107", "115", "119", "121",
-    "123", "125", "127", "129", "131", "133", "137", "139", "141",
+    "001", "007", "009", "013", "021", "023", "025", "027",
+    "033", "035", "039", "043", "045", "047", "049", "055",
+    "057", "059", "061", "063", "065", "071", "075", "077",
+    "079", "081", "085", "087", "089", "095", "097", "099",
+    "101", "103", "105", "107", "111", "115", "117", "119",
+    "121", "123", "125", "127", "129", "131", "133", "137",
+    "139", "141",
 )
 STATE_FIPS = "55"
 # No dispatch entries: county-board is ONE statewide layer here, not a
@@ -125,6 +134,22 @@ REQUEST_TIMEOUT = 180
 # tolerance that ever moved the edge past an anchor would fail the build.
 SIMPLIFY_TOLERANCE_M = 25
 
+# ADAMS IS WISCONSIN'S FIRST ENCLAVE (2026-08-29, when Columbia's roster
+# shipped) and it is a HOLE in the wash rather than a bite out of its edge:
+# every one of Adams's neighbours — Juneau, Wood, Portage, Waushara, Marquette
+# and now Columbia — serves, so the dissolve closes a ring around it. Columbia
+# moved the topology TWICE in the same join, and NEITHER MOVE WAS PREDICTED
+# BEFORE THE BUILD RAN: it borders Dane on one side and Juneau and Marquette on
+# the other, so it MERGED the southeast region into the west-central one, and
+# that merge is what sealed Adams. THE RING COUNT DID NOT MOVE — six before and
+# six after — because the region lost and the hole gained cancel; what moved is
+# the POLYGON count, six to five. A count that stands still is not a topology
+# that stood still, so read BOTH from `build_metro_outline.py --check` and from
+# the anchors, never from a map in your head. Adams keeps its OUTSIDE anchor
+# below, which is what proves the hole is a hole — a region mis-nested as a hole
+# (or a hole mis-read as a region) renders identically and answers the opposite
+# way to every containment test inside it.
+#
 # Points that MUST fall inside the dissolved outline (one per served county)
 # and outside it — ring-closure alone is not proof that a dissolve kept every
 # county. The template starts empty because no county-keyed layer exists yet;
@@ -135,28 +160,45 @@ SIMPLIFY_TOLERANCE_M = 25
 # county — ring closure alone is not proof a dissolve kept every county.
 # Representative points taken from the shipped TIGER county geometry.
 INSIDE = {
+    "Adams": (43.94586, -89.77671),
     "Bayfield": (46.6808, -91.18773),
     "Brown": (44.46004, -87.97772),
     "Burnett": (45.89865, -92.36377),
+    "Columbia": (43.46157, -89.30349),
+    "Crawford": (43.20611, -90.88776),
     "Dane": (43.06959, -89.42476),
+    "Dodge": (43.41296, -88.7031),
     "Dunn": (44.94602, -91.89321),
     "Eau Claire": (44.72335, -91.28595),
+    "Fond du Lac": (43.74103, -88.5229),
     "Grant": (42.85909, -90.76231),
     "Green": (42.67898, -89.60243),
+    "Green Lake": (43.80746, -89.02684),
+    "Iowa": (43.0113, -90.13346),
     "Jefferson": (43.02123, -88.77694),
     "Juneau": (43.94612, -90.13402),
+    "Kenosha": (42.5743, -87.66848),
     "Kewaunee": (44.50222, -87.3097),
+    "La Crosse": (43.90784, -91.12764),
+    "Lafayette": (42.66023, -90.1317),
+    "Manitowoc": (44.11033, -87.53102),
     "Marinette": (45.28025, -88.00346),
     "Marquette": (43.81242, -89.39817),
     "Milwaukee": (43.01735, -87.58072),
+    "Monroe": (43.94362, -90.61172),
     "Oneida": (45.68206, -89.54525),
+    "Outagamie": (44.41639, -88.46364),
+    "Ozaukee": (43.36679, -87.60391),
     "Polk": (45.46886, -92.41908),
     "Portage": (44.46479, -89.47499),
     "Price": (45.68002, -90.36068),
     "Racine": (42.72811, -87.68021),
     "Richland": (43.36279, -90.42886),
+    "Rock": (42.66871, -89.07199),
     "Rusk": (45.46562, -91.10925),
+    "Sauk": (43.39419, -89.89645),
     "Shawano": (44.80705, -88.7373),
+    "Sheboygan": (43.71856, -87.63869),
     "Taylor": (45.20651, -90.48556),
     "Trempealeau": (44.28859, -91.34782),
     "Vernon": (43.57669, -90.77139),
@@ -170,43 +212,26 @@ INSIDE = {
     "Wood": (44.46637, -90.02113),
 }
 OUTSIDE = {
-    "Adams": (43.94586, -89.77671),
     "Ashland": (46.64701, -90.68578),
     "Barron": (45.42366, -91.84865),
     "Buffalo": (44.31089, -91.72133),
     "Calumet": (44.06871, -88.22361),
     "Chippewa": (45.07456, -91.28766),
     "Clark": (44.72754, -90.61921),
-    "Columbia": (43.46157, -89.30349),
-    "Crawford": (43.20611, -90.88776),
-    "Dodge": (43.41296, -88.7031),
     "Door": (45.06344, -86.98152),
     "Douglas": (46.52585, -91.92275),
     "Florence": (45.86728, -88.37551),
-    "Fond du Lac": (43.74103, -88.5229),
     "Forest": (45.72458, -88.86156),
-    "Green Lake": (43.80746, -89.02684),
-    "Iowa": (43.0113, -90.13346),
     "Iron": (46.38983, -90.34647),
     "Jackson": (44.33432, -90.74153),
-    "Kenosha": (42.5743, -87.66848),
-    "La Crosse": (43.90784, -91.12764),
-    "Lafayette": (42.66023, -90.1317),
     "Langlade": (45.24922, -89.05229),
     "Lincoln": (45.33767, -89.73536),
-    "Manitowoc": (44.11033, -87.53102),
     "Marathon": (44.90091, -89.76945),
     "Menominee": (44.98678, -88.73481),
-    "Monroe": (43.94362, -90.61172),
     "Oconto": (45.02524, -88.30368),
-    "Outagamie": (44.41639, -88.46364),
-    "Ozaukee": (43.36679, -87.60391),
     "Pepin": (44.54575, -92.08728),
     "Pierce": (44.70099, -92.4242),
-    "Rock": (42.66871, -89.07199),
-    "Sauk": (43.39419, -89.89645),
     "Sawyer": (45.89772, -91.10962),
-    "Sheboygan": (43.71856, -87.63869),
     "St. Croix": (45.03443, -92.45383),
     "Waupaca": (44.46164, -88.98014),
 }

@@ -510,7 +510,9 @@
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "Darren W Schroeder",
+   "name": "Douglas Richmond",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.co.columbia.wi.us/columbiacounty/countyboard/Board-of-Supervisors/Supervisor-Listing",
    "seats": 28
   },
   "executive": {
@@ -1120,6 +1122,8 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "David Abendroth",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.greenlakecountywi.gov/officials_type/county-board-supervisors/",
    "seats": 19
   },
   "executive": {
@@ -1129,28 +1133,47 @@
   },
   "treasurer": {
    "name": "Jessica McLean",
-   "party": "Republican"
+   "party": "Republican",
+   "url": "https://www.greenlakecountywi.gov/officials_type/elected-officials/",
+   "phone": "920-294-4018",
+   "email": "treasurer@greenlakecountywi.gov",
+   "checked": true
   },
   "clerkOfCircuitCourt": {
-   "name": "Amy Thoma",
-   "party": "Republican"
+   "name": "Amy S Thoma",
+   "party": "Republican",
+   "url": "https://www.greenlakecountywi.gov/officials_type/elected-officials/",
+   "phone": "920-294-4142",
+   "checked": true
   },
   "registerOfDeeds": {
    "name": "Renee Thiem-Korth",
-   "party": "Republican"
+   "party": "Republican",
+   "url": "https://www.greenlakecountywi.gov/officials_type/elected-officials/",
+   "phone": "920-294-4021",
+   "email": "rod@greenlakecountywi.gov",
+   "checked": true
   },
   "districtAttorney": {
    "name": "Gerise Laspisa",
-   "party": "Republican"
+   "party": "Republican",
+   "url": "https://www.greenlakecountywi.gov/officials_type/elected-officials/",
+   "phone": "920-294-4046",
+   "checked": true
   },
   "sheriff": {
    "name": "Mark Podoll",
-   "party": "Republican"
+   "party": "Republican",
+   "url": "https://www.greenlakecountywi.gov/officials_type/elected-officials/",
+   "phone": "920-294-4134",
+   "email": "sheriff@greenlakecountywi.gov",
+   "checked": true
   },
   "coroner": {
    "name": "Thomas Wastart II",
    "title": "Medical Examiner (appointed)"
-  }
+  },
+  "contactChecked": 5
  },
  "55049": {
   "county": "Iowa",
@@ -2086,6 +2109,8 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "Dan Gabrielson",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors",
    "seats": 36
   },
   "executive": {
@@ -2124,6 +2149,8 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "Lee Schlenvogt",
+   "source": "county-board-page",
+   "sourceUrl": "https://ozaukeecounty.gov/701/County-Board",
    "seats": 26
   },
   "executive": {
@@ -2772,6 +2799,8 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "Keith Abler",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.sheboygancounty.com/departments/county-board/",
    "seats": 25
   },
   "executive": {
@@ -2781,28 +2810,44 @@
   },
   "treasurer": {
    "name": "Laura Henning-Lorenz",
-   "party": "Democrat"
+   "party": "Democrat",
+   "url": "https://www.sheboygancounty.com/government/elected-officials",
+   "phone": "920-459-3015",
+   "checked": true
   },
   "clerkOfCircuitCourt": {
    "name": "Christine Koenig",
-   "party": "Republican"
+   "party": "Republican",
+   "url": "https://www.sheboygancounty.com/government/elected-officials",
+   "phone": "920-459-3068",
+   "checked": true
   },
   "registerOfDeeds": {
    "name": "Ellen Schleicher",
-   "party": "Democrat"
+   "party": "Democrat",
+   "url": "https://www.sheboygancounty.com/government/elected-officials",
+   "phone": "920-459-3023",
+   "checked": true
   },
   "districtAttorney": {
    "name": "Joel Urmanski",
-   "party": "Republican"
+   "party": "Republican",
+   "url": "https://www.sheboygancounty.com/government/elected-officials",
+   "phone": "920-459-3040",
+   "checked": true
   },
   "sheriff": {
    "name": "Matt Spence",
-   "party": "Republican"
+   "party": "Republican",
+   "url": "https://www.sheboygancounty.com/government/elected-officials",
+   "phone": "920-459-3111",
+   "checked": true
   },
   "coroner": {
    "name": "Desarae Rohde",
    "title": "Medical Examiner (appointed)"
-  }
+  },
+  "contactChecked": 5
  },
  "55119": {
   "county": "Taylor",
@@ -3093,14 +3138,17 @@
   },
   "sheriff": {
    "name": "Dennis Stuart",
-   "party": "Republican"
+   "party": "Republican",
+   "url": "https://www.washburnsheriff.org/",
+   "phone": "(715) 468-4700",
+   "checked": true
   },
   "coroner": {
    "name": "Angela Pank",
    "party": "Republican",
    "title": "Coroner"
   },
-  "contactChecked": 4
+  "contactChecked": 5
  },
  "55131": {
   "county": "Washington",

@@ -273,9 +273,26 @@ PROVENANCE = [
     {
         "layer": "county-board",
         "app_file": "county-board-members.json",
+        "source_url": "https://www.co.adams.wi.us/government/county-board",
+        "note": (
+            "Adams's 20 supervisors, the one roster that rides a DOCUMENT and "
+            "still scrapes weekly: the county clerk publishes a public "
+            "directory PDF with a text layer, and this page is where the county "
+            "links it. THE PAGE IS THE ROW BECAUSE THE FILE IS NOT STABLE — the "
+            "clerk republishes each edition at a new Drive id, so the scraper "
+            "resolves the `County Directory` link here on every run rather than "
+            "pinning a file, and this page going dead (or losing that link) is "
+            "the signal. Note this host serves a full 259 KB of site chrome on "
+            "a 404, so a body-length probe cannot tell a live page from a "
+            "missing one; the status is what counts."
+        ),
+    },
+    {
+        "layer": "county-board",
+        "app_file": "county-board-members.json",
         "source_url": "https://www.browncountywi.gov/government/county-board-of-supervisors/",
         "note": (
-            "The supervisor roster — 29 counties' own board pages plus two county GIS layers (rows above), scraped weekly by "
+            "The supervisor roster — 29 counties' own board pages, two county GIS layers (rows above) and Kenosha's directory document (row below), refreshed weekly by "
             "update-wi-county-board-roster.yml with each county's reading direction "
             "pinned (the full URL table is COUNTIES in wi_county_board_scraper.py). "
             "Two representative pages are probed — Brown, the largest launch-set "
@@ -284,6 +301,22 @@ PROVENANCE = [
             "weekly scrape already fails loudly per "
             "county; this row exists so the FILE's disappearance is noticed and so "
             "the roster has a manifest row at all."
+        ),
+    },
+    {
+        "layer": "county-board",
+        "app_file": "county-board-members.json",
+        "source_url": ("https://saukdomino.co.sauk.wi.us/Internet/Applications/"
+                       "main.nsf/publicDistrictList.xsp"),
+        "note": (
+            "Sauk's 31 districts on a Domino application host of the county's "
+            "own — linked from co.sauk.wi.us/countyboard/sauk-county-board-"
+            "members as its current-term list, and the same distinction Dane "
+            "makes below: the roster is not on the host the county's other "
+            "surfaces live on. Probed here because it is the only county whose "
+            "roster rides an application server rather than a page, so an "
+            "application that stops answering is noticed on this report rather "
+            "than only in the weekly scrape's own failure."
         ),
     },
     {
@@ -301,6 +334,107 @@ PROVENANCE = [
     {
         "layer": "county-board",
         "app_file": "county-board-members.json",
+        "source_url": "https://www.kenoshacountywi.gov/1018/County-Directory-PDF",
+        "note": (
+            "Kenosha's 23 supervisors come from the Clerk's own Directory of "
+            "Public Officials — the file's one FETCHED document, as against "
+            "Taylor's carried one below, and re-read on every weekly run. "
+            "THE STABLE PAGE ID IS THE "
+            "POINT OF PROBING THIS: the document itself lives at a "
+            "/DocumentCenter/View/<edition>/ address that freezes on the edition "
+            "it names, and this id is the county's own page for whichever edition "
+            "is current, so it redirects as the annual directory is republished. "
+            "Its going unreachable is the news; the weekly scrape already fails "
+            "loudly if the document's board section reshapes."
+        ),
+    },
+    {
+        "layer": "county-board",
+        "app_file": "county-board-members.json",
+        "source_url": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors",
+        "note": (
+            "The WITNESS for the row above: the county board's own page, which "
+            "names the same 23 supervisors and states the board's leadership in "
+            "prose. The scraper ships nothing for Kenosha unless the two surfaces "
+            "agree name-for-name, and withholds the Chair and Vice-Chair roles "
+            "unless this page's leadership sentence confirms them, so this URL is "
+            "load-bearing rather than decorative. It is also the card's own link, "
+            "and it is NOT the county's map index at "
+            "/142/County-Board-Supervisor-Districts, which names nobody and which "
+            "this gap record mistook for the roster page for a month."
+        ),
+    },
+    {
+        "layer": "county-board",
+        "app_file": "county-board-members.json",
+        "source_url": "https://www.fdlco.wi.gov/government/county-board-supervisors",
+        "blocked": "AkamaiGHost \"Access Denied\" on every path, every user-agent and "
+                   "both schemes — a client-fingerprint block on a datacenter "
+                   "address, not a refusal to publish. Fond du Lac's twenty-five "
+                   "supervisors ship anyway, read from the Internet Archive's copy "
+                   "of this same public page (ARCHIVE_COUNTIES in "
+                   "wi_county_board_scraper.py), with the copy's age gated.",
+        "note": (
+            "Fond du Lac's County Board Supervisors directory — district-keyed "
+            "with name, county e-mail and phone per supervisor, and the Chair and "
+            "both Vice Chairs titled. THE INVERSION MATTERS MORE HERE THAN "
+            "ANYWHERE ELSE IN THIS FILE: this host answering again would not "
+            "merely be tidy news, it is the event that retires the archive hop, "
+            "because the scraper already tries the county's own server first on "
+            "every run and only falls through on a block. A WARN on this row is "
+            "an instruction to delete code."
+        ),
+    },
+    {
+        "layer": "county-board",
+        "app_file": "county-board-members.json",
+        "source_url": "https://board.co.columbia.wi.us/",
+        "note": (
+            "Columbia's 28 supervisors, as the TABLE its Supervisor Listing page "
+            "frames from this second host. The listing page is what the card "
+            "links and what the roster records as its source; THIS host is the "
+            "one nothing else in the repo names, so it is registered here — "
+            "without a row, the only surface that would notice it going away is "
+            "the weekly scrape, and only by failing."
+        ),
+    },
+    {
+        "layer": "county-board",
+        "app_file": "county-board-members.json",
+        "source_url": ("https://www.sheboygancounty.com/departments/county-board/"
+                       "county-board-supervisors"),
+        "probe_as": "scraper",
+        "note": (
+            "Sheboygan's 25 supervisors — the county recorded for a year as one "
+            "of nine answering 403 'and holding it against browser headers'. The "
+            "headers were not a browser's: a Chromium user-agent with none of "
+            "Chromium's Sec-CH-UA client hints, which Akamai's bot manager scores "
+            "as the self-contradiction it is. PROBED AS THE SCRAPER (see "
+            "`probe_as` above) because this host also discriminates by client "
+            "STACK — urllib 200, requests 403, identical headers. This row is the "
+            "standing witness that the fix still holds: the host refusing again "
+            "is the one failure the county's own count guard would report merely "
+            "as a missing county."
+        ),
+    },
+    {
+        "layer": "county",
+        "app_file": "wi-county-officers.json",
+        "source_url": "https://www.sheboygancounty.com/government/elected-officials",
+        "probe_as": "scraper",
+        "note": (
+            "Sheboygan's six elected county offices on ONE page — the first "
+            "'directory' source in wi_county_officer_contact_scraper.py, read "
+            "FORWARD from each officer's own witnessed name and stopped at the "
+            "next officer's, because the per-office 'pages' window centred on a "
+            "name returns the PRECEDING officer's phone on a page shaped like "
+            "this one (measured: four of five wrong, every one a plausible "
+            "county number)."
+        ),
+    },
+    {
+        "layer": "county-board",
+        "app_file": "county-board-members.json",
         "source_url": "https://co.taylor.wi.us/directory/county-board/",
         "blocked": "sg-captcha challenge on every path (HTTP 202 + meta-refresh to "
                    "/.well-known/sgcaptcha/); a captcha is an access control and is "
@@ -312,6 +446,53 @@ PROVENANCE = [
             "the check INVERTS: a refusal reads OK and this host becoming readable "
             "is the WARN, because that is the state a human can act on — it would "
             "mean the document route can be retired for a weekly scrape."
+        ),
+    },
+    {
+        "layer": "county-board",
+        "app_file": "county-board-members.json",
+        "source_url": "https://www.lafayettecountywi.org/bos",
+        # THE SAME INVERSION AS TAYLOR ABOVE, with one difference that matters:
+        # this county's page PARSES. `same-line-lead` reads all sixteen seats
+        # off it 16/16 (verified against the Internet Archive's own capture),
+        # and the weekly scraper pins that reading on Lafayette's
+        # DOCUMENT_ROSTERS entry and RE-TRIES THE LIVE PAGE ON EVERY RUN. So a
+        # WARN here is not paperwork: it means the live attempt can start
+        # succeeding, and the county moves to COUNTIES with its capture date
+        # leaving the card by itself.
+        "blocked": ("Cloudflare managed challenge (cf-mitigated: challenge, "
+                    "\"Just a moment...\") to plain clients on both the bare and "
+                    "www hosts, browser headers included — measured 2026-08-29"),
+        "note": (
+            "Lafayette's Board of Supervisors page — sixteen seats written "
+            "\"Larry Ludlum- Supervisor District #1\", the person, the office, "
+            "then the district, which none of the four older readings could see "
+            "because they test the text AFTER the district and it ends in the "
+            "word every other county uses as a heading. Fifteen of the sixteen "
+            "names are witnessed against the Internet Archive's capture of this "
+            "page; the chair against the Blue Book. Recorded EXPECTED-UNREACHABLE "
+            "on the same inverted terms as Taylor."
+        ),
+    },
+    {
+        "layer": "county-board",
+        "app_file": "county-board-members.json",
+        "source_url": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/"
+                      "districts-supervisors",
+        "blocked": "Akamai \"Access Denied\" to THIS checker's client and not to the "
+                   "scraper: the same page answers HTTP 200 (153 KB, all sixteen "
+                   "supervisors) to wi_county_board_scraper.py's urllib fetch with the "
+                   "header set a Chrome navigation sends, and is read that way weekly. "
+                   "Measured 2026-08-29: `requests` is refused with byte-identical "
+                   "headers, so what the edge scores sits below the header layer.",
+        "note": (
+            "Monroe's Districts & Supervisors table — the county states each seat's "
+            "district twice (the District cell and the district.NN@ address it "
+            "publishes for that seat) and the scraper requires the two to agree. "
+            "Recorded as EXPECTED-UNREACHABLE so this monthly report does not call a "
+            "link dead that the weekly roster run reads; the INVERSION means this "
+            "host answering here is the WARN, and that WARN would mean the "
+            "per-county header exception can go."
         ),
     },
     {
@@ -580,7 +761,8 @@ PROVENANCE = [
             "county-board-members.json (a chair the county's own page marks "
             "supersedes the book's; a book chair absent from a complete "
             "roster is withheld with the reason on the card) — and, via the "
-            "per-county scrape (tranches 1-3), forty-four counties' own "
+            "per-county scrape (tranches 1-3 plus Green Lake), forty-five "
+            "counties' own "
             "officer pages "
             "(wi_county_officer_contact_scraper.py): contact and a "
             "per-office name witness, superseding the book where a county "
@@ -898,6 +1080,54 @@ class Findings(object):
         return "ok"
 
 
+VALIDATOR_UA = {
+    "User-Agent": "District Explorer source validator (+https://districtry.com/wi/)",
+}
+# A PROVENANCE ROW IS PROBED WITH THE CLIENT THAT ACTUALLY READS IT, or it is
+# not a witness for that reader. This validator names itself honestly by
+# default and that stays the default. `probe_as: "scraper"` on a row says the
+# source is behind a bot manager that refuses this validator and answers the
+# scraper, so the row is probed exactly as its scraper fetches it — a
+# statement about the CONSUMER, never a way to quiet a finding.
+#
+# IT IS A DIFFERENT HTTP CLIENT AND NOT ONLY DIFFERENT HEADERS, and that is
+# the measurement worth keeping. Sheboygan's host (Akamai bot manager) answers
+# stdlib `urllib` 200 and `requests` 403 with BYTE-IDENTICAL headers — the
+# Chromium user-agent plus the Sec-CH-UA client hints that
+# wi_county_board_scraper.py's UA comment records. curl behaves like urllib.
+# So the discriminator is below HTTP: urllib3's TLS ClientHello differs from
+# the stdlib ssl module's, and the manager fingerprints it. Copying headers
+# into `requests` reproduces nothing; the probe has to be the scraper's own
+# stack.
+SCRAPER_UA = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                  "(KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Accept-Encoding": "identity",
+    "sec-ch-ua": '"Chromium";v="124", "Not;A=Brand";v="24"',
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": '"Windows"',
+}
+
+
+def scraper_get(url):
+    """Reach a source the way its scraper does — stdlib urllib, not requests."""
+    import urllib.error  # noqa: PLC0415 - only this one probe needs them
+    import urllib.request
+    try:
+        req = urllib.request.Request(url, headers=SCRAPER_UA)
+        with urllib.request.urlopen(req, timeout=HTTP_TIMEOUT) as resp:
+            if resp.status == 202:
+                return False, "HTTP 202 — bot-management interstitial, not the document"
+            resp.read(1)
+            return True, resp
+    except urllib.error.HTTPError as e:
+        return False, "HTTP %d" % e.code
+    except Exception as e:  # noqa: BLE001 - a finding, not a crash
+        return False, "request failed: %s" % e
+
+
 def http_get(url, want_json=True, params=None):
     """GET with a sane UA; returns (ok, payload_or_error). Never raises."""
     if requests is None:
@@ -907,7 +1137,7 @@ def http_get(url, want_json=True, params=None):
             url,
             params=params,
             timeout=HTTP_TIMEOUT,
-            headers={"User-Agent": "District Explorer source validator (+https://districtry.com/wi/)"},
+            headers=VALIDATOR_UA,
         )
     except Exception as e:  # network/TLS/proxy errors are a finding, not a crash
         return False, "request failed: %s" % e
@@ -1034,7 +1264,10 @@ def check_provenance(findings, offline):
             findings.add(FAIL, layer, "built data file data/app/%s is missing" % p["app_file"])
         if offline:
             continue
-        ok, res = http_get(p["source_url"], want_json=False)
+        if p.get("probe_as") == "scraper":
+            ok, res = scraper_get(p["source_url"])
+        else:
+            ok, res = http_get(p["source_url"], want_json=False)
         blocked = p.get("blocked")
         if ok and blocked:
             # The block LIFTING is the news. Every one of these entries was

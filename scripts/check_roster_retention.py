@@ -285,7 +285,36 @@ def compare(name, old, new):
     for label, old_sub in sorted(old_groups.items()):
         new_sub = new_groups.get(label)
         if new_sub is None:
-            continue                      # the group left the file: not this check's call
+            # A WHOLE SOURCE LEAVING THE FILE IS THE LOUDEST THING THAT CAN
+            # HAPPEN TO IT, and this branch used to say "not this check's call"
+            # and move on. Nothing else was checking either: a per-county
+            # builder's floor is sized for the FILE (Iowa's is 12 counties of
+            # 17), so one county dropping out clears it, the field-coverage
+            # pass above never sees a group that is gone, and the record-count
+            # test needs a halving. On 2026-08-29 a bot PR deleted all five of
+            # Grundy County's supervisors that way — green everywhere, and the
+            # county's own page was up the whole time, still naming them; a
+            # single failed fetch in one weekly run was the whole cause.
+            #
+            # A county that genuinely stops publishing is a real event and gets
+            # an ACCEPTED_DROPS entry with a reason and a date, exactly like a
+            # field that stops being published. What it does not get is silence.
+            _, lost_recs = coverage(old_sub)
+            if lost_recs < MIN_PRESENT:
+                continue                  # a one-record group: turnover, not a source
+            accepted = ACCEPTED_DROPS.get("%s:%s" % (name, label))
+            # These files are keyed by FIPS, so the label alone is a number
+            # nobody can act on. Where the group names itself, say the name.
+            named = old_sub.get("county") if isinstance(old_sub, dict) else None
+            label = "%s (%s)" % (label, named) if named else label
+            msg = ("%s VANISHED from this file — it had %d record(s) at the base "
+                   "and has none now, while the rest of the file is unchanged. A "
+                   "source that stops publishing is a real event; a source that "
+                   "failed to fetch once is not. GO AND LOOK AT THE PAGE before "
+                   "accepting this." % (label, lost_recs))
+            out.append(("OK-accepted" if accepted else "FAIL",
+                        msg + (" ACCEPTED: %s" % accepted if accepted else "")))
+            continue
         sub_old, sub_old_recs = coverage(old_sub)
         sub_new, _ = coverage(new_sub)
         if sub_old_recs < MIN_GROUP_RECORDS:

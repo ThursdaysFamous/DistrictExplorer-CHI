@@ -52,10 +52,12 @@ changed her surname. So, per county, in order:
     naming someone the county's own roster no longer seats fails the
     honesty rules, and inventing the successor would too.
 
-The 41 counties with no published roster keep the dated book row — there
+The 38 counties with no published roster keep the dated book row — there
 is nothing to reconcile against. (That was 50 until the 2026-08-27
-re-sweep; the set is READ from the shipped roster file, never listed here,
-so nine counties' chairs began reconciling with no change to this code.) Every decision prints on the build log.
+re-sweep and 41 until Taylor, Marinette and Rock joined on 2026-08-29;
+the set is READ from the shipped roster file, never listed here, so twelve
+counties' chairs began reconciling with no change to this code.) Every
+decision prints on the build log.
 
 The Menominee/Shawano DA rows carry the book's own footnote — one
 prosecutorial unit, one district attorney (Wis. Stat. ch. 978) — and the
@@ -281,6 +283,21 @@ def main():
                              "source": "county-board-page"}
                 if page.get("sourceUrl"):
                     new_chair["sourceUrl"] = page["sourceUrl"]
+                # A county whose board rows are a DATED CAPTURE rather than
+                # this week's read hands its date along, and the card prints
+                # that instead of "verified weekly". The chair still
+                # supersedes the Blue Book, because a capture taken this month
+                # is newer than the book's April 2025 snapshot either way —
+                # what changes is only what the card is entitled to claim.
+                if page.get("asOf"):
+                    new_chair["asOf"] = page["asOf"]
+                # `roleSourceUrl` when the county states the chair somewhere
+                # other than its district list — a reader checking the title
+                # has to land where the title is published, not merely on a
+                # page of the same county's board
+                page_url = page.get("roleSourceUrl") or page.get("sourceUrl")
+                if page_url:
+                    new_chair["sourceUrl"] = page_url
                 if "seats" in chair:
                     new_chair["seats"] = chair["seats"]
                 chair = new_chair

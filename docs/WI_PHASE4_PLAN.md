@@ -94,7 +94,10 @@ other tilings; Wisconsin's units ARE the county fabric minus one seam.)
 
 ## PR 2 — The county-by-county officer scrape (contact + currency, the attrition route) — TRANCHES 1-3 DELIVERED 2026-08-26
 
-FORTY-FOUR counties ship (233 offices checked weekly): tranches 1-2's
+FORTY-FOUR counties ship (233 offices checked weekly; FORTY-FIVE from
+2026-08-29, when Green Lake joined on a fourth page shape — one officials
+page carrying a self-contained block per officer, read as blocks because a
+window around the name reaches the next officer's contact): tranches 1-2's
 nineteen roster counties, joined by tranche 3's sweep of the non-roster
 frontier — Adams, Ashland, Buffalo, Calumet, Chippewa, Clark, Columbia,
 Douglas, Florence, Iron, Juneau, Kenosha, Langlade, Manitowoc,

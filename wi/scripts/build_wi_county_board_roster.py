@@ -11,14 +11,42 @@ That is what stops a county's page reorganising into a plausible-but-wrong
 number of members — the two files were built from different publishers (the
 county's own page, and LTSB's statewide filing) and have to agree.
 
-Twenty of Wisconsin's 72 counties publish a district-keyed member list; the
-other 52 are recorded in the Data gaps panel and their cards keep linking the
-county board rather than naming anybody. See the scraper's docstring for what
-each of the other 52 actually publishes.
+Fifty of Wisconsin's 72 counties have a district-keyed member list this project
+can reach, by one of the eight routes the scraper's docstring sets out; the
+other 22 are recorded in the Data gaps panel and their cards keep linking the
+county board rather than naming anybody.
+
+AND A COUNTY THAT SHIPPED LAST WEEK MAY NOT SIMPLY VANISH. The floors below are
+a fleet-sized net and one county falling out of a fifty-county file goes
+straight through it — a whole board quietly deleted, every count guard green,
+the diff looking like housekeeping. So the previous shipped file is read back
+and any county that resolved nothing this run fails the build by name. Dropping
+one deliberately takes `--allow-drop <County>`, which is a decision somebody
+makes rather than a silence.
+
+THREE OF THE FIFTY ARE CARRIED FROM A DOCUMENT, NOT RE-READ WEEKLY, AND THE
+CARD HAS TO SAY SO. Taylor's host answers a captcha, and Lafayette's and La
+Crosse's a Cloudflare challenge, so their rows come from a dated capture of each
+county's own page. The scraper marks those counties `carried_from_document` with
+the day they were read; this builder turns that into an `asOf` on every one of
+their rows, and the card prints it rather than letting a dated snapshot read
+like the weekly re-read the other forty-seven get. A county whose live page
+answers on a later run loses the flag in the scraper, so the field disappears
+here by itself — which is exactly what Fond du Lac did on the first run after
+its own archive route shipped.
+
+CONTACT RIDES ONLY WHERE ITS COUNTY PUBLISHED IT, which is why these rows are
+not uniform and should not be made uniform. Most counties publish a name and a
+district and nothing else; some publish a county mailbox, an office phone or a
+profile page beside the seat, and those ride. An absent field renders nothing
+rather than a placeholder. `phone` was collected by the scraper and silently
+dropped here for a while: ADDING A FIELD TO THE SCRAPER IS NOT ADDING IT TO THE
+APP — the two halves have to agree.
 
 Usage:
     python3 wi/scripts/build_wi_county_board_roster.py
     python3 wi/scripts/build_wi_county_board_roster.py --check
+    python3 wi/scripts/build_wi_county_board_roster.py --allow-drop Rock
 """
 
 import json
@@ -31,12 +59,33 @@ GEOMETRY = os.path.join(APP_DATA_DIR, "county-supervisory-districts.json")
 RAW = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache", "wi_county_boards_raw.json")
 OUT = os.path.join(APP_DATA_DIR, "county-board-members.json")
 
-MIN_COUNTIES = 31      # 33 ship one (30 pages + 2 county GIS layers + Taylor by document); tolerates two dark
-MIN_SEATS = 690        # 719 today (663 page-scraped + Milwaukee 18 + Racine 21 + Taylor 17)
+MIN_COUNTIES = 48      # 50 ship one (40 board pages + 2 county GIS layers + Fond du
+                       # Lac through the Internet Archive + Dodge's constituent
+                       # directory + Kenosha's witnessed directory PDF + Adams's
+                       # directory PDF + Columbia's framed table + Taylor,
+                       # Lafayette and La Crosse by document); tolerates two dark
+MIN_SEATS = 1066       # 1139 today; the tolerance is the two largest boards
+                       # (Dane 37 + Outagamie 36) going dark in one run, which is
+                       # what a floor is for — it is never lowered to fit a result
+
+
+def shipped_counties():
+    """{county name: seats} as the file on disk has them, or {} if it is new."""
+    try:
+        with open(OUT) as f:
+            shipped = json.load(f)
+    except (OSError, ValueError):
+        return {}
+    out = {}
+    for row in shipped.values():
+        out[row["county"]] = out.get(row["county"], 0) + 1
+    return out
 
 
 def main():
-    check_only = "--check" in sys.argv[1:]
+    argv = sys.argv[1:]
+    check_only = "--check" in argv
+    allowed_drops = {argv[i + 1] for i, a in enumerate(argv) if a == "--allow-drop"}
     with open(GEOMETRY) as f:
         geo = json.load(f)
     drawn = {}
@@ -73,6 +122,13 @@ def main():
             key = "%s%02d" % (fips, int(d))
             row = {"county": entry["county"], "district": int(d),
                    "sourceUrl": entry["source_url"]}
+            # Present only for a county the scraper marked as carried from a
+            # document rather than read this run. `sourceUrl` is still the
+            # page the names came from, so the pair is the whole provenance a
+            # reader needs; the exact route lives in the scraper's
+            # DOCUMENT_ROSTERS entry and on its NOT RE-READ line.
+            if entry.get("carried_from_document"):
+                row["asOf"] = "the county's own page, captured %s" % entry["read_on"]
             if member["vacant"]:
                 row["vacant"] = True
                 vacant += 1
@@ -80,22 +136,78 @@ def main():
                 row["name"] = member["name"]
                 if member["role"]:
                     row["role"] = member["role"]
-                # the two county-GIS rosters carry contact on the feature —
-                # fields the page-scraped counties never publish; each rides
-                # only where its county published it
+                # CONTACT RIDES ONLY WHERE ITS COUNTY PUBLISHED IT. The two
+                # county-GIS rosters carry an e-mail (and Milwaukee a profile
+                # link) on the feature; Taylor's document and Adams's directory
+                # carry an e-mail and a phone. The page-scraped counties publish
+                # none of it, and an absent field renders nothing rather than a
+                # placeholder.
+                #
+                # `phone` USED TO BE COLLECTED AND SILENTLY DROPPED HERE: the
+                # scraper has carried Taylor's seventeen numbers since the day
+                # it shipped, its own comment saying a phone is an official
+                # contact detail and does ship, and this loop copied `email`
+                # and `url` and nothing else. Adding a field to the scraper is
+                # not adding it to the app — the two halves have to agree.
+                    # where the county STATES the role, when that is not the
+                    # page the district list came from (Sheboygan names its
+                    # chair on the board's landing page, not its roster table)
+                    if member.get("role_url"):
+                        row["roleSourceUrl"] = member["role_url"]
+                # Contact rides only where its county published it: the two
+                # county-GIS rosters carry it as feature attributes, Taylor's
+                # comes with its document, and Sheboygan's off the page each
+                # supervisor has of their own. A supervisor's ADDRESS is never
+                # among these even where the county prints one — it is their
+                # home, not an office (the scraper's MEMBER_PAGES comment).
                 if member.get("email"):
                     row["email"] = member["email"]
+                if member.get("phone"):
+                    row["phone"] = member["phone"]
                 if member.get("url"):
                     row["profileUrl"] = member["url"]
+            # THE PAGE THE NAMES WERE ACTUALLY READ FROM, where that is not
+            # `sourceUrl`. Adams's twenty supervisors come out of a directory
+            # PDF the county links; its board page — the county's own landing
+            # page and this row's sourceUrl — names none of them, so a reader
+            # who clicks through to check a name finds nothing to check it
+            # against. The scraper resolves and records the document it read;
+            # dropping that here left the card pointing at the one surface that
+            # could not corroborate it.
+            if entry.get("document_url"):
+                row["documentUrl"] = entry["document_url"]
             roster[key] = row
             total += 1
 
     if total < MIN_SEATS:
         raise RuntimeError("%d seats resolved, floor is %d" % (total, MIN_SEATS))
 
+    # See the docstring: the floors above are a fleet-sized net, and one county
+    # falling out of a 34-county file slips straight through it.
+    was = shipped_counties()
+    gone = sorted(set(was) - {e["county"] for e in counties.values()} - allowed_drops)
+    if gone:
+        raise RuntimeError(
+            "%s shipped last time and resolved nothing this time (%s) — that is a "
+            "page to re-read, not a diff to merge; pass --allow-drop to drop a "
+            "county deliberately"
+            % (", ".join("%s (%d seats)" % (c, was[c]) for c in gone),
+               raw.get("failures") or "no failure recorded"))
+
+    for fips, entry in sorted(counties.items()):
+        # A county read from anywhere but its own live page says so on the log,
+        # so the weekly PR's reviewer can see which rung of the ladder answered.
+        read_from = entry.get("read_from", "live")
+        if read_from.startswith("archive:"):
+            print("  %s: read from the Internet Archive capture of %s"
+                  % (entry["county"], read_from.split(":", 1)[1][:8]), file=sys.stderr)
+
     payload = json.dumps(roster, indent=1, sort_keys=True) + "\n"
-    print("county-board-members: %d counties, %d seats (%d named, %d vacant)"
-          % (len(counties), total, total - vacant, vacant), file=sys.stderr)
+    dated = sorted({r["county"] for r in roster.values() if r.get("asOf")})
+    print("county-board-members: %d counties, %d seats (%d named, %d vacant)%s"
+          % (len(counties), total, total - vacant, vacant,
+             "; carried from a document: %s" % ", ".join(dated) if dated else ""),
+          file=sys.stderr)
     if check_only:
         try:
             with open(OUT) as f:

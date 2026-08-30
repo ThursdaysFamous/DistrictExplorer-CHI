@@ -18,6 +18,36 @@ each page PINNED, and writes an intermediate the officers builder merges:
     Contact (phone, e-mail) is taken only from a window around the name,
     never from the page at large — a department page carries many phones
     and shipping the wrong one is worse than shipping none.
+  * "indexroll" mode — a single OFFICIALS page carrying one
+    self-contained block per officer (name, exact title, and that
+    person's own contact list), parsed STRUCTURALLY like civicplus and
+    matched against the same per-office allow-sets. It exists because
+    "pages" mode cannot read a page like this safely: that mode takes
+    contact from a +/-350-character window around the witnessed surname,
+    and on a one-page roster the window runs into the NEXT officer's
+    block — measured on Green Lake, where the clerk of circuit court
+    publishes no e-mail and the window reaches the county clerk's.
+    A block boundary is not a distance guess (the board scraper's
+    `_indexroll` carries the same reasoning for the same county's
+    supervisors page, and this mode reuses its reader).
+  * "directory" mode — ONE page carrying SEVERAL offices, each read
+    FORWARD from its own witnessed name and STOPPED at the next
+    officer's. "pages" mode cannot read such a page and does not fail
+    when handed one, which is the whole reason this mode exists:
+    `witness_window` centres a +/-350-character window on the name, and
+    on a page that runs "Office / Name / Phone / ... / Office / Name /
+    Phone" the FIRST phone in that window is the PRECEDING officer's.
+    Measured on Sheboygan's elected-officials page 2026-08-29: four of
+    five phones came back wrong and all four were plausible county
+    numbers on the county's own exchange — the sheriff got the register
+    of deeds', the DA the county clerk's, the treasurer the sheriff's,
+    the register of deeds the DA's, and only the officer printed first
+    on the page (whose window had nothing before it) was right. That is
+    the same off-by-one the county board scraper pins a reading
+    direction per county to prevent, one file over. So a directory page
+    takes a window that BEGINS at the name and ENDS at the next
+    witnessed officer's name, and every office on it is pinned to the
+    same URL.
   * "civicplus" mode — the platform's one-page staff directory
     (directory.aspx), parsed STRUCTURALLY: each entry is a list item with
     the person's name and exact title(s). Titles are comma-split, the
@@ -71,9 +101,19 @@ OUT = os.path.join(SCRIPT_DIR, ".cache", "wi_county_officer_contacts_raw.json")
 COUNTIES_FILE = os.path.join(REPO_ROOT, "data", "app", "state-counties.json")
 OFFICERS = os.path.join(REPO_ROOT, "data", "app", "wi-county-officers.json")
 
+# The client hints go with the UA — see wi_county_board_scraper.py's UA comment
+# for the measurement. A Chromium user-agent sent without Chromium's
+# Sec-CH-UA headers is a self-contradicting client, and Akamai's bot manager
+# answers it 403; Sheboygan's pages are the ones that showed it. Every county
+# this file already reads is unaffected (re-run 2026-08-29: identical output).
 UA = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
                     "(KHTML, like Gecko) Chrome/126.0 Safari/537.36",
-      "Accept": "text/html,application/xhtml+xml"}
+      "Accept": "text/html,application/xhtml+xml",
+      "Accept-Language": "en-US,en;q=0.9",
+      "Accept-Encoding": "identity",
+      "sec-ch-ua": '"Chromium";v="126", "Not;A=Brand";v="24"',
+      "sec-ch-ua-mobile": "?0",
+      "sec-ch-ua-platform": '"Linux"'}
 
 OFFICE_KEYS = ["sheriff", "districtAttorney", "treasurer",
                "clerkOfCircuitCourt", "registerOfDeeds", "coroner",
@@ -320,12 +360,38 @@ COUNTIES = {
         "url": "https://www.sawyercounty.gov/Directory"},
     "St. Croix": {"mode": "civicplus", "floor": 5,
         "url": "https://sccwi.gov/Directory"},
+    # ---- 2026-08-29: Green Lake publishes every elected officer on ONE
+    # page, each in their own block with an exact title and their own
+    # phone/e-mail. Its County Clerk and Circuit Court Judge blocks match
+    # no office key here and are ignored — the clerk ships from
+    # wi-county-clerks.json and the bench from wi-circuit-judges.json.
+    "Green Lake": {"mode": "indexroll", "floor": 5,
+        "url": "https://www.greenlakecountywi.gov/officials_type/elected-officials/"},
+    # The first "directory" county: one Elected Officials page carrying six
+    # offices with a phone and a courthouse location each. Its own site was
+    # recorded unreadable until 2026-08-29 — an Akamai 403 against a header
+    # set that claimed to be Chromium and sent none of Chromium's client
+    # hints (wi_county_board_scraper.py's UA comment carries the
+    # measurement). FIVE of the six are pinned here. The county clerk is the
+    # sixth and belongs to wi_county_clerk_scraper.py, not to this file's
+    # OFFICE_KEYS; and the two APPOINTED offices this file does track — the
+    # county administrator and the medical examiner — are absent from the
+    # page itself, because they are not elected, so the book's dated rows
+    # continue to ship for both.
+    "Sheboygan": {"mode": "directory", "floor": 5,
+        "url": "https://www.sheboygancounty.com/government/elected-officials",
+        "offices": ["sheriff", "districtAttorney", "treasurer",
+                    "clerkOfCircuitCourt", "registerOfDeeds"]},
 }
 
 TAG_STRIP = re.compile(r"<script[\s\S]*?</script>|<style[\s\S]*?</style>|<[^>]+>")
 PHONE_RE = re.compile(r"\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}")
 EMAIL_RE = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+")
 SUFFIXES = {"jr", "sr", "ii", "iii", "iv", "dr"}
+# The backstop for a directory office that is the LAST one witnessed on its
+# page and so has no next-name bound. Sheboygan's longest real block (name to
+# the end of its own entry) is ~250 characters.
+DIRECTORY_SPAN = 400
 
 
 def fetch(url, tries=3):
@@ -367,6 +433,54 @@ def witness_window(text, book_name, span=350):
             lo2, hi2 = max(0, m.start() - span), m.start() + span
             return text[lo2:hi2]
     return None
+
+
+def scrape_directory(county, cfg, book):
+    """Several offices off ONE page, each contact read forward from its name.
+
+    The bound is the NEXT witnessed officer's name rather than a character
+    count, so the window can never reach into the following officer's block
+    however the page is spaced. An office whose name the page does not
+    witness is skipped exactly as in `scrape_pages` — the appointed offices
+    (Sheboygan's administrator and medical examiner) are simply not on an
+    ELECTED-officials page, and that is a fact about the page, not a miss.
+    """
+    url = cfg["url"]
+    text = to_text(fetch(url))
+    starts = {}
+    for office in cfg["offices"]:
+        book_name = (book.get(office) or {}).get("name")
+        if not book_name:
+            continue
+        first, sur = name_parts(book_name)
+        if not sur:
+            continue
+        for m in re.finditer(r"\b%s\b" % re.escape(sur), text, re.I):
+            near = text[max(0, m.start() - 120):m.start() + 120]
+            if re.search(r"\b%s[a-z]" % re.escape(first[0]), near):
+                starts[office] = m.start()
+                break
+    bounds = sorted(starts.values())
+    out = {}
+    for office in cfg["offices"]:
+        if office not in starts:
+            print("%s/%s: the directory does not witness %r — no contact ships"
+                  % (county, office,
+                     (book.get(office) or {}).get("name")), file=sys.stderr)
+            continue
+        begin = starts[office]
+        after = [b for b in bounds if b > begin]
+        window = text[begin:min(after[0] if after else len(text),
+                                begin + DIRECTORY_SPAN)]
+        entry = {"url": url}
+        phone = PHONE_RE.search(window)
+        if phone:
+            entry["phone"] = phone.group(0).strip()
+        email = EMAIL_RE.search(window)
+        if email:
+            entry["email"] = email.group(0)
+        out[office] = entry
+    return out
 
 
 def scrape_pages(county, cfg, book):
@@ -454,6 +568,65 @@ def scrape_civicplus(county, cfg, book):
     return out
 
 
+# The block markup is ONE county CMS's shape used by TWO of its pages — this
+# one and the supervisors page the board scraper reads — so it is defined once,
+# there, and imported here. A reskin then breaks one definition rather than two
+# that silently disagree.
+from wi_county_board_scraper import (          # noqa: E402 — same directory
+    INDEXROLL_ADDR, INDEXROLL_BLOCK, INDEXROLL_HEAD, INDEXROLL_SUB)
+
+
+def _block_text(fragment):
+    return re.sub(r"\s+", " ", htmllib.unescape(TAG_STRIP.sub(" ", fragment))).strip()
+
+
+def scrape_indexroll(county, cfg, book):
+    """One officials page, one block per officer — contact never crosses a block."""
+    raw = fetch(cfg["url"])
+    found = {}
+    for block in INDEXROLL_BLOCK.findall(raw):
+        head = INDEXROLL_HEAD.search(block)
+        sub = INDEXROLL_SUB.search(block)
+        if not head or not sub:
+            continue
+        name = _block_text(head.group(1))
+        if not name:
+            continue
+        entry = {"url": cfg["url"], "name": name}
+        addr = INDEXROLL_ADDR.search(block)
+        if addr:
+            # from THIS person's own contact list, never from the page at large
+            text = _block_text(addr.group(1))
+            phone = PHONE_RE.search(text)
+            if phone:
+                entry["phone"] = phone.group(0).strip()
+            email = EMAIL_RE.search(text)
+            if email:
+                entry["email"] = email.group(0)
+        for seg in _block_text(sub.group(1)).split(","):
+            seg = re.sub(r"^%s County " % re.escape(county), "", seg.strip())
+            for office, allowed in TITLE_SETS.items():
+                if seg in allowed:
+                    found.setdefault(office, {})[name] = dict(entry, title=seg)
+    out = {}
+    for office, people in found.items():
+        # same ambiguity rule as civicplus: two DISTINCT people under one
+        # title is a page this parser has misread, and skipping says so
+        groups = {}
+        for n in people:
+            first, sur = name_parts(n)
+            groups.setdefault((first[0].lower() if first else "",
+                               (sur or "").lower()), []).append(n)
+        if len(groups) > 1:
+            print("%s/%s: page names %d distinct people (%s) — ambiguous, "
+                  "skipped" % (county, office, len(groups), sorted(people)),
+                  file=sys.stderr)
+            continue
+        best = max(list(groups.values())[0], key=len)
+        out[office] = people[best]
+    return out
+
+
 INTERIM_EXEC_RE = re.compile(
     r"About\s+([A-Z][\w'.-]+(?:\s+[A-Z][\w'.-]+){1,2}?)\s+Interim\s+"
     r"(?:Waukesha\s+)?County\s+Executive")
@@ -496,6 +669,10 @@ def main():
                     exec_entry = scrape_interim_exec(county, cfg["interim_exec"])
                     if exec_entry:
                         entries["executive"] = exec_entry
+            elif cfg["mode"] == "indexroll":
+                entries = scrape_indexroll(county, cfg, book)
+            elif cfg["mode"] == "directory":
+                entries = scrape_directory(county, cfg, book)
             else:
                 entries = scrape_civicplus(county, cfg, book)
         except RuntimeError as exc:

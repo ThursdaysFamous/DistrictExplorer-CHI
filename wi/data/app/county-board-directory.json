@@ -12,7 +12,7 @@
  "55005": {
   "county": "Barron",
   "seats": 29,
-  "url": "https://co.barron.wi.us/"
+  "url": "https://www.barroncountywi.gov/index.asp?SEC=%7bB7F5AB49-3697-4A2E-8327-26847A43F33E%7d&Type=B_BASIC"
  },
  "55007": {
   "county": "Bayfield",
@@ -67,7 +67,7 @@
  "55027": {
   "county": "Dodge",
   "seats": 33,
-  "url": "https://co.dodge.wi.us/"
+  "url": "https://www.co.dodge.wi.gov/government/county-board/members"
  },
  "55029": {
   "county": "Door",
@@ -97,7 +97,7 @@
  "55039": {
   "county": "Fond Du Lac",
   "seats": 25,
-  "url": "http://fdlco.wi.gov/"
+  "url": "https://www.fdlco.wi.gov/"
  },
  "55041": {
   "county": "Forest",
@@ -152,7 +152,7 @@
  "55061": {
   "county": "Kewaunee",
   "seats": 20,
-  "url": "https://kewauneeco.com/"
+  "url": "https://www.kewauneeco.org/government/boards_and_committees/"
  },
  "55063": {
   "county": "La Crosse",
@@ -227,7 +227,7 @@
  "55089": {
   "county": "Ozaukee",
   "seats": 26,
-  "url": "https://ozaukeecounty.gov/2206/Supervisory-District-Maps"
+  "url": "https://ozaukeecounty.gov/701/County-Board"
  },
  "55091": {
   "county": "Pepin",
@@ -237,7 +237,7 @@
  "55093": {
   "county": "Pierce",
   "seats": 17,
-  "url": "https://co.pierce.wi.us/"
+  "url": "https://www.co.pierce.wi.us/"
  },
  "55095": {
   "county": "Polk",
@@ -272,7 +272,7 @@
  "55107": {
   "county": "Rusk",
   "seats": 19,
-  "url": "https://ruskcountywi.gov/"
+  "url": "https://ruskcounty.org/supervisors"
  },
  "55109": {
   "county": "St Croix",
@@ -282,7 +282,7 @@
  "55111": {
   "county": "Sauk",
   "seats": 31,
-  "url": "https://www.co.sauk.wi.us/"
+  "url": "https://www.co.sauk.wi.us/countyboard/sauk-county-board-members"
  },
  "55113": {
   "county": "Sawyer",
@@ -292,7 +292,7 @@
  "55115": {
   "county": "Shawano",
   "seats": 27,
-  "url": "https://shawanocountywi.gov/"
+  "url": "https://www.co.shawano.wi.us/county_board/"
  },
  "55117": {
   "county": "Sheboygan",
