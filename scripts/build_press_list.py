@@ -71,6 +71,15 @@ def render(d):
       f"to `{d['release']['volunteer_contact']}`.")
     a("")
 
+    a("## The release")
+    a("")
+    a(d["release"].get("authored", ""))
+    a("")
+    # Prefix every line once. Chaining two replaces here double-applies and yields nested `> >`.
+    for line in d["release"]["body"].split("\n"):
+        a(("> " + line) if line.strip() else ">")
+    a("")
+
     a("## How this file is used")
     a("")
     a("The same rules `docs/ASK_DRAFTS.md` sets for outbound asks apply here, for the same reason:")
@@ -152,16 +161,19 @@ def render(d):
             continue
         a(f"### {r['label']} — {len(rows)} ({sum(1 for o in rows if o['tier'] == 1)} tier-1)")
         a("")
-        a(f"Tag these `utm_source={r['utm_source']}`.")
+        a(f"Tag these `utm_source={r['utm_source']}`. The **#** column is the tier (send tier 1 "
+          f"first); **Wave** is the day it goes out, and a region can span two waves — ten Chicago "
+          f"rooms are lifted into wave 1 because the school-board hook is the only pitch in the "
+          f"whole send with a date attached.")
         a("")
-        a("| # | Outlet | What they are | Send to | State | Lead with |")
-        a("|---|---|---|---|---|---|")
+        a("| # | Wave | Outlet | What they are | Send to | State | Lead with |")
+        a("|---|---|---|---|---|---|---|")
         for o in sorted(rows, key=lambda x: (x["tier"], x["name"])):
             s = o["send_to"]
             name = esc(o["name"])
             if o["also_known_as"]:
                 name += " <br>*(also " + esc(", ".join(o["also_known_as"])) + " — one inbox)*"
-            a(f"| {o['tier']} | [{name}]({o['homepage']}) | {esc(o['medium'])} | "
+            a(f"| {o['tier']} | {o.get('wave', '')} | [{name}]({o['homepage']}) | {esc(o['medium'])} | "
               f"`{s['value']}` <br>[source]({s['source_url']}) | "
               f"{STATE_MARK.get(s['state'], s['state'])}"
               f"{' <br>**not a news inbox**' if not_news(s) else ''} | "
