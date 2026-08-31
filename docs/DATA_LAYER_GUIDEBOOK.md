@@ -4371,6 +4371,40 @@ client read as the county being blocked) and Vermilion (a Clerk having no GIS
 read as the county having none), and the first time this project has made it
 about a PERSON rather than a dataset.
 
+### 2026-08-31: the Jo Daviess permission is confirmed for districtry.com — the ask paid off, and the reply carries a typo worth keeping
+
+Kratcha answered on 31 Aug, two days after the ask and long before either
+scheduled follow-up: "I confirm you are authorized to use the Jo Daviess County
+Board district shapefiles provided under GIS Digital Data License Agreement
+#008328 on the new districtry.com website as noted below in your email." So the
+authorization on record now names the domain the site actually serves from, and
+the 29 Aug entry above closes with the outcome it was holding open. **The
+display never paused and never needed to** — that entry's own reasoning was that
+a permission given for this site and not withdrawn keeps covering it while the
+question is outstanding, which is why the honest move was to ASK while
+continuing rather than to take the boundaries down or to quietly assume.
+
+**THE CONFIRMATION NAMES LICENCE #008328. THE LICENCE IS #008382.** A digit
+transposition, in the county's own reply, against a number that appears
+correctly on the invoice, on the signed agreement, and in the request Kratcha
+was replying to three lines below. It is quoted AS WRITTEN everywhere this
+project records it, with the transposition named beside it — the Douglas rule
+applied to a licence number instead of an e-mail address: **you do not silently
+correct a character in somebody else's record, and you do not ship the error
+unlabelled either.** Left bare, a reader comparing the confirmation with the
+agreement has two licence numbers and no way to tell which is the typo; the
+distance between them is one transposition, and saying so is the whole fix.
+
+**What the confirmation does NOT do is widen the grant.** It re-authorizes
+DISPLAY, and its "as noted below in your email" incorporates the request's four
+stated conditions — free public map, no redistribution or download of the
+shapefile, county credited wherever the boundaries appear, and the file excluded
+from this project's own ODbL grant. So `LICENSE-DATA.md` §3 keeps the exclusion
+exactly as it was: the one file in the repo that is not ODbL, and the one whose
+raw source is deliberately uncommitted. A confirmation that a display permission
+followed a rename is not a redistribution permission, and reading it as one
+would be the same invention the ask existed to avoid.
+
 ### 2026-08-17, night: Jo Daviess ships as the 63rd county — the first boundary this project ever BOUGHT, and the first licence-gated county cleared
 
 `jo-daviess-county-board-districts` was the gap no free route could close, and
