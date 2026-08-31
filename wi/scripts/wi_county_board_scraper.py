@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Scrape county board supervisors from the 50 Wisconsin counties whose roster this
+Scrape county board supervisors from the 51 Wisconsin counties whose roster this
 file can reach. Stage 1 of the pair; build_wi_county_board_roster.py turns the
 intermediate JSON into data/app/county-board-members.json.
 
 EIGHT ROUTES, AND WHICH ONE A COUNTY TAKES IS A MEASUREMENT
 -----------------------------------------------------------
-  * COUNTIES                    - 40 counties whose own board page pairs a
+  * COUNTIES                    - 41 counties whose own board page pairs a
                                   district with a person, each page's reading
                                   direction PINNED;
   * ARCGIS_COUNTIES             - Milwaukee and Racine, whose SITES refuse this
@@ -38,12 +38,12 @@ each is defined: a WITNESSED document is fetched and checked every week; a
 CARRIED one was read once, by a person, through an access control this file does
 not try to defeat.
 
-WHY ONLY FIFTY OF SEVENTY-TWO
------------------------------
+WHY ONLY FIFTY-ONE OF SEVENTY-TWO
+---------------------------------
 Wisconsin publishes county board DISTRICTS statewide (Wis. Stat. 5.15(4)(br)1,
 see build_wi_supervisory_districts.py) and publishes the PEOPLE in them nowhere:
-each county names its own supervisors, 72 different ways. Fifty are reachable by
-one of the eight routes above. The other 22 are not oversights and are recorded
+each county names its own supervisors, 72 different ways. Fifty-one are reachable
+by one of the eight routes above. The other 21 are not oversights and are recorded
 as such — and the record is worth reading before adding to it, because on
 2026-08-29 seventeen counties joined at once and ALMOST NONE OF THEM HAD STARTED
 PUBLISHING ANYTHING NEW. What changed was this file:
@@ -61,10 +61,16 @@ PUBLISHING ANYTHING NEW. What changed was this file:
     all 26, and Kenosha's Clerk publishes a district-keyed directory. This file
     once claimed 23 counties on a sweep that tested district NUMBERS, and
     numbers are what a map index has. TEST FOR THE PEOPLE.
-  * The remaining 18 publish their members as images or prose with no district
-    column on the pages their own sites point to.
+  * The remaining 17 publish their members as images or prose with no district
+    column on the pages their own sites point to. THAT NUMBER WENT 18 -> 17 ON
+    2026-08-31 AND THE COUNTY THAT LEFT NEVER BELONGED IN IT: Calumet publishes
+    all 21 supervisors district-keyed, with a phone each, and answers 200 to a
+    plain request. Nobody had opened the page. It is the sixth county this file
+    has recovered from its own record rather than from anything a county
+    changed, and the bucket it sat in is the one that says what nobody checked
+    — so it is the first place to look for the 52nd, not the last.
 
-FIVE WAYS THAT LIST HAS BEEN WRONG, EACH FOUND BY CHECKING RATHER THAN GUESSING
+SIX WAYS THAT LIST HAS BEEN WRONG, EACH FOUND BY CHECKING RATHER THAN GUESSING
 -------------------------------------------------------------------------------
   1. A 403 MEASURES THE REQUEST, NOT THE COUNTY. The bucket used to say nine
      counties answer 403 "and hold it against browser headers", where browser
@@ -104,6 +110,17 @@ FIVE WAYS THAT LIST HAS BEEN WRONG, EACH FOUND BY CHECKING RATHER THAN GUESSING
      publishing all 33 seats district-keyed. A sweep that reads a status code
      cannot tell a county that publishes nothing from a county that left a
      forwarding note. See build_wi_county_board_directory.py --probe.
+  6. A COUNTY'S OWN PAGE CAN CONTRADICT ITSELF, AND THE COUNT GUARDS CANNOT SEE
+     IT. Calumet (2026-08-31) names all 21 supervisors correctly and gives TWO
+     of them the same role: districts 4 and 19 are both "Vice-Chairperson", and
+     the county's organisational minutes of 21 April 2026 show district 19's is
+     a label from the previous term. Every guard in this file counts SEATS —
+     all of them, each once — and 21 correct names carrying one wrong role pass
+     every one. So a field that is not the seat itself needs its own gate: the
+     roles here ship only where exactly one supervisor claims them. THE THING
+     WORTH TAKING TO THE NEXT COUNTY is that the contradiction was visible only
+     because the page states the role in the first place; a county that names
+     its chair somewhere else can be stale with nothing to compare against.
 
 MARINETTE IS THE ONE INFERENCE THIS FILE MAKES, and it is opt-in per county:
 the board page numbers 29 of 30 seats and prints one unnumbered "VACANT SEAT"
@@ -1079,6 +1096,14 @@ COUNTIES = [
     # phone, county e-mail and committee. Its host is in HONEST_UA_HOSTS.
     ("55087", "Outagamie", 36, "after",
      "https://www.outagamie.gov/Outagamie-County-Board/County-Board-of-Supervisors"),
+    # --- 2026-08-31: the 51st county, and the fourth whose "no district-keyed
+    # list" record was ours. Calumet was in the 22-county gap block on the
+    # strength of a sweep that never opened the page: calumetcounty.org answers
+    # 200 with 127 KB to an ordinary browser header set, and names all 21
+    # supervisors beside their districts. `cells` is load-bearing and so is the
+    # role gate above it — see the `_calumet` comment for both.
+    ("55015", "Calumet", 21, "cells",
+     "https://calumetcounty.org/243/County-Board-of-Supervisors"),
     # --- the 2026-08-29 header fix: a county recorded unreadable for a year ---,
 ]
 
@@ -1757,6 +1782,133 @@ def flip_last_first(text):
     if SUFFIX.match(b):
         return "%s %s" % (a, b)     # "Schaefer, II" is a suffix, never a flip
     return "%s %s" % (b, a)
+
+
+# --- Calumet: a district per TABLE CELL, and a role the page contradicts ------
+#
+# calumetcounty.org/243/County-Board-of-Supervisors is a CivicPlus page whose 21
+# seats sit in four TABS ("Districts 1-6", "7-12", "13-18", "19-21"). The tabs
+# are client-side, so one fetch carries all four panels, and each district is a
+# self-contained <td>: its heading, the member, their wards, the year they were
+# seated, a home address, a phone and their committees. THE CELL BOUNDARY IS THE
+# GUARD — the reason this county needs a reader of its own rather than one of the
+# line readings. A district whose name went missing could otherwise reach down
+# into its neighbour's block, which is the failure `-strict` was added for; here
+# it cannot, because the read never leaves the cell the heading opened.
+#
+# THE ADDRESSES ARE DELIBERATELY NOT CARRIED. Every cell prints the supervisor's
+# house ("2018 S. Jackson Street, Appleton"); the fleet's standing rule is that a
+# home address never ships even where the source publishes it — the same call
+# Taylor's document roster and Green Lake's block reader record.
+#
+# NO E-MAIL SHIPS EITHER, AND THAT IS A MEASUREMENT RATHER THAN A GAP IN THIS
+# READER: the county publishes no supervisor mailbox anywhere on the page. Each
+# "Email <name>" link is a CivicPlus FormCenter contact FORM
+# (/FormCenter/County-Supervisors-6/Contact-District-1-Supervisor-...), one per
+# district. It is not carried as `url` either, because the card renders that
+# field as "Supervisor page" and a contact form is not one — mislabelling the
+# link would cost a reader more than the missing link does, and the phone this
+# reader does carry reaches every one of the 21.
+#
+# TWO SUPERVISORS ARE LABELLED "Vice-Chairperson" AND ONLY ONE OF THEM IS, which
+# is why `_calumet` returns its roles separately for the caller to gate rather
+# than writing them straight onto the members. Measured 2026-08-31: the page
+# gives District 4 (Budde) and District 19 (Dietrich) the same role. The county's
+# own organisational minutes of 21 April 2026 settle it — item 8 elected Connors
+# chair, item 11 elected Budde vice-chair after Dietrich WITHDREW his nomination,
+# and item 12 made Schwalenberg 2nd vice-chair — so District 19 carries a label
+# from the term before, which nobody took down.
+#
+# THE FIX IS A UNIQUENESS GATE, NOT A PINNED NAME. Writing "Budde is the vice
+# chair" into this file would be correct today and would go stale in April 2028
+# exactly as the county's page did; the gate instead drops any role two
+# supervisors claim, names the conflict on the run log, and ships the roles that
+# are unambiguous. So Calumet ships a chair and a 2nd vice-chair today, and the
+# vice-chair returns on its own — with no code change — the day the county takes
+# the stale label down. A role guessed onto the wrong supervisor is worse than no
+# role at all.
+CAL_PANELS = re.compile(r'(?is)<div class="cpTabPanels">')
+CAL_CELL = re.compile(r"(?is)<td\b[^>]*>(.*?)</td>")
+CAL_DIST = re.compile(r"(?i)^district\s+(\d{1,2})\b")
+# Longest form first: District 15's "Second Vice-Chair" must not read as the
+# plain "Vice-Chair" the two conflicting cells carry.
+CAL_ROLE = re.compile(r"(?i)\b((?:second|2nd|first|1st)\s+vice[\s\-]?chair(?:man|person|woman)?"
+                      r"|vice[\s\-]?chair(?:man|person|woman)?"
+                      r"|chair(?:man|person|woman))\b")
+# The county writes its numbers five ways across the 21 cells — "(920) 639-6908",
+# "920-574-0421", "Phone:(920) 850-7931" with no space, "( 217) 722-1974" with a
+# space INSIDE the parenthesis, and District 15's "(920) 853-3440 Second
+# Vice-Chair" with the role run onto the same line. Anchoring on the county's own
+# "Phone:" label and rebuilding the number from its three groups reads all five;
+# the module-level PHONE (Green Lake's) matches only the bare-dash form and would
+# silently drop twenty of the twenty-one.
+CAL_PHONE = re.compile(r"(?i)phone:?\s*\(?\s*(\d{3})\s*\)?[\s.\-]*(\d{3})[\s.\-]*(\d{4})")
+CAL_NICK = re.compile(r"\s*\([^)]*\)\s*")
+
+
+def _calumet_lines(fragment):
+    """The cell's own lines, with its <br>-separated fields kept apart."""
+    h = re.sub(r"(?is)<br\s*/?>", "\n", fragment)
+    h = re.sub(r"(?is)</(p|h\d|div|li|tr)>", "\n", h)
+    h = _TAG.sub(" ", h)
+    return [" ".join(l.split()) for l in html_lib.unescape(h).split("\n") if l.strip()]
+
+
+def _calumet(page_html, seats):
+    """district -> (name, None), the seats the page empties, phones, and roles."""
+    m = CAL_PANELS.search(page_html)
+    region = page_html[m.end():] if m else page_html
+    found, vacant, contacts, roles = {}, set(), {}, {}
+    for fragment in CAL_CELL.findall(region):
+        lines = _calumet_lines(fragment)
+        if len(lines) < 2:
+            continue
+        head = CAL_DIST.match(lines[0])
+        if not head:
+            continue
+        d = int(head.group(1))
+        if not (1 <= d <= seats) or d in found or d in vacant:
+            continue
+        name = lines[1]
+        if VACANT.search(name):
+            vacant.add(d)                   # the county says the seat is empty
+            continue
+        # `is_name` is a SHARED guard and is not widened for one county: it
+        # rejects District 2's "Jacob (Jake) Wayne" on the parenthesis, and
+        # widening it would loosen the name test for all fifty. So the name is
+        # VALIDATED with the nickname removed and SHIPPED as the county spells
+        # it. Without this the seat would not resolve and the all-seats-or-
+        # nothing rule would correctly refuse the whole county for one bracket.
+        if not is_name(CAL_NICK.sub(" ", name).strip()):
+            continue
+        found[d] = (name, None)
+        text = " ".join(lines)
+        role = CAL_ROLE.search(text)
+        if role:
+            roles[d] = role_case(role.group(1))
+        phone = CAL_PHONE.search(text)
+        if phone:
+            contacts[d] = {"phone": "(%s) %s-%s" % phone.groups()}
+    return found, vacant, contacts, roles
+
+
+def _calumet_roles(roles, districts, county):
+    """Write through only the roles exactly one supervisor claims. See above."""
+    holders = {}
+    for d, role in roles.items():
+        holders.setdefault(role, []).append(d)
+    for role, ds in sorted(holders.items()):
+        if len(ds) > 1:
+            print("  note %-12s %r is on districts %s \u2014 the page cannot say which "
+                  "holds it, so it ships on neither"
+                  % (county, role, ", ".join(str(x) for x in sorted(ds))), file=sys.stderr)
+            continue
+        row = districts.get(str(ds[0]))
+        if row and not row.get("vacant"):
+            row["role"] = role
+            print("  role %-12s district %d: %s -> %s"
+                  % (county, ds[0], row["name"], role), file=sys.stderr)
+    return districts
 
 
 def _fielded(lines):
@@ -4260,6 +4412,14 @@ def scrape_county(fips, name, seats, strategy, url):
         # so the whole page is read at once rather than as a line list.
         return scrape_fielded_county(fips, name, seats, url), "live"
     page_html, read_from = fetch_or_archive(url, fips, name, headers_for(fips, url))
+    if strategy == "cells":
+        # A district per TABLE CELL: the cell boundary is the guard, so this
+        # never walks into a neighbouring district the way a line reading can.
+        # Its roles come back separately because the page contradicts itself on
+        # one of them — see the `_calumet` comment.
+        found, vacant, contacts, roles = _calumet(page_html, seats)
+        out = _resolve(name, seats, strategy, found, vacant, contacts)
+        return _calumet_roles(roles, out, name), read_from
     if strategy == "indexroll":
         # A structured page carries the role in the person's own block, so it
         # needs no `attach_officer_roles` pass over the flattened lines — and

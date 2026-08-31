@@ -346,7 +346,7 @@
             "url": "https://services9.arcgis.com/cqHJZMbXoaOT0XrP/arcgis/rest/services/Trempealeau_County_County_Board_Supervisor_Districts_2021_2031_WFL1/FeatureServer/3"
           }
         ],
-        "people": "For 50 of the 72 counties, the supervisor holding the district — 40 read from each county's own board page, Milwaukee and Racine off their own GIS layers (Milwaukee Legistar-witnessed on every run), Fond du Lac through the Internet Archive with the county asked first and the capture's age gated, Dodge from its paginated constituent directory, Kenosha's and Adams's from directory PDFs, Columbia's from the table its listing page frames from a second county host, and Taylor, Lafayette and La Crosse as dated documents behind challenges this project does not defeat (county-board-members.json, 1,139 seats, refreshed weekly by CI as a reviewed PR); a seat the county marks empty renders as vacant, and ten do. The other 22 counties publish no district-keyed member list this can read, so no name is shown and the card links the county board — Wisconsin has no statewide roster of county supervisors.",
+        "people": "For 51 of the 72 counties, the supervisor holding the district — 41 read from each county's own board page, Milwaukee and Racine off their own GIS layers (Milwaukee Legistar-witnessed on every run), Fond du Lac through the Internet Archive with the county asked first and the capture's age gated, Dodge from its paginated constituent directory, Kenosha's and Adams's from directory PDFs, Columbia's from the table its listing page frames from a second county host, and Taylor, Lafayette and La Crosse as dated documents behind challenges this project does not defeat (county-board-members.json, 1,139 seats, refreshed weekly by CI as a reviewed PR); a seat the county marks empty renders as vacant, and ten do. The other 21 counties publish no district-keyed member list this can read, so no name is shown and the card links the county board — Wisconsin has no statewide roster of county supervisors.",
         "applies": "Wisconsin — statewide, all 72 counties."
       }
     },
@@ -1427,8 +1427,8 @@
       },
       {
         "file": "county-board-members.json",
-        "min_keys": 1100,
-        "note": "County board supervisors for the 50 counties whose district-keyed member list this can obtain (1,139 seats, 1,129 named and 10 the counties themselves mark vacant) — 40 read from each county's own board page, Milwaukee and Racine off their own GIS layers (Milwaukee Legistar-witnessed on every run), Fond du Lac through the Internet Archive with the county asked first and the capture's age gated, Dodge from its paginated constituent directory, Kenosha's and Adams's from directory PDFs, Columbia's from the table its listing page frames from a second county host, and Taylor, Lafayette and La Crosse as dated documents behind challenges this project does not defeat. Built by wi/scripts/build_wi_county_board_roster.py, checked seat-for-seat against the shipped district geometry and refused outright if a county that shipped last week resolves nothing this week. The other 22 counties name nobody — their cards link the county board instead."
+        "min_keys": 1121,
+        "note": "County board supervisors for the 51 counties whose district-keyed member list this can obtain (1,160 seats, 1,150 named and 10 the counties themselves mark vacant) — 41 read from each county's own board page, Milwaukee and Racine off their own GIS layers (Milwaukee Legistar-witnessed on every run), Fond du Lac through the Internet Archive with the county asked first and the capture's age gated, Dodge from its paginated constituent directory, Kenosha's and Adams's from directory PDFs, Columbia's from the table its listing page frames from a second county host, and Taylor, Lafayette and La Crosse as dated documents behind challenges this project does not defeat. Calumet (2026-08-31) is the 51st and reads a district per TABLE CELL across four client-side tabs, one fetch carrying all of them; its roles pass a uniqueness gate, because the county's own page labels two supervisors Vice-Chairperson and its organisational minutes name only one. Built by wi/scripts/build_wi_county_board_roster.py, checked seat-for-seat against the shipped district geometry and refused outright if a county that shipped last week resolves nothing this week. The other 21 counties name nobody — their cards link the county board instead."
       },
       {
         "file": "wi-circuit-judges.json",
@@ -2129,7 +2129,7 @@
         "label": "county-board seats named on the card",
         "file": "data/app/county-board-members.json",
         "metric": "keys",
-        "note": "in the 50 counties whose district-keyed roster this can obtain"
+        "note": "in every county whose district-keyed roster this can obtain"
       },
       {
         "label": "circuit courts with their full bench named",
@@ -2139,6 +2139,11 @@
       }
     ],
     "entries": [
+      {
+        "date": "2026-08-31",
+        "title": "Calumet names your supervisor",
+        "body": "Click anywhere in Calumet County and the board card now names the supervisor holding your district, with the phone the county publishes for them — all twenty-one seats. Calumet had been on this app's own list of counties that publish nothing usable, and it was never true: the county's board page answers an ordinary request and pairs every district with a person. Nobody had opened it. That is the sixth Wisconsin county recovered from a wrong record here rather than from anything a county changed, which is why the list of counties we cannot name is kept as a record of what was measured and not as a verdict. Three separate county documents were made to agree before any of it shipped: the board page, the state's own district map, and the roll call of the county's April organizational meeting, which names the same twenty-one people. One thing is deliberately missing. The county's page gives two different supervisors the title of vice-chair, and its own minutes show only one of them holds it now, so that title is shown for neither. The chair and second vice-chair are named because nobody else claims those. It will appear on its own once the page stops saying both."
+      },
       {
         "date": "2026-08-29",
         "title": "Seventeen more counties name your supervisor",

@@ -11,10 +11,10 @@ That is what stops a county's page reorganising into a plausible-but-wrong
 number of members — the two files were built from different publishers (the
 county's own page, and LTSB's statewide filing) and have to agree.
 
-Fifty of Wisconsin's 72 counties have a district-keyed member list this project
-can reach, by one of the eight routes the scraper's docstring sets out; the
-other 22 are recorded in the Data gaps panel and their cards keep linking the
-county board rather than naming anybody.
+Fifty-one of Wisconsin's 72 counties have a district-keyed member list this
+project can reach, by one of the eight routes the scraper's docstring sets out;
+the other 21 are recorded in the Data gaps panel and their cards keep linking
+the county board rather than naming anybody.
 
 AND A COUNTY THAT SHIPPED LAST WEEK MAY NOT SIMPLY VANISH. The floors below are
 a fleet-sized net and one county falling out of a fifty-county file goes
@@ -59,12 +59,12 @@ GEOMETRY = os.path.join(APP_DATA_DIR, "county-supervisory-districts.json")
 RAW = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache", "wi_county_boards_raw.json")
 OUT = os.path.join(APP_DATA_DIR, "county-board-members.json")
 
-MIN_COUNTIES = 48      # 50 ship one (40 board pages + 2 county GIS layers + Fond du
+MIN_COUNTIES = 49      # 51 ship one (41 board pages + 2 county GIS layers + Fond du
                        # Lac through the Internet Archive + Dodge's constituent
                        # directory + Kenosha's witnessed directory PDF + Adams's
                        # directory PDF + Columbia's framed table + Taylor,
                        # Lafayette and La Crosse by document); tolerates two dark
-MIN_SEATS = 1066       # 1139 today; the tolerance is the two largest boards
+MIN_SEATS = 1087       # 1160 today; the tolerance is the two largest boards
                        # (Dane 37 + Outagamie 36) going dark in one run, which is
                        # what a floor is for — it is never lowered to fit a result
 
