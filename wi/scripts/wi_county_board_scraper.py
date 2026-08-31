@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-Scrape county board supervisors from the 55 Wisconsin counties whose roster this
+Scrape county board supervisors from the 56 Wisconsin counties whose roster this
 file can reach. Stage 1 of the pair; build_wi_county_board_roster.py turns the
 intermediate JSON into data/app/county-board-members.json.
 
-ELEVEN ROUTES, AND WHICH ONE A COUNTY TAKES IS A MEASUREMENT
+TWELVE ROUTES, AND WHICH ONE A COUNTY TAKES IS A MEASUREMENT
 ------------------------------------------------------------
   * COUNTIES                    - 42 counties whose own board page pairs a
                                   district with a person, each page's reading
@@ -35,6 +35,10 @@ ELEVEN ROUTES, AND WHICH ONE A COUNTY TAKES IS A MEASUREMENT
                                   CivicPlus staff-directory widget stating the
                                   district THREE ways — header, job title and
                                   county mailbox — gated on all three agreeing;
+  * `member-cards`              - Oconto, whose 31 members sit in ONE such
+                                  widget, alphabetical by surname, the district
+                                  stated only inside each card's job title and
+                                  the phones on each member's own page;
   * FRAMED_TABLE_COUNTIES       - Columbia, whose listing page is a shell around
                                   an iframe onto a second county host;
   * DOCUMENT_ROSTERS            - Taylor, Lafayette and La Crosse, whose hosts
@@ -50,12 +54,12 @@ each is defined: a WITNESSED document is fetched and checked every week; a
 CARRIED one was read once, by a person, through an access control this file does
 not try to defeat.
 
-WHY ONLY FIFTY-FIVE OF SEVENTY-TWO
-----------------------------------
+WHY ONLY FIFTY-SIX OF SEVENTY-TWO
+---------------------------------
 Wisconsin publishes county board DISTRICTS statewide (Wis. Stat. 5.15(4)(br)1,
 see build_wi_supervisory_districts.py) and publishes the PEOPLE in them nowhere:
-each county names its own supervisors, 72 different ways. Fifty-five are
-reachable by one of the routes above. The other 17 are not oversights and are
+each county names its own supervisors, 72 different ways. Fifty-six are
+reachable by one of the routes above. The other 16 are not oversights and are
 recorded as such — and the record is worth reading before adding to it, because on
 2026-08-29 seventeen counties joined at once and ALMOST NONE OF THEM HAD STARTED
 PUBLISHING ANYTHING NEW. What changed was this file:
@@ -67,12 +71,16 @@ PUBLISHING ANYTHING NEW. What changed was this file:
   * LINCOLN answers a Cloudflare managed challenge on every path and header
     tried. A challenge is an access control and is not defeated here.
   * FOREST does not resolve at all.
-  * OCONTO publishes district MAPS — a page per district with a PDF and no name
-    on it anywhere, re-checked 2026-08-29 and the record held. Kenosha and
-    Ozaukee were in this bullet until the same day; Ozaukee's BOARD page names
-    all 26, and Kenosha's Clerk publishes a district-keyed directory. This file
-    once claimed 23 counties on a sweep that tested district NUMBERS, and
-    numbers are what a map index has. TEST FOR THE PEOPLE.
+  * THE MAP-ONLY BULLET IS NOW EMPTY, and its last occupant is the reason to
+    distrust the whole list. It read "OCONTO publishes district MAPS — a page
+    per district with a PDF and no name on it anywhere, re-checked 2026-08-29
+    and the record held", and it was an accurate description of
+    /307/County-Board-Supervisory-District-Maps. Oconto's ROSTER is at
+    /453/County-Board and names all 31 members; the county was in this bullet
+    for a year with the answer one slug away, exactly as Kenosha and Ozaukee had
+    been until 2026-08-29. Three counties, one mistake, three times. RE-CHECKING
+    A RECORD IS NOT RE-CHECKING THE COUNTY — the 2026-08-29 pass confirmed what
+    the map page says and never asked whether it was the right page.
   * The remaining 13 publish their members as images or prose with no district
     column on the pages their own sites point to. THAT NUMBER WENT 18 -> 13 ON
     2026-08-31 AND NONE OF THE FIVE THAT LEFT EVER BELONGED IN IT. Calumet
@@ -1167,6 +1175,12 @@ COUNTIES = [
     # `scrape_staff_directory_county` comment.
     ("55029", "Door", 21, "staff-directory",
      "https://co.door.wi.gov/234/County-Board-of-Supervisors"),
+    # --- 2026-08-31: the 56th, and the county this file called map-only for a
+    # year. The record described /307/...District-Maps accurately and that is
+    # not the roster page; /453/County-Board names all 31. See
+    # `scrape_member_cards_county` — its page says "Member", never "Supervisor".
+    ("55083", "Oconto", 31, "member-cards",
+     "https://www.ocontocountywi.gov/453/County-Board"),
     # --- the 2026-08-29 header fix: a county recorded unreadable for a year ---,
 ]
 
@@ -4712,11 +4726,17 @@ def scrape_directory_county(fips, county, seats, url):
 DOOR_WIDGET = re.compile(
     r'(?is)<div class="widgetHeader">.*?<h3>.*?>\s*District\s*(\d+)[^<]*</a>.*?</div>\s*'
     r'<ol class="semanticList">(.*?)</ol>')
-DOOR_NAME = re.compile(r'(?is)<h4[^>]*\bp-name\b[^>]*>(.*?)</h4>')
-DOOR_TITLE = re.compile(r'(?is)class="field p-job-title"[^>]*>(.*?)</div>')
+# The CivicPlus h-card fields, shared by every county on that platform: Door
+# gives each district its own widget, Oconto puts all 31 members in one. The
+# FIELD names are the platform's and are identical; what differs is where the
+# district is stated and what the u-email field actually points at, so those
+# stay per county.
+HCARD_ITEM = re.compile(r'(?is)<li class="widgetItem h-card">(.*?)</li>')
+HCARD_NAME = re.compile(r'(?is)<h4[^>]*\bp-name\b[^>]*>(.*?)</h4>')
+HCARD_TITLE = re.compile(r'(?is)class="field p-job-title"[^>]*>(.*?)</div>')
+HCARD_TEL = re.compile(r'(?is)class="field p-tel"[^>]*>(.*?)</div>')
+HCARD_LINK = re.compile(r'(?is)class="field p-link".*?href="([^"]+)"')
 DOOR_MAIL = re.compile(r'mailto:(district(\d+)@co\.door\.wi\.gov)', re.I)
-DOOR_TEL = re.compile(r'(?is)class="field p-tel"[^>]*>(.*?)</div>')
-DOOR_LINK = re.compile(r'(?is)class="field p-link".*?href="([^"]+)"')
 DOOR_PHONE = re.compile(r"\b(\d{3})[-.\s](\d{3})[-.\s](\d{4})\b")
 DOOR_MIN_EMAILS = 19     # 21 of 21 today
 DOOR_MIN_PHONES = 19     # 21 of 21 today
@@ -4730,7 +4750,7 @@ def scrape_staff_directory_county(fips, county, seats, url):
         district, body = int(m.group(1)), m.group(2)
         if not (1 <= district <= seats):
             continue
-        name = DOOR_NAME.search(body)
+        name = HCARD_NAME.search(body)
         if not name:
             continue
         who = " ".join(html_lib.unescape(_TAG.sub(" ", name.group(1))).split())
@@ -4740,7 +4760,7 @@ def scrape_staff_directory_county(fips, county, seats, url):
         if not is_name(who):
             raise RuntimeError("%s: district %d resolved %r, which does not read "
                                "as a name — re-read %s" % (county, district, who, url))
-        title = DOOR_TITLE.search(body)
+        title = HCARD_TITLE.search(body)
         office = " ".join(html_lib.unescape(_TAG.sub(" ", title.group(1))).split()) \
             if title else ""
         mail = DOOR_MAIL.search(body)
@@ -4759,13 +4779,13 @@ def scrape_staff_directory_county(fips, county, seats, url):
                 % (county, district, mail.group(1) if mail else None))
         found[district] = (clean(who)[0], None)
         row = {"email": mail.group(1).lower()}
-        tel = DOOR_TEL.search(body)
+        tel = HCARD_TEL.search(body)
         if tel:
             digits = DOOR_PHONE.search(
                 " ".join(html_lib.unescape(_TAG.sub(" ", tel.group(1))).split()))
             if digits:
                 row["phone"] = "-".join(digits.groups())
-        link = DOOR_LINK.search(body)
+        link = HCARD_LINK.search(body)
         if link:
             row["url"] = urllib.parse.urljoin(url, html_lib.unescape(link.group(1)))
         contacts[district] = row
@@ -4791,6 +4811,158 @@ def scrape_staff_directory_county(fips, county, seats, url):
           "title and the county mailbox%s"
           % (county, len(found), seats,
              " (%d vacant)" % len(vacant) if vacant else ""), file=sys.stderr)
+    return attach_unique_roles(roles, out, county)
+
+
+# --- Oconto: the county this file called map-only for a year ------------------
+#
+# THE RECORD WAS WRONG AND ITS OWN CORRECTION SAID SO. This file's bullet list
+# read "OCONTO publishes district MAPS - a page per district with a PDF and no
+# name on it anywhere, re-checked 2026-08-29 and the record held", and two
+# bullets later: "CHECK WHICH BOARD PAGE ... two slugs one word apart, one a map
+# index and one the answer". Oconto is that sentence again. The directory table
+# pointed at /307/County-Board-Supervisory-District-Maps, which is exactly the
+# map index the record described; /453/County-Board names all 31 members with
+# their districts and has all along.
+#
+# THE WORD IS "MEMBER", NOT "SUPERVISOR", AND THAT IS WHY THE SWEEP MISSED IT.
+# The page contains the string "supervisor" ZERO times: every card reads "County
+# Board Member, District 30". A sweep that greps for the office this project
+# happens to call the job finds nothing on a page naming all 31 people. TEST FOR
+# THE PEOPLE was the lesson written after Kenosha; testing for the WORD is how
+# it fails.
+#
+# THE LIST IS ALPHABETICAL BY SURNAME, so document order is 30, 8, 26, 16, 12,
+# 29, 31, 10, 5, 28, 3, ... Nothing here reads by position - the district comes
+# out of each card's own job title - but an adjacency reading would scramble the
+# whole board while resolving 31 seats.
+#
+# THE TWO OFFICERS BREAK A TITLE-KEYED READ, which is the Jackson (Illinois)
+# trap in a new dress. Twenty-nine cards say "County Board Member, District N";
+# district 6 says "County Board Vice Chair, District 6" and district 27 "County
+# Board Chair, District 27". Keying on the literal "County Board Member" drops
+# exactly the chair and the vice chair — a 29-seat board where 31 was expected,
+# with the two most prominent members missing. The district is therefore taken
+# from "District N" ANYWHERE in the title and the role from the same string.
+#
+# THE u-email FIELD IS A CONTACT FORM FOR 28 OF THE 31 and is not shipped as an
+# address: /formcenter/County-Board-13/<name>-Contact-Form-89 is Calumet's case
+# exactly. Three members do publish a real mailbox, district-keyed as
+# cbdistrictN@ (on TWO county domains, co.oconto.wi.us and ocontocountywi.gov),
+# and those three are checked against the district whose card they sit on — the
+# Adams witness where it is available. The p-link, by contrast, IS a real page
+# ("Staff Directory - Don Bartels Jr.") and ships as the supervisor page, which
+# is the same distinction Door and Calumet already record.
+#
+# THE PHONES COME FROM THE PROFILE PAGES, because the list page carries none at
+# all. That is the Manitowoc arrangement — a page per member, fetched and used
+# as a witness — and the profile's own title must name the member the list page
+# put on that district, or the fetch is discarded rather than trusted. THE
+# COUNTY'S SWITCHBOARD SITS IN EVERY PROFILE'S FOOTER (920-834-6800, printed
+# under the county's address), so a number found on more than one member is
+# dropped from all of them: Waupaca's rule, and here it is the difference
+# between 31 personal numbers and 31 copies of the courthouse.
+OC_DIST = re.compile(r"(?i)\bDistrict\s*(\d+)\b")
+OC_MAIL = re.compile(r"mailto:(cbdistrict(\d+)@(?:co\.oconto\.wi\.us|ocontocountywi\.gov))", re.I)
+OC_PHONE = re.compile(r"\b(\d{3})[-.](\d{3})[-.](\d{4})\b")
+OC_TITLE = re.compile(r"(?is)<title>(.*?)</title>")
+OC_MIN_PHONES = 25       # 28 of 31 resolve one today; districts 9, 20 and 24
+                         # publish no number of their own and ship without one
+OC_MIN_LINKS = 29        # 31 of 31 today
+
+
+def _oconto_profiles(cards, county, base):
+    """{district: phone} from each member's own page, witnessed by its title."""
+    phones, seen = {}, {}
+    for district, (who, url) in sorted(cards.items()):
+        try:
+            page = fetch(urllib.parse.urljoin(base, url))
+        except Exception as e:          # noqa: BLE001 - contact, never the roster
+            print("  note %-12s district %d profile unreachable (%s) — no phone "
+                  "this run" % (county, district, e), file=sys.stderr)
+            continue
+        title = OC_TITLE.search(page)
+        named = html_lib.unescape(title.group(1)) if title else ""
+        if _wp_fold(who) not in _wp_fold(named):
+            # the page belongs to somebody else; a phone off it would be theirs
+            print("  note %-12s district %d links a page titled %r, which does not "
+                  "name %r — no phone taken" % (county, district, named.strip(), who),
+                  file=sys.stderr)
+            continue
+        for m in OC_PHONE.finditer(page):
+            seen.setdefault(district, []).append("-".join(m.groups()))
+    # A NUMBER ON MORE THAN ONE MEMBER IS THE COUNTY'S, NOT THEIRS — see above.
+    counts = {}
+    for district, found in seen.items():
+        for phone in set(found):
+            counts[phone] = counts.get(phone, 0) + 1
+    shared = {p for p, n in counts.items() if n > 1}
+    for phone in sorted(shared):
+        print("  phone %-12s %s appears on %d members — the county's, dropped from "
+              "all" % (county, phone, counts[phone]), file=sys.stderr)
+    for district, found in seen.items():
+        mine = [p for p in found if p not in shared]
+        if mine:
+            phones[district] = mine[0]
+    return phones
+
+
+def scrape_member_cards_county(fips, county, seats, url):
+    """All seats or nothing, out of one staff-directory widget of h-cards."""
+    page = fetch(url)
+    found, contacts, roles, links = {}, {}, {}, {}
+    for m in HCARD_ITEM.finditer(page):
+        body = m.group(1)
+        name, title = HCARD_NAME.search(body), HCARD_TITLE.search(body)
+        if not name or not title:
+            continue
+        who = " ".join(html_lib.unescape(_TAG.sub(" ", name.group(1))).split())
+        office = " ".join(html_lib.unescape(_TAG.sub(" ", title.group(1))).split())
+        stated = OC_DIST.search(office)
+        if not stated:
+            continue                    # a card on this page that is not a seat
+        district = int(stated.group(1))
+        if not (1 <= district <= seats) or district in found:
+            continue
+        if VACANT.search(who):
+            continue                    # caught by the all-seats gate below
+        if not is_name(who):
+            raise RuntimeError("%s: district %d resolved %r, which does not read "
+                               "as a name — re-read %s" % (county, district, who, url))
+        found[district] = (clean(who)[0], None)
+        row = {}
+        mail = OC_MAIL.search(body)
+        if mail:
+            if int(mail.group(2)) != district:
+                raise RuntimeError(
+                    "%s: district %d carries the mailbox %r — the county's own "
+                    "district-keyed address disagrees with the card it sits on"
+                    % (county, district, mail.group(1)))
+            row["email"] = mail.group(1).lower()
+        link = HCARD_LINK.search(body)
+        if link:
+            href = html_lib.unescape(link.group(1))
+            row["url"] = urllib.parse.urljoin(url, href)
+            links[district] = (found[district][0], href)
+        if row:
+            contacts[district] = row
+        role = STRUCTURED_ROLE.search(office)
+        if role:
+            roles[district] = role_case(role.group(1))
+
+    if len(links) < OC_MIN_LINKS:
+        raise RuntimeError("%s: only %d of %d cards link a member page (floor %d) "
+                           "— the directory widget has reshaped; re-read %s"
+                           % (county, len(links), seats, OC_MIN_LINKS, url))
+    for district, phone in _oconto_profiles(links, county, url).items():
+        contacts.setdefault(district, {})["phone"] = phone
+    got = sum(1 for r in contacts.values() if r.get("phone"))
+    if got < OC_MIN_PHONES:
+        raise RuntimeError("%s: %d of %d members resolved a phone from their own "
+                           "page (floor %d) — the profile pages have reshaped and "
+                           "contact is being dropped silently"
+                           % (county, got, seats, OC_MIN_PHONES))
+    out = _resolve(county, seats, "member-cards", found, set(), contacts)
     return attach_unique_roles(roles, out, county)
 
 
@@ -5073,6 +5245,11 @@ def attach_profiles(page, list_url, districts, county):
 
 def scrape_county(fips, name, seats, strategy, url):
     """All seats or nothing — see the module docstring."""
+    if strategy == "member-cards":
+        # One staff-directory widget of h-cards, alphabetical by surname, the
+        # district stated only inside each card's job title. Phones come from
+        # each member's own page — see `scrape_member_cards_county`.
+        return scrape_member_cards_county(fips, name, seats, url), "live"
     if strategy == "staff-directory":
         # A CivicPlus staff-directory widget per district, whose block states the
         # district three ways — header, job title and county mailbox — and is
