@@ -71,6 +71,15 @@ def render(d):
       f"to `{d['release']['volunteer_contact']}`.")
     a("")
 
+    a("## The release")
+    a("")
+    a(d["release"].get("authored", ""))
+    a("")
+    # Prefix every line once. Chaining two replaces here double-applies and yields nested `> >`.
+    for line in d["release"]["body"].split("\n"):
+        a(("> " + line) if line.strip() else ">")
+    a("")
+
     a("## How this file is used")
     a("")
     a("The same rules `docs/ASK_DRAFTS.md` sets for outbound asks apply here, for the same reason:")
