@@ -326,6 +326,15 @@ def _cross_check_scraper_hosts():
     """
     TWO_HOST_COUNTIES = {
         "55111": "the board page and the county's own Domino membership database",
+        # Waupaca's board page names NOBODY — four paragraphs about what a
+        # county board is, and zero "District n" — while its Clerk's Directory
+        # of Public Officials names all 27 district-keyed on the county's other
+        # host (public4.co.waupaca.wi.us, the same domain the supervisors'
+        # mailboxes sit on). Both hosts are live and both are the county's: this
+        # is a county with two publishers, not the dead-domain case the error
+        # below describes, so the card keeps linking the county's own site while
+        # the roster is read from the Clerk's.
+        "55135": "the county's own site and the Clerk's directory of officials",
     }
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     try:
