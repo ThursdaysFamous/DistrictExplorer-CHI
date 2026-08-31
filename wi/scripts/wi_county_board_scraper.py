@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Scrape county board supervisors from the 51 Wisconsin counties whose roster this
+Scrape county board supervisors from the 52 Wisconsin counties whose roster this
 file can reach. Stage 1 of the pair; build_wi_county_board_roster.py turns the
 intermediate JSON into data/app/county-board-members.json.
 
 EIGHT ROUTES, AND WHICH ONE A COUNTY TAKES IS A MEASUREMENT
 -----------------------------------------------------------
-  * COUNTIES                    - 41 counties whose own board page pairs a
+  * COUNTIES                    - 42 counties whose own board page pairs a
                                   district with a person, each page's reading
                                   direction PINNED;
   * ARCGIS_COUNTIES             - Milwaukee and Racine, whose SITES refuse this
@@ -38,12 +38,12 @@ each is defined: a WITNESSED document is fetched and checked every week; a
 CARRIED one was read once, by a person, through an access control this file does
 not try to defeat.
 
-WHY ONLY FIFTY-ONE OF SEVENTY-TWO
+WHY ONLY FIFTY-TWO OF SEVENTY-TWO
 ---------------------------------
 Wisconsin publishes county board DISTRICTS statewide (Wis. Stat. 5.15(4)(br)1,
 see build_wi_supervisory_districts.py) and publishes the PEOPLE in them nowhere:
-each county names its own supervisors, 72 different ways. Fifty-one are reachable
-by one of the eight routes above. The other 21 are not oversights and are recorded
+each county names its own supervisors, 72 different ways. Fifty-two are reachable
+by one of the eight routes above. The other 20 are not oversights and are recorded
 as such — and the record is worth reading before adding to it, because on
 2026-08-29 seventeen counties joined at once and ALMOST NONE OF THEM HAD STARTED
 PUBLISHING ANYTHING NEW. What changed was this file:
@@ -61,17 +61,19 @@ PUBLISHING ANYTHING NEW. What changed was this file:
     all 26, and Kenosha's Clerk publishes a district-keyed directory. This file
     once claimed 23 counties on a sweep that tested district NUMBERS, and
     numbers are what a map index has. TEST FOR THE PEOPLE.
-  * The remaining 17 publish their members as images or prose with no district
-    column on the pages their own sites point to. THAT NUMBER WENT 18 -> 17 ON
-    2026-08-31 AND THE COUNTY THAT LEFT NEVER BELONGED IN IT: Calumet publishes
-    all 21 supervisors district-keyed, with a phone each, and answers 200 to a
-    plain request. Nobody had opened the page. It is the sixth county this file
-    has recovered from its own record rather than from anything a county
-    changed, and the bucket it sat in is the one that says what nobody checked
-    — so it is the first place to look for the 52nd, not the last.
+  * The remaining 16 publish their members as images or prose with no district
+    column on the pages their own sites point to. THAT NUMBER WENT 18 -> 16 ON
+    2026-08-31 AND NEITHER COUNTY THAT LEFT EVER BELONGED IN IT. Calumet
+    publishes all 21 supervisors district-keyed with a phone each; Buffalo
+    publishes all 14 with a county e-mail for 12. Both answer 200 to a plain
+    request and both are linked from their own sites' menus. Nobody had opened
+    either page. That bucket is the one that records what nobody checked, and
+    saying so is what sent the next look at Buffalo — TWO counties out of it in
+    one day, from a list that had gone unre-read for two days while the
+    surrounding paragraphs were rewritten twice. THE 53RD IS IN THIS BULLET.
 
-SIX WAYS THAT LIST HAS BEEN WRONG, EACH FOUND BY CHECKING RATHER THAN GUESSING
--------------------------------------------------------------------------------
+SEVEN WAYS THAT LIST HAS BEEN WRONG, EACH FOUND BY CHECKING RATHER THAN GUESSING
+--------------------------------------------------------------------------------
   1. A 403 MEASURES THE REQUEST, NOT THE COUNTY. The bucket used to say nine
      counties answer 403 "and hold it against browser headers", where browser
      headers meant the three this file sent: a User-Agent, an Accept and an
@@ -121,6 +123,17 @@ SIX WAYS THAT LIST HAS BEEN WRONG, EACH FOUND BY CHECKING RATHER THAN GUESSING
      WORTH TAKING TO THE NEXT COUNTY is that the contradiction was visible only
      because the page states the role in the first place; a county that names
      its chair somewhere else can be stale with nothing to compare against.
+  7. THE SAME BLIND SPOT, ONE LEVEL DOWN: A ROLE THAT DOES NOT MATCH ITS REGEX
+     IS INVISIBLE. Buffalo (2026-08-31) resolved 14 of 14 seats on its first run
+     with its CHAIRMAN unnamed, and every guard stayed green. The role pattern
+     read `chair(?:man|person|woman)`, which requires a suffix: true of
+     Calumet's "Chairperson" a day earlier, false of Buffalo's bare "Chair". The
+     county published the role, the reader saw the line, and the regex declined
+     it silently. Finding 6 says a field that is not the seat needs its own
+     gate; this is the same sentence about the field's own PARSER, and it was
+     caught only by reading the fourteen rows against the page. WHEN A NEW
+     COUNTY SHARES A PATTERN WITH AN OLD ONE, RE-READ THE OUTPUT ROW BY ROW —
+     the count is the one thing that cannot tell you.
 
 MARINETTE IS THE ONE INFERENCE THIS FILE MAKES, and it is opt-in per county:
 the board page numbers 29 of 30 seats and prints one unnumbered "VACANT SEAT"
@@ -1104,6 +1117,13 @@ COUNTIES = [
     # role gate above it — see the `_calumet` comment for both.
     ("55015", "Calumet", 21, "cells",
      "https://calumetcounty.org/243/County-Board-of-Supervisors"),
+    # --- 2026-08-31: the 52nd, found the same way as the 51st and one bucket
+    # over. Buffalo's record said it "publishes no district-keyed list on the
+    # pages their own sites point to"; the page linked from its own Boards &
+    # Committees menu names all 14 with a county e-mail for 12. See the
+    # `_heading_block` comment for the shape and for the obfuscated addresses.
+    ("55011", "Buffalo", 14, "heading-block",
+     "https://www.buffalocountywi.gov/government/boards-committees/county-board/"),
     # --- the 2026-08-29 header fix: a county recorded unreadable for a year ---,
 ]
 
@@ -1830,11 +1850,20 @@ def flip_last_first(text):
 CAL_PANELS = re.compile(r'(?is)<div class="cpTabPanels">')
 CAL_CELL = re.compile(r"(?is)<td\b[^>]*>(.*?)</td>")
 CAL_DIST = re.compile(r"(?i)^district\s+(\d{1,2})\b")
-# Longest form first: District 15's "Second Vice-Chair" must not read as the
-# plain "Vice-Chair" the two conflicting cells carry.
-CAL_ROLE = re.compile(r"(?i)\b((?:second|2nd|first|1st)\s+vice[\s\-]?chair(?:man|person|woman)?"
-                      r"|vice[\s\-]?chair(?:man|person|woman)?"
-                      r"|chair(?:man|person|woman))\b")
+# Longest form first: Calumet's "Second Vice-Chair" must not read as the plain
+# "Vice-Chair" its two conflicting cells carry.
+#
+# THE SUFFIX IS OPTIONAL AND THAT COST A CHAIRMAN. Written as
+# `chair(?:man|person|woman)` the last branch REQUIRES a suffix, which is true
+# of Calumet ("Chairperson") and false of Buffalo, whose h5 reads a bare
+# "Chair<br />District 11". Buffalo resolved 14 of 14 seats with its chairman
+# silently unnamed and every guard green — the same shape as the role trap this
+# gate exists for, one level down: a field that is not the seat passes every
+# seat count in the file. `?` makes the suffix optional; the ordered alternation
+# still gives "Vice Chair" to the vice-chair branch before the bare one.
+STRUCTURED_ROLE = re.compile(r"(?i)\b((?:second|2nd|first|1st)\s+vice[\s\-]?chair(?:man|person|woman)?"
+                             r"|vice[\s\-]?chair(?:man|person|woman)?"
+                             r"|chair(?:man|person|woman)?)\b")
 # The county writes its numbers five ways across the 21 cells — "(920) 639-6908",
 # "920-574-0421", "Phone:(920) 850-7931" with no space, "( 217) 722-1974" with a
 # space INSIDE the parenthesis, and District 15's "(920) 853-3440 Second
@@ -1846,8 +1875,10 @@ CAL_PHONE = re.compile(r"(?i)phone:?\s*\(?\s*(\d{3})\s*\)?[\s.\-]*(\d{3})[\s.\-]
 CAL_NICK = re.compile(r"\s*\([^)]*\)\s*")
 
 
-def _calumet_lines(fragment):
-    """The cell's own lines, with its <br>-separated fields kept apart."""
+# Shared by the structured readers below: Calumet's table cell and Buffalo's
+# heading pair both need a fragment's own <br>-separated fields kept apart.
+def _flat_lines(fragment):
+    """A markup fragment's own lines, keeping its <br>-separated fields apart."""
     h = re.sub(r"(?is)<br\s*/?>", "\n", fragment)
     h = re.sub(r"(?is)</(p|h\d|div|li|tr)>", "\n", h)
     h = _TAG.sub(" ", h)
@@ -1860,7 +1891,7 @@ def _calumet(page_html, seats):
     region = page_html[m.end():] if m else page_html
     found, vacant, contacts, roles = {}, set(), {}, {}
     for fragment in CAL_CELL.findall(region):
-        lines = _calumet_lines(fragment)
+        lines = _flat_lines(fragment)
         if len(lines) < 2:
             continue
         head = CAL_DIST.match(lines[0])
@@ -1883,7 +1914,7 @@ def _calumet(page_html, seats):
             continue
         found[d] = (name, None)
         text = " ".join(lines)
-        role = CAL_ROLE.search(text)
+        role = STRUCTURED_ROLE.search(text)
         if role:
             roles[d] = role_case(role.group(1))
         phone = CAL_PHONE.search(text)
@@ -1892,8 +1923,14 @@ def _calumet(page_html, seats):
     return found, vacant, contacts, roles
 
 
-def _calumet_roles(roles, districts, county):
-    """Write through only the roles exactly one supervisor claims. See above."""
+# SHARED BY EVERY STRUCTURED READER THAT TAKES A ROLE OFF THE PAGE IT READS.
+# Calumet is why it exists — two districts labelled "Vice-Chairperson", only one
+# of them current — and Buffalo is why it carries no county's name: Buffalo
+# publishes exactly one Chair and one Vice Chair and passes this cleanly, which
+# is what a gate looks like when the page is right. Keeping one helper means the
+# next structured county inherits the guard instead of re-earning it.
+def attach_unique_roles(roles, districts, county):
+    """Write through only the roles exactly one supervisor claims."""
     holders = {}
     for d, role in roles.items():
         holders.setdefault(role, []).append(d)
@@ -1909,6 +1946,100 @@ def _calumet_roles(roles, districts, county):
             print("  role %-12s district %d: %s -> %s"
                   % (county, ds[0], row["name"], role), file=sys.stderr)
     return districts
+
+
+# --- Buffalo: an Elementor heading pair per supervisor -------------------------
+#
+# buffalocountywi.gov/government/boards-committees/county-board/ is a WordPress
+# /Elementor page that gives every supervisor a container holding an <h4> with
+# the name and an <h5> with the district — and, for the two officers, the role
+# on its own line INSIDE that same <h5>, split from the district by a <br>:
+#
+#     <h4>Max Weiss</h4>
+#     <h5>Vice Chair<br /> District 7 (Town of Modena, Alma, and Gilmanton)</h5>
+#
+# READ AS HEADINGS, NOT AS LINES, and the reason is the page's size rather than
+# its shape. The document is 612 KB because it also carries the county's whole
+# agenda-and-minutes archive — several hundred committee PDFs, each a dated
+# link — so a flattened line reading would be scanning a haystack for fourteen
+# needles. Pairing <h4> with the <h5> under it never leaves a member's own
+# container, which is the same guard `_calumet`'s table cell gives.
+#
+# THE E-MAILS ARE CLOUDFLARE-OBFUSCATED, WHICH IS THE BROWN COUNTY (IL) TRAP
+# EXACTLY: no `mailto:` survives in the markup, so a parser that looks for one
+# returns fourteen supervisors carrying nothing and every count guard stays
+# green. Here the token sits in the href FRAGMENT
+# (/cdn-cgi/l/email-protection#<hex>) rather than in Manitowoc's `data-cfemail`
+# attribute — same encoding, different carrier — and `cf_decode` reads it. There
+# is no second scramble layer, unlike Manitowoc. As everywhere in this fleet,
+# obfuscation markup that decodes to NOTHING is a hard failure rather than a
+# quietly empty column; see EMAIL_MIN below.
+#
+# TWO OF THE FOURTEEN PUBLISH NO E-MAIL AT ALL and that is the county's doing,
+# not this reader's: districts 8 and 14 have no "Email" link on the page. An
+# absent field renders nothing rather than a placeholder, so those two cards
+# name their supervisor and stop.
+#
+# THE COUNTY USES TWO MAIL DOMAINS AND BOTH SHIP AS PUBLISHED. Nine addresses
+# are on buffalocountywi.gov and four on co.buffalo.wi.us, which reads like a
+# half-finished migration; both domains resolve, both are the county's own, and
+# rewriting somebody's contact detail to make a column tidy is not this
+# project's call. `EMAIL_DOMAINS` gates them so a THIRD domain — the shape a
+# hijacked or mistyped address would take — fails the county loudly.
+#
+# NELSON IS A SURNAME AND A PLACE IN THIS COUNTY, which matters to anyone
+# corroborating this roster against the county's minutes rather than to the
+# reader below: districts 3 and 6 are Steve Nelson and Nathan Nelson, and
+# district 1 is "Town of Nelson and Village of Nelson". A surname is not a key
+# here (the Vermilion lesson) and a bare name search hits the townships too.
+BUF_H4 = re.compile(r"(?is)<h4[^>]*>(.*?)</h4>")
+BUF_H5 = re.compile(r"(?is)<h5[^>]*>(.*?)</h5>")
+BUF_DIST = re.compile(r"(?i)^district\s+(\d{1,2})\b")
+BUF_MAIL = re.compile(r"/cdn-cgi/l/email-protection#([0-9a-fA-F]{6,})")
+# The county's own two domains, pinned: see the note above.
+EMAIL_DOMAINS = frozenset(("buffalocountywi.gov", "co.buffalo.wi.us"))
+EMAIL_MIN = 10          # 12 of 14 publish one; districts 8 and 14 do not
+
+
+def _heading_block(page_html, seats):
+    """district -> (name, None), emptied seats, contacts, roles — from <h4>/<h5>."""
+    found, vacant, contacts, roles = {}, set(), {}, {}
+    starts = [m.start() for m in BUF_H4.finditer(page_html)]
+    for i, start in enumerate(starts):
+        block = page_html[start: starts[i + 1] if i + 1 < len(starts) else len(page_html)]
+        head, sub = BUF_H4.search(block), BUF_H5.search(block)
+        if not head or not sub:
+            continue
+        lines = _flat_lines(sub.group(1))
+        district = [l for l in lines if BUF_DIST.match(l)]
+        if not district:
+            continue                        # an <h4> that heads something else
+        d = int(BUF_DIST.match(district[0]).group(1))
+        if not (1 <= d <= seats) or d in found or d in vacant:
+            continue
+        name = " ".join(_flat_lines(head.group(1)))
+        if VACANT.search(name) or any(VACANT.search(l) for l in lines):
+            vacant.add(d)                   # the county says the seat is empty
+            continue
+        if not is_name(name):
+            continue
+        found[d] = (clean(name)[0], None)
+        # anything in the <h5> that is not the district line is the role
+        for line in lines:
+            if BUF_DIST.match(line):
+                continue
+            m = STRUCTURED_ROLE.search(line)
+            if m:
+                roles[d] = role_case(m.group(1))
+        token = BUF_MAIL.search(block)
+        if token:
+            address = cf_decode(token.group(1))
+            # The domain is compared EXACTLY, not with endswith: a suffix test
+            # accepts "…@not-buffalocountywi.gov" as readily as the county's own.
+            domain = address.rsplit("@", 1)[-1].lower()
+            if EMAIL_SHAPE.match(address) and domain in EMAIL_DOMAINS:
+                contacts[d] = {"email": address}
+    return found, vacant, contacts, roles
 
 
 def _fielded(lines):
@@ -4412,6 +4543,20 @@ def scrape_county(fips, name, seats, strategy, url):
         # so the whole page is read at once rather than as a line list.
         return scrape_fielded_county(fips, name, seats, url), "live"
     page_html, read_from = fetch_or_archive(url, fips, name, headers_for(fips, url))
+    if strategy == "heading-block":
+        # A name heading paired with a district heading, per supervisor. Its
+        # roles come back separately for the same uniqueness gate `cells` uses.
+        found, vacant, contacts, roles = _heading_block(page_html, seats)
+        out = _resolve(name, seats, strategy, found, vacant, contacts)
+        got = sum(1 for r in out.values() if r.get("email"))
+        if got < EMAIL_MIN:
+            # Cloudflare obfuscation that decodes to nothing is a HARD failure,
+            # never a quietly empty column — the Brown County (IL) rule.
+            raise RuntimeError(
+                "%s: %d of %d seats resolved an e-mail, floor is %d — the page's "
+                "obfuscation has changed and the addresses are being dropped "
+                "silently" % (name, got, seats, EMAIL_MIN))
+        return attach_unique_roles(roles, out, name), read_from
     if strategy == "cells":
         # A district per TABLE CELL: the cell boundary is the guard, so this
         # never walks into a neighbouring district the way a line reading can.
@@ -4419,7 +4564,7 @@ def scrape_county(fips, name, seats, strategy, url):
         # one of them — see the `_calumet` comment.
         found, vacant, contacts, roles = _calumet(page_html, seats)
         out = _resolve(name, seats, strategy, found, vacant, contacts)
-        return _calumet_roles(roles, out, name), read_from
+        return attach_unique_roles(roles, out, name), read_from
     if strategy == "indexroll":
         # A structured page carries the role in the person's own block, so it
         # needs no `attach_officer_roles` pass over the flattened lines — and

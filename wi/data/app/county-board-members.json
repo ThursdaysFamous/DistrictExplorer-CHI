@@ -420,6 +420,104 @@
   "name": "James Pyle",
   "sourceUrl": "https://www.browncountywi.gov/government/county-board-of-supervisors/"
  },
+ "5501101": {
+  "county": "Buffalo",
+  "district": 1,
+  "email": "dwight.ruff@co.buffalo.wi.us",
+  "name": "Dwight Ruff",
+  "sourceUrl": "https://www.buffalocountywi.gov/government/boards-committees/county-board/"
+ },
+ "5501102": {
+  "county": "Buffalo",
+  "district": 2,
+  "email": "chris.lindstrom@buffalocountywi.gov",
+  "name": "Chris Lindstrom",
+  "sourceUrl": "https://www.buffalocountywi.gov/government/boards-committees/county-board/"
+ },
+ "5501103": {
+  "county": "Buffalo",
+  "district": 3,
+  "email": "steven.nelson@co.buffalo.wi.us",
+  "name": "Steve Nelson",
+  "sourceUrl": "https://www.buffalocountywi.gov/government/boards-committees/county-board/"
+ },
+ "5501104": {
+  "county": "Buffalo",
+  "district": 4,
+  "email": "gary.stanton@buffalocountywi.gov",
+  "name": "Gary Stanton",
+  "sourceUrl": "https://www.buffalocountywi.gov/government/boards-committees/county-board/"
+ },
+ "5501105": {
+  "county": "Buffalo",
+  "district": 5,
+  "email": "carol.mcdonough@buffalocountywi.gov",
+  "name": "Carol McDonough",
+  "sourceUrl": "https://www.buffalocountywi.gov/government/boards-committees/county-board/"
+ },
+ "5501106": {
+  "county": "Buffalo",
+  "district": 6,
+  "email": "nathan.nelson@buffalocountywi.gov",
+  "name": "Nathan Nelson",
+  "sourceUrl": "https://www.buffalocountywi.gov/government/boards-committees/county-board/"
+ },
+ "5501107": {
+  "county": "Buffalo",
+  "district": 7,
+  "email": "max.weiss@buffalocountywi.gov",
+  "name": "Max Weiss",
+  "role": "Vice Chair",
+  "sourceUrl": "https://www.buffalocountywi.gov/government/boards-committees/county-board/"
+ },
+ "5501108": {
+  "county": "Buffalo",
+  "district": 8,
+  "name": "Daniel Schultz",
+  "sourceUrl": "https://www.buffalocountywi.gov/government/boards-committees/county-board/"
+ },
+ "5501109": {
+  "county": "Buffalo",
+  "district": 9,
+  "email": "brian.michaels@buffalocountywi.gov",
+  "name": "Brian Michaels",
+  "sourceUrl": "https://www.buffalocountywi.gov/government/boards-committees/county-board/"
+ },
+ "5501110": {
+  "county": "Buffalo",
+  "district": 10,
+  "email": "robert.sendelbach@co.buffalo.wi.us",
+  "name": "Robert Sendelbach",
+  "sourceUrl": "https://www.buffalocountywi.gov/government/boards-committees/county-board/"
+ },
+ "5501111": {
+  "county": "Buffalo",
+  "district": 11,
+  "email": "dennis.bork@buffalocountywi.gov",
+  "name": "Dennis Bork",
+  "role": "Chair",
+  "sourceUrl": "https://www.buffalocountywi.gov/government/boards-committees/county-board/"
+ },
+ "5501112": {
+  "county": "Buffalo",
+  "district": 12,
+  "email": "william.bruegger@co.buffalo.wi.us",
+  "name": "Bill Bruegger",
+  "sourceUrl": "https://www.buffalocountywi.gov/government/boards-committees/county-board/"
+ },
+ "5501113": {
+  "county": "Buffalo",
+  "district": 13,
+  "email": "michael.taylor@buffalocountywi.gov",
+  "name": "Michael L. Taylor",
+  "sourceUrl": "https://www.buffalocountywi.gov/government/boards-committees/county-board/"
+ },
+ "5501114": {
+  "county": "Buffalo",
+  "district": 14,
+  "name": "Mary Anne McMillan Urell",
+  "sourceUrl": "https://www.buffalocountywi.gov/government/boards-committees/county-board/"
+ },
  "5501301": {
   "county": "Burnett",
   "district": 1,
