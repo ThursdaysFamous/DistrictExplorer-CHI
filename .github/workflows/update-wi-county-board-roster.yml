@@ -2,8 +2,8 @@ name: Update WI county board roster
 
 # Weekly refresh of the Wisconsin county board supervisors
 # (wi/data/app/county-board-members.json, read by wi/index.html's County Board
-# District card). Re-scrapes the 52 counties whose district-keyed member list
-# this can reach, by whichever of the eight carriers reaches it — 42 board
+# District card). Re-scrapes the 53 counties whose district-keyed member list
+# this can reach, by whichever of the nine carriers reaches it — 42 board
 # pages, Milwaukee's and Racine's own GIS layers (Milwaukee witnessed against
 # the county's Legistar API), Fond du Lac through the Internet Archive, Dodge's
 # constituent directory, Kenosha's and Adams's directory PDFs, Columbia's framed

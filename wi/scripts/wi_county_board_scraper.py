@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-Scrape county board supervisors from the 52 Wisconsin counties whose roster this
+Scrape county board supervisors from the 53 Wisconsin counties whose roster this
 file can reach. Stage 1 of the pair; build_wi_county_board_roster.py turns the
 intermediate JSON into data/app/county-board-members.json.
 
-EIGHT ROUTES, AND WHICH ONE A COUNTY TAKES IS A MEASUREMENT
------------------------------------------------------------
+NINE ROUTES, AND WHICH ONE A COUNTY TAKES IS A MEASUREMENT
+----------------------------------------------------------
   * COUNTIES                    - 42 counties whose own board page pairs a
                                   district with a person, each page's reading
                                   direction PINNED;
@@ -23,6 +23,10 @@ EIGHT ROUTES, AND WHICH ONE A COUNTY TAKES IS A MEASUREMENT
                                   against the board's own page every run;
   * PDF_COUNTIES                - Adams, whose directory PDF is fetchable and
                                   district-keyed, so it is re-read weekly like a page;
+  * `pdf-roster`                - Jackson, whose HTML names nobody anywhere and
+                                  whose own listing page links a district-keyed
+                                  roster PDF, DISCOVERED fresh each run because
+                                  its filename carries the board's term;
   * FRAMED_TABLE_COUNTIES       - Columbia, whose listing page is a shell around
                                   an iframe onto a second county host;
   * DOCUMENT_ROSTERS            - Taylor, Lafayette and La Crosse, whose hosts
@@ -38,13 +42,13 @@ each is defined: a WITNESSED document is fetched and checked every week; a
 CARRIED one was read once, by a person, through an access control this file does
 not try to defeat.
 
-WHY ONLY FIFTY-TWO OF SEVENTY-TWO
----------------------------------
+WHY ONLY FIFTY-THREE OF SEVENTY-TWO
+-----------------------------------
 Wisconsin publishes county board DISTRICTS statewide (Wis. Stat. 5.15(4)(br)1,
 see build_wi_supervisory_districts.py) and publishes the PEOPLE in them nowhere:
-each county names its own supervisors, 72 different ways. Fifty-two are reachable
-by one of the eight routes above. The other 20 are not oversights and are recorded
-as such — and the record is worth reading before adding to it, because on
+each county names its own supervisors, 72 different ways. Fifty-three are
+reachable by one of the routes above. The other 19 are not oversights and are
+recorded as such — and the record is worth reading before adding to it, because on
 2026-08-29 seventeen counties joined at once and ALMOST NONE OF THEM HAD STARTED
 PUBLISHING ANYTHING NEW. What changed was this file:
 
@@ -61,16 +65,18 @@ PUBLISHING ANYTHING NEW. What changed was this file:
     all 26, and Kenosha's Clerk publishes a district-keyed directory. This file
     once claimed 23 counties on a sweep that tested district NUMBERS, and
     numbers are what a map index has. TEST FOR THE PEOPLE.
-  * The remaining 16 publish their members as images or prose with no district
-    column on the pages their own sites point to. THAT NUMBER WENT 18 -> 16 ON
-    2026-08-31 AND NEITHER COUNTY THAT LEFT EVER BELONGED IN IT. Calumet
-    publishes all 21 supervisors district-keyed with a phone each; Buffalo
-    publishes all 14 with a county e-mail for 12. Both answer 200 to a plain
-    request and both are linked from their own sites' menus. Nobody had opened
-    either page. That bucket is the one that records what nobody checked, and
-    saying so is what sent the next look at Buffalo — TWO counties out of it in
-    one day, from a list that had gone unre-read for two days while the
-    surrounding paragraphs were rewritten twice. THE 53RD IS IN THIS BULLET.
+  * The remaining 15 publish their members as images or prose with no district
+    column on the pages their own sites point to. THAT NUMBER WENT 18 -> 15 ON
+    2026-08-31 AND NONE OF THE THREE THAT LEFT EVER BELONGED IN IT. Calumet
+    publishes all 21 supervisors district-keyed with a phone each; Buffalo all
+    14 with a county e-mail for 12; Jackson all 19 with both. Nobody had opened
+    any of the three pages. The bullet said "THE 53RD IS IN THIS BULLET" and it
+    was: re-reading the list is what produced each of them, and the third
+    sharpens the bullet's own wording. "Publishes no district column ON THE
+    PAGES THEIR OWN SITES POINT TO" is true of Jackson's HTML and false of
+    Jackson — its site names no supervisor anywhere, and links a PDF that names
+    all 19. A COUNTY'S HTML IS NOT THE COUNTY. Ask what its pages LINK before
+    recording what they say.
 
 SEVEN WAYS THAT LIST HAS BEEN WRONG, EACH FOUND BY CHECKING RATHER THAN GUESSING
 --------------------------------------------------------------------------------
@@ -1124,6 +1130,13 @@ COUNTIES = [
     # `_heading_block` comment for the shape and for the obfuscated addresses.
     ("55011", "Buffalo", 14, "heading-block",
      "https://www.buffalocountywi.gov/government/boards-committees/county-board/"),
+    # --- 2026-08-31: the 53rd, and the third out of the same bucket in one day.
+    # Jackson's HTML names no supervisor anywhere; its own listing page links a
+    # district-keyed roster PDF. See the `scrape_pdf_roster_county` comment for
+    # the four traps and for the ward witness that checks its numbering against
+    # LTSB's filing.
+    ("55053", "Jackson", 19, "pdf-roster",
+     "https://www.co.jackson.wi.us/index.asp?SEC=219B0002-A26C-4AA7-B330-980B6D3ADB57"),
     # --- the 2026-08-29 header fix: a county recorded unreadable for a year ---,
 ]
 
@@ -4259,6 +4272,217 @@ def _email_agrees(name, email):
     return parts[0] == toks[0] and parts[-1] == toks[-1]
 
 
+# --- Jackson: a district-keyed roster PDF the county links from its own page ---
+#
+# THE COUNTY'S OWN SITE DOES NOT NAME A SUPERVISOR ANYWHERE IN ITS HTML, which
+# is why Jackson sat in the gap block and why a reader looking for a board page
+# comes away empty. co.jackson.wi.us links "County Board Supervisor Listing"
+# from its home nav, that page carries no roster either, and what it holds is a
+# LINK to `2026_-_2027_County_Board_Members.pdf` — a four-page document with a
+# full text layer naming all 19 districts, each with its ward composition, the
+# supervisor, a phone and a county e-mail. A PDF IS A FORMAT, NOT A BLOCKER
+# (the Adams rule); the disqualifier was always "no district column", and this
+# document is nothing but district columns.
+#
+# THE DOCUMENT URL IS DISCOVERED, NEVER PINNED. Its filename carries the term
+# ("2026_-_2027"), so the next board's document is at a different address and a
+# pinned URL would go on serving the previous term's names for two years — the
+# exact staleness this project keeps finding on other people's pages. The link
+# is found on the listing page each run and its resolved address is recorded, so
+# the run log names the edition that answered.
+#
+# THIS IS NOT THE ADAMS ROUTE AND DOES NOT REUSE IT. Adams's directory is a
+# Google Drive file whose names sit ON the contact line and are witnessed by a
+# `districtN@` mailbox; Jackson's document is on the county's own host, prints
+# the name on its own line, and gives every supervisor a personal
+# `First.Last@` address — so there is no per-district mailbox to check the
+# heading against, and the parser walks blocks rather than contact lines.
+#
+# FOUR TRAPS, ALL MEASURED 2026-08-31:
+#   1. TWO DASH FORMS. Four headings use a hyphen and fifteen an EN DASH, and
+#      one of those has no space after it ("DISTRICT 12 -KNAPP"). A heading
+#      regex that pins one dash silently loses three-quarters of the board.
+#   2. HEADINGS WRAP. Districts 3, 7, 9 and 12 run their ward composition onto
+#      a second line, so "the line after the heading" is ward text and NOT the
+#      supervisor — district 9's is the bare number "562". The name is the
+#      first line in the block that reads as a name and is not an ALL-CAPS ward
+#      run; every address line carries digits and `is_name` refuses it anyway.
+#   3. ONE PHONE HAS NO LABEL. Eighteen print "Phone 715-...", district 15
+#      prints the number bare. Anchoring on the county's own "Phone" label —
+#      which is what Calumet needed — would drop exactly one number here, and
+#      the seat count would not notice. PDF_PHONE matches the number itself.
+#   4. THE E-MAIL IS NOT DERIVABLE FROM THE NAME. District 18 is "Jerry
+#      Schmidt" at `Jerrold.Schmidt@`, district 19 "Ed Chamberlain" at
+#      `Edward.Chamberlain@`. Both are shipped exactly as the county publishes
+#      them; neither is "corrected" toward the other, because a display name and
+#      a mailbox are two different facts about one person.
+#
+# THE HOME ADDRESSES ARE NOT CARRIED, as everywhere in this fleet — every block
+# prints the supervisor's house, and the phone and county e-mail beside it are
+# the official contact details that do ship.
+#
+# THE WITNESS IS THE COUNTY'S OWN WARD COMPOSITION AGAINST LTSB'S FILING, and
+# it is worth more here than the name checks are. The document says District 1
+# is Garfield ward 1 plus Cleveland; LTSB's statewide ward layer independently
+# assigns those wards to Jackson district 1. All 50 listed wards land in their
+# same-numbered LTSB district and a one-district shift matches ZERO, so the two
+# publishers describe one plan and one numbering.
+#
+# IT MATCHES WITHOUT THE CITY/TOWN/VILLAGE CODE ON PURPOSE, unlike
+# `_ward_witness`. The document does not state the code reliably — "BLACK RIVER
+# FALLS" is a CITY written bare while "CITY POINT" is a TOWN whose name merely
+# begins with the word — so deriving one would be inference, and a wrong
+# derivation would fail a correct roster. Dropping it collides exactly one pair
+# (the Town and Village of Melrose, both in district 6), which cannot hide a
+# shift: a shift moves whole districts, not one ward.
+JK_HEAD = re.compile(r"^\s*DISTRICT\s+(\d{1,2})\s*[-–—]\s*(.*)$")
+JK_MAIL = re.compile(r"\b([A-Za-z][A-Za-z.'-]*)@jacksoncountywi\.gov\b", re.I)
+JK_DOMAIN = "jacksoncountywi.gov"
+# an ALL-CAPS ward run, a bare population, or a fragment of either
+JK_WARDLINE = re.compile(r"^[A-Z0-9][A-Z0-9 ,.&'#–-]*$")
+# "GARFIELD W1 574", "VILLAGE OF ALMA CENTER 487", "ALMA W1, W3 & W5 548" —
+# a municipality, an optional ward list, then the population that ends the entry
+JK_WARD_ENTRY = re.compile(r"([A-Za-z][A-Za-z .']*?)\s*"
+                           r"((?:W\d+(?:\s*[,&]\s*W?\d+)*)?)\s*(\d{2,5})\b")
+JK_MIN_EMAILS = 17       # 19 of 19 publish one today
+JK_MIN_PHONES = 17       # 19 of 19 today; the floor tolerates two dropping out
+
+
+def _jk_norm(text):
+    return re.sub(r"[^a-z]", "", text.lower())
+
+
+def _jk_wards(text):
+    """{(municipality, ward number)} from a district's composition text."""
+    out = set()
+    for m in JK_WARD_ENTRY.finditer(text):
+        name = re.sub(r"(?i)^\s*(?:village|city|town)\s+of\s+", "", m.group(1)).strip(" ,&")
+        if not name:
+            continue
+        wards = [int(x) for x in re.findall(r"\d+", m.group(2))] or [1]
+        for w in wards:
+            out.add((_jk_norm(name), w))
+    return out
+
+
+def _jk_ward_witness(fips, county, wards, seats):
+    """The county's own composition against LTSB's ward-level SUPERID.
+
+    A FETCH FAILURE IS NOT A DISAGREEMENT — an unreachable witness says nothing
+    about the roster, so it stands aside; a witness that RUNS and disagrees
+    fails the county, because then the district KEY is what is in doubt.
+    """
+    try:
+        data = _fetch_json(
+            LTSB_WARD_QUERY + "?where=CNTY_FIPS%%3D%%27%s%%27&outFields="
+            "MCD_NAME,WARDID,SUPERID&returnGeometry=false&f=json" % fips)
+        feats = data.get("features") or []
+        if not feats:
+            raise RuntimeError("no wards returned")
+    except Exception as e:      # noqa: BLE001 - the witness, never the source
+        print("  WITNESS SKIPPED %-9s LTSB ward layer unreachable (%s) — the "
+              "roster ships unwitnessed this run" % (county, e), file=sys.stderr)
+        return
+    ltsb = {}
+    for f in feats:
+        a = f.get("attributes") or {}
+        ltsb.setdefault(int(a["SUPERID"]), set()).add(
+            (_jk_norm(str(a.get("MCD_NAME", ""))), int(str(a.get("WARDID") or 0))))
+    listed = sum(len(v) for v in wards.values())
+    if listed < 2 * seats:
+        raise RuntimeError("%s: the document lists only %d wards across %d "
+                           "districts — it has stopped printing its ward "
+                           "composition, and the numbering witness with it"
+                           % (county, listed, seats))
+    hit = sum(len(v & ltsb.get(d, set())) for d, v in wards.items())
+    shifts = [sum(len(v & ltsb.get(d + off, set())) for d, v in wards.items())
+              for off in (1, -1)]
+    print("  witness %-12s %d/%d listed wards in LTSB's own district (shifts %d/%d)"
+          % (county, hit, listed, shifts[0], shifts[1]), file=sys.stderr)
+    if any(shifts):
+        raise RuntimeError("%s: %d of its listed wards land one district off in "
+                           "LTSB's file — the two publishers may have renumbered "
+                           "apart; re-read both before shipping"
+                           % (county, max(shifts)))
+    if hit < 0.95 * listed:
+        raise RuntimeError("%s: only %d of %d listed wards land in LTSB's "
+                           "same-numbered district — the county's composition and "
+                           "the state's filing no longer describe one plan"
+                           % (county, hit, listed))
+
+
+def scrape_pdf_roster_county(fips, county, seats, url):
+    """All seats or nothing, out of the roster PDF the county's page links."""
+    page = fetch(url)
+    link = None
+    for m in re.finditer(r'href="([^"]*\.pdf)"', page, re.I):
+        href = html_lib.unescape(m.group(1)).strip()
+        if re.search(r"(?i)county[_%20\s-]*board[_%20\s-]*members", href):
+            link = urllib.parse.urljoin(url, href)
+            break
+    if not link:
+        raise RuntimeError("%s: no County Board Members PDF linked from %s — the "
+                           "county has renamed or moved its listing; re-read the "
+                           "page" % (county, url))
+    blob = fetch_bytes(link, timeout=90)[0]
+    if not blob.startswith(b"%PDF"):
+        raise RuntimeError("%s: %s did not return a PDF (%d bytes, starts %r)"
+                           % (county, link, len(blob), blob[:16]))
+    from pypdf import PdfReader           # noqa: PLC0415 - pinned, lazily imported
+    reader = PdfReader(io.BytesIO(blob))
+    lines = [l.strip() for p in reader.pages
+             for l in (p.extract_text() or "").split("\n")]
+
+    heads = [(i, int(m.group(1)), m.group(2))
+             for i, l in enumerate(lines) for m in [JK_HEAD.match(l)] if m]
+    seen = [d for _, d, _ in heads]
+    if sorted(seen) != list(range(1, seats + 1)):
+        raise RuntimeError("%s: the document's headings are %s, not 1..%d — "
+                           "re-read %s" % (county, seen, seats, link))
+
+    out, wards, emails, phones = {}, {}, 0, 0
+    for n, (i, district, rest) in enumerate(heads):
+        end = heads[n + 1][0] if n + 1 < len(heads) else len(lines)
+        block = [l for l in lines[i + 1:end] if l]
+        # the composition may WRAP past the heading line — see trap 2
+        composition = rest
+        for line in block:
+            if not JK_WARDLINE.match(line):
+                break
+            composition += " " + line
+        wards[district] = _jk_wards(composition)
+        name = next((l for l in block
+                     if not JK_WARDLINE.match(l) and is_name(l)), None)
+        if not name:
+            raise RuntimeError("%s: district %d resolved no name from its block "
+                               "(%r) — re-read %s" % (county, district, block[:4], link))
+        row = {"name": clean(name)[0], "vacant": False, "role": None}
+        text = "\n".join(block)
+        phone = PDF_PHONE.search(text)
+        if phone:
+            row["phone"] = "-".join(phone.groups())
+            phones += 1
+        mail = JK_MAIL.search(text)
+        if mail and mail.group(0).lower().rsplit("@", 1)[-1] == JK_DOMAIN:
+            row["email"] = mail.group(0)
+            emails += 1
+        out[str(district)] = row
+
+    names = [r["name"] for r in out.values()]
+    if len(set(names)) != len(names):
+        dupes = sorted({n for n in names if names.count(n) > 1})
+        raise RuntimeError("%s: the same person is filed under two districts (%s) "
+                           "— the block boundaries have moved" % (county, dupes))
+    if emails < JK_MIN_EMAILS or phones < JK_MIN_PHONES:
+        raise RuntimeError("%s: %d e-mails and %d phones across %d seats (floors "
+                           "%d/%d) — the document has reshaped and contact is "
+                           "being dropped silently"
+                           % (county, emails, phones, seats,
+                              JK_MIN_EMAILS, JK_MIN_PHONES))
+    _jk_ward_witness(fips, county, wards, seats)
+    return out, link
+
+
 def _ward_witness(fips, county, wards, seats):
     """The county's own ward composition against LTSB's ward-level SUPERID.
 
@@ -4538,6 +4762,12 @@ def attach_profiles(page, list_url, districts, county):
 
 def scrape_county(fips, name, seats, strategy, url):
     """All seats or nothing — see the module docstring."""
+    if strategy == "pdf-roster":
+        # The county's HTML names nobody; its listing page links a district-keyed
+        # roster PDF, discovered fresh each run because the filename carries the
+        # board's term. Returns the document it read so the row can cite it.
+        districts, doc = scrape_pdf_roster_county(fips, name, seats, url)
+        return districts, "live", doc
     if strategy == "fielded":
         # Sauk's page names no district NEAR a name; it labels its own fields,
         # so the whole page is read at once rather than as a line list.
@@ -4708,7 +4938,12 @@ def main():
                 districts = scrape_framed_table_county(src)
                 source_url, read_from = src["page"], "live"
             else:
-                districts, read_from = scrape_county(fips, name, seats, strategy, src)
+                got = scrape_county(fips, name, seats, strategy, src)
+                if len(got) == 3:
+                    # a strategy that reads a linked DOCUMENT reports which one
+                    districts, read_from, doc_url = got
+                else:
+                    districts, read_from = got
                 source_url = src
         except Exception as e:      # noqa: BLE001 - one county never fails the run
             failures.append("%s (%s): %s" % (name, fips, e))
@@ -4717,7 +4952,7 @@ def main():
         counties[fips] = {"county": name, "seats": seats, "source_url": source_url,
                           "scraped_at": scraped_at, "read_from": read_from,
                           "districts": districts}
-        if strategy == "pdf":
+        if strategy in ("pdf", "pdf-roster"):
             # the roster IS re-read every run — the edition it was read from is
             # recorded so a reader of the JSON can see which one answered
             counties[fips]["document_url"] = doc_url
