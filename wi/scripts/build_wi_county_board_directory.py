@@ -196,7 +196,10 @@ COUNTY_SITES = {
     "55078": ("Menominee", "https://www.co.menominee.wi.us/"),
     "55079": ("Milwaukee", "https://county.milwaukee.gov/EN"),
     "55081": ("Monroe", "https://co.monroe.wi.us/"),
-    "55083": ("Oconto", "https://www.ocontocountywi.gov/307/County-Board-Supervisory-District-Maps"),  # county page confirms 1..31
+    # /307 is the MAP INDEX — 31 links to 31 PDFs with nobody's name on them —
+    # and this table pointed at it while /453/County-Board named all 31 members
+    # the whole time. The card links the page that names your supervisor.
+    "55083": ("Oconto", "https://www.ocontocountywi.gov/453/County-Board"),  # county page confirms 1..31
     "55085": ("Oneida", "https://www.oneidacountywi.gov/"),
     "55087": ("Outagamie", "https://www.outagamie.gov/"),
     # The BOARD page, not the /2206/Supervisory-District-Maps page this row

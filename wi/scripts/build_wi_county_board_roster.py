@@ -11,9 +11,9 @@ That is what stops a county's page reorganising into a plausible-but-wrong
 number of members — the two files were built from different publishers (the
 county's own page, and LTSB's statewide filing) and have to agree.
 
-Fifty-five of Wisconsin's 72 counties have a district-keyed member list this
+Fifty-six of Wisconsin's 72 counties have a district-keyed member list this
 project can reach, by one of the routes the scraper's docstring sets out; the
-other 17 are recorded in the Data gaps panel and their cards keep linking the
+other 16 are recorded in the Data gaps panel and their cards keep linking the
 county board rather than naming anybody.
 
 AND A COUNTY THAT SHIPPED LAST WEEK MAY NOT SIMPLY VANISH. The floors below are
@@ -59,12 +59,12 @@ GEOMETRY = os.path.join(APP_DATA_DIR, "county-supervisory-districts.json")
 RAW = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache", "wi_county_boards_raw.json")
 OUT = os.path.join(APP_DATA_DIR, "county-board-members.json")
 
-MIN_COUNTIES = 53      # 55 ship one (42 board pages + 2 county GIS layers + Fond du
+MIN_COUNTIES = 54      # 56 ship one (42 board pages + 2 county GIS layers + Fond du
                        # Lac through the Internet Archive + Dodge's constituent
                        # directory + Kenosha's witnessed directory PDF + Adams's
                        # directory PDF + Columbia's framed table + Taylor,
                        # Lafayette and La Crosse by document); tolerates two dark
-MIN_SEATS = 1168       # 1241 today; the tolerance is the two largest boards
+MIN_SEATS = 1199       # 1272 today; the tolerance is the two largest boards
                        # (Dane 37 + Outagamie 36) going dark in one run, which is
                        # what a floor is for — it is never lowered to fit a result
 
