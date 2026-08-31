@@ -56,13 +56,29 @@ JoDavGIS. Permission was granted in writing, and only for one thing: the
 county's IT/GIS Director authorized display of these boundaries "on your
 website: chidistricts.com for public viewing" (e-mail of 2026-08-17).
 
-That permission names `chidistricts.com`, which was this site's domain when it
+That permission named `chidistricts.com`, which was this site's domain when it
 was granted and which now redirects to `districtry.com` — the same site, renamed.
 **Confirmation that it carries over to the new name was requested from the
-county's IT/GIS Director on 2026-08-29 and has not yet been answered.** Until it
-is, this file claims no more than the county actually wrote: the authorization
-on record names the old domain. If the county declines or asks for the
-boundaries to come down, that is a real outcome and this file will say so.
+county's IT/GIS Director on 2026-08-29 and was given on 2026-08-31:** "I confirm
+you are authorized to use the Jo Daviess County Board district shapefiles
+provided under GIS Digital Data License Agreement #008328 on the new
+districtry.com website as noted below in your email." So the authorization on
+record now names the domain the site actually uses. If the county later
+withdraws it or asks for the boundaries to come down, that is a real outcome and
+this file will say so.
+
+Two things about that sentence are worth stating plainly rather than tidying
+away. **The licence number in it, #008328, is a digit transposition of #008382**
+— the number on the invoice, on the signed agreement, and in the request Kratcha
+was replying to in the same thread. It is the same licence; the confirmation is
+quoted as written so that a reader comparing the two numbers is not left
+guessing which is the typo. And "as noted below in your email" incorporates the
+request's own four conditions, which are the terms this project is confirming it
+holds to: the boundaries appear on a free public map with no ads or fees, the
+shapefile is not redistributed or downloadable, the county is credited wherever
+the boundaries appear, and this file excludes the data from the ODbL grant. **The
+confirmation re-authorizes display, not redistribution — the exclusion below is
+unchanged.**
 
 That authorization is a display permission, not a redistribution permission.
 So:

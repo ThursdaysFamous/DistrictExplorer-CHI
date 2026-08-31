@@ -26,10 +26,23 @@ official authorization, in addition to the signed license agreement, granting
 you permission to display the requested Jo Daviess County Board District
 boundaries to be provided in shapefile format on your website: chidistricts.com
 for public viewing." (e-mail of 2026-08-17 13:49Z, same thread). That
-authorization covers DISPLAY on chidistricts.com — which the simplified
-data/app file is — and does NOT cover republishing the raw dataset, so, as a
-DELIBERATE DEVIATION from the data/source/raw convention, THE RAW SHAPEFILE IS
-NOT COMMITTED. The originals are retained offline (the operator's Drive and
+authorization covers DISPLAY — which the simplified data/app file is — and does
+NOT cover republishing the raw dataset, so, as a DELIBERATE DEVIATION from the
+data/source/raw convention, THE RAW SHAPEFILE IS NOT COMMITTED.
+
+THE PERMISSION NAMED A DOMAIN, AND THE DOMAIN CHANGED. Kratcha's 2026-08-17
+wording authorized display on "chidistricts.com"; the site was renamed to
+districtry.com, and a permission that names a domain says what it names, so the
+carryover was ASKED rather than assumed (2026-08-29) and CONFIRMED on
+2026-08-31: "I confirm you are authorized to use the Jo Daviess County Board
+district shapefiles provided under GIS Digital Data License Agreement #008328 on
+the new districtry.com website as noted below in your email." The licence number
+there, #008328, is a DIGIT TRANSPOSITION of #008382 — the number on the invoice,
+on the signed agreement, and in the request being replied to — and is quoted as
+written rather than corrected, so a reader comparing the two is not left
+guessing. "As noted below in your email" incorporates the request's four stated
+conditions (free public map, no redistribution, county credited, the file
+excluded from this project's own ODbL grant), which LICENSE-DATA.md §3 holds to. The originals are retained offline (the operator's Drive and
 the session archive); this header records each component's byte size and
 sha256 so a re-supplied copy can be authenticated against the licensed
 delivery:
@@ -453,10 +466,11 @@ def main():
         "properties": {
             "source": SOURCE_LABEL,
             "license": ("Jo Daviess County GIS Digital Data License Agreement "
-                        "#008382 (2026-08-17); display on chidistricts.com "
-                        "authorized in writing by IT/GIS Director Joe Kratcha, "
-                        "2026-08-17. The raw shapefile is retained offline and "
-                        "is not redistributed."),
+                        "#008382 (2026-08-17); display authorized in writing "
+                        "by IT/GIS Director Joe Kratcha, 2026-08-17, and "
+                        "confirmed for districtry.com by the same office "
+                        "2026-08-31. The raw shapefile is retained offline "
+                        "and is not redistributed."),
             "boardUrl": BOARD_URL,
             "note": ("17 single-member districts, the county's own adopted "
                      "2021 lines (effective December 1, 2022). Simplified for "
