@@ -8767,9 +8767,16 @@ function initWisconsinExplorer() {
       if (member && member.asOf) {
         wrap.appendChild(renderFieldStack([{
           label: "As of",
-          value: "From " + String(member.asOf) + ". The county's website " +
-            "refuses automated readers, so this name is a dated capture " +
-            "rather than the weekly re-read the other named counties get."
+          // The DEFAULT reason is a refusal — a captcha or a managed
+          // challenge — which is what Taylor, Lafayette and La Crosse carry.
+          // A county that serves this client and merely ASKS it not to crawl
+          // (Pepin's robots.txt) is a different fact about a different county,
+          // so where the roster states its own reason, that is what prints.
+          value: "From " + String(member.asOf) + ". " + (member.asOfWhy
+            ? String(member.asOfWhy)
+            : "The county's website refuses automated readers, so this name " +
+              "is a dated capture rather than the weekly re-read the other " +
+              "named counties get.")
         }]));
       }
       if (result.seats) {

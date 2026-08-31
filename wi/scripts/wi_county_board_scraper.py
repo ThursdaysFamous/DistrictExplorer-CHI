@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Scrape county board supervisors from the 56 Wisconsin counties whose roster this
+Scrape county board supervisors from the 57 Wisconsin counties whose roster this
 file can reach. Stage 1 of the pair; build_wi_county_board_roster.py turns the
 intermediate JSON into data/app/county-board-members.json.
 
@@ -47,19 +47,25 @@ TWELVE ROUTES, AND WHICH ONE A COUNTY TAKES IS A MEASUREMENT
                                   with a NOT RE-READ line every run. Lafayette
                                   additionally re-tries its live page each run,
                                   because that page PARSES the moment the
-                                  challenge lifts.
+                                  challenge lifts. PEPIN is carried for the
+                                  OPPOSITE reason: its site answers this client
+                                  fine and its robots.txt disallows the whole
+                                  site to every agent it does not name, so a
+                                  person transcribed it and NOTHING re-fetches
+                                  it — the one entry here with no `live` key by
+                                  design.
 
 The last two are not the same arrangement and the difference is stated where
 each is defined: a WITNESSED document is fetched and checked every week; a
 CARRIED one was read once, by a person, through an access control this file does
 not try to defeat.
 
-WHY ONLY FIFTY-SIX OF SEVENTY-TWO
----------------------------------
+WHY ONLY FIFTY-SEVEN OF SEVENTY-TWO
+-----------------------------------
 Wisconsin publishes county board DISTRICTS statewide (Wis. Stat. 5.15(4)(br)1,
 see build_wi_supervisory_districts.py) and publishes the PEOPLE in them nowhere:
-each county names its own supervisors, 72 different ways. Fifty-six are
-reachable by one of the routes above. The other 16 are not oversights and are
+each county names its own supervisors, 72 different ways. Fifty-seven are
+reachable by one of the routes above. The other 15 are not oversights and are
 recorded as such — and the record is worth reading before adding to it, because on
 2026-08-29 seventeen counties joined at once and ALMOST NONE OF THEM HAD STARTED
 PUBLISHING ANYTHING NEW. What changed was this file:
@@ -81,6 +87,17 @@ PUBLISHING ANYTHING NEW. What changed was this file:
     been until 2026-08-29. Three counties, one mistake, three times. RE-CHECKING
     A RECORD IS NOT RE-CHECKING THE COUNTY — the 2026-08-29 pass confirmed what
     the map page says and never asked whether it was the right page.
+  * PEPIN IS THE ONE COUNTY HERE HELD BACK BY A ROBOTS.TXT, and it is not in
+    any bucket above because none of them describes it. Its site answers this
+    client perfectly well and publishes all 12 districts with a phone each and
+    ten county mailboxes; its robots.txt names six search-engine agents, gives
+    each a narrow Disallow, and then tells everything else `Disallow: /`. THAT
+    IS THE EXACT OPPOSITE OF IOWA AND WAUSHARA, whose files this scraper reads
+    precisely because their `*` group PERMITS the board path. A county that
+    asks not to be crawled has not refused to publish, so Pepin's roster is
+    transcribed by a person and carried in DOCUMENT_ROSTERS with no automated
+    re-read — and the card says the county ASKED rather than the default
+    sentence's "refuses", because those are different facts.
   * The remaining 13 publish their members as images or prose with no district
     column on the pages their own sites point to. THAT NUMBER WENT 18 -> 13 ON
     2026-08-31 AND NONE OF THE FIVE THAT LEFT EVER BELONGED IN IT. Calumet
@@ -2491,6 +2508,97 @@ ARCGIS_COUNTIES = [
 # supervisor's house is not an office location. Name, county e-mail and phone
 # are official contact details and do.
 DOCUMENT_ROSTERS = [
+    # PEPIN (2026-08-31) — THE FIRST ENTRY HERE HELD BACK BY A ROBOTS.TXT RATHER
+    # THAN BY A CHALLENGE, and the distinction is the whole reason it is carried.
+    # Taylor answers a captcha and Lafayette a Cloudflare interstitial: those are
+    # doors that will not open for this client. co.pepin.wi.us opens perfectly
+    # well and ASKS not to be crawled:
+    #
+    #     User-agent: Googlebot        Disallow: /admin/ /manager/ ...
+    #     User-agent: bingbot          (the same)
+    #     User-agent: ia_archiver      /admin/ /manager/
+    #     User-agent: archive.org_bot  /admin/ /manager/
+    #     User-agent: W3C-checklink    /admin/ /manager/
+    #     User-agent: CCBot            /admin/ /manager/
+    #     User-agent: *                Disallow: /
+    #
+    # This scraper is none of the named agents, so it falls to the `*` group and
+    # the whole site is disallowed to it. THAT IS THE EXACT OPPOSITE OF IOWA AND
+    # WAUSHARA, the two counties whose robots.txt this file already records: the
+    # note in COUNTIES turns on the fact that "in BOTH files the `User-agent: *`
+    # group permits the board path", which is what made reading them the
+    # operator's call to make. Here it permits nothing, so there is no weekly
+    # fetch and deliberately NO `live` key — an entry with one would re-request
+    # the page every run, which is the single thing the county has asked not to
+    # happen.
+    #
+    # A ROBOTS.TXT GOVERNS CRAWLERS, NOT READERS. The operator opened
+    # co.pepin.wi.us/bos in an ordinary browser and transcribed it, which is the
+    # route the file leaves open, exactly as a person passing Taylor's captcha
+    # is. The roster below is that transcription.
+    #
+    # IT WAS CROSS-CHECKED AGAINST THE ONE FETCH THIS FILE MADE BEFORE READING
+    # THE POLICY, and the two agree on all twelve names, all twelve phones and
+    # all ten mailboxes — recorded here because that fetch happened and saying
+    # so is cheaper than pretending it did not.
+    #
+    # WHAT THIS ENTRY DOES NOT CLAIM: that nothing in this repo touches the
+    # host. scripts/validate_card_links.py probes every shipped URL monthly and
+    # already probed four on co.pepin.wi.us before this entry existed (the
+    # county's directory link and three officer-contact pages in
+    # wi_county_officer_contact_scraper.py, which runs WEEKLY in two workflows);
+    # this adds a fifth. What is avoided here is the weekly roster crawl. The
+    # rest is a wider question than one county — six other hosts this repo
+    # fetches weekly publish the same `*  Disallow: /` — and is recorded rather
+    # than quietly half-fixed.
+    #
+    # THE MAILBOXES USE THREE PREFIXES, WHICH IS WHY NONE IS DERIVED. Ten of the
+    # twelve publish a district-keyed address and they are NOT one pattern:
+    # pcsdist1@, pcdistrict2@, pcsdist3@, pcsdist6@, pcdist7@, pcsdist8@,
+    # pcsdist9@, pcsdist10@, pcdistrict11@, pcsdist12@. A `pcsdist<n>@` rule
+    # would invent wrong addresses for districts 2, 7 and 11, so every one is
+    # transcribed. Districts 4 and 5 publish none and carry none.
+    #
+    # THE HOME ADDRESSES ARE NOT CARRIED — the page prints one per supervisor,
+    # and the fleet's standing rule is that a home address never ships. The
+    # county clerk (Audrey Bauer, Secretary to the Board) is on the same page and
+    # is NOT a supervisor; she is not in this table.
+    {
+        "fips": "55091", "name": "Pepin", "seats": 12,
+        "read_on": "2026-08-31",
+        "source_url": "https://www.co.pepin.wi.us/bos",
+        "how": "transcribed from the county's own Board of Supervisors page by "
+               "the operator in a browser; the site's robots.txt disallows the "
+               "whole site to every agent it does not name, so this roster is "
+               "never re-fetched",
+        # THE READER-FACING HALF OF `how`, because the card's own sentence is
+        # wrong for this county. It says a carried roster is dated "because the
+        # county's website refuses automated readers", which is true of Taylor's
+        # captcha and Lafayette's challenge and NOT true here: Pepin's site
+        # serves this client perfectly well and its robots.txt asks automated
+        # clients not to read it. Telling a reader the county refuses them would
+        # misdescribe what the county actually did.
+        "why": "The county asks automated readers not to crawl its site, so "
+               "this name is a dated capture rather than the weekly re-read the "
+               "other named counties get.",
+        "roles": {"8": "Chairperson", "9": "Vice-Chairperson",
+                  "12": "2nd Vice-Chairperson"},
+        # district -> (name, e-mail, phone)
+        "members": {
+            "1": ("Michael Wright", "pcsdist1@co.pepin.wi.us", "715-926-3210"),
+            "2": ("Gary S. Bauer", "pcdistrict2@co.pepin.wi.us", "715-495-1532"),
+            "3": ("Andy Winkler", "pcsdist3@co.pepin.wi.us", "715-577-9534"),
+            "4": ("Joe Schieffer", None, "715-495-7217"),
+            "5": ("Randall Weiss", None, "715-495-7429"),
+            "6": ("Elizabeth Bauer", "pcsdist6@co.pepin.wi.us", "504-723-3560"),
+            "7": ("Kris Sabelko", "pcdist7@co.pepin.wi.us", "715-505-3936"),
+            "8": ("Tom Milliren", "pcsdist8@co.pepin.wi.us", "715-495-6597"),
+            "9": ("John C. Andrews", "pcsdist9@co.pepin.wi.us", "715-279-3058"),
+            "10": ("Kevin C. Kosok", "pcsdist10@co.pepin.wi.us", "715-495-1761"),
+            "11": ("Vicki Kosok", "pcdistrict11@co.pepin.wi.us", "715-442-3071"),
+            "12": ("Angie Bocksell", "pcsdist12@co.pepin.wi.us", "715-559-0830"),
+        },
+    },
     {
         "fips": "55119", "name": "Taylor", "seats": 17,
         "read_on": "2026-08-29",
@@ -5461,6 +5569,9 @@ def main():
             counties[fips]["carried_from_document"] = True
             counties[fips]["read_on"] = src["read_on"]
             counties[fips]["how"] = src["how"]
+            # a county whose reason differs from the card's default says so
+            if src.get("why"):
+                counties[fips]["why"] = src["why"]
         if strategy == "archive" and any(archived_at or []):
             # SAME PRINCIPLE AS THE DOCUMENT LINE ABOVE: the file records that
             # this county's page was read through a public archive and WHEN
