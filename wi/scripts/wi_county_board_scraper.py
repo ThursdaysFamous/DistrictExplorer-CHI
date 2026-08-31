@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-Scrape county board supervisors from the 53 Wisconsin counties whose roster this
+Scrape county board supervisors from the 54 Wisconsin counties whose roster this
 file can reach. Stage 1 of the pair; build_wi_county_board_roster.py turns the
 intermediate JSON into data/app/county-board-members.json.
 
-NINE ROUTES, AND WHICH ONE A COUNTY TAKES IS A MEASUREMENT
-----------------------------------------------------------
+TEN ROUTES, AND WHICH ONE A COUNTY TAKES IS A MEASUREMENT
+---------------------------------------------------------
   * COUNTIES                    - 42 counties whose own board page pairs a
                                   district with a person, each page's reading
                                   direction PINNED;
@@ -27,6 +27,10 @@ NINE ROUTES, AND WHICH ONE A COUNTY TAKES IS A MEASUREMENT
                                   whose own listing page links a district-keyed
                                   roster PDF, DISCOVERED fresh each run because
                                   its filename carries the board's term;
+  * `directory`                 - Waupaca, whose BOARD page names nobody and
+                                  whose Clerk publishes a district-keyed
+                                  Directory of Public Officials as a live page
+                                  on the county's own host;
   * FRAMED_TABLE_COUNTIES       - Columbia, whose listing page is a shell around
                                   an iframe onto a second county host;
   * DOCUMENT_ROSTERS            - Taylor, Lafayette and La Crosse, whose hosts
@@ -42,12 +46,12 @@ each is defined: a WITNESSED document is fetched and checked every week; a
 CARRIED one was read once, by a person, through an access control this file does
 not try to defeat.
 
-WHY ONLY FIFTY-THREE OF SEVENTY-TWO
------------------------------------
+WHY ONLY FIFTY-FOUR OF SEVENTY-TWO
+----------------------------------
 Wisconsin publishes county board DISTRICTS statewide (Wis. Stat. 5.15(4)(br)1,
 see build_wi_supervisory_districts.py) and publishes the PEOPLE in them nowhere:
-each county names its own supervisors, 72 different ways. Fifty-three are
-reachable by one of the routes above. The other 19 are not oversights and are
+each county names its own supervisors, 72 different ways. Fifty-four are
+reachable by one of the routes above. The other 18 are not oversights and are
 recorded as such — and the record is worth reading before adding to it, because on
 2026-08-29 seventeen counties joined at once and ALMOST NONE OF THEM HAD STARTED
 PUBLISHING ANYTHING NEW. What changed was this file:
@@ -65,18 +69,23 @@ PUBLISHING ANYTHING NEW. What changed was this file:
     all 26, and Kenosha's Clerk publishes a district-keyed directory. This file
     once claimed 23 counties on a sweep that tested district NUMBERS, and
     numbers are what a map index has. TEST FOR THE PEOPLE.
-  * The remaining 15 publish their members as images or prose with no district
-    column on the pages their own sites point to. THAT NUMBER WENT 18 -> 15 ON
-    2026-08-31 AND NONE OF THE THREE THAT LEFT EVER BELONGED IN IT. Calumet
+  * The remaining 14 publish their members as images or prose with no district
+    column on the pages their own sites point to. THAT NUMBER WENT 18 -> 14 ON
+    2026-08-31 AND NONE OF THE FOUR THAT LEFT EVER BELONGED IN IT. Calumet
     publishes all 21 supervisors district-keyed with a phone each; Buffalo all
-    14 with a county e-mail for 12; Jackson all 19 with both. Nobody had opened
-    any of the three pages. The bullet said "THE 53RD IS IN THIS BULLET" and it
-    was: re-reading the list is what produced each of them, and the third
-    sharpens the bullet's own wording. "Publishes no district column ON THE
-    PAGES THEIR OWN SITES POINT TO" is true of Jackson's HTML and false of
-    Jackson — its site names no supervisor anywhere, and links a PDF that names
-    all 19. A COUNTY'S HTML IS NOT THE COUNTY. Ask what its pages LINK before
-    recording what they say.
+    14 with a county e-mail for 12; Jackson all 19 with both; Waupaca all 27
+    with both. Nobody had opened any of the four pages. The bullet said "THE
+    53RD IS IN THIS BULLET" and it was, twice over — re-reading the list is what
+    produced each of them.
+    THE LAST TWO SHARPEN THE BULLET'S OWN WORDING, and it is now the sentence
+    to distrust. "Publishes no district column ON THE PAGES THEIR OWN SITES
+    POINT TO" is true of Jackson's HTML and of Waupaca's board page, and false
+    of both counties: Jackson's site names no supervisor anywhere and links a
+    PDF naming all 19; Waupaca's /county_board/ carries four paragraphs about
+    what a county board is, with ZERO "District n" on it, while the county's
+    home page links the Clerk's Directory of Public Officials naming all 27.
+    A COUNTY'S HTML IS NOT THE COUNTY, AND ITS BOARD PAGE IS NOT ITS CLERK.
+    Ask what a county's pages LINK before recording what they say.
 
 SEVEN WAYS THAT LIST HAS BEEN WRONG, EACH FOUND BY CHECKING RATHER THAN GUESSING
 --------------------------------------------------------------------------------
@@ -1137,6 +1146,12 @@ COUNTIES = [
     # LTSB's filing.
     ("55053", "Jackson", 19, "pdf-roster",
      "https://www.co.jackson.wi.us/index.asp?SEC=219B0002-A26C-4AA7-B330-980B6D3ADB57"),
+    # --- 2026-08-31: the 54th. Its BOARD page names nobody at all; the Clerk's
+    # Directory of Public Officials, linked from the county's own home page,
+    # names all 27 district-keyed. See `scrape_directory_county` for the
+    # courthouse-number rule and the two witnesses.
+    ("55135", "Waupaca", 27, "directory",
+     "https://public4.co.waupaca.wi.us/CountyDirectory"),
     # --- the 2026-08-29 header fix: a county recorded unreadable for a year ---,
 ]
 
@@ -4483,6 +4498,159 @@ def scrape_pdf_roster_county(fips, county, seats, url):
     return out, link
 
 
+# --- Waupaca: the Clerk's Directory of Public Officials, as a live page --------
+#
+# THE COUNTY BOARD'S OWN PAGE NAMES NOBODY. waupacacounty-wi.gov's
+# /county_board/ carries four paragraphs about what a county board is and not
+# one supervisor — zero "District n" anywhere on it — which is why Waupaca sat
+# in the gap block. The county's own home page links "Directory of Public
+# Officials" to public4.co.waupaca.wi.us/CountyDirectory, the Clerk's annual
+# directory published as HTML rather than as the PDF Kenosha's Clerk uses, and
+# its County Board Supervisors section is district-keyed for all 27 seats with a
+# name, a phone and a county mailbox each. Same lesson as Jackson an hour
+# earlier: ASK WHAT A COUNTY'S PAGES LINK, not only what they say.
+#
+# ITS HOST IS THE COUNTY'S OWN. public4.co.waupaca.wi.us is on co.waupaca.wi.us,
+# the same domain every supervisor's mailbox sits on, and the county's home page
+# is what links it — so this is the Clerk publishing, not a third party
+# republishing.
+#
+# THE SHARED NUMBER IS THE COURTHOUSE AND IS DROPPED FROM ALL OF THEM. Districts
+# 2, 3, 25 and 27 all print (715) 258-6200, which this same directory gives as
+# the COUNTY CLERK's number ("Courthouse, Waupaca (715) 258-6200") and the
+# county's own site prints in its footer. Those four supervisors publish no
+# personal number and the directory falls back to the switchboard; shipping it
+# would tell a reader they are calling their supervisor when they are calling
+# the Clerk. The rule here is GENERIC rather than a pinned literal — a number
+# that appears under more than one district is not one supervisor's, so it is
+# dropped from every district that carries it and NAMED on the run log. That is
+# Green Lake's shared-mailbox rule applied to phones, and it keeps working if
+# the county changes its switchboard number.
+#
+# THREE SUPERVISORS PUBLISH TWO NUMBERS EACH (districts 4, 7 and 9). The first
+# ships and the rest are named on the log, never dropped silently — again the
+# Green Lake handling.
+#
+# TWO WITNESSES, BOTH INTERNAL TO THE DIRECTORY, AND BOTH GATED:
+#   * every supervisor's name agrees with their own county mailbox
+#     (duwayne.federwitz@ for DuWayne Federwitz), 27 of 27 today. This is the
+#     Adams mailbox witness in a different shape, and it is what would catch a
+#     block boundary that moved.
+#   * the directory names its officers in a SEPARATE block above the listing
+#     ("Chair - James Nygaard (District 9)", "Vice Chair - Ricky Ertl (District
+#     7)") and that block states its own district numbers. They must match the
+#     listing, which is a genuine anti-shift check: a reading that drifted by
+#     one would put a different person at 9 and 7.
+#
+# THE HOME ADDRESSES ARE NOT CARRIED, as everywhere in this fleet.
+WP_SECTION = 'id="county-board-supervisors"'
+WP_SECTION_END = 'id="town-officials"'
+WP_DIST = re.compile(r"^District\s+(\d{1,2})$")
+WP_MAIL = re.compile(r"[\w.+-]+@co\.waupaca\.wi\.us", re.I)
+WP_PHONE = re.compile(r"\(?(\d{3})\)?[\s.-]*(\d{3})[-.\s]*(\d{4})")
+WP_OFFICER = re.compile(r"(Vice Chair|Chair)\s*[–—-]\s*([A-Za-z .'\-]+?)\s*"
+                        r"\(District\s*(\d{1,2})\)")
+WP_MIN_EMAILS = 25       # 27 of 27 publish one today
+WP_MIN_AGREE = 25        # 27 of 27 names agree with their own mailbox today
+
+
+def _wp_fold(text):
+    return re.sub(r"[^a-z]", "", text.lower())
+
+
+def scrape_directory_county(fips, county, seats, url):
+    """All seats or nothing, out of the Clerk's own directory of officials."""
+    page = fetch(url)
+    start = page.find(WP_SECTION)
+    if start < 0:
+        raise RuntimeError("%s: no County Board Supervisors section on %s — the "
+                           "Clerk's directory has reshaped; re-read it"
+                           % (county, url))
+    end = page.find(WP_SECTION_END, start)
+    lines = _flat_lines(page[start:end if end > start else len(page)])
+
+    heads = [(i, int(m.group(1)))
+             for i, l in enumerate(lines) for m in [WP_DIST.match(l)] if m]
+    seen = [d for _, d in heads]
+    if sorted(seen) != list(range(1, seats + 1)):
+        raise RuntimeError("%s: the directory's headings are %s, not 1..%d — "
+                           "re-read %s" % (county, seen, seats, url))
+
+    blocks, numbers = {}, {}
+    for n, (i, district) in enumerate(heads):
+        stop = heads[n + 1][0] if n + 1 < len(heads) else len(lines)
+        block = lines[i + 1:stop]
+        name = next((l for l in block if is_name(l)), None)
+        if not name:
+            raise RuntimeError("%s: district %d resolved no name from its block "
+                               "(%r) — re-read %s" % (county, district, block[:4], url))
+        found = []
+        for line in block:
+            for m in WP_PHONE.finditer(line):
+                found.append("(%s) %s-%s" % m.groups())
+        numbers[district] = found
+        mail = next((m.group(0) for l in block for m in [WP_MAIL.search(l)] if m), None)
+        blocks[district] = {"name": clean(name)[0], "vacant": False, "role": None}
+        if mail:
+            blocks[district]["email"] = mail
+
+    # A NUMBER ON MORE THAN ONE DISTRICT IS NOT A PERSONAL NUMBER — see above.
+    shared = {p for p in {q for v in numbers.values() for q in v}
+              if sum(1 for v in numbers.values() if p in v) > 1}
+    for phone in sorted(shared):
+        holders = sorted(d for d, v in numbers.items() if phone in v)
+        print("  phone %-12s %s is published for districts %s — not one "
+              "supervisor's, dropped from all"
+              % (county, phone, ", ".join(str(d) for d in holders)), file=sys.stderr)
+    for district, found in numbers.items():
+        mine = [p for p in found if p not in shared]
+        if not mine:
+            continue
+        blocks[district]["phone"] = mine[0]
+        if len(mine) > 1:
+            print("  note %-12s district %d publishes %d numbers (%s) — the first "
+                  "ships" % (county, district, len(mine), ", ".join(mine)),
+                  file=sys.stderr)
+
+    names = [r["name"] for r in blocks.values()]
+    if len(set(names)) != len(names):
+        dupes = sorted({n for n in names if names.count(n) > 1})
+        raise RuntimeError("%s: the same person is filed under two districts (%s) "
+                           "— the block boundaries have moved" % (county, dupes))
+
+    emails = sum(1 for r in blocks.values() if r.get("email"))
+    agree = sum(1 for r in blocks.values() if r.get("email")
+                and _wp_fold(r["name"].split()[-1]) in _wp_fold(r["email"].split("@")[0]))
+    if emails < WP_MIN_EMAILS or agree < WP_MIN_AGREE:
+        raise RuntimeError("%s: %d of %d seats carry a county mailbox and %d agree "
+                           "with their own name (floors %d/%d) — the directory has "
+                           "reshaped" % (county, emails, seats, agree,
+                                         WP_MIN_EMAILS, WP_MIN_AGREE))
+    print("  witness %-12s %d/%d supervisors' names agree with their own county "
+          "mailbox" % (county, agree, seats), file=sys.stderr)
+
+    # THE OFFICER BLOCK STATES ITS OWN DISTRICTS AND MUST AGREE WITH THE LISTING.
+    officers = WP_OFFICER.findall(" \n".join(lines))
+    if not officers:
+        raise RuntimeError("%s: the directory names no chair or vice chair — that "
+                           "block has moved; re-read %s" % (county, url))
+    for role, who, district in officers:
+        d = int(district)
+        if d not in blocks:
+            raise RuntimeError("%s: the officer block puts the %s in district %d, "
+                               "which the listing does not carry" % (county, role, d))
+        if _wp_fold(who) != _wp_fold(blocks[d]["name"]):
+            raise RuntimeError(
+                "%s: the officer block names %r as %s of district %d and the "
+                "listing puts %r there — the two halves of one document disagree, "
+                "which is what a shifted reading looks like"
+                % (county, who.strip(), role, d, blocks[d]["name"]))
+        blocks[d]["role"] = role_case(role)
+        print("  role %-12s district %d: %s -> %s"
+              % (county, d, blocks[d]["name"], role_case(role)), file=sys.stderr)
+    return {str(d): r for d, r in blocks.items()}
+
+
 def _ward_witness(fips, county, wards, seats):
     """The county's own ward composition against LTSB's ward-level SUPERID.
 
@@ -4762,6 +4930,10 @@ def attach_profiles(page, list_url, districts, county):
 
 def scrape_county(fips, name, seats, strategy, url):
     """All seats or nothing — see the module docstring."""
+    if strategy == "directory":
+        # The board's own page names nobody; the Clerk's directory of public
+        # officials does, district-keyed, on the county's own host.
+        return scrape_directory_county(fips, name, seats, url), "live"
     if strategy == "pdf-roster":
         # The county's HTML names nobody; its listing page links a district-keyed
         # roster PDF, discovered fresh each run because the filename carries the
