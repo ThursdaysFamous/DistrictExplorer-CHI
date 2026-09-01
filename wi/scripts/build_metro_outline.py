@@ -102,14 +102,29 @@ TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
 # about coverage, so it has to track the roster or it lies in one direction or
 # the other — the reference instance greyed out four counties whose layers were
 # answering because this list was not updated with them.
+#
+# THAT RULE WAS WRITTEN HERE AND ENFORCED NOWHERE, AND THIS INSTANCE THEN BROKE
+# IT (2026-09-01). Buffalo, Calumet, Door, Jackson, Oconto, Pepin and Waupaca
+# shipped their supervisors over two days and stayed under the wash the whole
+# time — greyed out on the map while their cards named all 145 members — with
+# every gate in the repo green. `--check` below could not catch it: it verifies
+# the anchors this file already lists, so a county nobody added is green by
+# construction. validate_index.py's dispatch-entry check could not either: it
+# walks registerCountyLayer entries and this instance has none.
+#
+# `check_coverage_ring_tracks_roster()` in wi/scripts/validate_index.py is the
+# gate now — METRO_COUNTY_FIPS must equal the county set in the shipped
+# county-board-members.json, in BOTH directions, and it runs on every PR with
+# no network. A rule with no gate is a comment.
 METRO_COUNTY_FIPS = (
-    "001", "007", "009", "013", "021", "023", "025", "027",
-    "033", "035", "039", "043", "045", "047", "049", "055",
-    "057", "059", "061", "063", "065", "071", "075", "077",
-    "079", "081", "085", "087", "089", "095", "097", "099",
-    "101", "103", "105", "107", "111", "115", "117", "119",
-    "121", "123", "125", "127", "129", "131", "133", "137",
-    "139", "141",
+    "001", "007", "009", "011", "013", "015", "021", "023",
+    "025", "027", "029", "033", "035", "039", "043", "045",
+    "047", "049", "053", "055", "057", "059", "061", "063",
+    "065", "071", "075", "077", "079", "081", "083", "085",
+    "087", "089", "091", "095", "097", "099", "101", "103",
+    "105", "107", "111", "115", "117", "119", "121", "123",
+    "125", "127", "129", "131", "133", "135", "137", "139",
+    "141",
 )
 STATE_FIPS = "55"
 # No dispatch entries: county-board is ONE statewide layer here, not a
@@ -163,11 +178,14 @@ INSIDE = {
     "Adams": (43.94586, -89.77671),
     "Bayfield": (46.6808, -91.18773),
     "Brown": (44.46004, -87.97772),
+    "Buffalo": (44.31089, -91.72133),
     "Burnett": (45.89865, -92.36377),
+    "Calumet": (44.06871, -88.22361),
     "Columbia": (43.46157, -89.30349),
     "Crawford": (43.20611, -90.88776),
     "Dane": (43.06959, -89.42476),
     "Dodge": (43.41296, -88.7031),
+    "Door": (45.06344, -86.98152),
     "Dunn": (44.94602, -91.89321),
     "Eau Claire": (44.72335, -91.28595),
     "Fond du Lac": (43.74103, -88.5229),
@@ -175,6 +193,7 @@ INSIDE = {
     "Green": (42.67898, -89.60243),
     "Green Lake": (43.80746, -89.02684),
     "Iowa": (43.0113, -90.13346),
+    "Jackson": (44.33432, -90.74153),
     "Jefferson": (43.02123, -88.77694),
     "Juneau": (43.94612, -90.13402),
     "Kenosha": (42.5743, -87.66848),
@@ -186,9 +205,11 @@ INSIDE = {
     "Marquette": (43.81242, -89.39817),
     "Milwaukee": (43.01735, -87.58072),
     "Monroe": (43.94362, -90.61172),
+    "Oconto": (45.02524, -88.30368),
     "Oneida": (45.68206, -89.54525),
     "Outagamie": (44.41639, -88.46364),
     "Ozaukee": (43.36679, -87.60391),
+    "Pepin": (44.54575, -92.08728),
     "Polk": (45.46886, -92.41908),
     "Portage": (44.46479, -89.47499),
     "Price": (45.68002, -90.36068),
@@ -207,6 +228,7 @@ INSIDE = {
     "Washburn": (45.8978, -91.78707),
     "Washington": (43.36763, -88.22925),
     "Waukesha": (43.01882, -88.30439),
+    "Waupaca": (44.46164, -88.98014),
     "Waushara": (44.11364, -89.24186),
     "Winnebago": (44.06844, -88.64513),
     "Wood": (44.46637, -90.02113),
@@ -214,26 +236,19 @@ INSIDE = {
 OUTSIDE = {
     "Ashland": (46.64701, -90.68578),
     "Barron": (45.42366, -91.84865),
-    "Buffalo": (44.31089, -91.72133),
-    "Calumet": (44.06871, -88.22361),
     "Chippewa": (45.07456, -91.28766),
     "Clark": (44.72754, -90.61921),
-    "Door": (45.06344, -86.98152),
     "Douglas": (46.52585, -91.92275),
     "Florence": (45.86728, -88.37551),
     "Forest": (45.72458, -88.86156),
     "Iron": (46.38983, -90.34647),
-    "Jackson": (44.33432, -90.74153),
     "Langlade": (45.24922, -89.05229),
     "Lincoln": (45.33767, -89.73536),
     "Marathon": (44.90091, -89.76945),
     "Menominee": (44.98678, -88.73481),
-    "Oconto": (45.02524, -88.30368),
-    "Pepin": (44.54575, -92.08728),
     "Pierce": (44.70099, -92.4242),
     "Sawyer": (45.89772, -91.10962),
     "St. Croix": (45.03443, -92.45383),
-    "Waupaca": (44.46164, -88.98014),
 }
 
 

@@ -700,6 +700,11 @@ def main():
     # 5. every county the app dispatches a layer on is inside the coverage ring
     n_counties = check_county_coverage_list(html, repo_root)
 
+    # 5b. and the ring itself is exactly the counties the roster names — the
+    # check above walks dispatch entries, of which this instance has none, so
+    # the ring could and did drift seven counties behind the roster.
+    n_ring = check_coverage_ring_tracks_roster(repo_root, app_dir)
+
     # 6. the public sources page, if this fork ships one, still accounts for
     # every layer and is still reachable from the app.
     n_sourced = check_sources_page(html, repo_root)
@@ -708,8 +713,9 @@ def main():
         "validate_index: OK — inline script parses, %d registerLayer( calls, "
         "LAYER_AREA_RANK + LAYER_SIDEBAR_RANK cover all %d ids, no inline datasets, %d well-formed "
         "METRO_EXPLORERS entries, all data/app files present and cached in "
-        "exactly one sw.js list, %d dispatched counties all inside the coverage ring%s"
-        % (n, len(EXPECT_LAYER_IDS), n_metros, n_counties,
+        "exactly one sw.js list, %d dispatched counties all inside the coverage "
+        "ring whose %d counties match the shipped roster exactly%s"
+        % (n, len(EXPECT_LAYER_IDS), n_metros, n_counties, n_ring,
            "" if n_sourced is None else
            ", sources page linked and covering all %d layers" % n_sourced)
     )
@@ -990,6 +996,84 @@ def check_county_coverage_list(html, repo_root):
              "dropped — restore it."
              % ", ".join(undispatched))
     return len(seen_counties)
+
+
+def check_coverage_ring_tracks_roster(repo_root, app_dir):
+    """METRO_COUNTY_FIPS must be exactly the counties the board roster names.
+
+    THE CHECK ABOVE CANNOT SEE THIS INSTANCE. It walks registerCountyLayer
+    dispatch entries, and Wisconsin has none — county-board is ONE statewide
+    layer, so DISPATCH_COUNTY_FIPS is empty by design and that loop never
+    executes. Nothing else tied the coverage ring to the roster either:
+    build_metro_outline.py --check only asserts the anchors it already lists,
+    which is green by construction for a county nobody added.
+
+    So the ring drifted. Seven counties (Buffalo, Calumet, Door, Jackson,
+    Oconto, Pepin, Waupaca) shipped their supervisors between 2026-08-30 and
+    2026-08-31 and stayed under the out-of-scope wash for two days, greyed out
+    on the map while their cards named every member. Every gate in the repo was
+    green throughout — which is exactly the failure build_metro_outline.py's own
+    docstring warns about ("the reference instance greyed out four counties
+    whose layers were answering because this list was not updated"), written
+    down and then not enforced anywhere.
+
+    The wash is a CLAIM ABOUT COVERAGE, so it has to be checked against the
+    thing it claims. Both directions fail: a county in the roster but outside
+    the ring is greyed out while it answers, and one in the ring with no roster
+    promises a name the card cannot give.
+    """
+    outline_py = os.path.join(repo_root, "scripts", "build_metro_outline.py")
+    roster_path = os.path.join(app_dir, "county-board-members.json")
+    counties_path = os.path.join(app_dir, "state-counties.json")
+    for path in (outline_py, roster_path, counties_path):
+        if not os.path.exists(path):
+            fail("%s not found — the coverage-ring/roster check cannot run"
+                 % os.path.relpath(path, repo_root))
+
+    in_ring = set(_literals_from(outline_py, ("METRO_COUNTY_FIPS",))["METRO_COUNTY_FIPS"])
+    with open(counties_path, encoding="utf-8") as f:
+        feats = json.load(f)["features"]
+    # BASENAME is how the roster names a county; GEOID's last three digits are
+    # how the ring lists it. Normalised, because the roster writes "Fond Du Lac"
+    # where TIGER writes "Fond du Lac" and a case difference is not a county.
+    norm = lambda s: re.sub(r"[^a-z]", "", s.lower())
+    fips_by_name = {norm(f["properties"]["BASENAME"]): f["properties"]["GEOID"][2:]
+                    for f in feats}
+    with open(roster_path, encoding="utf-8") as f:
+        roster = json.load(f)
+    rostered, unmatched = set(), set()
+    for row in roster.values():
+        county = (row or {}).get("county")
+        if not county:
+            continue
+        fips = fips_by_name.get(norm(county))
+        (rostered.add(fips) if fips else unmatched.add(county))
+    if unmatched:
+        fail("county-board-members.json names count%s no county in "
+             "state-counties.json matches: %s. The roster and the county fabric "
+             "have to agree before the coverage ring can be checked against "
+             "either." % ("ies" if len(unmatched) > 1 else "y",
+                          ", ".join(sorted(unmatched))))
+
+    name_by_fips = {v: k for k, v in fips_by_name.items()}
+    masked = sorted(rostered - in_ring)
+    if masked:
+        fail("count%s whose supervisors this app NAMES but which sit outside "
+             "METRO_COUNTY_FIPS, so the out-of-scope wash greys them out while "
+             "their cards answer in full: %s. Add the FIPS to "
+             "scripts/build_metro_outline.py WITH an INSIDE anchor, delete the "
+             "OUTSIDE anchor, and rebuild data/app/metro-outline.json."
+             % ("ies" if len(masked) > 1 else "y",
+                ", ".join("%s (%s)" % (name_by_fips.get(f, "?"), f) for f in masked)))
+    promised = sorted(in_ring - rostered)
+    if promised:
+        fail("count%s inside METRO_COUNTY_FIPS with no roster in "
+             "county-board-members.json, so the wash promises a name the card "
+             "cannot give: %s. Either the roster stopped resolving (re-read the "
+             "page) or the county was added to the ring too early."
+             % ("ies are" if len(promised) > 1 else "y is",
+                ", ".join("%s (%s)" % (name_by_fips.get(f, "?"), f) for f in promised)))
+    return len(in_ring)
 
 
 if __name__ == "__main__":
