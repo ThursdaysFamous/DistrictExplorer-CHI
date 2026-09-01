@@ -28,6 +28,7 @@ def not_news(send_to):
 
 STATE_MARK = {
     "CONFIRMED": "confirmed",
+    "BOUNCED": "**BOUNCED**",
     "UNRECHECKED": "**unrechecked**",
     "PARTIAL": "**partial**",
     "NOT_FOUND": "**not found**",
@@ -118,10 +119,19 @@ def render(d):
     a("| State | Means |")
     a("|---|---|")
     a("| `confirmed` | the address was found on the page cited for it |")
+    a("| `BOUNCED` | mail to it was rejected. It is left on the list, struck, so nobody tries it "
+      "again. |")
+    a("| `markup-only` | the address is on the cited page but ONLY inside machine-readable markup "
+      "— JSON-LD, a meta tag, a data attribute — and in no text or `mailto:` link a reader ever "
+      "sees. **This is the shape the Chicago Tribune's dead address had.** Nobody at the outlet "
+      "looks at it, so nobody notices when it dies. Treat as unconfirmed. |")
     a("| `unrechecked` | that page refuses this network (Akamai/Cloudflare 403, a TLS failure). "
       "**This is a fact about the host, not a doubt about the address** — the same inversion "
       "`validate_card_links.py` uses for its `EXPECTED_UNREACHABLE` hosts. Confirm in a browser "
       "before sending. |")
+    a("")
+    a("")
+    a("**And a limit worth stating plainly.** " + d["release"]["deliverability_note"])
     a("")
     a("Rows with **no send address at all** are listed separately. They are not failures: a "
       "newsroom that publishes only a form is answered through its form, and several sites here "
@@ -174,6 +184,10 @@ def render(d):
             if o["also_known_as"]:
                 name += " <br>*(also " + esc(", ".join(o["also_known_as"])) + " — one inbox)*"
             state = STATE_MARK.get(s["state"], s["state"])
+            if s.get("risk") == "markup_only":
+                state += " <br>**markup-only**"
+            if s.get("bounced_on"):
+                state += " <br>*" + s["bounced_on"] + "*"
             if not_news(s):
                 state += " <br>**not a news inbox**"
             if o.get("sent_on"):

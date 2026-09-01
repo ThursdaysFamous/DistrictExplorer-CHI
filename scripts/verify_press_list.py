@@ -80,6 +80,29 @@ def pdf_text(raw):
     return re.sub(r"[()]", "", runs)
 
 
+def visible_text(raw):
+    """What a HUMAN sees on the page: markup, scripts and styles removed.
+
+    The Chicago Tribune bounce is why this exists. `newsroom@chicagotribune.com` was published
+    ONLY inside the page's schema.org JSON-LD, as "contactType":"newsroom". It was genuinely on
+    the page the researcher cited, and the string check found it — but no reader had seen it in
+    years and the mailbox was gone. An address that appears only in machine-readable metadata is
+    an address nobody at the outlet is looking at.
+    """
+    text = raw.decode("utf-8", "replace")
+    # A mailto: link IS user-facing publication — a reader clicks it, and the address lives in the
+    # href rather than the link text ("Contact us"). Keep those before stripping tags, or every
+    # normally-published address looks like metadata. Same for Cloudflare-obfuscated mailtos,
+    # which are mailto links the browser rebuilds.
+    mailtos = " ".join(re.findall(r'(?i)mailto:([^"\'>?\s]+)', text))
+    for hx in re.findall(r'data-cfemail="([0-9a-fA-F]+)"', text):
+        mailtos += " " + decode_cfemail(hx)
+    body = re.sub(r"(?is)<(script|style|template)\b.*?</\1>", " ", text)
+    body = re.sub(r"(?s)<!--.*?-->", " ", body)
+    body = re.sub(r"(?s)<[^>]+>", " ", body)          # tags, and with them every attribute
+    return html.unescape(body + " " + mailtos).lower()
+
+
 def normalise(raw):
     """Everything an address could be hiding behind, flattened into one searchable blob.
     `raw` is bytes, so a PDF still has its real streams to decompress."""
@@ -122,8 +145,17 @@ def check(job, page_cache):
         out["detail"] = "form url loads (HTTP " + str(status) + ")"
         return out
     if addr.lower() in blob:
-        out["verdict"] = "ON_PAGE"
-        out["detail"] = "found on cited page"
+        # Published where a reader can see it, or only in markup a reader never sees?
+        is_html = b"<html" in body[:4000].lower() or b"<!doctype html" in body[:4000].lower() \
+            or b"<body" in body[:8000].lower()
+        if not is_html or addr.lower() in visible_text(body):
+            out["verdict"] = "ON_PAGE"
+            out["detail"] = ("found on the cited page" if not is_html
+                             else "found in the visible text of the cited page")
+        else:
+            out["verdict"] = "MARKUP_ONLY"
+            out["detail"] = ("present only in markup/metadata (JSON-LD, an attribute, a script) "
+                             "— no reader sees it, so nobody at the outlet notices when it dies")
         return out
     # Same mailbox, different host casing/subdomain is still a real find worth reporting apart
     # from a flat miss, because it usually means the page moved rather than the address being wrong.
@@ -176,6 +208,10 @@ def main(path=None):
     # retired the inbox, or moved the page. That is the whole reason to re-run this before a send.
     regressed = [r for r in results
                  if r.get("was") == "CONFIRMED" and r["verdict"] in ("NOT_ON_PAGE", "PARTIAL")]
+    markup = [r for r in results if r["verdict"] == "MARKUP_ONLY"]
+    for r in markup:
+        print(f"  MARKUP-ONLY  {r['outlet']}: {r['address']}")
+    print(f"{len(markup)} address(es) appear only in machine-readable markup — the Tribune class.")
     for r in regressed:
         print(f"  REGRESSED  {r['outlet']}: {r['address']} -> {r['detail']}")
     print(f"\n{len(regressed)} address(es) stopped being published where they were cited.")
