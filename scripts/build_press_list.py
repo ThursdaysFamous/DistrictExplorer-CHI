@@ -166,18 +166,27 @@ def render(d):
           f"rooms are lifted into wave 1 because the school-board hook is the only pitch in the "
           f"whole send with a date attached.")
         a("")
-        a("| # | Wave | Outlet | What they are | Send to | State | Lead with |")
+        a("| # | Wave | Outlet | What they are | Send to | State | Opening line |")
         a("|---|---|---|---|---|---|---|")
         for o in sorted(rows, key=lambda x: (x["tier"], x["name"])):
             s = o["send_to"]
             name = esc(o["name"])
             if o["also_known_as"]:
                 name += " <br>*(also " + esc(", ".join(o["also_known_as"])) + " — one inbox)*"
+            state = STATE_MARK.get(s["state"], s["state"])
+            if not_news(s):
+                state += " <br>**not a news inbox**"
+            if o.get("sent_on"):
+                state += " <br>*sent " + o["sent_on"] + "*"
+            # The opening line IS the deliverable; the research angle is only what produced it.
+            # For the ones already sent, point at the sender's own outbox rather than reproducing
+            # his correspondence — this file is public and those e-mails are not.
+            if o.get("sent_on"):
+                opening = "*already sent — see your own sent mail for the wording used*"
+            else:
+                opening = esc(o.get("intro") or o["angle"])
             a(f"| {o['tier']} | {o.get('wave', '')} | [{name}]({o['homepage']}) | {esc(o['medium'])} | "
-              f"`{s['value']}` <br>[source]({s['source_url']}) | "
-              f"{STATE_MARK.get(s['state'], s['state'])}"
-              f"{' <br>**not a news inbox**' if not_news(s) else ''} | "
-              f"{esc(o['angle'])} |")
+              f"`{s['value']}` <br>[source]({s['source_url']}) | {state} | {opening} |")
         a("")
 
     noaddr = [o for o in d["outlets"] if not o["send_to"]]
