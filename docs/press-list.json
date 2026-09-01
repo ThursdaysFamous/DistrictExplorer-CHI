@@ -7,7 +7,8 @@
   "press_phone": "312-718-4318",
   "volunteer_contact": "hello@overberg.co",
   "body": "What state house district do you live in? What's your police district? You might know your school board district? But what about the Illinois Supreme Court districts?\n\nWhen trying to get something done in your community, one of the first things you need to know is the right person, agency or jurisdiction to talk to. And for any given U.S. resident, that can mean anywhere from a handful to two dozen districts that cover their address.\n\n\"I was at a community organizing event, and I was talking with a neighbor about a project. Then we realized that, even though we lived near each other, we were actually in two different districts. But that's often not easy to figure out,\" explains Adam Overberg, cyber security expert and creator of districtry.com.\n\nThat's how the project was born.\n\nOverberg began by combing through government websites to get map layers and geographic boundaries for local, county, state and federal districts in Chicago. It was at times cumbersome - there's no standard organizational system for this type of government data across agencies.\n\nThen he expanded to New York and San Francisco, and now has coverage of nearly all counties in Illinois, Wisconsin and Iowa.\n\nDistrictry is an independent project. It is not a government service and is not affiliated with, endorsed by, or operated by any government agency. There is no account, no sign-in, and it never asks for personal or financial information.\n\nWhat it does do is tell you what districts you're in, who your elected representatives are and where to go to get the answers you need about your community.\n\nAll you have to do is pick a point or enter an address and it reports every civic boundary that contains it at once - legislative, judicial, policing, schools, and the local special districts that most tools leave out.\n\nThe app names who holds each seat, according to the latest available data, and links the official body when none does. Districtry never guesses an officeholder.\n\nBecause Districtry is open source and transparent, every layer names the publisher of the data. Every line of code in Districtry is public.\n\nSo what comes next? Overberg says he wants to continue building out the app, eventually creating a resource for every major city and all 3,143 counties in the U.S. But that's a heavy lift, as much of this work is done by manually finding datasets, sometimes calling agencies and then unifying that data into the Districtry platform.\n\nHow can I help? - Get the word out. Share Districtry with a friend, or on social media. Use the tool! You can also donate your time and resources. Do you want your community represented? Contact Districtry at hello@overberg.co and ask how you can get involved in gathering data.\n\nOverberg sees this project highlighting the problem with how geospatial district-level data is stored across government agencies. He says he wants to use this tool to bring attention to the lack of consistent record keeping, and bring about legislative change in Illinois and beyond for how local, county, state and federal bodies keep and update this type of information.\n\nFor more information about the project, interview requests or access to shareable or embeddable versions of Districtry, please contact Adam Overberg at press@overberg.co or 312-718-4318.",
-  "authored": "Written by a reporter, not generated. It is pasted VERBATIM beneath every pitch; only the one personal line above it changes per outlet."
+  "authored": "Written by a reporter, not generated. It is pasted VERBATIM beneath every pitch; only the one personal line above it changes per outlet.",
+  "deliverability_note": "PUBLISHED IS NOT DELIVERABLE. Every address here was read on a page that publishes it and then re-checked by fetching that page again. Neither test can tell you a mailbox still accepts mail — outbound SMTP is not available to the tooling, so no address here has been proven deliverable. The Chicago Tribune bounce on 2026-09-01 is what taught this: newsroom@chicagotribune.com was published, and had been dead long enough that nobody noticed, because it appeared ONLY in the page's schema.org JSON-LD. `risk: markup_only` marks the addresses that share that shape — present in machine-readable markup but in no text or mailto link a reader ever sees. Treat those as unconfirmed and expect some to bounce."
  },
  "utm": {
   "campaign": "districtry-launch",
@@ -1139,34 +1140,46 @@
    "angle": "Scale is the Tribune-sized version: one person has now mapped 262 of the 273 counties in Illinois, Wisconsin and Iowa and is aiming at all 3,143 in the country. Offer the Tribune the Illinois-specific reporting underneath it — which of the state's 102 counties can and cannot produce their own board-district maps on request, a list no state agency maintains.",
    "extra_angles": [],
    "send_to": {
-    "value": "newsroom@chicagotribune.com",
-    "purpose": "general newsroom",
-    "source_url": "https://www.chicagotribune.com/contact-us/",
-    "verbatim": "\"contactPoint\":[{\"@type\":\"ContactPoint\",\"contactType\":\"newsroom\",\"email\":\"newsroom@chicagotribune.com\"},{\"@type\":\"ContactPoint\",\"contactType\":\"sales\",\"email\":\"dchiappe@chicagotribune.com\"},{\"@type\":\"C…",
+    "value": "aquig@chicagotribune.com",
+    "purpose": "specific beat desk — A.D. Quig, Cook County government and City Hall. The Tribune publishes no newsroom, tips or press-release address anywhere on its site, so a named reporter is the only route it offers.",
+    "source_url": "https://www.chicagotribune.com/author/a-d-quig/",
+    "verbatim": "A.D. Quig covers Cook County government, City Hall — aquig@chicagotribune.com",
     "state": "CONFIRMED",
-    "state_detail": "found on cited page"
+    "state_detail": "found in the visible text of the cited page"
    },
    "forms": [
     "https://www.chicagotribune.com/2024/01/01/submit-a-letter-to-the-editor/"
    ],
    "alternates": [
     {
+     "value": "kperez@chicagotribune.com",
+     "purpose": "specific beat desk — Kate Perez, CPS and the elected school board",
+     "source_url": "https://www.chicagotribune.com/author/kate-perez/",
+     "state": "CONFIRMED"
+    },
+    {
+     "value": "newsroom@chicagotribune.com",
+     "purpose": "DEAD — do not use",
+     "source_url": "https://www.chicagotribune.com/contact-us/",
+     "verbatim": "\"contactPoint\":[{\"@type\":\"ContactPoint\",\"contactType\":\"newsroom\",\"email\":\"newsroom@chicagotribune.com\"},{\"@type\":\"ContactPoint\",\"contactType\":\"sales\",\"email\":\"dchiappe@chicagotribune.com\"},{\"@type\":\"C…",
+     "state": "BOUNCED",
+     "state_detail": "mail to this address was rejected on 2026-09-01 — address not found. It was published only in the page's JSON-LD.",
+     "risk": "markup_only",
+     "bounced_on": "2026-09-01"
+    },
+    {
      "value": "dcassidy@tribpub.com",
      "purpose": "specific beat desk — Metro Editor, The Aurora Beacon-News (Kane County / Fox Valley)",
      "source_url": "https://www.chicagotribune.com/contact-suburban-pubs/",
-     "state": "CONFIRMED"
+     "state": "CONFIRMED",
+     "risk": "markup_only"
     },
     {
      "value": "ksorensen@tribpub.com",
      "purpose": "specific beat desk — Metro Editor, The Elgin Courier-News AND the Naperville Sun (Kane / DuPage)",
      "source_url": "https://www.chicagotribune.com/contact-suburban-pubs/",
-     "state": "CONFIRMED"
-    },
-    {
-     "value": "bjohnson@pioneerlocal.com",
-     "purpose": "specific beat desk — Metro Editor, Daily Southtown (south and southwest Cook County)",
-     "source_url": "https://www.chicagotribune.com/contact-suburban-pubs/",
-     "state": "CONFIRMED"
+     "state": "CONFIRMED",
+     "risk": "markup_only"
     }
    ],
    "bylines": [
@@ -1183,7 +1196,7 @@
      "source_url": "https://www.chicagotribune.com/author/a-d-quig/"
     }
    ],
-   "notes": "FETCH NOTE (matters for reproducing this): www.chicagotribune.com refuses the standard WebFetch tool outright. Every page below was retrieved with curl and a browser user-agent, all HTTP 200. Nothing here is from memory. THE HEADLINE FINDING: the Chicago Tribune publishes NO reader-facing news-tips, city-desk, metro-desk, assignment-desk or press-release address. I checked the homepage, /contact-us/, /about/, /help-center/, /news/investigations/ and /tips/ (which redirects to an unrelated article from the year 2000). There is no SecureDrop, no tip line and no \"send us a tip\" form. The only newsroom-labelled address on the whole site, newsroom@chicagotribune.com, exists solely inside the schema.org JSON-LD metadata on the homepage and contac…",
+   "notes": "newsroom@chicagotribune.com BOUNCED on 2026-09-01 (address not found). It was published only in the site's JSON-LD. FETCH NOTE (matters for reproducing this): www.chicagotribune.com refuses the standard WebFetch tool outright. Every page below was retrieved with curl and a browser user-agent, all HTTP 200. Nothing here is from memory. THE HEADLINE FINDING: the Chicago Tribune publishes NO reader-facing news-tips, city-desk, metro-desk, assignment-desk or press-release address. I checked the homepage, /contact-us/, /about/, /help-center/, /news/investigations/ and /tips/ (which redirects to an unrelated article from the year 2000). There is no SecureDrop, no tip line and no \"send us a tip\" form. The only newsroom-labelled address on the whole site, newsroom@chicagotribune.com, exists solely inside the schema.org JSON-LD metadata on the homepage and contac…",
    "wave": 2,
    "link": "https://districtry.com/il/?utm_source=press-chi&utm_medium=email&utm_campaign=districtry-launch",
    "intro": "One person has now mapped 262 of the 273 counties in Illinois, Wisconsin and Iowa, and the goal is all 3,143 in the country. I am that person, and I started because I could not find out which districts my own neighbor lived in. The Illinois half is free for your readers to use today."
@@ -1881,7 +1894,8 @@
      "value": "news@chicagocrusader.com",
      "purpose": "general newsroom / organization contact. This is the email the outlet declares for itself in its own structured data, on the chicagocrusader.com domain. It is machine-readable rather than visibly rendered, so it is published but not labelled with a purpose in reader-facing text.",
      "source_url": "https://chicagocrusader.com/contact/",
-     "state": "CONFIRMED"
+     "state": "CONFIRMED",
+     "risk": "markup_only"
     }
    ],
    "bylines": [
@@ -1941,7 +1955,8 @@
      "value": "jgarth@citizennewspapergroup.com",
      "purpose": "other — ADVERTISING ONLY. The page's own heading is \"Advertising Inquiry Only:\", which is about as explicit an exclusion as an outlet can print. NOT for a press release; listed only so it is not mistaken for a newsroom address.",
      "source_url": "https://citizennewspapergroup.com/advertise/",
-     "state": "CONFIRMED"
+     "state": "CONFIRMED",
+     "risk": "markup_only"
     }
    ],
    "bylines": [],
@@ -2062,13 +2077,15 @@
      "value": "mthomas@hfchronicle.com",
      "purpose": "press releases — the outlet's own explicitly labelled news-release inbox (Marilyn Thomas, co-owner). The published mailto also pre-fills the subject line \"News release for the Chronicle\".",
      "source_url": "https://www.hfchronicle.com/contact-us/",
-     "state": "CONFIRMED"
+     "state": "CONFIRMED",
+     "risk": "markup_only"
     },
     {
      "value": "editor@hfchronicle.com",
      "purpose": "other — the page assigns it specifically to calendar/event submissions (\"Submitting an event for our calendar?\"), with the link text naming Eric Crump. It is a generic editor@ address, but the outlet's own stated purpose for it is the events calendar, not news tips or releases.",
      "source_url": "https://www.hfchronicle.com/contact-us/",
-     "state": "CONFIRMED"
+     "state": "CONFIRMED",
+     "risk": "markup_only"
     },
     {
      "value": "advertising@hfchronicle.com",
@@ -4017,7 +4034,8 @@
      "value": "brian.sapp@wsiu.org",
      "purpose": "specific beat desk — direct address of a named local reporter, published by WSIU itself on its own author page. Use only as a secondary/CC address; the desk address above is the primary.",
      "source_url": "https://www.wsiu.org/people/brian-sapp-1",
-     "state": "CONFIRMED"
+     "state": "CONFIRMED",
+     "risk": "markup_only"
     }
    ],
    "bylines": [
@@ -4254,7 +4272,8 @@
      "value": "mike.devine@pbswisconsin.org",
      "purpose": "other — PBS Wisconsin's OWN outbound publicity contact. It is the \"Key Contact\" printed at the foot of the station's press releases, i.e. the person journalists write to when covering PBS Wisconsin. It is not an address for sending press releases TO the newsroom.",
      "source_url": "https://pbswisconsin.org/pressroom/madison-symphony-at-100-premieres-sept-10-on-pbs-wisconsin-and-wpr-music/",
-     "state": "CONFIRMED"
+     "state": "CONFIRMED",
+     "risk": "markup_only"
     },
     {
      "value": "eernst@wisc.edu",
@@ -6290,7 +6309,8 @@
      "value": "contact@nysfocus.com",
      "purpose": "other — general/unspecified. NOT rendered anywhere on the visible page; it appears only inside the site's schema.org JSON-LD Organization block as the \"email\" property. Machine-readable and genuinely published in the page source, but the outlet steers human readers to editor@ instead",
      "source_url": "https://nysfocus.com/contact",
-     "state": "CONFIRMED"
+     "state": "CONFIRMED",
+     "risk": "markup_only"
     },
     {
      "value": "rebecca@nysfocus.com",
@@ -6458,7 +6478,8 @@
     "source_url": "https://48hills.org/about/contact/",
     "verbatim": "48 Hills is the official publication of the non-profit San Francisco Progressive Media Center, launched in 2013.",
     "state": "CONFIRMED",
-    "state_detail": "found on cited page"
+    "state_detail": "found on cited page",
+    "risk": "markup_only"
    },
    "forms": [
     "https://48hills.org/about/contact/"
@@ -6468,13 +6489,15 @@
      "value": "tim@48hills.org",
      "purpose": "specific beat desk — Tim Redmond, Editor and Founder, published by the outlet on its own masthead page. He is the byline on 'The Agenda' (City Hall, supervisor races, the 2026 campaign trail), which is the beat this pitch fits.",
      "source_url": "https://48hills.org/about/",
-     "state": "CONFIRMED"
+     "state": "CONFIRMED",
+     "risk": "markup_only"
     },
     {
      "value": "marke@48hills.org",
      "purpose": "specific beat desk — Marke Bieschke, Publisher and Arts & Culture Editor / Co-Founder, published on the outlet's own masthead. This is the ARTS side of the newsroom, not the civic/politics side; listed for completeness, not as the right target for this pitch.",
      "source_url": "https://48hills.org/about/",
-     "state": "CONFIRMED"
+     "state": "CONFIRMED",
+     "risk": "markup_only"
     },
     {
      "value": "hello@48hills.org",
