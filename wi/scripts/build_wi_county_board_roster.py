@@ -204,7 +204,7 @@ def main():
         raise RuntimeError("%d seats resolved, floor is %d" % (total, MIN_SEATS))
 
     # See the docstring: the floors above are a fleet-sized net, and one county
-    # falling out of a 34-county file slips straight through it.
+    # falling out of a 57-county file slips straight through it.
     was = shipped_counties()
     gone = sorted(set(was) - {e["county"] for e in counties.values()} - allowed_drops)
     if gone:
