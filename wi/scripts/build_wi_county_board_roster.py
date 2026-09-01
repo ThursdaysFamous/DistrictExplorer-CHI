@@ -11,9 +11,9 @@ That is what stops a county's page reorganising into a plausible-but-wrong
 number of members — the two files were built from different publishers (the
 county's own page, and LTSB's statewide filing) and have to agree.
 
-Fifty-six of Wisconsin's 72 counties have a district-keyed member list this
+Fifty-seven of Wisconsin's 72 counties have a district-keyed member list this
 project can reach, by one of the routes the scraper's docstring sets out; the
-other 16 are recorded in the Data gaps panel and their cards keep linking the
+other 15 are recorded in the Data gaps panel and their cards keep linking the
 county board rather than naming anybody.
 
 AND A COUNTY THAT SHIPPED LAST WEEK MAY NOT SIMPLY VANISH. The floors below are
@@ -24,13 +24,26 @@ and any county that resolved nothing this run fails the build by name. Dropping
 one deliberately takes `--allow-drop <County>`, which is a decision somebody
 makes rather than a silence.
 
-THREE OF THE FIFTY ARE CARRIED FROM A DOCUMENT, NOT RE-READ WEEKLY, AND THE
-CARD HAS TO SAY SO. Taylor's host answers a captcha, and Lafayette's and La
-Crosse's a Cloudflare challenge, so their rows come from a dated capture of each
-county's own page. The scraper marks those counties `carried_from_document` with
-the day they were read; this builder turns that into an `asOf` on every one of
-their rows, and the card prints it rather than letting a dated snapshot read
-like the weekly re-read the other forty-seven get. A county whose live page
+NINE OF THE FIFTY-SEVEN ARE CARRIED FROM A DOCUMENT, NOT RE-READ WEEKLY, AND
+THE CARD HAS TO SAY SO — in two classes that must not be blurred. Taylor's host
+answers a captcha and Lafayette's and La Crosse's a Cloudflare challenge: those
+counties are BLOCKED, and the card's default sentence, that the county's site
+refuses automated readers, is true of them.
+
+THE OTHER SIX ARE THE OPPOSITE CASE. Pepin, Jackson, Richland, Rusk, Polk and
+Dunn all serve this client perfectly well, and every one publishes a robots.txt
+whose `User-agent: *` group disallows the whole site. Five of the six were being
+scraped WEEKLY until 2026-08-31, when wi/scripts/validate_robots.py was written
+and swept every host this instance fetches; the crawl stopped and the names
+stayed, dated, because robots.txt governs RETRIEVAL and not what already-public
+information may be shown. A refusal and a request are different facts about a
+county, so each of those six carries its own `why` and the card prints it in
+place of the default.
+
+The scraper marks those counties `carried_from_document` with the day they were
+read; this builder turns that into an `asOf` on every one of their rows, and the
+card prints it rather than letting a dated snapshot read like the weekly re-read
+the other fifty-three get. A county whose live page
 answers on a later run loses the flag in the scraper, so the field disappears
 here by itself — which is exactly what Fond du Lac did on the first run after
 its own archive route shipped.
@@ -59,12 +72,12 @@ GEOMETRY = os.path.join(APP_DATA_DIR, "county-supervisory-districts.json")
 RAW = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache", "wi_county_boards_raw.json")
 OUT = os.path.join(APP_DATA_DIR, "county-board-members.json")
 
-MIN_COUNTIES = 54      # 56 ship one (42 board pages + 2 county GIS layers + Fond du
+MIN_COUNTIES = 55      # 57 ship one (42 board pages + 2 county GIS layers + Fond du
                        # Lac through the Internet Archive + Dodge's constituent
                        # directory + Kenosha's witnessed directory PDF + Adams's
                        # directory PDF + Columbia's framed table + Taylor,
                        # Lafayette and La Crosse by document); tolerates two dark
-MIN_SEATS = 1199       # 1272 today; the tolerance is the two largest boards
+MIN_SEATS = 1211       # 1284 today; the tolerance is the two largest boards
                        # (Dane 37 + Outagamie 36) going dark in one run, which is
                        # what a floor is for — it is never lowered to fit a result
 
@@ -129,6 +142,14 @@ def main():
             # DOCUMENT_ROSTERS entry and on its NOT RE-READ line.
             if entry.get("carried_from_document"):
                 row["asOf"] = "the county's own page, captured %s" % entry["read_on"]
+                # WHY it is a capture, where that is not the card's default. The
+                # card says a carried roster is dated because the county's site
+                # "refuses automated readers", which is true of a captcha and a
+                # Cloudflare challenge and false of a county that serves this
+                # client and asks it not to crawl (Pepin). A county that states
+                # its own reason gets it printed instead.
+                if entry.get("why"):
+                    row["asOfWhy"] = entry["why"]
             if member["vacant"]:
                 row["vacant"] = True
                 vacant += 1

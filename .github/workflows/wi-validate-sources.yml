@@ -65,8 +65,24 @@ jobs:
             --status-file status.txt
           echo "status=$(cat status.txt)" >> "$GITHUB_OUTPUT"
 
+      # THE ROBOTS GATE (added 2026-08-31). validate_sources.py asks whether a
+      # source still resolves; this asks whether the publisher wants an
+      # automated client there at all. It found seven county hosts whose
+      # `User-agent: *` group disallows the whole site while this repo fetched
+      # them weekly — five of them for shipped board rosters. It lives here
+      # rather than in the merge gate because it needs the network and 72
+      # counties' hosts have their own bad days; a FAIL folds into the same
+      # tracking issue as the source report, which is the project's standing
+      # "surface for a human, don't block" convention.
+      - name: Check every scheduled fetch against its host's robots.txt
+        id: robots
+        continue-on-error: true
+        run: |
+          python3 wi/scripts/validate_robots.py 2>&1 | tee robots-report.txt
+          echo "status=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+
       - name: Open or update tracking issue
-        if: steps.validate.outputs.status != 'ok'
+        if: steps.validate.outputs.status != 'ok' || steps.robots.outputs.status != '0'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |

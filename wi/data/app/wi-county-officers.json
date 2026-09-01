@@ -4,7 +4,9 @@
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "John West",
+   "name": "Rick Pease",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.co.adams.wi.us/government/county-board",
    "seats": 20
   },
   "executive": {
@@ -52,7 +54,8 @@
    "phone": "608) 339-3304",
    "checked": true
   },
-  "contactChecked": 5
+  "contactChecked": 5,
+  "contactCheckedWeekly": 5
  },
  "55003": {
   "county": "Ashland",
@@ -105,7 +108,9 @@
    "party": "Democrat",
    "title": "Coroner"
   },
-  "contactChecked": 4
+  "contactChecked": 4,
+  "contactAsOf": "2026-08-31",
+  "contactAsOfWhy": "The county asks automated readers not to crawl its site, so these office contacts are a dated capture rather than the weekly re-read the other counties' rows get."
  },
  "55005": {
   "county": "Barron",
@@ -244,7 +249,8 @@
    "phone": "920-448-4185",
    "checked": true
   },
-  "contactChecked": 7
+  "contactChecked": 7,
+  "contactCheckedWeekly": 7
  },
  "55011": {
   "county": "Buffalo",
@@ -252,6 +258,8 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "Dennis Bork",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.buffalocountywi.gov/government/boards-committees/county-board/",
    "seats": 14
   },
   "executive": {
@@ -299,7 +307,8 @@
    "phone": "(608) 685-4433",
    "checked": true
   },
-  "contactChecked": 5
+  "contactChecked": 5,
+  "contactCheckedWeekly": 5
  },
  "55013": {
   "county": "Burnett",
@@ -350,7 +359,8 @@
    "url": "https://burnettcountywi.gov/directory.aspx",
    "checked": true
   },
-  "contactChecked": 6
+  "contactChecked": 6,
+  "contactCheckedWeekly": 6
  },
  "55015": {
   "county": "Calumet",
@@ -358,6 +368,8 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "Alice Connors",
+   "source": "county-board-page",
+   "sourceUrl": "https://calumetcounty.org/243/County-Board-of-Supervisors",
    "seats": 21
   },
   "executive": {
@@ -403,7 +415,8 @@
    "url": "https://calumetcounty.org/Directory",
    "checked": true
   },
-  "contactChecked": 7
+  "contactChecked": 7,
+  "contactCheckedWeekly": 7
  },
  "55017": {
   "county": "Chippewa",
@@ -457,7 +470,8 @@
    "url": "https://chippewacountywi.gov/Directory",
    "checked": true
   },
-  "contactChecked": 7
+  "contactChecked": 7,
+  "contactCheckedWeekly": 7
  },
  "55019": {
   "county": "Clark",
@@ -503,7 +517,8 @@
    "url": "https://www.clarkcountywi.gov/corner",
    "checked": true
   },
-  "contactChecked": 4
+  "contactChecked": 4,
+  "contactCheckedWeekly": 4
  },
  "55021": {
   "county": "Columbia",
@@ -550,7 +565,8 @@
    "name": "Pamela Stock",
    "title": "Medical Examiner (appointed)"
   },
-  "contactChecked": 2
+  "contactChecked": 2,
+  "contactCheckedWeekly": 2
  },
  "55023": {
   "county": "Crawford",
@@ -637,14 +653,17 @@
    "name": "Cristina Figueroa Soto",
    "title": "Medical Examiner (appointed)"
   },
-  "contactChecked": 4
+  "contactChecked": 4,
+  "contactCheckedWeekly": 4
  },
  "55027": {
   "county": "Dodge",
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "Dave Frohling",
+   "name": "David Frohling",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members",
    "seats": 33
   },
   "executive": {
@@ -683,6 +702,8 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "David Englebert",
+   "source": "county-board-page",
+   "sourceUrl": "https://co.door.wi.gov/234/County-Board-of-Supervisors",
    "seats": 21
   },
   "executive": {
@@ -762,7 +783,8 @@
    "name": "Sheila Keup",
    "title": "Medical Examiner (appointed)"
   },
-  "contactChecked": 5
+  "contactChecked": 5,
+  "contactCheckedWeekly": 5
  },
  "55033": {
   "county": "Dunn",
@@ -772,6 +794,7 @@
    "name": "Randy L. Prochnow",
    "source": "county-board-page",
    "sourceUrl": "https://dunncountywi.gov/supervisors",
+   "asOf": "the county's own page, captured 2026-08-31",
    "seats": 29
   },
   "executive": {
@@ -811,7 +834,9 @@
    "name": "Marcie Rosas",
    "title": "Medical Examiner (appointed)"
   },
-  "contactChecked": 2
+  "contactChecked": 2,
+  "contactAsOf": "2026-08-31",
+  "contactAsOfWhy": "The county asks automated readers not to crawl its site, so these office contacts are a dated capture rather than the weekly re-read the other counties' rows get."
  },
  "55035": {
   "county": "Eau Claire",
@@ -869,7 +894,8 @@
    "name": "Marcie Rosas",
    "title": "Medical Examiner (appointed)"
   },
-  "contactChecked": 5
+  "contactChecked": 5,
+  "contactCheckedWeekly": 5
  },
  "55037": {
   "county": "Florence",
@@ -925,14 +951,17 @@
    "phone": "715.528.3346",
    "checked": true
   },
-  "contactChecked": 5
+  "contactChecked": 5,
+  "contactCheckedWeekly": 5
  },
  "55039": {
   "county": "Fond du Lac",
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "Steven Abel",
+   "name": "Steven A. Abel",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.fdlco.wi.gov/government/county-board-supervisors",
    "seats": 25
   },
   "executive": {
@@ -1062,7 +1091,8 @@
    "party": "Republican",
    "title": "Coroner"
   },
-  "contactChecked": 6
+  "contactChecked": 6,
+  "contactCheckedWeekly": 6
  },
  "55045": {
   "county": "Green",
@@ -1114,7 +1144,8 @@
    "url": "https://greencountywi.org/directory.aspx",
    "checked": true
   },
-  "contactChecked": 6
+  "contactChecked": 6,
+  "contactCheckedWeekly": 6
  },
  "55047": {
   "county": "Green Lake",
@@ -1173,7 +1204,8 @@
    "name": "Thomas Wastart II",
    "title": "Medical Examiner (appointed)"
   },
-  "contactChecked": 5
+  "contactChecked": 5,
+  "contactCheckedWeekly": 5
  },
  "55049": {
   "county": "Iowa",
@@ -1267,14 +1299,16 @@
    "url": "https://www.co.iron.wi.gov/Directory",
    "checked": true
   },
-  "contactChecked": 7
+  "contactChecked": 7,
+  "contactCheckedWeekly": 7
  },
  "55053": {
   "county": "Jackson",
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "Jeff Amo",
+   "withheld": true,
+   "reason": "Not named: the Blue Book (April 2025) lists a chair who no longer appears on the county's own supervisor roster, and that roster does not mark a successor. The County Board District card names the sitting supervisors.",
    "seats": 19
   },
   "executive": {
@@ -1362,7 +1396,8 @@
    "phone": "920-674-7119",
    "checked": true
   },
-  "contactChecked": 6
+  "contactChecked": 6,
+  "contactCheckedWeekly": 6
  },
  "55057": {
   "county": "Juneau",
@@ -1410,14 +1445,17 @@
    "name": "Myron Oestreich",
    "title": "Medical Examiner (appointed)"
   },
-  "contactChecked": 3
+  "contactChecked": 3,
+  "contactCheckedWeekly": 3
  },
  "55059": {
   "county": "Kenosha",
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "Monica M Yuhas",
+   "name": "Mark Nordigian",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors",
    "seats": 23
   },
   "executive": {
@@ -1462,7 +1500,8 @@
    "url": "https://www.kenoshacountywi.gov/Directory",
    "checked": true
   },
-  "contactChecked": 7
+  "contactChecked": 7,
+  "contactCheckedWeekly": 7
  },
  "55061": {
   "county": "Kewaunee",
@@ -1511,6 +1550,9 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "Tina Tryggestad",
+   "source": "county-board-page",
+   "sourceUrl": "https://lacrossecounty.org/countyboard/members",
+   "asOf": "the county's own page, captured 2026-08-29",
    "seats": 30
   },
   "executive": {
@@ -1549,6 +1591,9 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "Jack Sauer",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.lafayettecountywi.org/bos",
+   "asOf": "the county's own page, captured 2026-08-29",
    "seats": 16
   },
   "executive": {
@@ -1638,7 +1683,8 @@
    "url": "https://www.co.langlade.wi.us/departments/coroner/",
    "checked": true
   },
-  "contactChecked": 6
+  "contactChecked": 6,
+  "contactCheckedWeekly": 6
  },
  "55069": {
   "county": "Lincoln",
@@ -1684,7 +1730,8 @@
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "Tyler Martell",
+   "withheld": true,
+   "reason": "Not named: the Blue Book (April 2025) lists a chair who no longer appears on the county's own supervisor roster, and that roster does not mark a successor. The County Board District card names the sitting supervisors.",
    "seats": 25
   },
   "executive": {
@@ -1728,7 +1775,8 @@
    "phone": "920-683-4008",
    "checked": true
   },
-  "contactChecked": 4
+  "contactChecked": 4,
+  "contactCheckedWeekly": 4
  },
  "55073": {
   "county": "Marathon",
@@ -1824,7 +1872,8 @@
    "phone": "715-732-7421",
    "checked": true
   },
-  "contactChecked": 6
+  "contactChecked": 6,
+  "contactCheckedWeekly": 6
  },
  "55077": {
   "county": "Marquette",
@@ -1882,7 +1931,8 @@
    "email": "athoma@marquettecountywi.gov",
    "checked": true
   },
-  "contactChecked": 5
+  "contactChecked": 5,
+  "contactCheckedWeekly": 5
  },
  "55078": {
   "county": "Menominee",
@@ -1966,6 +2016,8 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "Cedric Schnitzler",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors",
    "seats": 16
   },
   "executive": {
@@ -2004,6 +2056,8 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "Alan Sleeter",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.ocontocountywi.gov/453/County-Board",
    "seats": 31
   },
   "executive": {
@@ -2032,10 +2086,8 @@
    "checked": true
   },
   "districtAttorney": {
-   "name": "Hannah Schuchart",
-   "note": "Appointed to fill a vacancy",
-   "url": "https://www.ocontocountywi.gov/Directory",
-   "checked": true
+   "name": "Hannah N Schuchart",
+   "note": "Appointed to fill a vacancy"
   },
   "sheriff": {
    "name": "Todd Skarban",
@@ -2049,7 +2101,8 @@
    "url": "https://www.ocontocountywi.gov/Directory",
    "checked": true
   },
-  "contactChecked": 7
+  "contactChecked": 6,
+  "contactCheckedWeekly": 6
  },
  "55085": {
   "county": "Oneida",
@@ -2101,7 +2154,8 @@
    "checked": true
   },
   "coroner": null,
-  "contactChecked": 4
+  "contactChecked": 4,
+  "contactCheckedWeekly": 4
  },
  "55087": {
   "county": "Outagamie",
@@ -2194,7 +2248,8 @@
    "name": "Whitney Feiertag",
    "title": "Medical Examiner (appointed)"
   },
-  "contactChecked": 6
+  "contactChecked": 6,
+  "contactCheckedWeekly": 6
  },
  "55091": {
   "county": "Pepin",
@@ -2202,6 +2257,9 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "Tom Milliren",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.co.pepin.wi.us/bos",
+   "asOf": "the county's own page, captured 2026-08-31",
    "seats": 12
   },
   "executive": {
@@ -2243,7 +2301,9 @@
    "phone": "715-672-7242",
    "checked": true
   },
-  "contactChecked": 3
+  "contactChecked": 3,
+  "contactAsOf": "2026-08-31",
+  "contactAsOfWhy": "The county asks automated readers not to crawl its site, so these office contacts are a dated capture rather than the weekly re-read the other counties' rows get."
  },
  "55093": {
   "county": "Pierce",
@@ -2291,6 +2351,7 @@
    "name": "Russ Arcand",
    "source": "county-board-page",
    "sourceUrl": "https://www.polkcountywi.gov/government/county_board_of_supervisors/index.php",
+   "asOf": "the county's own page, captured 2026-08-31",
    "seats": 15
   },
   "executive": {
@@ -2336,7 +2397,9 @@
    "name": "Jamie Holscher",
    "title": "Medical Examiner (appointed)"
   },
-  "contactChecked": 5
+  "contactChecked": 5,
+  "contactAsOf": "2026-08-31",
+  "contactAsOfWhy": "The county asks automated readers not to crawl its site, so these office contacts are a dated capture rather than the weekly re-read the other counties' rows get."
  },
  "55097": {
   "county": "Portage",
@@ -2390,7 +2453,8 @@
    "url": "https://www.co.portage.wi.gov/Directory",
    "checked": true
   },
-  "contactChecked": 7
+  "contactChecked": 7,
+  "contactCheckedWeekly": 7
  },
  "55099": {
   "county": "Price",
@@ -2440,7 +2504,8 @@
    "url": "https://co.price.wi.us/Directory",
    "checked": true
   },
-  "contactChecked": 5
+  "contactChecked": 5,
+  "contactCheckedWeekly": 5
  },
  "55101": {
   "county": "Racine",
@@ -2523,6 +2588,8 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "Kevin Leavy",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors",
    "seats": 29
   },
   "executive": {
@@ -2563,6 +2630,7 @@
    "name": "Ron Freeman",
    "source": "county-board-page",
    "sourceUrl": "https://ruskcounty.org/supervisors",
+   "asOf": "the county's own page, captured 2026-08-31",
    "seats": 19
   },
   "executive": {
@@ -2646,7 +2714,8 @@
    "url": "https://sccwi.gov/Directory",
    "checked": true
   },
-  "contactChecked": 7
+  "contactChecked": 7,
+  "contactCheckedWeekly": 7
  },
  "55111": {
   "county": "Sauk",
@@ -2702,7 +2771,8 @@
    "url": "https://www.co.sauk.wi.us/coroner",
    "checked": true
   },
-  "contactChecked": 7
+  "contactChecked": 7,
+  "contactCheckedWeekly": 7
  },
  "55113": {
   "county": "Sawyer",
@@ -2751,7 +2821,8 @@
    "name": "John Froemel",
    "title": "Medical Examiner (appointed)"
   },
-  "contactChecked": 5
+  "contactChecked": 5,
+  "contactCheckedWeekly": 5
  },
  "55115": {
   "county": "Shawano",
@@ -2847,7 +2918,8 @@
    "name": "Desarae Rohde",
    "title": "Medical Examiner (appointed)"
   },
-  "contactChecked": 5
+  "contactChecked": 5,
+  "contactCheckedWeekly": 5
  },
  "55119": {
   "county": "Taylor",
@@ -2942,7 +3014,8 @@
    "email": "kindscb@co.trempealeau.wi.us",
    "checked": true
   },
-  "contactChecked": 5
+  "contactChecked": 5,
+  "contactCheckedWeekly": 5
  },
  "55123": {
   "county": "Vernon",
@@ -2998,7 +3071,8 @@
    "email": "bnigh@vernoncountywi.gov",
    "checked": true
   },
-  "contactChecked": 4
+  "contactChecked": 4,
+  "contactCheckedWeekly": 4
  },
  "55125": {
   "county": "Vilas",
@@ -3090,7 +3164,8 @@
    "url": "https://co.walworth.wi.us/directory.aspx",
    "checked": true
   },
-  "contactChecked": 7
+  "contactChecked": 7,
+  "contactCheckedWeekly": 7
  },
  "55129": {
   "county": "Washburn",
@@ -3138,17 +3213,15 @@
   },
   "sheriff": {
    "name": "Dennis Stuart",
-   "party": "Republican",
-   "url": "https://www.washburnsheriff.org/",
-   "phone": "(715) 468-4700",
-   "checked": true
+   "party": "Republican"
   },
   "coroner": {
    "name": "Angela Pank",
    "party": "Republican",
    "title": "Coroner"
   },
-  "contactChecked": 5
+  "contactChecked": 4,
+  "contactCheckedWeekly": 4
  },
  "55131": {
   "county": "Washington",
@@ -3203,7 +3276,8 @@
    "phone": "414-516-4300",
    "checked": true
   },
-  "contactChecked": 7
+  "contactChecked": 7,
+  "contactCheckedWeekly": 7
  },
  "55133": {
   "county": "Waukesha",
@@ -3259,14 +3333,17 @@
    "name": "Lynda Biedrzycki",
    "title": "Medical Examiner (appointed)"
   },
-  "contactChecked": 5
+  "contactChecked": 5,
+  "contactCheckedWeekly": 5
  },
  "55135": {
   "county": "Waupaca",
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "David Morack",
+   "name": "James Nygaard",
+   "source": "county-board-page",
+   "sourceUrl": "https://public4.co.waupaca.wi.us/CountyDirectory",
    "seats": 27
   },
   "executive": {
@@ -3314,7 +3391,8 @@
    "name": "Catherine Wegener",
    "title": "Medical Examiner (appointed)"
   },
-  "contactChecked": 5
+  "contactChecked": 5,
+  "contactCheckedWeekly": 5
  },
  "55137": {
   "county": "Waushara",
@@ -3369,7 +3447,8 @@
    "phone": "920-787-6612",
    "checked": true
   },
-  "contactChecked": 6
+  "contactChecked": 6,
+  "contactCheckedWeekly": 6
  },
  "55139": {
   "county": "Winnebago",
@@ -3421,7 +3500,8 @@
    "url": "https://www.winnebagocountywi.gov/directory.aspx",
    "checked": true
   },
-  "contactChecked": 6
+  "contactChecked": 6,
+  "contactCheckedWeekly": 6
  },
  "55141": {
   "county": "Wood",
@@ -3477,6 +3557,7 @@
    "phone": "715-421-8702",
    "checked": true
   },
-  "contactChecked": 5
+  "contactChecked": 5,
+  "contactCheckedWeekly": 5
  }
 }

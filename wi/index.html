@@ -8599,8 +8599,18 @@ function initWisconsinExplorer() {
                 "from the county's own board page.";
           }
           if (o.contactChecked) {
-            asOfNote += " The rows showing a phone number or office-page " +
-              "link are checked weekly against the county's own pages.";
+            // A COUNTY THAT ASKS NOT TO BE CRAWLED STILL GETS ITS CONTACT
+            // SHOWN — it was already read — but never under a claim of a
+            // weekly check it no longer gets. Same split as the board card's
+            // asOfWhy: a site that refuses and a site that asks are different
+            // facts, and the date is what tells the reader how much to trust.
+            asOfNote += o.contactAsOf
+              ? " The rows showing a phone number or office-page link were " +
+                "captured on " + String(o.contactAsOf) + " and are not " +
+                "re-read. " + (o.contactAsOfWhy ? String(o.contactAsOfWhy) :
+                "") + " They will go out of date."
+              : " The rows showing a phone number or office-page " +
+                "link are checked weekly against the county's own pages.";
           }
           extras.push({ label: "As of", value: asOfNote });
           wrap.appendChild(renderFieldStack(extras));
@@ -8767,9 +8777,16 @@ function initWisconsinExplorer() {
       if (member && member.asOf) {
         wrap.appendChild(renderFieldStack([{
           label: "As of",
-          value: "From " + String(member.asOf) + ". The county's website " +
-            "refuses automated readers, so this name is a dated capture " +
-            "rather than the weekly re-read the other named counties get."
+          // The DEFAULT reason is a refusal — a captcha or a managed
+          // challenge — which is what Taylor, Lafayette and La Crosse carry.
+          // A county that serves this client and merely ASKS it not to crawl
+          // (Pepin's robots.txt) is a different fact about a different county,
+          // so where the roster states its own reason, that is what prints.
+          value: "From " + String(member.asOf) + ". " + (member.asOfWhy
+            ? String(member.asOfWhy)
+            : "The county's website refuses automated readers, so this name " +
+              "is a dated capture rather than the weekly re-read the other " +
+              "named counties get.")
         }]));
       }
       if (result.seats) {

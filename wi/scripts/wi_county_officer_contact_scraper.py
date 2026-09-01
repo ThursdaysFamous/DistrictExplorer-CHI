@@ -74,19 +74,30 @@ stubs). DANE's medical-examiner and clerk-of-courts subdomains do not
 resolve from this network (proxy 502), and its treasurer subdomain is a
 payment portal naming nobody. DUNN's administration page does not name
 the county manager, dunncountysheriff.com is a JS shell, and its
-DA/deeds/examiner pages 404 at every conventional path — so Dunn ships
-its two witnessed offices only. JEFFERSON's own homepage links no
+DA/deeds/examiner pages 404 at every conventional path — it shipped its
+two witnessed offices only until 2026-08-31, when dunncountywi.gov's own
+robots.txt turned out to disallow this client and the county left this
+table entirely (the note above COUNTIES). JEFFERSON's own homepage links no
 sheriff page and the conventional path 404s. GRANT publishes no
 coroner/medical-examiner page at either conventional path. MARQUETTE's
 DA page is a 1KB shell and its treasurer page is unlocated (finance
 sits under administration). VERNON's DA page is a 2KB stub naming no
 one and its clerk-of-courts page 404s (both spellings). WASHBURN's
-clerk-of-courts page 404s (both spellings). WAUSHARA publishes a County
-Clerk page but no clerk-of-courts page. Waukesha's medical-examiner
-page deliberately names no person. A county below its pinned floor is
+clerk-of-courts page 404s (both spellings), and washburnsheriff.org — the
+county's separately-hosted sheriff site, and its ONLY sheriff surface —
+began answering 403 to this client behind a StackProtect WAF (measured
+2026-09-01, three consecutive denials, `server: nginx` with an
+`x-stackprotect-id`, so it is the site and not the egress proxy). That
+office therefore stops resolving and its phone and link fall out of the
+shipped row rather than carrying a `checked` date for a page that now
+refuses; the county's floor of 4 still passes on its other four offices,
+and a later run picks the sheriff back up if the WAF relents. WAUSHARA
+publishes a County Clerk page but no clerk-of-courts page. Waukesha's
+medical-examiner page deliberately names no person. A county below its pinned floor is
 SKIPPED with a loud line, never shipped partial-silent.
 """
 
+import datetime
 import json
 import os
 import re
@@ -136,6 +147,23 @@ TITLE_SETS = {
                   "County Manager"},
 }
 
+# FOUR COUNTIES LEFT THIS TABLE ON 2026-08-31 — Ashland, Dunn, Pepin and Polk —
+# and not because their pages stopped answering. Each of those hosts publishes a
+# robots.txt whose `User-agent: *` group reads `Disallow: /`, naming a handful of
+# search engines above it and giving each a narrow /admin/ and /manager/. This
+# scraper is none of the named agents, and it runs in TWO weekly workflows, so
+# those counties were being fetched twice a week against a file that had said no.
+# `wi/scripts/validate_robots.py` checks every URL this file fetches against its
+# host's own `*` group and fails if one is disallowed, so a county cannot come
+# back here by accident.
+#
+# THEIR CONTACT DID NOT GO WITH THEM. It is already read, and robots.txt governs
+# RETRIEVAL rather than what already-public information may be shown, so the four
+# ride CARRIED_CONTACTS below — the same treatment the board scraper's
+# DOCUMENT_ROSTERS gives Jackson, Richland, Rusk, Polk, Dunn and Pepin, and for
+# the same reason. Nothing re-fetches them; every run prints a NOT RE-READ line
+# naming the county and the capture's age, and the card says the rows are a dated
+# capture instead of the weekly check the other 42 counties get.
 COUNTIES = {
     "Brown": {"mode": "pages", "floor": 6, "offices": {
         "sheriff": "https://www.browncountywi.gov/government/sheriffs-office/",
@@ -200,12 +228,6 @@ COUNTIES = {
         "coroner": "https://www.marquettecountywi.gov/medical-examiner/",
         "sheriff": "https://www.marquettecountywi.gov/sheriff/",
         "registerOfDeeds": "https://www.marquettecountywi.gov/register-of-deeds/"}},
-    "Polk": {"mode": "pages", "floor": 4, "offices": {
-        "sheriff": "https://www.polkcountywi.gov/government/elected_officials/sheriff/index.php",
-        "clerkOfCircuitCourt": "https://www.polkcountywi.gov/government/elected_officials/clerk_of_courts/index.php",
-        "registerOfDeeds": "https://www.polkcountywi.gov/government/elected_officials/register_of_deeds/index.php",
-        "districtAttorney": "https://www.polkcountywi.gov/government/divisions_and_departments/public_safety_public_works/district_attorney/index.php",
-        "treasurer": "https://www.polkcountywi.gov/government/elected_officials/treasurer/index.php"}},
     "Vernon": {"mode": "pages", "floor": 3, "offices": {
         "coroner": "https://www.vernoncountywi.gov/departments/county_coroner/index.php",
         "treasurer": "https://www.vernoncountywi.gov/departments/county_treasurer/index.php",
@@ -224,11 +246,6 @@ COUNTIES = {
         "treasurer": "https://www.wausharacountywi.gov/12730/treasurer",
         "coroner": "https://www.wausharacountywi.gov/41436/medical-examiner",
         "executive": "https://www.wausharacountywi.gov/12681/administration"}},
-    # Dunn ships THIN on purpose: only two of its surfaces name their
-    # officer to a non-JS client (the docstring carries the rest)
-    "Dunn": {"mode": "pages", "floor": 2, "offices": {
-        "clerkOfCircuitCourt": "https://dunncountywi.gov/clerkofcourts",
-        "treasurer": "https://dunncountywi.gov/treasurer"}},
     "Winnebago": {"mode": "civicplus", "floor": 5,
                   "url": "https://www.winnebagocountywi.gov/directory.aspx"},
     "Burnett": {"mode": "civicplus", "floor": 5,
@@ -248,12 +265,6 @@ COUNTIES = {
         "districtAttorney": "https://www.co.adams.wi.us/departments/district-attorney",
         "executive": "https://www.co.adams.wi.us/departments/county-administrator",
         "registerOfDeeds": "https://www.co.adams.wi.us/departments/register-of-deeds"
-    }},
-    "Ashland": {"mode": "pages", "floor": 3, "offices": {
-        "clerkOfCircuitCourt": "https://ashlandcountywi.gov/circuit_court",
-        "districtAttorney": "https://ashlandcountywi.gov/district_attorney",
-        "executive": "https://ashlandcountywi.gov/administration",
-        "treasurer": "https://ashlandcountywi.gov/treasurer"
     }},
     "Buffalo": {"mode": "pages", "floor": 4, "offices": {
         "clerkOfCircuitCourt": "https://www.buffalocountywi.gov/departments/clerk-of-courts/",
@@ -311,11 +322,6 @@ COUNTIES = {
         "registerOfDeeds": "https://www.oneidacountywi.gov/departments/rd/",
         "sheriff": "https://www.oneidacountywi.gov/departments/sd/",
         "treasurer": "https://www.oneidacountywi.gov/departments/tr/"
-    }},
-    "Pepin": {"mode": "pages", "floor": 2, "offices": {
-        "coroner": "https://www.co.pepin.wi.us/coroner",
-        "sheriff": "https://www.co.pepin.wi.us/sheriff",
-        "treasurer": "https://www.co.pepin.wi.us/treasurer"
     }},
     "Sauk": {"mode": "pages", "floor": 6, "offices": {
         "clerkOfCircuitCourt": "https://www.co.sauk.wi.us/clerkofcourts",
@@ -383,6 +389,125 @@ COUNTIES = {
         "offices": ["sheriff", "districtAttorney", "treasurer",
                     "clerkOfCircuitCourt", "registerOfDeeds"]},
 }
+
+
+# ==== THE FOUR COUNTIES' CONTACT, AS LAST READ BEFORE THE CRAWL STOPPED ====
+#
+# Read from each county's own pages on 2026-08-31 by the "pages" mode above,
+# under the same witness rule everything here obeys: the surname as a whole word
+# with a word matching the first name's initial nearby, and contact taken only
+# from a window around that name. Then the robots.txt sweep ran and these four
+# hosts turned out to disallow this client, so the four rows moved here.
+#
+# NOTHING BELOW IS FETCHED. There is no URL to re-try and no `live` escape
+# hatch: the values are the capture, and `main()` prints a NOT RE-READ line per
+# county naming the capture's age, so an entry cannot rot unremarked.
+#
+# WHAT IS CARRIED IS THE OFFICE'S CONTACT, NEVER ITS OFFICEHOLDER. The name each
+# row shows still comes from the current Blue Book every build; `witness` is the
+# name the page carried when the contact was taken, and the builder DROPS an
+# office's carried contact if the shipped name stops matching that witness. An
+# office phone and an office page survive a turnover; a predecessor's contact
+# rendered under a successor's name would not be a stale row, it would be a
+# wrong one. That check is the whole reason the witness is stored.
+CARRIED_CONTACTS = {
+    "Ashland": {
+        "read_on": "2026-08-31",
+        "offices": {
+            "executive": {
+                "witness": "Dan Grady",
+                "url": "https://ashlandcountywi.gov/administration"
+            },
+            "treasurer": {
+                "witness": "Tracey Hoglund",
+                "url": "https://ashlandcountywi.gov/treasurer",
+                "phone": "715-682-7012",
+                "email": "tracey.hoglund@ashlandcountywi.gov"
+            },
+            "clerkOfCircuitCourt": {
+                "witness": "Lexi Pierce",
+                "url": "https://ashlandcountywi.gov/circuit_court",
+                "phone": "715-682-7016",
+                "email": "lexi.pierce@wicourts.gov"
+            },
+            "districtAttorney": {
+                "witness": "Blake Gross",
+                "url": "https://ashlandcountywi.gov/district_attorney",
+                "phone": "715-682-7019"
+            },
+        },
+    },
+    "Dunn": {
+        "read_on": "2026-08-31",
+        "offices": {
+            "treasurer": {
+                "witness": "Lynn Niggemann",
+                "url": "https://dunncountywi.gov/treasurer",
+                "phone": "(715) 232-3789",
+                "email": "trs@dunncountywi.gov"
+            },
+            "clerkOfCircuitCourt": {
+                "witness": "Katie Schalley",
+                "url": "https://dunncountywi.gov/clerkofcourts",
+                "phone": "(715) 232-2611",
+                "email": "dunn.clerk@wicourts.gov"
+            },
+        },
+    },
+    "Pepin": {
+        "read_on": "2026-08-31",
+        "offices": {
+            "treasurer": {
+                "witness": "Patricia Scharr",
+                "url": "https://www.co.pepin.wi.us/treasurer",
+                "phone": "715-672-8850"
+            },
+            "sheriff": {
+                "witness": "Joel D Wener",
+                "url": "https://www.co.pepin.wi.us/sheriff",
+                "phone": "888 944 8463"
+            },
+            "coroner": {
+                "witness": "Jeff Doughty",
+                "url": "https://www.co.pepin.wi.us/coroner",
+                "phone": "715-672-7242"
+            },
+        },
+    },
+    "Polk": {
+        "read_on": "2026-08-31",
+        "offices": {
+            "treasurer": {
+                "witness": "Amanda Nissen",
+                "url": "https://www.polkcountywi.gov/government/elected_officials/treasurer/index.php",
+                "phone": "715-485-8633",
+                "email": "amanda.nissen@polkcountywi.gov"
+            },
+            "clerkOfCircuitCourt": {
+                "witness": "Sharon Jorgenson",
+                "url": "https://www.polkcountywi.gov/government/elected_officials/clerk_of_courts/index.php"
+            },
+            "registerOfDeeds": {
+                "witness": "Sally Spanel",
+                "url": "https://www.polkcountywi.gov/government/elected_officials/register_of_deeds/index.php",
+                "phone": "715-485-9240",
+                "email": "sally.spanel@polkcountywi.gov"
+            },
+            "districtAttorney": {
+                "witness": "Jeffrey L Kemp",
+                "url": "https://www.polkcountywi.gov/government/divisions_and_departments/public_safety_public_works/district_attorney/index.php"
+            },
+            "sheriff": {
+                "witness": "Brent A Waak",
+                "url": "https://www.polkcountywi.gov/government/elected_officials/sheriff/index.php"
+            },
+        },
+    },
+}
+
+CARRIED_WHY = ("The county asks automated readers not to crawl its site, so "
+               "these office contacts are a dated capture rather than the "
+               "weekly re-read the other counties' rows get.")
 
 TAG_STRIP = re.compile(r"<script[\s\S]*?</script>|<style[\s\S]*?</style>|<[^>]+>")
 PHONE_RE = re.compile(r"\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}")
@@ -689,6 +814,28 @@ def main():
                                        ", ".join(sorted(entries))),
               file=sys.stderr)
         time.sleep(1)
+
+    # ---- the carried four: emitted, never fetched ----
+    # Printed loudly and dated, the same posture the board scraper takes with
+    # DOCUMENT_ROSTERS: a number that ages should say how old it is on every
+    # single run, not only on the day somebody thinks to look.
+    today = datetime.date.today()
+    for county, spec in sorted(CARRIED_CONTACTS.items()):
+        read_on = datetime.date.fromisoformat(spec["read_on"])
+        age = (today - read_on).days
+        out[str(geoid_by_base[county])] = {
+            "county": county,
+            "offices": {office: {k: v for k, v in c.items() if k != "witness"}
+                        for office, c in spec["offices"].items()},
+            "witnesses": {office: c["witness"]
+                          for office, c in spec["offices"].items()},
+            "carried_from_document": spec["read_on"],
+            "why": CARRIED_WHY,
+        }
+        print("%s: NOT RE-READ — %d office(s) carried from the capture of %s "
+              "(%d day%s old); the county's robots.txt disallows this client"
+              % (county, len(spec["offices"]), spec["read_on"], age,
+                 "" if age == 1 else "s"), file=sys.stderr)
 
     if len(out) < 32:
         raise SystemExit("only %d counties resolved — the tranche floor is "

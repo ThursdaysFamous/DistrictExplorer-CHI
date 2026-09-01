@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Scrape county board supervisors from the 56 Wisconsin counties whose roster this
+Scrape county board supervisors from the 57 Wisconsin counties whose roster this
 file can reach. Stage 1 of the pair; build_wi_county_board_roster.py turns the
 intermediate JSON into data/app/county-board-members.json.
 
 TWELVE ROUTES, AND WHICH ONE A COUNTY TAKES IS A MEASUREMENT
 ------------------------------------------------------------
-  * COUNTIES                    - 42 counties whose own board page pairs a
+  * COUNTIES                    - 41 counties whose own board page pairs a
                                   district with a person, each page's reading
                                   direction PINNED;
   * ARCGIS_COUNTIES             - Milwaukee and Racine, whose SITES refuse this
@@ -41,25 +41,32 @@ TWELVE ROUTES, AND WHICH ONE A COUNTY TAKES IS A MEASUREMENT
                                   the phones on each member's own page;
   * FRAMED_TABLE_COUNTIES       - Columbia, whose listing page is a shell around
                                   an iframe onto a second county host;
-  * DOCUMENT_ROSTERS            - Taylor, Lafayette and La Crosse, whose hosts
-                                  answer a captcha or a Cloudflare challenge, so
-                                  their rosters are carried as dated documents
-                                  with a NOT RE-READ line every run. Lafayette
-                                  additionally re-tries its live page each run,
-                                  because that page PARSES the moment the
-                                  challenge lifts.
+  * DOCUMENT_ROSTERS            - NINE counties, in two classes. Taylor,
+                                  Lafayette and La Crosse are BLOCKED: their
+                                  hosts answer a captcha or a Cloudflare
+                                  challenge, and Lafayette re-tries its live
+                                  page each run because it PARSES the moment
+                                  the challenge lifts. Pepin, Jackson,
+                                  Richland, Rusk, Polk and Dunn are the
+                                  OPPOSITE case — every one of those sites
+                                  answers this client perfectly well and every
+                                  one publishes a robots.txt disallowing the
+                                  whole site to every agent it does not name.
+                                  None of the six carries a `live` key, by
+                                  design: a re-try is a fetch. See the header
+                                  of that table and validate_robots.py.
 
 The last two are not the same arrangement and the difference is stated where
 each is defined: a WITNESSED document is fetched and checked every week; a
 CARRIED one was read once, by a person, through an access control this file does
 not try to defeat.
 
-WHY ONLY FIFTY-SIX OF SEVENTY-TWO
----------------------------------
+WHY ONLY FIFTY-SEVEN OF SEVENTY-TWO
+-----------------------------------
 Wisconsin publishes county board DISTRICTS statewide (Wis. Stat. 5.15(4)(br)1,
 see build_wi_supervisory_districts.py) and publishes the PEOPLE in them nowhere:
-each county names its own supervisors, 72 different ways. Fifty-six are
-reachable by one of the routes above. The other 16 are not oversights and are
+each county names its own supervisors, 72 different ways. Fifty-seven are
+reachable by one of the routes above. The other 15 are not oversights and are
 recorded as such — and the record is worth reading before adding to it, because on
 2026-08-29 seventeen counties joined at once and ALMOST NONE OF THEM HAD STARTED
 PUBLISHING ANYTHING NEW. What changed was this file:
@@ -81,6 +88,17 @@ PUBLISHING ANYTHING NEW. What changed was this file:
     been until 2026-08-29. Three counties, one mistake, three times. RE-CHECKING
     A RECORD IS NOT RE-CHECKING THE COUNTY — the 2026-08-29 pass confirmed what
     the map page says and never asked whether it was the right page.
+  * PEPIN IS THE ONE COUNTY HERE HELD BACK BY A ROBOTS.TXT, and it is not in
+    any bucket above because none of them describes it. Its site answers this
+    client perfectly well and publishes all 12 districts with a phone each and
+    ten county mailboxes; its robots.txt names six search-engine agents, gives
+    each a narrow Disallow, and then tells everything else `Disallow: /`. THAT
+    IS THE EXACT OPPOSITE OF IOWA AND WAUSHARA, whose files this scraper reads
+    precisely because their `*` group PERMITS the board path. A county that
+    asks not to be crawled has not refused to publish, so Pepin's roster is
+    transcribed by a person and carried in DOCUMENT_ROSTERS with no automated
+    re-read — and the card says the county ASKED rather than the default
+    sentence's "refuses", because those are different facts.
   * The remaining 13 publish their members as images or prose with no district
     column on the pages their own sites point to. THAT NUMBER WENT 18 -> 13 ON
     2026-08-31 AND NONE OF THE FIVE THAT LEFT EVER BELONGED IN IT. Calumet
@@ -1016,8 +1034,6 @@ COUNTIES = [
      "https://www.browncountywi.gov/government/county-board-of-supervisors/"),
     ("55013", "Burnett", 21, "same-line",
      "https://burnettcountywi.gov/264/Supervisors"),
-    ("55033", "Dunn", 29, "after",
-     "https://dunncountywi.gov/supervisors"),
     ("55035", "Eau Claire", 29, "same-line",
      "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"),
     ("55043", "Grant", 17, "same-line",
@@ -1028,8 +1044,6 @@ COUNTIES = [
      "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"),
     ("55077", "Marquette", 17, "before",
      "https://www.marquettecountywi.gov/government/county-board-supervisors/"),
-    ("55095", "Polk", 15, "same-line",
-     "https://www.polkcountywi.gov/government/county_board_of_supervisors/index.php"),
     ("55097", "Portage", 25, "before",
      "https://www.co.portage.wi.gov/171/County-Board"),
     ("55123", "Vernon", 19, "same-line",
@@ -1065,10 +1079,6 @@ COUNTIES = [
      "https://www.oneidacountywi.gov/government/cb/"),
     ("55099", "Price", 13, "column-after",
      "https://co.price.wi.us/319/County-Board"),
-    ("55103", "Richland", 21, "after-strict",
-     "https://richlandcountywi.gov/index.asp?SEC=DB387A4E-E124-4584-B32C-2C95880C63F0"),
-    ("55107", "Rusk", 19, "after-strict",
-     "https://ruskcounty.org/supervisors"),
     ("55115", "Shawano", 27, "before-strict",
      "https://www.co.shawano.wi.us/county_board/"),
     # --- the 2026-08-29 header fix: a county recorded unreadable for a year ---
@@ -1161,8 +1171,7 @@ COUNTIES = [
     # district-keyed roster PDF. See the `scrape_pdf_roster_county` comment for
     # the four traps and for the ward witness that checks its numbering against
     # LTSB's filing.
-    ("55053", "Jackson", 19, "pdf-roster",
-     "https://www.co.jackson.wi.us/index.asp?SEC=219B0002-A26C-4AA7-B330-980B6D3ADB57"),
+
     # --- 2026-08-31: the 54th. Its BOARD page names nobody at all; the Clerk's
     # Directory of Public Officials, linked from the county's own home page,
     # names all 27 district-keyed. See `scrape_directory_county` for the
@@ -2491,6 +2500,305 @@ ARCGIS_COUNTIES = [
 # supervisor's house is not an office location. Name, county e-mail and phone
 # are official contact details and do.
 DOCUMENT_ROSTERS = [
+    # ==== THE FIVE COUNTIES STOPPED ON 2026-08-31 BY THEIR OWN robots.txt ====
+    #
+    # Jackson, Richland, Rusk, Polk and Dunn were scraped weekly from their own
+    # board pages, and every one of those hosts publishes:
+    #
+    #     User-agent: *
+    #     Disallow: /
+    #
+    # naming half a dozen search engines above it and giving each a narrow
+    # /admin/ and /manager/. This project's clients are none of them, so all
+    # five sites were disallowed to it the whole time. The sweep that found
+    # them is `wi/scripts/validate_robots.py`, written the same day and run
+    # monthly, so this cannot recur quietly; the file's own COUNTIES note about
+    # Iowa and Waushara turned entirely on the `*` group PERMITTING the board
+    # path, and nothing had ever checked the other direction. THAT GUARD ALSO
+    # CAUGHT THE COUNT: the first pass carried four and the fifth, Dunn, was
+    # only found because the check was run again afterwards.
+    #
+    # THE CRAWL STOPS AND THE NAMES STAY. Removing them would blank 103 seats a
+    # reader can see today, and robots.txt governs RETRIEVAL rather than what
+    # already-public information may be shown: what these counties asked is
+    # that automated clients stop fetching, which is what stopping the fetch
+    # does. So each carries the roster as last read, dated 2026-08-31, with no
+    # `live` key, and its card says the county ASKED — the same treatment
+    # Pepin got when it was found the same day, and the reason its `why` exists.
+    # These rows will age, visibly, and that is the honest cost of the choice.
+    #
+    # WHAT IT WOULD TAKE TO MAKE THEM WEEKLY AGAIN: the county's own say-so.
+    # That is a letter, not a user-agent string, and nothing here will quietly
+    # rename a client to get past a file that says no.
+    {
+        "fips": "55033", "name": "Dunn", "seats": 29,
+        "read_on": "2026-08-31",
+        "source_url": "https://dunncountywi.gov/supervisors",
+        "how": "read from the county's own page before its robots.txt was "
+               "checked; that file disallows the whole site to every agent it "
+               "does not name, so this roster is never re-fetched",
+        "why": "The county asks automated readers not to crawl its site, so "
+               "this name is a dated capture rather than the weekly re-read "
+               "the other named counties get.",
+        "roles": {"5": "Vice Chair", "24": "Chair"},
+        # district -> (name, e-mail, phone); the page publishes neither
+        "members": {
+            "1": ("Tim Lauffer", None, None),
+            "2": ("John Wurtzler", None, None),
+            "3": ("Albert Kelly", None, None),
+            "4": ("Ronald P. Score", None, None),
+            "5": ("Gary Stene", None, None),
+            "6": ("Dustin Shackleton", None, None),
+            "7": ("Gary Bjork", None, None),
+            "8": ("Luke Wilsey", None, None),
+            "9": ("Samuel Thompson", None, None),
+            "10": ("Donald Gjestson", None, None),
+            "11": ("Michelle Bachand", None, None),
+            "12": ("Mike Kneer", None, None),
+            "13": ("Monica Berrier", None, None),
+            "14": ("Agnes Welsch", None, None),
+            "15": ("Barbara Lyon", None, None),
+            "16": ("Tom Wagner", None, None),
+            "17": ("Kelly McCullough", None, None),
+            "18": ("Sheila Stori", None, None),
+            "19": ("Cody Gentz", None, None),
+            "20": ("Spencer Berndt", None, None),
+            "21": ("Diane L. Morehouse", None, None),
+            "22": ("Andrew Hagen", None, None),
+            "23": ("Mark Thomas", None, None),
+            "24": ("Randy L. Prochnow", None, None),
+            "25": ("Tom Gilbert", None, None),
+            "26": ("Larry R. Bjork", None, None),
+            "27": ("Robert Bauer", None, None),
+            "28": ("Tim Lienau", None, None),
+            "29": ("David Styer", None, None),
+        },
+    },
+    {
+        "fips": "55053", "name": "Jackson", "seats": 19,
+        "read_on": "2026-08-31",
+        "source_url": "https://www.co.jackson.wi.us/index.asp?SEC=219B0002-A26C-4AA7-B330-980B6D3ADB57",
+        "document_url":
+            "https://www.co.jackson.wi.us/vertical/sites/%7B4C09F8F2-A8A2-4929-9E2A-A836851B00CC%7D/uploads/2026_-_2027_County_Board_Members.pdf",
+        "how": "read from the county's own page before its robots.txt was "
+               "checked; that file disallows the whole site to every agent it "
+               "does not name, so this roster is never re-fetched",
+        "why": "The county asks automated readers not to crawl its site, so "
+               "this name is a dated capture rather than the weekly re-read "
+               "the other named counties get.",
+        # district -> (name, e-mail, phone); None is a seat the county marks empty
+        "members": {
+            "1": ("Brian Bethke", "Brian.Bethke@jacksoncountywi.gov", "715-533-9941"),
+            "2": ("David Holen", "David.Holen@jacksoncountywi.gov", "715-896-1003"),
+            "3": ("Hoyt Strandberg", "Hoyt.Strandberg@jacksoncountywi.gov", "715-299-1586"),
+            "4": ("Daryl Boe", "Daryl.Boe@jacksoncountywi.gov", "715-896-1071"),
+            "5": ("Michael Beck", "Michael.Beck@jacksoncountywi.gov", "608-343-1742"),
+            "6": ("Mike Kunes", "Mike.Kunes@jacksoncountywi.gov", "715-299-4561"),
+            "7": ("Russell Anderson", "Russell.Anderson@jacksoncountywi.gov", "715-963-2133"),
+            "8": ("Max Hart", "Max.Hart@jacksoncountywi.gov", "715-896-4508"),
+            "9": ("Bill Laurent", "Bill.Laurent@jacksoncountywi.gov", "715-641-4519"),
+            "10": ("Nicole Pettibone", "Nicole.Pettibone@jacksoncountywi.gov", "715-299-2849"),
+            "11": ("Garth Rolbiecki", "Garth.Rolbiecki@jacksoncountywi.gov", "715-773-2954"),
+            "12": ("Ron Carney", "Ron.Carney@jacksoncountywi.gov", "608-387-9604"),
+            "13": ("Dale Hoff", "Dale.Hoff@jacksoncountywi.gov", "715-284-2720"),
+            "14": ("John Higgins", "John.Higgins@jacksoncountywi.gov", "715-299-2132"),
+            "15": ("Sarah Peloquin", "Sarah.Peloquin@jacksoncountywi.gov", "608-792-3391"),
+            "16": ("Desiree Gearing-Lancaster", "Desiree.Gearing-Lancaster@jacksoncountywi.gov", "715-284-2815"),
+            "17": ("Reed Richardson", "Reed.Richardson@jacksoncountywi.gov", "715-577-7226"),
+            "18": ("Jerry Schmidt", "Jerrold.Schmidt@jacksoncountywi.gov", "715-896-5478"),
+            "19": ("Ed Chamberlain", "Edward.Chamberlain@jacksoncountywi.gov", "715-896-0016"),
+        },
+    },
+    {
+        "fips": "55103", "name": "Richland", "seats": 21,
+        "read_on": "2026-08-31",
+        "source_url": "https://richlandcountywi.gov/index.asp?SEC=DB387A4E-E124-4584-B32C-2C95880C63F0",
+        "how": "read from the county's own page before its robots.txt was "
+               "checked; that file disallows the whole site to every agent it "
+               "does not name, so this roster is never re-fetched",
+        "why": "The county asks automated readers not to crawl its site, so "
+               "this name is a dated capture rather than the weekly re-read "
+               "the other named counties get.",
+        # district -> (name, e-mail, phone); None is a seat the county marks empty
+        "members": {
+            "1": ("Steve Carrow", None, None),
+            "2": ("Mary Miller", None, None),
+            "3": ("Randy E. Schoonover", None, None),
+            "4": ("Sandra M. Kramer", None, None),
+            "5": ("Richard D McKee", None, None),
+            "6": ("Larry Engel", None, None),
+            "7": ("Steve Meyer", None, None),
+            "8": ("Shirley Welte", None, None),
+            "9": ("Tiffany Thompson", None, None),
+            "10": ("Kevin Nolen", None, None),
+            "11": ("Rod C. Perry", None, None),
+            "12": ("Mary Collins-Johnsrud", None, None),
+            "13": ("David Turk", None, None),
+            "14": ("Darlene Waldsmith-Tagliapietra", None, None),
+            "15": ("Melvin (Bob) Frank", None, None),
+            "16": ("Kerry Severson", None, None),
+            "17": ("Steve Williamson", None, None),
+            "18": ("Marc Couey", None, None),
+            "19": ("Randy Schmidt", None, None),
+            "20": ("Duane McElvain", None, None),
+            "21": ("Daniel J. McGuire", None, None),
+        },
+    },
+    {
+        "fips": "55107", "name": "Rusk", "seats": 19,
+        "read_on": "2026-08-31",
+        "source_url": "https://ruskcounty.org/supervisors",
+        "how": "read from the county's own page before its robots.txt was "
+               "checked; that file disallows the whole site to every agent it "
+               "does not name, so this roster is never re-fetched",
+        "why": "The county asks automated readers not to crawl its site, so "
+               "this name is a dated capture rather than the weekly re-read "
+               "the other named counties get.",
+        "roles": {"12": "Vice-Chairman", "19": "Chairman"},
+        # district -> (name, e-mail, phone); None is a seat the county marks empty
+        "members": {
+            "1": ("Alec Hampton", None, None),
+            "2": ("Jerry Biller", None, None),
+            "3": None,
+            "4": ("John Moore", None, None),
+            "5": ("Terry Wedwick", None, None),
+            "6": None,
+            "7": ("Bill Stewart", None, None),
+            "8": ("Tom Cudo", None, None),
+            "9": ("Lisa Podgornik", None, None),
+            "10": ("Anton Ziesler", None, None),
+            "11": ("Phil Schneider", None, None),
+            "12": ("Jim Meyer", None, None),
+            "13": ("Kurt Gorsegner", None, None),
+            "14": ("Jeremy Vincent", None, None),
+            "15": ("Tom Hanson", None, None),
+            "16": ("Lois Goode", None, None),
+            "17": ("Dave Willingham", None, None),
+            "18": ("Mike Russell", None, None),
+            "19": ("Ron Freeman", None, None),
+        },
+    },
+    {
+        "fips": "55095", "name": "Polk", "seats": 15,
+        "read_on": "2026-08-31",
+        "source_url": "https://www.polkcountywi.gov/government/county_board_of_supervisors/index.php",
+        "how": "read from the county's own page before its robots.txt was "
+               "checked; that file disallows the whole site to every agent it "
+               "does not name, so this roster is never re-fetched",
+        "why": "The county asks automated readers not to crawl its site, so "
+               "this name is a dated capture rather than the weekly re-read "
+               "the other named counties get.",
+        "roles": {"11": "2nd Vice Chair", "13": "Chair", "15": "1st Vice Chair"},
+        # district -> (name, e-mail, phone); None is a seat the county marks empty
+        "members": {
+            "1": ("Brad Olson", None, None),
+            "2": ("Doug Route", None, None),
+            "3": ("Jim Bethke", None, None),
+            "4": ("Pam Garvey", None, None),
+            "5": ("Scott Gilbertson", None, None),
+            "6": ("Adam Jarchow", None, None),
+            "7": ("Sharon Kelly", None, None),
+            "8": ("Jeremy Hall", None, None),
+            "9": ("Kim O'Connell", None, None),
+            "10": ("Alice Moris", None, None),
+            "11": ("Jay Luke", None, None),
+            "12": ("Fran Duncanson", None, None),
+            "13": ("Russ Arcand", None, None),
+            "14": ("Keith Karpenski", None, None),
+            "15": ("John Bonneprise", None, None),
+        },
+    },
+    # PEPIN (2026-08-31) — THE FIRST ENTRY HERE HELD BACK BY A ROBOTS.TXT RATHER
+    # THAN BY A CHALLENGE, and the distinction is the whole reason it is carried.
+    # Taylor answers a captcha and Lafayette a Cloudflare interstitial: those are
+    # doors that will not open for this client. co.pepin.wi.us opens perfectly
+    # well and ASKS not to be crawled:
+    #
+    #     User-agent: Googlebot        Disallow: /admin/ /manager/ ...
+    #     User-agent: bingbot          (the same)
+    #     User-agent: ia_archiver      /admin/ /manager/
+    #     User-agent: archive.org_bot  /admin/ /manager/
+    #     User-agent: W3C-checklink    /admin/ /manager/
+    #     User-agent: CCBot            /admin/ /manager/
+    #     User-agent: *                Disallow: /
+    #
+    # This scraper is none of the named agents, so it falls to the `*` group and
+    # the whole site is disallowed to it. THAT IS THE EXACT OPPOSITE OF IOWA AND
+    # WAUSHARA, the two counties whose robots.txt this file already records: the
+    # note in COUNTIES turns on the fact that "in BOTH files the `User-agent: *`
+    # group permits the board path", which is what made reading them the
+    # operator's call to make. Here it permits nothing, so there is no weekly
+    # fetch and deliberately NO `live` key — an entry with one would re-request
+    # the page every run, which is the single thing the county has asked not to
+    # happen.
+    #
+    # A ROBOTS.TXT GOVERNS CRAWLERS, NOT READERS. The operator opened
+    # co.pepin.wi.us/bos in an ordinary browser and transcribed it, which is the
+    # route the file leaves open, exactly as a person passing Taylor's captcha
+    # is. The roster below is that transcription.
+    #
+    # IT WAS CROSS-CHECKED AGAINST THE ONE FETCH THIS FILE MADE BEFORE READING
+    # THE POLICY, and the two agree on all twelve names, all twelve phones and
+    # all ten mailboxes — recorded here because that fetch happened and saying
+    # so is cheaper than pretending it did not.
+    #
+    # WHAT THIS ENTRY DOES NOT CLAIM: that nothing in this repo touches the
+    # host. scripts/validate_card_links.py probes every shipped URL monthly and
+    # already probed four on co.pepin.wi.us before this entry existed (the
+    # county's directory link and three officer-contact pages in
+    # wi_county_officer_contact_scraper.py, which runs WEEKLY in two workflows);
+    # this adds a fifth. What is avoided here is the weekly roster crawl. The
+    # rest is a wider question than one county — six other hosts this repo
+    # fetches weekly publish the same `*  Disallow: /` — and is recorded rather
+    # than quietly half-fixed.
+    #
+    # THE MAILBOXES USE THREE PREFIXES, WHICH IS WHY NONE IS DERIVED. Ten of the
+    # twelve publish a district-keyed address and they are NOT one pattern:
+    # pcsdist1@, pcdistrict2@, pcsdist3@, pcsdist6@, pcdist7@, pcsdist8@,
+    # pcsdist9@, pcsdist10@, pcdistrict11@, pcsdist12@. A `pcsdist<n>@` rule
+    # would invent wrong addresses for districts 2, 7 and 11, so every one is
+    # transcribed. Districts 4 and 5 publish none and carry none.
+    #
+    # THE HOME ADDRESSES ARE NOT CARRIED — the page prints one per supervisor,
+    # and the fleet's standing rule is that a home address never ships. The
+    # county clerk (Audrey Bauer, Secretary to the Board) is on the same page and
+    # is NOT a supervisor; she is not in this table.
+    {
+        "fips": "55091", "name": "Pepin", "seats": 12,
+        "read_on": "2026-08-31",
+        "source_url": "https://www.co.pepin.wi.us/bos",
+        "how": "transcribed from the county's own Board of Supervisors page by "
+               "the operator in a browser; the site's robots.txt disallows the "
+               "whole site to every agent it does not name, so this roster is "
+               "never re-fetched",
+        # THE READER-FACING HALF OF `how`, because the card's own sentence is
+        # wrong for this county. It says a carried roster is dated "because the
+        # county's website refuses automated readers", which is true of Taylor's
+        # captcha and Lafayette's challenge and NOT true here: Pepin's site
+        # serves this client perfectly well and its robots.txt asks automated
+        # clients not to read it. Telling a reader the county refuses them would
+        # misdescribe what the county actually did.
+        "why": "The county asks automated readers not to crawl its site, so "
+               "this name is a dated capture rather than the weekly re-read the "
+               "other named counties get.",
+        "roles": {"8": "Chairperson", "9": "Vice-Chairperson",
+                  "12": "2nd Vice-Chairperson"},
+        # district -> (name, e-mail, phone)
+        "members": {
+            "1": ("Michael Wright", "pcsdist1@co.pepin.wi.us", "715-926-3210"),
+            "2": ("Gary S. Bauer", "pcdistrict2@co.pepin.wi.us", "715-495-1532"),
+            "3": ("Andy Winkler", "pcsdist3@co.pepin.wi.us", "715-577-9534"),
+            "4": ("Joe Schieffer", None, "715-495-7217"),
+            "5": ("Randall Weiss", None, "715-495-7429"),
+            "6": ("Elizabeth Bauer", "pcsdist6@co.pepin.wi.us", "504-723-3560"),
+            "7": ("Kris Sabelko", "pcdist7@co.pepin.wi.us", "715-505-3936"),
+            "8": ("Tom Milliren", "pcsdist8@co.pepin.wi.us", "715-495-6597"),
+            "9": ("John C. Andrews", "pcsdist9@co.pepin.wi.us", "715-279-3058"),
+            "10": ("Kevin C. Kosok", "pcsdist10@co.pepin.wi.us", "715-495-1761"),
+            "11": ("Vicki Kosok", "pcdistrict11@co.pepin.wi.us", "715-442-3071"),
+            "12": ("Angie Bocksell", "pcsdist12@co.pepin.wi.us", "715-559-0830"),
+        },
+    },
     {
         "fips": "55119", "name": "Taylor", "seats": 17,
         "read_on": "2026-08-29",
@@ -2673,7 +2981,7 @@ def document_county(spec):
         missing = sorted(int(k) for k in want - set(members))
         raise RuntimeError("%s: the document carries %d of %d districts (missing %s)"
                            % (spec["name"], len(members), spec["seats"], missing))
-    names = [v[0] for v in members.values()]
+    names = [v[0] for v in members.values() if v is not None]
     if len(set(names)) != len(names):
         dupes = sorted({n for n in names if names.count(n) > 1})
         raise RuntimeError("%s: the same person is filed under two districts (%s)"
@@ -2685,6 +2993,10 @@ def document_county(spec):
     if stray:
         raise RuntimeError("%s: a role is filed under district(s) %s, which the "
                            "board does not have" % (spec["name"], stray))
+    empty = sorted(d for d in roles if members.get(d) is None)
+    if empty:
+        raise RuntimeError("%s: a role is filed under district(s) %s, which the "
+                           "county marks vacant" % (spec["name"], empty))
     chairs = sorted(d for d, r in roles.items() if marks_chair(r))
     if len(chairs) > 1:
         # La Crosse prints "Chair, <standing committee>" in the same slot as
@@ -2694,7 +3006,15 @@ def document_county(spec):
                            % (spec["name"], len(chairs), chairs))
     out = {}
     for d in range(1, spec["seats"] + 1):
-        name, email, phone = members[str(d)]
+        seat = members[str(d)]
+        # A SEAT THE COUNTY ITSELF MARKS EMPTY IS `None`, not a row of blanks.
+        # Rusk carries two, and before this the carried path could only ever
+        # say "vacant": False — so a county with a vacancy could not be carried
+        # at all without asserting somebody holds the seat.
+        if seat is None:
+            out[str(d)] = {"name": None, "vacant": True, "role": None}
+            continue
+        name, email, phone = seat
         row = {"name": name, "vacant": False, "role": roles.get(str(d))}
         if email:
             row["email"] = email
@@ -5461,6 +5781,14 @@ def main():
             counties[fips]["carried_from_document"] = True
             counties[fips]["read_on"] = src["read_on"]
             counties[fips]["how"] = src["how"]
+            # The document that NAMES the members, where the source_url page
+            # does not — Jackson's HTML names nobody and its roster is a PDF,
+            # so a reader sent only to the page has nothing to check against.
+            if src.get("document_url"):
+                counties[fips]["document_url"] = src["document_url"]
+            # a county whose reason differs from the card's default says so
+            if src.get("why"):
+                counties[fips]["why"] = src["why"]
         if strategy == "archive" and any(archived_at or []):
             # SAME PRINCIPLE AS THE DOCUMENT LINE ABOVE: the file records that
             # this county's page was read through a public archive and WHEN
