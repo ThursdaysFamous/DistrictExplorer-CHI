@@ -30,8 +30,11 @@ It checks the URLs that are actually REQUESTED on a schedule:
     weekly workflows and so fetches its hosts twice a week,
   * a DOCUMENT_ROSTERS entry ONLY when it carries a `live` key, because that
     is the one thing in that table that makes a request. An entry without one
-    is a transcription and is not a fetch — Pepin is exactly that, and it must
-    not be reported as a crawl of a host it never touches.
+    is a transcription and is not a fetch — six of the nine are exactly that,
+    and they must not be reported as a crawl of hosts they never touch.
+  * everything EXCEPT the names in NOT_FETCHED (below), which are tables of
+    already-read values the app displays. The default is to include, so a table
+    added tomorrow is checked whether or not anyone remembers this file.
 
 IT DOES NOT CHECK LINKS THE APP MERELY SHOWS. A `sourceUrl` on a card is an
 address a reader clicks; robots.txt governs automated retrieval, not what a
@@ -102,7 +105,7 @@ def fetched_urls():
 
     import wi_county_officer_contact_scraper as officers
     for nm in dir(officers):
-        if not nm.isupper():
+        if not nm.isupper() or nm in NOT_FETCHED:
             continue
         for url in _strings(getattr(officers, nm)):
             out.append((url, "county officer contact (twice weekly)"))
@@ -112,6 +115,23 @@ def fetched_urls():
             seen.add(url)
             uniq.append((url, why))
     return sorted(uniq)
+
+
+# The sweep above takes EVERY http string in every upper-case attribute of the
+# contact scraper, which over-reports on purpose: a table added tomorrow is
+# checked by default, and over-reporting is the safe direction for a gate whose
+# whole job is to never miss a fetch. Names listed here are the exceptions, and
+# listing one is a CLAIM — that nothing in this repo requests those URLs — which
+# is worth as much as the reading of the module that backs it.
+#
+#   CARRIED_CONTACTS holds the office contact of the four counties whose hosts
+#   disallow this client. Its URLs are what the CARD SHOWS a reader, taken from
+#   a capture made before the policy was read; `main()` emits them and makes no
+#   request. It is the DOCUMENT_ROSTERS case one file over, and the same rule
+#   applies for the same reason: a transcription is not a fetch. Note that this
+#   table has no `live` escape hatch at all, so unlike a roster entry it cannot
+#   drift back into being fetched without an edit here too.
+NOT_FETCHED = {"CARRIED_CONTACTS"}
 
 
 def _strings(obj):

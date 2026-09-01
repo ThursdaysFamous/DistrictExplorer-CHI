@@ -78,6 +78,20 @@ builder itself: even when the contact scrape is absent or its extraction
 fails, Waukesha's executive is WITHHELD with the reason stated rather
 than ever again shipping the deceased officeholder's name. The pin lasts
 until the next Blue Book edition re-bases the file.
+
+FOUR OF THOSE COUNTIES ARE CARRIED RATHER THAN READ, AND THE CARD SAYS SO.
+Ashland, Dunn, Pepin and Polk each publish a robots.txt disallowing this
+client, so the contact scraper stopped fetching them on 2026-08-31 and
+their last read rides its CARRIED_CONTACTS table instead. The contact
+still ships — robots.txt governs RETRIEVAL, not what already-public
+information may be shown — but the county gains `contactAsOf` and
+`contactAsOfWhy`, and the card swaps its "checked weekly" sentence for the
+capture's date and the county's reason. THE CARRY IS GUARDED BY A WITNESS:
+each carried office records the name the page showed when its contact was
+taken, and this builder DROPS that office's contact the moment the shipped
+name stops matching it. A phone captured beside one officeholder and
+rendered under their successor's name is not a stale row, it is a wrong
+one, and nothing here can re-read the page to find out which it has.
 """
 
 import json
@@ -355,11 +369,31 @@ def main():
         print("WARNING: no contact intermediate (%s) — officer rows ship "
               "without contact; run wi_county_officer_contact_scraper.py "
               "first" % os.path.relpath(CONTACTS, REPO_ROOT), file=sys.stderr)
-    n_contact, n_diverged = 0, 0
+    n_contact, n_diverged, n_carried, n_witness_lost = 0, 0, 0, 0
     for geoid, centry in (contacts or {}).items():
         entry = out_counties[geoid]
         checked = 0
+        carried = centry.get("carried_from_document")
+        witnesses = centry.get("witnesses") or {}
         for office, c in centry["offices"].items():
+            # A CARRIED OFFICE'S CONTACT IS DROPPED THE MOMENT ITS OFFICEHOLDER
+            # CHANGES. The contact was read from a window around a name; the
+            # name itself still comes from the current Blue Book every build.
+            # If the two stop agreeing the office turned over, and a
+            # predecessor's phone under a successor's name is not a stale row,
+            # it is a wrong one. Nothing can re-read these pages to find out,
+            # so the safe move is to let the contact go and say so.
+            if carried and office in witnesses:
+                shipped = (entry.get(office) or {}).get("name")
+                if not shipped or not (surname_initials(witnesses[office]) &
+                                       surname_initials(shipped)):
+                    print("%s/%s carried contact DROPPED — captured beside %r, "
+                          "the book now names %r; the office turned over and "
+                          "nothing here can re-read the page"
+                          % (centry["county"], office, witnesses[office],
+                             shipped), file=sys.stderr)
+                    n_witness_lost += 1
+                    continue
             if "supersede" in c:
                 s = c["supersede"]
                 executive = {"name": s["name"], "title": s["title"],
@@ -431,7 +465,21 @@ def main():
             rec["checked"] = True
             checked += 1
             n_contact += 1
+            if carried:
+                n_carried += 1
         entry["contactChecked"] = checked
+        if carried and checked:
+            # The card must not tell a reader these rows are checked weekly.
+            entry["contactAsOf"] = carried
+            entry["contactAsOfWhy"] = centry.get("why") or ""
+        elif checked:
+            # SEPARATE FIELD, SEPARATE CLAIM. history.html's tiles measure the
+            # weekly check, and `contactChecked` stopped meaning that the day
+            # four counties' contact became a dated carry — the tile would have
+            # gone on counting 46 counties and 243 rows as weekly-verified
+            # while 14 of those rows were a capture nothing re-reads. A measured
+            # tile is only as honest as the field it counts.
+            entry["contactCheckedWeekly"] = checked
 
     for base, reason in STALE_EXEC.items():
         geoid = str(geoid_by_base[base])
@@ -482,10 +530,13 @@ def main():
           "note on Menominee and Shawano; chairs reconciled against the weekly "
           "board roster (%d from county pages, %d confirmed dated, %d withheld, "
           "%d counties with no roster to check); officer contact from %d "
-          "counties' own pages (%d offices checked, %d names superseded)"
+          "counties' own pages (%d offices checked, %d names superseded, %d "
+          "carried dated from robots-disallowed hosts, %d dropped on a lost "
+          "witness)"
           % (os.path.relpath(OUT, REPO_ROOT), len(superseded), len(confirmed),
              len(withheld), 72 - len(board_by_geoid),
-             len(contacts or {}), n_contact, n_diverged),
+             len(contacts or {}), n_contact, n_diverged, n_carried,
+             n_witness_lost),
           file=sys.stderr)
 
 
