@@ -23,6 +23,13 @@ TWELVE ROUTES, AND WHICH ONE A COUNTY TAKES IS A MEASUREMENT
                                   against the board's own page every run;
   * PDF_COUNTIES                - Adams, whose directory PDF is fetchable and
                                   district-keyed, so it is re-read weekly like a page;
+  * CLARK_DIRECTORY             - Clark, whose board page names only the chair
+                                  and whose Clerk's 44-page OFFICIAL DIRECTORY
+                                  prints all 29 seats eleven pages further in,
+                                  each with the ward composition that witnesses
+                                  the numbering. The link is discovered by its
+                                  anchor TEXT because the county is on Wix and
+                                  serves the file from a content hash;
   * `pdf-roster`                - Jackson, whose HTML names nobody anywhere and
                                   whose own listing page links a district-keyed
                                   roster PDF, DISCOVERED fresh each run because
@@ -4729,8 +4736,15 @@ def _jk_wards(text):
     return out
 
 
-def _jk_ward_witness(fips, county, wards, seats):
+def ward_number_witness(fips, county, wards, seats, min_pairs=None, munis=None):
     """The county's own composition against LTSB's ward-level SUPERID.
+
+    SHARED, NOT JACKSON'S. It was written for Jackson and is the strongest
+    check this file has, because it tests the one thing a roster cannot check
+    about itself: that the county's district NUMBERS mean what the shipped
+    geometry's numbers mean. Clark calls it too — its Clerk prints each
+    district's municipalities and wards beside the number, so the same
+    comparison runs on a completely different document shape.
 
     A FETCH FAILURE IS NOT A DISAGREEMENT — an unreachable witness says nothing
     about the roster, so it stands aside; a witness that RUNS and disagrees
@@ -4753,26 +4767,75 @@ def _jk_ward_witness(fips, county, wards, seats):
         ltsb.setdefault(int(a["SUPERID"]), set()).add(
             (_jk_norm(str(a.get("MCD_NAME", ""))), int(str(a.get("WARDID") or 0))))
     listed = sum(len(v) for v in wards.values())
-    if listed < 2 * seats:
-        raise RuntimeError("%s: the document lists only %d wards across %d "
-                           "districts — it has stopped printing its ward "
-                           "composition, and the numbering witness with it"
-                           % (county, listed, seats))
+    # THE FLOOR IS PER DOCUMENT, NOT PER COUNTY BOARD. Jackson names every ward
+    # of every municipality, so twice the seat count is a fair bar there. Clark
+    # names some municipalities WHOLE ("Town of Withee", "Village of Curtiss"),
+    # which is a complete statement of that district's composition carrying no
+    # ward number at all — 56 numbered pairs across 29 seats is its healthy
+    # state, not a document that has stopped printing compositions. Expanding a
+    # whole-municipality mention from LTSB's own file would make the witness
+    # score data it supplied itself, so the floor moves and the prose does not.
+    floor = 2 * seats if min_pairs is None else min_pairs
+    if listed < floor:
+        raise RuntimeError("%s: the document lists only %d ward pairs across %d "
+                           "districts (floor %d) — it has stopped printing its "
+                           "ward composition, and the numbering witness with it"
+                           % (county, listed, seats, floor))
     hit = sum(len(v & ltsb.get(d, set())) for d, v in wards.items())
     shifts = [sum(len(v & ltsb.get(d + off, set())) for d, v in wards.items())
               for off in (1, -1)]
     print("  witness %-12s %d/%d listed wards in LTSB's own district (shifts %d/%d)"
           % (county, hit, listed, shifts[0], shifts[1]), file=sys.stderr)
-    if any(shifts):
-        raise RuntimeError("%s: %d of its listed wards land one district off in "
-                           "LTSB's file — the two publishers may have renumbered "
-                           "apart; re-read both before shipping"
+    # THE SHIFT TEST IS COMPARATIVE, NOT ABSOLUTE. It asks whether the county's
+    # numbering fits LTSB's file BETTER at its own offset than one district
+    # along, which is the shape a renumbering takes. It was written as "any
+    # shifted match at all fails", which is true of Jackson's document and false
+    # in general: Clark scores a perfect 56/56 at its own offset and still picks
+    # up 1 and 2 stray hits shifted, because two neighbouring districts happen
+    # to contain a like-numbered ward in different municipalities. Refusing a
+    # county on 2 coincidences against 56 exact matches would reject a roster
+    # that agrees with the state completely. A real renumbering inverts the
+    # ratio — the shift scores near everything and the true offset near nothing.
+    if hit and max(shifts) > 0.5 * hit:
+        raise RuntimeError("%s: %d of its listed wards land in LTSB's "
+                           "same-numbered district but %d land one district off "
+                           "— too close to call, and the two publishers may have "
+                           "renumbered apart; re-read both before shipping"
+                           % (county, hit, max(shifts)))
+    if not hit and any(shifts):
+        raise RuntimeError("%s: NONE of its listed wards land in LTSB's "
+                           "same-numbered district and %d land one off — the "
+                           "document is numbered against a different plan"
                            % (county, max(shifts)))
     if hit < 0.95 * listed:
         raise RuntimeError("%s: only %d of %d listed wards land in LTSB's "
                            "same-numbered district — the county's composition and "
                            "the state's filing no longer describe one plan"
                            % (county, hit, listed))
+
+    # THE MUNICIPALITY SET IS THE STRONGER TEST WHERE A DOCUMENT STATES IT, and
+    # it is the one that reaches a district named whole. Every municipality the
+    # county puts in district N must be exactly the set LTSB files there —
+    # nothing extra, nothing missing — which is a statement about the NUMBERING
+    # that survives the county listing wards loosely or not at all.
+    if munis:
+        filed = {}
+        for f in feats:
+            a = f.get("attributes") or {}
+            filed.setdefault(int(a["SUPERID"]), set()).add(
+                _jk_norm(str(a.get("MCD_NAME", ""))))
+        wrong = {d: (sorted(v), sorted(filed.get(d, set())))
+                 for d, v in munis.items() if v != filed.get(d, set())}
+        if wrong:
+            raise RuntimeError(
+                "%s: %d of %d districts name a different set of municipalities "
+                "than LTSB files under that number — the two publishers describe "
+                "different plans, or the document has been renumbered. First: "
+                "D%s county=%s LTSB=%s"
+                % (county, len(wrong), len(munis), min(wrong),
+                   wrong[min(wrong)][0], wrong[min(wrong)][1]))
+        print("  witness %-12s %d/%d districts name LTSB's own municipality set"
+              % (county, len(munis), len(munis)), file=sys.stderr)
 
 
 def scrape_pdf_roster_county(fips, county, seats, url):
@@ -4843,7 +4906,219 @@ def scrape_pdf_roster_county(fips, county, seats, url):
                            "being dropped silently"
                            % (county, emails, phones, seats,
                               JK_MIN_EMAILS, JK_MIN_PHONES))
-    _jk_ward_witness(fips, county, wards, seats)
+    ward_number_witness(fips, county, wards, seats)
+    return out, link
+
+
+# --- Clark: the County Clerk's OFFICIAL DIRECTORY, as a linked PDF ------------
+#
+# clarkcountywi.gov publishes no board page that names anybody. Its /county-board
+# path 404s, and the COUNTY BOARD page inside the directory names three people:
+# the Chairperson, the Vice Chairperson and the Clerk. A reader looking for the
+# board stops there, and so did this project's record.
+#
+# THE NAMES ARE ELEVEN PAGES FURTHER IN. The Clerk compiles a 44-page Official
+# Directory each term, and its "COUNTY SUPERVISORS - CLARK COUNTY / SUPERVISORY
+# DISTRICTS" section prints all 29 seats as
+#
+#     District No. 4 (Town of Green Grove Ward 1, Town of Hoard Ward 2)
+#     Tom Wilcox tom.wilcox@co.clark.wi.us ............................ 715-743-5225
+#     N14016 Oak Grove Ave, Curtiss WI 54422
+#
+# — the district WITH ITS WARD COMPOSITION, then the person, then a HOME ADDRESS.
+#
+# FOUR THINGS ABOUT THIS DOCUMENT, EVERY ONE OF THEM MEASURED:
+#
+# 1. THE LINK IS DISCOVERED, NEVER PINNED. The county is on Wix and the document
+#    is served from /_files/ugd/<hash>.pdf, a content hash that changes the day
+#    the Clerk uploads a new edition. What is stable is the anchor TEXT in the
+#    site's own nav — "Official Directory" — so that is what is matched, the
+#    same discipline Adams's directory and Jackson's roster PDF already use.
+#
+# 2. THE SECTION SCOPE IS LOAD-BEARING. This one document also carries fifteen
+#    TOWN boards (each with its own "Supervisor I / II"), the elected and
+#    standing COMMITTEE rosters, and the county-board page naming the chair. An
+#    unscoped parse mixes town supervisors into a county board, so the reader
+#    starts at the SUPERVISORY DISTRICTS heading and stops at the next section.
+#
+# 3. pdfplumber, NOT pypdf's layout mode, and the reason is one row. pypdf
+#    returns District 23 as "Duane Boonduaneboon5@gmail.com" — surname welded to
+#    mailbox with no separator — which yields the name "Duane" and the address
+#    "Boonduaneboon5@gmail.com". pdfplumber keeps the space. The name-shape
+#    guard below catches the CLASS rather than that one row: a name carrying an
+#    @, a digit, or fewer than two words fails the county rather than shipping.
+#
+# 4. THE THIRD LINE IS A HOME ADDRESS AND NEVER SHIPS. Every seat prints one,
+#    and District 17's carries a second phone ("Cell: 715-613-8387") — which is
+#    why the phone is read from the NAME line only and never from the block. A
+#    home address is not contact data this project publishes, for any county.
+#
+# THE MAILBOXES ARE MOSTLY PERSONAL AND THEY STILL SHIP: three of the 29 are
+# @co.clark.wi.us and the rest are gmail/yahoo/hotmail addresses the County
+# Clerk publishes, in the county's official directory, as the way to reach that
+# supervisor. That is a published constituent-contact channel for a public
+# officeholder, which is exactly what the card exists to surface. The home
+# addresses printed beside them are not, and are dropped.
+CLARK_DIRECTORY = {
+    "fips": "55019", "name": "Clark", "seats": 29,
+    # the page a READER is sent to, and the page the link is discovered on
+    "source_url": "https://www.clarkcountywi.gov/",
+    "link_text": "Official Directory",
+    # the county's own domain, for the log's own-vs-personal split
+    "domain": "co.clark.wi.us",
+}
+CLARK_SECTION = re.compile(r"(?i)^SUPERVISORY\s+DISTRICTS?\s*$")
+# "District No. 4 (Town of Green Grove Ward 1, Town of Hoard Ward 2)". The
+# interposed "No." is why a plain /District\s+\d/ sweep of this document returns
+# ONE hit — a committee page's "District 6" — and misses all 29 seats.
+CLARK_HEAD = re.compile(r"^District No\.\s*(\d{1,2})\s*\((.*)\)\s*$")
+CLARK_EMAIL = re.compile(r"(?<![^\s])([A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,})")
+# Two or more words, letters and the punctuation a name really carries
+# ("Joe Waichulis Jr", "DuWayne (Butch) Trunkel"). No digits, no @.
+CLARK_NAME = re.compile(r"^[A-Za-z][A-Za-z.'\-]*(?: \(?[A-Za-z][A-Za-z.'\-]*\)?)+$")
+# "Tom Wilcox, Chairperson" on the directory's own COUNTY BOARD page
+CLARK_ROLE = re.compile(r"^([A-Z][A-Za-z.'\- ]+?),\s*((?:Vice\s+)?Chair(?:person|man|woman)?)\s*$")
+CLARK_MUNI = re.compile(r"(?i)\b(city|town|village)\s+of\s+([A-Za-z][A-Za-z .'\-]*?)"
+                        r"(?=\s+Wards?\b|\s*,|\s*&|\s*$|\s+and\b)")
+CLARK_WARDS = re.compile(r"(?i)wards?\s*((?:\d+\s*(?:,|&|and)?\s*)+)")
+CLARK_MIN_EMAILS = 16    # 20 of 29 publish one today
+CLARK_MIN_PHONES = 26    # 28 of 29 today; District 18 prints none
+# 56 numbered (municipality, ward) pairs today. Six districts name a
+# municipality WHOLE and contribute none, which is why this is not 2x seats.
+CLARK_MIN_WARD_PAIRS = 45
+
+
+def _clark_lines(blob):
+    """The directory's printed lines, via pdfplumber — see note 3 above."""
+    import io                            # noqa: PLC0415
+    import pdfplumber                    # noqa: PLC0415 - pinned in requirements
+    out = []
+    with pdfplumber.open(io.BytesIO(blob)) as pdf:
+        for page in pdf.pages:
+            out += (page.extract_text() or "").split("\n")
+    return [re.sub(r"\s+", " ", ln).strip() for ln in out]
+
+
+def _clark_wards(composition):
+    """{(normalised municipality, ward number)} for one district's prose.
+
+    A municipality named with NO ward ("Town of Withee", "Village of Curtiss")
+    means the whole municipality, and contributes no (name, ward) pair — the
+    witness scores the pairs it can see and the floor below keeps a document
+    that stops printing wards from passing unnoticed.
+    """
+    pairs = set()
+    for m in CLARK_MUNI.finditer(composition):
+        muni = _jk_norm(m.group(2))
+        tail = composition[m.end():]
+        nxt = CLARK_MUNI.search(tail)
+        wards = CLARK_WARDS.search(tail[:nxt.start()] if nxt else tail)
+        if not wards:
+            continue
+        for n in re.findall(r"\d+", wards.group(1)):
+            pairs.add((muni, int(n)))
+    return pairs
+
+
+def scrape_official_directory_county(spec):
+    """All seats or nothing, out of the Clerk's own Official Directory PDF."""
+    county, seats = spec["name"], spec["seats"]
+    page = fetch(spec["source_url"])
+    link = None
+    for m in re.finditer(r'href="([^"]+\.pdf)"[^>]*>\s*([^<]{1,60}?)\s*<', page, re.I):
+        if html_lib.unescape(m.group(2)).strip().lower() == spec["link_text"].lower():
+            link = urllib.parse.urljoin(spec["source_url"],
+                                        html_lib.unescape(m.group(1)).strip())
+            break
+    if not link:
+        raise RuntimeError("%s: no %r PDF link on %s — the county has renamed or "
+                           "moved its directory; re-read the page"
+                           % (county, spec["link_text"], spec["source_url"]))
+    blob = fetch_bytes(link, timeout=90)[0]
+    if not blob.startswith(b"%PDF"):
+        raise RuntimeError("%s: %s did not return a PDF (%d bytes, starts %r)"
+                           % (county, link, len(blob), blob[:16]))
+    lines = _clark_lines(blob)
+
+    start = next((i for i, l in enumerate(lines) if CLARK_SECTION.match(l)), None)
+    if start is None:
+        raise RuntimeError("%s: the directory carries no SUPERVISORY DISTRICTS "
+                           "heading — it has been restructured; re-read %s"
+                           % (county, link))
+    heads = [(i, m) for i, l in enumerate(lines[start:], start)
+             for m in [CLARK_HEAD.match(l)] if m]
+    seen = [int(m.group(1)) for _, m in heads]
+    if sorted(seen) != list(range(1, seats + 1)):
+        raise RuntimeError("%s: the directory's district headings are %s, not "
+                           "1..%d — re-read %s" % (county, seen, seats, link))
+
+    out, wards, munis, emails, phones, own = {}, {}, {}, 0, 0, 0
+    for i, m in heads:
+        district = int(m.group(1))
+        wards[district] = _clark_wards(m.group(2))
+        munis[district] = {_jk_norm(g[1]) for g in CLARK_MUNI.findall(m.group(2))}
+        if not munis[district]:
+            raise RuntimeError("%s: district %d's heading names no municipality "
+                               "(%r) — the composition is what witnesses the "
+                               "numbering, so this cannot ship unchecked"
+                               % (county, district, m.group(2)[:80]))
+        line = lines[i + 1]
+        mail = CLARK_EMAIL.search(line)
+        # THE NAME LINE ONLY: District 17's home-address line carries a second
+        # phone, and reading the block would ship it as the listed number.
+        phone = PDF_PHONE.search(line)
+        name = line
+        for cut in (mail.group(1) if mail else None, phone.group(0) if phone else None):
+            if cut:
+                name = name.split(cut)[0]
+        name = clean(name.split("....")[0].strip(" ."))[0]
+        if not CLARK_NAME.match(name):
+            raise RuntimeError("%s: district %d resolved the name %r from %r — "
+                               "that is not a name, and the row has reshaped; "
+                               "re-read %s" % (county, district, name, line[:90], link))
+        row = {"name": name, "vacant": False, "role": None}
+        if phone:
+            row["phone"] = "-".join(phone.groups())
+            phones += 1
+        if mail:
+            row["email"] = mail.group(1)
+            emails += 1
+            own += mail.group(1).lower().endswith("@" + spec["domain"])
+        out[str(district)] = row
+
+    names = [r["name"] for r in out.values()]
+    if len(set(names)) != len(names):
+        dupes = sorted({n for n in names if names.count(n) > 1})
+        raise RuntimeError("%s: the same person is filed under two districts (%s) "
+                           "— the heading boundaries have moved" % (county, dupes))
+    if emails < CLARK_MIN_EMAILS or phones < CLARK_MIN_PHONES:
+        raise RuntimeError("%s: %d e-mails and %d phones across %d seats (floors "
+                           "%d/%d) — the directory has reshaped and contact is "
+                           "being dropped silently"
+                           % (county, emails, phones, seats,
+                              CLARK_MIN_EMAILS, CLARK_MIN_PHONES))
+
+    # The directory's own COUNTY BOARD page names the Chairperson and Vice
+    # Chairperson without their districts; the seats above give the districts
+    # without the roles. Joined on a name that must appear EXACTLY once.
+    for j, l in enumerate(lines[:start]):
+        r = CLARK_ROLE.match(l)
+        if not r or "County Board" not in " ".join(lines[j + 1:j + 3]):
+            continue
+        who, role = clean(r.group(1))[0], r.group(2).title()
+        hits = [d for d, row in out.items() if row["name"] == who]
+        if len(hits) != 1:
+            raise RuntimeError("%s: the directory's board page calls %r the %s "
+                               "and the district list matches %d seats — a role "
+                               "cannot be filed without one" % (county, who, role, len(hits)))
+        out[hits[0]]["role"] = role
+        print("  role    %-12s %s -> District %s" % (county, role, hits[0]), file=sys.stderr)
+
+    print("  %-12s %d seats, %d phones, %d e-mails (%d on %s, %d personal but "
+          "county-published)" % (county, seats, phones, emails, own,
+                                 spec["domain"], emails - own), file=sys.stderr)
+    ward_number_witness(spec["fips"], county, wards, seats,
+                        min_pairs=CLARK_MIN_WARD_PAIRS, munis=munis)
     return out, link
 
 
@@ -5322,10 +5597,26 @@ def _ward_witness(fips, county, wards, seats):
               for off in (1, -1)]
     print("  witness %-12s %d/%d listed wards in LTSB's own district (shifts %d/%d)"
           % (county, hit, placed, shifts[0], shifts[1]), file=sys.stderr)
-    if any(shifts):
-        raise RuntimeError("%s: %d of its listed wards land one district off in "
-                           "LTSB's file — the two publishers may have renumbered "
-                           "apart; re-read both before shipping"
+    # THE SHIFT TEST IS COMPARATIVE, NOT ABSOLUTE. It asks whether the county's
+    # numbering fits LTSB's file BETTER at its own offset than one district
+    # along, which is the shape a renumbering takes. It was written as "any
+    # shifted match at all fails", which is true of Jackson's document and false
+    # in general: Clark scores a perfect 56/56 at its own offset and still picks
+    # up 1 and 2 stray hits shifted, because two neighbouring districts happen
+    # to contain a like-numbered ward in different municipalities. Refusing a
+    # county on 2 coincidences against 56 exact matches would reject a roster
+    # that agrees with the state completely. A real renumbering inverts the
+    # ratio — the shift scores near everything and the true offset near nothing.
+    if hit and max(shifts) > 0.5 * hit:
+        raise RuntimeError("%s: %d of its listed wards land in LTSB's "
+                           "same-numbered district but %d land one district off "
+                           "— too close to call, and the two publishers may have "
+                           "renumbered apart; re-read both before shipping"
+                           % (county, hit, max(shifts)))
+    if not hit and any(shifts):
+        raise RuntimeError("%s: NONE of its listed wards land in LTSB's "
+                           "same-numbered district and %d land one off — the "
+                           "document is numbered against a different plan"
                            % (county, max(shifts)))
     if hit < 0.95 * placed:
         raise RuntimeError("%s: only %d of %d listed wards land in LTSB's "
@@ -5716,6 +6007,8 @@ def main():
     jobs += [(d["fips"], d["name"], d["seats"], "pdf", d) for d in PDF_COUNTIES]
     jobs += [(t["fips"], t["name"], t["seats"], "framed-table", t)
              for t in FRAMED_TABLE_COUNTIES]
+    jobs += [(CLARK_DIRECTORY["fips"], CLARK_DIRECTORY["name"],
+              CLARK_DIRECTORY["seats"], "official-directory", CLARK_DIRECTORY)]
     jobs += [(fips, name, seats, strategy, url) for fips, name, seats, strategy, url in COUNTIES]
     for fips, name, seats, strategy, src in jobs:
         if only and fips != only:
@@ -5726,6 +6019,9 @@ def main():
             doc_url = None
             if strategy == "arcgis":
                 districts = scrape_arcgis_county(src)
+                source_url, read_from = src["source_url"], "live"
+            elif strategy == "official-directory":
+                districts, doc_url = scrape_official_directory_county(src)
                 source_url, read_from = src["source_url"], "live"
             elif strategy == "archive":
                 districts, archived_at = scrape_archive_county(src)
@@ -5814,7 +6110,7 @@ def main():
              + len(CONSTITUENT_COUNTIES)
              + len(WITNESSED_DOCUMENT_COUNTIES)
              + len(PDF_COUNTIES)
-             + len(FRAMED_TABLE_COUNTIES), total,
+             + len(FRAMED_TABLE_COUNTIES) + 1, total,
              ", %d county/counties missed" % len(failures) if failures else ""),
           file=sys.stderr)
 
