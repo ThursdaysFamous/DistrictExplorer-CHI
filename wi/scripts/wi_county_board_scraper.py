@@ -30,6 +30,16 @@ TWELVE ROUTES, AND WHICH ONE A COUNTY TAKES IS A MEASUREMENT
                                   the numbering. The link is discovered by its
                                   anchor TEXT because the county is on Wix and
                                   serves the file from a content hash;
+  * PIERCE_DIRECTORY            - Pierce, whose annual county directory prints
+                                  all 17 seats in TWO COLUMNS (composition left,
+                                  home address right, so the columns are split
+                                  by x-position and the addresses dropped), each
+                                  with a firstname.lastname county mailbox that
+                                  witnesses the name and a sideways summary index
+                                  that witnesses every seat a second time. Its
+                                  URL is PINNED, not discovered, because the
+                                  host's robots.txt allows documents and forbids
+                                  pages — the county's own site redirects there;
   * `pdf-roster`                - Jackson, whose HTML names nobody anywhere and
                                   whose own listing page links a district-keyed
                                   roster PDF, DISCOVERED fresh each run because
@@ -4753,7 +4763,7 @@ def ward_number_witness(fips, county, wards, seats, min_pairs=None, munis=None):
     try:
         data = _fetch_json(
             LTSB_WARD_QUERY + "?where=CNTY_FIPS%%3D%%27%s%%27&outFields="
-            "MCD_NAME,WARDID,SUPERID&returnGeometry=false&f=json" % fips)
+            "MCD_NAME,CTV,WARDID,SUPERID&returnGeometry=false&f=json" % fips)
         feats = data.get("features") or []
         if not feats:
             raise RuntimeError("no wards returned")
@@ -4765,7 +4775,8 @@ def ward_number_witness(fips, county, wards, seats, min_pairs=None, munis=None):
     for f in feats:
         a = f.get("attributes") or {}
         ltsb.setdefault(int(a["SUPERID"]), set()).add(
-            (_jk_norm(str(a.get("MCD_NAME", ""))), int(str(a.get("WARDID") or 0))))
+            (str(a.get("CTV", "")).lower()[:1], _jk_norm(str(a.get("MCD_NAME", ""))),
+             int(str(a.get("WARDID") or 0))))
     listed = sum(len(v) for v in wards.values())
     # THE FLOOR IS PER DOCUMENT, NOT PER COUNTY BOARD. Jackson names every ward
     # of every municipality, so twice the seat count is a fair bar there. Clark
@@ -4823,19 +4834,34 @@ def ward_number_witness(fips, county, wards, seats, min_pairs=None, munis=None):
         for f in feats:
             a = f.get("attributes") or {}
             filed.setdefault(int(a["SUPERID"]), set()).add(
-                _jk_norm(str(a.get("MCD_NAME", ""))))
-        wrong = {d: (sorted(v), sorted(filed.get(d, set())))
-                 for d, v in munis.items() if v != filed.get(d, set())}
-        if wrong:
+                (str(a.get("CTV", "")).lower()[:1], _jk_norm(str(a.get("MCD_NAME", "")))))
+        # SUBSET, NOT EQUALITY, and the difference is a real distinction rather
+        # than a loosened bar. A county naming a municipality LTSB does NOT file
+        # under that number is a CONFLICT: two publishers describing different
+        # plans, which is exactly what this exists to catch. A county naming
+        # FEWER is the document abbreviating — Pierce's directory lists the
+        # towns of a rural district and leaves out the incorporated village
+        # sitting inside it (Elmwood, Bay City, Maiden Rock, Plum City, and one
+        # City of River Falls ward), 4 districts of 17, while every ward it DOES
+        # name lands in LTSB's same-numbered district. Failing that would be
+        # refusing a roster for saying less than the state, not for saying
+        # something different. The shortfall is printed so it cannot go unseen.
+        conflict = {d: (sorted(v - filed.get(d, set())), sorted(filed.get(d, set())))
+                    for d, v in munis.items() if v - filed.get(d, set())}
+        if conflict:
+            first = min(conflict)
             raise RuntimeError(
-                "%s: %d of %d districts name a different set of municipalities "
-                "than LTSB files under that number — the two publishers describe "
-                "different plans, or the document has been renumbered. First: "
-                "D%s county=%s LTSB=%s"
-                % (county, len(wrong), len(munis), min(wrong),
-                   wrong[min(wrong)][0], wrong[min(wrong)][1]))
-        print("  witness %-12s %d/%d districts name LTSB's own municipality set"
-              % (county, len(munis), len(munis)), file=sys.stderr)
+                "%s: %d of %d districts name a municipality LTSB does NOT file "
+                "under that number — the two publishers describe different plans, "
+                "or the document has been renumbered. First: D%s names %s, LTSB "
+                "files %s" % (county, len(conflict), len(munis), first,
+                              conflict[first][0], conflict[first][1]))
+        short = sorted(d for d, v in munis.items() if filed.get(d, set()) - v)
+        print("  witness %-12s %d/%d districts name only municipalities LTSB "
+              "files there%s" % (county, len(munis), len(munis),
+                                 "; %d abbreviate (%s)" % (len(short), ", ".join(
+                                     "D%d" % d for d in short)) if short else ""),
+              file=sys.stderr)
 
 
 def scrape_pdf_roster_county(fips, county, seats, url):
@@ -4978,9 +5004,10 @@ CLARK_EMAIL = re.compile(r"(?<![^\s])([A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-
 CLARK_NAME = re.compile(r"^[A-Za-z][A-Za-z.'\-]*(?: \(?[A-Za-z][A-Za-z.'\-]*\)?)+$")
 # "Tom Wilcox, Chairperson" on the directory's own COUNTY BOARD page
 CLARK_ROLE = re.compile(r"^([A-Z][A-Za-z.'\- ]+?),\s*((?:Vice\s+)?Chair(?:person|man|woman)?)\s*$")
-CLARK_MUNI = re.compile(r"(?i)\b(city|town|village)\s+of\s+([A-Za-z][A-Za-z .'\-]*?)"
-                        r"(?=\s+Wards?\b|\s*,|\s*&|\s*$|\s+and\b)")
-CLARK_WARDS = re.compile(r"(?i)wards?\s*((?:\d+\s*(?:,|&|and)?\s*)+)")
+# Shared by every county whose document states its districts in prose.
+MUNI_RE = re.compile(r"(?i)\b(city|town|village)\s+of\s+([A-Za-z][A-Za-z .'\-]*?)"
+                     r"(?=\s+(?:city|town|village)\s+of\b|\s*,?\s+Wards?\b|\s*,|\s*&|\s*$|\s+and\b)")
+WARDS_RE = re.compile(r"(?i)wards?\s*((?:\d+\s*(?:,|&|and)?\s*)+)")
 CLARK_MIN_EMAILS = 16    # 20 of 29 publish one today
 CLARK_MIN_PHONES = 26    # 28 of 29 today; District 18 prints none
 # 56 numbered (municipality, ward) pairs today. Six districts name a
@@ -4999,25 +5026,34 @@ def _clark_lines(blob):
     return [re.sub(r"\s+", " ", ln).strip() for ln in out]
 
 
-def _clark_wards(composition):
-    """{(normalised municipality, ward number)} for one district's prose.
+def parse_composition(composition):
+    """({(type, municipality, ward)}, {(type, municipality)}) for one district.
+
+    THE TYPE IS PART OF THE KEY, and Pierce is why. Wisconsin lets a town and a
+    village of the same name sit side by side, each with its own ward 1: Pierce
+    has Ellsworth wards 1 and 2 as BOTH a Town and a Village, in two different
+    supervisory districts, and Maiden Rock ward 1 the same way. Keyed on the
+    bare name, "ellsworth ward 2" is in district 11 and district 12 at once, and
+    the witness scores a match for whichever it meets first — which is a
+    coin-flip dressed as agreement. Jackson and Clark have no such pair, so the
+    key went untyped until a county that does turned up.
 
     A municipality named with NO ward ("Town of Withee", "Village of Curtiss")
-    means the whole municipality, and contributes no (name, ward) pair — the
-    witness scores the pairs it can see and the floor below keeps a document
-    that stops printing wards from passing unnoticed.
+    means the whole municipality and contributes no ward pair; it still
+    contributes its (type, name), which is what the municipality-set check uses.
     """
-    pairs = set()
-    for m in CLARK_MUNI.finditer(composition):
-        muni = _jk_norm(m.group(2))
+    pairs, munis = set(), set()
+    for m in MUNI_RE.finditer(composition):
+        key = (m.group(1).lower()[0], _jk_norm(m.group(2)))
+        munis.add(key)
         tail = composition[m.end():]
-        nxt = CLARK_MUNI.search(tail)
-        wards = CLARK_WARDS.search(tail[:nxt.start()] if nxt else tail)
+        nxt = MUNI_RE.search(tail)
+        wards = WARDS_RE.search(tail[:nxt.start()] if nxt else tail)
         if not wards:
             continue
         for n in re.findall(r"\d+", wards.group(1)):
-            pairs.add((muni, int(n)))
-    return pairs
+            pairs.add(key + (int(n),))
+    return pairs, munis
 
 
 def scrape_official_directory_county(spec):
@@ -5055,8 +5091,7 @@ def scrape_official_directory_county(spec):
     out, wards, munis, emails, phones, own = {}, {}, {}, 0, 0, 0
     for i, m in heads:
         district = int(m.group(1))
-        wards[district] = _clark_wards(m.group(2))
-        munis[district] = {_jk_norm(g[1]) for g in CLARK_MUNI.findall(m.group(2))}
+        wards[district], munis[district] = parse_composition(m.group(2))
         if not munis[district]:
             raise RuntimeError("%s: district %d's heading names no municipality "
                                "(%r) — the composition is what witnesses the "
@@ -5119,6 +5154,257 @@ def scrape_official_directory_county(spec):
                                  spec["domain"], emails - own), file=sys.stderr)
     ward_number_witness(spec["fips"], county, wards, seats,
                         min_pairs=CLARK_MIN_WARD_PAIRS, munis=munis)
+    return out, link
+
+
+# --- Pierce: the Clerk's annual county DIRECTORY, pinned because robots.txt --
+#     forbids reading the page that would otherwise link it -------------------
+#
+# Pierce's directory is the richest board document in this fleet: every seat
+# prints its municipalities and wards, the supervisor, a phone, a
+# firstname.lastname county mailbox, when they were elected or appointed, and
+# their committees. It is also the first whose link CANNOT be discovered, and
+# that is a robots decision rather than a technical one.
+#
+# www.co.pierce.wi.us REDIRECTS to cms5.revize.com, so the county's pages and
+# its documents share one policy, and that policy is:
+#
+#     User-agent: *
+#     Allow: /*.pdf$   (and .DOC/.DOCX/.PPT/.PPTX)
+#     Disallow: /
+#
+# Documents yes, pages no. So there is no listing page this may read to find
+# the current file, and the URL is pinned instead — the exact opposite of
+# Clark, where the hash-named file forced discovery. What makes the pin
+# survivable is that the county names the file by YEAR and keeps exactly one:
+# 2024 and 2025 both 404 today and 2026 answers. So the fetch tries this year,
+# next year and last year against the same template, which self-heals at the
+# turn of the year and is three permitted .pdf requests rather than a crawl.
+#
+# THAT POLICY ALSO CAUGHT A BUG IN THIS PROJECT'S OWN ROBOTS GATE, which had
+# been doing literal prefix matching and so could not match a pattern
+# containing `*` or `$` AT ALL. It read this file as a flat refusal. Wildcards
+# are RFC 9309 section 2.2.3 and every major crawler implements them; the gate
+# does now too, and the same blindness ran the other way — a wildcard DISALLOW
+# covering a fetched path would have been silently ignored.
+#
+# TWO WITNESSES, BOTH INSIDE THE COUNTY'S OWN MATERIAL:
+#
+# 1. THE MAILBOX IS THE NAME. Every seat publishes firstname.lastname@
+#    co.pierce.wi.us, so the heading's name is checked against its own mailbox
+#    — 17 of 17 agree. That is what makes a two-column PDF safe to read: the
+#    name is reconstructed from a line whose halves the layout splits, and the
+#    mailbox says whether the reconstruction was right.
+# 2. THE ROTATED INDEX. Page 18 is a sideways summary listing all 17 districts
+#    with an initial and a surname, which pdfplumber returns character-reversed
+#    ("ytraCcM"). Reversed back it agrees with all 17 blocks, and it is where
+#    the display spelling of McCARTY comes from: the fleet's title_case is
+#    documented as getting Mc/Mac and apostrophes wrong, and its own note says
+#    such a name needs an EXPLICIT label with a source. This is that source —
+#    the county's own mixed-case rendering, in the same document.
+#
+# THE HOME ADDRESSES DO NOT SHIP. They occupy the right-hand column of every
+# block, which is exactly why the columns are split by x-position rather than
+# by flattening the page: a flattened line reads
+# "City of Prescott 611 Lake St. N." and there is no honest way to tell the
+# composition from the address afterwards.
+PIERCE_DIRECTORY = {
+    "fips": "55093", "name": "Pierce", "seats": 17,
+    "source_url": "https://www.co.pierce.wi.us/",
+    "doc_template": ("https://cms5.revize.com/revize/piercewi/Agendas%%20and%%20Minutes/"
+                     "Government/Board%%20of%%20Supervisor/"
+                     "%d%%20Directory_Pierce%%20County.pdf"),
+    "domain": "co.pierce.wi.us",
+    "pages": (15, 22),          # 0-based slice of the board section
+    "index_page": 17,           # the rotated summary
+}
+# Word x0 below this is the composition column; at or above it is the address
+# and phone column. Measured on a 306pt-wide page: composition words sit at
+# 35-110 and the address column starts at 185.
+PIERCE_SPLIT = 180.0
+PIERCE_HEAD = re.compile(r"^District\s+(\d{1,2})\s*\.{3,}\s*(.+?)\s*$")
+PIERCE_STOP = re.compile(r"(?i)\b(Email|Elected|Appointed|Committees|Term)\b")
+PIERCE_PHONE = re.compile(r"\(?(\d{3})\)?[-.\s]\s*(\d{3})[-.\s](\d{4})")
+# "Chairperson ....... Jon Aubart" / "2nd Vice-Chairperson ....... Neil Gulbranson"
+PIERCE_ROLE = re.compile(r"^((?:2nd\s+)?(?:Vice-)?Chairperson)\s*\.{3,}\s*(.+?)\s*$")
+PIERCE_MIN_EMAILS = 15   # 17 of 17 today
+PIERCE_MIN_PHONES = 15   # 17 of 17 today
+# 44 typed (type, municipality, ward) pairs today; several districts name a
+# municipality WHOLE and contribute none, so this is not 2x seats.
+PIERCE_MIN_WARD_PAIRS = 34
+
+
+def _pierce_rows(pdf, first, last):
+    """[(whole line, left column, right column)] for the board section."""
+    import collections                  # noqa: PLC0415
+    out = []
+    for page in pdf.pages[first:last]:
+        buckets = collections.defaultdict(list)
+        for w in page.extract_words():
+            buckets[round(w["top"] / 3)].append(w)
+        for k in sorted(buckets):
+            ws = sorted(buckets[k], key=lambda w: w["x0"])
+            out.append((" ".join(w["text"] for w in ws),
+                        " ".join(w["text"] for w in ws if w["x0"] < PIERCE_SPLIT).strip(),
+                        " ".join(w["text"] for w in ws if w["x0"] >= PIERCE_SPLIT).strip()))
+    return out
+
+
+def _pierce_index(pdf, page_no):
+    """{district: (initial, Surname)} from the sideways summary on page 18.
+
+    The page is rendered bottom-to-top, so every token comes back reversed;
+    reversing each one restores it. The stream is number, surname, initial.
+    """
+    toks = [l[::-1] for l in (pdf.pages[page_no].extract_text() or "").split("\n") if l.strip()]
+    table, i = {}, 0
+    while i < len(toks) - 2:
+        if re.fullmatch(r"\d{1,2}", toks[i]) \
+           and re.fullmatch(r"[A-Z][A-Za-z'\-]+", toks[i + 1]) \
+           and re.fullmatch(r"[A-Z]\.", toks[i + 2]):
+            table[int(toks[i])] = (toks[i + 2], toks[i + 1])
+            i += 3
+        else:
+            i += 1
+    return table
+
+
+def scrape_pierce_directory(spec):
+    """All seats or nothing, out of the county's pinned annual directory PDF."""
+    import io                           # noqa: PLC0415
+    import pdfplumber                   # noqa: PLC0415 - pinned in requirements
+    county, seats = spec["name"], spec["seats"]
+    year = int(time.strftime("%Y"))
+    blob, link, tried = None, None, []
+    for candidate in (year, year + 1, year - 1):
+        url = spec["doc_template"] % candidate
+        tried.append(str(candidate))
+        try:
+            body = fetch_bytes(url, timeout=120)[0]
+        except Exception:               # noqa: BLE001 - a 404 is the next year
+            continue
+        if body.startswith(b"%PDF"):
+            blob, link = body, url
+            break
+    if blob is None:
+        raise RuntimeError("%s: no directory PDF answered for %s — the county has "
+                           "renamed the file or changed its path, and robots.txt "
+                           "forbids reading the page that links it, so the URL in "
+                           "PIERCE_DIRECTORY has to be re-pinned by hand"
+                           % (county, "/".join(tried)))
+    if link != spec["doc_template"] % year:
+        print("  note %-12s directory is the %s edition, not %d"
+              % (county, link.rsplit("/", 1)[-1][:4], year), file=sys.stderr)
+
+    with pdfplumber.open(io.BytesIO(blob)) as pdf:
+        rows = _pierce_rows(pdf, *spec["pages"])
+        index = _pierce_index(pdf, spec["index_page"])
+    heads = [(i, m) for i, (full, _, _) in enumerate(rows)
+             for m in [PIERCE_HEAD.match(full)] if m]
+    seen = [int(m.group(1)) for _, m in heads]
+    if sorted(seen) != list(range(1, seats + 1)):
+        raise RuntimeError("%s: the directory's district headings are %s, not "
+                           "1..%d — re-read %s" % (county, seen, seats, link))
+    if sorted(index) != list(range(1, seats + 1)):
+        raise RuntimeError("%s: the summary index lists districts %s, not 1..%d — "
+                           "the page that cross-checks every seat has moved or "
+                           "reshaped; re-read %s" % (county, sorted(index), seats, link))
+
+    mail_re = re.compile(r"([A-Za-z0-9._%+\-]+)@" + re.escape(spec["domain"]) + r"\b", re.I)
+    out, wards, munis, emails, phones = {}, {}, {}, 0, 0
+    for n, (i, m) in enumerate(heads):
+        end = heads[n + 1][0] if n + 1 < len(heads) else len(rows)
+        district, raw_name = int(m.group(1)), " ".join(m.group(2).split())
+        comp, phone, email, collecting = [], None, None, True
+        for full, left, right in rows[i + 1:end]:
+            if PIERCE_STOP.search(full):
+                collecting = False
+            if not email:
+                em = mail_re.search(full)
+                if em:
+                    email = em.group(0).lower()
+            # THE PHONE COMES FROM THE ADDRESS COLUMN AND MUST BE LABELLED.
+            # Unlabelled digits over there are a street number or a ZIP.
+            if not phone:
+                ph = PIERCE_PHONE.search(right)
+                if ph and re.search(r"(?i)\b(cell|home|phone|work)\b", right):
+                    phone = "-".join(ph.groups())
+            if collecting and left:
+                comp.append(left)
+        if not email:
+            raise RuntimeError("%s: district %d publishes no %s mailbox — that "
+                               "mailbox is what witnesses the name a two-column "
+                               "layout reconstructs, so this cannot ship "
+                               "unchecked; re-read %s" % (county, district,
+                                                          spec["domain"], link))
+        parts = {p for p in re.split(r"[._]", mail_re.match(email).group(1)) if p}
+        words = {w.lower().strip(".") for w in raw_name.split()}
+        if not parts <= words:
+            raise RuntimeError("%s: district %d reads the name %r beside the "
+                               "mailbox %r — the two halves of the heading line "
+                               "have not been put back together correctly; "
+                               "re-read %s" % (county, district, raw_name, email, link))
+        initial, surname = index[district]
+        if raw_name.split()[0][0].upper() + "." != initial \
+           or raw_name.split()[-1].lower() != surname.lower():
+            raise RuntimeError("%s: district %d reads %r and the directory's own "
+                               "summary index says %s %s — the two disagree, and "
+                               "neither is guessed at; re-read %s"
+                               % (county, district, raw_name, initial, surname, link))
+        # The index carries the county's own mixed-case spelling (McCarty),
+        # which the fleet's title_case is documented as unable to derive.
+        given = " ".join(w.capitalize() for w in raw_name.split()[:-1])
+        out[str(district)] = {"name": ("%s %s" % (given, surname)).strip(),
+                              "vacant": False, "role": None,
+                              "email": email}
+        emails += 1
+        if phone:
+            out[str(district)]["phone"] = phone
+            phones += 1
+        wards[district], munis[district] = parse_composition(" ".join(comp))
+        if not munis[district]:
+            raise RuntimeError("%s: district %d's block names no municipality — "
+                               "the composition is what witnesses the numbering, "
+                               "so this cannot ship unchecked; re-read %s"
+                               % (county, district, link))
+
+    names = [r["name"] for r in out.values()]
+    if len(set(names)) != len(names):
+        dupes = sorted({n for n in names if names.count(n) > 1})
+        raise RuntimeError("%s: the same person is filed under two districts (%s)"
+                           % (county, dupes))
+    if emails < PIERCE_MIN_EMAILS or phones < PIERCE_MIN_PHONES:
+        raise RuntimeError("%s: %d e-mails and %d phones across %d seats (floors "
+                           "%d/%d) — the directory has reshaped and contact is "
+                           "being dropped silently"
+                           % (county, emails, phones, seats,
+                              PIERCE_MIN_EMAILS, PIERCE_MIN_PHONES))
+
+    # The board's officers are printed above the seats, WITHOUT their districts,
+    # and the two surfaces do not agree on given names — the officer line says
+    # "Mike Kahlow" where the seat says "MICHAEL KAHLOW" — so the join is on a
+    # surname that must match exactly one seat.
+    by_surname = {}
+    for d, row in out.items():
+        by_surname.setdefault(row["name"].split()[-1].lower(), []).append(d)
+    for full, _, _ in rows:
+        r = PIERCE_ROLE.match(full)
+        if not r:
+            continue
+        role, who = r.group(1), " ".join(r.group(2).split())
+        hits = by_surname.get(who.split()[-1].lower(), [])
+        if len(hits) != 1:
+            raise RuntimeError("%s: the board page calls %r the %s and that "
+                               "surname matches %d seats — a role is never filed "
+                               "without one" % (county, who, role, len(hits)))
+        out[hits[0]]["role"] = role
+        print("  role    %-12s %-22s -> District %s" % (county, role, hits[0]),
+              file=sys.stderr)
+
+    print("  %-12s %d seats, %d phones, %d county mailboxes"
+          % (county, seats, phones, emails), file=sys.stderr)
+    ward_number_witness(spec["fips"], county, wards, seats,
+                        min_pairs=PIERCE_MIN_WARD_PAIRS, munis=munis)
     return out, link
 
 
@@ -6009,6 +6295,8 @@ def main():
              for t in FRAMED_TABLE_COUNTIES]
     jobs += [(CLARK_DIRECTORY["fips"], CLARK_DIRECTORY["name"],
               CLARK_DIRECTORY["seats"], "official-directory", CLARK_DIRECTORY)]
+    jobs += [(PIERCE_DIRECTORY["fips"], PIERCE_DIRECTORY["name"],
+              PIERCE_DIRECTORY["seats"], "pierce-directory", PIERCE_DIRECTORY)]
     jobs += [(fips, name, seats, strategy, url) for fips, name, seats, strategy, url in COUNTIES]
     for fips, name, seats, strategy, src in jobs:
         if only and fips != only:
@@ -6022,6 +6310,9 @@ def main():
                 source_url, read_from = src["source_url"], "live"
             elif strategy == "official-directory":
                 districts, doc_url = scrape_official_directory_county(src)
+                source_url, read_from = src["source_url"], "live"
+            elif strategy == "pierce-directory":
+                districts, doc_url = scrape_pierce_directory(src)
                 source_url, read_from = src["source_url"], "live"
             elif strategy == "archive":
                 districts, archived_at = scrape_archive_county(src)
@@ -6110,7 +6401,7 @@ def main():
              + len(CONSTITUENT_COUNTIES)
              + len(WITNESSED_DOCUMENT_COUNTIES)
              + len(PDF_COUNTIES)
-             + len(FRAMED_TABLE_COUNTIES) + 1, total,
+             + len(FRAMED_TABLE_COUNTIES) + 2, total,
              ", %d county/counties missed" % len(failures) if failures else ""),
           file=sys.stderr)
 

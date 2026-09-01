@@ -171,15 +171,52 @@ def star_disallows(text):
     return groups.get("*")
 
 
+def _rule_re(value):
+    """One robots.txt path pattern as a regex anchored at the path start.
+
+    `*` matches any run of characters and a TRAILING `$` anchors the end of the
+    path — RFC 9309 section 2.2.3, and what every major crawler implements.
+    Everything else is a literal, so the regex is built from escaped chunks
+    rather than by escaping the whole string and unescaping the metacharacters.
+    """
+    anchored = value.endswith("$")
+    body = value[:-1] if anchored else value
+    pattern = ".*".join(re.escape(part) for part in body.split("*"))
+    return re.compile("^" + pattern + ("$" if anchored else ""))
+
+
 def permitted(path, rules):
-    """robots.txt longest-match: the most specific rule wins, Allow ties win."""
+    """robots.txt longest-match: the most specific rule wins, Allow ties win.
+
+    THE WILDCARDS ARE NOT DECORATION, and leaving them out got a real host
+    wrong in the direction that matters. This did literal `startswith`
+    matching, which cannot match a pattern containing `*` or `$` AT ALL — so
+    every wildcard rule silently evaluated as "does not apply". On
+    cms5.revize.com, whose `*` group reads
+
+        Allow: /*.pdf$   (and .DOC/.DOCX/.PPT/.PPTX)
+        Disallow: /
+
+    that turned an unmistakable policy — documents yes, everything else no —
+    into a flat refusal, because only the bare `Disallow: /` could match. The
+    same blindness runs the other way and is worse: a wildcard DISALLOW that
+    genuinely covers a path this repo fetches would have been ignored, and the
+    gate would have reported the crawl permitted. Clark's own file carries
+    `Disallow: *?lightbox=`, which this had been discarding; it happens not to
+    cover anything fetched here, which is luck rather than a check.
+
+    Specificity is the length of the rule as WRITTEN, which is what makes
+    `/*.pdf$` (7) beat `/` (1) rather than the other way round.
+    """
     best_len, best_kind = -1, "allow"
     for kind, value in rules:
         if not value:
             continue                    # `Disallow:` with no value permits all
-        if path.startswith(value) and len(value) > best_len:
+        if not _rule_re(value).match(path):
+            continue
+        if len(value) > best_len:
             best_len, best_kind = len(value), kind
-        elif path.startswith(value) and len(value) == best_len and kind == "allow":
+        elif len(value) == best_len and kind == "allow":
             best_kind = "allow"
     return best_kind == "allow"
 
@@ -190,8 +227,13 @@ def main():
     by_host = {}
     for url, why in urls:
         parts = urllib.parse.urlparse(url)
-        by_host.setdefault(parts.netloc, []).append(
-            ((parts.path or "/"), why, url))
+        # RFC 9309 section 2.2.2: the string a rule is matched against is the
+        # path AND the query. Matching the path alone would let a rule like
+        # `Disallow: /*?lightbox=` — which exists on one county's host — miss
+        # the very URLs it names, and would call a cache-busted `.pdf?t=...`
+        # permitted under an `Allow: /*.pdf$` that does not actually reach it.
+        target = (parts.path or "/") + (("?" + parts.query) if parts.query else "")
+        by_host.setdefault(parts.netloc, []).append((target, why, url))
     print("robots: %d scheduled URLs across %d hosts" % (len(urls), len(by_host)),
           file=sys.stderr)
     if offline:
