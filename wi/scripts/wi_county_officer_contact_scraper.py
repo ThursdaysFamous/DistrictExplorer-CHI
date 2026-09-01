@@ -74,16 +74,26 @@ stubs). DANE's medical-examiner and clerk-of-courts subdomains do not
 resolve from this network (proxy 502), and its treasurer subdomain is a
 payment portal naming nobody. DUNN's administration page does not name
 the county manager, dunncountysheriff.com is a JS shell, and its
-DA/deeds/examiner pages 404 at every conventional path — so Dunn ships
-its two witnessed offices only. JEFFERSON's own homepage links no
+DA/deeds/examiner pages 404 at every conventional path — it shipped its
+two witnessed offices only until 2026-08-31, when dunncountywi.gov's own
+robots.txt turned out to disallow this client and the county left this
+table entirely (the note above COUNTIES). JEFFERSON's own homepage links no
 sheriff page and the conventional path 404s. GRANT publishes no
 coroner/medical-examiner page at either conventional path. MARQUETTE's
 DA page is a 1KB shell and its treasurer page is unlocated (finance
 sits under administration). VERNON's DA page is a 2KB stub naming no
 one and its clerk-of-courts page 404s (both spellings). WASHBURN's
-clerk-of-courts page 404s (both spellings). WAUSHARA publishes a County
-Clerk page but no clerk-of-courts page. Waukesha's medical-examiner
-page deliberately names no person. A county below its pinned floor is
+clerk-of-courts page 404s (both spellings), and washburnsheriff.org — the
+county's separately-hosted sheriff site, and its ONLY sheriff surface —
+began answering 403 to this client behind a StackProtect WAF (measured
+2026-09-01, three consecutive denials, `server: nginx` with an
+`x-stackprotect-id`, so it is the site and not the egress proxy). That
+office therefore stops resolving and its phone and link fall out of the
+shipped row rather than carrying a `checked` date for a page that now
+refuses; the county's floor of 4 still passes on its other four offices,
+and a later run picks the sheriff back up if the WAF relents. WAUSHARA
+publishes a County Clerk page but no clerk-of-courts page. Waukesha's
+medical-examiner page deliberately names no person. A county below its pinned floor is
 SKIPPED with a loud line, never shipped partial-silent.
 """
 
@@ -136,6 +146,17 @@ TITLE_SETS = {
                   "County Manager"},
 }
 
+# FOUR COUNTIES WERE REMOVED FROM THIS TABLE ON 2026-08-31 — Ashland, Dunn,
+# Pepin and Polk — and not because their pages stopped answering. Each of those
+# hosts publishes a robots.txt whose `User-agent: *` group reads `Disallow: /`,
+# naming a handful of search engines above it and giving each a narrow /admin/
+# and /manager/. This scraper is none of the named agents, and it runs in TWO
+# weekly workflows, so those counties were being fetched twice a week against a
+# file that had said no. Their officer rows now ship from the Blue Book alone,
+# without the page-checked phone, e-mail and links the other forty-odd carry —
+# a real loss, taken deliberately. `wi/scripts/validate_robots.py` checks every
+# URL this file fetches against its host's own `*` group and fails if one is
+# disallowed, so a county cannot be added back here by accident.
 COUNTIES = {
     "Brown": {"mode": "pages", "floor": 6, "offices": {
         "sheriff": "https://www.browncountywi.gov/government/sheriffs-office/",
@@ -200,12 +221,6 @@ COUNTIES = {
         "coroner": "https://www.marquettecountywi.gov/medical-examiner/",
         "sheriff": "https://www.marquettecountywi.gov/sheriff/",
         "registerOfDeeds": "https://www.marquettecountywi.gov/register-of-deeds/"}},
-    "Polk": {"mode": "pages", "floor": 4, "offices": {
-        "sheriff": "https://www.polkcountywi.gov/government/elected_officials/sheriff/index.php",
-        "clerkOfCircuitCourt": "https://www.polkcountywi.gov/government/elected_officials/clerk_of_courts/index.php",
-        "registerOfDeeds": "https://www.polkcountywi.gov/government/elected_officials/register_of_deeds/index.php",
-        "districtAttorney": "https://www.polkcountywi.gov/government/divisions_and_departments/public_safety_public_works/district_attorney/index.php",
-        "treasurer": "https://www.polkcountywi.gov/government/elected_officials/treasurer/index.php"}},
     "Vernon": {"mode": "pages", "floor": 3, "offices": {
         "coroner": "https://www.vernoncountywi.gov/departments/county_coroner/index.php",
         "treasurer": "https://www.vernoncountywi.gov/departments/county_treasurer/index.php",
@@ -224,11 +239,6 @@ COUNTIES = {
         "treasurer": "https://www.wausharacountywi.gov/12730/treasurer",
         "coroner": "https://www.wausharacountywi.gov/41436/medical-examiner",
         "executive": "https://www.wausharacountywi.gov/12681/administration"}},
-    # Dunn ships THIN on purpose: only two of its surfaces name their
-    # officer to a non-JS client (the docstring carries the rest)
-    "Dunn": {"mode": "pages", "floor": 2, "offices": {
-        "clerkOfCircuitCourt": "https://dunncountywi.gov/clerkofcourts",
-        "treasurer": "https://dunncountywi.gov/treasurer"}},
     "Winnebago": {"mode": "civicplus", "floor": 5,
                   "url": "https://www.winnebagocountywi.gov/directory.aspx"},
     "Burnett": {"mode": "civicplus", "floor": 5,
@@ -248,12 +258,6 @@ COUNTIES = {
         "districtAttorney": "https://www.co.adams.wi.us/departments/district-attorney",
         "executive": "https://www.co.adams.wi.us/departments/county-administrator",
         "registerOfDeeds": "https://www.co.adams.wi.us/departments/register-of-deeds"
-    }},
-    "Ashland": {"mode": "pages", "floor": 3, "offices": {
-        "clerkOfCircuitCourt": "https://ashlandcountywi.gov/circuit_court",
-        "districtAttorney": "https://ashlandcountywi.gov/district_attorney",
-        "executive": "https://ashlandcountywi.gov/administration",
-        "treasurer": "https://ashlandcountywi.gov/treasurer"
     }},
     "Buffalo": {"mode": "pages", "floor": 4, "offices": {
         "clerkOfCircuitCourt": "https://www.buffalocountywi.gov/departments/clerk-of-courts/",
@@ -311,11 +315,6 @@ COUNTIES = {
         "registerOfDeeds": "https://www.oneidacountywi.gov/departments/rd/",
         "sheriff": "https://www.oneidacountywi.gov/departments/sd/",
         "treasurer": "https://www.oneidacountywi.gov/departments/tr/"
-    }},
-    "Pepin": {"mode": "pages", "floor": 2, "offices": {
-        "coroner": "https://www.co.pepin.wi.us/coroner",
-        "sheriff": "https://www.co.pepin.wi.us/sheriff",
-        "treasurer": "https://www.co.pepin.wi.us/treasurer"
     }},
     "Sauk": {"mode": "pages", "floor": 6, "offices": {
         "clerkOfCircuitCourt": "https://www.co.sauk.wi.us/clerkofcourts",

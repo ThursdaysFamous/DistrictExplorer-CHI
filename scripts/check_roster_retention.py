@@ -134,6 +134,37 @@ ACCEPTED_DROPS = {
         "phone on a member row.",
 }
 
+# THE FOUR WISCONSIN COUNTIES WHOSE OFFICER CONTACT STOPPED BEING FETCHED,
+# 2026-08-31. Ashland, Dunn, Pepin and Polk each publish a robots.txt whose
+# `User-agent: *` group reads `Disallow: /` — a handful of search engines are
+# named above it and given a narrow /admin/ and /manager/, and this project's
+# clients are none of them. wi_county_officer_contact_scraper.py runs in TWO
+# weekly workflows, so those four hosts were being fetched twice a week against
+# a file that had said no. They were removed from its table; their officer rows
+# now ship from the Blue Book alone, without the page-checked phone, e-mail,
+# link and `checked` date the other 42 counties carry.
+#
+# This is the drop being real and intended, which is exactly what this table is
+# for. It is scoped to those four FIPS and those four fields — every other
+# county's contact stays protected, and so does every other field on these four
+# — so if a fifth county's contact ever vanishes, this gate still fails.
+# `wi/scripts/validate_robots.py` is the guard that stops it recurring.
+_WI_ROBOTS_DROP = (
+    "2026-08-31 — the county's own robots.txt disallows this client, so "
+    "wi_county_officer_contact_scraper.py no longer fetches it and the row "
+    "ships from the Blue Book alone. Deliberate; see that scraper's COUNTIES "
+    "note and wi/scripts/validate_robots.py."
+)
+for _fips, _fields in (
+    ("55003", ("checked", "email", "phone", "url")),   # Ashland
+    ("55033", ("checked", "email", "phone", "url")),   # Dunn
+    ("55091", ("checked", "phone", "url")),            # Pepin — publishes no e-mail
+    ("55095", ("checked", "email", "phone", "url")),   # Polk
+):
+    for _field in _fields:
+        ACCEPTED_DROPS["wi/data/app/wi-county-officers.json:%s:%s"
+                       % (_fips, _field)] = _WI_ROBOTS_DROP
+
 
 def records_in(payload):
     """Every dict that looks like a person/place record — one with a name.

@@ -4,7 +4,9 @@
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "John West",
+   "name": "Rick Pease",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.co.adams.wi.us/government/county-board",
    "seats": 20
   },
   "executive": {
@@ -65,25 +67,15 @@
   "executive": {
    "name": "Dan Grady",
    "title": "County Administrator",
-   "appointed": true,
-   "url": "https://ashlandcountywi.gov/administration",
-   "checked": true
+   "appointed": true
   },
   "treasurer": {
    "name": "Tracey Hoglund",
-   "party": "Democrat",
-   "url": "https://ashlandcountywi.gov/treasurer",
-   "phone": "715-682-7012",
-   "email": "tracey.hoglund@ashlandcountywi.gov",
-   "checked": true
+   "party": "Democrat"
   },
   "clerkOfCircuitCourt": {
    "name": "Lexi Pierce",
-   "party": "Independent",
-   "url": "https://ashlandcountywi.gov/circuit_court",
-   "phone": "715-682-7016",
-   "email": "lexi.pierce@wicourts.gov",
-   "checked": true
+   "party": "Independent"
   },
   "registerOfDeeds": {
    "name": "Julie Gleeson",
@@ -91,10 +83,7 @@
   },
   "districtAttorney": {
    "name": "Blake Gross",
-   "party": "Democrat",
-   "url": "https://ashlandcountywi.gov/district_attorney",
-   "phone": "715-682-7019",
-   "checked": true
+   "party": "Democrat"
   },
   "sheriff": {
    "name": "Brian Zupke",
@@ -104,8 +93,7 @@
    "name": "Barbara Beeksma",
    "party": "Democrat",
    "title": "Coroner"
-  },
-  "contactChecked": 4
+  }
  },
  "55005": {
   "county": "Barron",
@@ -252,6 +240,8 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "Dennis Bork",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.buffalocountywi.gov/government/boards-committees/county-board/",
    "seats": 14
   },
   "executive": {
@@ -358,6 +348,8 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "Alice Connors",
+   "source": "county-board-page",
+   "sourceUrl": "https://calumetcounty.org/243/County-Board-of-Supervisors",
    "seats": 21
   },
   "executive": {
@@ -644,7 +636,9 @@
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "Dave Frohling",
+   "name": "David Frohling",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.co.dodge.wi.gov/government/county-board/members",
    "seats": 33
   },
   "executive": {
@@ -683,6 +677,8 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "David Englebert",
+   "source": "county-board-page",
+   "sourceUrl": "https://co.door.wi.gov/234/County-Board-of-Supervisors",
    "seats": 21
   },
   "executive": {
@@ -772,6 +768,7 @@
    "name": "Randy L. Prochnow",
    "source": "county-board-page",
    "sourceUrl": "https://dunncountywi.gov/supervisors",
+   "asOf": "the county's own page, captured 2026-08-31",
    "seats": 29
   },
   "executive": {
@@ -781,19 +778,11 @@
   },
   "treasurer": {
    "name": "Lynn Niggemann",
-   "party": "Republican",
-   "url": "https://dunncountywi.gov/treasurer",
-   "phone": "(715) 232-3789",
-   "email": "trs@dunncountywi.gov",
-   "checked": true
+   "party": "Republican"
   },
   "clerkOfCircuitCourt": {
    "name": "Katie Schalley",
-   "party": "Republican",
-   "url": "https://dunncountywi.gov/clerkofcourts",
-   "phone": "(715) 232-2611",
-   "email": "dunn.clerk@wicourts.gov",
-   "checked": true
+   "party": "Republican"
   },
   "registerOfDeeds": {
    "name": "Heather Kuhn",
@@ -810,8 +799,7 @@
   "coroner": {
    "name": "Marcie Rosas",
    "title": "Medical Examiner (appointed)"
-  },
-  "contactChecked": 2
+  }
  },
  "55035": {
   "county": "Eau Claire",
@@ -932,7 +920,9 @@
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "Steven Abel",
+   "name": "Steven A. Abel",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.fdlco.wi.gov/government/county-board-supervisors",
    "seats": 25
   },
   "executive": {
@@ -1274,7 +1264,8 @@
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "Jeff Amo",
+   "withheld": true,
+   "reason": "Not named: the Blue Book (April 2025) lists a chair who no longer appears on the county's own supervisor roster, and that roster does not mark a successor. The County Board District card names the sitting supervisors.",
    "seats": 19
   },
   "executive": {
@@ -1417,7 +1408,9 @@
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "Monica M Yuhas",
+   "name": "Mark Nordigian",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.kenoshacountywi.gov/113/County-Board-of-Supervisors",
    "seats": 23
   },
   "executive": {
@@ -1511,6 +1504,9 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "Tina Tryggestad",
+   "source": "county-board-page",
+   "sourceUrl": "https://lacrossecounty.org/countyboard/members",
+   "asOf": "the county's own page, captured 2026-08-29",
    "seats": 30
   },
   "executive": {
@@ -1549,6 +1545,9 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "Jack Sauer",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.lafayettecountywi.org/bos",
+   "asOf": "the county's own page, captured 2026-08-29",
    "seats": 16
   },
   "executive": {
@@ -1684,7 +1683,8 @@
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "Tyler Martell",
+   "withheld": true,
+   "reason": "Not named: the Blue Book (April 2025) lists a chair who no longer appears on the county's own supervisor roster, and that roster does not mark a successor. The County Board District card names the sitting supervisors.",
    "seats": 25
   },
   "executive": {
@@ -1966,6 +1966,8 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "Cedric Schnitzler",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.co.monroe.wi.us/government/county-board-of-supervisors/districts-supervisors",
    "seats": 16
   },
   "executive": {
@@ -2004,6 +2006,8 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "Alan Sleeter",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.ocontocountywi.gov/453/County-Board",
    "seats": 31
   },
   "executive": {
@@ -2032,10 +2036,8 @@
    "checked": true
   },
   "districtAttorney": {
-   "name": "Hannah Schuchart",
-   "note": "Appointed to fill a vacancy",
-   "url": "https://www.ocontocountywi.gov/Directory",
-   "checked": true
+   "name": "Hannah N Schuchart",
+   "note": "Appointed to fill a vacancy"
   },
   "sheriff": {
    "name": "Todd Skarban",
@@ -2049,7 +2051,7 @@
    "url": "https://www.ocontocountywi.gov/Directory",
    "checked": true
   },
-  "contactChecked": 7
+  "contactChecked": 6
  },
  "55085": {
   "county": "Oneida",
@@ -2202,6 +2204,9 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "Tom Milliren",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.co.pepin.wi.us/bos",
+   "asOf": "the county's own page, captured 2026-08-31",
    "seats": 12
   },
   "executive": {
@@ -2211,10 +2216,7 @@
   },
   "treasurer": {
    "name": "Patricia Scharr",
-   "party": "Republican",
-   "url": "https://www.co.pepin.wi.us/treasurer",
-   "phone": "715-672-8850",
-   "checked": true
+   "party": "Republican"
   },
   "clerkOfCircuitCourt": {
    "name": "Audrey Lieffring",
@@ -2230,20 +2232,13 @@
   },
   "sheriff": {
    "name": "Joel D Wener",
-   "party": "Republican",
-   "url": "https://www.co.pepin.wi.us/sheriff",
-   "phone": "888 944 8463",
-   "checked": true
+   "party": "Republican"
   },
   "coroner": {
    "name": "Jeff Doughty",
    "note": "Appointed to fill a vacancy",
-   "title": "Coroner",
-   "url": "https://www.co.pepin.wi.us/coroner",
-   "phone": "715-672-7242",
-   "checked": true
-  },
-  "contactChecked": 3
+   "title": "Coroner"
+  }
  },
  "55093": {
   "county": "Pierce",
@@ -2291,6 +2286,7 @@
    "name": "Russ Arcand",
    "source": "county-board-page",
    "sourceUrl": "https://www.polkcountywi.gov/government/county_board_of_supervisors/index.php",
+   "asOf": "the county's own page, captured 2026-08-31",
    "seats": 15
   },
   "executive": {
@@ -2300,43 +2296,28 @@
   },
   "treasurer": {
    "name": "Amanda Nissen",
-   "party": "Democrat",
-   "url": "https://www.polkcountywi.gov/government/elected_officials/treasurer/index.php",
-   "phone": "715-485-8633",
-   "email": "amanda.nissen@polkcountywi.gov",
-   "checked": true
+   "party": "Democrat"
   },
   "clerkOfCircuitCourt": {
    "name": "Sharon Jorgenson",
-   "party": "Republican",
-   "url": "https://www.polkcountywi.gov/government/elected_officials/clerk_of_courts/index.php",
-   "checked": true
+   "party": "Republican"
   },
   "registerOfDeeds": {
    "name": "Sally Spanel",
-   "party": "Democrat",
-   "url": "https://www.polkcountywi.gov/government/elected_officials/register_of_deeds/index.php",
-   "phone": "715-485-9240",
-   "email": "sally.spanel@polkcountywi.gov",
-   "checked": true
+   "party": "Democrat"
   },
   "districtAttorney": {
    "name": "Jeffrey L Kemp",
-   "party": "Independent",
-   "url": "https://www.polkcountywi.gov/government/divisions_and_departments/public_safety_public_works/district_attorney/index.php",
-   "checked": true
+   "party": "Independent"
   },
   "sheriff": {
    "name": "Brent A Waak",
-   "party": "Republican",
-   "url": "https://www.polkcountywi.gov/government/elected_officials/sheriff/index.php",
-   "checked": true
+   "party": "Republican"
   },
   "coroner": {
    "name": "Jamie Holscher",
    "title": "Medical Examiner (appointed)"
-  },
-  "contactChecked": 5
+  }
  },
  "55097": {
   "county": "Portage",
@@ -2523,6 +2504,8 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "Kevin Leavy",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.co.rock.wi.us/government/county-board-of-supervisors",
    "seats": 29
   },
   "executive": {
@@ -2563,6 +2546,7 @@
    "name": "Ron Freeman",
    "source": "county-board-page",
    "sourceUrl": "https://ruskcounty.org/supervisors",
+   "asOf": "the county's own page, captured 2026-08-31",
    "seats": 19
   },
   "executive": {
@@ -3138,17 +3122,14 @@
   },
   "sheriff": {
    "name": "Dennis Stuart",
-   "party": "Republican",
-   "url": "https://www.washburnsheriff.org/",
-   "phone": "(715) 468-4700",
-   "checked": true
+   "party": "Republican"
   },
   "coroner": {
    "name": "Angela Pank",
    "party": "Republican",
    "title": "Coroner"
   },
-  "contactChecked": 5
+  "contactChecked": 4
  },
  "55131": {
   "county": "Washington",
@@ -3266,7 +3247,9 @@
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "David Morack",
+   "name": "James Nygaard",
+   "source": "county-board-page",
+   "sourceUrl": "https://public4.co.waupaca.wi.us/CountyDirectory",
    "seats": 27
   },
   "executive": {

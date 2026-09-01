@@ -24,15 +24,21 @@ and any county that resolved nothing this run fails the build by name. Dropping
 one deliberately takes `--allow-drop <County>`, which is a decision somebody
 makes rather than a silence.
 
-FOUR OF THE FIFTY-SEVEN ARE CARRIED FROM A DOCUMENT, NOT RE-READ WEEKLY, AND
-THE CARD HAS TO SAY SO. Taylor's host answers a captcha, and Lafayette's and La
-Crosse's a Cloudflare challenge, so their rows come from a dated capture of each
-county's own page. PEPIN IS CARRIED FOR THE OPPOSITE REASON and the card must
-not blur the two: its site serves this client perfectly well and its robots.txt
-disallows the whole site to every agent it does not name, so the roster was
-transcribed by a person and there is no automated re-read. A refusal and a
-request are different facts about a county, which is why that entry carries its
-own `why` and the card prints it in place of the default sentence.
+NINE OF THE FIFTY-SEVEN ARE CARRIED FROM A DOCUMENT, NOT RE-READ WEEKLY, AND
+THE CARD HAS TO SAY SO — in two classes that must not be blurred. Taylor's host
+answers a captcha and Lafayette's and La Crosse's a Cloudflare challenge: those
+counties are BLOCKED, and the card's default sentence, that the county's site
+refuses automated readers, is true of them.
+
+THE OTHER SIX ARE THE OPPOSITE CASE. Pepin, Jackson, Richland, Rusk, Polk and
+Dunn all serve this client perfectly well, and every one publishes a robots.txt
+whose `User-agent: *` group disallows the whole site. Five of the six were being
+scraped WEEKLY until 2026-08-31, when wi/scripts/validate_robots.py was written
+and swept every host this instance fetches; the crawl stopped and the names
+stayed, dated, because robots.txt governs RETRIEVAL and not what already-public
+information may be shown. A refusal and a request are different facts about a
+county, so each of those six carries its own `why` and the card prints it in
+place of the default.
 
 The scraper marks those counties `carried_from_document` with the day they were
 read; this builder turns that into an `asOf` on every one of their rows, and the
