@@ -5883,6 +5883,22 @@ route was tried.
   `aldermanic-incomplete-filings`). Coding them at a future 15 Jan / 15 Jul
   filing would close it with no change at this end.
 
+SEVEN OF THAT EIGHT WERE ANSWERED WITHOUT SENDING ANY OF IT (2026-09-01).
+Dane, Outagamie, Dodge, Oconto, Sauk, La Crosse and Marinette all name
+their supervisors on the card today, and not one of them replied to
+anything — the tranche was drafted and never sent, and the counties were
+reached by re-reading pages this project had already written off. **THE
+LIST OF COUNTIES TO ASK WAS, SEVEN-EIGHTHS OF IT, A LIST OF PAGES NOBODY
+HAD RE-READ**, which is the Knox lesson arriving in the one place built
+specifically to route around it: an ask queue is where a wrong measurement
+goes to look like a plan. MARATHON IS THE ONE THAT SURVIVES — 38 seats,
+still unnamed, still the largest unnamed board in the state — so the
+tranche is now a single letter rather than eight, and the honest count in
+this entry's own terms is 38 unnamed seats out of the 15 counties in gap
+`county-officials`, not 266 out of 50. RE-READ BEFORE YOU RE-SEND: the
+same check that emptied this tranche is a page fetch, and it costs less
+than an envelope.
+
 FIRST REPLY: WEC, IN 22 MINUTES (2026-08-27, ticket 123582, Jodi
 Vitcenda). It answered all three of that ask's questions and moved two
 records that had been wrong for a fortnight:
@@ -5970,8 +5986,9 @@ unresponsive — and record it as UNRESPONSIVE, never as "no source exists",
 which is a different claim about a different thing.
 
 WHAT A REPLY UNLOCKS, so a reader of this entry knows what to do with one:
-a district-to-supervisor pairing from any of the eight counties is a
-scraper plus a weekly workflow on the pattern the other 22 already use
+a district-to-supervisor pairing from Marathon, the one county of that
+eight still unnamed, is a scraper plus a weekly workflow on the pattern
+the other 48 already use
 (`wi_county_board_scraper.py`, reading direction PINNED per county); a WEC
 bulk file is the statewide polling build the recon could not reach — WHICH
 IS NOW A COMPLETED SENTENCE RATHER THAN A HOPE, delivered the day it was
@@ -9570,7 +9587,7 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 | `wi-assembly` | Wisconsin State Assembly District | political | Chamber | pre-built (TIGERweb L2, same vintage proof) | `wi-assembly-members.json` (Open States × docs.legis office merge, weekly CI) | — |
 | `wi-circuit-court` | Circuit Court | political | Bespoke | pre-built `wi-circuit-courts.json` — 69 county unions per Wis. Stat. 753.06 + wicourts double witness (build_wi_circuit_courts.py; partition/merge/containment gates) | `wi-circuit-judges.json` (wicourts.gov judges table + contact directory, 261 judges, weekly CI; the scrape asserts the composition — the redistricting tripwire) | — |
 | `wi-court-of-appeals` | Court of Appeals District | political | Bespoke | pre-built `wi-court-of-appeals-districts.json` — 4 county unions per Wis. Stat. 752.11 + wicourts double witness (build_wi_court_of_appeals.py; one-ring + containment gates) | `wi-court-of-appeals-roster.json` (wicourts contact page content blocks, 16 judges gated 4/4/3/5, weekly CI) | — |
-| `county-board` | County Board District | political | Bespoke | pre-built `county-supervisory-districts.json` (LTSB statewide, 1,589 → 1,590 with the Trempealeau override; operator rebuild each Jan/Jul filing window) | `county-board-directory.json` (72/72, board size + link) + `county-board-members.json` (50 counties, 1,139 seats, weekly CI — 40 board pages + 2 county GIS layers + Fond du Lac through the Internet Archive + Dodge's constituent directory + Kenosha's and Adams's directory PDFs + Columbia's framed table + Taylor, Lafayette and La Crosse as dated documents) | statewide; supervisor NAMED only inside the 34-county `metro-outline.json` ring |
+| `county-board` | County Board District | political | Bespoke | pre-built `county-supervisory-districts.json` (LTSB statewide, 1,589 → 1,590 with the Trempealeau override; operator rebuild each Jan/Jul filing window) | `county-board-directory.json` (72/72, board size + link) + `county-board-members.json` (57 counties, 1,284 seats — 48 weekly CI: 41 board pages + 2 county GIS layers + Fond du Lac through the Internet Archive + Dodge's constituent directory + Kenosha's and Adams's directory PDFs + Columbia's framed table; plus NINE dated documents never re-fetched — Taylor, Lafayette and La Crosse behind a challenge, and Jackson, Richland, Rusk, Polk, Dunn and Pepin whose robots.txt disallows this client) | statewide; WI's `metro-outline.json` is the WHOLE STATE, so the ring gates nothing here — a supervisor is named wherever that county's own roster resolves and nowhere else, and the other 15 counties get the district plus a board link |
 | `school-district-secondary` | School District (Union High) | schools | Polygon | live TIGERweb School L1, STATE=55 | — | — |
 | `school-district-unified` | School District (Unified) | schools | Polygon | pre-built (TIGERweb School L0, 369) | — | — |
 | `school-director-district` | School Director District | schools | Bespoke (`subOf` `school-district-unified`) | pre-built (Iowa Legislature ArcGIS org, `IowaSchoolDirectorDistricts`, **licence CC0 — carried on the ITEM `5d6e55f885c54dd282eb17daaca20740`, NOT on the service, whose own `licenseInfo` is null**; 728 published -> 716 shipped) | **identity-only, measured**: no statewide roster of Iowa school board members exists — the state collects them through the login-gated Iowa Education Portal and IASB's directory is member-gated, and the card says exactly that. Iowa Code ch. 274/277 lets each district elect its board AT LARGE or by director district, and the layer carries both: 193 whole-district at-large features **read from the publisher's own `AT-LARGE` label in `DIST_NAME`, never inferred from `DISTRICT == 0`**, and 523 numbered districts. Three corrections to this project's own prior record came out of the build — `DIST_NAME` and `UID` were on file as "100% NULL" and are fully populated; **`UID` is not unique** (Webster City publishes districts 2 and 3 under one UID, so the key is `<GEOID>-<DISTRICT>` with a uniqueness assertion); and **two** districts publish every row twice (Davis County *and* East Buchanan), where the note on file named only Davis — a Davis-shaped hard-code would have shipped East Buchanan as a six-seat board. KINGSLEY-PIERSON is incoherent at source (an AT-LARGE row *and* a D2 row, no District 1) and ships recorded rather than smoothed. Name join 322/326 needing two aliases; `LU VERNE` and `ORIENT-MACKSBURG` are stale in the director layer and correctly absent from ours, the latter independently corroborating this repo's own dissolve into Nodaway Valley. 2,000-point agreement gate 99.85%, 0 overlaps |

@@ -346,7 +346,7 @@
             "url": "https://services9.arcgis.com/cqHJZMbXoaOT0XrP/arcgis/rest/services/Trempealeau_County_County_Board_Supervisor_Districts_2021_2031_WFL1/FeatureServer/3"
           }
         ],
-        "people": "For 57 of the 72 counties, the supervisor holding the district — 42 read from each county's own board page, Milwaukee and Racine off their own GIS layers (Milwaukee Legistar-witnessed on every run), Fond du Lac through the Internet Archive with the county asked first and the capture's age gated, Dodge from its paginated constituent directory, Kenosha's and Adams's from directory PDFs, Columbia's from the table its listing page frames from a second county host, and Taylor, Lafayette and La Crosse as dated documents behind challenges this project does not defeat (county-board-members.json, 1,139 seats, refreshed weekly by CI as a reviewed PR); a seat the county marks empty renders as vacant, and ten do. The other 15 counties publish no district-keyed member list this can read, so no name is shown and the card links the county board — Wisconsin has no statewide roster of county supervisors.",
+        "people": "For 57 of the 72 counties, the supervisor holding the district — 41 read weekly from each county's own board page, Milwaukee and Racine off their own GIS layers (Milwaukee Legistar-witnessed on every run), Fond du Lac through the Internet Archive with the county asked first and the capture's age gated, Dodge from its paginated constituent directory, Kenosha's and Adams's from directory PDFs, Columbia's from the table its listing page frames from a second county host, and nine as dated documents that are never re-fetched — Taylor, Lafayette and La Crosse because their hosts answer a challenge this project does not defeat, and Jackson, Richland, Rusk, Polk, Dunn and Pepin because each of those sites publishes a robots.txt asking automated readers to stay off, so the reading stopped and the names stayed with the date they were read (county-board-members.json, 1,284 seats, refreshed weekly by CI as a reviewed PR); a seat the county marks empty renders as vacant, and ten do. The other 15 counties publish no district-keyed member list this can read, so no name is shown and the card links the county board — Wisconsin has no statewide roster of county supervisors.",
         "applies": "Wisconsin — statewide, all 72 counties."
       }
     },
@@ -1940,7 +1940,7 @@
     },
     {
       "file": "update-wi-county-board-roster.yml",
-      "purpose": "County board supervisors for the 50 counties whose member list can be resolved",
+      "purpose": "County board supervisors for the 57 counties whose member list can be resolved (48 re-read weekly; nine carried as dated documents)",
       "schedule": "Thu 14:30 UTC"
     },
     {
