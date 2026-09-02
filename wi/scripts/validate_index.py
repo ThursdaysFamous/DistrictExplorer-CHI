@@ -886,13 +886,23 @@ def _literals_from(path, names):
 def check_county_coverage_list(html, repo_root):
     """Every county the app dispatches a layer on must be inside the scope mask.
 
-    THE BUG THIS EXISTS FOR: the mask's county list was previously guarded only
-    by the outline builder's OUTSIDE anchors, which catch a county only if
-    somebody had already thought to name it. LaSalle, Kankakee, Boone and Grundy
-    therefore shipped layers and stayed greyed out for two research passes —
-    the wash telling residents "beyond here only the statewide layers answer"
-    while five of their layers answered. Nothing failed, because nothing was
-    comparing the list against what the app actually registers.
+    VACUOUS IN THIS INSTANCE, AND THAT IS WHY THE CHECK BELOW EXISTS.
+    Wisconsin registers no registerCountyLayer dispatch entries at all —
+    county-board is one statewide layer — so this walks an empty set and
+    returns 0 on every run. It is kept because the shape is shared with the
+    reference instance and a future dispatch entry must be covered from its
+    first day, not because it is currently measuring anything.
+
+    THE BUG IT EXISTS FOR, in an instance that does dispatch: the mask's county
+    list was previously guarded only by the outline builder's OUTSIDE anchors,
+    which catch a county only if somebody had already thought to name it. Four
+    of the reference instance's counties therefore shipped layers and stayed
+    greyed out for two research passes — the wash telling residents "beyond
+    here only the statewide layers answer" while five of their layers answered.
+    Nothing failed, because nothing was comparing the list against what the app
+    actually registers. In Wisconsin that comparison is
+    check_coverage_ring_tracks_roster(), below — which was written only after
+    seven counties sat greyed out for two days with every gate green.
 
     So this derives the answer instead of trusting a list: it reads the county
     keys out of index.html's own dispatch tables and requires each one to be in

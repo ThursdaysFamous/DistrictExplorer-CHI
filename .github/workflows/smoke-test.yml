@@ -255,6 +255,46 @@ jobs:
       - name: Skills point at things that exist
         run: python3 scripts/validate_skills.py
 
+      # ADDING A STATE IS NOT ONE EDIT. The instance is a folder, and a dozen
+      # other places have to learn its tag — the generator's table, the fleet
+      # manifest, four hand-kept tables in four builders, and the three literal
+      # per-instance lists in THIS file. Five consumers discover the fleet from
+      # the tree and need nothing; the rest are lists somebody wrote once, and
+      # nothing measured that they agree. Twice the miss shipped: 303 URLs went
+      # unwatched when validate_card_links.py named four instances out of five,
+      # and a bot PR stripped three fields from all 213 New York legislators
+      # while the retention gate, pointed at il/data/app alone, reported "222
+      # roster files, no field lost its records". This takes the TREE as
+      # canonical — a top-level dir with index.html and data/app/ IS an
+      # instance — so a sixth folder nobody registered fails here instead of
+      # being quietly untested. Stdlib only.
+      - name: Every instance is registered everywhere
+        run: python3 scripts/validate_instance_registration.py
+
+      # THE COVERAGE WASH IS A CLAIM, AND ITS GATE WAS IN NO WORKFLOW. Each
+      # statewide instance ships a dissolved outline of its served counties;
+      # --check validates that shipped ring against the instance's hand-listed
+      # INSIDE/OUTSIDE anchors, and nothing ran it. It also cannot rebuild
+      # (that needs TIGERweb), so a county added to METRO_COUNTY_FIPS without
+      # an anchor was green by construction — the ring simply never got asked
+      # about it. That is how Wisconsin greyed out seven counties for two days
+      # with every gate passing. check_anchor_registry(), added 2026-09-02 and
+      # run on both the check and build paths, makes the anchor list track the
+      # county list offline: one anchor per served county, no county doubled,
+      # none both inside and outside. Stdlib only, no network.
+      - name: Coverage ring anchors track the served-county list
+        run: |
+          # --check reads the shipped ring and the anchor lists and fetches
+          # nothing, but validate_workflow_deps.py walks an entry point WITH its
+          # function-local imports — running a script runs its functions, and it
+          # cannot know which argv path CI takes. requests is real for the
+          # rebuild path, so it is installed here rather than the check being
+          # split into a second entry point to dodge a true dependency.
+          pip install -c scripts/requirements.txt requests
+          python3 scripts/build_metro_outline.py --check
+          python3 wi/scripts/build_metro_outline.py --check
+          python3 ia/scripts/build_metro_outline.py --check
+
       # docs/PRESS_LIST.md carries a --check in its own header calling it the
       # drift gate, and until now nothing ran it — a generated file gated in
       # name only, which is the shape this repo keeps finding (a measurement
