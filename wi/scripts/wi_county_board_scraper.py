@@ -4771,12 +4771,38 @@ def ward_number_witness(fips, county, wards, seats, min_pairs=None, munis=None):
         print("  WITNESS SKIPPED %-9s LTSB ward layer unreachable (%s) — the "
               "roster ships unwitnessed this run" % (county, e), file=sys.stderr)
         return
-    ltsb = {}
+    ltsb, types_by_name = {}, {}
     for f in feats:
         a = f.get("attributes") or {}
+        ctv, name = str(a.get("CTV", "")).lower()[:1], _jk_norm(str(a.get("MCD_NAME", "")))
         ltsb.setdefault(int(a["SUPERID"]), set()).add(
-            (str(a.get("CTV", "")).lower()[:1], _jk_norm(str(a.get("MCD_NAME", ""))),
-             int(str(a.get("WARDID") or 0))))
+            (ctv, name, int(str(a.get("WARDID") or 0))))
+        types_by_name.setdefault(name, set()).add(ctv)
+
+    # THE TYPE IS LOAD-BEARING ONLY WHERE THE NAME IS AMBIGUOUS. Marathon has
+    # five names that are two municipalities at once (Elderon, Mosinee, Spencer,
+    # Wausau, Weston) and Pierce three, and for those the county's town/village
+    # word is the only thing separating them — a mismatch there is a real
+    # disagreement. Where LTSB files a name under exactly ONE type in that
+    # county, the word carries no information and a mismatch is a stale LABEL:
+    # Marathon's District 37 says "Town of Rib Mountain" where its own District
+    # 36 says "Village", the state says Village, and both agree on wards
+    # 1,2,7,8,9 versus 3,4,5,6,10. Refusing a county over the word while its
+    # numbers agree exactly would be refusing the wrong thing. Relabelled pairs
+    # are counted and printed, never silently absorbed.
+    relabelled = set()
+
+    def settle(key):
+        """The county's (type, name[, ward]) with a redundant type corrected."""
+        filed = types_by_name.get(key[1])
+        if filed and len(filed) == 1 and key[0] not in filed:
+            relabelled.add((key[0], key[1], next(iter(filed))))
+            return (next(iter(filed)),) + key[1:]
+        return key
+
+    wards = {d: {settle(k) for k in v} for d, v in wards.items()}
+    if munis:
+        munis = {d: {settle(k) for k in v} for d, v in munis.items()}
     listed = sum(len(v) for v in wards.values())
     # THE FLOOR IS PER DOCUMENT, NOT PER COUNTY BOARD. Jackson names every ward
     # of every municipality, so twice the seat count is a fair bar there. Clark
@@ -4797,6 +4823,19 @@ def ward_number_witness(fips, county, wards, seats, min_pairs=None, munis=None):
               for off in (1, -1)]
     print("  witness %-12s %d/%d listed wards in LTSB's own district (shifts %d/%d)"
           % (county, hit, listed, shifts[0], shifts[1]), file=sys.stderr)
+    if relabelled:
+        for was, name, now in sorted(relabelled):
+            print("  note    %-12s the document calls %s a '%s' and LTSB files it as "
+                  "a '%s'; that name is only one municipality here, so the wards "
+                  "decide" % (county, name, was, now), file=sys.stderr)
+    stray = sorted(k for d, v in wards.items() for k in v - ltsb.get(d, set()))
+    if stray:
+        print("  note    %-12s %d listed ward(s) are not in LTSB's same-numbered "
+              "district: %s" % (county, len(stray),
+                                ", ".join("%s %s w%d in D%d" % (k[0], k[1], k[2], d)
+                                          for d, v in sorted(wards.items())
+                                          for k in sorted(v - ltsb.get(d, set())))[:220]),
+              file=sys.stderr)
     # THE SHIFT TEST IS COMPARATIVE, NOT ABSOLUTE. It asks whether the county's
     # numbering fits LTSB's file BETTER at its own offset than one district
     # along, which is the shape a renumbering takes. It was written as "any
@@ -5026,33 +5065,88 @@ def _clark_lines(blob):
     return [re.sub(r"\s+", " ", ln).strip() for ln in out]
 
 
+# A composition can name several municipalities under ONE "of", with or without
+# per-item wards: Marathon writes "Towns of Harrison, Hewitt, Easton, Plover,
+# Norrie Ward 1 & Village of Birnamwood" and "Cities of Abbotsford and Colby".
+# So a type word opens a RUN, and the run is a list of items until the next type
+# word. Clark's and Pierce's singular forms are the one-item case of this.
+TYPE_RUN = re.compile(r"(?i)\b(cit(?:y|ies)|towns?|villages?)\s+of\s+")
+TYPE_LETTER = {"city": "c", "cities": "c", "town": "t", "towns": "t",
+               "village": "v", "villages": "v"}
+# A name never STARTS with the separator word "and": without the guard,
+# "Village of Rothschild Wards 5 & 6 and Weston Ward 1" yields a municipality
+# called "and Weston". Names themselves may contain spaces (Rib Mountain,
+# Green Valley, Eau Pleine) and even a type word (Village of MARATHON CITY),
+# which is safe because a type word only opens a run when "of" follows it.
+# A WARD RUN IS MASKED BEFORE ITEMS ARE SPLIT, because its separators are the
+# item separators. "Wards 2, 3 & 4" is ONE item's wards and "Berlin Ward 1,
+# Stettin Ward 4" is TWO items; splitting first gets both wrong. The run is
+# digits joined only by separators that are followed by more digits, so
+# "Ward 11, Hatley" masks "Ward 11" and leaves the comma to separate items.
+# The optional LEADING COMMA is Pierce ("Town of Martell, Ward 2 Town of River
+# Falls, Wards 1, 2 & 3"), where a comma sits between the name and its wards and
+# is NOT an item separator. The optional digits are Clark, whose District 27
+# reads "Town of Grant Ward," with no number at all — masking it keeps the bare
+# word out of the municipality name.
+COMP_WARDS = re.compile(r"(?i),?\s*\bWards?\b(?:\s*\d+(?:\s*[,&\u2013-]\s*\d+)*)?")
+COMP_SEP = re.compile(r"(?i)[,;&]|\band\b")
+
+
+def _ward_numbers(text):
+    """{1, 2, 3} for "Wards 1, 2 & 3" or "Wards 1-3" — Marathon writes both.
+
+    Takes the WHOLE run including its leading "Ward"/"Wards", which is stripped
+    here rather than by the caller: leaving it on silently drops the FIRST ward
+    of every list, because "Wards 2" is not a number.
+    """
+    out = set()
+    for chunk in re.split(r"[,&]|\band\b", re.sub(r"(?i)^[\s,]*Wards?\s*", "", text or "")):
+        chunk = chunk.strip()
+        span = re.fullmatch(r"(\d+)\s*[-\u2013]\s*(\d+)", chunk)
+        if span:
+            lo, hi = int(span.group(1)), int(span.group(2))
+            if 0 < lo <= hi <= 200:
+                out.update(range(lo, hi + 1))
+        elif chunk.isdigit():
+            out.add(int(chunk))
+    return out
+
+
 def parse_composition(composition):
     """({(type, municipality, ward)}, {(type, municipality)}) for one district.
 
     THE TYPE IS PART OF THE KEY, and Pierce is why. Wisconsin lets a town and a
     village of the same name sit side by side, each with its own ward 1: Pierce
     has Ellsworth wards 1 and 2 as BOTH a Town and a Village, in two different
-    supervisory districts, and Maiden Rock ward 1 the same way. Keyed on the
-    bare name, "ellsworth ward 2" is in district 11 and district 12 at once, and
-    the witness scores a match for whichever it meets first — which is a
-    coin-flip dressed as agreement. Jackson and Clark have no such pair, so the
-    key went untyped until a county that does turned up.
+    supervisory districts, and Marathon carries five such pairs (Elderon,
+    Mosinee, Spencer, Wausau, Weston). Keyed on the bare name, one of those
+    scores a match for whichever it meets first — a coin-flip dressed as
+    agreement.
 
-    A municipality named with NO ward ("Town of Withee", "Village of Curtiss")
-    means the whole municipality and contributes no ward pair; it still
-    contributes its (type, name), which is what the municipality-set check uses.
+    A municipality named with NO ward means the whole municipality and
+    contributes no ward pair; it still contributes its (type, name), which is
+    what the municipality-set check uses.
     """
     pairs, munis = set(), set()
-    for m in MUNI_RE.finditer(composition):
-        key = (m.group(1).lower()[0], _jk_norm(m.group(2)))
-        munis.add(key)
-        tail = composition[m.end():]
-        nxt = MUNI_RE.search(tail)
-        wards = WARDS_RE.search(tail[:nxt.start()] if nxt else tail)
-        if not wards:
-            continue
-        for n in re.findall(r"\d+", wards.group(1)):
-            pairs.add(key + (int(n),))
+    runs = [(m.end(), TYPE_LETTER[m.group(1).lower()])
+            for m in TYPE_RUN.finditer(composition)]
+    starts = [m.start() for m in TYPE_RUN.finditer(composition)]
+    for n, (begin, ctv) in enumerate(runs):
+        end = starts[n + 1] if n + 1 < len(starts) else len(composition)
+        seg = composition[begin:end]
+        runs, masked = [], seg
+        for m in reversed(list(COMP_WARDS.finditer(seg))):
+            runs.append(m.group(0))
+            masked = masked[:m.start()] + ("\x00%d\x00" % (len(runs) - 1)) + masked[m.end():]
+        for part in COMP_SEP.split(masked):
+            tok = re.search(r"\x00(\d+)\x00", part)
+            name = _jk_norm(re.sub(r"\x00\d+\x00", " ", part))
+            if not name:
+                continue
+            munis.add((ctv, name))
+            if tok:
+                for w in _ward_numbers(runs[int(tok.group(1))]):
+                    pairs.add((ctv, name, w))
     return pairs, munis
 
 
@@ -5406,6 +5500,158 @@ def scrape_pierce_directory(spec):
     ward_number_witness(spec["fips"], county, wards, seats,
                         min_pairs=PIERCE_MIN_WARD_PAIRS, munis=munis)
     return out, link
+
+
+# --- Marathon: the county's staff-directory table, plus one page per member ---
+#
+# Marathon seats 38, the largest board in Wisconsin, and it was the last county
+# this project's own ask-queue still listed as needing a letter. It never did.
+# Two things had been recorded about it and both were half-true:
+#
+#   "Marathon answers 403 to this client."  Its Akamai edge does — to a browser
+#   User-Agent, to no User-Agent, to an honest one, and to curl's default, all
+#   with the same 428-byte deny. It does NOT to the header set this file already
+#   sends for Monroe (UA + Accept + Accept-Language + Sec-Fetch-*), which
+#   Akamai's bot scoring treats as a real navigation. Even robots.txt is denied
+#   without it. So the county was never blocked to this project; it was blocked
+#   to four clients nobody here uses.
+#
+#   "Marathon has no pinned reading yet."  That was the accurate half, and it is
+#   what this fixes.
+#
+# THE MEMBERS PAGE LOOKS LIKE A MAP INDEX AND IS NOT ONE. Its only visible
+# widget is "District Maps" — 38 links to per-district PDFs with no person on
+# them, the exact shape this project already records for Kenosha, Oconto and
+# Ozaukee and warns to test for the PEOPLE rather than the district numbers.
+# The people are in a staff-directory table further down the same document:
+# 38 rows of Surname-first name, "DISTRICT n", a phone, and an e-mail link.
+#
+# THE E-MAIL IS NOT SHIPPED, AND THAT IS A DECISION RATHER THAN A LIMITATION.
+# Every address sits behind a JavaScript handler keyed by `data-mailto-id`, on
+# the table AND on each member's own page; no @marathoncounty.gov string exists
+# in either document. That is deliberate anti-harvesting, and defeating it is
+# the same class of act as answering a captcha, which this project does not do.
+# So the card carries the name, the district, the phone the county publishes in
+# plain markup, and a link to the member's own page where a reader can click
+# through to write to them.
+#
+# EACH MEMBER'S PAGE IS FETCHED, and it earns the trip twice: it states that
+# member's own "Title: DISTRICT n" — the list-versus-own-page agreement the
+# Oconto reader already relies on — and it prints the district's WARD
+# COMPOSITION, which is what lets ward_number_witness check the numbering
+# against LTSB's filing. It also prints the member's HOME ADDRESS, which is
+# read past and never shipped.
+#
+# TWO THINGS THE WITNESS REPORTS RATHER THAN SWALLOWS, both measured 2026-09-02.
+# District 37's page calls Rib Mountain a TOWN where District 36's calls it a
+# VILLAGE and the state files it as a village; the two districts' ward numbers
+# (1,2,7,8,9 against 3,4,5,6,10) match LTSB exactly, so the word is a stale
+# label and the numbers decide. And three City of Marshfield wards read 1-3 here
+# where LTSB files 12, 16 and 19: Marshfield straddles Marathon and Wood, and
+# the county numbers its own share while the state uses the city's numbering.
+# Both publishers put Marshfield in District 27, so the numbering is not in
+# doubt — 90 of 93 ward pairs land, and the three that do not are named in the
+# run's own log rather than absorbed by a threshold.
+MARATHON_DIRECTORY = {
+    "fips": "55073", "name": "Marathon", "seats": 38,
+    "source_url": "https://www.marathoncounty.gov/about-us/government/county-board/members",
+    "origin": "https://www.marathoncounty.gov",
+}
+# "<td><a href="/Home/Components/StaffDirectory/StaffDirectory/2035/62">Rosenberg,
+#  Katie</a></td><td class="mobile_hide">DISTRICT 1</td><td><a ... tel:7152123477"
+MARATHON_ROW = re.compile(
+    r'(?is)<td>\s*<a href="(?P<url>/Home/Components/StaffDirectory/StaffDirectory/\d+/\d+)">'
+    r'(?P<name>[^<]+)</a>\s*</td>\s*'
+    r'<td[^>]*>\s*DISTRICT\s+(?P<district>\d{1,2})\s*</td>'
+    r'(?:(?!</tr>).)*?href=.tel:(?P<phone>\d{10})')
+MARATHON_TITLE = re.compile(r"(?i)Title:\s*\|\s*DISTRICT\s+(\d{1,2})\b")
+# "(City of Wausau Wards 1, 2)" — parenthesised, and the ONLY thing taken from a
+# page that also prints a street address two lines above it.
+MARATHON_COMP = re.compile(r"\(([^()]*(?:City|Town|Village)s?\s+of[^()]*)\)", re.I)
+MARATHON_MIN_PHONES = 34    # 38 of 38 today
+MARATHON_MIN_WARD_PAIRS = 70    # 93 today
+
+
+def _marathon_text(html):
+    """One flattened line of a member page, tags collapsed to pipes."""
+    body = re.sub(r"(?is)<(script|style).*?</\1>", " ", html)
+    body = html_lib.unescape(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " | ", body)))
+    return re.sub(r"(\| )+", "| ", body)
+
+
+def scrape_marathon_directory(spec):
+    """All seats or nothing: the table for the roster, each page for the proof."""
+    county, seats = spec["name"], spec["seats"]
+    page = fetch(spec["source_url"])
+    rows = list(MARATHON_ROW.finditer(page))
+    seen = [int(m.group("district")) for m in rows]
+    if sorted(seen) != list(range(1, seats + 1)):
+        raise RuntimeError("%s: the members table lists districts %s, not 1..%d — "
+                           "the page has reshaped; re-read %s"
+                           % (county, seen, seats, spec["source_url"]))
+
+    out, wards, munis, phones = {}, {}, {}, 0
+    for n, m in enumerate(rows):
+        district = int(m.group("district"))
+        # SURNAME FIRST — "Rosenberg, Katie" — flipped, and the flip PRINTED,
+        # because a table that stops using the comma would otherwise ship every
+        # name backwards without a word.
+        raw = html_lib.unescape(m.group("name")).strip()
+        if "," not in raw:
+            raise RuntimeError("%s: district %d reads the name %r, which is not "
+                               "'Surname, Given' — the table has changed how it "
+                               "writes names and the flip below would be wrong"
+                               % (county, district, raw))
+        surname, given = (p.strip() for p in raw.split(",", 1))
+        name = clean("%s %s" % (given, surname))[0]
+        row = {"name": name, "vacant": False, "role": None,
+               "phone": "%s-%s-%s" % (m.group("phone")[:3], m.group("phone")[3:6],
+                                      m.group("phone")[6:])}
+        phones += 1
+
+        if n:
+            time.sleep(0.4)             # 38 pages of somebody else's server
+        profile = fetch(spec["origin"] + m.group("url"))
+        text = _marathon_text(profile)
+        own = MARATHON_TITLE.search(text)
+        if not own:
+            raise RuntimeError("%s: %s's own page states no 'Title: DISTRICT n' — "
+                               "that statement is what confirms the table's "
+                               "district, so this cannot ship unchecked (%s)"
+                               % (county, name, spec["origin"] + m.group("url")))
+        if int(own.group(1)) != district:
+            raise RuntimeError("%s: the table files %s under district %d and their "
+                               "own page says district %s — the two county "
+                               "surfaces disagree, and neither is guessed at"
+                               % (county, name, district, own.group(1)))
+        comp = MARATHON_COMP.search(text)
+        if not comp:
+            raise RuntimeError("%s: %s's page prints no ward composition — that "
+                               "composition is what witnesses the numbering "
+                               "against the state's filing (%s)"
+                               % (county, name, spec["origin"] + m.group("url")))
+        wards[district], munis[district] = parse_composition(comp.group(1))
+        if not munis[district]:
+            raise RuntimeError("%s: district %d's composition %r names no "
+                               "municipality" % (county, district, comp.group(1)[:80]))
+        row["profileUrl"] = spec["origin"] + m.group("url")
+        out[str(district)] = row
+
+    names = [r["name"] for r in out.values()]
+    if len(set(names)) != len(names):
+        dupes = sorted({n for n in names if names.count(n) > 1})
+        raise RuntimeError("%s: the same person is filed under two districts (%s)"
+                           % (county, dupes))
+    if phones < MARATHON_MIN_PHONES:
+        raise RuntimeError("%s: %d phones across %d seats (floor %d) — the table "
+                           "has reshaped and contact is being dropped silently"
+                           % (county, phones, seats, MARATHON_MIN_PHONES))
+    print("  %-12s %d seats, %d phones, 0 e-mails (every address is behind the "
+          "county's JavaScript mailto handler and is not taken)"
+          % (county, seats, phones), file=sys.stderr)
+    ward_number_witness(spec["fips"], county, wards, seats,
+                        min_pairs=MARATHON_MIN_WARD_PAIRS, munis=munis)
+    return out, spec["source_url"]
 
 
 # --- Waupaca: the Clerk's Directory of Public Officials, as a live page --------
@@ -6297,6 +6543,8 @@ def main():
               CLARK_DIRECTORY["seats"], "official-directory", CLARK_DIRECTORY)]
     jobs += [(PIERCE_DIRECTORY["fips"], PIERCE_DIRECTORY["name"],
               PIERCE_DIRECTORY["seats"], "pierce-directory", PIERCE_DIRECTORY)]
+    jobs += [(MARATHON_DIRECTORY["fips"], MARATHON_DIRECTORY["name"],
+              MARATHON_DIRECTORY["seats"], "marathon-directory", MARATHON_DIRECTORY)]
     jobs += [(fips, name, seats, strategy, url) for fips, name, seats, strategy, url in COUNTIES]
     for fips, name, seats, strategy, src in jobs:
         if only and fips != only:
@@ -6313,6 +6561,9 @@ def main():
                 source_url, read_from = src["source_url"], "live"
             elif strategy == "pierce-directory":
                 districts, doc_url = scrape_pierce_directory(src)
+                source_url, read_from = src["source_url"], "live"
+            elif strategy == "marathon-directory":
+                districts, _doc = scrape_marathon_directory(src)
                 source_url, read_from = src["source_url"], "live"
             elif strategy == "archive":
                 districts, archived_at = scrape_archive_county(src)
@@ -6401,7 +6652,7 @@ def main():
              + len(CONSTITUENT_COUNTIES)
              + len(WITNESSED_DOCUMENT_COUNTIES)
              + len(PDF_COUNTIES)
-             + len(FRAMED_TABLE_COUNTIES) + 2, total,
+             + len(FRAMED_TABLE_COUNTIES) + 3, total,
              ", %d county/counties missed" % len(failures) if failures else ""),
           file=sys.stderr)
 

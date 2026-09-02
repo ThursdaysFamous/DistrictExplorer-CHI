@@ -21,13 +21,12 @@ a new county cannot be added against a host that has said no.
 
 WHAT IT CHECKS, AND WHAT IT DELIBERATELY DOES NOT
 -------------------------------------------------
-It checks the URLs that are actually REQUESTED on a schedule:
+It checks the URLs that are actually REQUESTED on a schedule, and it finds
+them BY DISCOVERY rather than from a list of tables:
 
-  * every `source_url` in wi_county_board_scraper's COUNTIES, plus the
-    ARCGIS / ARCHIVE / CONSTITUENT / PDF / FRAMED_TABLE / WITNESSED tables,
-  * OFFICER_PAGES and MEMBER_PAGES, which are second fetches per county,
-  * every http URL in wi_county_officer_contact_scraper, which runs in TWO
-    weekly workflows and so fetches its hosts twice a week,
+  * every http string in every upper-case attribute of BOTH scrapers —
+    wi_county_board_scraper (weekly) and wi_county_officer_contact_scraper,
+    which runs in TWO weekly workflows and so fetches its hosts twice a week,
   * a DOCUMENT_ROSTERS entry ONLY when it carries a `live` key, because that
     is the one thing in that table that makes a request. An entry without one
     is a transcription and is not a fetch — six of the nine are exactly that,
@@ -35,6 +34,20 @@ It checks the URLs that are actually REQUESTED on a schedule:
   * everything EXCEPT the names in NOT_FETCHED (below), which are tables of
     already-read values the app displays. The default is to include, so a table
     added tomorrow is checked whether or not anyone remembers this file.
+
+THE BOARD SIDE NAMED SIX TABLES BY HAND UNTIL 2026-09-02 and the paragraph
+above claimed discovery of both. Three carriers written after it — Clark's
+Official Directory, Pierce's annual directory, Marathon's members table — sat
+outside all six, so this gate was not looking at `cms5.revize.com` or
+`www.marathoncounty.gov` at all, and reported Clark's host green on four paths
+the OFFICER scraper happens to read there. A hand-kept list of what a gate
+covers is the one thing the gate cannot check. See NOT_FETCHED for what the
+sweep then found that nobody had listed.
+
+AND IT READS EACH POLICY WITH THE CLIENT THAT DOES THE CRAWLING (robots_headers
+below). Sending a weaker client than the scraper's own turned seven counties'
+readable policies into "unreadable — not assumed", which looks like caution and
+means the rules were never read.
 
 IT DOES NOT CHECK LINKS THE APP MERELY SHOWS. A `sourceUrl` on a card is an
 address a reader clicks; robots.txt governs automated retrieval, not what a
@@ -57,6 +70,7 @@ Usage:
     python3 wi/scripts/validate_robots.py --offline  # list the surface only
 """
 
+import gzip
 import os
 import re
 import sys
@@ -68,47 +82,73 @@ import urllib.request
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, SCRIPT_DIR)
 
-UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                    "AppleWebKit/537.36 (KHTML, like Gecko) "
-                    "Chrome/128.0.0.0 Safari/537.36"}
+def robots_headers(host):
+    """The header set THIS host's own pages are already crawled with.
+
+    ROBOTS.TXT MUST BE READ BY THE CLIENT THAT DOES THE CRAWLING, and until
+    2026-09-02 this script sent its own bare User-Agent — one line, no Accept,
+    no client hints — while the scraper it audits sends three carefully pinned
+    header sets. That asymmetry is not a detail: `www.marathoncounty.gov`
+    serves its board page to the scraper every week and answered THIS script
+    403, so its policy was filed as "unreadable — not assumed", which reads
+    like caution and means the rules were never read. It serves a 6,641-byte
+    robots.txt to the scraper's own default client on the first try.
+
+    Reading the policy with a WEAKER client than the crawl is the one
+    asymmetry a compliance gate must not have. (The opposite — reaching for a
+    stronger client than the crawl uses — would be defeating a control, and is
+    not what this does: the pins below are exactly the scraper's own, host for
+    host, and nothing is retried up the ladder.)
+    """
+    import wi_county_board_scraper as board
+    if host in getattr(board, "HONEST_UA_HOSTS", ()):
+        return board.HONEST_UA
+    if host in _browser_header_hosts():
+        return board.BROWSER
+    return board.UA
+
+
+def _browser_header_hosts():
+    """Hosts whose county is pinned to the scraper's Chrome-navigation set."""
+    import wi_county_board_scraper as board
+    pinned = getattr(board, "BROWSER_HEADER_COUNTIES", set())
+    return {urllib.parse.urlsplit(url).hostname
+            for fips, _n, _s, _d, url in board.COUNTIES if fips in pinned}
+
+
+def read_body(response):
+    """The response text, gunzipped when the pinned header set asked for gzip.
+
+    urllib does not decompress, and one of the three header sets sends
+    `Accept-Encoding: gzip` — so without this, a host on that pin returns a
+    robots.txt of binary noise that parses to zero rules and reports as
+    permitting everything.
+    """
+    raw = response.read()
+    if (response.headers.get("Content-Encoding") or "").lower() == "gzip":
+        raw = gzip.decompress(raw)
+    return raw.decode("utf-8", "replace")
 
 
 def fetched_urls():
     """[(url, why)] — every address this instance requests on a schedule."""
     import wi_county_board_scraper as board
+    import wi_county_officer_contact_scraper as officers
     out = []
     for fips, name, seats, strategy, url in board.COUNTIES:
         out.append((url, "%s board roster (%s)" % (name, strategy)))
-    for table, label in (
-        (getattr(board, "ARCGIS_COUNTIES", []), "county GIS layer"),
-        (getattr(board, "ARCHIVE_COUNTIES", []), "archive ladder (county asked first)"),
-        (getattr(board, "CONSTITUENT_COUNTIES", []), "constituent directory"),
-        (getattr(board, "PDF_COUNTIES", []), "directory PDF"),
-        (getattr(board, "FRAMED_TABLE_COUNTIES", []), "framed table"),
-        (getattr(board, "WITNESSED_DOCUMENT_COUNTIES", []), "witnessed document"),
-    ):
-        for spec in table:
-            for key in ("source_url", "page", "url"):
-                if spec.get(key):
-                    out.append((spec[key], "%s %s" % (spec.get("name", "?"), label)))
     # A CARRIED ROSTER IS NOT A FETCH unless it re-tries its live page.
     for spec in getattr(board, "DOCUMENT_ROSTERS", []):
         if spec.get("live"):
             out.append((spec["source_url"],
                         "%s carried roster, live re-try each run" % spec["name"]))
-    for fips, spec in (getattr(board, "OFFICER_PAGES", {}) or {}).items():
-        if isinstance(spec, dict) and spec.get("url"):
-            out.append((spec["url"], "officers block for %s" % fips))
-    for fips, spec in (getattr(board, "MEMBER_PAGES", {}) or {}).items():
-        for url in _strings(spec):
-            out.append((url, "member pages for %s" % fips))
-
-    import wi_county_officer_contact_scraper as officers
-    for nm in dir(officers):
-        if not nm.isupper() or nm in NOT_FETCHED:
-            continue
-        for url in _strings(getattr(officers, nm)):
-            out.append((url, "county officer contact (twice weekly)"))
+    for module, label in ((board, "county board roster (weekly)"),
+                          (officers, "county officer contact (twice weekly)")):
+        for nm in dir(module):
+            if not nm.isupper() or nm in NOT_FETCHED:
+                continue
+            for url in _strings(getattr(module, nm)):
+                out.append((url, "%s [%s]" % (label, nm)))
     seen, uniq = set(), []
     for url, why in out:
         if url.startswith("http") and url not in seen:
@@ -117,12 +157,28 @@ def fetched_urls():
     return sorted(uniq)
 
 
-# The sweep above takes EVERY http string in every upper-case attribute of the
-# contact scraper, which over-reports on purpose: a table added tomorrow is
-# checked by default, and over-reporting is the safe direction for a gate whose
-# whole job is to never miss a fetch. Names listed here are the exceptions, and
-# listing one is a CLAIM — that nothing in this repo requests those URLs — which
-# is worth as much as the reading of the module that backs it.
+# THE SWEEP IS BY DISCOVERY, NOT BY A LIST: it takes EVERY http string in every
+# upper-case attribute of BOTH scrapers, so a table added tomorrow is checked
+# whether or not anyone remembers this file. Over-reporting is the safe
+# direction for a gate whose whole job is to never miss a fetch.
+#
+# THAT WAS TRUE OF THE CONTACT SCRAPER ONLY UNTIL 2026-09-02, and the docstring
+# above claimed it of both. The board side named six tables by hand, and three
+# carriers added after it was written — Clark's Official Directory, Pierce's
+# annual directory and Marathon's members table — sat outside all six. So the
+# gate whose entire purpose is to never miss a fetch was silently missing
+# `cms5.revize.com` and `www.marathoncounty.gov` altogether; Clark's host was
+# reported only because the OFFICER scraper happens to read four other paths
+# there, which is the most misleading possible pass. Discovery also swept in
+# four hosts nobody had listed at all: `web.archive.org` and `archive.org` (the
+# archive ladder genuinely fetches them every run), `services1.arcgis.com` for
+# the LTSB ward-witness query, and the second URL inside three specs whose
+# key was not one of the three the hand list looked at. A HAND-KEPT LIST OF
+# WHAT A GATE COVERS IS THE THING THE GATE CANNOT CHECK.
+#
+# Names listed below are the exceptions, and listing one is a CLAIM — that
+# nothing in this repo requests those URLs — which is worth as much as the
+# reading of the module that backs it.
 #
 #   CARRIED_CONTACTS holds the office contact of the four counties whose hosts
 #   disallow this client. Its URLs are what the CARD SHOWS a reader, taken from
@@ -131,7 +187,21 @@ def fetched_urls():
 #   applies for the same reason: a transcription is not a fetch. Note that this
 #   table has no `live` escape hatch at all, so unlike a roster entry it cannot
 #   drift back into being fetched without an edit here too.
-NOT_FETCHED = {"CARRIED_CONTACTS"}
+#
+#   Discovery also swept in four things nobody had listed: `web.archive.org`
+#   and `archive.org`, which the archive ladder genuinely requests every run;
+#   `services1.arcgis.com` for the LTSB ward-witness query that checks every
+#   new county's district numbers; and the SECOND url inside three specs,
+#   whose key was not one of the three the hand list looked at.
+#
+#   DOCUMENT_ROSTERS is the board scraper's own carried table — nine counties
+#   read once and dated, six of them because their hosts ask automated readers
+#   to stay off. Fetching those hosts to check a policy this project has ALREADY
+#   read and complied with would be the one request the compliance forbids, so
+#   the whole table is excepted here and its `live` entries are added back by
+#   name in the loop above. That inversion is deliberate: an entry that starts
+#   re-trying its page appears in this surface the moment it gains the key.
+NOT_FETCHED = {"CARRIED_CONTACTS", "DOCUMENT_ROSTERS"}
 
 
 def _strings(obj):
@@ -169,6 +239,27 @@ def star_disallows(text):
             for agent in current:
                 groups.setdefault(agent, []).append((key, value))
     return groups.get("*")
+
+
+def resolve_template(url):
+    """A `%s`-templated URL as the path shape actually requested.
+
+    Six of the swept constants are FORMAT TEMPLATES, not addresses — the
+    archive ladder's four (`https://web.archive.org/save/%s` and friends) and
+    Pierce's directory pair, which is templated on the year. Matching a
+    template against robots.txt verbatim asks the wrong question twice: `%s`
+    stands where a real path segment goes, and `%%20` is a doubled percent
+    that means a literal `%20` on the wire. Pierce's real path is
+    `/revize/piercewi/Agendas%20and%20Minutes/...`, so a host rule naming that
+    directory would not have matched the string this script was holding.
+
+    The substitution is exactly what `%` formatting does, in the same order:
+    the placeholder first, then the doubled percent. A path segment is
+    stand-in text of the right SHAPE, which is all a prefix rule can see; the
+    report marks these rows so nobody reads a checked template as a checked
+    address.
+    """
+    return url.replace("%s", "PLACEHOLDER").replace("%%", "%")
 
 
 def _rule_re(value):
@@ -226,7 +317,7 @@ def main():
     urls = fetched_urls()
     by_host = {}
     for url, why in urls:
-        parts = urllib.parse.urlparse(url)
+        parts = urllib.parse.urlparse(resolve_template(url))
         # RFC 9309 section 2.2.2: the string a rule is matched against is the
         # path AND the query. Matching the path alone would let a rule like
         # `Disallow: /*?lightbox=` — which exists on one county's host — miss
@@ -244,9 +335,10 @@ def main():
     disallowed, unknown = [], []
     for host in sorted(by_host):
         try:
-            req = urllib.request.Request("https://%s/robots.txt" % host, headers=UA)
+            req = urllib.request.Request("https://%s/robots.txt" % host,
+                                         headers=robots_headers(host))
             with urllib.request.urlopen(req, timeout=25) as r:
-                body = r.read().decode("utf-8", "replace")
+                body = read_body(r)
         except urllib.error.HTTPError as e:
             if e.code == 404:
                 print("  ok   %-34s no robots.txt (nothing disallowed)" % host)
