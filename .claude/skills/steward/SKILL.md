@@ -42,6 +42,7 @@ python3 scripts/build_coverage_gaps.py --check --metro iowa      --out ia/data/a
 python3 wi/scripts/build_wi_county_board_directory.py --check
 python3 wi/scripts/build_wi_county_outlines.py --check
 python3 scripts/build_brand_tokens.py --check            # must precede compose_app
+python3 scripts/validate_contrast.py                     # text vs ground, both tiers
 python3 scripts/compose_app.py --check                   # engine/ vs every instance's fences
 python3 scripts/build_county_status.py --check
 python3 scripts/backfill_board_seats.py --check
