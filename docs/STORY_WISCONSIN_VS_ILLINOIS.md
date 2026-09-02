@@ -63,14 +63,16 @@ for a "Wisconsin just works better" headline to erase: Wisconsin's law gets you 
 gets you nothing about who actually holds each seat.
 
 There is no Wisconsin office that publishes a statewide list of county supervisors. Getting
-names for 66 of its 72 counties took the same flavor of scattered, individual work Illinois
+names for all 72 counties took the same flavor of scattered, individual work Illinois
 required — a plain board page here, a PDF directory there, one county's data recovered only
 through the Internet Archive after its own site went dark, one board whose current roster was
-linked, in plain text, right from the county's own official page — a link nobody had actually
-followed until now. Six Wisconsin counties still
-publish nothing usable at all, and my map says so honestly rather than guessing. That's not a
-lesser achievement than the boundary problem — it's the same problem Illinois has, dressed in
-a different state's paperwork, and it is nowhere near solved.
+linked, in plain text, right from the county's own official page: a link nobody had actually
+followed. It finished, county by county, one at a time, and the last six were the slowest
+precisely because there was no statewide file to fall back on. All 1,591 seats now carry a
+name or the county's own note that the seat is vacant.
+
+That took a week of work for a state whose *maps* took one afternoon. Which is the whole
+lesson: the law bought the boundaries and bought nothing else.
 
 What actually changed for me, between the two states, is not that the messy problem got
 easier. It's that the messy problem stopped multiplying the size of my own project every time
@@ -93,6 +95,18 @@ Wisconsin: all 72 counties mapped, in three days, because one law did in an afte
 separate investigations did for its neighbor over a year. Iowa followed the same pattern to 99
 of 99 counties, arriving with even less to lean on than Wisconsin had.
 
-Three states, the same free tool, the same underlying question — and the gap between them
-is, itself, a pretty good measurement of just how differently American states let their own
-counties run.
+One caution I want to put in writing, because it would be easy for me to tell a tidier story
+than I can support. It is tempting to read all this as "Wisconsin's counties are simply better
+run than Illinois's." I checked that, and I can't stand behind it. My Wisconsin list is
+hand-corrected and double-checked; my Illinois list leans much more on an automated sweep that
+guesses a county's web address from its clerk's e-mail address. Those two methods fail in
+opposite ways, and I have the receipts on my own: six of my 72 Wisconsin addresses turned out
+to be wrong after passing an earlier check, and in Illinois I spent weeks recording Pulaski
+County as unreachable when it has a perfectly good website — just on a different domain than
+the one I guessed. Some of the gap I've described is a real difference between two states.
+Some of it is a difference between two of my own measuring sticks, and I'd rather say so than
+let a clean number do work it hasn't earned.
+
+What I'll defend is narrower and, I think, more useful: one Wisconsin law turned 72 separate
+research problems into a single download, and Illinois has no equivalent — for county board
+maps, or for anything else.

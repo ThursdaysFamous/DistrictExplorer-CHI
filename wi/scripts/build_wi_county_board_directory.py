@@ -275,11 +275,65 @@ COUNTY_SITES = {
 # it reports rather than repairs, because which page replaces a dead one is a
 # judgement (a county home page, or the board page that confirms 1..n) and is
 # made by hand above.
+# THE PROBE ASKS WITH THE SCRAPER'S OWN HEADERS, NOT A SECOND WEAKER COPY.
+# This file used to carry its own PROBE_UA — a Chrome User-Agent plus an Accept
+# and nothing else — while wi_county_board_scraper.py asked the same 72 hosts
+# with a fuller set and a per-host exception table (`headers_for`). The probe
+# was therefore a worse client than the scraper it exists to check, and it
+# reported counties blocked that the weekly run reads perfectly well.
+#
+# MEASURED 2026-09-02 over all 72 county sites, same process, same minute,
+# urllib both times:
+#
+#     PROBE_UA (this file's old set)     13 of 72 answered non-200
+#     headers_for() (the scraper's)       6 of 72 answered non-200
+#
+# The seven that recovered are Fond du Lac, Marathon, Monroe, Outagamie,
+# Racine, Rock and Sheboygan, returning 21 KB to 200 KB of real county
+# navigation where the old set got a 403. Two of them are the exceptions
+# `headers_for` exists for and this file could never have reproduced by
+# guessing: Monroe wants the Fetch-Metadata set a Chrome NAVIGATION sends, and
+# Outagamie's Akamai rule denies any `Mozilla/`-prefixed UA and wants a client
+# that says what it is. The other five simply wanted the fuller header set.
+#
+# OUTAGAMIE IS WHY THIS MATTERS RATHER THAN BEING A TIDY-UP. A 403 is excused
+# below as "the county's host declining THIS client", so the probe SKIPS it —
+# which means the one county whose fetch this repo had already solved was the
+# one county the probe would never actually check. Had its URL gone stale the
+# probe would have said "blocked" forever and never noticed.
+#
+# WHICH SINGLE HEADER DOES IT IS NOT CLAIMED, because the isolation runs that
+# would answer it were confounded: attempts to bisect the header set with
+# `requests` returned 403 for every variant including the full one, on hosts
+# that answer 200 to urllib with those same headers. The client's own
+# fingerprint is doing some of the work, so only the paired measurement above
+# is asserted. What is settled is the rule: ONE source of truth for how this
+# fleet asks a Wisconsin county for a page, and it lives in the scraper.
 PROBE_UA = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
                   "(KHTML, like Gecko) Chrome/124.0 Safari/537.36",
     "Accept": "text/html,application/xhtml+xml,*/*;q=0.8",
 }
+
+
+def probe_headers(fips, url):
+    """The scraper's own per-host header set, with this file's as the fallback.
+
+    Imported per call rather than at module scope for the reason
+    `_cross_check_scraper_hosts` does it: this builder must stay runnable when
+    the scraper is not importable. A fallback is announced rather than silent —
+    a probe quietly running as the weaker client is exactly the failure this
+    function was written to end.
+    """
+    try:
+        from wi_county_board_scraper import headers_for
+    except Exception as exc:  # pragma: no cover - import-environment only
+        print("probe: wi_county_board_scraper not importable (%s); asking with "
+              "this file's weaker PROBE_UA, which reports ~7 more counties "
+              "blocked than the weekly run actually sees" % type(exc).__name__,
+              file=sys.stderr)
+        return PROBE_UA
+    return headers_for(fips, url)
 # A real county site is tens of KB of navigation. Every stub measured was under
 # 4 KB and every live county over 20 KB, so the floor sits between them and is
 # reported, never enforced.
@@ -294,7 +348,7 @@ def probe():
     findings = []
     for fips, (name, url) in sorted(COUNTY_SITES.items(), key=lambda kv: kv[1][0]):
         try:
-            req = urllib.request.Request(url, headers=PROBE_UA)
+            req = urllib.request.Request(url, headers=probe_headers(fips, url))
             with urllib.request.urlopen(req, timeout=35,
                                         context=ssl.create_default_context()) as r:
                 body = r.read(200000)
