@@ -2,37 +2,48 @@
 """
 Weekly fleet-status aggregator (docs/MECHANIZATION_PLAYBOOK.md, Conversion 3).
 
-Runs in the CHI repo only (one report, in the canonical repo). Reads the fleet
-manifest (metros.json) and, for every fork, aggregates:
+Runs in this repo only (one report, one checkout). Originally compared CHI
+against separate per-metro fork repos; those forks are retired as of R5 —
+every metro is now a folder in this same repo — so two of the original checks
+(the engine.lock.json pin, and diffing each fork's own docs/ENGINE_SYNC.md
+against CHI's) no longer have anything to compare against and were removed
+rather than left to report a trivial "in sync" against themselves. What
+remains, read straight off this checkout for every instance in metros.json:
 
-  - engine pin: the fork's engine.lock.json version vs CHI's latest engine-v*
-    release (behind = the bump PR hasn't merged there yet);
-  - validator capabilities: the CAPABILITIES list parsed from the fork's
-    scripts/validate_index.py, diffed against CHI's. A capability present in a
-    fork but absent in CHI is a **reverse-parity WARN** — the back-port debt
-    this workflow exists to surface;
-  - scraper health: last completed run per workflow named in the fork's
+  - validator capabilities: the CAPABILITIES list parsed from the instance's
+    own scripts/validate_index.py, diffed against CHI's. A capability present
+    in an instance but absent in CHI is a **reverse-parity WARN** — the
+    back-port debt this workflow exists to surface;
+  - scraper health: last completed run per workflow named in the instance's
     metro-worksheet.json, plus any per-field coverage one-liners greppable
-    from that run's log;
-  - guidebook coverage: the fork's worksheet layer roster diffed against the
-    coverage map in docs/DATA_LAYER_GUIDEBOOK.md. A layer shipped without a
-    guidebook row (or a guidebook row no fork backs) is a **GUIDEBOOK WARN** —
-    the layer-parity analog of the engine parity check;
-  - data-gaps drift: the fork's shipped data/app/coverage-gaps.json compared to
-    what the guidebook's gaps block would emit for that metro. This is the one
-    check nothing else can do: the guidebook lives in CHI only, so a sibling's
-    file is generated here and lands there through a bump PR — which means a
-    sibling has NO local drift gate (its build_coverage_gaps.py --check does not
-    exist), and its Data gaps panel could quietly disagree with the document of
-    record. A mismatch is a **GAPS WARN**;
-  - ENGINE_SYNC drift: every fork's docs/ENGINE_SYNC.md compared against CHI's,
-    and CHI's own block inventory compared against the live fences. That file
-    opens "the SAME copy ships in every fork; never edit it in one fork only",
-    and until this check existed **nothing enforced it**:
-    check_engine_parity.py compares fenced CODE, so the document describing the
-    fence system drifted silently and was found only when somebody read two
-    copies side by side — 164 lines apart, with a block inventory naming 50
-    blocks when the fences held 53 (ENGINE_SYNC backlog item 14);
+    from that run's log. Also flags a workflow file that is not actually in
+    the repo ROOT .github/workflows/ (GitHub Actions only reads there) as
+    **INERT** — an instance folder brings its own .github/ along, and every
+    file in it looks like a live refresh while never running;
+  - workflow name collisions: two instances inventorying the same workflow
+    BASENAME, which can only be one file at the shared root — so at most one
+    of them is telling the truth about that refresh. Reported loudly rather
+    than letting the health check above answer confidently about the wrong
+    file, which is how six of the ten workflows once found INERT were missed
+    on the first pass;
+  - guidebook coverage: the instance's worksheet layer roster diffed against
+    the coverage map in docs/DATA_LAYER_GUIDEBOOK.md. A layer shipped without
+    a guidebook row (or a guidebook row no instance backs) is a **GUIDEBOOK
+    WARN**;
+  - data-gaps drift: the instance's shipped data/app/coverage-gaps.json
+    compared to what the guidebook's gaps block would emit for that metro. A
+    mismatch is a **GAPS WARN**. Since 2026-09-02 this is also gated directly
+    in CI (smoke-test.yml runs build_coverage_gaps.py --check for all five
+    metros), so this is now a second, weekly-cadence check on the same
+    invariant rather than the only one;
+  - CHI's own ENGINE_SYNC.md inventory checked against the real ENGINE fences
+    in il/index.html and il/sw.js — the doc that opens "the SAME copy ships in
+    every fork; never edit it in one fork only" had drifted 164 lines with an
+    inventory naming 50 blocks when the fences held 53, because
+    check_engine_parity.py compares fenced CODE and nothing compared the
+    document (ENGINE_SYNC backlog item 14). CHI-only now for the same reason
+    the cross-fork diff above was removed: one copy of the doc, one repo,
+    nothing left to diff it against;
   - open bot PRs (roster + engine-bump branches awaiting human review).
 
 Emits a markdown report and a status word (ok|warn). It never edits anything —
@@ -153,7 +164,7 @@ def api_get(path, raw=False):
 def parse_capabilities(validator_text):
     m = CAP_RE.search(validator_text or "")
     if not m:
-        return None  # fork hasn't declared yet — reported as such, not a WARN
+        return None  # instance hasn't declared yet — reported as such, not a WARN
     return sorted(re.findall(r'"([a-z0-9-]+)"', m.group(1)))
 
 
@@ -182,7 +193,7 @@ def guidebook_diff(gb_map, metro_id, layer_ids):
         warns.append("%s: GUIDEBOOK — shipped layers not in the guidebook: %s"
                      % (metro_id, ", ".join(unlisted)))
     if phantom:
-        warns.append("%s: GUIDEBOOK — guidebook lists layers the fork doesn't register: %s"
+        warns.append("%s: GUIDEBOOK — guidebook lists layers the instance doesn't register: %s"
                      % (metro_id, ", ".join(phantom)))
     if warns:
         line = ("- Guidebook coverage: **GUIDEBOOK WARN** — "
@@ -207,11 +218,11 @@ def load_guidebook_gaps(repo_root):
 
 
 def gaps_diff(gaps_map, metro_id, shipped_text):
-    """(report_line, warn_list) for one fork's shipped gaps file vs the guidebook.
+    """(report_line, warn_list) for one instance's shipped gaps file vs the guidebook.
 
     Four states, and only two of them are warnings:
-      - guidebook has no array AND the fork ships nothing  -> consistent, silent
-      - guidebook has an array, fork's file matches it      -> in sync
+      - guidebook has no array AND the instance ships nothing  -> consistent, silent
+      - guidebook has an array, instance's file matches it      -> in sync
       - the two disagree, either way round                  -> GAPS WARN
     """
     listed = gaps_map.get(metro_id)
@@ -224,7 +235,7 @@ def gaps_diff(gaps_map, metro_id, shipped_text):
              "metro" % (metro_id, GAPS_PATH))
         return ("- Data gaps: **GAPS WARN** — file shipped with no guidebook array", [w])
     if not shipped:
-        w = ("%s: GAPS — guidebook records %d gap(s) but the fork ships no %s"
+        w = ("%s: GAPS — guidebook records %d gap(s) but the instance ships no %s"
              % (metro_id, len(listed), GAPS_PATH))
         return ("- Data gaps: **GAPS WARN** — %d recorded, none shipped" % len(listed), [w])
     if render_gaps is None:
@@ -254,7 +265,7 @@ def gaps_diff(gaps_map, metro_id, shipped_text):
         only_guide = sorted(want - have)
         bits = []
         if only_guide:
-            bits.append("missing from the fork: %s" % ", ".join(only_guide))
+            bits.append("missing from the instance: %s" % ", ".join(only_guide))
         if only_shipped:
             bits.append("shipped but not recorded: %s" % ", ".join(only_shipped))
         # same ids on both sides means a FIELD changed — the common case after
@@ -265,7 +276,7 @@ def gaps_diff(gaps_map, metro_id, shipped_text):
     w = "%s: GAPS — shipped %s is out of date (%s). Regenerate with %s" % (
         metro_id, GAPS_PATH, detail,
         "scripts/build_coverage_gaps.py" if metro_id == "chicago"
-        else "scripts/build_coverage_gaps.py --metro %s --out <fork>/%s" % (metro_id, GAPS_PATH))
+        else "scripts/build_coverage_gaps.py --metro %s --out <tag>/%s" % (metro_id, GAPS_PATH))
     return ("- Data gaps: **GAPS WARN** — %s" % detail, [w])
 
 
@@ -287,14 +298,15 @@ def parse_inventory(doc_text):
 def inventory_diff(repo_root):
     """(report_line, warn_list) for CHI's ENGINE_SYNC inventory vs its real fences.
 
-    CHI-only on purpose. The doc-identity check below already guarantees every
-    fork carries the same file, and the release pipeline guarantees every fork
-    carries the same fences — so re-reading each sibling's fences would add
-    network for no new signal, and would fire a spurious WARN during a bump
-    window where a fork is legitimately one release behind (already its own
-    WARN). Checking the canonical copy against the canonical fences is what
-    catches the real failure: a release that adds blocks and never updates the
-    list, which is how the count sat at 50 while the fences held 53.
+    CHI-only on purpose: since R5 there is one copy of docs/ENGINE_SYNC.md and
+    one copy of the ENGINE fences, both in this repo — re-reading them once
+    per instance would add network for no new signal, since every instance
+    would report the identical answer. (Before the fork consolidation this
+    check also diffed each fork's own copy of the doc against CHI's; that half
+    is gone along with the forks it compared, per the module docstring.)
+    Checking the canonical copy against the canonical fences is what catches
+    the real failure: a release that adds blocks and never updates the list,
+    which is how the count sat at 50 while the fences held 53.
     """
     try:
         with open(os.path.join(repo_root, ENGINE_SYNC_PATH), encoding="utf-8") as f:
@@ -444,13 +456,22 @@ def main():
     if gaps_map is None:
         warns.append("guidebook: gaps block missing or unparseable — data-gaps drift unchecked")
         lines.append("**GAPS WARN:** the guidebook's gaps block is missing or unparseable — "
-                     "data-gaps drift unchecked in every fork.")
+                     "data-gaps drift unchecked in every instance.")
         lines.append("")
 
     inv_line, inv_warns = inventory_diff(repo_root)
     lines.append(inv_line)
     lines.append("")
     warns.extend(inv_warns)
+
+    bot_prs = open_bot_prs(chi["repo"])
+    if bot_prs:
+        lines.append("- Open bot PRs (roster + engine-bump branches awaiting human review): %d" % len(bot_prs))
+        for pr in bot_prs:
+            lines.append("  - %s" % pr)
+    else:
+        lines.append("- Open bot PRs: none")
+    lines.append("")
 
     collisions = workflow_name_collisions(repo_root)
     if collisions:
@@ -498,12 +519,12 @@ def main():
             behind = sorted(set(chi_caps) - set(caps))
             if ahead:
                 warns.append("%s: REVERSE-PARITY — capabilities not in CHI: %s" % (m["id"], ", ".join(ahead)))
-                lines.append("- Validator capabilities: **REVERSE-PARITY WARN — fork has %s; CHI lacks them.** "
+                lines.append("- Validator capabilities: **REVERSE-PARITY WARN — instance has %s; CHI lacks them.** "
                              "Back-port to CHI within one release cycle (docs/ENGINE_SYNC.md DoD)." % ", ".join("`%s`" % c for c in ahead))
             else:
                 lines.append("- Validator capabilities: no reverse-parity debt")
             if behind:
-                lines.append("  (fork missing vs CHI: %s — forward parity, arrives via normal porting)" % ", ".join("`%s`" % c for c in behind))
+                lines.append("  (instance missing vs CHI: %s — forward parity, arrives via normal porting)" % ", ".join("`%s`" % c for c in behind))
 
         ws_raw = read_local(os.path.join(repo_root, INSTANCES[tag]["worksheet"]))
         ws = None
@@ -526,7 +547,7 @@ def main():
 
         # Data-gaps drift. Deliberately NOT nested under the worksheet check
         # above: the gaps file is compared to the guidebook directly and does not
-        # need the fork's worksheet, so an unreadable worksheet must not silently
+        # need the instance's worksheet, so an unreadable worksheet must not silently
         # take this check down with it.
         if gaps_map is not None:
             gaps_line, gaps_warns = gaps_diff(
