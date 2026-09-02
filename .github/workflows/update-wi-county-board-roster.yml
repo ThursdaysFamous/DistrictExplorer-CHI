@@ -2,8 +2,8 @@ name: Update WI county board roster
 
 # Weekly refresh of the Wisconsin county board supervisors
 # (wi/data/app/county-board-members.json, read by wi/index.html's County Board
-# District card). Re-scrapes the 67 counties whose district-keyed member list
-# this can reach, by whichever of the twenty-two carriers reaches it — 41 board
+# District card). Re-scrapes the 68 counties whose district-keyed member list
+# this can reach, by whichever of the twenty-three carriers reaches it — 41 board
 # pages, Milwaukee's, Racine's and Lincoln's own GIS layers (Milwaukee
 # witnessed against the county's Legistar API; Lincoln's layer lives on a
 # second county host its challenge-blocked website never links, and its
@@ -25,6 +25,10 @@ name: Update WI county board roster
 # page links it twice and names two people; each seat is two table rows with
 # the district number in the row above the supervisor, and the address column
 # is 28 home addresses and is never read),
+# Florence's board list plus one fetch per member (12 pages; its one empty
+# seat is filed as a member and would flip to a plausible name, so the vacancy
+# is tested before the name is built and on both county surfaces; home
+# addresses skipped),
 # Forest's supervisors page (every card carries three headings of which only
 # the first is that seat's own — the other two hold neighbouring supervisors'
 # names, and the four vacancy headings leak the same way, so both the name and

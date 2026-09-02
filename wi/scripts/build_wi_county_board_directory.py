@@ -182,7 +182,7 @@ COUNTY_SITES = {
     "55031": ("Douglas", "https://douglascountywi.gov/"),
     "55033": ("Dunn", "https://dunncountywi.gov/supervisors"),  # county page confirms 1..29
     "55035": ("Eau Claire", "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"),  # county page confirms 1..29
-    "55037": ("Florence", "https://www.florencecountywi.com/"),
+    "55037": ("Florence", "https://www.florencecountywi.com/government/boards_and_committees/"),  # its board list, which names all 12 with their districts; the county home page this table had names nobody
     "55039": ("Fond Du Lac", "https://www.fdlco.wi.gov/government/county-board-supervisors"),  # county page confirms 1..25
     # http://fdlco.wi.gov/ answers 200 with a default "IIS Windows Server"
     # placeholder — 703 bytes, no county content — so the card footer linked
