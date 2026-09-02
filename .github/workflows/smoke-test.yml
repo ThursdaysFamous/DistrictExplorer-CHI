@@ -272,6 +272,22 @@ jobs:
           echo "comparing roster fields against $BASE"
           python3 scripts/check_roster_retention.py --base "$BASE"
 
+      # A CACHE-FIRST data file that changes without a CACHE_NAME bump reaches
+      # nobody who has already visited. Wisconsin added seven counties across
+      # five PRs on 2026-09-02, every one rewriting the cache-first coverage
+      # ring, and none bumped the cache: returning visitors got the new
+      # supervisors on their cards (rosters are network-first) and the old wash
+      # on the map, greying out the very counties that had just been added.
+      # sw.js says to bump it; nothing checked that anyone had.
+      - name: Cache-first data carries a cache bump
+        run: |
+          BASE="${{ github.event.pull_request.base.sha || github.event.before }}"
+          if [ -z "$BASE" ] || ! git cat-file -e "$BASE^{commit}" 2>/dev/null; then
+            BASE="$(git rev-parse HEAD~1 2>/dev/null || git rev-parse HEAD)"
+          fi
+          echo "comparing cache-first data against $BASE"
+          python3 scripts/check_cache_version.py --base "$BASE"
+
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
