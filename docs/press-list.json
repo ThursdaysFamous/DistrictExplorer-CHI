@@ -194,7 +194,8 @@
    "notes": "SEND TO: newsroom@blockclubchi.org. This is an unusually clean result — Block Club publishes one inbound editorial address on three separate pages (/faq/, /send-tips/, /contact-us/), and the FAQ EXPLICITLY names \"press releases\" among what it wants there. Most newsrooms do not say that; it removes any ambiguity about whether a release is welcome. DOMAIN TRAP — DO NOT \"CORRECT\" IT: the website is blockclubchicago.org but the mail domain is blockclubchi.org (no \"cago\"). Every address on the site, staff included, uses blockclubchi.org. Sending to newsroom@blockclubchicago.org would be a fabricated address and would bounce or vanish. CASE: /send-tips/ prints it as \"Newsroom@BlockClubChi.org\" and /contact-us/ and /faq/ print it lowercase. Same m…",
    "wave": 1,
    "link": "https://districtry.com/il/?utm_source=press-chi&utm_medium=email&utm_campaign=districtry-launch",
-   "sent_on": "2026-08-31"
+   "sent_on": "2026-08-31",
+   "sent_to": "newsroom@blockclubchi.org"
   },
   {
    "name": "Capitol News Illinois",
@@ -247,7 +248,9 @@
    "notes": "SEND TARGET: editors@capitolnewsillinois.com, with the Submit a News Tip form (https://capitolnewsillinois.com/media-center/submit-a-news-tip/) as the belt-and-braces second channel. Address the pitch to Ben Szalinski (statehouse/legislation, for the record-keeping policy angle) or Hannah Meisel (statehouse AND Chicago, for the elected school board angle). READ THE BYLINE-ADDRESS FIELDS CAREFULLY: the values in `bylines[].address` are FORM URLs, not email addresses. CNI publishes NO individual reporter email address anywhere I could find — not on the staff page, not on author pages, not in article bylines (I checked a live Ben Szalinski story and his author archive page; the only email on either is the site-wide footer's editors@).",
    "wave": 2,
    "link": "https://districtry.com/il/?utm_source=press-chi&utm_medium=email&utm_campaign=districtry-launch",
-   "intro": "Illinois has no common standard for how counties, municipalities and special districts publish their district boundaries. I found that out the slow way, county by county, building a free lookup that now covers 91 of the 102. Eleven counties still cannot produce a usable board-district map, and that seems more like a statehouse story than a technology one."
+   "intro": "Illinois has no common standard for how counties, municipalities and special districts publish their district boundaries. I found that out the slow way, county by county, building a free lookup that now covers 91 of the 102. Eleven counties still cannot produce a usable board-district map, and that seems more like a statehouse story than a technology one.",
+   "sent_on": "2026-09-01",
+   "sent_to": "editors@capitolnewsillinois.com"
   },
   {
    "name": "Chalkbeat Chicago",
@@ -301,7 +304,8 @@
    "notes": "SEND TO: chicago.tips@chalkbeat.org. This is the cleanest result of any outlet on the list — Chalkbeat publishes a per-bureau inbound address and states outright that press releases go to it, so nothing here is inferred from a pattern. NO CONTACT FORM EXISTS, and that is not a gap. Chalkbeat's contact route is email plus a tipline phone; there is no web form on /contact/ or /pages/how-to-be-a-source/ to fall back to, and none is needed. TIPLINE: (908) 827-1448 takes voicemail, SMS and Signal — published on both pages. No phone number is required of you to submit anything. ON THE BYLINE ADDRESSES — THE PLAN'S RULE IS SATISFIED, NOT BENT.",
    "wave": 1,
    "link": "https://districtry.com/il/?utm_source=press-chi&utm_medium=email&utm_campaign=districtry-launch",
-   "sent_on": "2026-08-31"
+   "sent_on": "2026-08-31",
+   "sent_to": "chicago.tips@chalkbeat.org"
   },
   {
    "name": "Chi Hack Night",
@@ -407,7 +411,8 @@
    "notes": "SEND TO metro@suntimes.com. This is the rare case where the outlet publishes an address explicitly and solely for press releases, in its own words: \"If you'd like to send a press release to our newsroom editors, please email metro@suntimes.com.\" That beats a generic tips inbox for a launch announcement. Cc tips@suntimes.com, which is the newsroom's general inbound address published on the contact page, the tips page and the masthead. DO NOT use wire@suntimes.com for this pitch. The same published sentence scopes it to breaking news and event advisories, and the launch plan's own framing (a tool that already shipped, plus a school-board explainer hook) is neither. Using it would put the pitch in front of a desk clearing same-day copy. DO NOT…",
    "wave": 1,
    "link": "https://districtry.com/il/?utm_source=press-chi&utm_medium=email&utm_campaign=districtry-launch",
-   "sent_on": "2026-08-31"
+   "sent_on": "2026-08-31",
+   "sent_to": "tips@suntimes.com"
   },
   {
    "name": "Cicero Independiente",
@@ -529,7 +534,8 @@
    "notes": "SEND TO: chicago@citycast.fm. This is an unusually clean case — the outlet publishes one inbox and labels it for pitches in its own words, so nothing here is inferred from a pattern. WHAT IS PUBLISHED, AND WHERE. The homepage (https://chicago.citycast.fm/) has no visible \"Contact\" link in the page body — only a footer envelope icon whose mailto is chicago@citycast.fm — but the site's own navigation config carries /about-us and /contact, and both resolve (HTTP 200). https://chicago.citycast.fm/contact is the real masthead-equivalent: four labelled routes (editorial pitches, membership, advertising, plus a voicemail/text line). https://chicago.citycast.fm/about is a 404; the About page is at /about-us. ONE INBOX SERVES BOTH PRODUCTS.",
    "wave": 1,
    "link": "https://districtry.com/il/?utm_source=press-chi&utm_medium=email&utm_campaign=districtry-launch",
-   "sent_on": "2026-08-31"
+   "sent_on": "2026-08-31",
+   "sent_to": "chicago@citycast.fm"
   },
   {
    "name": "Crain's Chicago Business",
@@ -591,7 +597,9 @@
    "notes": "SEND TO: editor@chicagobusiness.com. That is the one inbound editorial address Crain's publishes, and it is explicitly labelled for news tips. Newsroom tip phone 312-649-5200. Office: 130 E Randolph Street, Suite 3200, Chicago, IL 60601. NO REPORTER ADDRESSES EXIST TO USE. This is the important finding for the launch plan's rule about not listing personal addresses — here the rule costs nothing, because the outlet's own staff page lists roughly 20 newsroom staff (leadership, editorial, sales, events) with names and job titles and NOT ONE email address. Reporters are linked only to their author pages. So there is no reporter address to prefer or avoid, and none can be inferred. Address the pitch to a byline by name, send it to editor@. HOW T…",
    "wave": 2,
    "link": "https://districtry.com/il/?utm_source=press-chi&utm_medium=email&utm_campaign=districtry-launch",
-   "intro": "I'm a cyber security professional and I built this on my own time. There is no company behind it, no funding, no servers and no business model. It now covers 262 counties across Illinois, Wisconsin and Iowa, and I am still working out what it becomes next."
+   "intro": "I'm a cyber security professional and I built this on my own time. There is no company behind it, no funding, no servers and no business model. It now covers 262 counties across Illinois, Wisconsin and Iowa, and I am still working out what it becomes next.",
+   "sent_on": "2026-09-01",
+   "sent_to": "editor@chicagobusiness.com"
   },
   {
    "name": "Evanston RoundTable",
@@ -647,7 +655,9 @@
    "notes": "SEND TO: tips@evanstonroundtable.com, cc news@evanstonroundtable.com. Both are published inbound addresses, both read verbatim off https://evanstonroundtable.com/contact-us/ and confirmed against the raw HTML with curl (not just a rendered summary), so neither is pattern-inferred. tips@ is the story-tip desk; news@ is the one the page itself names for press releases and is the only address on the masthead/staff page. REPORTER ADDRESSES ARE PUBLISHED BY THE OUTLET, so the plan's exception applies.",
    "wave": 2,
    "link": "https://districtry.com/il/?utm_source=press-chi&utm_medium=email&utm_campaign=districtry-launch",
-   "intro": "Evanston is its own township as well as a city, sitting inside a Cook County board district, a judicial subcircuit, and state and congressional districts that most residents could not name. I built a free lookup that returns all of them for a single Evanston address."
+   "intro": "Evanston is its own township as well as a city, sitting inside a Cook County board district, a judicial subcircuit, and state and congressional districts that most residents could not name. I built a free lookup that returns all of them for a single Evanston address.",
+   "sent_on": "2026-09-01",
+   "sent_to": "tips@evanstonroundtable.com"
   },
   {
    "name": "Illinois Answers Project",
@@ -701,7 +711,8 @@
    "notes": "SEND TO: tips@illinoisanswers.org, addressed by name to Alex Nitkin (government accountability) or Steve Warmbir (investigations editor). That single address is the outlet's only reader-facing inbound route and it is explicitly labelled for tips and story ideas. NO CONTACT PAGE AND NO FORM EXIST. I pulled the full page sitemap (wp-sitemap-posts-page-1.xml, 49 pages) rather than guessing paths: there is no /contact/ (it 404s), no /tips/, no submit-a-story page and no contact form anywhere on the site. The only inbound mechanism is a mailto link. The only forms on the site are newsletter signup and donation/checkout. So a form fallback is not available here — the mailto is the answer. THE STAFF PAGE IS EMPTY, WHICH MATTERS FOR THE NO-REPORTER…",
    "wave": 1,
    "link": "https://districtry.com/il/?utm_source=press-chi&utm_medium=email&utm_campaign=districtry-launch",
-   "sent_on": "2026-08-31"
+   "sent_on": "2026-08-31",
+   "sent_to": "tips@illinoisanswers.org"
   },
   {
    "name": "Injustice Watch",
@@ -755,7 +766,9 @@
    "notes": "SEND TO: tips@injusticewatch.org, addressed to Jonah Newman (interim editor in chief). It is the only address the outlet itself points inbound news at, and the Contact Us page heads it \"Send tips to our reporters.\" NO OBFUSCATION, NOTHING RECONSTRUCTED. Every address here was read in the raw HTML of a page I fetched (HTTP 200): contact-us 230,223 bytes, send-us-a-tip 233,829 bytes, staff 273,601 bytes. Zero occurrences of Cloudflare `data-cfemail` / `email-protection` on any of the three. The 13 staff addresses are plain `mailto:` hrefs in the staff page markup. REPORTER ADDRESSES ARE PUBLISHED BY THE OUTLET ITSELF, so the plan's exception applies. The staff page gives every staff member an \"email\" link resolving to a `mailto:` on the injus…",
    "wave": 2,
    "link": "https://districtry.com/il/?utm_source=press-chi&utm_medium=email&utm_campaign=districtry-launch",
-   "intro": "The judicial subcircuit is the least understood district on a Cook County ballot, and you are the only newsroom that treats it as a beat. I've built a free lookup that returns a reader's subcircuit from their address, along with every other district they vote in. It is open source and there is no account."
+   "intro": "The judicial subcircuit is the least understood district on a Cook County ballot, and you are the only newsroom that treats it as a beat. I've built a free lookup that returns a reader's subcircuit from their address, along with every other district they vote in. It is open source and there is no account.",
+   "sent_on": "2026-09-01",
+   "sent_to": "tips@injusticewatch.org"
   },
   {
    "name": "Invisible Institute",
@@ -803,7 +816,9 @@
    "notes": "SEND TO info@invisibleinstitute.com, cc media@invisibleinstitute.com. Both were read verbatim on https://invisible.institute/contact, which is the only page on the site publishing either; both are live mailto: links, neither is obfuscated, image-based or JS-revealed, so nothing here was reconstructed from a pattern. NO INBOUND CONTACT FORM EXISTS. /contact carries only a newsletter signup (\"The View from the Ground\"), whose \"user@domain.com\" placeholder appears in the page source across the site and is NOT an address. Two other pages that look like inbound routes are not: /mailroom is an INTERNAL STAFF page (\"Use the form below to send outgoing mail... leave the envelope or package in the Invisible Institute outbox in the downstairs office\"…",
    "wave": 2,
    "link": "https://districtry.com/il/?utm_source=press-chi&utm_medium=email&utm_campaign=districtry-launch",
-   "intro": "The app carries police districts and beats as a layer, which is the part I think would interest you. Why it took so long is the other story: there is no standard system for this data, so I had to comb agency websites county by county to assemble it."
+   "intro": "The app carries police districts and beats as a layer, which is the part I think would interest you. Why it took so long is the other story: there is no standard system for this data, so I had to comb agency websites county by county to assemble it.",
+   "sent_on": "2026-09-01",
+   "sent_to": "info@invisibleinstitute.com"
   },
   {
    "name": "South Side Weekly",
@@ -850,7 +865,8 @@
    "notes": "BEST ADDRESS: editor@southsideweekly.com. It is the only inbound editorial address South Side Weekly publishes, and it is published twice — on the Contact/Editorial page (/editors/) and on the About/Masthead page (/about/) — with the same wording inviting \"submissions, story ideas, comments, or questions.\" Both strings were read in the raw HTML of pages actually fetched (HTTP 200), never inferred from a pattern. NO TIPS DESK, NO PRESS-RELEASE POLICY. There is no separate tips, city-desk, assignment-desk or press-release inbox. /tips/, /contact/ and /investigations/ all return 404. The site states no submission policy, no embargo policy and nothing about whether it accepts press releases; /policies/ covers only editorial independence (INN st…",
    "wave": 1,
    "link": "https://districtry.com/il/?utm_source=press-chi&utm_medium=email&utm_campaign=districtry-launch",
-   "sent_on": "2026-08-31"
+   "sent_on": "2026-08-31",
+   "sent_to": "editor@southsideweekly.com"
   },
   {
    "name": "The TRiiBE",
@@ -944,7 +960,8 @@
    "notes": "SEND IT TO news@wbez.org. It is WBEZ's own newsroom inbox, published three separate times on three pages I fetched (/pressroom, /contact, /about/staff), and the /pressroom wording explicitly invites a \"story idea\", not just breaking news. Nothing was inferred from a pattern — every address below was read as a live mailto: link in the fetched HTML. WBEZ AND THE CHICAGO SUN-TIMES ARE ONE NEWSROOM. Chicago Public Media acquired the Sun-Times in 2022; wbez.org/about/staff is a single combined masthead covering both, and its \"Contact the newsroom\" line offers tips@suntimes.com and news@wbez.org as alternatives to each other. The launch plan lists WBEZ and the Sun-Times city desk as two separate outlets — they share editors and a tipline. Pitch W…",
    "wave": 1,
    "link": "https://districtry.com/il/?utm_source=press-chi&utm_medium=email&utm_campaign=districtry-launch",
-   "sent_on": "2026-08-31"
+   "sent_on": "2026-08-31",
+   "sent_to": "news@wbez.org"
   },
   {
    "name": "Axios Chicago",
@@ -1125,7 +1142,9 @@
    "notes": "RECOMMENDED SEND: smulcahy@chicagoreader.com (News & Politics), CC themail@chicagoreader.com. Optional second send for the neighborhood framing: shugueley@chicagoreader.com (City Life). The Reader is a nonprofit newsroom and still publishing. NO TIPS INBOX AND NO CONTACT FORM EXIST. I fetched the homepage, /about/, /about/contact/, /about/staff/ and /about/freelance-information-pitch-guidelines/. There is no \"send us a tip\", \"news tips\", \"submit a story\" or secure-tips page anywhere in the navigation or footer, and the Contact page contains no form at all — only e-mail addresses, a phone number and a mailing address. So the desk addresses above are the whole of the published inbound editorial surface; there is no form to fall back to. THE S…",
    "wave": 2,
    "link": "https://districtry.com/il/?utm_source=press-chi&utm_medium=email&utm_campaign=districtry-launch",
-   "intro": "I set out to answer one question at a community meeting and ended up on the phone with county clerks across Illinois, reading certified election canvasses, and in one case buying a shapefile under licence. The result is a free map of 262 counties. The building of it is the stranger story."
+   "intro": "I set out to answer one question at a community meeting and ended up on the phone with county clerks across Illinois, reading certified election canvasses, and in one case buying a shapefile under licence. The result is a free map of 262 counties. The building of it is the stranger story.",
+   "sent_on": "2026-09-01",
+   "sent_to": "themail@chicagoreader.com"
   },
   {
    "name": "Chicago Tribune",
@@ -1199,7 +1218,11 @@
    "notes": "newsroom@chicagotribune.com BOUNCED on 2026-09-01 (address not found). It was published only in the site's JSON-LD. FETCH NOTE (matters for reproducing this): www.chicagotribune.com refuses the standard WebFetch tool outright. Every page below was retrieved with curl and a browser user-agent, all HTTP 200. Nothing here is from memory. THE HEADLINE FINDING: the Chicago Tribune publishes NO reader-facing news-tips, city-desk, metro-desk, assignment-desk or press-release address. I checked the homepage, /contact-us/, /about/, /help-center/, /news/investigations/ and /tips/ (which redirects to an unrelated article from the year 2000). There is no SecureDrop, no tip line and no \"send us a tip\" form. The only newsroom-labelled address on the whole site, newsroom@chicagotribune.com, exists solely inside the schema.org JSON-LD metadata on the homepage and contac…",
    "wave": 2,
    "link": "https://districtry.com/il/?utm_source=press-chi&utm_medium=email&utm_campaign=districtry-launch",
-   "intro": "One person has now mapped 262 of the 273 counties in Illinois, Wisconsin and Iowa, and the goal is all 3,143 in the country. I am that person, and I started because I could not find out which districts my own neighbor lived in. The Illinois half is free for your readers to use today."
+   "intro": "One person has now mapped 262 of the 273 counties in Illinois, Wisconsin and Iowa, and the goal is all 3,143 in the country. I am that person, and I started because I could not find out which districts my own neighbor lived in. The Illinois half is free for your readers to use today.",
+   "sent_on": null,
+   "attempted_on": "2026-09-01",
+   "attempted_to": "newsroom@chicagotribune.com",
+   "attempt_outcome": "bounced the same minute — address not found. Re-routed to aquig@chicagotribune.com (A.D. Quig, Cook County government / City Hall); NOT yet re-sent."
   },
   {
    "name": "Daily Herald",
@@ -1428,7 +1451,11 @@
    "notes": "SEND TO: jgreenfield@streetsblog.org, CC svance@streetsblog.org. Address the pitch to John Greenfield. NO DESK ADDRESS EXISTS AND NO FORM EXISTS. This is a two-person newsroom. I fetched the homepage, /contact, /about and /about/staff-board. The only inbound addresses anywhere on chi.streetsblog.org are the two on /contact, and there is no contact form on any of those pages — so the launch plan's \"prefer a desk/tips inbox over a personal address\" rule has nothing to prefer here. These two are not scraped byline addresses: they are what the outlet itself publishes on its own Contact page as the way to reach the publication, which is the plan's stated exception. Using them is correct, not a rule break. NO OBFUSCATION. Both addresses are plain…",
    "wave": 2,
    "link": "https://districtry.com/il/?utm_source=press-chi&utm_medium=email&utm_campaign=districtry-launch",
-   "intro": "Aldermanic prerogative is a map problem. A single bus or bike corridor can cross five wards and need five alders to say yes, and your readers argue about exactly that. I built a free lookup that returns the ward and alder for any point, along with the park district and county board district."
+   "intro": "Aldermanic prerogative is a map problem. A single bus or bike corridor can cross five wards and need five alders to say yes, and your readers argue about exactly that. I built a free lookup that returns the ward and alder for any point, along with the park district and county board district.",
+   "sent_on": "2026-09-01",
+   "sent_to": "jgreenfield@streetsblog.org",
+   "reply_on": "2026-09-01",
+   "reply_note": "John Greenfield, Editor, replied the same afternoon — interested, may run it. The wording is in your own inbox; it is not reproduced here."
   },
   {
    "name": "The Chicago Reporter",
@@ -1843,7 +1870,8 @@
    "notes": "MERGED with \"City Bureau / Documenters\": info@ is the only address citybureau.org publishes; network@ is the Documenters Network collaboration channel. SEND IT THROUGH THE FORM. City Bureau publishes no tips@, news@, editor@ or press@ anywhere on its site, and I did not construct one. What it does publish is a contact form whose REQUIRED Category dropdown includes a literal \"Press release\" option — the outlet telling you, in its own words, where a press release goes. That beats guessing at an inbox. FORM MECHANICS (read from the form's own embedded config, so you can prepare the submission): fields are Category (required select), Name (required), Email (required), ZIP Code (required — a free-text field, easy to miss and it will block submission), and Message (marked NOT required, but it is the only place the pitch can go, so write it there). Captcha is enabled (\"captchaEnabled\":true). Su",
    "wave": 1,
    "link": "https://districtry.com/il/?utm_source=press-chi-community&utm_medium=email&utm_campaign=districtry-launch",
-   "sent_on": "2026-08-31"
+   "sent_on": "2026-08-31",
+   "sent_to": "info@citybureau.org"
   },
   {
    "name": "Nadig Newspapers",
@@ -8172,7 +8200,8 @@
    "notes": "MERGED with \"WTTW News / Chicago Tonight\": the other row had no address at all; WTTW publishes politics reporter Heather Cherone directly. RECOMMENDED SEND: the tips form at https://news.wttw.com/contact, with the pitch addressed to Heather Cherone; optionally also e-mail hcherone@wttw.com directly. Do not send to the WTTW pressroom (see below). WHAT I COULD AND COULD NOT READ. The entire WTTW web estate sits behind a Cloudflare managed challenge for this client — news.wttw.com/contact, /about, /content/send-tips-0, every article page, and all of www.wttw.com return HTTP 403 with `cf-mitigated: challenge` and a \"Just a moment...\" interstitial, on both WebFetch and curl, consistently across five retries and multiple user agents. That is an access control and I did not attempt to defeat it. The Internet Archive has usable snapshots (news.wttw.com/contact from 18 Jun 2026, www.wt…",
    "wave": 1,
    "link": "https://districtry.com/?utm_source=press-wire&utm_medium=email&utm_campaign=districtry-launch",
-   "sent_on": "2026-08-31"
+   "sent_on": "2026-08-31",
+   "sent_to": "hcherone@wttw.com"
   },
   {
    "name": "404 Media",

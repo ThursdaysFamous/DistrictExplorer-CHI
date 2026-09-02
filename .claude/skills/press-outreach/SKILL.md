@@ -79,9 +79,18 @@ interested".
 
 ## 6. The ledger — the same rule as the asks, for the same reason
 
-The operator sends. Fill the send-ledger row at the foot of the page the day
-the pitch goes — address used, wave, date, follow-up due — never in advance;
-two ask ledgers in this repo once said "held" about mail already sent. ONE
+The operator sends. Record the send in `docs/press-list.json` the day the
+pitch goes — `sent_on` and `sent_to` on the outlet — and regenerate; the
+ledger at the foot of the page is GENERATED from those fields, so the outlet's
+own row and the ledger cannot disagree. Never in advance; two ask ledgers in
+this repo once said "held" about mail already sent, and the press ledger was
+hand-filled and empty for its first two waves while the outlet rows carried
+the truth. **A BOUNCE IS AN ATTEMPT, NOT A SEND**: record it as `attempted_on`
+/ `attempted_to` / `attempt_outcome` and leave `sent_on` unset, because an
+outlet that was never reached still has a pitch owing and `sent_on` would
+retire it. A reply is `reply_on` plus a `reply_note` that says what came back
+WITHOUT quoting it — this repo is public and that is the recipient's mail.
+ONE
 follow-up, at 6–8 business days, in the same thread, three sentences, carrying
 something NEW (a county that shipped since, a gap that closed, a link to that
 outlet's turf); after it, stop. A clean no is recorded — it closes an outlet

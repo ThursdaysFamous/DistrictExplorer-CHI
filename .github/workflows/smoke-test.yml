@@ -295,6 +295,16 @@ jobs:
           python3 wi/scripts/build_metro_outline.py --check
           python3 ia/scripts/build_metro_outline.py --check
 
+      # docs/PRESS_LIST.md carries a --check in its own header calling it the
+      # drift gate, and until now nothing ran it — a generated file gated in
+      # name only, which is the shape this repo keeps finding (a measurement
+      # filed somewhere no pass repeats). It matters more than a doc usually
+      # would: the page is the send ledger for outreach to strangers, so a
+      # stale copy is what makes someone pitch the same tips inbox twice.
+      # Stdlib only.
+      - name: Press list matches its data
+        run: python3 scripts/build_press_list.py --check
+
       # A roster's count guard proves it still has twelve members; it proves
       # nothing about whether those twelve still carry an e-mail. On 2026-08-08
       # Cloudflare's e-mail obfuscation quietly emptied all seven of Brown

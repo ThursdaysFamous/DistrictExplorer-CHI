@@ -244,13 +244,36 @@ def render(d):
 
     a("## Send ledger")
     a("")
-    a("Fill a row the day a pitch goes out — **never in advance**. `docs/ASK_DRAFTS.md` exists "
-      "because two ask ledgers in this repo once said *held* about e-mails that had already been "
-      "sent; a press list is the same failure waiting to happen, with strangers on the other end.")
+    a("**GENERATED from `sent_on` / `attempted_on` in `docs/press-list.json` — this table is not "
+      "hand-filled.** `docs/ASK_DRAFTS.md` exists because two ask ledgers in this repo once said "
+      "*held* about e-mails that had already been sent. A hand-filled press ledger is that same "
+      "failure waiting to happen with strangers on the other end, so the ledger and the per-outlet "
+      "rows above are now ONE fact: mark the outlet the day it goes out and both surfaces move "
+      "together. A bounce is recorded as an ATTEMPT, never as a send — an outlet that was never "
+      "reached still has a pitch owing.")
     a("")
-    a("| Outlet | Address used | Wave | Sent | Follow-up due | Reply | Outcome |")
-    a("|---|---|---|---|---|---|---|")
-    a("| | | | | | | |")
+    log = []
+    for o in d["outlets"]:
+        if o.get("sent_on"):
+            log.append((o["sent_on"], o, "sent", o.get("sent_to") or "", o.get("reply_note") or ""))
+        elif o.get("attempted_on"):
+            log.append((o["attempted_on"], o, "**BOUNCED — owing**",
+                        o.get("attempted_to") or "", o.get("attempt_outcome") or ""))
+    if not log:
+        a("Nothing has been sent yet.")
+        a("")
+        return "\n".join(L) + "\n"
+    log.sort(key=lambda r: (r[0], r[1]["name"]))
+    a(f"{len(log)} outlets contacted; "
+      f"{sum(1 for r in log if r[2] == 'sent')} delivered, "
+      f"{sum(1 for r in log if r[2] != 'sent')} bounced. "
+      f"{sum(1 for r in log if r[4])} have an outcome recorded.")
+    a("")
+    a("| Sent | Wave | Outlet | Address used | State | Outcome |")
+    a("|---|---|---|---|---|---|")
+    for day, o, state, addr, note in log:
+        a(f"| {day} | {o.get('wave','')} | [{esc(o['name'])}]({o['homepage']}) | "
+          f"`{addr}` | {state} | {esc(note)} |")
     a("")
     return "\n".join(L) + "\n"
 
