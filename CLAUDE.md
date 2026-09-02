@@ -40,11 +40,18 @@ Chicago District Explorer: a single-file, dependency-light web app. Click a poin
 
 ## Running & testing
 
+This list undercounts what actually runs: CI (`.github/workflows/smoke-test.yml`) has grown to 19
+static gates plus a Playwright smoke test per instance (`il`/`ca`/`ny`/`wi`/`ia`) plus 2 root-page
+tests, one static-gate addition at a time, and nobody kept this section in step. Treat the workflow
+file as the source of truth for the full battery and its order; `.claude/skills/steward/SKILL.md`
+mirrors it as locally-runnable commands with per-gate rationale, for driving a PR to green. What
+follows is the short list worth knowing by name, not the whole battery.
+
 ```bash
 # Run locally — any static server works; internet needed for live-API layers:
 python3 -m http.server 8000    # then open http://localhost:8000/
 
-# Behaviour gate (real Chromium boot via Playwright) — the main test:
+# Behaviour gate (real Chromium boot via Playwright) — the one to run most often:
 npm install playwright@1.56.1 && npx playwright install --with-deps chromium
 BASE_URL=http://localhost:8000/il/ node scripts/smoke_test.mjs   # serve first, then run
 
@@ -70,11 +77,13 @@ python3 scripts/validate_contrast.py           # --report prints every pair
 # §section, --flag and ALL_CAPS table a skill names must exist:
 python3 scripts/validate_skills.py
 
-# Source-freshness gate (checks upstream datasets haven't gone stale):
+# Source-freshness gate (checks upstream datasets haven't gone stale) — not in
+# CI, monthly instead:
 pip install -c scripts/requirements.txt requests
 python3 scripts/validate_sources.py            # add --offline to skip network
 
-# Link gate (checks every URL the cards and rosters actually render):
+# Link gate (checks every URL the cards and rosters actually render) — also
+# monthly, not in CI:
 python3 scripts/validate_card_links.py         # --offline lists the surface only
 
 # Roster retention gate (fails when a field stops being published):
@@ -91,7 +100,7 @@ python3 scripts/check_roster_retention.py --base origin/main
 
 `smoke_test.mjs` is a single end-to-end script, not a framework — there are no "individual tests" to select. It asserts the app boots, registers all layers, classifies a known downtown point against ground truth (school board 12, IL Supreme Court 1, Board of Review 3), and degrades to an isolated error card when a source fails. `node_modules`/`package.json` are intentionally gitignored — this repo never commits build artifacts.
 
-**Sandboxed environments (Claude Code web) — Leaflet/MapLibre CDN egress:** every instance's `index.html` loads Leaflet and MapLibre GL (the vector-basemap renderer; the bridge plugin is committed same-origin at `<instance>/vendor/`) from `cdnjs.cloudflare.com`. In the Claude Code web/sandbox the headless browser cannot reach that CDN — Chromium doesn't use the agent HTTPS proxy, so the request resets (`ERR_CONNECTION_RESET` → `L is not defined` → the app never boots; a MapLibre-only failure is gentler — the app boots on its raster-fallback basemap). This is environmental, **not** a code regression; don't chase it in app code. It's handled automatically: a `SessionStart` hook (`.claude/settings.json`) runs `scripts/vendor_leaflet.sh`, which `curl`s both libraries (curl *does* go through the proxy) into **each instance's own** vendor dir — `scripts/vendor/leaflet/` for `il`, `ca/scripts/vendor/leaflet/`, `ny/scripts/vendor/leaflet/`, `wi/scripts/vendor/leaflet/` — because that is where each instance's `smoke_test.mjs` looks (it resolves `vendor/leaflet` next to itself). All four are gitignored; the smoke test then serves them same-origin via `page.route`, so the app boots. Production and GitHub Actions CI are untouched — they reach the CDN directly and the vendor dirs are absent, so the fallback is skipped. To vendor one instance manually, `bash scripts/vendor_leaflet.sh ca`; with no argument it does all four.
+**Sandboxed environments (Claude Code web) — Leaflet/MapLibre CDN egress:** every instance's `index.html` loads Leaflet and MapLibre GL (the vector-basemap renderer; the bridge plugin is committed same-origin at `<instance>/vendor/`) from `cdnjs.cloudflare.com`. In the Claude Code web/sandbox the headless browser cannot reach that CDN — Chromium doesn't use the agent HTTPS proxy, so the request resets (`ERR_CONNECTION_RESET` → `L is not defined` → the app never boots; a MapLibre-only failure is gentler — the app boots on its raster-fallback basemap). This is environmental, **not** a code regression; don't chase it in app code. It's handled automatically: a `SessionStart` hook (`.claude/settings.json`) runs `scripts/vendor_leaflet.sh`, which `curl`s both libraries (curl *does* go through the proxy) into **each instance's own** vendor dir — `scripts/vendor/leaflet/` for `il`, `ca/scripts/vendor/leaflet/`, `ny/scripts/vendor/leaflet/`, `wi/scripts/vendor/leaflet/`, `ia/scripts/vendor/leaflet/` — because that is where each instance's `smoke_test.mjs` looks (it resolves `vendor/leaflet` next to itself). All five are gitignored; the smoke test then serves them same-origin via `page.route`, so the app boots. Production and GitHub Actions CI are untouched — they reach the CDN directly and the vendor dirs are absent, so the fallback is skipped. To vendor one instance manually, `bash scripts/vendor_leaflet.sh ca`; with no argument it does all five.
 
 **That script is ONE script, and it fails loudly on a misconfiguration.** Three byte-identical copies used to live in `scripts/`, `ca/scripts/` and `ny/scripts/` — genuinely non-redundant while the instances were separate repos, because each self-located into its own tree, and pure duplication the moment they became folders under one root where only the root copy's hook ever fires. It also used to print a soft note and `exit 0` when it found no Leaflet URL, which is right for an unreachable CDN and wrong for a bad path: R2.3 moved the app to `il/` and left the script reading the repo-root `index.html`, now the redirect stub, so it skipped silently and the smoke test died 45 seconds later at `page.waitForFunction: Timeout` — the exact symptom the paragraph above tells you not to chase into app code. A missing app file or one with no Leaflet URL now exits 1 and names the instance; only a failed fetch stays best-effort.
 
