@@ -5654,6 +5654,232 @@ def scrape_marathon_directory(spec):
     return out, spec["source_url"]
 
 
+# --- St. Croix: the county's own Districts & Supervisors table ----------------
+#
+# THE RECORD SAID THIS COUNTY PUBLISHES NOTHING, AND THE MEASUREMENT BEHIND
+# THAT WAS OF THE WRONG PAGE — the sixth county in this fleet to sit dark for
+# that reason after Jackson, Waupaca, Oconto, Taylor and Marathon.
+#
+# St. Croix has never been blocked: sccwi.gov answers 200 to the plain client
+# and its robots.txt permits everything outside /admin, /search and /map. What
+# it does NOT do is link its board from its home page — and the home page is
+# the URL this repo itself had on file for the county, in
+# build_wi_county_board_directory.py's table and therefore on the card's own
+# footer link. Zero anchors on sccwi.gov/ match board, supervisor or district.
+# The route is Government -> County Board of Supervisors -> Districts &
+# Supervisors, and the middle page is the trap: /477 is four paragraphs of
+# prose that states "19 elected supervisors that each represent one of the 19
+# districts" and names NOT ONE of them, which is precisely the sentence the gap
+# record used ("publishes prose with no district column"). That description was
+# accurate about /477 and false about the county, whose /483 page one link
+# further carries all nineteen with their wards, phones and county mailboxes.
+#
+# A COUNTY'S BOARD LANDING PAGE DESCRIBES THE BOARD; THE ROSTER IS ONE LINK
+# DEEPER, under a Districts, Members or More Resources heading. That is the
+# generalisable form of the Oconto and Marathon findings, and it is why the
+# card's footer link moves to /477 in this same change: a reader sent to the
+# county's front door cannot reach their own board either.
+#
+# THE TABLE IS THE BEST-SHAPED SOURCE IN WISCONSIN. Five columns — district,
+# municipal wards, standing committees, the supervisor's contact block, and
+# when they were first elected — as a real <table> with one <tr> per district,
+# every e-mail a plain mailto: in the markup, and the ward composition printed
+# beside the number. It witnesses at 131 of 131 wards and 19 of 19
+# municipality sets against LTSB's own filing, with no relabel and no stray
+# pair: the cleanest ward witness this project has run.
+#
+# THREE THINGS ARE DELIBERATELY NOT TAKEN.
+#
+#   THE ADDRESS BLOCK. Every contact cell prints a street address under the
+#   name, and the county mixes two kinds in one column: eleven supervisors
+#   list 1101 Carmichael Road, which is the Government Center, and eight list
+#   what is plainly their home. No column, tag or class separates them — only
+#   knowing the county's own address does — so nothing here reads the address
+#   at all. That is the Pierce decision reached by a different route: there the
+#   two were separable by position on the page and the home column was
+#   discarded; here they are not separable, so both go.
+#
+#   THE SHARED PHONE. Districts 7, 10, 13 and 19 all print 715-386-4610, which
+#   the county's own staff directory gives as County Clerk Christine Hines's
+#   line. Those four publish no personal number and the table falls back to a
+#   county office. drop_shared_phones() drops it from all four and names it on
+#   the log — the generic rule, not a pin on that number.
+#
+#   THE COMMITTEE AND FIRST-ELECTED COLUMNS. Both are real and neither has a
+#   row on any county-board card in the fleet. Adding a field nineteen records
+#   out of 1,387 carry is a card-shape decision rather than a data one, and it
+#   is not made in a county build.
+#
+# THE CHAIR MARKER IS IN THE NAME CELL AND ONLY THERE, which is the trap this
+# table sets. "(Chair)" appears in FOUR committee cells as well — District 5's
+# Administration (Chair), 14's Health and Human Services (Chair), 15's Public
+# Protection & Judiciary (Chair), 18's Transportation (Chair) — and those are
+# committee chairs, not the board's. A row-level search for the word would make
+# five board chairs out of one, and District 18 would collect both titles at
+# once: Jerry Van Someren is the board's Vice-Chair AND chairs Transportation.
+# So the role is read from the <strong> name cell alone, gated for uniqueness
+# (the Calumet rule), and cross-checked against the page's OWN officer block in
+# the sidebar, which names Bob Feidler (Chair) and Jerry Van Someren
+# (Vice-Chair) independently of the table.
+# THE NAME IS LTSB'S, NOT THE COUNTY'S. The county writes itself "St. Croix"
+# on every page of its own site; the state's ward filing — which is the shipped
+# geometry, and therefore the key this roster joins on — writes "St Croix" with
+# no period. build_wi_county_board_roster.py gates the two as byte-identical
+# and refused this county on the first build, correctly: a roster keyed on a
+# name the map does not use is a roster that silently matches nothing. The
+# fleet carries both spellings on purpose, each matching its own source (the
+# census-derived outlines and coverage anchors say "St. Croix").
+ST_CROIX_TABLE = {
+    "fips": "55109", "name": "St Croix", "seats": 19,
+    "source_url": "https://sccwi.gov/483/Districts-Supervisors",
+    "domain": "sccwi.gov",
+}
+SC_ROW = re.compile(r"(?is)<tr[^>]*>(.*?)</tr>")
+SC_CELL = re.compile(r"(?is)<td[^>]*>(.*?)</td>")
+SC_NAME = re.compile(r"(?is)<strong>(.*?)</strong>")
+# `mailto:` then OPTIONAL WHITESPACE: District 16's link is written
+# "mailto: mike.barcalow@sccwi.gov", one stray space that a tighter pattern
+# reads as no address at all — and an 18-of-19 e-mail count looks like a
+# supervisor who publishes none rather than like a typo in the markup.
+SC_MAIL = re.compile(r'(?i)mailto:\s*([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+)')
+SC_PHONE = re.compile(r"(?i)\bPhone\b\s*:?\s*(\d{3})[-.\s](\d{3})[-.\s](\d{4})")
+SC_ROLE = re.compile(r"(?i)\(\s*((?:Vice-?\s*)?Chair(?:person|man|woman)?)\s*\)")
+# The sidebar's own officer block: "<a ...>Bob Feidler (Chair)</a>" twice over.
+SC_OFFICER = re.compile(r"(?i)>\s*([A-Z][^<>()]{2,40}?)\s*\((Chair|Vice-Chair)\)\s*<")
+SC_MIN_EMAILS = 17          # 19 of 19 today
+SC_MIN_PHONES = 13          # 15 of 19 today; four fall to the Clerk's line
+SC_MIN_WARD_PAIRS = 110     # 131 today
+
+
+def _sc_flat(cell):
+    """One table cell as text, its <br> line breaks kept as separators."""
+    cell = re.sub(r"(?i)<br\s*/?>", " \x1e ", cell)
+    cell = re.sub(r"<[^>]+>", " ", cell)
+    return re.sub(r"\s+", " ", html_lib.unescape(cell).replace("\xa0", " ")).strip()
+
+
+def scrape_st_croix_table(spec):
+    """All seats or nothing, out of the county's own district table."""
+    county, seats = spec["name"], spec["seats"]
+    page = fetch(spec["source_url"])
+    if "<tbody>" not in page:
+        raise RuntimeError("%s: no table on %s — the page has been rebuilt; "
+                           "re-read it" % (county, spec["source_url"]))
+    body = page[page.index("<tbody>"):page.index("</tbody>")]
+    rows = SC_ROW.findall(body)
+
+    out, wards, munis, numbers = {}, {}, {}, {}
+    for row in rows:
+        cells = SC_CELL.findall(row)
+        if len(cells) < 4:
+            raise RuntimeError("%s: a table row carries %d cells, not 5 — the "
+                               "column layout has changed and every field below "
+                               "would be read out of the wrong one"
+                               % (county, len(cells)))
+        digits = re.sub(r"\D", "", _sc_flat(cells[0]))
+        if not digits:
+            raise RuntimeError("%s: a table row's first cell is %r, not a "
+                               "district number" % (county, _sc_flat(cells[0])[:40]))
+        district = int(digits)
+
+        # THE NAME CELL, AND THE ROLE ONLY FROM IT — see the note above.
+        head = SC_NAME.search(cells[3])
+        if not head:
+            raise RuntimeError("%s: district %d's contact cell has no bold name — "
+                               "the table stopped marking them and the address "
+                               "line below would be read as the person"
+                               % (county, district))
+        raw = _sc_flat(head.group(1))
+        role = None
+        got = SC_ROLE.search(raw)
+        if got:
+            role = re.sub(r"\s+", " ", got.group(1)).strip()
+            raw = SC_ROLE.sub("", raw)
+        name = clean(raw.replace("\x1e", " "))[0]
+        if not is_name(name):
+            raise RuntimeError("%s: district %d resolved the name %r — that is "
+                               "not a name, and the cell has reshaped"
+                               % (county, district, name))
+        entry = {"name": name, "vacant": False, "role": role}
+
+        contact = _sc_flat(cells[3])
+        mail = SC_MAIL.search(cells[3])
+        if mail:
+            entry["email"] = mail.group(1).lower()
+        numbers[district] = ["-".join(m.groups()) for m in SC_PHONE.finditer(contact)]
+
+        wards[district], munis[district] = parse_composition(
+            _sc_flat(cells[1]).replace("\x1e", ", "))
+        if not munis[district]:
+            raise RuntimeError("%s: district %d's ward cell names no municipality "
+                               "(%r) — the composition is what witnesses the "
+                               "numbering, so this cannot ship unchecked"
+                               % (county, district, _sc_flat(cells[1])[:80]))
+        out[district] = entry
+
+    seen = sorted(out)
+    if seen != list(range(1, seats + 1)):
+        raise RuntimeError("%s: the table lists districts %s, not 1..%d — re-read "
+                           "%s" % (county, seen, seats, spec["source_url"]))
+
+    drop_shared_phones(county, numbers, out)
+
+    names = [r["name"] for r in out.values()]
+    if len(set(names)) != len(names):
+        dupes = sorted({n for n in names if names.count(n) > 1})
+        raise RuntimeError("%s: the same person is filed under two districts (%s)"
+                           % (county, dupes))
+
+    emails = sum(1 for r in out.values() if r.get("email"))
+    phones = sum(1 for r in out.values() if r.get("phone"))
+    own = sum(1 for r in out.values()
+              if (r.get("email") or "").endswith("@" + spec["domain"]))
+    agree = sum(1 for r in out.values() if r.get("email")
+                and name_fold(r["name"].split()[-1]) in name_fold(r["email"].split("@")[0]))
+    if emails < SC_MIN_EMAILS or phones < SC_MIN_PHONES:
+        raise RuntimeError("%s: %d e-mails and %d phones across %d seats (floors "
+                           "%d/%d) — the contact cell has reshaped and contact is "
+                           "being dropped silently"
+                           % (county, emails, phones, seats,
+                              SC_MIN_EMAILS, SC_MIN_PHONES))
+    if own != emails or agree < emails - 1:
+        raise RuntimeError("%s: %d of %d mailboxes are on %s and %d agree with "
+                           "their own supervisor's surname — a row has shifted"
+                           % (county, own, emails, spec["domain"], agree))
+
+    # THE PAGE'S OWN OFFICER BLOCK, INDEPENDENT OF THE TABLE.
+    tail = page[page.index("</tbody>"):]
+    stated = {}
+    for who, what in SC_OFFICER.findall(tail):
+        stated[clean(who)[0]] = what
+    listed = {r["name"]: r["role"] for r in out.values() if r["role"]}
+    if not stated:
+        raise RuntimeError("%s: the page's officer block names nobody — it is the "
+                           "only check on the table's own chair marks" % county)
+    if {k: v.lower().replace("-", " ") for k, v in stated.items()} != \
+       {k: v.lower().replace("-", " ") for k, v in listed.items()}:
+        raise RuntimeError("%s: the table marks %s and the page's own officer "
+                           "block names %s — the two disagree and neither is "
+                           "guessed at" % (county, listed, stated))
+    roles = [v for v in listed.values()]
+    if len(set(roles)) != len(roles):
+        raise RuntimeError("%s: two supervisors carry the same title (%s)"
+                           % (county, sorted(listed.items())))
+
+    print("  %-12s %d seats, %d phones, %d e-mails (no address is read: the "
+          "contact column mixes the Government Center with home addresses and "
+          "nothing separates them)" % (county, seats, phones, emails),
+          file=sys.stderr)
+    print("  witness %-12s %d/%d supervisors' names agree with their own county "
+          "mailbox; officers %s confirmed by the page's own block"
+          % (county, agree, seats,
+             ", ".join("%s (%s)" % (k, v) for k, v in sorted(listed.items()))),
+          file=sys.stderr)
+    ward_number_witness(spec["fips"], county, wards, seats,
+                        min_pairs=SC_MIN_WARD_PAIRS, munis=munis)
+    return {str(d): r for d, r in out.items()}, spec["source_url"]
+
+
 # --- Waupaca: the Clerk's Directory of Public Officials, as a live page --------
 #
 # THE COUNTY BOARD'S OWN PAGE NAMES NOBODY. waupacacounty-wi.gov's
@@ -5710,8 +5936,50 @@ WP_MIN_EMAILS = 25       # 27 of 27 publish one today
 WP_MIN_AGREE = 25        # 27 of 27 names agree with their own mailbox today
 
 
-def _wp_fold(text):
+def name_fold(text):
+    """Letters only, lower-cased — for comparing a name against a mailbox."""
     return re.sub(r"[^a-z]", "", text.lower())
+
+
+_wp_fold = name_fold          # the name it had while Waupaca was its only caller
+
+
+def drop_shared_phones(county, numbers, rows):
+    """A NUMBER ON MORE THAN ONE DISTRICT IS NOT A PERSONAL NUMBER.
+
+    `numbers` is {district: [phone, ...]} in the order the page prints them;
+    `rows` is the roster being built, keyed the same way. Every number that
+    appears under two or more districts is dropped from ALL of them and named
+    on the run log, and the first of whatever survives ships.
+
+    THE RULE IS GENERIC RATHER THAN A PINNED LITERAL, and both counties that
+    need it show why. Waupaca's districts 2, 3, 25 and 27 all print the
+    COURTHOUSE switchboard, which its own directory gives as the County Clerk's
+    number. St. Croix's districts 7, 10, 13 and 19 all print 715-386-4610,
+    which that county's own staff directory gives as County Clerk Christine
+    Hines's line. In both cases the supervisor publishes no personal number and
+    the page falls back to a county office; shipping it would tell a reader
+    they are calling their supervisor when they are calling the Clerk. Pinning
+    either number would go stale the day a county changed it, and would say
+    nothing about the next county to do the same thing.
+    """
+    shared = {p for p in {q for v in numbers.values() for q in v}
+              if sum(1 for v in numbers.values() if p in v) > 1}
+    for phone in sorted(shared):
+        holders = sorted(d for d, v in numbers.items() if phone in v)
+        print("  phone %-12s %s is published for districts %s — not one "
+              "supervisor's, dropped from all"
+              % (county, phone, ", ".join(str(d) for d in holders)), file=sys.stderr)
+    for district, found in numbers.items():
+        mine = [p for p in found if p not in shared]
+        if not mine:
+            continue
+        rows[district]["phone"] = mine[0]
+        if len(mine) > 1:
+            print("  note %-12s district %d publishes %d numbers (%s) — the first "
+                  "ships" % (county, district, len(mine), ", ".join(mine)),
+                  file=sys.stderr)
+    return shared
 
 
 def scrape_directory_county(fips, county, seats, url):
@@ -5751,22 +6019,7 @@ def scrape_directory_county(fips, county, seats, url):
             blocks[district]["email"] = mail
 
     # A NUMBER ON MORE THAN ONE DISTRICT IS NOT A PERSONAL NUMBER — see above.
-    shared = {p for p in {q for v in numbers.values() for q in v}
-              if sum(1 for v in numbers.values() if p in v) > 1}
-    for phone in sorted(shared):
-        holders = sorted(d for d, v in numbers.items() if phone in v)
-        print("  phone %-12s %s is published for districts %s — not one "
-              "supervisor's, dropped from all"
-              % (county, phone, ", ".join(str(d) for d in holders)), file=sys.stderr)
-    for district, found in numbers.items():
-        mine = [p for p in found if p not in shared]
-        if not mine:
-            continue
-        blocks[district]["phone"] = mine[0]
-        if len(mine) > 1:
-            print("  note %-12s district %d publishes %d numbers (%s) — the first "
-                  "ships" % (county, district, len(mine), ", ".join(mine)),
-                  file=sys.stderr)
+    drop_shared_phones(county, numbers, blocks)
 
     names = [r["name"] for r in blocks.values()]
     if len(set(names)) != len(names):
@@ -6523,6 +6776,20 @@ def _resolve(name, seats, strategy, found, vacant, contacts, eliminate=None):
             out[str(d)] = row
     return out
 
+# EVERY CARRIER THAT SERVES EXACTLY ONE COUNTY, IN ONE PLACE. These used to be
+# three hand-written `jobs +=` lines and a literal `+ 3` in the run summary's
+# arithmetic, which is the same hand-kept-list defect wi/scripts/validate_robots.py
+# was carrying one file over: adding a fourth meant remembering to bump a number
+# nothing checks, and a summary that under-counts reads as counties silently
+# missing. The list is the count now.
+SINGLE_COUNTY_CARRIERS = (
+    (CLARK_DIRECTORY, "official-directory"),
+    (PIERCE_DIRECTORY, "pierce-directory"),
+    (MARATHON_DIRECTORY, "marathon-directory"),
+    (ST_CROIX_TABLE, "st-croix-table"),
+)
+
+
 def main():
     argv = sys.argv[1:]
     out_path = argv[argv.index("--out") + 1] if "--out" in argv else DEFAULT_OUT
@@ -6539,12 +6806,8 @@ def main():
     jobs += [(d["fips"], d["name"], d["seats"], "pdf", d) for d in PDF_COUNTIES]
     jobs += [(t["fips"], t["name"], t["seats"], "framed-table", t)
              for t in FRAMED_TABLE_COUNTIES]
-    jobs += [(CLARK_DIRECTORY["fips"], CLARK_DIRECTORY["name"],
-              CLARK_DIRECTORY["seats"], "official-directory", CLARK_DIRECTORY)]
-    jobs += [(PIERCE_DIRECTORY["fips"], PIERCE_DIRECTORY["name"],
-              PIERCE_DIRECTORY["seats"], "pierce-directory", PIERCE_DIRECTORY)]
-    jobs += [(MARATHON_DIRECTORY["fips"], MARATHON_DIRECTORY["name"],
-              MARATHON_DIRECTORY["seats"], "marathon-directory", MARATHON_DIRECTORY)]
+    jobs += [(spec["fips"], spec["name"], spec["seats"], strategy, spec)
+             for spec, strategy in SINGLE_COUNTY_CARRIERS]
     jobs += [(fips, name, seats, strategy, url) for fips, name, seats, strategy, url in COUNTIES]
     for fips, name, seats, strategy, src in jobs:
         if only and fips != only:
@@ -6564,6 +6827,9 @@ def main():
                 source_url, read_from = src["source_url"], "live"
             elif strategy == "marathon-directory":
                 districts, _doc = scrape_marathon_directory(src)
+                source_url, read_from = src["source_url"], "live"
+            elif strategy == "st-croix-table":
+                districts, _doc = scrape_st_croix_table(src)
                 source_url, read_from = src["source_url"], "live"
             elif strategy == "archive":
                 districts, archived_at = scrape_archive_county(src)
@@ -6652,7 +6918,7 @@ def main():
              + len(CONSTITUENT_COUNTIES)
              + len(WITNESSED_DOCUMENT_COUNTIES)
              + len(PDF_COUNTIES)
-             + len(FRAMED_TABLE_COUNTIES) + 3, total,
+             + len(FRAMED_TABLE_COUNTIES) + len(SINGLE_COUNTY_CARRIERS), total,
              ", %d county/counties missed" % len(failures) if failures else ""),
           file=sys.stderr)
 
