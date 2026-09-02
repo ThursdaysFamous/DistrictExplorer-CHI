@@ -5068,6 +5068,7 @@
   "county": "Oconto",
   "district": 2,
   "name": "Dale Mohr",
+  "phone": "920-606-9685",
   "profileUrl": "https://www.ocontocountywi.gov/m/directory/employee?eid=75",
   "sourceUrl": "https://www.ocontocountywi.gov/453/County-Board"
  },
@@ -5930,6 +5931,145 @@
   "phone": "715-559-0830",
   "role": "2nd Vice-Chairperson",
   "sourceUrl": "https://www.co.pepin.wi.us/bos"
+ },
+ "5509301": {
+  "county": "Pierce",
+  "district": 1,
+  "email": "kris.sampson@co.pierce.wi.us",
+  "name": "Kris Sampson",
+  "phone": "651-269-7902",
+  "sourceUrl": "https://www.co.pierce.wi.us/"
+ },
+ "5509302": {
+  "county": "Pierce",
+  "district": 2,
+  "email": "jim.ashbach@co.pierce.wi.us",
+  "name": "Jim Ashbach",
+  "phone": "715-425-0131",
+  "sourceUrl": "https://www.co.pierce.wi.us/"
+ },
+ "5509303": {
+  "county": "Pierce",
+  "district": 3,
+  "email": "jon.aubart@co.pierce.wi.us",
+  "name": "Jon Aubart",
+  "phone": "715-441-2604",
+  "role": "Chairperson",
+  "sourceUrl": "https://www.co.pierce.wi.us/"
+ },
+ "5509304": {
+  "county": "Pierce",
+  "district": 4,
+  "email": "joanne.johnson@co.pierce.wi.us",
+  "name": "Joanne Johnson",
+  "phone": "715-760-2089",
+  "sourceUrl": "https://www.co.pierce.wi.us/"
+ },
+ "5509305": {
+  "county": "Pierce",
+  "district": 5,
+  "email": "claire.mccarty@co.pierce.wi.us",
+  "name": "Claire McCarty",
+  "phone": "715-307-4311",
+  "sourceUrl": "https://www.co.pierce.wi.us/"
+ },
+ "5509306": {
+  "county": "Pierce",
+  "district": 6,
+  "email": "michael.kahlow@co.pierce.wi.us",
+  "name": "Michael Kahlow",
+  "phone": "715-426-5325",
+  "role": "Vice-Chairperson",
+  "sourceUrl": "https://www.co.pierce.wi.us/"
+ },
+ "5509307": {
+  "county": "Pierce",
+  "district": 7,
+  "email": "scott.bjork@co.pierce.wi.us",
+  "name": "Scott Bjork",
+  "phone": "715-377-3199",
+  "sourceUrl": "https://www.co.pierce.wi.us/"
+ },
+ "5509308": {
+  "county": "Pierce",
+  "district": 8,
+  "email": "frank.during@co.pierce.wi.us",
+  "name": "Frank During",
+  "phone": "715-821-7128",
+  "sourceUrl": "https://www.co.pierce.wi.us/"
+ },
+ "5509309": {
+  "county": "Pierce",
+  "district": 9,
+  "email": "angela.mathison@co.pierce.wi.us",
+  "name": "Angela Mathison",
+  "phone": "612-987-6774",
+  "sourceUrl": "https://www.co.pierce.wi.us/"
+ },
+ "5509310": {
+  "county": "Pierce",
+  "district": 10,
+  "email": "anne.claflin@co.pierce.wi.us",
+  "name": "Anne Claflin",
+  "phone": "715-690-4525",
+  "sourceUrl": "https://www.co.pierce.wi.us/"
+ },
+ "5509311": {
+  "county": "Pierce",
+  "district": 11,
+  "email": "neil.gulbranson@co.pierce.wi.us",
+  "name": "Neil Gulbranson",
+  "phone": "715-781-4834",
+  "role": "2nd Vice-Chairperson",
+  "sourceUrl": "https://www.co.pierce.wi.us/"
+ },
+ "5509312": {
+  "county": "Pierce",
+  "district": 12,
+  "email": "larry.knutson@co.pierce.wi.us",
+  "name": "Larry Knutson",
+  "phone": "715-760-2690",
+  "sourceUrl": "https://www.co.pierce.wi.us/"
+ },
+ "5509313": {
+  "county": "Pierce",
+  "district": 13,
+  "email": "daniel.puhrmann@co.pierce.wi.us",
+  "name": "Daniel Puhrmann",
+  "phone": "715-497-2547",
+  "sourceUrl": "https://www.co.pierce.wi.us/"
+ },
+ "5509314": {
+  "county": "Pierce",
+  "district": 14,
+  "email": "mark.groen@co.pierce.wi.us",
+  "name": "Mark Groen",
+  "phone": "651-246-0627",
+  "sourceUrl": "https://www.co.pierce.wi.us/"
+ },
+ "5509315": {
+  "county": "Pierce",
+  "district": 15,
+  "email": "jerry.kosin@co.pierce.wi.us",
+  "name": "Jerry Kosin",
+  "phone": "715-262-5677",
+  "sourceUrl": "https://www.co.pierce.wi.us/"
+ },
+ "5509316": {
+  "county": "Pierce",
+  "district": 16,
+  "email": "barry.barringer@co.pierce.wi.us",
+  "name": "Barry Barringer",
+  "phone": "715-792-2304",
+  "sourceUrl": "https://www.co.pierce.wi.us/"
+ },
+ "5509317": {
+  "county": "Pierce",
+  "district": 17,
+  "email": "mel.pittman@co.pierce.wi.us",
+  "name": "Mel Pittman",
+  "phone": "715-495-5433",
+  "sourceUrl": "https://www.co.pierce.wi.us/"
  },
  "5509501": {
   "asOf": "the county's own page, captured 2026-08-31",
