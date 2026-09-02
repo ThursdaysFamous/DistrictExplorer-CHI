@@ -195,7 +195,7 @@ COUNTY_SITES = {
     "55045": ("Green", "https://greencountywi.org/164/County-Board-of-Supervisors"),  # county page confirms 1..31
     "55047": ("Green Lake", "https://www.greenlakecountywi.gov/"),
     "55049": ("Iowa", "https://www.iowacountywi.gov/"),
-    "55051": ("Iron", "https://www.co.iron.wi.gov/"),
+    "55051": ("Iron", "https://www.co.iron.wi.gov/190/County-Board"),  # its board page, which links each member's own page — where the district is
     "55053": ("Jackson", "https://www.co.jackson.wi.us/"),
     "55055": ("Jefferson", "https://jeffersoncountywi.gov/county_government/county_board/county_board_information/index.php"),  # county page confirms 1..30
     "55057": ("Juneau", "https://www.co.juneau.wi.gov/"),

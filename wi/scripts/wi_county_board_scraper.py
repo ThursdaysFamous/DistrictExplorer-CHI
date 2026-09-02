@@ -3085,8 +3085,15 @@ def document_county(spec):
     live = spec.get("live")
     if live:
         try:
+            # SCRAPE_COUNTY RETURNS (districts, read_from) — and this line took
+            # the whole tuple until 2026-09-02, when Lafayette's page answered
+            # for the first time and the run died three counties later on
+            # `districts.values()`. A retry path guarded by "this will probably
+            # keep failing" is exercised only on the day it stops failing, which
+            # is the day it must not be the thing that breaks: the weekly job
+            # would have gone red on the good news that a county came back.
             districts = scrape_county(spec["fips"], spec["name"], spec["seats"],
-                                      live["strategy"], spec["source_url"])
+                                      live["strategy"], spec["source_url"])[0]
             print("  ok   %-12s %d seats READ LIVE \u2014 the page answered this run, "
                   "so this DOCUMENT_ROSTERS entry can be retired and the county "
                   "moved to COUNTIES with the %r reading"
@@ -6854,6 +6861,222 @@ def scrape_langlade_board(spec):
     return attach_unique_roles(roles, rows, county), spec["source_url"]
 
 
+# --- Iron: the county I called measured-shut without opening a member's page --
+#
+# THE RECORD THAT SAID THIS COUNTY PUBLISHES NO DISTRICTS WAS MINE, AND IT WAS
+# WRONG THE WAY EVERY OTHER RECORD THIS FILE CORRECTS WAS WRONG. /190/County-
+# Board names all fifteen supervisors with their roles and no districts, and
+# the county's aggregate /directory.aspx — 832 KB, 213 mailboxes — contains the
+# word "district" not once. Both readings were accurate and both were about
+# PAGES. Every member's OWN employee page states "District: 4" and
+# "Township/Wards: 4 - Hurley Ward 4", and the board page LINKS all fourteen of
+# them, in the very anchors their names were read out of. Sawyer, on this same
+# CivicPlus template, had its employee pages enumerated an hour earlier.
+# AN AGGREGATE THAT OMITS A FIELD IS NOT A COUNTY THAT OMITS IT.
+#
+# The other half of that record was a real measurement and stays true: the
+# county's only district-keyed DOCUMENT is a pre-election candidate list whose
+# incumbent column names nine people no longer on the board. It was the right
+# thing to refuse; it was not the only thing to look at.
+#
+# THE DISTRICT IS STATED TWO WAYS AND ONE OF THEM IS THE ONLY WAY FOR TWO SEATS.
+# Twelve pages carry a `District:` field. Kessler's and McNutt's do not — their
+# number leads the `Township/Wards:` line instead ("15 - Sherman", "11 - Mercer
+# Ward 1"), so a reader that takes only the labelled field ships a thirteen-seat
+# board. Where both appear they must agree.
+#
+# THE VACANCY IS ARITHMETIC, AND IT IS GATED RATHER THAN INFERRED. The board
+# page carries exactly one "VACANT, Member" row with no member page behind it,
+# so no page states the empty seat's number. Fourteen districts come off the
+# member pages; LTSB files fifteen; the remainder is district 3. That is only
+# safe while BOTH counts hold, so the builder refuses unless the page shows
+# exactly one vacancy AND exactly one district in 1..seats is unaccounted for —
+# otherwise a member the directory merely dropped would be published as an
+# empty seat, which tells that district it has nobody when it has someone.
+#
+# THE WARD COMPOSITION COMES FREE and is what witnesses the numbering. It uses
+# an em-dash on some pages and a hyphen on others, and names its towns BARE and
+# slash-separated ("9 — Anderson / Knight / Pence"), so the type is supplied by
+# LTSB's own filing the way Forest's is — see settle() in ward_number_witness().
+IRON_BOARD = {
+    "fips": "55051", "name": "Iron", "seats": 15,
+    "source_url": "https://www.co.iron.wi.gov/190/County-Board",
+    "member_url": "https://www.co.iron.wi.gov/m/directory/employee?eid=%s",
+    "domain": "ironcountywi.org",
+}
+IR_LINK = re.compile(r'(?is)<a[^>]+href="[^"]*[Ee][Ii][Dd]=(\d+)"[^>]*>(.*?)</a>')
+IR_MEMBER = re.compile(r"(?i)^\s*(.+?)\s*,\s*((?:County Board )?(?:Vice )?Chair(?:man|person)?|Member)\s*$")
+# THE COLON IS OPTIONAL AND THE PAGES DISAGREE ABOUT IT. Youngs's reads
+# "District: 4" and "Township/Wards: 4 - Hurley Ward 4"; Hanson's reads
+# "District 9" and "Township/Wards 9 &mdash; Anderson / Knight / Pence". A
+# pattern requiring the colon failed that page outright — which is the right
+# failure (the county is refused rather than shipped short) and still the wrong
+# pattern. The number each label introduces is cross-checked against the other
+# wherever both appear, which is what guards the looser match.
+IR_DISTRICT = re.compile(r"(?i)\bDistrict\s*:?\s*(\d{1,2})\b")
+IR_WARDS = re.compile(r"(?i)\bTownship\s*/\s*Wards\s*:?\s*(\d{1,2})\s*[-–—]\s*([^\n]{1,90})")
+IR_MAIL = re.compile(r"(?i)mailto:\s*([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+)")
+IR_PHONE = re.compile(r"(?<!\d)(\d{3})[-.\s](\d{3})[-.\s](\d{4})(?!\d)")
+IR_MIN_EMAILS = 12          # 14 of 14 today
+IR_MIN_PHONES = 10          # 12 of 14 today
+IR_MIN_WARD_PAIRS = 8       # 10 today: five districts are whole towns with no
+                            # ward number ("7 - Kimball", "15 - Sherman"), which
+                            # is a complete statement carrying no pair. Measured,
+                            # not guessed — Barron's floor taught that.
+
+
+def _ir_flat(page):
+    t = re.sub(r"(?is)<(script|style)[^>]*>.*?</\1>", " ", page)
+    t = re.sub(r"(?i)<br\s*/?>|</(p|div|li|h[1-6])>", "\n", t)
+    return html_lib.unescape(re.sub(r"<[^>]+>", " ", t)).replace("\xa0", " ")
+
+
+IR_PART = re.compile(r"(?i)^(.+?)(?:\s+Wards?\s*(\d{1,2}))?$")
+
+
+def _ir_composition(text):
+    """({(None, name, ward)}, {(None, name)}) for one Township/Wards line.
+
+    NOT parse_composition(), for Forest's reason: that function anchors on a
+    "Town of" / "City of" / "Village of" run and Iron names its towns BARE and
+    slash-separated — "Anderson / Knight / Pence", "Hurley Ward 4", "Kimball".
+    Fed to it, every line yields nothing at all, which reads as a county that
+    has stopped printing its composition rather than one that never wrote the
+    type word. The type is left None so ward_number_witness()'s settle() takes
+    it from LTSB's own filing, and a name the state files under two types stays
+    unresolved and fails rather than being guessed.
+    """
+    pairs, munis = set(), set()
+    for part in re.split(r"\s*[/,]\s*", text):
+        got = IR_PART.match(part.strip())
+        if not got:
+            continue
+        name = _jk_norm(got.group(1))
+        if not name:
+            continue
+        munis.add((None, name))
+        if got.group(2):
+            pairs.add((None, name, int(got.group(2))))
+    return pairs, munis
+
+
+def scrape_iron_board(spec):
+    """All 15 seats or nothing, out of each member's own employee page."""
+    county, seats = spec["name"], spec["seats"]
+    page = fetch(spec["source_url"])
+
+    # THE BOARD PAGE: who sits, their office, and their member-page link.
+    listed, vacancies = {}, 0
+    for line in (x.strip() for x in _ir_flat(page).split("\n")):
+        got = IR_MEMBER.match(line)
+        if got and VACANT.search(got.group(1)):
+            vacancies += 1
+    ids = []
+    for eid, raw in IR_LINK.findall(page):
+        who = re.sub(r"\s+", " ", html_lib.unescape(re.sub(r"<[^>]+>", " ", raw))).strip()
+        if who and eid not in [e for e, _ in ids]:
+            ids.append((eid, who))
+    if not ids:
+        raise RuntimeError("%s: the board page links no member pages — it has been "
+                           "rebuilt; re-read %s" % (county, spec["source_url"]))
+    roles = {}
+    for line in (x.strip() for x in _ir_flat(page).split("\n")):
+        got = IR_MEMBER.match(line)
+        if got and not VACANT.search(got.group(1)):
+            office = re.sub(r"(?i)^county board\s+", "", got.group(2)).strip()
+            if office.lower() != "member":
+                listed[name_fold(clean(got.group(1))[0])] = office.title()
+
+    out, wards, munis, numbers = {}, {}, {}, {}
+    for n, (eid, who) in enumerate(ids):
+        if n:
+            time.sleep(0.4)             # 14 pages of somebody else's server
+        own = fetch(spec["member_url"] % eid)
+        flat = _ir_flat(own)
+        said = IR_DISTRICT.search(flat)
+        comp = IR_WARDS.search(flat)
+        if not (said or comp):
+            raise RuntimeError("%s: %s's page states neither a District nor a "
+                               "Township/Wards line — the member pages have "
+                               "reshaped and the district would be unknown (%s)"
+                               % (county, who, spec["member_url"] % eid))
+        # BOTH STATEMENTS WHERE BOTH EXIST — see the note above.
+        if said and comp and int(said.group(1)) != int(comp.group(1)):
+            raise RuntimeError("%s: %s's page says District %s and its "
+                               "Township/Wards line leads %s — the page's own two "
+                               "statements disagree"
+                               % (county, who, said.group(1), comp.group(1)))
+        district = int((said or comp).group(1))
+        if district in out:
+            raise RuntimeError("%s: two members claim district %d (%s and %s)"
+                               % (county, district, out[district]["name"], who))
+        if not (1 <= district <= seats):
+            raise RuntimeError("%s: %s's page states district %d, outside 1..%d"
+                               % (county, who, district, seats))
+        name = clean(who)[0]
+        if not _reads_as_name(name):
+            raise RuntimeError("%s: district %d resolved the name %r, which does "
+                               "not read as a name" % (county, district, name))
+        entry = {"name": name, "vacant": False,
+                 "role": listed.get(name_fold(name))}
+        mail = IR_MAIL.search(own)
+        if mail:
+            entry["email"] = mail.group(1).lower()
+        tel = IR_PHONE.search(flat)
+        if tel:
+            numbers[district] = ["-".join(tel.groups())]
+        out[district] = entry
+        if comp:
+            wards[district], munis[district] = _ir_composition(comp.group(2))
+
+    # THE EMPTY SEAT, BY ARITHMETIC THAT MUST CLOSE — see the note above.
+    missing = [d for d in range(1, seats + 1) if d not in out]
+    if len(missing) != vacancies:
+        raise RuntimeError(
+            "%s: %d district(s) have no member page (%s) and the board page shows "
+            "%d vacancy row(s) — those must match, or a supervisor the directory "
+            "merely dropped would ship as an empty seat"
+            % (county, len(missing), ", ".join(str(d) for d in missing), vacancies))
+    for d in missing:
+        out[d] = {"name": None, "vacant": True, "role": None}
+
+    seen = sorted(out)
+    if seen != list(range(1, seats + 1)):
+        raise RuntimeError("%s: resolved districts %s, not 1..%d"
+                           % (county, seen, seats))
+    drop_shared_phones(county, numbers, out)
+    live = [d for d, r in out.items() if not r["vacant"]]
+    names = [out[d]["name"] for d in live]
+    if len(set(names)) != len(names):
+        raise RuntimeError("%s: the same person is filed under two districts (%s)"
+                           % (county, sorted({n for n in names if names.count(n) > 1})))
+    emails = sum(1 for d in live if out[d].get("email"))
+    phones = sum(1 for d in live if out[d].get("phone"))
+    own_dom = sum(1 for d in live
+                  if (out[d].get("email") or "").endswith("@" + spec["domain"]))
+    if emails < IR_MIN_EMAILS or phones < IR_MIN_PHONES:
+        raise RuntimeError("%s: %d e-mails and %d phones across %d filled seats "
+                           "(floors %d/%d) — the member pages have reshaped and "
+                           "contact is being dropped silently"
+                           % (county, emails, phones, len(live),
+                              IR_MIN_EMAILS, IR_MIN_PHONES))
+    if own_dom != emails:
+        raise RuntimeError("%s: %d of %d mailboxes are on %s — a page has shifted"
+                           % (county, own_dom, emails, spec["domain"]))
+    print("  %-12s %d seats, %d filled, %d phones, %d e-mails (the district is on "
+          "each member's OWN page; the board page and the county's aggregate "
+          "directory both state none)"
+          % (county, seats, len(live), phones, emails), file=sys.stderr)
+    if missing:
+        print("  note %-12s district %s is the county's one VACANT row, identified "
+              "by elimination and gated on the two counts agreeing"
+              % (county, ", ".join(str(d) for d in missing)), file=sys.stderr)
+    if wards:
+        ward_number_witness(spec["fips"], county, wards, seats,
+                            min_pairs=IR_MIN_WARD_PAIRS, munis=munis)
+    return {str(d): r for d, r in out.items()}, spec["source_url"]
+
+
 # --- Ashland: read once, then STOPPED by the county's own robots.txt ---------
 #
 # THE CRAWL STOPS AND THE NAMES STAY — the seventh county on that footing, after
@@ -8921,6 +9144,7 @@ SINGLE_COUNTY_CARRIERS = (
     (FLORENCE_BOARD, "florence-board"),
     (SAWYER_DIRECTORY, "sawyer-directory"),
     (DOUGLAS_TABLE, "douglas-table"),
+    (IRON_BOARD, "iron-board"),
 )
 
 
@@ -8989,6 +9213,9 @@ def main():
                 source_url, read_from = src["source_url"], "live"
             elif strategy == "douglas-table":
                 districts, _doc = scrape_douglas_table(src)
+                source_url, read_from = src["source_url"], "live"
+            elif strategy == "iron-board":
+                districts, _doc = scrape_iron_board(src)
                 source_url, read_from = src["source_url"], "live"
             elif strategy == "archive":
                 districts, archived_at = scrape_archive_county(src)
