@@ -90,7 +90,13 @@ jobs:
       # its own NAMES, never its own values — and covers the metric-matched
       # fallback face, which four surfaces named in --font-body and never
       # defined. Runs BEFORE compose_app because it writes what that splices.
-      # Stdlib only.
+      # EXTENDED 2026-09-02 after two weeks green over two live drifts it could
+      # not see: it checked the skin's LIGHT neutrals and a hand-kept list of
+      # three worksheets, while the skin's dark block restated all four accents
+      # by hand (one of them two hex digits off) and Iowa's worksheet — the
+      # fourth of five — had carried two off-fleet values since the day it
+      # shipped. Both tiers of the skin are checked now, presence required,
+      # and the worksheets are discovered rather than listed. Stdlib only.
       - name: Brand tokens have one source
         run: python3 scripts/build_brand_tokens.py --check
 

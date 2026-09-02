@@ -23,6 +23,23 @@ the dark tier from memory: --accent-warm #fd88b8 against the app's #e879b9,
 That shell exists BECAUSE thirteen hand-kept copies drifted. It drifted on day
 one. Restating a palette is not a thing to do carefully; it is a thing not to do.
 
+Two more were found on 2026-09-02, in the gate's OWN blind spots, after it had
+been green for two weeks:
+
+  --accent-warm-deep dark   app skin #f0a3cf   token file #f0a5cd
+      The skin's dark block restates all four accents by hand and this checked
+      none of them: the light accents ride the worksheet (gated below), and
+      the dark ones rode nothing. Every instance's app painted one dark
+      magenta while every sub-page — generated from the token file — painted
+      the other, in the same tab.
+  ia/metro-worksheet.json   accent_deep #4a2b8c, accent_warm_deep #8c2e4a
+      against the fleet's #5730ab / #8f2659, from the day Iowa shipped, under
+      a label reading "shared with the fleet, not state-themed by convention".
+      check_worksheets named three worksheets of five.
+
+A gate that checks a hand-kept list of consumers has the same failure mode as
+the copies it guards: the newest one is the one it does not know about.
+
 WHAT THIS DOES. Two jobs, one source:
 
   GENERATE  engine/shared/tokens-brand.txt — the sub-page palette, emitted in
@@ -75,11 +92,25 @@ ALIASES = [
     ("--line-strong",      "border-dot"),
 ]
 
-# The neutral six the app's skin restates. The accents are already generated
-# into the app from the worksheet (GENERATED brand-palette), so they are checked
-# against the worksheet below instead of here.
-APP_SKIN_CHECKED = ["--ink", "--slate", "--slate-soft", "--paper", "--panel",
-                    "--line", "--line-strong"]
+# What the skin restates BY HAND, per tier — and every one of these must be
+# PRESENT, not merely correct when present. The light :root sets the seven
+# neutrals and not the accents, which arrive through the GENERATED brand-palette
+# region the worksheet drives (gated in check_worksheets). The dark block has no
+# generated region to lean on and restates all eleven aliases itself, which is
+# where --accent-warm-deep sat two hex digits off the token file for two weeks
+# while a check that only knew the neutrals stayed green. Presence is required
+# because a dark alias that goes missing does not error — the browser falls
+# through to the LIGHT value, which is a dark-mode link painted for white paper.
+APP_SKIN_CHECKED = {
+    "light": ["--ink", "--slate", "--slate-soft", "--paper", "--panel",
+              "--line", "--line-strong"],
+    "dark":  [prop for prop, _tok in ALIASES],
+}
+# The one canonical name the skin sets DIRECTLY rather than through an alias
+# (--faint, defined for the map legend, which had referenced it undefined for
+# weeks). It is a restatement all the same, and validate_contrast.py measures
+# the token file's --faint on the assumption that this is the same colour.
+APP_SKIN_DIRECT = [("--faint", "faint")]
 
 # The fallback face, by its canonical text. Four surfaces carry a copy — the
 # shared shell, the three apps, and (via build_landing_page.FALLBACK_FACE) the
@@ -179,11 +210,15 @@ def check_app_skin(light, dark):
             continue
         got = {k: v.strip() for k, v in
                re.findall(r"(--[a-z0-9-]+)\s*:\s*([^;]+);", m.group(1))}
-        for prop in APP_SKIN_CHECKED:
-            tok = dict(ALIASES)[prop]
+        checked = [(prop, dict(ALIASES)[prop]) for prop in APP_SKIN_CHECKED[label]]
+        for prop, tok in checked + APP_SKIN_DIRECT:
             want = resolve(table, tok)
             if prop not in got:
-                continue          # the dark block legitimately omits some
+                problems.append(
+                    "app skin %s: %s is not set — the %s block must restate it, "
+                    "or the browser falls through to the other tier's value"
+                    % (label, prop, label))
+                continue
             if want is None or norm(got[prop]) != norm(want):
                 problems.append(
                     "app skin %s: %s is %s, the token file says --%s is %s"
@@ -212,12 +247,23 @@ def check_fallback_face():
             problems.append("fallback face differs in %s: %s" % (rel, txt[:90]))
 
 
+def worksheets():
+    """Every metro-worksheet.json in the tree: the root one plus one per
+    instance folder. DISCOVERED, because the hand-kept ("", "ny", "ca") this
+    replaced was written when those were the three instances and never
+    learned about Wisconsin or Iowa — and Iowa's palette had been off the
+    fleet's since the day it shipped."""
+    found = ["metro-worksheet.json"]
+    for name in sorted(os.listdir(REPO_ROOT)):
+        rel = os.path.join(name, "metro-worksheet.json")
+        if os.path.isfile(os.path.join(REPO_ROOT, rel)):
+            found.append(rel)
+    return found
+
+
 def check_worksheets(light):
-    for tag in ("", "ny", "ca"):
-        rel = os.path.join(tag, "metro-worksheet.json") if tag else "metro-worksheet.json"
+    for rel in worksheets():
         path = os.path.join(REPO_ROOT, rel)
-        if not os.path.exists(path):
-            continue
         pal = json.load(open(path, encoding="utf-8")).get("palette", {})
         for key, tok in WORKSHEET_PALETTE:
             want = resolve(light, tok)
@@ -254,9 +300,10 @@ def main():
                 print("  - " + p, file=sys.stderr)
             fail("%d consumer(s) disagree with districtry/tokens/districtry.tokens.css"
                  % len(problems))
-        print("build-brand-tokens: OK — %d alias(es) agree across the shell, the app "
-              "skin and %d worksheet(s); the fallback face is identical on %d "
-              "surface(s)" % (len(ALIASES), 3, len(FACE_CARRIERS)))
+        print("build-brand-tokens: OK — %d alias(es) agree across the shell, both "
+              "tiers of the app skin and %d worksheet(s); the fallback face is "
+              "identical on %d surface(s)"
+              % (len(ALIASES), len(worksheets()), len(FACE_CARRIERS)))
         return
 
     if problems:

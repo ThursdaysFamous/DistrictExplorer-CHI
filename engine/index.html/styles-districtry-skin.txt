@@ -792,7 +792,7 @@
        its hue: #e879b9 is the design package's own dark value for the mark's
        third polygon, so the four group dots stay four distinct hues. */
     --accent-warm: #e879b9;
-    --accent-warm-deep: #f0a3cf;
+    --accent-warm-deep: #f0a5cd;
     --ink: #ece9f4;
     --slate: #b6b1c4;
     --slate-soft: #746e86;
