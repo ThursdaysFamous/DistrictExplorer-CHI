@@ -1,7 +1,7 @@
 # Why Wisconsin was faster than Illinois — the county-level record
 
 **What this is.** A measured comparison of the two hardest build problems this fleet has
-taken on: Illinois's 91 (of 102) counties, added one at a time over roughly a year, and
+taken on: Illinois's 91 (of 102) counties, added one at a time over about two months, and
 Wisconsin's 72 (of 72), whose county-board *geometry* shipped complete in a single build
 while its *rosters* are still closing out county by county. This is a retrospective, not a
 build log — it draws on the county-by-county record already kept in the root `CLAUDE.md`,
@@ -26,8 +26,8 @@ size of the repository every time one more county closes.
 - **Illinois: 91 of 102 counties served**, each added through its own investigation — a
   bespoke scraper, a bespoke builder, its own weekly GitHub Actions workflow, and in most
   cases its own multi-source proof that the geometry is real (`docs/COUNTY_STATUS.md`).
-  Eleven counties remain, each with a distinct, named blocker (see below). This took the
-  better part of a year.
+  Eleven counties remain, each with a distinct, named blocker (see below). This took about
+  two months — the project itself is two and a half months old.
 - **Wisconsin: all 72 counties' board-district *boundaries*** shipped in a single build, from
   a single statewide feed (`wi/scripts/build_wi_supervisory_districts.py`). The *rosters* —
   who holds each seat — were a separate problem entirely, and one that had to be solved a
@@ -40,8 +40,8 @@ size of the repository every time one more county closes.
   Jackson and Waupaca — one county per PR, all the way down.
 - Wisconsin's whole instance — 31 layers across four phases — went from nothing to
   "statewide and mostly complete" in three days, 2026-08-25 through 2026-08-27
-  (`wi/CLAUDE.md`). Illinois has been adding counties for the better part of a year and is
-  still closing its last 11.
+  (`wi/CLAUDE.md`). Illinois has been adding counties for about two months and is still
+  closing its last 11.
 
 ## Cause 1: build order is architecture, not effort
 
@@ -127,7 +127,7 @@ Lac), a constituent directory (Dodge), two directory PDFs (Kenosha, Adams), one 
 (Columbia), and nine robots.txt-frozen snapshots dated and carried forward rather than
 re-scraped. The six that held out longest — Ashland, Douglas, Florence, Forest, Iron and
 Sawyer — were an honest standing gap for as long as they were unread, named in the panel
-rather than guessed at, and they closed only when someone went and found each one's source.
+rather than guessed at, and they closed only when each one's source was tracked down.
 
 The difference from Illinois isn't that Wisconsin's roster problem is easier. It's purely
 organizational. All of that heterogeneity lives inside **one** Python file's per-county
@@ -164,15 +164,15 @@ EPSG:3436 by matching aspect ratio to four decimal places, and resolves three
 split-precinct census blocks against a certified canvass — four independent gates, built for
 one county, because nothing about that county's map was reusable anywhere else.
 
-**Barron County, Wisconsin** shipped the same day someone actually followed a link that had
-been sitting in plain sight for a week. Its geometry had been in LTSB's feed the whole time.
+**Barron County, Wisconsin** shipped the same day a link that had been sitting in plain sight
+for a week was finally followed. Its geometry had been in LTSB's feed the whole time.
 Its official `.gov` page names only two people in 75 KB of prose — but that same page links
 the real roster twice, as "Individual Contact Information for County Board Supervisors." The
-county's front door had already been corrected on 2026-08-26; nobody had clicked its own link
+county's front door had already been corrected on 2026-08-26; the link on it went unfollowed
 until 2026-09-02. As `wi/CLAUDE.md` puts it: "finding the host that serves a board page is not
 reading it." Once read, it was an ordinary district-table scrape — no harder than any other
-county's roster page. Same category of problem as Jackson — get the county's own roster page
-in front of the right eyes — wildly different cost, because the geometry underneath it
+county's roster page. Same category of problem as Jackson — find and read the county's own
+roster page — wildly different cost, because the geometry underneath it
 required zero invention.
 
 ## The honest caveat
@@ -237,12 +237,22 @@ which is why it is being done by hand rather than automated away.
 `docs/EXPANSION_GUIDE.md` Part 0.2 now states "prefer statewide-first" as a rule for every
 future state, and Iowa — the fleet's second state, arriving 2026-08-27 with, per the root
 `CLAUDE.md`, "zero national-tier layers to lean on at any point" that Wisconsin's original
-four could — reached 99 of 99 counties following the same order. That is two data points
-for the architectural claim, not one. But the institutional claim is not something the
-project can manufacture for the next state: whether a future state's hardest layer has its
-own LTSB is a fact about that state's government, discovered the same way Wisconsin's was —
-by reading one county's board-page footer and one statute, not by assuming the pattern
-repeats.
+four could — reached all 99 counties following the same order. That is two data points
+for the architectural claim, not one.
+
+**Iowa also sharpens what the institutional claim actually is, and it is not "a statewide
+file exists."** Iowa has one: the Iowa Legislature publishes a `CountySupervisorDistricts`
+layer, and it is that instance's only statewide source for the concept. But Jones County has
+**zero rows in it** — measured both by name and by its own FIPS, so not a naming mismatch —
+and the county therefore carries no supervisor-district card at all (`jones-county-supervisor`,
+the instance's single county gap). Wisconsin's aggregate has no such hole because Wisconsin's
+is not merely *maintained*, it is *filed*: a statute obliges all 72 counties, twice a year,
+and a county missing from LTSB's file would be a county out of compliance. **A maintained
+aggregate is a courtesy and can be short a county; a compelled one is a duty and shows up
+when it isn't.** So the question to ask of the next state is not whether some agency publishes
+a layer, but whether anything obliges every county to be in it — a fact about that state's
+government, discovered the same way Wisconsin's was, by reading one statute rather than by
+assuming the pattern repeats.
 
 ## Sources
 

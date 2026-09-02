@@ -45,8 +45,8 @@ current supervisory-district boundaries with a legislative office twice a year, 
 July, and that office republishes all 72 counties' boundaries as one open, public file. Illinois
 has no equivalent anywhere in its state government. No office collects what Illinois's 102
 county boards look like. Each county simply decides for itself whether, and how, to make that
-public — which is the entire reason it took a year of individual detective work instead of one
-download.
+public — which is the entire reason it took two months of individual detective work instead
+of one download.
 
 I don't want to oversell what that Wisconsin law bought me. The state office is a clearinghouse,
 not an authority — it republishes whatever each county clerk sends it, and at least one
@@ -66,8 +66,8 @@ There is no Wisconsin office that publishes a statewide list of county superviso
 names for all 72 counties took the same flavor of scattered, individual work Illinois
 required — a plain board page here, a PDF directory there, one county's data recovered only
 through the Internet Archive after its own site went dark, one board whose current roster was
-linked, in plain text, right from the county's own official page: a link nobody had actually
-followed. It finished, county by county, one at a time, and the last six were the slowest
+linked, in plain text, right from the county's own official page — I had found the site and
+never opened that link. It finished, county by county, one at a time, and the last six were the slowest
 precisely because there was no statewide file to fall back on. All 1,591 seats now carry a
 name or the county's own note that the seat is vacant.
 
@@ -85,15 +85,24 @@ change to make safely mid-flight.
 
 ## The honest number
 
-Illinois: 91 of 102 counties, after roughly a year, with 11 left — each one blocked by
+Illinois: 91 of 102 counties, with 11 left — each one blocked by
 something different (no map published anywhere, a licensing fee, a remap the county itself
 never finished, a county with no reachable website at all). I'm closing the last of them by
 hand this week, the same way I closed the first 91: by reading a county's own site, and
 sometimes by asking.
 
 Wisconsin: all 72 counties mapped, in three days, because one law did in an afternoon what 91
-separate investigations did for its neighbor over a year. Iowa followed the same pattern to 99
-of 99 counties, arriving with even less to lean on than Wisconsin had.
+separate investigations did for its neighbor over two months. Iowa followed the same pattern
+across all 99 of its counties, arriving with even less to lean on than Wisconsin had.
+
+Iowa is also the useful counter-example, and it taught me to state the Wisconsin lesson more
+carefully. Iowa's legislature does publish a statewide county-supervisor district file — so
+"a statewide file exists" is not what makes the difference. Jones County simply isn't in it.
+Not misspelled, not mismatched: zero rows, so that one county gets no supervisor district
+from me at all. Wisconsin's file doesn't have holes like that, and the reason isn't diligence
+— it's that Wisconsin's counties are *required* to file, twice a year, so a county missing
+from the state's copy would be a county out of compliance. A file somebody maintains can
+quietly be short a county. A file everybody must file into shows you when it isn't.
 
 One caution I want to put in writing, because it would be easy for me to tell a tidier story
 than I can support. It is tempting to read all this as "Wisconsin's counties are simply better
