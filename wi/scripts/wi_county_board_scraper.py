@@ -1356,8 +1356,22 @@ def is_name(text):
 # A shape with more than two non-suffix fields is NOT pinned and is not
 # guessed at: it joins in the order the county wrote it, so an unread shape
 # reads oddly rather than naming somebody wrongly.
+# A TRAILING "Jr." OR "M." IS AN ABBREVIATION, NOT STRAY PUNCTUATION, and the
+# strip below cannot tell them apart. Two names met it in two days:
+# `"George Rohmeyer, Jr."` shipped as "George Rohmeyer Jr" (Chippewa district
+# 17, 2026-09-02), and Menominee's `"Wilber,  Dawn M."` came out as "Dawn M
+# Wilber" — the middle initial's period eaten before the surname-first flip
+# moved it into the middle of the name. Both are the same bug seen from two
+# sides, which is why the restore covers a generational SUFFIX and a single
+# INITIAL rather than only the case that turned up first. The dot goes back
+# only when the ORIGINAL text ended in one of those carrying it, which is the
+# only case where removing it changed a name rather than tidying a fragment.
+ABBREV_DOT = re.compile(r"(?i)(?:\b(?:I{1,3}|IV|Jr|Sr)|(?<![A-Za-z])[A-Z])\.\s*$")
+
+
 def clean(text):
     text, role = split_role(repair(text))
+    had_abbrev_dot = bool(ABBREV_DOT.search(text))
     text = LEAD.sub("", text).strip(" .,-–—")
     if "," in text:
         fields = [x.strip() for x in text.split(",") if x.strip()]
@@ -1366,7 +1380,17 @@ def clean(text):
         if len(rest) == 2:
             rest = [rest[1], rest[0]]
         text = " ".join(rest + suffix)
-    return " ".join(text.split()), role
+    text = " ".join(text.split())
+    # The flip above can move the abbreviation into the MIDDLE of the name
+    # ("Wilber, Dawn M." -> "Dawn M Wilber"), so the dot is restored on the
+    # token it belongs to rather than on the end of the string.
+    if had_abbrev_dot:
+        parts = text.split()
+        for i, tok in enumerate(parts):
+            if SUFFIX.match(tok) or re.fullmatch(r"[A-Z]", tok):
+                parts[i] = tok if tok.endswith(".") else tok + "."
+        text = " ".join(parts)
+    return text, role
 
 
 # --- the three readings -------------------------------------------------------
@@ -6065,6 +6089,186 @@ def scrape_chippewa_directory(spec):
     return attach_unique_roles(roles, rows, county), spec["source_url"]
 
 
+# --- Menominee: a joint County/Town board, five wards and two at large --------
+#
+# THE SMALLEST BOARD IN THE FLEET AND THE ONLY ONE WHOSE MEMBERS ARE NOT ALL
+# DISTRICTED. co.menominee.wi.us/county-board/ names all seven supervisors of
+# what the county itself calls the "Menominee County and Town Board of
+# Supervisors" — the county is coextensive with the Town of Menominee and the
+# two share one governing body — under three headings the county writes itself:
+# Chair, Vice-Chair, Board Members. Five hold a WARD; two are elected AT LARGE,
+# and one of those two is the Vice-Chair.
+#
+# THE WARD IS THE SUPERVISORY DISTRICT HERE, AND THE STATE SAYS SO OUTRIGHT.
+# LTSB files Menominee with exactly five wards and maps each to the
+# same-numbered SUPERID — ward 0001 to district 01, straight through to 5 — so
+# the county's "Ward #3" IS district 3, proven by the state's own filing rather
+# than inferred from a name. That is the ward witness in its strongest possible
+# form and it is why this county can ship at all: nothing else on the page uses
+# the word district.
+#
+# THE TWO AT-LARGE SUPERVISORS ARE NOT DROPPED. They hold no district, so they
+# cannot key into a district-keyed roster — and leaving them out would ship a
+# five-member board for a county that seats seven, with the Vice-Chair among the
+# missing. That is the Alexander (Illinois) lesson: a card that names fewer
+# people than the body seats must say so rather than let the absence read as
+# completeness. They ride a county-keyed entry ("<fips>-at-large") in the same
+# roster file, and every district card in the county names them beneath its own
+# supervisor, because a reader in ward 3 is represented by all three.
+#
+# EACH MEMBER'S OWN PAGE IS FETCHED AND IT WITNESSES TWO THINGS. It prints
+# "Name: Ben Warrington" — the given-name-first form, which confirms the flip
+# out of the list page's "Warrington,  Ben" (two spaces, and suffixes ride the
+# surname: "Cox Sr.,  Douglas") — and "Ward: #3", which confirms the ward the
+# list page filed them under. Seven pages, and the same list-versus-own-page
+# agreement Marathon and Oconto already rely on.
+#
+# NO CONTACT SHIPS, AND THAT IS THE CALUMET RULE RATHER THAN AN OMISSION. The
+# only way to reach a supervisor through this site is a per-member contact FORM;
+# there is no mailbox and no phone anywhere on either page. A form is not an
+# address, so nothing is shipped as one and the member page is not offered as a
+# "Supervisor page" either. The card's footer link is the board page, where the
+# form is one click away and labelled as what it is.
+MENOMINEE_BOARD = {
+    "fips": "55078", "name": "Menominee", "seats": 5, "at_large": 2,
+    "source_url": "https://www.co.menominee.wi.us/county-board/",
+}
+# "<b>Chair</b>" / "<b>Vice-Chair</b>" / "<b>Board Members</b>" — the county's
+# own headings, each followed by the block of members holding that office.
+MN_HEAD = re.compile(r"(?is)<b>\s*(Chair|Vice-Chair|Board Members)\s*</b>")
+# "<a href='...&i=HASH'>Warrington,  Ben</a> - Ward #3"
+MN_ROW = re.compile(
+    r'(?is)<a href="(?P<url>[^"]*\bi=[0-9a-f]+)">(?P<name>[^<]+)</a>\s*-\s*'
+    r'Ward\s*(?P<ward>#\s*\d+|At\s+Large)')
+MN_OWN_NAME = re.compile(r"(?is)\bName:\s*\|?\s*([A-Z][^|<]{1,60}?)\s*\|")
+MN_OWN_WARD = re.compile(r"(?is)\bWard:\s*\|?\s*(#\s*\d+|At\s+Large)\b")
+
+
+def _mn_flip(raw):
+    """"Warrington,  Ben" -> "Ben Warrington"; "Cox Sr.,  Douglas" -> "Douglas Cox Sr.".
+
+    THE FLIP IS `clean()`'s, NOT THIS FUNCTION'S. Its comma branch already
+    swaps a surname-first pair and keeps a suffix where it belongs, and doing
+    the split here first meant handing it an already-flipped string whose
+    trailing "Sr." then read as stray punctuation. What is left here is the
+    SHAPE CHECK: the comma has to be there, because a page that stops using it
+    would send every name through unflipped and backwards without a word.
+    """
+    raw = " ".join(html_lib.unescape(raw).split())
+    if "," not in raw:
+        raise RuntimeError("Menominee: the name %r is not 'Surname, Given' — the "
+                           "page has changed how it writes names and every name "
+                           "would ship backwards" % raw)
+    return clean(raw)[0]
+
+
+def _mn_flat(html):
+    """One page as pipe-separated text, for the two `Name:`/`Ward:` labels.
+
+    UNESCAPE BEFORE COLLAPSING WHITESPACE, not after. This page puts a spacer
+    cell between every label and its value, written `&#160;` — still an entity
+    while `\s+` runs, so collapsing first leaves `Name: | \xa0 | Ben
+    Warrington` and the pipe-run rule never fires. The label then matched
+    nothing here and found the CONTACT FORM's "Name:" further down instead,
+    which is a different field on a different subject.
+    """
+    body = re.sub(r"(?is)<(script|style).*?</\1>", " ", html)
+    body = re.sub(r"\s+", " ", html_lib.unescape(re.sub(r"<[^>]+>", " | ", body)))
+    return re.sub(r"(\| )+", "| ", body)
+
+
+def scrape_menominee_board(spec):
+    """All seven or nothing: five ward seats keyed as districts, two at large."""
+    county, seats = spec["name"], spec["seats"]
+    page = fetch(spec["source_url"])
+    heads = [(m.start(), m.group(1)) for m in MN_HEAD.finditer(page)]
+    if len(heads) != 3:
+        raise RuntimeError("%s: the page carries %d of its three office headings "
+                           "(Chair, Vice-Chair, Board Members) — it has been "
+                           "rebuilt; re-read %s"
+                           % (county, len(heads), spec["source_url"]))
+    members = []
+    for n, (start, office) in enumerate(heads):
+        end = heads[n + 1][0] if n + 1 < len(heads) else len(page)
+        for m in MN_ROW.finditer(page[start:end]):
+            ward = re.sub(r"\s+", "", m.group("ward")).lower()
+            members.append({
+                "name": _mn_flip(m.group("name")),
+                "ward": None if ward == "atlarge" else int(ward.lstrip("#")),
+                "role": None if office == "Board Members" else office,
+                "url": urllib.parse.urljoin(spec["source_url"],
+                                            html_lib.unescape(m.group("url"))),
+            })
+
+    districted = sorted(x["ward"] for x in members if x["ward"] is not None)
+    at_large = [x for x in members if x["ward"] is None]
+    if districted != list(range(1, seats + 1)):
+        raise RuntimeError("%s: the page names wards %s, not 1..%d — the board's "
+                           "composition has changed; re-read %s and LTSB's ward "
+                           "filing together" % (county, districted, seats,
+                                                spec["source_url"]))
+    if len(at_large) != spec["at_large"]:
+        raise RuntimeError("%s: the page names %d at-large supervisor(s), not %d — "
+                           "the board's composition has changed and the card's "
+                           "own statement of its size would be wrong"
+                           % (county, len(at_large), spec["at_large"]))
+    names = [x["name"] for x in members]
+    if len(set(names)) != len(names):
+        raise RuntimeError("%s: the same person is named twice (%s)"
+                           % (county, sorted({n for n in names if names.count(n) > 1})))
+
+    # EACH MEMBER'S OWN PAGE, AS A WITNESS ONLY — see the note above. A fetch
+    # failure is not a disagreement, but a page that names someone else is.
+    checked = 0
+    for n, member in enumerate(members):
+        if n:
+            time.sleep(0.4)             # seven pages of somebody else's server
+        try:
+            own = _mn_flat(fetch(member["url"]))
+        except Exception as e:          # noqa: BLE001 - the witness, never the source
+            print("  note %-12s %s's own page unreachable (%s) — unwitnessed this "
+                  "run" % (county, member["name"], e), file=sys.stderr)
+            continue
+        said_name, said_ward = MN_OWN_NAME.search(own), MN_OWN_WARD.search(own)
+        if not (said_name and said_ward):
+            raise RuntimeError("%s: %s's own page states no Name/Ward pair — the "
+                               "member pages have reshaped and the list page's "
+                               "ward would be unwitnessed (%s)"
+                               % (county, member["name"], member["url"]))
+        if name_fold(said_name.group(1)) != name_fold(member["name"]):
+            raise RuntimeError("%s: the list files %r where their own page says "
+                               "%r — the two county surfaces disagree about who "
+                               "this is" % (county, member["name"],
+                                            said_name.group(1).strip()))
+        ward = re.sub(r"\s+", "", said_ward.group(1)).lower()
+        mine = None if ward == "atlarge" else int(ward.lstrip("#"))
+        if mine != member["ward"]:
+            raise RuntimeError("%s: the list files %s under ward %s and their own "
+                               "page says %s — the two county surfaces disagree "
+                               "about which seat this is"
+                               % (county, member["name"], member["ward"], mine))
+        checked += 1
+
+    out = {}
+    for member in members:
+        if member["ward"] is None:
+            continue
+        out[str(member["ward"])] = {"name": member["name"], "vacant": False,
+                                    "role": member["role"]}
+    print("  %-12s %d ward seats + %d at large, no contact (the county's only "
+          "channel is a per-member contact FORM, which is not an address)"
+          % (county, seats, len(at_large)), file=sys.stderr)
+    print("  witness %-12s %d/%d supervisors' own pages confirm their name and "
+          "ward; LTSB files ward N as district N for all %d"
+          % (county, checked, len(members), seats), file=sys.stderr)
+    for member in at_large:
+        print("  at-large %-9s %s%s" % (county, member["name"],
+                                        " (%s)" % member["role"] if member["role"] else ""),
+              file=sys.stderr)
+    return out, [{"name": x["name"], "role": x["role"]} for x in at_large], \
+        spec["source_url"]
+
+
 # --- Waupaca: the Clerk's Directory of Public Officials, as a live page --------
 #
 # THE COUNTY BOARD'S OWN PAGE NAMES NOBODY. waupacacounty-wi.gov's
@@ -6973,6 +7177,7 @@ SINGLE_COUNTY_CARRIERS = (
     (MARATHON_DIRECTORY, "marathon-directory"),
     (ST_CROIX_TABLE, "st-croix-table"),
     (CHIPPEWA_DIRECTORY, "chippewa-directory"),
+    (MENOMINEE_BOARD, "menominee-board"),
 )
 
 
@@ -7002,6 +7207,7 @@ def main():
         try:
             archived_at = None
             doc_url = None
+            at_large = None
             if strategy == "arcgis":
                 districts = scrape_arcgis_county(src)
                 source_url, read_from = src["source_url"], "live"
@@ -7019,6 +7225,9 @@ def main():
                 source_url, read_from = src["source_url"], "live"
             elif strategy == "chippewa-directory":
                 districts, _doc = scrape_chippewa_directory(src)
+                source_url, read_from = src["source_url"], "live"
+            elif strategy == "menominee-board":
+                districts, at_large, _doc = scrape_menominee_board(src)
                 source_url, read_from = src["source_url"], "live"
             elif strategy == "archive":
                 districts, archived_at = scrape_archive_county(src)
@@ -7062,6 +7271,13 @@ def main():
         counties[fips] = {"county": name, "seats": seats, "source_url": source_url,
                           "scraped_at": scraped_at, "read_from": read_from,
                           "districts": districts}
+        # THE SUPERVISORS WHO HOLD NO DISTRICT. Only Menominee has any, and
+        # they are carried beside the districts rather than inside them: a
+        # district-keyed roster has no slot for a member elected countywide,
+        # and dropping them would ship a five-member board for a seven-member
+        # body with the Vice-Chair among the missing.
+        if at_large:
+            counties[fips]["at_large"] = at_large
         if strategy in ("pdf", "pdf-roster"):
             # the roster IS re-read every run — the edition it was read from is
             # recorded so a reader of the JSON can see which one answered

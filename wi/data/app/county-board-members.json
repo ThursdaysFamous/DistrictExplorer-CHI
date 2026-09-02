@@ -927,7 +927,7 @@
   "county": "Chippewa",
   "district": 17,
   "email": "grohmeyer@chippewacountywi.gov",
-  "name": "George Rohmeyer Jr",
+  "name": "George Rohmeyer Jr.",
   "phone": "715-210-9985",
   "sourceUrl": "https://chippewacountywi.gov/162/County-Board-Supervisors"
  },
@@ -1422,7 +1422,7 @@
  "5502311": {
   "county": "Crawford",
   "district": 11,
-  "name": "Wayne Jerrett Jr",
+  "name": "Wayne Jerrett Jr.",
   "sourceUrl": "https://www.crawfordcountywi.gov/boardsupervisors"
  },
  "5502312": {
@@ -1656,7 +1656,7 @@
  "5502533": {
   "county": "Dane",
   "district": 33,
-  "name": "Donald D. Dantzler Jr",
+  "name": "Donald D. Dantzler Jr.",
   "sourceUrl": "https://board.danecounty.gov/Supervisors"
  },
  "5502534": {
@@ -4025,7 +4025,7 @@
  "5506103": {
   "county": "Kewaunee",
   "district": 3,
-  "name": "Steven D Agamaite",
+  "name": "Steven D. Agamaite",
   "sourceUrl": "https://www.kewauneeco.org/government/boards_and_committees/"
  },
  "5506104": {
@@ -4068,13 +4068,13 @@
  "5506110": {
   "county": "Kewaunee",
   "district": 10,
-  "name": "Scott D Browne",
+  "name": "Scott D. Browne",
   "sourceUrl": "https://www.kewauneeco.org/government/boards_and_committees/"
  },
  "5506111": {
   "county": "Kewaunee",
   "district": 11,
-  "name": "Aaron G Augustian",
+  "name": "Aaron G. Augustian",
   "sourceUrl": "https://www.kewauneeco.org/government/boards_and_committees/"
  },
  "5506112": {
@@ -4092,13 +4092,13 @@
  "5506114": {
   "county": "Kewaunee",
   "district": 14,
-  "name": "Thomas J Romdenne",
+  "name": "Thomas J. Romdenne",
   "sourceUrl": "https://www.kewauneeco.org/government/boards_and_committees/"
  },
  "5506115": {
   "county": "Kewaunee",
   "district": 15,
-  "name": "Linda J Teske",
+  "name": "Linda J. Teske",
   "sourceUrl": "https://www.kewauneeco.org/government/boards_and_committees/"
  },
  "5506116": {
@@ -5233,6 +5233,50 @@
   "name": "Judi Nigbor",
   "sourceUrl": "https://www.marquettecountywi.gov/government/county-board-supervisors/"
  },
+ "55078-at-large": {
+  "atLarge": [
+   {
+    "name": "Eva Johnson",
+    "role": "Vice-Chair"
+   },
+   {
+    "name": "Dawn M. Wilber"
+   }
+  ],
+  "county": "Menominee",
+  "sourceUrl": "https://www.co.menominee.wi.us/county-board/"
+ },
+ "5507801": {
+  "county": "Menominee",
+  "district": 1,
+  "name": "Sandra Wescott-Gauthier",
+  "sourceUrl": "https://www.co.menominee.wi.us/county-board/"
+ },
+ "5507802": {
+  "county": "Menominee",
+  "district": 2,
+  "name": "Eugene Caldwell",
+  "sourceUrl": "https://www.co.menominee.wi.us/county-board/"
+ },
+ "5507803": {
+  "county": "Menominee",
+  "district": 3,
+  "name": "Ben Warrington",
+  "role": "Chair",
+  "sourceUrl": "https://www.co.menominee.wi.us/county-board/"
+ },
+ "5507804": {
+  "county": "Menominee",
+  "district": 4,
+  "name": "Kristah Warrington",
+  "sourceUrl": "https://www.co.menominee.wi.us/county-board/"
+ },
+ "5507805": {
+  "county": "Menominee",
+  "district": 5,
+  "name": "Douglas Cox Sr.",
+  "sourceUrl": "https://www.co.menominee.wi.us/county-board/"
+ },
  "5507901": {
   "county": "Milwaukee",
   "district": 1,
@@ -5729,7 +5773,7 @@
  "5508330": {
   "county": "Oconto",
   "district": 30,
-  "name": "Don Bartels Jr",
+  "name": "Don Bartels Jr.",
   "phone": "715-276-6326",
   "profileUrl": "https://www.ocontocountywi.gov/m/directory/employee?eid=49",
   "sourceUrl": "https://www.ocontocountywi.gov/453/County-Board"
@@ -8717,7 +8761,7 @@
  "5512510": {
   "county": "Vilas",
   "district": 10,
-  "name": "Joseph Wildcat Sr",
+  "name": "Joseph Wildcat Sr.",
   "sourceUrl": "http://www.vilascountywi.gov/departments/administration___officials/county_board_members/index.php"
  },
  "5512511": {
