@@ -25,6 +25,19 @@ The expansion invariant (§0.4): a county adds dispatch entries and roster
 rows, never a layer; an at-large body adds roster rows ONLY — no dispatch
 entry, no coverage function, no toggle.
 
+A CITY tier inside a state instance (§3.0) is that instance's depth, and no
+narrower skill owns it: one coverage gate per city, dissolved from the city's
+own ward fabric and never a bbox; a concept that appears in a second city
+becomes a dispatched concept exactly as a county concept does; the city's
+publisher outranks the state's for what the city administers, with the state's
+answer kept as the fallback so a failed city file degrades instead of
+dead-ending; two surfaces always, the live service and the open-data extract,
+with a build-time witness comparing them. §3.1 holds the dispatcher's
+semantics — coverage is the OR of the entries, the query dispatches by
+containment, a downed county's error propagates rather than reading as "no
+result" — and the rule that every retired per-county id is appended to the
+instance's alias shim, so shipped permalinks keep working.
+
 ## 2. Find the instance's files before writing anything (§0.1)
 
 `<tag>/metro-worksheet.json`, `<tag>/scripts/` (builders, scrapers, the
@@ -72,7 +85,9 @@ an instance file; never inline an instance value in a fence (add a
 repopulates `engine/` FROM one instance and is the adoption door, not the edit
 path. `docs/ENGINE_SYNC.md`'s banner describes the RETIRED release channel as
 current; use it only for its block inventory and the tombstone convention for
-retiring helpers.
+retiring helpers. `ny/CLAUDE.md` and `ca/CLAUDE.md` predate the consolidation
+and still describe a lockfile, an apply script and an engine-bump workflow —
+none exists; `compose_app.py` is the mechanism in those folders too.
 
 ## 5. A new roster → the triad (§6.3; roster-pipeline has the mechanics)
 
@@ -82,7 +97,12 @@ error record — never dropped, never invented. Builder: writes `<tag>/data/app`
 refuses below its floor (a deliberate under-tolerance so a vacancy does not
 wedge the weekly run; a placeholder roster gets floor 0, raised after the
 first real scrape), stable key order. Workflow: a fixed `bot/*` branch,
-force-pushed, opening a PR — never a commit to `main`.
+force-pushed, opening a PR — never a commit to `main`. Shared machinery lives
+in `scripts/scraper_common.py` (fail voices, UA definitions, retry) and
+`scripts/aia_bundle.py` (the pinned intermediates); a new scraper reuses them
+rather than hand-rolling a retry loop or its own certificate pin. A retired
+script gets a "Supersedes …" line in its successor's docstring AND is deleted —
+`docs/OPTIMIZATION_PLAYBOOK.md` §8 records the one a merge resurrected.
 
 ## 6. Choose the fetch engine by the ladder, and record the rung per target
 

@@ -76,6 +76,8 @@ names five; two more break the build and are in no document:
 - `.github/workflows/deploy-pages.yml` — `EXCLUDES`: add `<tag>/data/source`, `<tag>/data/state`, `<tag>/scripts` and `<tag>/data/*.geojson` so build inputs never publish, and add the instance folder ITSELF — that line is the go-live switch (§7).
 - `docs/DATA_LAYER_GUIDEBOOK.md` — coverage map, inventory, matrix, and each drop with its structural reason.
 - Regenerate `python3 scripts/build_landing_page.py`, `python3 scripts/build_privacy_page.py`, `python3 scripts/build_coverage_map.py` — the privacy page is MEASURED from the shipped `index.html`, so it reflects the instance only once its analytics and geocoder posture are real.
+- `sitemap.xml` — every page the instance serves; `scripts/page_consistency_test.mjs` derives its page list from it, so an unlisted page is never checked and never indexed.
+- The reader-facing counts `python3 scripts/build_county_status.py --check` scans: README's fleet table (a row per `metros.json` entry, and its "<n> instances" prose) and `funding.json`. Iowa shipped while README said "four instances" and every gate stayed green; this one was written to stop that.
 - Instance-side: PWA icons and `manifest.webmanifest` via `python3 scripts/build_manifests.py`; its own GoatCounter site and tag (`trackEvent` no-ops silently without one — a real port shipped days of zero analytics); any CI secrets its scrapers need.
 
 ## 5. Compose, generate, then the national tier

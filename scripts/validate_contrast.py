@@ -69,7 +69,10 @@ place the repo has measured it is a comment in styles-hover-responsive.txt,
 which records "#8b93a1 measures 3.09:1 and fails AA" as the reason its labels
 are #6b7280 — by hand, once, for one file. Opacity on text (.locate-btn:disabled
 at 0.6, .rel-note at 0.7) and color-mix() grounds (.disclaimer, the sub-page
-pill hover) are likewise noted and not measured.
+pill hover) are likewise noted and not measured. The TEMPLATE style blocks an
+instance's index.html carries between the fences (Illinois's .empty-state-lede,
+its school chips) sit outside those five surfaces and were not mapped as a
+whole; the one faint pair a completeness critic found in them is in the table.
 
 WHAT IT DOES WITH A SHORTFALL. A pair under its floor FAILS, unless it is
 recorded in ACCEPTED_SHORTFALLS with the MEASURED ratio, a reason and a date
@@ -118,24 +121,24 @@ FLOORS = {"text": 4.5, "large": 3.0, "ui": 3.0, "decorative": None}
 # not measuring.
 PAIRS = [
     # — body text on the grounds —
-    ("ink",        "surface",    "text", "cards, panels, masthead: header.masthead, .layer-block, .share-popover (skin)"),
+    ("ink",        "surface",    "text", "cards, panels, masthead: header.masthead, .layer-block, .share-popover (skin); the sub-page shell's .answer-card body"),
     ("ink",        "paper",      "text", "app ground: body (styles-app); every root page's body"),
     ("ink",        "surface-2",  "text", "section heads: .layer-block-head (skin; dark literal #262331 == --surface-2 dark)"),
     ("ink",        "brand-tint", "text", "privacy.html .k / .tldr; landing .notice-h; landing .pill (build_landing_page, build_privacy_page)"),
     ("ink",        "border",     "text", ".gap-suggest:hover — text with the border colour as its ground (styles-hover-responsive)"),
     ("ink-2",      "surface",    "text", "history.html .tile-l (build_history_page)"),
     ("ink-2",      "paper",      "text", "history.html .intro, .entry p, code (build_history_page)"),
-    ("ink-3",      "surface",    "text", "h1.title small, .masthead-action-link, .share-popover-note, .empty-state (skin, as --slate)"),
+    ("ink-3",      "surface",    "text", "h1.title small, .masthead-action-link, .share-popover-note (skin, as --slate); the gaps panel's .gap-area, .gap-detail, .gaps-credit (styles-footer); the source-unavailable notice renderSourceUnavailable paints from JS"),
     ("ink-3",      "paper",      "text", "sub-page details body, landing h1 at <=560px, .kbd-select-btn (shell, root, styles-app)"),
     ("ink-3",      "surface-2",  "text", "privacy.html thead th at 12px (build_privacy_page)"),
     ("ink-3",      "brand-tint", "text", "landing .notice-b, footer .support (build_landing_page)"),
     ("ink-3",      "border",     "text", ".gap-badge at 10px — text on the border colour (styles-hover-responsive)"),
     ("muted",      "surface",    "text", "privacy .masthead h1 small, .which, .footer-inner; coverage-map attribution at 10px"),
-    ("muted",      "paper",      "text", "landing .lede, .coverage-caption, .not-yet-list; history .kicker"),
+    ("muted",      "paper",      "text", "landing .lede, .coverage-caption, .not-yet-list; history .kicker and its scheduled-jobs th at 12px"),
     ("muted",      "brand-tint", "text", "landing #notice-dismiss at 11.5px; coverage-map .legend a:hover .mt"),
 
     # — the quiet tier: small labels, meta, placeholders — still TEXT —
-    ("faint",      "surface",    "text", ".dst-metro-menu-label 10px, .districtry-panel-foot / .footer-meta 11px, .title-metro, .hover-foot (skin, as --slate-soft)"),
+    ("faint",      "surface",    "text", ".dst-metro-menu-label 10px, .footer-meta 11px, .title-metro, .hover-foot (skin, as --slate-soft); .empty-state-lede 12.5px (il TEMPLATE block); privacy td small 12px; coverage-map .legend h3 11px; landing .pill-n at rest"),
     ("faint",      "paper",      "text", "landing h2 at 15px, .cta-note 13px, .search-input::placeholder (build_landing_page, shell)"),
     ("faint",      "brand-tint", "text", "landing .pill:hover .pill-n at 12px (build_landing_page)"),
 
@@ -159,7 +162,7 @@ PAIRS = [
     # inversion the sub-page reader named). build_landing_page.py already
     # flips its own button to --paper text in dark, and records why.
     ("#fff",       "brand",      "text", ".search-row button (styles-core colour, skin ground), .masthead-actions a.is-primary:hover, .footer-link-btn:hover"),
-    ("#fff",       "brand-700",  "text", ".cta (shell), .search-row button:hover, .hover-toggle-btn[aria-pressed=true], .pin-parent-btn.is-pinned, .btn-primary"),
+    ("#fff",       "brand-700",  "text", ".cta (shell), .search-row button:hover, .btn-primary:hover — NOT the pressed/pinned toggles in dark: the skin's later [data-theme=dark] .hover-toggle-btn / .pin-parent-btn rules repaint those on --dst-raised"),
     ("#fff",       "brand-warm", "text", ".stub-badge at 10px (styles-hover-responsive)"),
     ("paper",      "brand",      "text", "landing .search-button in dark — the flip that HOLDS: build_landing_page records white on #a78bfa = 2.72 and paints --paper instead"),
     ("paper",      "brand-700",  "text", "landing .search-button:hover in dark"),
@@ -176,7 +179,7 @@ PAIRS = [
     # border-dot outlines LABELLED controls (.dst-metro-btn, .masthead-actions
     # a, .hover-toggle-btn, as --line-strong); 1.4.11 holds a boundary to 3:1
     # only where it is what identifies the component, and these carry text.
-    ("border-dot", "surface",    "decorative", "outlined labelled controls: .dst-metro-btn, .masthead-actions a, .hover-toggle-btn (skin, shell; as --line-strong)"),
+    ("border-dot", "surface",    "decorative", "outlined labelled controls: .masthead-actions a (shell), .hover-toggle-btn, .school-chip (skin; as --line-strong — .dst-metro-btn has border: 0)"),
     ("border",     "paper",      "decorative", "landing .search-card, sub-page details rules"),
     ("border-soft","surface",    "decorative", "row rules; privacy th/td rules"),
     ("empty",      "surface",    "decorative", "empty-state stripe: .layer-block.state-empty border-left"),
@@ -240,7 +243,7 @@ ACCEPTED_SHORTFALLS = {
     ("#fff", "brand-700", "dark"): dict(
         measured=1.91, decided=False, date="2026-09-02",
         reason="white on --accent-deep #c4b0ff: the search button's HOVER, the "
-               "sub-page .cta, and every pressed/pinned toggle state — 'deep' "
+               "sub-page .cta, the primary button's hover — 'deep' "
                "means more contrast against the ground, which on a dark ground "
                "is LIGHTER, and white text on it is the worst pair in the palette"),
     ("#fff", "brand-warm", "dark"): dict(

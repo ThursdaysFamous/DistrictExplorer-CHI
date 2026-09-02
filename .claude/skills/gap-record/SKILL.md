@@ -78,9 +78,12 @@ carries. No structured `asked` field exists; the vocabulary is the contract.
 A shipped county's entry is DELETED from the block — its story moves to a
 dated backlog section. A multi-county record shrinks and says so ("this
 record used to name five counties"). A partial close stays, with
-`PARTLY CLOSED <date>` and a narrowed `wanted`. A gap that says a source does
-not exist ages badly in one direction only; re-test the `no-source` entries
-periodically.
+`PARTLY CLOSED <date>` and a narrowed `wanted`. A gap closed on a source a
+READER contributed owes a credit row in `docs/SOURCE_CREDITS.md` — gap id,
+link, submitter or "anonymous", date — and a mention in the changelog entry;
+it is the one step in retiring a gap no gate can see. A gap that says a source
+does not exist ages badly in one direction only; re-test the `no-source`
+entries periodically.
 
 ## 7. Regenerate, then gate — every instance whose key changed
 

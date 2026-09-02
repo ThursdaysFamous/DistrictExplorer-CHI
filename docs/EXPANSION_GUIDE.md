@@ -1338,7 +1338,7 @@ Jersey's PDF.
 **AND BEFORE EVEN SEARCHING, READ THE CLERK'S E-MAIL ADDRESS.** The 2026-08-09 resweep
 of the fourteen counties recorded as having no website found NINE of them, and for nine
 counties **the Clerk's e-mail domain IS the county's web domain** — a fact sitting in
-`data/app/il-county-clerks.json`, scraped weekly from ISBE, for the whole time those
+`il/data/app/il-county-clerks.json`, scraped weekly from ISBE, for the whole time those
 records claimed no site existed. This project was e-mailing those counties at those very
 domains on 2026-08-05 while telling readers they had none. So step zero has a step
 minus-one, and it costs one line:
@@ -1383,7 +1383,7 @@ about the world that is very often a claim about the search.
    document rather than from the board page's silence (§3.5.1). The at-large path is
    implemented: add a `SITES` entry + parser to `scripts/il_county_commissioners_scraper.py`
    and a seat count to `EXPECT_MEMBERS` in `build_county_commissioners.py`, so the county
-   lands in `data/app/il-county-commissioners.json`, which the COUNTY card already reads —
+   lands in `il/data/app/il-county-commissioners.json`, which the COUNTY card already reads —
    no dispatch entry, no toggle (§3.5.1; Monroe/Randolph are the reference pair, the
    tranche-5 four the larger case). If
    the board IS districted but the county publishes no boundary, check whether it

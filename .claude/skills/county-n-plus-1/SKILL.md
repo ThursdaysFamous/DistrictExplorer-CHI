@@ -14,8 +14,9 @@ lines. What neither gives an agent at the moment it starts is the **order**,
 the **test that settles each decision**, and the **current names** of the
 tables and files the steps hang on. That is what is here.
 
-One correction to carry: §3.5 still writes `data/app/…`. Since R2.3 the
-Illinois files live at `il/data/app/`; the root `data/app` does not exist.
+One path to carry: Illinois's files live at `il/data/app/`. Older docs still
+write the pre-R2.3 spelling without the `il/` prefix, and the root `data/app`
+does not exist.
 
 ## 1. Before touching the world, read your own records
 
@@ -208,8 +209,7 @@ Read the ring count from `--check`, never from a map in your head — the
 enclave predictions were wrong twice in one day. A county with no unserved
 neighbour is an enclave only if it is INTERIOR; one that fronts the state line
 is a notch. A new hole needs its own OUTSIDE anchor inside it; an island
-follows the **First-island checklist** entry in §3.5.1 (CLAUDE.md still cites it
-as §2.5.1, from before the guide's 2026-08-27 rewrite). A frontier county you cannot
+follows the **First-island checklist** entry in §3.5.1. A frontier county you cannot
 serve but have recorded a gap for still ships `<slug>-county-outline.json`
 with the worksheet entry marked `dynamic_reference: true` and NOTHING in
 `DISPATCH_COUNTY_FIPS`; derive its anchors from TIGERweb place centroids and
@@ -263,21 +263,43 @@ python3 scripts/build_county_status.py           # docs/COUNTY_STATUS.md; its --
 ```
 
 plus the guidebook's coverage-map, inventory and matrix rows, the smoke
-ground truth if the county adds an anchor, and then the whole steward battery
+ground truth if the county adds an anchor, and the READER-FACING COUNTS that
+`build_county_status.py --check` also scans — the Illinois blurb in
+`metros.json` opens with "<n> counties", README's Illinois row says it, and
+`funding.json` repeats it; a join that leaves them behind is a red CI no skill
+explains. A permanent, measured block is recorded where the monthly gates
+invert on it: the `blocked` field on a `scripts/validate_sources.py` entry and
+`EXPECTED_UNREACHABLE` in `scripts/validate_card_links.py` — both from a CI
+probe, never from this sandbox's address. Then the whole steward battery
 (`.claude/skills/steward/SKILL.md` §1) before the push.
 
-## 9. Wisconsin and Iowa
+## 9. Wisconsin and Iowa are not the Illinois shape
 
-The ladder in §2–§3 is the same in every state; the files are not. Read the
-instance's `CLAUDE.md` (`wi/CLAUDE.md`, `ia/CLAUDE.md`) and its `scripts/`
-before assuming the Illinois shape — Wisconsin's boards are supervisory
-districts read by `wi/scripts/wi_county_board_scraper.py`; Iowa's officers
+The ladder in §2–§3 is the same in every state; the mechanics are not, and an
+agent routed here for an Iowa or Wisconsin county who reaches for a dispatch
+entry and a per-county triple will build the wrong thing.
+
+**Iowa.** `ia/CLAUDE.md` makes `docs/IA_EXPANSION_PLAN.md` binding for any
+Iowa change. Its supervisor layer is ONE state aggregate keyed by plan type,
+with county-level placeholders for boards in transition — a county is a row
+in that aggregate, not a dispatch entry; every workflow and data file is
+`ia-` prefixed with no exceptions, on a fixed `bot/ia-*` branch. Its officers
 come from ISAC's member portal plus one statewide directory per office, which
-can disagree, and `DIVERGENCE_RESOLVED` in `ia/scripts/build_ia_county_officers.py`
-is the pin table that withholds a name until a third witness settles it; both
-instances carry their own worksheets and gap blocks (`--metro wisconsin` / `--metro iowa` on `build_coverage_gaps.py`).
-Part 5 of the guide is the cross-state statement of these rules; §3.5.1 is
-their Illinois-worded original.
+can disagree; `DIVERGENCE_RESOLVED` in `ia/scripts/build_ia_county_officers.py`
+is the pin table that withholds a name until a third witness settles it.
+
+**Wisconsin.** `docs/WI_PHASE4_PLAN.md` is the plan of record. Boards are
+supervisory districts, and adding a county's roster is a `COUNTIES` table
+entry in `wi/scripts/wi_county_board_scraper.py` plus a robots.txt check
+(`wi/scripts/validate_robots.py`, in the WI validate-sources workflow) — one
+`.github/workflows/update-wi-county-board-roster.yml` re-scrapes every
+reachable county into one file, never a new triple. Two WI-only CI gates run
+on every PR: the county board directory and the county outlines must match
+the shipped fabric.
+
+Both instances carry their own worksheets and gap blocks (`--metro wisconsin`
+/ `--metro iowa` on `build_coverage_gaps.py`). Part 5 of the guide is the
+cross-state statement of the rules; §3.5.1 is their Illinois-worded original.
 
 ## 10. Nevers specific to county work
 

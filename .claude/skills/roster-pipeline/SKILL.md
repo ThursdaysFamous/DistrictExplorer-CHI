@@ -173,10 +173,14 @@ URLs, markers and regexes; which contact fields ship; every `EXPECT_*` and
 its stated blind spot; subset exceptions; role-join rules; fetch posture
 (plain `requests.get`, `scraper_common.fetch`, or a pinned intermediate); the
 UA constant; the cron slot; the `-o` default. Wisconsin and Iowa do NOT use the
-per-county triple: one `update-wi-county-board-roster.yml` re-scrapes every
-reachable county into one file with `--allow-drop` and a robots.txt gate
-(`wi/scripts/validate_robots.py`); Iowa hoists the board switchboard to
-`boardPhone`. Read the instance's `CLAUDE.md` first.
+per-county triple. Wisconsin: a `COUNTIES` entry in
+`wi/scripts/wi_county_board_scraper.py`, a robots.txt check
+(`wi/scripts/validate_robots.py`), and one
+`.github/workflows/update-wi-county-board-roster.yml` re-scraping every
+reachable county into one file with `--allow-drop`. Iowa: one state aggregate,
+every file and workflow `ia-` prefixed, the board switchboard hoisted to
+`boardPhone`, under `docs/IA_EXPANSION_PLAN.md`. Read the instance's
+`CLAUDE.md` first.
 
 ## 11. Nevers
 

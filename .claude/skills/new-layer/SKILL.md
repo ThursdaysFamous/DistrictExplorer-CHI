@@ -1,6 +1,6 @@
 ---
 name: new-layer
-description: Add a NEW layer, toggle or concept to an instance — starting with the test that decides whether it is a layer at all (most proposals are a dispatch entry or a card row), then the factory, the card, the sidebar position, nesting, and the same-change bookkeeping split by what the worksheet GENERATES and what is hand-edited. Use it for "add an appellate-district layer to il", "wi: new layer for technical college districts", "is ROE a layer or a county-card row?", "where does community-college sit in the sidebar", "nest mpd-squad-area under mpd-district", "validate_index says LAYER_SIDEBAR_RANK is missing an id", "add the guidebook matrix row for ia-judicial-district", "should mwrd become a sanitary-district concept now that a second county publishes one". Not for a county's dispatch entry into a shipped concept (county-n-plus-1), a new state (new-state-instance), restyling an existing layer, or a red PR (steward).
+description: Add a NEW layer, toggle or concept to an instance — starting with the test that decides whether it is a layer at all (most proposals are a dispatch entry or a card row), then the factory, the card, the sidebar position, nesting, and the same-change bookkeeping split by what the worksheet GENERATES and what is hand-edited. Use it for "add an appellate-district layer to il", "wi: new layer for technical college districts", "is ROE a layer or a county-card row?", "where does community-college sit in the sidebar", "nest mpd-squad-area under mpd-district", "validate_index says LAYER_SIDEBAR_RANK is missing an id", "add the guidebook matrix row for ia-judicial-district", "should mwrd become a sanitary-district concept now that a second county publishes one", and for changing what an EXISTING layer's card renders. Not for a county's dispatch entry into a shipped concept (county-n-plus-1), a new state (new-state-instance), restyling an existing layer, or a red PR (steward).
 ---
 
 # A new layer
@@ -57,8 +57,10 @@ pill (`cardIdentifier`) → person rows (badges, notes, committee expanders) →
 office group → contact line → footer link (`primaryLink`); a name-only layer
 sets `compact`. Helpers are data-only by contract: never pass HTML; e-mail
 renders as `mailto:` and is never printed; phone rows get a `tel:` href the
-helper builds; absent fields render nothing. Deviate only where the concept
-demands it. If the source carries identity, location or contact the card does
+helper builds; absent fields render nothing; every external `url` passes
+through `safeHttpUrl` inside the helper. Deviate only where the concept
+demands it. Editing an existing card is the same vocabulary — pick the helper
+by pattern from that file's table, and never bypass one. If the source carries identity, location or contact the card does
 not yet show, record the gap in the guidebook backlog rather than shipping
 silently.
 
