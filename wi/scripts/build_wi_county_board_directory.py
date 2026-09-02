@@ -216,7 +216,12 @@ COUNTY_SITES = {
     "55103": ("Richland", "https://richlandcountywi.gov/"),
     "55105": ("Rock", "https://co.rock.wi.us/"),
     "55107": ("Rusk", "https://ruskcounty.org/supervisors"),  # county page confirms 1..19
-    "55109": ("St Croix", "https://sccwi.gov/"),
+    # WAS THE COUNTY'S HOME PAGE, which links NOTHING about the board — zero
+    # anchors on sccwi.gov/ match board, supervisor or district, so a reader
+    # sent there could not reach their own board and neither could this repo's
+    # own sweeps, which is why the county sat in the gap block until
+    # 2026-09-02 with its whole 19-seat roster published two clicks in.
+    "55109": ("St Croix", "https://sccwi.gov/477/County-Board-of-Supervisors"),  # county page confirms 1..19
     "55111": ("Sauk", "https://www.co.sauk.wi.us/countyboard/sauk-county-board-members"),
     "55113": ("Sawyer", "https://www.sawyercounty.gov/"),
     "55115": ("Shawano", "https://www.co.shawano.wi.us/county_board/"),  # county page confirms 1..27

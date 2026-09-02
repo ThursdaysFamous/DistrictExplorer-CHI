@@ -2,8 +2,8 @@ name: Update WI county board roster
 
 # Weekly refresh of the Wisconsin county board supervisors
 # (wi/data/app/county-board-members.json, read by wi/index.html's County Board
-# District card). Re-scrapes the 60 counties whose district-keyed member list
-# this can reach, by whichever of the fifteen carriers reaches it — 41 board
+# District card). Re-scrapes the 61 counties whose district-keyed member list
+# this can reach, by whichever of the sixteen carriers reaches it — 41 board
 # pages, Milwaukee's and Racine's own GIS layers (Milwaukee witnessed against
 # the county's Legistar API), Fond du Lac through the Internet Archive, Dodge's
 # constituent directory, Kenosha's and Adams's directory PDFs, Clark's Official
@@ -11,6 +11,7 @@ name: Update WI county board roster
 # it from a content hash that changes on re-upload), Pierce's annual directory
 # PDF (pinned by year, because that host allows documents and forbids pages),
 # Marathon's staff-directory table with a fetch per member,
+# St. Croix's own five-column Districts & Supervisors table,
 # Columbia's framed table,
 # and NINE dated documents that are never re-fetched (Taylor, Lafayette
 # and La Crosse behind a captcha or a challenge; Pepin, Jackson, Richland, Rusk,
