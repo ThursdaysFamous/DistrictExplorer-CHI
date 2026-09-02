@@ -1109,6 +1109,113 @@ def parse_gallatin(page):
 
 
 
+# ----------------------------------------------------------------- Pulaski
+PULASKI_EMAIL_RE = re.compile(r"[\w.+-]+@[\w-]+\.[\w.-]+")
+
+
+def parse_pulaski(page):
+    """Pulaski prints its three commissioners as one centred Weebly paragraph,
+    each seat a name/role/e-mail triple separated by <br />:
+
+        <div class="paragraph" style="text-align:center;"><em><font size="3">
+        <strong>Robert Helman</strong><br />Chairman&nbsp;<br />
+        rhelman@pulaskicountyil.gov&nbsp;<br /><br />
+        <strong>Rex Wilburn</strong><br />Vice Chairman&nbsp;<br />...
+
+    THE PAGE'S OWN HEADING IS ALSO <strong>-WRAPPED AND ALSO SITS IN A
+    `<div class="paragraph">` — "Pulaski County Board of Commissioners" in a
+    <font size="6">. An unbounded read of every <strong> on the page therefore
+    ships the heading as a commissioner.
+
+    AND THE HEADING CANNOT BE USED TO BOUND THE REGION, which the first draft
+    of this parser got wrong and the count guard caught. That heading's exact
+    text appears TWICE: once at byte 371 inside
+    `<meta property="og:description">`, and only then in the heading div at
+    ~18,600. Searching for the text and taking the next paragraph div lands on
+    the META occurrence, so "the next paragraph div" is the HEADING div — and
+    the parser returns exactly one member, named "Pulaski County Board of
+    Commissioners". A SOCIAL-CARD META TAG REPEATS THE HEADING, so a
+    find-the-heading-then-take-what-follows bound reads the page's own title
+    block as its content.
+
+    The region is therefore chosen by CONTENT, not position: of the page's four
+    paragraph divs, the roster is the one carrying two or more e-mail addresses
+    AND two or more <strong> names. The heading div has one <strong> and no
+    e-mail; the two footer divs have neither. If the county ever reformats past
+    that test this returns nothing and the count guard fails the county, which
+    is the intended failure — a roster that silently shrinks is worse than one
+    that stops.
+
+    THE COUNTY'S WEBSITE AND ITS MAIL DOMAIN ARE DIFFERENT DOMAINS, WHICH IS
+    WHY THIS COUNTY READ AS DARK FOR WEEKS. The commissioners' e-mails are on
+    pulaskicountyil.gov; the website is pulaskicountyil.net. This project's
+    standing method for finding a county site — permute the domain in the
+    clerk's e-mail address, the Cumberland correction — lands on the .gov,
+    which serves no page, and the gap record concluded "the county's website
+    cannot be reached from here." It reads 200 with 26 KB of content on the
+    .net, with a department page per office. A MAIL DOMAIN IS NOT A CLAIM
+    ABOUT A WEBSITE: when the permutation fails, search for the county by
+    name before recording it dark.
+
+    AT-LARGE was already settled on this county's record from its certified
+    2024 primary (platinumelectionresults.com, county id 19): one countywide
+    commissioner contest per party over all eleven precincts, no
+    district-suffixed contest anywhere. Nothing here re-proves it.
+
+    THE ROSTER COMES FROM THE COUNTY'S PAGE, NEVER FROM THOSE RETURNS — the
+    Scott rule: a return names who WON a contest, not who holds the seat
+    today. That was the second half of this county's blocker, and the page
+    answers it directly. The page is maintained: it carried
+    `Last-Modified: Thu, 23 Jul 2026 16:53:05 GMT` when this parser was
+    written, six weeks before. Its 2022-dated minutes and 2023 ordinance are
+    ATTACHMENTS below the roster block, not evidence about the roster's age.
+
+    E-MAILS SHIP because the county publishes one per commissioner. No phone
+    ships: the page carries none for this body.
+    """
+    roster = None
+    for candidate in re.finditer(
+            r"(?is)<div class=\"paragraph\"[^>]*>(.*?)</div>", page):
+        body = candidate.group(1)
+        if (len(PULASKI_EMAIL_RE.findall(body)) >= 2
+                and len(re.findall(r"(?is)<strong>", body)) >= 2):
+            roster = body
+            break
+    if roster is None:
+        return [], None
+    members = []
+    entry = None
+    for part in re.split(r"(?i)<br\s*/?>", roster):
+        strong = re.search(r"(?is)<strong>(.*?)</strong>", part)
+        if strong:
+            name = clean(strong.group(1))
+            if not name:
+                continue
+            entry = {"name": name}
+            if not any(x["name"] == name for x in members):
+                members.append(entry)
+            continue
+        if entry is None:
+            continue
+        text = clean(part)
+        if not text:
+            continue
+        email = PULASKI_EMAIL_RE.search(text)
+        if email:
+            entry["email"] = email.group(0)
+            continue
+        if "role" not in entry:
+            canonical = role_of(text)
+            if canonical:
+                entry["role"] = canonical
+            elif text.lower() == "secretary":
+                # A board office this county names and the shared mapper does
+                # not — kept verbatim here rather than widening role_of for
+                # every county, exactly as Massac's parser does.
+                entry["role"] = "Secretary"
+    return members, None
+
+
 # ------------------------------------------------- incomplete TLS chains
 # THE COLES PATTERN, MET A SECOND TIME. gallatinco.illinois.gov answers 200 and
 # renders perfectly in a browser, but serves ONLY its leaf certificate — the
@@ -1154,6 +1261,16 @@ SITES = {
         "structure": "Commission form \u2014 3 commissioners elected countywide",
         "expect": 3,
         "parse": parse_massac,
+    },
+    "PULASKI": {
+        "name": "Pulaski County",
+        # NOT pulaskicountyil.gov, which carries the commissioners' MAIL and
+        # serves no page. See parse_pulaski: the clerk-domain permutation this
+        # project normally uses lands on the .gov and reads the county as dark.
+        "url": "https://pulaskicountyil.net/pulaski-county-board.html",
+        "structure": "Commission form — 3 commissioners elected countywide",
+        "expect": 3,
+        "parse": parse_pulaski,
     },
     "MONROE": {
         "name": "Monroe County",

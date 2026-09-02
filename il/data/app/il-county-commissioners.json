@@ -418,6 +418,28 @@
   "sourceUrl": "https://www.pikecountyil.org/county-boards/",
   "structure": "9 members elected countywide — no districts"
  },
+ "PULASKI": {
+  "county": "Pulaski County",
+  "members": [
+   {
+    "email": "rhelman@pulaskicountyil.gov",
+    "name": "Robert Helman",
+    "role": "Chairman"
+   },
+   {
+    "email": "rwilburn@pulaskicountyil.gov",
+    "name": "Rex Wilburn",
+    "role": "Vice Chairman"
+   },
+   {
+    "email": "msharp@pulaskicountyil.gov",
+    "name": "Mike Sharp",
+    "role": "Secretary"
+   }
+  ],
+  "sourceUrl": "https://pulaskicountyil.net/pulaski-county-board.html",
+  "structure": "Commission form — 3 commissioners elected countywide"
+ },
  "PUTNAM": {
   "county": "Putnam County",
   "members": [

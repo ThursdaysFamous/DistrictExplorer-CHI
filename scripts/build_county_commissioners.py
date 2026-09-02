@@ -104,6 +104,19 @@ EXPECT_MEMBERS = {
                                      # county's own commissioners page, never the returns.
                                      # A new ISLAND — all three Illinois neighbours
                                      # (Johnson, Pope, Pulaski) are unserved.
+    "PULASKI": 3,                    # 2026-09-02; the roster half of a county already
+                                     # served on precincts. At-large was settled on its
+                                     # own record from the certified 2024 primary (one
+                                     # countywide commissioner contest per party over
+                                     # all eleven precincts); what was missing was who
+                                     # holds the seats, because the gap record said the
+                                     # county's website "cannot be reached from here".
+                                     # IT CAN. The permutation this project uses to find
+                                     # a county site derives it from the clerk's MAIL
+                                     # domain, pulaskicountyil.gov, which serves no page;
+                                     # the site is pulaskicountyil.net and its board page
+                                     # names all three with a county e-mail each. The
+                                     # page carried Last-Modified 2026-07-23 when read.
     "GALLATIN": 5,                   # 2026-08-21; at-large proven TWICE from the county's
                                      # own certified canvasses — "CO.BD.MEMBER CWD (VOTE
                                      # FOR) 3" in the 2026 primary and "COUNTY BOARD MEMBER
