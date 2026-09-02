@@ -236,6 +236,20 @@ jobs:
       - name: Workflow scripts import under their declared dependencies
         run: python3 scripts/validate_workflow_deps.py
 
+      # A skill under .claude/skills/ is prose an agent loads at the moment it
+      # starts a task, and prose that names scripts, tables, guide sections and
+      # flags is a copy of facts that live elsewhere — the drift class every
+      # other gate here exists for. The steward skill's own preamble says why a
+      # skill carries only what CLAUDE.md does not; this is what keeps the
+      # pointers it does carry pointing at things: every backticked path
+      # exists, every §N.N is a heading in docs/EXPANSION_GUIDE.md, every
+      # --flag after a script is one the script mentions, every ALL_CAPS table
+      # name lives in a file the skill names, and the description fits the
+      # trigger surface. It found its first stale path in the first skill
+      # written against it. Stdlib only.
+      - name: Skills point at things that exist
+        run: python3 scripts/validate_skills.py
+
       # A roster's count guard proves it still has twelve members; it proves
       # nothing about whether those twelve still carry an e-mail. On 2026-08-08
       # Cloudflare's e-mail obfuscation quietly emptied all seven of Brown
