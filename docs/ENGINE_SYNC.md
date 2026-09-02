@@ -3,6 +3,16 @@
 *This file is itself part of the shared engine: the SAME copy ships in every
 metro fork. Never edit it in one fork only.*
 
+> **SUPERSEDED AGAIN — R2.1 (recorded 2026-09-02).** The release channel the
+> note below describes was itself retired when the forks became folders of
+> this one repo: there is ONE copy of every block under `engine/`,
+> `scripts/compose_app.py` splices it into every instance and its `--check`
+> is the CI gate; `engine.lock.json`, `apply_engine.py`, `engine-bump.yml` and
+> the release workflows no longer exist (`docs/DEV_PROCESS_ASSESSMENT.md`).
+> What survives of this file is the block inventory — which omits the two
+> `engine/shared/` blocks; `ls engine/` is the authority — and the tombstone
+> convention. Read it as history, not procedure.
+>
 > **SUPERSEDED IN PART — 2026-07-13.** The manual porting loop below (struck
 > through) is retired by `docs/MECHANIZATION_PLAYBOOK.md` Conversion 1 in the
 > Chicago repo: the engine is now distributed as a **published, hash-verified

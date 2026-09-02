@@ -3,7 +3,7 @@
 Build data/app/mercer-precincts.json + data/app/mercer-county-board-districts.json
 — Mercer County's 24 voting precincts and 5 County Board districts, composed
 from the county's own certified election returns (docs/EXPANSION_GUIDE.md
-§2.5.1, the canvass route; scripts/vtd_board_districts.py holds the machinery).
+§3.5.1, the canvass route; scripts/vtd_board_districts.py holds the machinery).
 
 HOW THIS COUNTY CAME TO BE BUILDABLE. Mercer answered this project's ask on
 2026-08-17: Deputy Clerk Adams, routed by County Clerk & Recorder Brian

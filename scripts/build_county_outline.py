@@ -1358,7 +1358,7 @@ COUNTIES = {
     # record at all, researched together after contiguity was retired as a
     # shipping gate. GAP-LOCATION outlines only — none is dispatched. Anchors
     # derived from TIGERweb Incorporated Places centroids and round-tripped
-    # through a point-in-county test (EXPANSION_GUIDE §2.5.1), never recalled
+    # through a point-in-county test (EXPANSION_GUIDE §3.5.1), never recalled
     # coordinates; outside anchors are the largest place of neighbouring
     # counties. Alexander has two outside anchors, not three — its remaining
     # borders are the Mississippi and Ohio rivers, not Illinois counties.

@@ -9,7 +9,7 @@ franklincountyil.gov/county-board-members/, which publishes all nine members
 grouped under District 1, 2 and 3. The GEOMETRY is derived from the county's
 certified per-precinct returns (build_franklin_boundaries.py), and this module
 re-reads two cheap facts from those returns every week as the re-precincting
-and redistricting tripwire that §2.5.1 step 6 asks for.
+and redistricting tripwire that §3.5.1 step 6 asks for.
 
 THE MEMBERS PAGE IS A GRID, AND IT MUST BE READ AS ONE. It is a WP Table
 Builder table whose every cell carries data-y-index / data-x-index, and the
@@ -187,7 +187,7 @@ def scrape_members(page, warnings):
 
 
 def check_composition(warnings):
-    """The §2.5.1 step-6 tripwire, in two cheap reads.
+    """The §3.5.1 step-6 tripwire, in two cheap reads.
 
     Neither proves the dissolve; both catch the two events that would
     invalidate it — the county re-precincting, or the board redistricting.

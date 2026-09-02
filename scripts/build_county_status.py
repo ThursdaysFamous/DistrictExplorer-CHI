@@ -312,7 +312,7 @@ def render(d):
         " county of a shipped judicial circuit (its only county-specific card"
         " is the subcircuit); `County card`: an at-large county with no"
         " district geometry, its board riding the County card"
-        " (`docs/EXPANSION_GUIDE.md` §2.5.1).",
+        " (`docs/EXPANSION_GUIDE.md` §3.5.1).",
         "- **Board** — how the county board surfaces: `districted` (own"
         " `county-board` dispatch entry), `at-large — County card`"
         " (data/app/il-county-commissioners.json), or `no board layer`"

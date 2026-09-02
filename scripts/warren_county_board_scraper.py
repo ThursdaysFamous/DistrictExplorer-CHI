@@ -9,7 +9,7 @@ each member as a nested list — name, then "County Board Member District N", th
 committees they serve on, the year their term expires, and an e-mail. The
 COMPOSITION comes from the legend of the county's own precinct map
 (build_warren_boundaries.py), and this module re-reads that legend weekly, which
-is the §2.5.1 step-6 tripwire in its strongest available form: the same document
+is the §3.5.1 step-6 tripwire in its strongest available form: the same document
 the boundary was built from, re-parsed.
 
 THE E-MAILS ARE CLOUDFLARE-OBFUSCATED — every one of them, with no plain

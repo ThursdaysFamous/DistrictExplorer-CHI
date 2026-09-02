@@ -960,9 +960,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
     /* ==== GENERATED:BEGIN brand-palette ==== */
     /* ---- districtry palette — brand violet is CHROME ONLY, never map data; shared with the fleet, not state-themed by convention ---- */
     --accent: #6d3fd1;
-    --accent-deep: #4a2b8c;
+    --accent-deep: #5730ab;
     --accent-warm: #b0316e;
-    --accent-warm-deep: #8c2e4a;
+    --accent-warm-deep: #8f2659;
     /* ==== GENERATED:END brand-palette ==== */
   /* ==== ENGINE:BEGIN styles-core ==== */
 
@@ -1011,7 +1011,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
     left: -9999px;
     top: 0;
     background: var(--ink);
-    color: #fff;
+    /* --paper, not #fff: the dark tier lifts --ink to #ece9f4 and white on it
+       is 1.2:1 — a skip link invisible to exactly the keyboard users it exists
+       for. The root pages' skip links already paint this pair. Measured by
+       scripts/validate_contrast.py, both tiers. */
+    color: var(--paper);
     padding: 10px 16px;
     z-index: 1000;
     border-radius: 0 0 6px 0;
@@ -1993,7 +1997,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
     content: "▸";
     font-size: 10px;
     line-height: 1;
-    color: var(--line-strong);
+    /* --slate, not --line-strong: this glyph is the group's open/closed
+       indicator, which 1.4.11 holds to 3:1, and --line-strong measured 1.69:1
+       light / 1.91:1 dark on the panel. The label text beside it is already
+       --slate. Measured by scripts/validate_contrast.py, both tiers. */
+    color: var(--slate);
   }
   .gaps-group[open] > .gaps-section-label::before { content: "▾"; }
   .gaps-section-label:hover { color: var(--ink); }
@@ -3233,7 +3241,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
        its hue: #e879b9 is the design package's own dark value for the mark's
        third polygon, so the four group dots stay four distinct hues. */
     --accent-warm: #e879b9;
-    --accent-warm-deep: #f0a3cf;
+    --accent-warm-deep: #f0a5cd;
     --ink: #ece9f4;
     --slate: #b6b1c4;
     --slate-soft: #746e86;

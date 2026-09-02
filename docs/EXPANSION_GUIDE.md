@@ -70,7 +70,7 @@ bands, and what "done" means.
 |---|---|---|
 | Day one | every layer a statewide publisher answers for | one city's full civic stack |
 | Growth | *downward* into city tiers (Milwaukee, then Madison) | *outward* county by county |
-| Coverage bands | two — in-state / out-of-state | three — deep coverage / wider region / outside |
+| Coverage bands | usually two — in-state / outside; three where full coverage is a proper subset of a region whose layers still answer (Wisconsin, per §2.5.1's measured table) | three for Illinois; two for a city instance (NYC, SF) — §2.5.1's table is what was measured |
 | Layers a metro can't have | PSAP + NG911 service areas, statewide court tiers, technical-college districts | — |
 | Layers a state can't cheaply have | neighborhood fabrics, city police beats, ward-level polling | — |
 | Risk | thin cards everywhere; identity-only layers dominate | a wash that greys out territory you came to serve |
@@ -302,7 +302,7 @@ regions in `index.html`, `sw.js`, `sources.html`, `validate_index.py`, `smoke_te
 | Legislature | Senate 33 / Assembly 99 | chamber sizes gate the roster floors |
 | Congressional seats | 8 | from `data/state/` at bootstrap |
 | Board/commission structure | 72 counties, 1,590 supervisory districts | the depth question Part 3 answers |
-| Domain / brand / analytics | districtry.com/wi/, own GoatCounter tag | never the reference's, never absent |
+| Domain / brand / analytics | districtry.com/wi/, the fleet's shared GoatCounter endpoint | never the reference's domain or brand; analytics copied from a sibling — one shared site, keyed by path (corrected 2026-09-02) |
 
 ## 2.2 What the instance inherits vs writes
 
@@ -409,24 +409,34 @@ contract, never pass HTML).
 
 ## 2.4 Day-one registration
 
-In the **repo root**: (1) add the instance to `metros.json` with `id`, `tag`, `url`,
-`landing_name` and `blurb`, then run `generate_metro_files.py --sync-fleet` — `sync_fleet`
-projects a whitelist into each instance's `metro_explorers` and deliberately keeps the three
-landing fields fleet-level, so they never reach an app; (2) regenerate the root landing page
+In the **repo root**: (1) **at go-live, not on day one** — add the instance to `metros.json`
+with `id`, `tag`, `url`, `landing_name` and `blurb`, then run
+`generate_metro_files.py --sync-fleet` — `sync_fleet` projects a whitelist into each
+instance's `metro_explorers` and deliberately keeps the three landing fields fleet-level, so
+they never reach an app. CORRECTED 2026-09-02 from Iowa's PR 0 (`docs/IA_EXPANSION_PLAN.md`):
+`render_cards()` and `sync_fleet()` filter nothing, so a `metros.json` entry renders a live,
+clickable landing card the day it lands, and while the folder is still excluded from the
+deploy that card is a 404 — until go-live, hand-seed the new worksheet's `metro_explorers`
+from a sibling's array, which is exactly what `--sync-fleet` will produce later; (2) regenerate the root landing page
 (`build_landing_page.py`) and `privacy.html` (`build_privacy_page.py`) — the privacy page is
 **measured from each app's shipped `index.html`**, so a new instance appears there only once
 its analytics and geocoder posture are real; (3) add its `validate_index.py` and
 `smoke_test.mjs` invocations to `smoke-test.yml`; (4) add it to the guidebook (coverage map,
 inventory, matrix, drops included); (5) drop it from the deploy's EXCLUDES list — that is
 the switch that makes it live — and add its `data/source` and `scripts` to the excludes so
-build inputs and tooling never publish.
+build inputs and tooling never publish; the same file's `for published in` presence loop is a
+hand-kept list too, and the go-live PR extends it (Iowa's did), together with (1).
 
 In the **instance**: (6) its own `scripts/` with `validate_index.py`, `smoke_test.mjs`,
 `validate_sources.py` and its builders — imports resolving inside its own tree, which
 `validate_workflow_deps.py` enforces; (7) PWA icons and `manifest.webmanifest` (generated —
-`build_manifests.py`); (8) *(operator)* its own GoatCounter site and tag — `trackEvent`
-no-ops silently without one, and a real port shipped days of zero analytics; (9) *(operator)*
-any CI secrets its scrapers need.
+`build_manifests.py`); (8) analytics — copy `brand.analytics.goatcounter_url` from a sibling
+worksheet: the fleet counts on ONE shared GoatCounter site keyed by path, and never add a
+`ga_id` (the schema says a rebrand must not add a tracker). CORRECTED 2026-09-02: this item
+used to say "its own GoatCounter site and tag", which no instance has ever shipped — all five
+worksheets carry the same endpoint; `trackEvent` still no-ops silently when the key is
+absent, and a real port shipped days of zero analytics that way; (9) *(operator)* any CI
+secrets its scrapers need.
 
 **Anything fleet-level that names the instances should DISCOVER them, not list them.** Every
 hand-kept fleet list is a registration step, and this one is the step most often missed:
@@ -931,8 +941,8 @@ The two kinds are not interchangeable and both need the flag:
 **Only mark appointed where the source says so.** Stephenson marks 66 of its 86 rows
 explicitly, which is the strongest signal any source in this file publishes; the other 20
 ship with **no** flag rather than an assumed "elected". Where a source marks nothing, the
-office title is the only guide, and the known-appointed title set in the builder is the
-whole of it.
+office title is the only guide, and the known-appointed title set is the
+whole of it. (CORRECTED 2026-09-02: that set is per SCRAPER — `APPOINTED_TITLES` in `scripts/lasalle_municipal_officials_scraper.py`, Henry's and Livingston's — and the builder only copies the flag; nothing in `scripts/build_municipal_officials_roster.py` carries one.)
 
 **The section header follows what the section holds** (fixed 2026-07-31; it was a fixed
 "Other Elected Officials" for as long as appointees have shipped, which stated something
@@ -1338,7 +1348,7 @@ Jersey's PDF.
 **AND BEFORE EVEN SEARCHING, READ THE CLERK'S E-MAIL ADDRESS.** The 2026-08-09 resweep
 of the fourteen counties recorded as having no website found NINE of them, and for nine
 counties **the Clerk's e-mail domain IS the county's web domain** — a fact sitting in
-`data/app/il-county-clerks.json`, scraped weekly from ISBE, for the whole time those
+`il/data/app/il-county-clerks.json`, scraped weekly from ISBE, for the whole time those
 records claimed no site existed. This project was e-mailing those counties at those very
 domains on 2026-08-05 while telling readers they had none. So step zero has a step
 minus-one, and it costs one line:
@@ -1383,7 +1393,7 @@ about the world that is very often a claim about the search.
    document rather than from the board page's silence (§3.5.1). The at-large path is
    implemented: add a `SITES` entry + parser to `scripts/il_county_commissioners_scraper.py`
    and a seat count to `EXPECT_MEMBERS` in `build_county_commissioners.py`, so the county
-   lands in `data/app/il-county-commissioners.json`, which the COUNTY card already reads —
+   lands in `il/data/app/il-county-commissioners.json`, which the COUNTY card already reads —
    no dispatch entry, no toggle (§3.5.1; Monroe/Randolph are the reference pair, the
    tranche-5 four the larger case). If
    the board IS districted but the county publishes no boundary, check whether it
@@ -1851,7 +1861,11 @@ the two overlap Part 5 is the shorter statement of the same rule.
   districts were in `validate_sources.py` (an ArcGIS endpoint, always fine) while the
   members page the card's names actually come from was not, so the monthly check
   reported the layer healthy through the block. A layer with a scraper has TWO sources;
-  both belong in the registry. And don't reach for `"blocked"` on a conditional block —
+  both belong in the registry. CORRECTED 2026-09-02: since `scripts/validate_card_links.py`
+  (2026-08-27) extracts every `sourceUrl` in every instance's `data/app` and probes it in
+  the same monthly run, the members page is watched without a manifest row — and no
+  districted roster page carries one today. What a `validate_sources.py` row still adds is
+  the `blocked` inversion for a permanent, CI-measured block. And don't reach for `"blocked"` on a conditional block —
   that flag inverts the check, and it is for permanent ones where unreachable is the
   expected state. Where a source answers sometimes, both states are worth reporting.
 

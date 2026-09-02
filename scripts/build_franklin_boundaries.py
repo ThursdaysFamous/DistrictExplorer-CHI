@@ -3,7 +3,7 @@
 Build data/app/franklin-precincts.json + data/app/franklin-county-board-districts.json
 — Franklin County's 35 voting precincts and 3 County Board districts, composed
 from the county's own certified election returns (docs/EXPANSION_GUIDE.md
-§2.5.1, the canvass route; scripts/vtd_board_districts.py holds the machinery).
+§3.5.1, the canvass route; scripts/vtd_board_districts.py holds the machinery).
 
 A THIRD RESULTS VENDOR, AND THE FIRST COUNTY THIS PROJECT HAS REACHED THROUGH
 IT. Clark, Crawford, Mercer and Edgar all came from the accessliberty /

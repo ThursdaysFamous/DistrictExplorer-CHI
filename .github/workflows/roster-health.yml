@@ -21,7 +21,7 @@ name: Roster refresh health
 
 on:
   schedule:
-    - cron: "0 23 * * *" # daily, 23:00 UTC — after the last roster cron (21:00)
+    - cron: "0 23 * * *" # daily, 23:00 UTC — after the last roster cron (22:00: Jackson, Vermilion)
   workflow_dispatch: {}
 
 permissions:

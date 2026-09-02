@@ -673,10 +673,17 @@ A directory that does not list someone has not said they left.
 ### On a yes, or a no
 
 * **Yes** → record the date and the wording in `docs/DATA_LAYER_GUIDEBOOK.md`'s Jo Daviess
-  entry, and update the two places that currently record the domain gap: the
-  §3 note in `LICENSE-DATA.md` and the `SOURCE_LABEL` string in
-  `scripts/build_jodaviess_board_districts.py` (which is shipped into the data file and
-  rendered on the card).
+  entry, and update every place that records the domain gap: the §3 note in
+  `LICENSE-DATA.md`; the `license` string in the payload
+  `scripts/build_jodaviess_board_districts.py` writes (the data file re-ships only when
+  the operator re-runs the builder against the offline shapefile — never hand-edit the
+  JSON); the data-file note in `metro-worksheet.json`, which regenerates the note in
+  `scripts/validate_index.py` (run `python3 scripts/generate_metro_files.py`); the
+  hand-kept manifest note in `scripts/validate_sources.py`; and the card's fixed credit
+  literal in `il/index.html` if the wording changes. (Corrected 2026-09-02: this bullet
+  used to name `SOURCE_LABEL` as the string that reaches the card; the card renders a
+  fixed literal and reads nothing from the file, and the 2026-08-31 yes was written to
+  the `license` string, not to `SOURCE_LABEL`.)
 * **No, or take it down** → the file comes out of `il/data/app/`, the dispatch entry goes,
   and the gap record `jo-daviess-county-board-districts` reopens citing the withdrawal.
   That is a real outcome and the ask should not pretend otherwise.

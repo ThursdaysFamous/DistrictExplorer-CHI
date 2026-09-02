@@ -44,7 +44,11 @@
     left: -9999px;
     top: 0;
     background: var(--ink);
-    color: #fff;
+    /* --paper, not #fff: the dark tier lifts --ink to #ece9f4 and white on it
+       is 1.2:1 — a skip link invisible to exactly the keyboard users it exists
+       for. The root pages' skip links already paint this pair. Measured by
+       scripts/validate_contrast.py, both tiers. */
+    color: var(--paper);
     padding: 10px 16px;
     z-index: 1000;
     border-radius: 0 0 6px 0;

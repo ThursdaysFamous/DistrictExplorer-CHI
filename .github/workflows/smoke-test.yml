@@ -62,6 +62,11 @@ jobs:
           python3 scripts/build_coverage_gaps.py --check
           python3 scripts/build_coverage_gaps.py --check --metro wisconsin --out wi/data/app/coverage-gaps.json
           python3 scripts/build_coverage_gaps.py --check --metro iowa --out ia/data/app/coverage-gaps.json
+          # ny/ and ca/ ship a gaps file too; until 2026-09-02 only three of the
+          # five keys were gated here, and drift in the other two surfaced only in
+          # the weekly fleet-status notice.
+          python3 scripts/build_coverage_gaps.py --check --metro nyc --out ny/data/app/coverage-gaps.json
+          python3 scripts/build_coverage_gaps.py --check --metro sf --out ca/data/app/coverage-gaps.json
 
       # Wisconsin's county-board-directory.json carries each county's board
       # SIZE, and it reads that number back from the shipped supervisory
@@ -90,9 +95,31 @@ jobs:
       # its own NAMES, never its own values — and covers the metric-matched
       # fallback face, which four surfaces named in --font-body and never
       # defined. Runs BEFORE compose_app because it writes what that splices.
-      # Stdlib only.
+      # EXTENDED 2026-09-02 after two weeks green over two live drifts it could
+      # not see: it checked the skin's LIGHT neutrals and a hand-kept list of
+      # three worksheets, while the skin's dark block restated all four accents
+      # by hand (one of them two hex digits off) and Iowa's worksheet — the
+      # fourth of five — had carried two off-fleet values since the day it
+      # shipped. Both tiers of the skin are checked now, presence required,
+      # and the worksheets are discovered rather than listed. Stdlib only.
       - name: Brand tokens have one source
         run: python3 scripts/build_brand_tokens.py --check
+
+      # The token file is the one source of the brand surface; this is the one
+      # MEASUREMENT of it. Every text colour the palette paints is tested
+      # against the ground it sits on, in both tiers, at the floor WCAG sets for
+      # its role — the pairs mapped from every CSS surface rather than guessed,
+      # the dark tier composed over the light one exactly as the cascade does
+      # it. It exists because the palette had 54 aria attributes of care behind
+      # it and not one number saying its footer meta was legible: light --faint
+      # reads 2.5:1 on white, below even the bar for LARGE text, dark mode
+      # paints white on violets that hold it at 2.7:1 and 1.9:1, and the skip
+      # link was 1.2:1 in dark until this gate found it. Known shortfalls are
+      # recorded WITH their measured value and printed on every run; the gate
+      # fails on anything new, on a recorded value that moves in either
+      # direction, and on an accepted entry that nothing tests. Stdlib only.
+      - name: Brand text is legible on the grounds it is painted on
+        run: python3 scripts/validate_contrast.py
 
       # There is ONE copy of each engine block, under engine/, and every
       # instance's index.html/sw.js is composed from it (R3). This is that
@@ -214,6 +241,20 @@ jobs:
       - name: Workflow scripts import under their declared dependencies
         run: python3 scripts/validate_workflow_deps.py
 
+      # A skill under .claude/skills/ is prose an agent loads at the moment it
+      # starts a task, and prose that names scripts, tables, guide sections and
+      # flags is a copy of facts that live elsewhere — the drift class every
+      # other gate here exists for. The steward skill's own preamble says why a
+      # skill carries only what CLAUDE.md does not; this is what keeps the
+      # pointers it does carry pointing at things: every backticked path
+      # exists, every §N.N is a heading in docs/EXPANSION_GUIDE.md, every
+      # --flag after a script is one the script mentions, every ALL_CAPS table
+      # name lives in a file the skill names, and the description fits the
+      # trigger surface. It found its first stale path in the first skill
+      # written against it. Stdlib only.
+      - name: Skills point at things that exist
+        run: python3 scripts/validate_skills.py
+
       # A roster's count guard proves it still has twelve members; it proves
       # nothing about whether those twelve still carry an e-mail. On 2026-08-08
       # Cloudflare's e-mail obfuscation quietly emptied all seven of Brown
@@ -293,7 +334,7 @@ jobs:
           fi
 
       # Static merge gate, once per instance. Each instance's validate_index.py
-      # resolves data/app relative to the index it is handed, so all three run
+      # resolves data/app relative to the index it is handed, so every instance runs
       # from the repo root. Stdlib only, so this sits before the browser work
       # and fails fast.
       - name: Each instance's index validates
@@ -323,7 +364,7 @@ jobs:
             sleep 0.5
           done
           status=0
-          # Run all three even if an early one fails, so a PR sees every broken
+          # Run every instance even if an early one fails, so a PR sees every broken
           # instance in one go rather than one per push.
           BASE_URL=http://localhost:8000/il/  node scripts/smoke_test.mjs     || status=1
           BASE_URL=http://localhost:8000/ca/  node ca/scripts/smoke_test.mjs  || status=1

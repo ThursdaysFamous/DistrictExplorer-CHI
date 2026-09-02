@@ -165,11 +165,12 @@ il/                                  ILLINOIS — the reference implementation t
   data/app/                         271 files the page fetches — boundary geometry (cache-first) and
                                     officeholder rosters (network-first)
   data/ · data/source/raw/          full-precision conversions and untouched originals
-  scripts/                          one scraper + builder pair per roster (ilga_scraper.py,
-                                    build_congress_roster.py, cpd_district_scraper.py, ~80 county-board/
-                                    precinct/fire/park/library builders...), plus this instance's own
-                                    validate_index.py and smoke_test.mjs
-  docs/                             COUNTY_STATUS.md (generated per-county table), DATA_LAYER_GUIDEBOOK.md
+  (scripts/ — at the REPO ROOT)     Illinois runs from the root, not from il/: one scraper + builder
+                                    pair per roster (ilga_scraper.py, build_congress_roster.py,
+                                    cpd_district_scraper.py, ~80 county-board/precinct/fire/park/library
+                                    builders...), plus Illinois's own validate_index.py and
+                                    smoke_test.mjs, beside the fleet tooling. There is no il/scripts/.
+  (docs/ — at the REPO ROOT)        COUNTY_STATUS.md (generated per-county table), DATA_LAYER_GUIDEBOOK.md
                                     (fleet layer inventory), EXPANSION_GUIDE.md, BUILD_PLAYBOOK_1.md
 
 ny/                                  NEW YORK CITY — same shape as il/

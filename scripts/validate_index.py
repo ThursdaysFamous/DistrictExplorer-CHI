@@ -971,7 +971,7 @@ def check_county_coverage_list(html, repo_root):
              "counties the docs quote and the FIPS table build_county_outline.py "
              "cross-checks, so a row with nothing behind it makes both wrong. If "
              "the county is served only through the COUNTY card (an AT-LARGE "
-             "board — EXPANSION_GUIDE §2.5.1), remove it from DISPATCH_COUNTY_FIPS "
+             "board — EXPANSION_GUIDE §3.5.1), remove it from DISPATCH_COUNTY_FIPS "
              "and leave it in METRO_COUNTY_FIPS. Otherwise its dispatch entry was "
              "dropped — restore it."
              % ", ".join(undispatched))

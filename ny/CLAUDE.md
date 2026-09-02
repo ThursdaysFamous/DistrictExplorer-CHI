@@ -54,7 +54,7 @@ python3 scripts/validate_sources.py            # add --offline to skip network
 
 ## Architecture: stable core + pluggable layer modules
 
-The metro-agnostic engine inside `index.html` is fenced with `/* ==== ENGINE:BEGIN <name> ==== */ … ENGINE:END` markers and is **distributed as a published, hash-verified release artifact from CHI** (CHI `docs/MECHANIZATION_PLAYBOOK.md`, Conversion 1): `engine.lock.json` pins the version + sha256, deploy-time assembly splices and asserts the pinned bytes (`scripts/apply_engine.py`, `check_engine_parity.py --against-bundle`), and new engine releases arrive as gated `engine-bump.yml` PRs that also refresh the shared scripts. Never hand-edit inside an ENGINE fence; never inline a city-specific value in one — city values live in the `METRO:BEGIN config` block (worksheet-generated). See `docs/ENGINE_SYNC.md`.
+The metro-agnostic engine inside `index.html` is fenced with `/* ==== ENGINE:BEGIN <name> ==== */ … ENGINE:END` markers, and since the consolidation (R2.1, `docs/DEV_PROCESS_ASSESSMENT.md` at the repo root) there is ONE copy of every block under the root `engine/`: `python3 scripts/compose_app.py` splices it into this folder's `index.html` and `sw.js`, and its `--check` is the CI gate. The release channel this paragraph used to describe — `engine.lock.json`, `apply_engine.py`, `engine-bump.yml` — was retired with it, and none of those files exists (corrected 2026-09-02). Edit the block file under `engine/` and recompose, never the fence here; never inline a city-specific value in one — city values live in the `METRO:BEGIN config` block (worksheet-generated). `docs/ENGINE_SYNC.md` is the engine's history and block inventory, not the procedure.
 
 Shared utilities (reuse these; don't reinvent): `sanitize()`/`textContent` for every external string, `pointInGeometry()`, `fetchJSONWithRetry()`, `haversineMiles()`. Layer modules register via `registerLayer({ id, group, label, overlay, query, render })`; families go through the factories (`registerPolygonLayer`, `registerSchoolZone`, `registerCpsNetwork`, `registerIlgaChamber` — shared engine names kept fork-agnostic) with NYC-side wrappers carrying city dataset schemas (`registerNycZone`, `registerBoroughOfficeLayer`). The two invariants that pervade the code: the stale-async `sequence` guard, and per-layer failure isolation (one layer's dead source never breaks another's card).
 
@@ -76,8 +76,7 @@ Most layers fetch live public APIs at runtime (NYC Open Data / Socrata, ArcGIS, 
 ## CI workflows (`.github/workflows/`)
 
 - `smoke-test.yml` — the `--check` generated-region gate, then the behaviour gate, on every PR and push to `main`.
-- `deploy-pages.yml` — hash-verified engine assembly (fetch pinned release → `sha256sum --check` → splice → gates) before the Pages artifact; `assemble` runs on any ref, `deploy` is main-only.
-- `engine-bump.yml` — consumes CHI's `engine-release` dispatch: re-pins the lockfile, refreshes shared scripts from the release assets, applies, gates, and opens a PR on `bot/engine-bump`.
+- `deploy-pages.yml` (repo root) — publishes `main`, this folder included, to GitHub Pages; the committed bytes are the deployed bytes. The `engine-bump.yml` workflow this list used to carry was retired with the release channel (corrected 2026-09-02).
 - `update-{ny-legislature,congress,nypd,cec,council}-roster.yml` — weekly staggered roster refreshes; each opens a PR, never commits to `main`. Officeholder data always gets a human review before it ships.
 - `validate-sources.yml` — monthly freshness + redistricting watch; opens/updates one tracking issue, never edits anything.
 
