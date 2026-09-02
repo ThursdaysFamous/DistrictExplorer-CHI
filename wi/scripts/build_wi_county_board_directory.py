@@ -187,7 +187,7 @@ COUNTY_SITES = {
     "55061": ("Kewaunee", "https://www.kewauneeco.org/government/boards_and_committees/"),  # county page confirms 1..20
     "55063": ("La Crosse", "https://lacrossecounty.org/"),
     "55065": ("Lafayette", "https://lafayettecountywi.org/"),
-    "55067": ("Langlade", "https://www.co.langlade.wi.us/"),
+    "55067": ("Langlade", "https://www.co.langlade.wi.us/government/board_and_committees/"),  # county page confirms 1..21
     "55069": ("Lincoln", "https://co.lincoln.wi.us/"),
     "55071": ("Manitowoc", "https://manitowoccountywi.gov/"),
     "55073": ("Marathon", "https://marathoncounty.gov/"),
