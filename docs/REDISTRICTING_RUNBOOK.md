@@ -178,9 +178,9 @@ represents them TODAY; showing not-yet-effective districts is a correctness bug,
 2. **Acquire authoritative geometry**, in order of preference: (a) official shapefile from the
    enacting body; (b) city portal new dataset id; (c) TIGER/Line vintage. Never scrape a rendered
    map.
-3. **Provenance intake.** Save the original into `data/source/raw/` with a name encoding layer +
+3. **Provenance intake.** Save the original into `il/data/source/raw/` with a name encoding layer +
    vintage + enactment citation (e.g. `chi_wards_2033_ordinance-O2033-XXXX.shp`).
-4. **Full-precision conversion** into `data/` (GeoJSON).
+4. **Full-precision conversion** into `il/data/` (GeoJSON).
 5. **build_embedded_boundaries.py entry.** If the changed layer is an anchor, add/update its LAYERS
    entry (Visvalingam keep-shapes, per-layer simplify % + precision). All anchors must be
    registered — CHI currently registers only 1 of its 3 anchors in build_embedded_boundaries.py;

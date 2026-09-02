@@ -48,9 +48,9 @@ Illinois cases) still needs a code re-check on a redraw. Shapefile-derived
 layers: the archive goes in `il/data/source/raw/` under a name encoding layer,
 vintage and enactment citation, the full-precision GeoJSON in `il/data/`, then
 its `LAYERS` entry in `scripts/build_embedded_boundaries.py` — whose `source`
-paths still read `data/*.geojson` off the repo root and die with a
-FileNotFoundError before mapshaper runs (measured 2026-09-02; the fix is
-queued): that error is the builder's, not yours.
+paths read `il/data/*.geojson` (fixed 2026-09-02; they used to read
+`data/*.geojson` off the repo root and die with a FileNotFoundError before
+mapshaper ran).
 
 ## 3. Acquire in this order, and never trace (runbook 3–4)
 

@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """
-Regenerate the app-data boundary files in data/app/ from the full-precision
-GeoJSON in data/, applying the same topology-preserving simplification the
+Regenerate the app-data boundary files in il/data/app/ from the full-precision
+GeoJSON in il/data/, applying the same topology-preserving simplification the
 sibling boundary layers received.
 
 Why this exists: the boundary layers with no CORS-enabled endpoint are shipped
 as same-origin static files under data/app/, fetched lazily by index.html on
 first toggle (they used to be embedded inline in index.html; the P0 change moved
-them out). The full-precision conversions in data/ (e.g. school-board's 24,904
-vertices at 14-15 decimals) need simplifying before they ship; this script makes
+them out). The full-precision conversions in il/data/ (e.g. school-board's
+24,904 vertices at 14-15 decimals) need simplifying before they ship; this script makes
 that simplification reproducible instead of a one-off manual step, so each
 app-data copy can be regenerated whenever its source boundary changes and never
-silently drifts from data/. All three Chicago anchors (school-board,
+silently drifts from il/data/. All three Chicago anchors (school-board,
 il-supreme-court, ccbr) are registered in LAYERS below.
 
 Simplification uses mapshaper (the same tool the sibling layers used), which
@@ -42,8 +42,8 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 APP_DATA_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 MAPSHAPER = "mapshaper@0.6.102"  # pinned for reproducible output
 
-# name -> how to regenerate its data/app/<out> file.
-#   source:   full-precision GeoJSON under data/ (the source of truth)
+# name -> how to regenerate its il/data/app/<out> file.
+#   source:   full-precision GeoJSON under il/data/ (the source of truth)
 #   out:      the app-data file index.html fetches for this layer
 #   simplify: mapshaper Visvalingam retain percentage (topology-aware, keep-shapes)
 #   precision: coordinate rounding on export (0.000001 = 6 decimals ~= 0.11 m)
@@ -51,7 +51,7 @@ MAPSHAPER = "mapshaper@0.6.102"  # pinned for reproducible output
 #              to validate point-in-district agreement below
 LAYERS = {
     "school-board": {
-        "source": "data/school-board-districts.geojson",
+        "source": "il/data/school-board-districts.geojson",
         "out": "school-board-districts.json",
         "simplify": "15%",
         "precision": "0.000001",
@@ -66,14 +66,14 @@ LAYERS = {
     # key_prop is the uppercase attribute-table field (ID/DISTRICT/DISTRICTN);
     # the app itself keys case-insensitively on districtn/district.
     "il-supreme-court": {
-        "source": "data/il-supreme-court-districts.geojson",
+        "source": "il/data/il-supreme-court-districts.geojson",
         "out": "il-supreme-court-districts.json",
         "simplify": "12%",
         "precision": "0.000001",
         "key_prop": "DISTRICT",
     },
     "ccbr": {
-        "source": "data/ccbr-districts.geojson",
+        "source": "il/data/ccbr-districts.geojson",
         "out": "ccbr-districts.json",
         "simplify": "15%",
         "precision": "0.000001",
@@ -82,11 +82,11 @@ LAYERS = {
     # Kane's 16th-Circuit judicial subcircuits (PA 102-0693). Same enacted-map
     # family and attribute schema (ID/DISTRICT/DISTRICTN) as il-supreme-court,
     # converted from the ilsenateredistricting.com shapefile ZIP archived at
-    # data/source/raw/Enacted_Judicial_Sub_Circiuts.zip (the county's own GIS
+    # il/data/source/raw/Enacted_Judicial_Sub_Circiuts.zip (the county's own GIS
     # publishes subcircuits only behind permission-locked proxies, hence the
     # shapefile route — docs/DATA_LAYER_GUIDEBOOK.md backlog).
     "kane-judicial": {
-        "source": "data/kane-judicial-subcircuits.geojson",
+        "source": "il/data/kane-judicial-subcircuits.geojson",
         "out": "kane-judicial-subcircuits.json",
         "simplify": "12%",
         "precision": "0.000001",
@@ -96,7 +96,7 @@ LAYERS = {
     # shapefile ZIP and schema as kane-judicial (the county publishes no
     # subcircuit service at all).
     "mchenry-judicial": {
-        "source": "data/mchenry-judicial-subcircuits.geojson",
+        "source": "il/data/mchenry-judicial-subcircuits.geojson",
         "out": "mchenry-judicial-subcircuits.json",
         "simplify": "12%",
         "precision": "0.000001",
@@ -104,7 +104,7 @@ LAYERS = {
     },
     # The first three counties OUTSIDE the seven-county metro, and the cheapest
     # expansion available: the same PA 102-0693 archive already in
-    # data/source/raw/ carries NINE circuits and the app shipped six, so these
+    # il/data/source/raw/ carries NINE circuits and the app shipped six, so these
     # three needed no new source at all (docs/DATA_LAYER_GUIDEBOOK.md, statewide
     # expansion research). Same ID/DISTRICT/DISTRICTN schema as kane-judicial.
     #
@@ -113,21 +113,21 @@ LAYERS = {
     # so the layer answers for all ten, and the entry is keyed by the circuit's
     # largest county purely for naming.
     "winnebago-judicial": {
-        "source": "data/winnebago-judicial-subcircuits.geojson",
+        "source": "il/data/winnebago-judicial-subcircuits.geojson",
         "out": "winnebago-judicial-subcircuits.json",
         "simplify": "12%",
         "precision": "0.000001",
         "key_prop": "DISTRICT",
     },
     "madison-judicial": {
-        "source": "data/madison-judicial-subcircuits.geojson",
+        "source": "il/data/madison-judicial-subcircuits.geojson",
         "out": "madison-judicial-subcircuits.json",
         "simplify": "12%",
         "precision": "0.000001",
         "key_prop": "DISTRICT",
     },
     "sangamon-judicial": {
-        "source": "data/sangamon-judicial-subcircuits.geojson",
+        "source": "il/data/sangamon-judicial-subcircuits.geojson",
         "out": "sangamon-judicial-subcircuits.json",
         "simplify": "12%",
         "precision": "0.000001",
@@ -279,7 +279,7 @@ def build_layer(name, cfg):
         f.write(compact)
 
     print(
-        "%s -> data/app/%s: %s; %d bytes (%s)"
+        "%s -> il/data/app/%s: %s; %d bytes (%s)"
         % (name, cfg["out"], msg, len(compact), cfg["simplify"] + " retain, " + cfg["precision"] + " precision"),
         file=sys.stderr,
     )
