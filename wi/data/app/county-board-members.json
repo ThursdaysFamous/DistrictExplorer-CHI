@@ -182,6 +182,216 @@
   "phone": "715-325-7329",
   "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
  },
+ "5500301": {
+  "asOf": "the county's own page, captured 2026-09-02",
+  "asOfWhy": "The county asks automated readers not to crawl its site, so this name is a dated capture rather than the weekly re-read the other named counties get.",
+  "county": "Ashland",
+  "district": 1,
+  "email": "elizabeth.gehred@ashlandcountywi.gov",
+  "name": "Elizabeth Gehred",
+  "sourceUrl": "https://ashlandcountywi.gov/bos"
+ },
+ "5500302": {
+  "asOf": "the county's own page, captured 2026-09-02",
+  "asOfWhy": "The county asks automated readers not to crawl its site, so this name is a dated capture rather than the weekly re-read the other named counties get.",
+  "county": "Ashland",
+  "district": 2,
+  "email": "thomas.trudeau@ashlandcountywi.gov",
+  "name": "Thomas D. Trudeau",
+  "phone": "715-209-3920",
+  "sourceUrl": "https://ashlandcountywi.gov/bos"
+ },
+ "5500303": {
+  "asOf": "the county's own page, captured 2026-09-02",
+  "asOfWhy": "The county asks automated readers not to crawl its site, so this name is a dated capture rather than the weekly re-read the other named counties get.",
+  "county": "Ashland",
+  "district": 3,
+  "email": "laura.nagro@ashlandcountywi.gov",
+  "name": "Laura L. Nagro",
+  "phone": "715-216-1886",
+  "sourceUrl": "https://ashlandcountywi.gov/bos"
+ },
+ "5500304": {
+  "asOf": "the county's own page, captured 2026-09-02",
+  "asOfWhy": "The county asks automated readers not to crawl its site, so this name is a dated capture rather than the weekly re-read the other named counties get.",
+  "county": "Ashland",
+  "district": 4,
+  "email": "william.metzinger@ashlandcountywi.gov",
+  "name": "William Metzinger",
+  "phone": "715-682-5942",
+  "sourceUrl": "https://ashlandcountywi.gov/bos"
+ },
+ "5500305": {
+  "asOf": "the county's own page, captured 2026-09-02",
+  "asOfWhy": "The county asks automated readers not to crawl its site, so this name is a dated capture rather than the weekly re-read the other named counties get.",
+  "county": "Ashland",
+  "district": 5,
+  "email": "clarence.campbell@ashlandcountywi.gov",
+  "name": "Clarence Campbell",
+  "phone": "715-292-1160",
+  "role": "Vice Chair",
+  "sourceUrl": "https://ashlandcountywi.gov/bos"
+ },
+ "5500306": {
+  "asOf": "the county's own page, captured 2026-09-02",
+  "asOfWhy": "The county asks automated readers not to crawl its site, so this name is a dated capture rather than the weekly re-read the other named counties get.",
+  "county": "Ashland",
+  "district": 6,
+  "email": "bradley.ray@ashlandcountywi.gov",
+  "name": "Bradley Ray",
+  "phone": "715-513-6067",
+  "sourceUrl": "https://ashlandcountywi.gov/bos"
+ },
+ "5500307": {
+  "asOf": "the county's own page, captured 2026-09-02",
+  "asOfWhy": "The county asks automated readers not to crawl its site, so this name is a dated capture rather than the weekly re-read the other named counties get.",
+  "county": "Ashland",
+  "district": 7,
+  "email": "patrick.kinney@ashlandcountywi.gov",
+  "name": "(Donald) Patrick Kinney",
+  "phone": "715-682-9198",
+  "sourceUrl": "https://ashlandcountywi.gov/bos"
+ },
+ "5500308": {
+  "asOf": "the county's own page, captured 2026-09-02",
+  "asOfWhy": "The county asks automated readers not to crawl its site, so this name is a dated capture rather than the weekly re-read the other named counties get.",
+  "county": "Ashland",
+  "district": 8,
+  "email": "richard.pufall@ashlandcountywi.gov",
+  "name": "Richard Pufall",
+  "phone": "715-682-6116",
+  "sourceUrl": "https://ashlandcountywi.gov/bos"
+ },
+ "5500309": {
+  "asOf": "the county's own page, captured 2026-09-02",
+  "asOfWhy": "The county asks automated readers not to crawl its site, so this name is a dated capture rather than the weekly re-read the other named counties get.",
+  "county": "Ashland",
+  "district": 9,
+  "email": "elizabeth.franek@ashlandcountywi.gov",
+  "name": "Elizabeth A. Franek",
+  "phone": "715-969-6732",
+  "sourceUrl": "https://ashlandcountywi.gov/bos"
+ },
+ "5500310": {
+  "asOf": "the county's own page, captured 2026-09-02",
+  "asOfWhy": "The county asks automated readers not to crawl its site, so this name is a dated capture rather than the weekly re-read the other named counties get.",
+  "county": "Ashland",
+  "district": 10,
+  "email": "paul.wilharm@ashlandcountywi.gov",
+  "name": "Paul Wilharm",
+  "phone": "612-685-0445",
+  "sourceUrl": "https://ashlandcountywi.gov/bos"
+ },
+ "5500311": {
+  "asOf": "the county's own page, captured 2026-09-02",
+  "asOfWhy": "The county asks automated readers not to crawl its site, so this name is a dated capture rather than the weekly re-read the other named counties get.",
+  "county": "Ashland",
+  "district": 11,
+  "email": "ronald.sztyndor@ashlandcountywi.gov",
+  "name": "Ronald Sztyndor",
+  "phone": "845-517-7725",
+  "sourceUrl": "https://ashlandcountywi.gov/bos"
+ },
+ "5500312": {
+  "asOf": "the county's own page, captured 2026-09-02",
+  "asOfWhy": "The county asks automated readers not to crawl its site, so this name is a dated capture rather than the weekly re-read the other named counties get.",
+  "county": "Ashland",
+  "district": 12,
+  "email": "benjamen.connors@ashlandcountywi.gov",
+  "name": "Benjamen Connors Sr.",
+  "phone": "715-292-1728",
+  "sourceUrl": "https://ashlandcountywi.gov/bos"
+ },
+ "5500313": {
+  "asOf": "the county's own page, captured 2026-09-02",
+  "asOfWhy": "The county asks automated readers not to crawl its site, so this name is a dated capture rather than the weekly re-read the other named counties get.",
+  "county": "Ashland",
+  "district": 13,
+  "email": "philip.livingston@ashlandcountywi.gov",
+  "name": "Philip Livingston",
+  "phone": "715-292-5339",
+  "sourceUrl": "https://ashlandcountywi.gov/bos"
+ },
+ "5500314": {
+  "asOf": "the county's own page, captured 2026-09-02",
+  "asOfWhy": "The county asks automated readers not to crawl its site, so this name is a dated capture rather than the weekly re-read the other named counties get.",
+  "county": "Ashland",
+  "district": 14,
+  "email": "george.bussey@ashlandcountywi.gov",
+  "name": "George E. Bussey",
+  "phone": "715-209-2508",
+  "sourceUrl": "https://ashlandcountywi.gov/bos"
+ },
+ "5500315": {
+  "asOf": "the county's own page, captured 2026-09-02",
+  "asOfWhy": "The county asks automated readers not to crawl its site, so this name is a dated capture rather than the weekly re-read the other named counties get.",
+  "county": "Ashland",
+  "district": 15,
+  "email": "philip.livingston@ashlandcountywi.gov",
+  "name": "Marques Jolma",
+  "phone": "715-413-1928",
+  "sourceUrl": "https://ashlandcountywi.gov/bos"
+ },
+ "5500316": {
+  "asOf": "the county's own page, captured 2026-09-02",
+  "asOfWhy": "The county asks automated readers not to crawl its site, so this name is a dated capture rather than the weekly re-read the other named counties get.",
+  "county": "Ashland",
+  "district": 16,
+  "email": "shawn.sederholm@ashlandcountywi.gov",
+  "name": "Shawn Sederholm",
+  "phone": "715-209-0841",
+  "sourceUrl": "https://ashlandcountywi.gov/bos"
+ },
+ "5500317": {
+  "asOf": "the county's own page, captured 2026-09-02",
+  "asOfWhy": "The county asks automated readers not to crawl its site, so this name is a dated capture rather than the weekly re-read the other named counties get.",
+  "county": "Ashland",
+  "district": 17,
+  "email": "terrance.vanburen@ashlandcountywi.gov",
+  "name": "Terrance Van Buren",
+  "sourceUrl": "https://ashlandcountywi.gov/bos"
+ },
+ "5500318": {
+  "asOf": "the county's own page, captured 2026-09-02",
+  "asOfWhy": "The county asks automated readers not to crawl its site, so this name is a dated capture rather than the weekly re-read the other named counties get.",
+  "county": "Ashland",
+  "district": 18,
+  "email": "james.schultz@ashlandcountywi.gov",
+  "name": "James R. Schultz",
+  "phone": "715-278-3781",
+  "sourceUrl": "https://ashlandcountywi.gov/bos"
+ },
+ "5500319": {
+  "asOf": "the county's own page, captured 2026-09-02",
+  "asOfWhy": "The county asks automated readers not to crawl its site, so this name is a dated capture rather than the weekly re-read the other named counties get.",
+  "county": "Ashland",
+  "district": 19,
+  "email": "gary.eder@ashlandcountywi.gov",
+  "name": "Gary Eder. Jr.",
+  "phone": "715-663-0727",
+  "sourceUrl": "https://ashlandcountywi.gov/bos"
+ },
+ "5500320": {
+  "asOf": "the county's own page, captured 2026-09-02",
+  "asOfWhy": "The county asks automated readers not to crawl its site, so this name is a dated capture rather than the weekly re-read the other named counties get.",
+  "county": "Ashland",
+  "district": 20,
+  "email": "dave.meindl@ashlandcountywi.gov",
+  "name": "(Wilfred) David Meindl",
+  "phone": "715-769-3355",
+  "sourceUrl": "https://ashlandcountywi.gov/bos"
+ },
+ "5500321": {
+  "asOf": "the county's own page, captured 2026-09-02",
+  "asOfWhy": "The county asks automated readers not to crawl its site, so this name is a dated capture rather than the weekly re-read the other named counties get.",
+  "county": "Ashland",
+  "district": 21,
+  "email": "gary.mertig@ashlandcountywi.gov",
+  "name": "Gary A. Mertig",
+  "phone": "715-661-0243",
+  "role": "Chair",
+  "sourceUrl": "https://ashlandcountywi.gov/bos"
+ },
  "5500501": {
   "county": "Barron",
   "district": 1,
@@ -2341,6 +2551,171 @@
   "phone": "920-421-0111",
   "profileUrl": "https://co.door.wi.gov/m/directory/employee?eid=8",
   "sourceUrl": "https://co.door.wi.gov/234/County-Board-of-Supervisors"
+ },
+ "5503101": {
+  "county": "Douglas",
+  "district": 1,
+  "email": "anders.hultstrom@douglascountywi.gov",
+  "name": "Anders Hultstrom",
+  "phone": "218-341-8087",
+  "sourceUrl": "https://douglascountywi.gov/647/Members-by-District"
+ },
+ "5503102": {
+  "county": "Douglas",
+  "district": 2,
+  "sourceUrl": "https://douglascountywi.gov/647/Members-by-District",
+  "vacant": true
+ },
+ "5503103": {
+  "county": "Douglas",
+  "district": 3,
+  "email": "marquise.slay@douglascountywi.gov",
+  "name": "Marquise A. Slay",
+  "phone": "313-318-0655",
+  "sourceUrl": "https://douglascountywi.gov/647/Members-by-District"
+ },
+ "5503104": {
+  "county": "Douglas",
+  "district": 4,
+  "email": "bill.fennessey@douglascountywi.gov",
+  "name": "Bill Fennessey",
+  "phone": "218-590-7418",
+  "sourceUrl": "https://douglascountywi.gov/647/Members-by-District"
+ },
+ "5503105": {
+  "county": "Douglas",
+  "district": 5,
+  "email": "nick.baker@douglascountywi.gov",
+  "name": "Nick Baker",
+  "phone": "715-392-1083",
+  "sourceUrl": "https://douglascountywi.gov/647/Members-by-District"
+ },
+ "5503106": {
+  "county": "Douglas",
+  "district": 6,
+  "email": "howard.hendrickson@douglascountywi.gov",
+  "name": "Howard Hendrickson",
+  "phone": "218-390-9731",
+  "sourceUrl": "https://douglascountywi.gov/647/Members-by-District"
+ },
+ "5503107": {
+  "county": "Douglas",
+  "district": 7,
+  "email": "charlie.glazman@douglascountywi.gov",
+  "name": "Charlie Glazman",
+  "phone": "715-645-2162",
+  "sourceUrl": "https://douglascountywi.gov/647/Members-by-District"
+ },
+ "5503108": {
+  "county": "Douglas",
+  "district": 8,
+  "email": "randy.skowlund@douglascountywi.gov",
+  "name": "Randy Skowlund",
+  "phone": "218-391-9703",
+  "sourceUrl": "https://douglascountywi.gov/647/Members-by-District"
+ },
+ "5503109": {
+  "county": "Douglas",
+  "district": 9,
+  "email": "alan.jaques@douglascountywi.gov",
+  "name": "Alan J. Jaques",
+  "phone": "715-394-3616",
+  "sourceUrl": "https://douglascountywi.gov/647/Members-by-District"
+ },
+ "5503110": {
+  "county": "Douglas",
+  "district": 10,
+  "email": "kelly.peterson@douglascountywi.gov",
+  "name": "Kelly Peterson",
+  "phone": "715-817-0313",
+  "sourceUrl": "https://douglascountywi.gov/647/Members-by-District"
+ },
+ "5503111": {
+  "county": "Douglas",
+  "district": 11,
+  "email": "mark.cummings@douglascountywi.gov",
+  "name": "Mark Cummings",
+  "phone": "218-260-8182",
+  "sourceUrl": "https://douglascountywi.gov/647/Members-by-District"
+ },
+ "5503112": {
+  "county": "Douglas",
+  "district": 12,
+  "email": "rosemary.lear@douglascountywi.gov",
+  "name": "Rosemary L. Lear",
+  "phone": "715-398-6745",
+  "sourceUrl": "https://douglascountywi.gov/647/Members-by-District"
+ },
+ "5503113": {
+  "county": "Douglas",
+  "district": 13,
+  "email": "keith.allen@douglascountywi.org",
+  "name": "Lee Sandok Baker",
+  "phone": "218-260-8231",
+  "sourceUrl": "https://douglascountywi.gov/647/Members-by-District"
+ },
+ "5503114": {
+  "county": "Douglas",
+  "district": 14,
+  "email": "john.lohse@douglascountywi.gov",
+  "name": "John Lohse",
+  "phone": "218-393-9750",
+  "sourceUrl": "https://douglascountywi.gov/647/Members-by-District"
+ },
+ "5503115": {
+  "county": "Douglas",
+  "district": 15,
+  "email": "sue.hendrickson@douglascountywi.gov",
+  "name": "Susan A. Hendrickson",
+  "phone": "715-398-7213",
+  "sourceUrl": "https://douglascountywi.gov/647/Members-by-District"
+ },
+ "5503116": {
+  "county": "Douglas",
+  "district": 16,
+  "email": "scott.luostari@douglascountywi.gov",
+  "name": "Scott Luostari",
+  "phone": "715-363-2359",
+  "sourceUrl": "https://douglascountywi.gov/647/Members-by-District"
+ },
+ "5503117": {
+  "county": "Douglas",
+  "district": 17,
+  "email": "mark.liebaert@douglascountywi.gov",
+  "name": "Mark E. Liebaert",
+  "phone": "715-398-5234",
+  "sourceUrl": "https://douglascountywi.gov/647/Members-by-District"
+ },
+ "5503118": {
+  "county": "Douglas",
+  "district": 18,
+  "email": "joseph.moen@douglascountywi.gov",
+  "name": "Joseph A. Moen",
+  "phone": "715-399-0202",
+  "sourceUrl": "https://douglascountywi.gov/647/Members-by-District"
+ },
+ "5503119": {
+  "county": "Douglas",
+  "district": 19,
+  "email": "steven.long@douglascountywi.gov",
+  "name": "Steven Long",
+  "phone": "218-491-1825",
+  "sourceUrl": "https://douglascountywi.gov/647/Members-by-District"
+ },
+ "5503120": {
+  "county": "Douglas",
+  "district": 20,
+  "email": "jacob.moss@douglascountywi.gov",
+  "name": "Jacob Moss",
+  "phone": "218-730-8224",
+  "sourceUrl": "https://douglascountywi.gov/647/Members-by-District"
+ },
+ "5503121": {
+  "county": "Douglas",
+  "district": 21,
+  "email": "dennis.cummings@douglascountywi.gov",
+  "name": "Dennis Cummings",
+  "sourceUrl": "https://douglascountywi.gov/647/Members-by-District"
  },
  "5503301": {
   "asOf": "the county's own page, captured 2026-08-31",
@@ -8774,6 +9149,122 @@
   "name": "Andy Arntsen",
   "phone": "608-386-8181",
   "sourceUrl": "https://saukdomino.co.sauk.wi.us/Internet/Applications/main.nsf/publicDistrictList.xsp"
+ },
+ "5511301": {
+  "county": "Sawyer",
+  "district": 1,
+  "email": "steve.kariainen@sawyercountygov.org",
+  "name": "Steve Kariainen",
+  "phone": "715-699-4181",
+  "sourceUrl": "https://www.sawyercounty.gov/directory.aspx?did=33"
+ },
+ "5511302": {
+  "county": "Sawyer",
+  "district": 2,
+  "email": "kay.wilson@sawyercountygov.org",
+  "name": "Kay Wilson",
+  "phone": "715-462-9911",
+  "sourceUrl": "https://www.sawyercounty.gov/directory.aspx?did=33"
+ },
+ "5511303": {
+  "county": "Sawyer",
+  "district": 3,
+  "email": "steve.longtine@sawyercounty.gov",
+  "name": "Steve Longtine",
+  "phone": "715-558-2098",
+  "sourceUrl": "https://www.sawyercounty.gov/directory.aspx?did=33"
+ },
+ "5511304": {
+  "county": "Sawyer",
+  "district": 4,
+  "email": "stacey.hessel@sawyercountygov.org",
+  "name": "Stacey Hessel",
+  "sourceUrl": "https://www.sawyercounty.gov/directory.aspx?did=33"
+ },
+ "5511305": {
+  "county": "Sawyer",
+  "district": 5,
+  "email": "randy.neumann@sawyercountygov.org",
+  "name": "Randy Neumann",
+  "sourceUrl": "https://www.sawyercounty.gov/directory.aspx?did=33"
+ },
+ "5511306": {
+  "county": "Sawyer",
+  "district": 6,
+  "email": "marc.helwig@sawyercountygov.org",
+  "name": "Marc D. Helwig",
+  "phone": "715-699-0870",
+  "sourceUrl": "https://www.sawyercounty.gov/directory.aspx?did=33"
+ },
+ "5511307": {
+  "county": "Sawyer",
+  "district": 7,
+  "email": "jim.miller@sawyercounty.gov",
+  "name": "Jim Miller",
+  "sourceUrl": "https://www.sawyercounty.gov/directory.aspx?did=33"
+ },
+ "5511308": {
+  "county": "Sawyer",
+  "district": 8,
+  "email": "marshal.savitski@sawyercountygov.org",
+  "name": "Marshal Savitski",
+  "phone": "630-800-7787",
+  "sourceUrl": "https://www.sawyercounty.gov/directory.aspx?did=33"
+ },
+ "5511309": {
+  "county": "Sawyer",
+  "district": 9,
+  "email": "jim.evans@sawyercountygov.org",
+  "name": "Jim Evans",
+  "phone": "715-699-3026",
+  "sourceUrl": "https://www.sawyercounty.gov/directory.aspx?did=33"
+ },
+ "5511310": {
+  "county": "Sawyer",
+  "district": 10,
+  "email": "chuck.vanetten@sawyercountygov.org",
+  "name": "Chuck Van Etten",
+  "phone": "715-638-0704",
+  "sourceUrl": "https://www.sawyercounty.gov/directory.aspx?did=33"
+ },
+ "5511311": {
+  "county": "Sawyer",
+  "district": 11,
+  "email": "jeff.hoehne@sawyercountygov.org",
+  "name": "Jeff Hoehne",
+  "phone": "715-699-2866",
+  "sourceUrl": "https://www.sawyercounty.gov/directory.aspx?did=33"
+ },
+ "5511312": {
+  "county": "Sawyer",
+  "district": 12,
+  "email": "john.righeimer@sawyercountygov.org",
+  "name": "John Righeimer",
+  "phone": "715-462-3231",
+  "sourceUrl": "https://www.sawyercounty.gov/directory.aspx?did=33"
+ },
+ "5511313": {
+  "county": "Sawyer",
+  "district": 13,
+  "email": "ron.kinsley@sawyercountygov.org",
+  "name": "Ron Kinsley",
+  "phone": "715-945-2384",
+  "sourceUrl": "https://www.sawyercounty.gov/directory.aspx?did=33"
+ },
+ "5511314": {
+  "county": "Sawyer",
+  "district": 14,
+  "email": "ronald.buckholtz@sawyercountygov.org",
+  "name": "Ronald Buckholtz",
+  "phone": "715-943-2620",
+  "sourceUrl": "https://www.sawyercounty.gov/directory.aspx?did=33"
+ },
+ "5511315": {
+  "county": "Sawyer",
+  "district": 15,
+  "email": "john.minto@sawyercounty.gov",
+  "name": "John Minto",
+  "sourceUrl": "https://www.sawyercounty.gov/directory.aspx?did=33"
  },
  "5511501": {
   "county": "Shawano",
