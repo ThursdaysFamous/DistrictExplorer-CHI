@@ -88,7 +88,7 @@
 | Peoria | 17143 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 3 — `county-board-office-addresses` (no-source); `pass9-ward-seats-without-maps` (no-source); `peoria-fire-park-library-contact` (data-quality) |
 | Perry | 17145 | dispatch | no board layer — see gaps | `county-precinct` | 1 — `perry-county-website-blocked` (blocked) |
 | Pike | 17149 | County card | at-large — County card | — | 1 — `pike-precinct-geometry` (no-source) |
-| Pulaski | 17153 | dispatch | no board layer — see gaps | `county-precinct` | 1 — `pulaski-county-board` (no-source) |
+| Pulaski | 17153 | dispatch | at-large — County card | `county-precinct` | none |
 | Putnam | 17155 | County card | at-large — County card | — | 1 — `putnam-precinct-geometry` (no-source) |
 | Randolph | 17157 | dispatch | at-large — County card | `county-precinct` | 2 — `randolph-fire-park-library` (no-source); `randolph-precinct-polling` (data-quality) |
 | Richland | 17159 | dispatch | districted | `county-board`, `county-precinct` | none |
@@ -139,4 +139,4 @@ Counties outside the coverage ring that a research pass has already measured; ea
 
 ## Gap records not tagged to a county (1)
 
-City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 101 records in the Data gaps panel: `chicago-amenity-phones`.
+City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 100 records in the Data gaps panel: `chicago-amenity-phones`.
