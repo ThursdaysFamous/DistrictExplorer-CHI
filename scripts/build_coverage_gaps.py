@@ -261,6 +261,33 @@ def main():
     # hardcoded one — that is what lets the same script run in every fork.
     w = worksheet()
     metro = args.metro or w["this_metro"]
+
+    # --metro AND --out ARE ONE ARGUMENT, and forgetting the second one is the
+    # only way this script has ever touched a wrong file. --metro chooses the
+    # guidebook BLOCK; --out chooses the FILE, and nothing tied them together.
+    # `--metro wisconsin` alone read Wisconsin's gaps and wrote them over
+    # ILLINOIS's shipped file, reporting success. Nothing downstream named the
+    # cause: build_county_status.py failed on "gap 'aldermanic-incomplete-
+    # filings' names unknown county slug 'calumet'" and build_history_page.py
+    # on a stale page, both symptoms one step removed — and the pair only fired
+    # at all because the two states' slug vocabularies happen to disagree. Two
+    # metros that shared a slug would have shipped it.
+    #
+    # THE --check PATH WAS THE WORSE HALF AND IS WHY THIS GUARD COVERS IT.
+    # `--check --metro wisconsin` compares Wisconsin's block against Illinois's
+    # FILE, so it reports FAIL on a correct tree — and reports **OK** on a tree
+    # where the bad write above has already happened, because then the wrong
+    # file really does hold the wrong content. A verification that passes
+    # BECAUSE of the defect it should catch is worse than one that writes it,
+    # and this one did exactly that on 2026-09-02 before Lincoln shipped. CI
+    # always pairs the two flags (smoke-test.yml); it is the hand-run that lies.
+    if args.metro and not args.out and metro != w["this_metro"]:
+        fail("--metro %s needs --out: --metro picks the guidebook block and --out "
+             "picks the file, so without it this %s %s's gaps against %s — this "
+             "repo's own %s file. Pass the sibling's path, e.g. --metro %s --out "
+             "<tag>/data/app/coverage-gaps.json."
+             % (metro, "checks" if args.check else "writes", metro,
+                os.path.relpath(OUT_PATH, REPO_ROOT), w["this_metro"], metro))
     gaps = load_gaps()
     entries = gaps.get(metro)
     if entries is None:

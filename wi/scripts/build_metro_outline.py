@@ -120,11 +120,12 @@ METRO_COUNTY_FIPS = (
     "001", "007", "009", "011", "013", "015", "017", "019",
     "021", "023", "025", "027", "029", "033", "035", "039",
     "043", "045", "047", "049", "053", "055", "057", "059",
-    "061", "063", "065", "067", "071", "073", "075", "077",
-    "078", "079", "081", "083", "085", "087", "089", "091",
-    "093", "095", "097", "099", "101", "103", "105", "107",
-    "109", "111", "115", "117", "119", "121", "123", "125",
-    "127", "129", "131", "133", "135", "137", "139", "141",
+    "061", "063", "065", "067", "069", "071", "073", "075",
+    "077", "078", "079", "081", "083", "085", "087", "089",
+    "091", "093", "095", "097", "099", "101", "103", "105",
+    "107", "109", "111", "115", "117", "119", "121", "123",
+    "125", "127", "129", "131", "133", "135", "137", "139",
+    "141",
 )
 STATE_FIPS = "55"
 # No dispatch entries: county-board is ONE statewide layer here, not a
@@ -165,6 +166,19 @@ SIMPLIFY_TOLERANCE_M = 25
 # (or a hole mis-read as a region) renders identically and answers the opposite
 # way to every containment test inside it.
 #
+# LINCOLN WAS THE SECOND ENCLAVE AND LASTED ONE DAY (opened 2026-09-02 when
+# Langlade's roster shipped, closed the same day by Lincoln's own). Its five
+# Illinois-style neighbours — Langlade, Marathon, Taylor, Price and Oneida —
+# all serve, so Langlade's join sealed a ring around it and the count went 2
+# to 3; Lincoln's join took it back to 2. TWO THINGS ARE WORTH THE NEXT
+# READER'S TIME. An enclave is a county a reader can SEE missing, and seeing
+# it is how it got fixed: the hole is what prompted the second look that
+# found the county's map server. And the count that remains is NOT a hole —
+# both rings are OUTER. Bayfield has been an ISLAND since it joined, its only
+# neighbours being unserved Douglas, Ashland and Sawyer, so the file is a
+# MultiPolygon of two regions with no interior ring at all. Read which is
+# which from --check and from the anchors, never from the number alone.
+#
 # Points that MUST fall inside the dissolved outline (one per served county)
 # and outside it — ring-closure alone is not proof that a dissolve kept every
 # county. The template starts empty because no county-keyed layer exists yet;
@@ -203,6 +217,7 @@ INSIDE = {
     "La Crosse": (43.90784, -91.12764),
     "Lafayette": (42.66023, -90.1317),
     "Langlade": (45.24922, -89.05229),
+    "Lincoln": (45.33767, -89.73536),
     "Manitowoc": (44.11033, -87.53102),
     "Marathon": (44.90091, -89.76945),
     "Marinette": (45.28025, -88.00346),
@@ -247,7 +262,6 @@ OUTSIDE = {
     "Florence": (45.86728, -88.37551),
     "Forest": (45.72458, -88.86156),
     "Iron": (46.38983, -90.34647),
-    "Lincoln": (45.33767, -89.73536),
     "Sawyer": (45.89772, -91.10962),
 }
 

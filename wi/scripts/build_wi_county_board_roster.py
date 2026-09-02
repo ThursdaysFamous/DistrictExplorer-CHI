@@ -72,7 +72,7 @@ GEOMETRY = os.path.join(APP_DATA_DIR, "county-supervisory-districts.json")
 RAW = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache", "wi_county_boards_raw.json")
 OUT = os.path.join(APP_DATA_DIR, "county-board-members.json")
 
-MIN_COUNTIES = 62      # 64 ship one (41 board pages + 2 county GIS layers + Fond du
+MIN_COUNTIES = 63      # 65 ship one (41 board pages + 3 county GIS layers + Fond du
                        # Lac through the Internet Archive + Dodge's constituent
                        # directory + Kenosha's witnessed directory PDF + Adams's
                        # directory PDF + Clark's, Pierce's and Marathon's
@@ -81,7 +81,7 @@ MIN_COUNTIES = 62      # 64 ship one (41 board pages + 2 county GIS layers + Fon
                        # County/Town board + Langlade's board page +
                        # Columbia's framed table + NINE by dated document);
                        # tolerates two dark
-MIN_SEATS = 1361       # 1434 today; the tolerance is the two largest boards
+MIN_SEATS = 1383       # 1456 today; the tolerance is the two largest boards
                        # (Dane 37 + Outagamie 36) going dark in one run, which is
                        # what a floor is for — it is never lowered to fit a result
 
@@ -120,7 +120,7 @@ def main():
                            % (len(counties), MIN_COUNTIES, raw.get("failures")))
 
     roster = {}
-    total = vacant = 0
+    total = vacant = withheld = 0
     for fips, entry in sorted(counties.items()):
         if fips not in drawn:
             raise RuntimeError("county %s (%s) has members but no districts in the "
@@ -154,7 +154,16 @@ def main():
                 # its own reason gets it printed instead.
                 if entry.get("why"):
                     row["asOfWhy"] = entry["why"]
-            if member["vacant"]:
+            if member.get("withheld"):
+                # A SEAT NAMED BY NOBODY BECAUSE TWO PUBLISHERS DISAGREE ABOUT
+                # ITS GROUND — never `vacant`, which is a claim the county
+                # makes about an empty seat, and never silence, which reads as
+                # a lookup that failed. Lincoln district 21 is the case: see
+                # district_geometry_witness() in the scraper.
+                row["withheld"] = True
+                row["withheldWhy"] = member["withheld_why"]
+                withheld += 1
+            elif member["vacant"]:
                 row["vacant"] = True
                 vacant += 1
             else:
@@ -253,8 +262,9 @@ def main():
 
     payload = json.dumps(roster, indent=1, sort_keys=True) + "\n"
     dated = sorted({r["county"] for r in roster.values() if r.get("asOf")})
-    print("county-board-members: %d counties, %d seats (%d named, %d vacant)%s"
-          % (len(counties), total, total - vacant, vacant,
+    print("county-board-members: %d counties, %d seats (%d named, %d vacant%s)%s"
+          % (len(counties), total, total - vacant - withheld, vacant,
+             ", %d withheld" % withheld if withheld else "",
              "; carried from a document: %s" % ", ".join(dated) if dated else ""),
           file=sys.stderr)
     if check_only:
