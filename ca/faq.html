@@ -324,8 +324,13 @@ a { color: var(--accent-deep); }
   position: absolute;
   left: -9999px;
   top: 0;
-  background: var(--accent-deep);
-  color: #fff;
+  /* --paper on --ink, the pair the app's styles-core skip link and the root
+     pages already paint: white on --accent-deep was 1.91:1 in the dark tier
+     (#fff on #c4b0ff), the worst pair in the palette, on a focus-only element
+     that exists for keyboard users. Measured by scripts/validate_contrast.py,
+     both tiers. */
+  background: var(--ink);
+  color: var(--paper);
   padding: 10px 16px;
   z-index: 1000;
   border-radius: 0 0 8px 0;

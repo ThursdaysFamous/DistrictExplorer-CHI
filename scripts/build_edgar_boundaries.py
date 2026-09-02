@@ -3,7 +3,7 @@
 Build data/app/edgar-precincts.json + data/app/edgar-county-board-districts.json
 — Edgar County's 31 voting precincts and 7 County Board districts, composed
 from the county's own certified election returns (docs/EXPANSION_GUIDE.md
-§2.5.1, the canvass route; scripts/vtd_board_districts.py holds the machinery).
+§3.5.1, the canvass route; scripts/vtd_board_districts.py holds the machinery).
 
 WHY THIS COUNTY MATTERS TWICE. Edgar became the coverage ring's own OUTSIDE
 anchor on 2026-08-18, hours before this build, when Clark joined and left it

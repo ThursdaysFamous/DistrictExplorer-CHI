@@ -31,7 +31,7 @@ column and asserted again here), and party, which the members page does not
 publish.
 
 THE CHAIR IS THE COUNTY'S OWN LABEL, not an inference from the canvasses.
-§2.5.1 warns against badging a chair derived from returns, because a
+§3.5.1 warns against badging a chair derived from returns, because a
 chairmanship is elected from within the body and no certified document shows
 it. This is the other case: the county's members page prints a role beside four
 of its nine members, and the table distinguishes the board's own officers

@@ -17,7 +17,7 @@ five by district, and the 2024 General re-elected districts 3 and 4:
     D5  CLINT SPENCER, DEM         (2022 canvass p.43)
 
 Names are matched surname + first initial, and the match must be UNIQUE (the
-§2.5.1 rule). ANY divergence — a name on the page this table cannot place, a
+§3.5.1 rule). ANY divergence — a name on the page this table cannot place, a
 table row the page no longer lists, a party that moved — FAILS the build
 instead of shipping a guess: a membership change means an appointment or an
 election, and which district the new member represents is a fact only a new

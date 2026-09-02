@@ -62,6 +62,11 @@ jobs:
           python3 scripts/build_coverage_gaps.py --check
           python3 scripts/build_coverage_gaps.py --check --metro wisconsin --out wi/data/app/coverage-gaps.json
           python3 scripts/build_coverage_gaps.py --check --metro iowa --out ia/data/app/coverage-gaps.json
+          # ny/ and ca/ ship a gaps file too; until 2026-09-02 only three of the
+          # five keys were gated here, and drift in the other two surfaced only in
+          # the weekly fleet-status notice.
+          python3 scripts/build_coverage_gaps.py --check --metro nyc --out ny/data/app/coverage-gaps.json
+          python3 scripts/build_coverage_gaps.py --check --metro sf --out ca/data/app/coverage-gaps.json
 
       # Wisconsin's county-board-directory.json carries each county's board
       # SIZE, and it reads that number back from the shipped supervisory
@@ -329,7 +334,7 @@ jobs:
           fi
 
       # Static merge gate, once per instance. Each instance's validate_index.py
-      # resolves data/app relative to the index it is handed, so all three run
+      # resolves data/app relative to the index it is handed, so every instance runs
       # from the repo root. Stdlib only, so this sits before the browser work
       # and fails fast.
       - name: Each instance's index validates
@@ -359,7 +364,7 @@ jobs:
             sleep 0.5
           done
           status=0
-          # Run all three even if an early one fails, so a PR sees every broken
+          # Run every instance even if an early one fails, so a PR sees every broken
           # instance in one go rather than one per push.
           BASE_URL=http://localhost:8000/il/  node scripts/smoke_test.mjs     || status=1
           BASE_URL=http://localhost:8000/ca/  node ca/scripts/smoke_test.mjs  || status=1

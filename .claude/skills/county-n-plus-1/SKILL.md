@@ -1,22 +1,23 @@
 ---
 name: county-n-plus-1
-description: Take ONE county from unserved to in-the-ring, or repair one that is — research its publishers in the right order, settle its board's form from a certified election document, build the roster and (if districted) the geometry by the route the source's shape allows, join the coverage ring, and do the bookkeeping the gates check. Use it the moment a task names a county and something it lacks — "ship Jasper", "add Pope to the ring", "Bureau, anything new?", "Marion's board from the canvasses", "Christian re-precincted, can we build it now", "county N+1 Fayette", "Pierce County board, 17 supervisors", a red FIRST run of a new county's roster workflow — in Illinois, Wisconsin or Iowa — even just to look. It carries the ORDER of the work and the test that settles each decision; the rules live in docs/EXPANSION_GUIDE.md §3.5 and §3.5.1 and this says when to open them. Not for a red bot PR on a shipped county (steward), a new layer (new-layer), a new state (new-state-instance), or "which district is this address in".
+description: Take ONE county from unserved to in-the-ring, or repair one that is — research its publishers in the right order, settle its board's form from a certified election document, build the roster and (if districted) the geometry by the route the source's shape allows, join the coverage ring, and do the bookkeeping the gates check. Use it the moment a task names a county and something it lacks — "ship Jasper", "Bureau, anything new?", "Marion's board from the canvasses", "Christian re-precincted, build it now?", "Pierce County board, 17 supervisors", a red FIRST run of a new county's roster workflow — in Illinois, Wisconsin or Iowa, even just to look. It carries the ORDER of the work and the test that settles each decision; the rules live in docs/EXPANSION_GUIDE.md §3.5 and §3.5.1. Not for the pipeline once the source is settled (roster-pipeline), the gap text (gap-record), the e-mail (outbound-ask), a red bot PR on a shipped county (steward), a new layer (new-layer), or a new state (new-state-instance).
 ---
 
 # One more county
 
 This file exists for the moment an agent starts on a county. `CLAUDE.md`
-carries ninety counties of narrative and every gate's name and is loaded on
+carries the county-by-county narrative and every gate's name and is loaded on
 every turn; `docs/EXPANSION_GUIDE.md` §3.5 is the checklist and §3.5.1 the
-thirty-odd rules the counties taught, and both are pointed at below rather than
+rules the counties taught, and both are pointed at below rather than
 restated — two documents stating one rule is how `ENGINE_SYNC.md` drifted 164
 lines. What neither gives an agent at the moment it starts is the **order**,
 the **test that settles each decision**, and the **current names** of the
 tables and files the steps hang on. That is what is here.
 
-One path to carry: Illinois's files live at `il/data/app/`. Older docs still
-write the pre-R2.3 spelling without the `il/` prefix, and the root `data/app`
-does not exist.
+One translation to carry: Illinois's files live at `il/data/app/`. Wherever
+an older doc or docstring writes the pre-R2.3 spelling without the `il/`
+prefix, or cites §2.5.1, read `il/data/app/` and §3.5.1 — the guide's
+2026-08-27 rewrite moved that section. The root `data/app` does not exist.
 
 ## 1. Before touching the world, read your own records
 
@@ -29,8 +30,8 @@ records went on calling the question undeterminable. So before any fetch:
 - `docs/DATA_LAYER_GUIDEBOOK.md` — grep the county's name; its gap record and every dated ask.
 - `scripts/il_county_commissioners_scraper.py` — `SITES`, `DOCUMENT_ROSTERS`, `RETURNS_ROSTERS`: is it already known here?
 - `scripts/build_metro_outline.py` — the county's `INSIDE` / `OUTSIDE` anchor comments, which are the history of every ring-count change.
-- `WATCH.md` — any standing watch on it.
 - `docs/ASK_DRAFTS.md` — a drafted or sent ask you would otherwise send twice.
+- For a Wisconsin or Iowa county, the instance's `wi/WATCH.md` / `ia/WATCH.md` rows. Illinois keeps such findings in the gap record and the builder docstring; the root `WATCH.md` is the redistricting calendar and carries no county rows.
 
 If the record names a blocker, the question is not "is it still blocked" but
 "has the METHOD changed" — five counties were shut on split precincts until the
@@ -44,8 +45,9 @@ weekly from ISBE. `clerk_email.split("@")[-1]` is very often the county's web
 domain, correct and maintained by someone else. Try `https://<domain>` and
 `https://www.<domain>` before permuting the county's name — nine counties
 recorded as having no website had one at exactly this address. A domain with
-no A record but a live MX (`<county>.illinois.gov` for Pope, Jasper, Marion) is
-a mail-only domain: no site here, not an unreachable clerk.
+no A record but a live MX — the county's `illinois.gov` mail domain,
+`popeco.illinois.gov` for Pope, likewise Jasper and Marion — is a mail-only
+domain: no site here, not an unreachable clerk.
 
 **Zero — search the web, for the county AND for the artifact.** An ordinary
 search-engine query, before any host sweep or catalogue. A county is not a
@@ -81,10 +83,10 @@ the card.
 
 **Classify reachability from the vantage that matters.**
 - `python3 scripts/probe_incomplete_tls_chains.py --clerk-domains` (or with hosts) — a leaf served without its intermediate reads to every automated client as a dead host and to every browser as fine. Coles, Gallatin, Knox's GIS. The remedy is the intermediate fetched by AIA with a PINNED hash (`scripts/coles_county_board_scraper.py`), never verification off.
-- `openssl s_client -connect <host>:443 -showcerts | grep -c 'BEGIN CERTIFICATE'` against a control host that sends three: two is an incomplete chain, not a refusal.
+- `openssl s_client -connect <host>:443 -showcerts | grep -c 'BEGIN CERTIFICATE'` against a control host: a host that sends ONLY its leaf (one certificate) where the control sends two or three is an incomplete chain, not a refusal. Two certificates — leaf plus intermediate — is the ordinary complete chain.
 - HTTP 202 is never a document — it is what a captcha front returns. A captcha is an access control, not an obstacle to route around.
 - A blocked WEBSITE is not a blocked COUNTY. Knox had four hosts; Johnson and Perry shipped with their sites never read, from their election authority's results vendor.
-- A block seen from this sandbox is a fact about this address. The scrapers' vantage is CI: dispatch the workflow on your branch and sample several runs before recording a block as terminal.
+- A block seen from this sandbox is a fact about this address. The scrapers' vantage is CI: dispatch the workflow on your branch and sample several runs before recording a block as terminal — one run is not a measurement, and §3.5.1's DeKalb bullets say how many are.
 
 **The ask is a rung, not a last resort.** `docs/ASK_DRAFTS.md` holds the
 protocol and the drafts. Nothing there is sent by the agent that wrote it;
@@ -110,11 +112,11 @@ calls Union districted while Union's own returns count every seat in 20 of 20
 precincts.
 
 The results vendors and which counties each carries are a TABLE in
-`docs/DATA_LAYER_GUIDEBOOK.md` (grep `pollresults`). Test carriage by CONTENT,
-never by a vendor's landing page, and sweep several election slugs before
-recording that a vendor lacks a county — carriage is per election. A wrong
-download-handler pair returns the vendor's login page as a 200 PDF: check for
-`%PDF` and the canvass's own title.
+`docs/DATA_LAYER_GUIDEBOOK.md` (grep `results platforms, catalogued`). Test
+carriage by CONTENT, never by a vendor's landing page, and sweep several
+election slugs before recording that a vendor lacks a county — carriage is
+per election. A wrong download-handler pair returns the vendor's login page
+as a 200 PDF: check for `%PDF` and the canvass's own title.
 
 ## 4. The build, by the route the source's shape allows
 
@@ -124,12 +126,16 @@ to `scripts/il_county_commissioners_scraper.py` — or a `DOCUMENT_ROSTERS` row
 (a document the clerk sent) or `RETURNS_ROSTERS` row (certified winners, each
 row naming its election) when the county's page cannot be read — and a seat
 count to `EXPECT_MEMBERS` in `scripts/build_county_commissioners.py`. The
-county lands in `il/data/app/il-county-commissioners.json`, keyed UPPERCASE
-exactly as `il-county-clerks.json` is. It STILL needs its outline and INSIDE
-anchor (§5 below), goes in `METRO_COUNTY_FIPS` and NOT `DISPATCH_COUNTY_FIPS`,
-and its precinct card must carry no board-district row. A roster the county
-publishes short of its seats ships with `seats` beside the members, so the
-card can say a seat is unlisted rather than concealing it.
+county lands in `il/data/app/il-county-commissioners.json`, keyed by
+uppercase letters only with COUNTY stripped (`STCLAIR`, `JODAVIESS`) — the
+builder's own normaliser, the same key `il-county-clerks.json` uses. It STILL
+needs its outline and INSIDE anchor (§5 below) and goes in
+`METRO_COUNTY_FIPS` regardless; it goes in `DISPATCH_COUNTY_FIPS` ONLY if it
+also registers a dispatch entry — its precincts, a fire tiling — and
+`validate_index.py` check 8 fails in BOTH directions. Its precinct card must
+carry no board-district row. A roster the county publishes short of its
+seats ships with `seats` beside the members, so the card can say a seat is
+unlisted rather than concealing it.
 
 **Districted, with a published boundary layer.** Before choosing the
 no-scraper "roster rides the layer" shape, spend one fetch comparing the
@@ -143,22 +149,32 @@ balances, whatever it is called (Vermilion's well-labelled layer was the 2011
 plan), and the builder gates that comparison in BOTH directions.
 
 **Districted, no map, districts are whole precincts — the canvass route**
-(§3.5.1's whole-precinct entry numbers the steps, from results archive to the weekly composition check). Find the election
-authority's results archive; read the board contests; take a second witness of
-a DIFFERENT kind (a second certified election, a precinct count, a population
-sum — arithmetic beats another map); run THE JASPER TEST in
-`scripts/vtd_board_districts.py` before any dissolve — the Census 2020 voting
-districts must match the county's CURRENT precinct names one for one and sum
-to its exact population, and failing is the correct outcome for a county that
-re-precincted. Walk GENERALS newest-first; primaries never seat anybody. Read
-precinct names from a canvass's contest list, never from a polling notice's
-headings (those group buildings, not precincts).
+(§3.5.1's whole-precinct entry numbers the steps, from results archive to the
+weekly composition check). Find the election authority's results archive;
+read the board contests; take a second witness of a DIFFERENT kind (a second
+certified election, a precinct count, a population sum — arithmetic beats
+another map); run THE JASPER TEST in `scripts/vtd_board_districts.py` before
+any dissolve — `check_fabric`: the Census 2020 voting districts must match the
+county's CURRENT precinct names one for one and sum to its exact population,
+and failing is the correct outcome for a county that re-precincted. A county
+whose current precincts are unions of whole voting districts uses
+`check_fabric_composed` instead — names need not match, the population
+identity and `check_partition` must hold, and every census merge must be
+nameable AND sit wholly inside one district (Clinton passes, Marion fails).
+Walk GENERALS newest-first; primaries never seat anybody. Read precinct names
+from a canvass's contest list, never from a polling notice's headings (those
+group buildings, not precincts).
 
 **Districted, composition published on the page the roster is scraped from.**
 The scraper emits the composition it read; the ROSTER builder compares it to
 the table compiled into the boundary builder and FAILS on any difference, so
 the weekly job turns red on a redistricting. Compare at precinct level, not
 township names. Write the negative tests (a unit lost, gained, renamed).
+Composition only in a PDF the page LINKS → no drift check is possible; assert
+the weakest real substitute the page does publish (Cass: its seat counts,
+which its population test depends on and which a reapportionment almost
+always moves) and state in the builder's header AND the workflow's exactly
+what that cannot catch.
 
 **Districted, and the districts split precincts.** The census fabric cannot
 draw it. Three things have: two county-published LAYERS that compose each
@@ -168,12 +184,14 @@ and a VECTOR PDF whose districts are filled path objects — read the objects,
 never the pixels (Jackson). A genuine raster scan is still shut, and a
 clerk's written sentence can draw one line (Clay's corporate-limits split).
 
-**The population ceiling.** The dissolve guard's worst-deviation ceiling is
-30%. A board whose districts elect different numbers of members balances PER
-MEMBER — get seats per district from the county's roster page before writing
-the check. The ceiling is raised for ONE county, on that county's own written
-confirmation that the plan is current, with the measured value recorded rather
-than smoothed (Wayne 32.4%, Clay 39.8%). Never widened for the fleet.
+**The population ceiling.** `BALANCE_DEV_MAX = 0.30` in each county builder
+(`scripts/build_clinton_boundaries.py` is the reference; the shared
+`scripts/vtd_board_districts.py` carries no ceiling). A board whose districts
+elect different numbers of members balances PER MEMBER — get seats per
+district from the county's roster page before writing the check. The ceiling
+is raised for ONE county, on that county's own written confirmation that the
+plan is current, with the measured value recorded rather than smoothed (Wayne
+32.4%, Clay 39.8%). Never widened for the fleet.
 
 **Roster rules that apply everywhere.** Match names across surfaces on
 surname plus first initial and require the match UNIQUE, dropping ambiguous
@@ -195,10 +213,10 @@ A county joins when its BOARD or its PRECINCTS answer — a fire, park, library
 or drainage tiling alone never qualifies, and a county never joins for a rich
 statewide answer. In `scripts/build_metro_outline.py`, in ONE step: the slug →
 FIPS row in `DISPATCH_COUNTY_FIPS` (only if the county registers a dispatch
-entry — an at-large county belongs in `METRO_COUNTY_FIPS` alone, and
-`validate_index.py` check 8 fails in BOTH directions), the FIPS in
-`METRO_COUNTY_FIPS`, an INSIDE anchor, and its removal from OUTSIDE if listed.
-Then:
+entry — an at-large county with no dispatch entry belongs in
+`METRO_COUNTY_FIPS` alone, and `validate_index.py` check 8 fails in BOTH
+directions), the FIPS in `METRO_COUNTY_FIPS`, an INSIDE anchor, and its
+removal from OUTSIDE if listed. Then:
 
 ```bash
 python3 scripts/build_metro_outline.py            # rebuild the dissolve
@@ -209,12 +227,12 @@ Read the ring count from `--check`, never from a map in your head — the
 enclave predictions were wrong twice in one day. A county with no unserved
 neighbour is an enclave only if it is INTERIOR; one that fronts the state line
 is a notch. A new hole needs its own OUTSIDE anchor inside it; an island
-follows the **First-island checklist** entry in §3.5.1. A frontier county you cannot
-serve but have recorded a gap for still ships `<slug>-county-outline.json`
-with the worksheet entry marked `dynamic_reference: true` and NOTHING in
-`DISPATCH_COUNTY_FIPS`; derive its anchors from TIGERweb place centroids and
-round-trip each through a point-in-county query rather than recalling
-coordinates.
+follows the **First-island checklist** entry in §3.5.1. A frontier county you
+cannot serve but have recorded a gap for still ships
+`<slug>-county-outline.json` with the worksheet entry marked
+`dynamic_reference: true` and NOTHING in `DISPATCH_COUNTY_FIPS`; derive its
+anchors from TIGERweb place centroids and round-trip each through a
+point-in-county query rather than recalling coordinates.
 
 ## 6. The other concepts — §3.5's numbered steps, one line each
 
@@ -231,12 +249,13 @@ coordinates.
 
 The mechanics — file names, the two schemas, the exact-count guard ladder,
 the drift-check-first ordering, the workflow's five load-bearing lines, the
-worksheet registration that feeds `validate_index.py` and `sw.js` together —
-are the **roster-pipeline** skill's; Richland, Wayne and Clay are its three
-complete reference triples. Two things county work adds on top:
-
-- **grep the cloned workflow for the OLD county's name and domain** — its PR title and body are a human-review surface;
-- **dispatch every new workflow the day it ships and read the log.** A green `validate_index.py` says nothing about whether the job runs; heavy imports go function-local, and `scripts/validate_workflow_deps.py` is what caught the five roster jobs that were dead from the day they shipped.
+worksheet registration that feeds `validate_index.py` and `sw.js` together,
+the grep of a cloned workflow for the old county, and the first dispatch (a
+sample, not a verdict) — are the **roster-pipeline** skill's; Richland, Wayne
+and Clay are its three reference triples. Manual dispatch on 2026-08-02
+caught five roster jobs that had been dead since the day they shipped, on
+shapely imports; `scripts/validate_workflow_deps.py` now fails that seam in
+CI, and heavy imports go function-local in the modules a builder imports.
 
 Officeholder sourcing is settled in the SAME change that ships the boundary,
 never deferred (§3.3).
@@ -244,12 +263,15 @@ never deferred (§3.3).
 ## 8. Record, then bookkeep, then run the battery
 
 Write the finding where the next reader will look — the gap record, the
-builder's docstring, or a `WATCH.md` row — never only the guidebook backlog. A
-gap record's reader fields (`summary` / `why` / `wanted`, each ≤240 chars) name
-the COUNTIES it affects; the unbounded `blocker` field holds every host, date
-and status; `kind` is one of `KINDS` in `scripts/build_coverage_gaps.py`
-(`no-source` / `blocked` / `data-quality`). Record the blocker you MEASURED, in
-its vocabulary — unresponsive, licence-gated, split-precinct, raster-only are
+builder's docstring, or (for Wisconsin and Iowa) a `<tag>/WATCH.md` row —
+never only the guidebook backlog. In a gap record, `counties: ["<slug>"]`
+(shipped outline slugs) is what names the counties it affects; the reader
+fields `summary` / `why` / `wanted` are plain prose, each ≤240 characters,
+carrying no hostname, date or capitals — the gap-record skill carries the
+lints; the unbounded `blocker` field holds every host, date and status;
+`kind` is one of `KINDS` in `scripts/build_coverage_gaps.py` (`no-source` /
+`blocked` / `data-quality`). Record the blocker you MEASURED, in its
+vocabulary — unresponsive, licence-gated, split-precinct, raster-only are
 different claims with different routes out; "no source exists" is almost never
 one of them. When a build disproves its own record, rewriting the record is
 part of the build.
@@ -259,6 +281,7 @@ Then, in order:
 ```bash
 python3 scripts/generate_metro_files.py          # worksheet entries → generated regions
 python3 scripts/build_coverage_gaps.py           # the gap block → il/data/app/coverage-gaps.json
+python3 scripts/build_history_page.py            # il/history.html counts the gaps file in a MEASURED tile
 python3 scripts/build_county_status.py           # docs/COUNTY_STATUS.md; its --check fails a lagging table
 ```
 
@@ -284,9 +307,12 @@ Iowa change. Its supervisor layer is ONE state aggregate keyed by plan type,
 with county-level placeholders for boards in transition — a county is a row
 in that aggregate, not a dispatch entry; every workflow and data file is
 `ia-` prefixed with no exceptions, on a fixed `bot/ia-*` branch. Its officers
-come from ISAC's member portal plus one statewide directory per office, which
-can disagree; `DIVERGENCE_RESOLVED` in `ia/scripts/build_ia_county_officers.py`
-is the pin table that withholds a name until a third witness settles it.
+come from ISAC's member portal, with a statewide directory as second witness
+for recorder, sheriff and county attorney only (treasurer and supervisors
+have none, and the builder's docstring says so). `DIVERGENCE_RESOLVED` in
+`ia/scripts/build_ia_county_officers.py` pins the divergences a THIRD witness
+settled (winner plus witness URL): any divergence not pinned ships no name,
+and a pin whose sources stop disagreeing fails the build.
 
 **Wisconsin.** `docs/WI_PHASE4_PLAN.md` is the plan of record. Boards are
 supervisory districts, and adding a county's roster is a `COUNTIES` table
@@ -297,18 +323,28 @@ reachable county into one file, never a new triple. Two WI-only CI gates run
 on every PR: the county board directory and the county outlines must match
 the shipped fabric.
 
-Both instances carry their own worksheets and gap blocks (`--metro wisconsin`
-/ `--metro iowa` on `build_coverage_gaps.py`). Part 5 of the guide is the
-cross-state statement of the rules; §3.5.1 is their Illinois-worded original.
+Both instances carry their own worksheets and gap blocks. `--metro` chooses
+the key and `--out` is MANDATORY beside it — without `--out` the script
+writes and compares against Illinois's shipped file:
+
+```bash
+python3 scripts/build_coverage_gaps.py --metro wisconsin --out wi/data/app/coverage-gaps.json
+python3 scripts/build_coverage_gaps.py --metro iowa      --out ia/data/app/coverage-gaps.json
+```
+
+(`--check` on each for the gate.) Part 5 of the guide is the cross-state
+statement of the rules; §3.5.1 is their Illinois-worded original.
 
 ## 10. Nevers specific to county work
 
+Steward §3 and `CLAUDE.md`'s coverage rules (never join for a statewide
+answer; a city never carries its unserved county; read the ring count from
+`--check`; never lower a floor or the ceiling) apply as written. On top:
+
 - Never decide a board's form from a board page's silence, or from a state table older than the county's own returns.
 - Never write "publishes no X" without having searched, and never to the source's maintainer.
-- Never lower a count floor, a field floor or the deviation ceiling to get a build to write. A refusal to write is the builder working.
 - Never name an officeholder two publishers disagree on. Withhold and say who names whom.
 - Never collect a home address; never mirror a private location the source printed by mistake.
 - Never ship a traced raster, a colour-sampled fill, or a dissolve that failed the Jasper test.
 - Never disable TLS verification to reach a host; supply the intermediate and pin it.
-- Never join a county for a statewide answer, and never let a city carry its unserved county.
-- Never predict the ring count. Run `--check`.
+- Never record a block from this sandbox's address or from one CI run.

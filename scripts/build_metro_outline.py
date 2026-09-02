@@ -55,7 +55,7 @@ by two features is an interior border and is dropped; survivors chain back into
 closed rings. Doing it here means the browser ships one feature with no interior
 edges left to cancel. Disjoint regions fall out of the same walk — each closed
 ring is chained independently — and group_rings() nests them into a MultiPolygon.
-Effingham exercised that path on 2026-08-04 (the first island, §2.5.1 checklist):
+Effingham exercised that path on 2026-08-04 (the first island, §3.5.1 checklist):
 the shipped file became a MultiPolygon whose second polygon was the island's own
 OUTER ring — verified by anchor, not by eye, because an island mis-nested as a
 hole renders identically and answers False to every containment test inside it.
@@ -186,7 +186,7 @@ TIGERWEB_STATE = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb
 #
 # group_rings() below nests rings correctly and emits a MultiPolygon when the
 # served area becomes disjoint. Effingham (FIPS 049) exercised it on 2026-08-04
-# as the first island, following the §2.5.1 checklist: its INSIDE anchor plus
+# as the first island, following the §3.5.1 checklist: its INSIDE anchor plus
 # the Vandalia/Shelbyville corridor OUTSIDE anchors prove the island landed as
 # its own OUTER ring — mis-nested as a hole it would render identically under
 # the wash and answer False to every containment test inside it.
@@ -430,7 +430,7 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # ONE polygon — Vienna moving from the OUTSIDE list to the
                      # INSIDE one exactly as its own note said it would. Massac
                      # is kept here as an island because the record of HOW IT
-                     # JOINED is what the §2.5.1 checklist is for; what it is
+                     # JOINED is what the §3.5.1 checklist is for; what it is
                      # today is a plain interior county, and the ring count
                      # comes from --check rather than from this comment.
                      #
@@ -977,11 +977,11 @@ INSIDE = {
     # other entry here proves — that the county is inside the dissolve — and it
     # stays exactly as it was measured. Derived from TIGERweb's Incorporated
     # Places centroid for Metropolis city and round-tripped through a
-    # point-in-county query, per the §2.5.1 rule against recalled coordinates.
+    # point-in-county query, per the §3.5.1 rule against recalled coordinates.
     "Metropolis (Massac)": (37.1565, -88.7082),
     # Saline's anchor (2026-08-21), the 74th county. Derived from TIGERweb's
     # Incorporated Places centroid for Harrisburg city and round-tripped
-    # through a point-in-county query, per the §2.5.1 rule against recalled
+    # through a point-in-county query, per the §3.5.1 rule against recalled
     # coordinates. Saline joins on the mainland through the County card alone.
     "Harrisburg (Saline)": (37.7375, -88.5457),
     # Hancock's anchor (2026-08-21), the 75th county. TIGERweb's Incorporated

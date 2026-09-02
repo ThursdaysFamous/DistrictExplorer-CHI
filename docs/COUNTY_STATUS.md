@@ -13,7 +13,7 @@
 
 ## How to read this
 
-- **Served through** — `dispatch`: the county has its own entries in index.html's county dispatch tables; `judicial circuit`: a secondary county of a shipped judicial circuit (its only county-specific card is the subcircuit); `County card`: an at-large county with no district geometry, its board riding the County card (`docs/EXPANSION_GUIDE.md` §2.5.1).
+- **Served through** — `dispatch`: the county has its own entries in index.html's county dispatch tables; `judicial circuit`: a secondary county of a shipped judicial circuit (its only county-specific card is the subcircuit); `County card`: an at-large county with no district geometry, its board riding the County card (`docs/EXPANSION_GUIDE.md` §3.5.1).
 - **Board** — how the county board surfaces: `districted` (own `county-board` dispatch entry), `at-large — County card` (data/app/il-county-commissioners.json), or `no board layer` for a served county whose board does not surface at all. That last one comes in two kinds, and the difference is the point: `see gaps` means a record says why, **`no gap record`** means nothing does — an unexplained absence, and a debt against this project's own rule that every absence is recorded.
 - **County-keyed dispatch entries** — read from index.html itself, the same scan `validate_index.py` check 8 gates on.
 - **Open gaps** — records from the guidebook's gaps block (`data/app/coverage-gaps.json`, the app's Data gaps panel). A record naming several counties appears in each of their rows.

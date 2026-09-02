@@ -46,7 +46,7 @@ a static import check, not a run:
   * Anything past the import: a missing binary, a bad token, a blocked source.
 
 So this closes the specific hole that let five refreshes ship broken; it does not
-make dispatching a new workflow optional (EXPANSION_GUIDE §2.5.1).
+make dispatching a new workflow optional (EXPANSION_GUIDE §3.5.1).
 
 Stdlib only, so it runs in smoke-test.yml before any dependency is installed.
 

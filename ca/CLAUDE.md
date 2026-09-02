@@ -85,7 +85,7 @@ This app is one of several sibling metro forks (Chicago at `ThursdaysFamous/Dist
 - Don't edit inside an ENGINE fence unless the change will be ported to every sibling fork — and port it as the **actual git diff**, never by re-describing the feature in a prompt (same prompt ≠ same code; that's exactly how the forks drifted before the fences existed).
 - Region-agnostic changes land in this repo first; siblings apply the diff verbatim.
 - Never inline a city-specific value in an ENGINE block — add a variable to the METRO config block instead.
-- Verify with `python3 scripts/check_engine_parity.py index.html` (fence lint; `validate_index.py` also runs it) or `--against <sibling path or URL> --strict` (byte comparison). Parity is maintained **by construction**: SF consumes Chicago's released engine (hash-verified via `engine.lock.json` + `apply_engine.py`, refreshed by `engine-bump.yml` PRs), and the deploy's assemble job asserts the spliced blocks equal the downloaded bundle. The old scheduled cross-fork watcher (`engine-parity.yml`) runs in the Chicago repo only.
+- Parity is maintained **by construction**: there is ONE copy of every block under the root `engine/`, `python3 scripts/compose_app.py` splices it into this folder's `index.html` and `sw.js`, and its `--check` is the CI gate (`python3 scripts/check_engine_parity.py ca/index.html` is the fence lint). The release channel this bullet used to describe — `engine.lock.json`, `apply_engine.py`, `engine-bump.yml`, `engine-parity.yml` — was retired at R2.1 and none of those files exists (corrected 2026-09-02).
 - Full protocol + the known reconciliation backlog: `docs/ENGINE_SYNC.md`.
 
 ## Data pipeline
@@ -102,7 +102,7 @@ Most layers fetch live public APIs at runtime (DataSF / Socrata, Census TIGERweb
 - `smoke-test.yml` — runs the behaviour gate on every PR and push to `main`.
 - `update-{congress,ca-legislature,sf-supervisor}-roster.yml` — weekly (staggered) roster refreshes. Each re-fetches its source, rebuilds `data/app/`, runs `validate_index.py`, and — if anything changed — **opens a PR rather than committing to `main`.** Officeholder data always gets a human review before it ships. Match this pattern for any new roster: never auto-commit roster changes to `main`.
 - `validate-sources.yml` — monthly source-freshness check. Runs `scripts/validate_sources.py`; on any WARN/FAIL (e.g. a DataSF dataset superseded by a newer-year edition, or a pre-built boundary source gone unreachable) it **opens or updates a single tracking issue** rather than editing anything — the job stays green, the issue is the signal. Same "surface for a human, don't auto-apply" convention as the roster PRs.
-- `deploy-pages.yml` — deploys to GitHub Pages, applying the pinned reference-engine bundle over `index.html` at deploy time (SF consumes Chicago's released engine; see `engine.lock.json`). ENGINE-fenced changes must ship through a new engine release, not this fork's `index.html`.
+- `deploy-pages.yml` (repo root) — publishes `main`, this folder included, to GitHub Pages; the committed bytes are the deployed bytes. An ENGINE-fenced change is made in the root `engine/` block file and recomposed, never in this folder's `index.html` (corrected 2026-09-02: the deploy no longer splices a pinned bundle).
 
 ## Conventions
 

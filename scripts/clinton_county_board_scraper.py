@@ -10,7 +10,7 @@ District #1 through #5, each with a phone, an e-mail and the year their term
 expires, and names the Board Chairman and Vice Chairman above the grid. The
 GEOMETRY is derived from the county's certified per-precinct returns
 (build_clinton_boundaries.py), and this module re-reads the district shape from
-those returns every week as the §2.5.1 step-6 tripwire.
+those returns every week as the §3.5.1 step-6 tripwire.
 
 THE PAGE IS A COLUMN GRID, and each member is one <div class="col"> holding a
 <strong> name, a phone line, a mailto: link and a "Term Expires: YYYY" line,
@@ -136,7 +136,7 @@ def scrape_members(page, warnings):
 
 
 def check_composition(warnings):
-    """The §2.5.1 step-6 tripwire, in two cheap reads: the county's live
+    """The §3.5.1 step-6 tripwire, in two cheap reads: the county's live
     precinct count, and each numbered board contest's precinct count in the
     newest board election."""
     turnout = get(RESULTS_URL)

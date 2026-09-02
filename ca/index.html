@@ -2026,7 +2026,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
     content: "▸";
     font-size: 10px;
     line-height: 1;
-    color: var(--line-strong);
+    /* --slate, not --line-strong: this glyph is the group's open/closed
+       indicator, which 1.4.11 holds to 3:1, and --line-strong measured 1.69:1
+       light / 1.91:1 dark on the panel. The label text beside it is already
+       --slate. Measured by scripts/validate_contrast.py, both tiers. */
+    color: var(--slate);
   }
   .gaps-group[open] > .gaps-section-label::before { content: "▾"; }
   .gaps-section-label:hover { color: var(--ink); }

@@ -22,10 +22,16 @@ It was not an idle gap. Measured on the day this was written (2026-09-02):
   --muted  light  #6b7280  on --paper   #f4f2ee   4.32:1
   #fff     dark            on --brand   #a78bfa   2.72:1   the search button,
                                                            every primary CTA
-  #fff     dark            on --brand-700 #c4b0ff 1.91:1   its hover, .cta,
-                                                           every pressed state
-  #fff     dark            on --ink     #ece9f4   1.20:1   the SKIP LINK —
-                                                           fixed in this change
+  #fff     dark            on --brand-700 #c4b0ff 1.91:1   its hover, .cta, the
+                                                           sub-page shell's
+                                                           primary action
+  #fff     dark            on --ink     #ece9f4   1.20:1   the SKIP LINK — fixed
+                                                           in this change, in
+                                                           the app AND the
+                                                           sub-page shell
+  --line-strong  light  #c9c5d4 on --surface      1.69:1   the gaps modal's
+                                                           open/closed caret —
+                                                           repainted --slate
 
 against the 4.5:1 that WCAG 1.4.3 asks of body text and the 3:1 it asks of
 large text and UI parts (1.4.11). Light --faint clears NEITHER — it is below
@@ -52,27 +58,54 @@ build_brand_tokens.py's ALIASES: a row is an assertion that this text is
 painted on this ground, and the gate is what makes it a measurement rather
 than a hope. A new text colour ships by adding its row.
 
+WHERE A GROUND SITS. A translucent token is not a colour until it is on
+something, and WHICH opaque thing matters: dark --brand-tint is
+rgba(167,139,250,0.16), and the same --muted text on it measures 4.94:1 over
+--paper and 4.33:1 over --surface — one side of the 4.5 floor each. So a row
+names the opaque ground under a translucent background with `@`:
+`brand-tint@surface` is the coverage-map legend's hover, which sits on a
+--surface panel; bare `brand-tint` is the landing page's pill, which sits on
+the body. A translucent FOREGROUND takes the same suffix (`border@paper` is
+the search input's border composited over its own dark interior before it is
+seen against the masthead). Without `@`, a translucent background is
+composited over --paper, the body ground, and a translucent foreground over
+its row's background. The first draft of this gate composited every
+translucent ground over --paper and passed the legend hover at 4.94:1 while
+the browser paints it at 4.33:1; the review that caught it is why the ground
+is now written down per row. Composited channels are rounded to 8 bits
+before measuring, so a recorded ratio is one a rasteriser can reproduce.
+
 WHAT THE TABLE COVERS, AND WHAT IT DOES NOT — measured, not assumed. The five
 CSS surfaces (engine/index.html/styles-*.txt, engine/shared/styles-subpage.txt
 and the CSS the four root-page builders emit) were mapped rule by rule on
-2026-09-02: 291 distinct (foreground, background, role, tier) pairs, 120 of
-them driven by brand tokens — those are the rows above — and 105 literal
-colour values the token file does not own: the engine's --card-* palette
-(styles-card-v2: #111827 on #fff, --card-link #1a56c4, and their dark
-counterparts in the skin), the pre-rebrand navy the hover popup and the
-footer still declare (#08406e, #0B5394, #C9D4DB — much of it dead under the
-skin's cascade, some of it live), Leaflet's own popup chrome (#333 on white),
-the three gap-kind indicators, and --layer-accent, which is set INLINE per
-card at runtime and no static gate can read. This gate measures the brand.
-The card palette is the next gate's subject, and until it exists the one
-place the repo has measured it is a comment in styles-hover-responsive.txt,
-which records "#8b93a1 measures 3.09:1 and fails AA" as the reason its labels
-are #6b7280 — by hand, once, for one file. Opacity on text (.locate-btn:disabled
-at 0.6, .rel-note at 0.7) and color-mix() grounds (.disclaimer, the sub-page
-pill hover) are likewise noted and not measured. The TEMPLATE style blocks an
-instance's index.html carries between the fences (Illinois's .empty-state-lede,
-its school chips) sit outside those five surfaces and were not mapped as a
-whole; the one faint pair a completeness critic found in them is in the table.
+2026-09-02, and every paint that puts one brand token on another is a row
+here. The only counts this file claims are the ones the OK line prints —
+rows, tier-pairs and gated pairs — because a row is a (fg, bg, role) that
+stands for every selector in its `where` in both tiers, and an earlier
+docstring quoted totals from the map that did not sum. What the map found
+and this gate does NOT measure: literal colours the token file does not own —
+the engine's --card-* palette (styles-card-v2: #111827 on #fff, --card-link
+#1a56c4, and their dark counterparts in the skin; where a card literal EQUALS
+a token the row says so and measures the token), the pre-rebrand navy the
+hover popup and the footer still declare (#08406e, #0B5394, #C9D4DB — much of
+it dead under the skin's cascade, some of it live), Leaflet's own popup chrome
+(#333 on white), the three gap-kind indicators, and --layer-accent, which is
+set INLINE per card at runtime and no static gate can read; the skin's OWN
+tints (--dst-brand-tint-soft, --dst-ink-tint, --dst-raised-hover), which are
+skin literals rather than brand tokens and ground the metro menu's focus
+state and the support panel; opacity on text (.locate-btn:disabled at 0.6,
+.rel-note at 0.7) and color-mix() grounds (.disclaimer, the sub-page pill
+hover); and the TEMPLATE style blocks an instance's index.html carries
+between the fences (Illinois's .empty-state-lede, its school chips), which
+sit outside those five surfaces and were not mapped as a whole — the one
+faint pair a completeness critic found in them is in the table. One rule is
+DORMANT rather than unmeasured: styles-app's .stub-badge paints #fff on
+--accent-warm (2.67:1 in dark), and no module in any instance sets `stub`,
+so it has no row until one does. This gate measures the brand. The card
+palette is the next gate's subject, and until it exists the one place the
+repo has measured it is a comment in styles-hover-responsive.txt, which
+records "#8b93a1 measures 3.09:1 and fails AA" as the reason its labels are
+#6b7280 — by hand, once, for one file.
 
 WHAT IT DOES WITH A SHORTFALL. A pair under its floor FAILS, unless it is
 recorded in ACCEPTED_SHORTFALLS with the MEASURED ratio, a reason and a date
@@ -80,7 +113,9 @@ recorded in ACCEPTED_SHORTFALLS with the MEASURED ratio, a reason and a date
 validate_card_links.py with EXPECTED_UNREACHABLE. An accepted entry is not a
 silence: every run prints it, it FAILS if the ratio moves in either direction
 (a fix must retire the entry; a regression must not hide behind it), and it
-fails if the pair it names stops being tested. An entry recorded at
+fails if the pair it names stops being tested. The floor is compared against
+the UNROUNDED ratio — 4.4986:1 is short, however it prints — and only the
+recorded value is compared at two decimals. An entry recorded at
 introduction with no decision is marked so, and stays visible until someone
 either fixes the token or writes down why not.
 
@@ -91,6 +126,7 @@ Stdlib only.
 """
 
 import argparse
+import math
 import os
 import re
 import sys
@@ -101,59 +137,68 @@ TOKENS = os.path.join(REPO_ROOT, "districtry", "tokens", "districtry.tokens.css"
 # WCAG 2.x floors by role. `text` is 1.4.3 (AA, normal-size text); `large`
 # is the same criterion's relaxation for text >= 24px, or >= 18.66px bold;
 # `ui` is 1.4.11 (non-text contrast) for the parts of a component a reader
-# must perceive to use it — a button face, an input's border, a focus ring.
-# `decorative` is measured and printed and never gated: card rules, row
-# dividers and the empty-state stripe carry no information a reader needs,
-# and 1.4.11 says so in as many words.
+# must perceive to use it — a button face, an input's border, a focus ring,
+# an open/closed indicator. `decorative` is measured and printed and never
+# gated: card rules, row dividers and the empty-state stripe carry no
+# information a reader needs, and 1.4.11 says so in as many words.
 FLOORS = {"text": 4.5, "large": 3.0, "ui": 3.0, "decorative": None}
 
-# (foreground token, background token, role, where it is painted).
+# (foreground, background, role, where it is painted).
 #
 # Tokens are CANONICAL names from the token file. The app's alias vocabulary
 # maps through build_brand_tokens.ALIASES (--slate-soft is faint, --panel is
 # surface, --accent-deep is brand-700); the root pages use these names
 # directly. "#fff" is the one literal the skin paints as text — a primary
 # button's face — and it is listed because the token file cannot see it.
+# `name@under` composites a translucent `name` over the opaque token `under`
+# first (see WHERE A GROUND SITS in the docstring).
 #
 # The `where` column is the evidence: a selector that paints this pair, from
 # the surface named. Keep it honest — a row nothing paints is a row that
 # should go, and a colour painted with no row here is a colour this gate is
-# not measuring.
+# not measuring. Where a literal in the engine happens to EQUAL a token the
+# row says "literal equals token": the measurement is the token's, and the
+# literal is the card palette's, which is the next gate's subject.
 PAIRS = [
     # — body text on the grounds —
     ("ink",        "surface",    "text", "cards, panels, masthead: header.masthead, .layer-block, .share-popover (skin); the sub-page shell's .answer-card body"),
     ("ink",        "paper",      "text", "app ground: body (styles-app); every root page's body"),
-    ("ink",        "surface-2",  "text", "section heads: .layer-block-head (skin; dark literal #262331 == --surface-2 dark)"),
-    ("ink",        "brand-tint", "text", "privacy.html .k / .tldr; landing .notice-h; landing .pill (build_landing_page, build_privacy_page)"),
-    ("ink",        "border",     "text", ".gap-suggest:hover — text with the border colour as its ground (styles-hover-responsive)"),
+    ("ink",        "surface-2",  "text", ".layer-block-head in DARK only — the skin repaints it #262331 (== --surface-2 dark) under --card-ink #ece9f4 (== --ink dark); in light the head is styles-card-v2's literal #fff (== --surface), so the light half of this row re-measures (ink, surface). The --surface-2 VALUE reaches a light-tier reader through .card-section-label (the muted row below)"),
+    ("ink",        "brand-tint", "text", "landing .notice-h and .pill; privacy .tldr (build_landing_page, build_privacy_page — children of body or of an unpainted main, i.e. on --paper)"),
+    ("ink",        "brand-tint@surface", "text", "privacy .k inline code inside .card, a --surface panel (build_privacy_page)"),
+    ("ink",        "border",     "text", ".gap-suggest:hover — text with the border colour as its ground (styles-footer; the gaps modal is composed outside the hidden footer)"),
     ("ink-2",      "surface",    "text", "history.html .tile-l (build_history_page)"),
     ("ink-2",      "paper",      "text", "history.html .intro, .entry p, code (build_history_page)"),
-    ("ink-3",      "surface",    "text", "h1.title small, .masthead-action-link, .share-popover-note (skin, as --slate); the gaps panel's .gap-area, .gap-detail, .gaps-credit (styles-footer); the source-unavailable notice renderSourceUnavailable paints from JS"),
+    ("ink-3",      "surface",    "text", "h1.title small, .masthead-action-link (skin, as --slate); .share-popover-note / -label (styles-app, on the #fff popover); the gaps panel's .gap-area, .gap-detail, .gaps-credit and its group caret .gaps-section-label::before — a state indicator repainted from --line-strong on 2026-09-02 (styles-footer); renderSourceUnavailable paints it from JS"),
     ("ink-3",      "paper",      "text", "sub-page details body, landing h1 at <=560px, .kbd-select-btn (shell, root, styles-app)"),
     ("ink-3",      "surface-2",  "text", "privacy.html thead th at 12px (build_privacy_page)"),
-    ("ink-3",      "brand-tint", "text", "landing .notice-b, footer .support (build_landing_page)"),
-    ("ink-3",      "border",     "text", ".gap-badge at 10px — text on the border colour (styles-hover-responsive)"),
+    ("ink-3",      "brand-tint", "text", "landing .notice-b, footer .support (build_landing_page — on body)"),
+    ("ink-3",      "border",     "text", ".gap-badge at 10px — text on the border colour (styles-footer)"),
     ("muted",      "surface",    "text", "privacy .masthead h1 small, .which, .footer-inner; coverage-map attribution at 10px"),
     ("muted",      "paper",      "text", "landing .lede, .coverage-caption, .not-yet-list; history .kicker and its scheduled-jobs th at 12px"),
-    ("muted",      "brand-tint", "text", "landing #notice-dismiss at 11.5px; coverage-map .legend a:hover .mt"),
+    ("muted",      "surface-2",  "text", ".card-section-label and .card-tinted (styles-card-v2) on --card-section-bg, which the skin sets to --surface-2's value in both tiers, under --card-muted, which equals --muted — literal equals token"),
+    ("muted",      "brand-tint", "text", "landing #notice-dismiss at 11.5px (build_landing_page — on body)"),
+    ("muted",      "brand-tint@surface", "text", "coverage-map .legend a:hover .mt at 11.5px — the legend is a --surface panel (build_coverage_map)"),
 
     # — the quiet tier: small labels, meta, placeholders — still TEXT —
-    ("faint",      "surface",    "text", ".dst-metro-menu-label 10px, .footer-meta 11px, .title-metro, .hover-foot (skin, as --slate-soft); .empty-state-lede 12.5px (il TEMPLATE block); privacy td small 12px; coverage-map .legend h3 11px; landing .pill-n at rest"),
-    ("faint",      "paper",      "text", "landing h2 at 15px, .cta-note 13px, .search-input::placeholder (build_landing_page, shell)"),
-    ("faint",      "brand-tint", "text", "landing .pill:hover .pill-n at 12px (build_landing_page)"),
+    ("faint",      "surface",    "text", ".dst-metro-menu-label 10px, .footer-meta 11px, .title-metro, .hover-foot (skin, as --slate-soft; .hover-foot is the literal #9aa3b2 on literal #fff in light); the app's search placeholder in LIGHT, whose --dst-sunken interior is #ffffff (== --surface); .empty-state-lede 12.5px (il TEMPLATE block); privacy td small 12px; coverage-map .legend h3 11px; landing .pill-n at rest"),
+    ("faint",      "paper",      "text", "landing h2 at 15px, .cta-note 13px (build_landing_page, shell); the app's search placeholder in DARK, whose --dst-sunken interior is #15131b (== --paper dark)"),
+    ("faint",      "brand-tint", "text", "landing .pill:hover .pill-n at 12px (build_landing_page — on body)"),
 
     # — links and accents as text —
-    ("brand-700",  "surface",    "text", "links: .dpf-links a, .dpf-support a, .sibling-result-hint, footer.site-footer a (skin, shell; as --accent-deep)"),
-    ("brand-700",  "paper",      "text", "links on the app ground, every root page's `a`, .locate-btn, .btn-secondary"),
-    ("brand-700",  "brand-tint", "text", ".dst-metro-menu a:focus-visible; privacy .masthead-actions a:hover; landing footer .support a:hover"),
+    ("brand-700",  "surface",    "text", "links on panels: .dpf-links a, .sibling-result-hint (skin, as --accent-deep). NOT .dpf-support a — its ground is the skin's own --dst-brand-tint-soft — and NOT footer.site-footer a, which the skin hides"),
+    ("brand-700",  "paper",      "text", "links on the app ground; privacy and history `a`; .locate-btn, .btn-secondary (styles-app, styles-footer)"),
+    ("brand-700",  "brand-tint", "text", "landing footer .support a:hover (build_landing_page — on body)"),
+    ("brand-700",  "brand-tint@surface", "text", "privacy .masthead-actions a:hover — the masthead is a --surface panel (build_privacy_page)"),
+    ("brand-700",  "surface-2",  "text", "the UNPRESSED .hover-toggle-btn and .pin-parent-btn in dark: --accent-deep (styles-app) on --dst-raised #262331 (skin), which equals --surface-2 dark — literal equals token"),
     ("brand",      "surface",    "text", "coverage-map attribution links at 10px; .dst-wordmark-link:hover (skin, as --accent)"),
     ("brand",      "paper",      "text", "landing footer a; sub-page summary::after glyph at 24px"),
-    ("brand",      "brand-tint", "text", "landing footer .support a (build_landing_page)"),
+    ("brand",      "brand-tint", "text", "landing footer .support a (build_landing_page — on body)"),
 
     # — error state —
-    ("error-ink",  "surface",    "text", ".layer-card-body.state-error (skin; dark literal #fdba74 == --error-ink dark)"),
+    ("error-ink",  "surface",    "text", ".layer-card-body.state-error — styles-card-v2's literal #7c2d12 wins by source order over styles-app's var(--err) and equals --error-ink light; the skin's dark #fdba74 equals --error-ink dark — literal equals token"),
     ("error",      "surface",    "text", "landing .search-status.err at 13.5px (build_landing_page)"),
-    ("error",      "surface",    "ui",   ".layer-block.state-error border-left (skin; dark literal #f97316 == --error dark)"),
+    ("error",      "surface",    "ui",   ".layer-block:has(> .layer-card-body.state-error) border-left (styles-card-v2 literal == --error; skin dark #f97316 == --error dark)"),
 
     # — literal white as text: the engine's button faces, on every accent —
     # The token file cannot see these; they are listed because the dark tier
@@ -161,109 +206,140 @@ PAIRS = [
     # the same tokens are BUTTON FACES under white text (the polarity
     # inversion the sub-page reader named). build_landing_page.py already
     # flips its own button to --paper text in dark, and records why.
-    ("#fff",       "brand",      "text", ".search-row button (styles-core colour, skin ground), .masthead-actions a.is-primary:hover, .footer-link-btn:hover"),
-    ("#fff",       "brand-700",  "text", ".cta (shell), .search-row button:hover, .btn-primary:hover — NOT the pressed/pinned toggles in dark: the skin's later [data-theme=dark] .hover-toggle-btn / .pin-parent-btn rules repaint those on --dst-raised"),
-    ("#fff",       "brand-warm", "text", ".stub-badge at 10px (styles-hover-responsive)"),
+    ("#fff",       "brand",      "text", ".search-row button (styles-core colour, skin ground), .masthead-actions a.is-primary:hover (shell), .footer-link-btn:hover (skin)"),
+    ("#fff",       "brand-700",  "text", ".cta and the RESTING .masthead-actions a.is-primary (shell, on every sub-page), .search-row button:hover, .btn-primary:hover (styles-core) — NOT the pressed/pinned toggles in dark: the skin's later [data-theme=dark] .hover-toggle-btn / .pin-parent-btn rules repaint those on --dst-raised, which is its own defect (see the entry below)"),
     ("paper",      "brand",      "text", "landing .search-button in dark — the flip that HOLDS: build_landing_page records white on #a78bfa = 2.72 and paints --paper instead"),
     ("paper",      "brand-700",  "text", "landing .search-button:hover in dark"),
-    ("paper",      "ink",        "text", ".skip-link (styles-core; the root pages' skip links already paint this pair) — focus-only, and the one masthead element the skin does not restyle"),
+    ("paper",      "ink",        "text", ".skip-link — the app's (styles-core) and, since 2026-09-02, the sub-page shell's (engine/shared/styles-subpage); the root pages' skip links already painted this pair. Focus-only, and the one masthead element the skin does not restyle"),
 
     # — UI parts a reader must perceive to use (1.4.11) —
     ("brand-warm", "paper",      "ui",   "--focus-ring: 3px solid var(--accent-warm) on the app ground and every sub-page summary"),
     ("brand-warm", "surface",    "ui",   "focus ring on a card or the masthead; .group-safety .dot"),
-    ("brand",      "surface",    "ui",   "focused input border: .masthead .search-row input:focus; .group-political .dot; landing outline rings"),
-    ("data-500",   "surface",    "ui",   "legend dot / selected-boundary swatch: .dml-dot (skin)"),
-    ("border",     "surface",    "ui",   "the masthead search input's RESTING border: its interior is --dst-sunken, white on the white masthead in light, so the 1px --line border is the field's only boundary — 1.4.11's text-input case"),
+    ("brand",      "surface",    "ui",   "focused input border: .masthead .search-row input:focus (skin); .group-political .dot; the landing .search-input / .search-button rings inside .search-card"),
+    ("brand",      "paper",      "ui",   "focus rings on the page ground: privacy :focus-visible on body links (build_privacy_page); landing .pill:focus-visible, drawn outside the pill over .pills, which has no background (build_landing_page)"),
+    ("data-500",   "surface",    "ui",   "legend dot / selected-boundary swatch: .dml-dot (skin; literals #1d5fd6 / #6ea8ff equal the token's two tiers)"),
+    ("border@paper", "surface",  "ui",   "the masthead search input's RESTING border, composited over its own interior (--dst-sunken: #ffffff in light, where --border is opaque anyway; #15131b == --paper in dark) and seen against the --panel masthead — 1.4.11's text-input case, where the boundary is the field's only indicator once a reader types"),
 
     # — decorative: measured, printed, never gated —
-    # border-dot outlines LABELLED controls (.dst-metro-btn, .masthead-actions
-    # a, .hover-toggle-btn, as --line-strong); 1.4.11 holds a boundary to 3:1
+    # border-dot outlines LABELLED controls; 1.4.11 holds a boundary to 3:1
     # only where it is what identifies the component, and these carry text.
-    ("border-dot", "surface",    "decorative", "outlined labelled controls: .masthead-actions a (shell), .hover-toggle-btn, .school-chip (skin; as --line-strong — .dst-metro-btn has border: 0)"),
+    # One caveat is recorded rather than argued away: the shell's masthead
+    # pills carry text-decoration: none and the same --slate as the subtitle
+    # beside them, so the border is what says "this is a link" — a 1.4.1
+    # Use-of-Colour question the 1.4.11 exemption does not answer.
+    ("border-dot", "surface",    "decorative", "outlined labelled controls: .dst-metro-menu (skin) and the shell's .masthead-actions a, as --line-strong; .school-chip (il TEMPLATE)"),
     ("border",     "paper",      "decorative", "landing .search-card, sub-page details rules"),
     ("border-soft","surface",    "decorative", "row rules; privacy th/td rules"),
-    ("empty",      "surface",    "decorative", "empty-state stripe: .layer-block.state-empty border-left"),
+    ("empty",      "surface",    "decorative", "empty-state stripe: .layer-block:has(> .layer-card-body.state-empty) border-left"),
 ]
 
-# A shortfall someone has looked at. Keyed (fg, bg, tier); `measured` is the
-# ratio on the day it was recorded, to two decimals, and the gate FAILS if the
-# live value differs — a fix retires the entry, a regression cannot shelter
-# under it. `decided` is False for the ones recorded at introduction: they are
+# A shortfall someone has looked at. Keyed (fg, bg, role, tier) — the role
+# too, because one (fg, bg) can be painted as text in one place and as a UI
+# part in another, at different floors. `measured` is the ratio on the day
+# it was recorded, to two decimals, and the gate FAILS if the live value
+# differs — a fix retires the entry, a regression cannot shelter under it.
+# `decided` is False for the ones recorded at introduction: they are
 # measured, visible on every run, and awaiting either a token change or a
 # written reason. Nothing here is a threshold being lowered; the floor is the
 # floor, and this is the list of places the palette is known not to meet it.
 ACCEPTED_SHORTFALLS = {
-    # --faint: one token, one decision, six grounds. For it to clear 4.5:1 on
-    # the paper ground it must become #696f79, which is DARKER than --muted
-    # #6b7280 — the quiet tier cannot stay quiet and meet AA on every ground.
-    # The decision is which: darken the ramp, or move the 10-15px text off
-    # --faint (menu labels, footer meta, placeholders, the landing page's own
-    # h2) onto --muted / --ink-3 and keep --faint for large text and decoration.
-    ("faint", "surface", "light"): dict(
+    # (a) --faint: one token, one decision, six grounds. For it to clear
+    # 4.5:1 on the paper ground it must become #696f79, which is DARKER than
+    # --muted #6b7280 — the quiet tier cannot stay quiet and meet AA on every
+    # ground. The decision is which: darken the ramp, or move the 10-15px
+    # text off --faint (menu labels, footer meta, placeholders, the landing
+    # page's own h2) onto --muted / --ink-3 and keep --faint for large text
+    # and decoration. The app's legend chevron (.dml-kicker, currentColor at
+    # opacity .8) rides the same token as an open/closed indicator, so a
+    # decision to move small text off --faint should take the chevron with it.
+    ("faint", "surface", "text", "light"): dict(
         measured=2.54, decided=False, date="2026-09-02",
         reason="#9aa3b2, luminance 0.363 against a 0.183 ceiling for 4.5:1 on "
                "white; recorded at the gate's introduction — the token predates it"),
-    ("faint", "paper", "light"): dict(
+    ("faint", "paper", "text", "light"): dict(
         measured=2.28, decided=False, date="2026-09-02",
         reason="same token on the app ground, whose ceiling is 0.159 — this is "
                "the landing page's h2 at 15px"),
-    ("faint", "brand-tint", "light"): dict(
+    ("faint", "brand-tint", "text", "light"): dict(
         measured=2.15, decided=False, date="2026-09-02",
         reason="same token on the landing page's pill tint at 12px"),
-    ("faint", "surface", "dark"): dict(
+    ("faint", "surface", "text", "dark"): dict(
         measured=3.40, decided=False, date="2026-09-02",
         reason="#746e86 clears the 3:1 large-text bar and not the 4.5:1 text bar"),
-    ("faint", "paper", "dark"): dict(
+    ("faint", "paper", "text", "dark"): dict(
         measured=3.78, decided=False, date="2026-09-02",
         reason="same token on the dark app ground"),
-    ("faint", "brand-tint", "dark"): dict(
+    ("faint", "brand-tint", "text", "dark"): dict(
         measured=2.96, decided=False, date="2026-09-02",
-        reason="same token on the dark pill tint — under even the 3:1 bar"),
-    # --muted misses by a step on the two tinted grounds and clears --surface.
-    ("muted", "paper", "light"): dict(
+        reason="same token on the dark pill tint over the body — under even the 3:1 bar"),
+    # (b) --muted misses by a step on the tinted grounds and clears --surface.
+    ("muted", "paper", "text", "light"): dict(
         measured=4.32, decided=False, date="2026-09-02",
         reason="#6b7280 (luminance 0.167) on the paper ground, whose ceiling for "
-               "4.5:1 is 0.159; #686f7c clears both grounds (4.54 on paper) — a "
+               "4.5:1 is 0.159; #686f7c clears both grounds (4.52 on paper) — a "
                "one-step darkening"),
-    ("muted", "brand-tint", "light"): dict(
+    ("muted", "brand-tint", "text", "light"): dict(
         measured=4.08, decided=False, date="2026-09-02",
         reason="same token on the landing page's pill tint, at 11.5px"),
-    # White on the dark accents: the polarity inversion. The dark tier lifts
-    # every accent to a tint chosen so LINKS read on a dark ground, and the
-    # engine paints the same tokens as BUTTON FACES under literal #fff. The
-    # fix exists in-repo — build_landing_page.py flips its button to --paper
-    # text in dark and records why — and porting it to styles-core's button
-    # rules is a visible change on every instance's dark mode, so it is
-    # recorded here rather than made.
-    ("#fff", "brand", "dark"): dict(
+    ("muted", "brand-tint@surface", "text", "light"): dict(
+        measured=4.08, decided=False, date="2026-09-02",
+        reason="the coverage-map legend's hover: light --brand-tint is opaque, so "
+               "the ground under it changes nothing here"),
+    ("muted", "brand-tint@surface", "text", "dark"): dict(
+        measured=4.33, decided=False, date="2026-09-02",
+        reason="the same hover in dark, where --brand-tint is rgba(167,139,250,0.16) "
+               "over the legend's --surface panel — the pair the first draft of this "
+               "gate passed at 4.94:1 by compositing over --paper instead"),
+    # (c) White on the dark accents: the polarity inversion. The dark tier
+    # lifts every accent to a tint chosen so LINKS read on a dark ground, and
+    # the engine paints the same tokens as BUTTON FACES under literal #fff.
+    # The fix exists in-repo — build_landing_page.py flips its button to
+    # --paper text in dark and records why — and porting it to styles-core's
+    # button rules is a visible change on every instance's dark mode, so it
+    # is recorded here rather than made.
+    # (e) The same tokens' PRESSED states are a separate, unmeasured defect:
+    # in dark the skin repaints .hover-toggle-btn[aria-pressed=true] and
+    # .pin-parent-btn.is-pinned on --dst-raised, so the pressed fill is lost
+    # and pressed differs from unpressed only by text colour — 1.4.11 asks
+    # the state indicator itself to be perceivable. Restoring the fill would
+    # put #fff back on --brand-700 at 1.91:1, so both halves are one decision.
+    ("#fff", "brand", "text", "dark"): dict(
         measured=2.72, decided=False, date="2026-09-02",
         reason="white on --accent #a78bfa: the search button, the primary "
                "masthead action, the footer-link hover — --paper on the same "
                "ground reads ~6.8:1"),
-    ("#fff", "brand-700", "dark"): dict(
+    ("#fff", "brand-700", "text", "dark"): dict(
         measured=1.91, decided=False, date="2026-09-02",
         reason="white on --accent-deep #c4b0ff: the search button's HOVER, the "
-               "sub-page .cta, the primary button's hover — 'deep' "
-               "means more contrast against the ground, which on a dark ground "
-               "is LIGHTER, and white text on it is the worst pair in the palette"),
-    ("#fff", "brand-warm", "dark"): dict(
-        measured=2.67, decided=False, date="2026-09-02",
-        reason="white on --accent-warm #e879b9 in the hover popup's .stub-badge at 10px"),
-    # The one 1.4.11 case that is genuinely arguable: a text input whose
-    # interior matches its ground has only its border to say where it is.
-    ("border", "surface", "light"): dict(
+               "sub-page .cta and its resting primary action, the primary "
+               "button's hover — 'deep' means more contrast against the ground, "
+               "which on a dark ground is LIGHTER, and white text on it is the "
+               "worst pair in the palette"),
+    # (d) The text-input case, which the first draft argued out of 1.4.11 and
+    # the review argued back in: the placeholder is --faint at 2.54:1, so it
+    # is not a perceivable indicator under 1.4.11's own floor, and it vanishes
+    # the moment a reader types, leaving the border as the only thing that
+    # says where the field is. --border-dot would not clear it either (1.69);
+    # a >= 3:1 border (--muted reads 4.83 on white) or a visibly sunken
+    # interior would.
+    ("border@paper", "surface", "ui", "light"): dict(
         measured=1.23, decided=False, date="2026-09-02",
-        reason="the masthead search input's resting border, #e8e7ef on white; "
-               "the field also carries a placeholder and a search button, which "
-               "is the reading under which 1.4.11 exempts the boundary — "
-               "recorded so the decision is a written one"),
-    ("border", "surface", "dark"): dict(
-        measured=1.31, decided=False, date="2026-09-02",
-        reason="same border, rgba(236,233,244,0.1) composited over #201d29"),
+        reason="the masthead search input's resting border, opaque #e8e7ef on the "
+               "white masthead; the input's interior is white too"),
+    ("border@paper", "surface", "ui", "dark"): dict(
+        measured=1.14, decided=False, date="2026-09-02",
+        reason="the same border, rgba(236,233,244,0.1) over the input's #15131b "
+               "interior, against the #201d29 masthead; the interior itself "
+               "reads 1.11:1 against the masthead, so neither edge is perceivable"),
 }
 
 problems = []
 warnings = []
+
+
+class Unresolvable(Exception):
+    """A var() chain the resolver cannot follow — deeper than its cap, or
+    cyclic. Distinct from a missing token so the report names the cause."""
 
 
 def fail(msg):
@@ -278,31 +354,66 @@ def read(path):
 
 def token_block(css, selector):
     """The same shape build_brand_tokens.py reads, so the two cannot disagree
-    about what a block is."""
+    about what a block is. Comments are stripped first — the token file
+    annotates values with '(was #e8eaef)' remarks, one edit from a
+    commented-out declaration that would otherwise win as the last match —
+    and a token declared twice in one block is a failure, not a last-wins."""
     m = re.search(re.escape(selector) + r"\s*\{(.*?)\n\}", css, re.S)
     if not m:
         fail("no %r block in %s" % (selector, os.path.relpath(TOKENS, REPO_ROOT)))
-    return {k: v.strip() for k, v in
-            re.findall(r"(--[a-z0-9-]+)\s*:\s*([^;]+);", m.group(1))}
+    body = re.sub(r"/\*.*?\*/", "", m.group(1), flags=re.S)
+    pairs = re.findall(r"(--[a-z0-9-]+)\s*:\s*([^;]+);", body)
+    seen = {}
+    for k, v in pairs:
+        if k in seen:
+            fail("%s declares %s twice in %s — which value is the brand's?"
+                 % (os.path.relpath(TOKENS, REPO_ROOT), k, selector))
+        seen[k] = v.strip()
+    return seen
 
 
 def resolve(table, name, depth=0):
     """Follow var() indirection to a colour. The token file uses one level
     (--brand is var(--brand-600)); allowing a few more costs nothing and
-    means a future ramp alias cannot silently read as unresolved."""
+    means a future ramp alias cannot silently read as unresolved. A var()
+    fallback is honoured when its target is missing."""
     if depth > 5:
-        return None
+        raise Unresolvable("var() chain deeper than 5 (or cyclic) at --%s" % name)
     v = table.get("--" + name)
     if v is None:
         return None
-    m = re.fullmatch(r"var\((--[a-z0-9-]+)\)", v.strip())
-    return resolve(table, m.group(1)[2:], depth + 1) if m else v
+    m = re.fullmatch(r"var\((--[a-z0-9-]+)(?:\s*,\s*(.+))?\)", v.strip())
+    if not m:
+        return v
+    target = resolve(table, m.group(1)[2:], depth + 1)
+    if target is None and m.group(2):
+        return m.group(2).strip()
+    return target
+
+
+def _channel(p):
+    v = float(p[:-1]) * 255.0 / 100.0 if p.endswith("%") else float(p)
+    if not math.isfinite(v) or v < 0 or v > 255:
+        raise ValueError(p)
+    return v
+
+
+def _alpha(p):
+    v = float(p[:-1]) / 100.0 if p.endswith("%") else float(p)
+    if not math.isfinite(v) or v < 0 or v > 1:
+        raise ValueError(p)
+    return v
 
 
 def parse_color(v):
     """-> (r, g, b, a) with channels 0-255 and alpha 0-1. Hex in 3, 4, 6 or 8
-    digits; rgb()/rgba() with commas. Anything else is a colour this gate
-    cannot measure, which is a failure rather than a skip."""
+    digits; rgb()/rgba() in the comma form or the CSS Color 4 space form with
+    an optional `/ alpha`, channels as numbers or percentages, every value
+    range-checked and finite. Anything else — a named colour, hsl(), a
+    color-mix(), a hybrid of the two rgb syntaxes, an out-of-range channel —
+    is a colour this gate cannot measure, which is a failure rather than a
+    skip: a NaN that slipped through would compare False against every floor
+    and read as 'ok'."""
     s = v.strip().lower()
     if s.startswith("#"):
         h = s[1:]
@@ -313,26 +424,40 @@ def parse_color(v):
         r, g, b = int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
         a = int(h[6:8], 16) / 255.0 if len(h) == 8 else 1.0
         return (r, g, b, a)
-    m = re.fullmatch(r"rgba?\(([^)]*)\)", s)
-    if m:
-        parts = [p.strip() for p in m.group(1).replace("/", ",").split(",") if p.strip()]
-        if len(parts) not in (3, 4):
+    m = re.fullmatch(r"rgba?\((.*)\)", s)
+    if not m:
+        return None
+    inner = m.group(1).strip()
+    if "," in inner:
+        if "/" in inner:
             return None
-        try:
-            r, g, b = (float(p) for p in parts[:3])
-            a = float(parts[3]) if len(parts) == 4 else 1.0
-        except ValueError:
-            return None
-        return (r, g, b, a)
-    return None
+        parts = [p.strip() for p in inner.split(",")]
+    elif "/" in inner:
+        chans, _, alpha = inner.partition("/")
+        parts = chans.split() + [alpha.strip()]
+    else:
+        parts = inner.split()
+    if len(parts) not in (3, 4) or any(not p for p in parts):
+        return None
+    try:
+        r, g, b = (_channel(p) for p in parts[:3])
+        a = _alpha(parts[3]) if len(parts) == 4 else 1.0
+    except ValueError:
+        return None
+    return (r, g, b, a)
 
 
 def composite(fg, bg):
     """Source-over: what the eye sees when a translucent colour sits on an
-    opaque one. The result is opaque by construction."""
+    opaque one. The result is opaque by construction, and its channels are
+    rounded to 8 bits, because the painted pixel is 8-bit — a recorded ratio
+    should be one a screenshot or DevTools can reproduce, and on four of the
+    five dark composited pairs the float and the 8-bit value differ at two
+    decimals."""
     r, g, b, a = fg
     R, G, B, _ = bg
-    return (r * a + R * (1 - a), g * a + G * (1 - a), b * a + B * (1 - a), 1.0)
+    return (round(r * a + R * (1 - a)), round(g * a + G * (1 - a)),
+            round(b * a + B * (1 - a)), 1.0)
 
 
 def _lin(c):
@@ -359,36 +484,49 @@ def contrast(fg, bg):
 def tiers(css):
     """Light is :root as written. Dark is :root with the [data-theme="dark"]
     block laid over it — the cascade's own answer, so a token the dark block
-    does not redefine (every --brand-N00 step, --border-soft's partner
-    --surface-2's neighbours) keeps its light value here exactly as it does
-    in the browser."""
+    does not redefine (every --brand-N00 ramp step, the spacing and layer
+    tokens) keeps its light value here exactly as it does in the browser."""
     light = token_block(css, ":root")
     dark = dict(light)
     dark.update(token_block(css, '[data-theme="dark"]'))
     return {"light": light, "dark": dark}
 
 
-def colour_of(table, name, ground):
-    """Resolve a token (or a literal) to an opaque colour on `ground`."""
-    raw = name if name.startswith("#") or name.startswith("rgb") else resolve(table, name)
+def colour_of(table, spec, under):
+    """Resolve a token (or a literal) to an opaque colour. `spec` may carry
+    `@under-token`, which names the opaque ground a translucent value sits
+    on; otherwise `under` (the caller's ground) is used. Returns
+    (colour, None) or (None, why)."""
+    name, _, at = spec.partition("@")
+    if at:
+        under, err = colour_of(table, at, None)
+        if err:
+            return None, "ground under %s: %s" % (spec, err)
+    try:
+        raw = name if name.startswith("#") or name.startswith("rgb") else resolve(table, name)
+    except Unresolvable as e:
+        return None, str(e)
     if raw is None:
         return None, "no token --%s" % name
     c = parse_color(raw)
     if c is None:
         return None, "--%s is %r, which this gate cannot parse" % (name, raw)
-    if c[3] < 1.0 and ground is not None:
-        c = composite(c, ground)
+    if c[3] < 1.0:
+        if under is None:
+            return None, "--%s is translucent (%s) and nothing names its ground" % (name, raw)
+        c = composite(c, under)
     return c, None
 
 
 def measure(table, tier):
-    """-> list of rows: (fg, bg, role, ratio, floor, status, where)."""
+    """-> list of rows: (fg, bg, role, ratio, floor, status, where). `ratio`
+    is the unrounded value; callers round for display."""
     rows = []
     paper, err = colour_of(table, "paper", None)
     if err:
         fail("%s tier: %s" % (tier, err))
     for fg, bg, role, where in PAIRS:
-        # a translucent GROUND (dark --brand-tint is rgba) sits on paper
+        # a translucent GROUND with no `@` sits on paper, the body ground
         ground, err = colour_of(table, bg, paper)
         if err:
             problems.append("%s tier: background %s" % (tier, err))
@@ -397,7 +535,7 @@ def measure(table, tier):
         if err:
             problems.append("%s tier: foreground %s" % (tier, err))
             continue
-        ratio = round(contrast(fore, ground), 2)
+        ratio = contrast(fore, ground)
         floor = FLOORS[role]
         status = "ok"
         if floor is not None and ratio < floor:
@@ -412,46 +550,47 @@ def judge(rows_by_tier):
     seen = set()
     for tier, rows in rows_by_tier.items():
         for fg, bg, role, ratio, floor, status, where in rows:
-            key = (fg, bg, tier)
+            key = (fg, bg, role, tier)
             acc = ACCEPTED_SHORTFALLS.get(key)
+            shown = round(ratio, 2)
             if status == "short":
                 if acc is None:
                     problems.append(
                         "%s: %s on %s (%s) is %.2f:1, floor %.1f — %s"
-                        % (tier, fg, bg, role, ratio, floor, where))
+                        % (tier, fg, bg, role, shown, floor, where))
                 else:
                     seen.add(key)
-                    if abs(acc["measured"] - ratio) > 0.005:
+                    if abs(acc["measured"] - shown) > 0.005:
                         problems.append(
-                            "%s: %s on %s is %.2f:1 but ACCEPTED_SHORTFALLS records "
+                            "%s: %s on %s (%s) is %.2f:1 but ACCEPTED_SHORTFALLS records "
                             "%.2f — the palette moved; re-measure and re-decide, or "
-                            "retire the entry" % (tier, fg, bg, ratio, acc["measured"]))
+                            "retire the entry" % (tier, fg, bg, role, shown, acc["measured"]))
                     else:
                         warnings.append(
                             "%s: %s on %s (%s) %.2f:1 < %.1f — accepted %s%s: %s"
-                            % (tier, fg, bg, role, ratio, floor, acc["date"],
+                            % (tier, fg, bg, role, shown, floor, acc["date"],
                                "" if acc["decided"] else ", NOT YET DECIDED",
                                acc["reason"]))
             elif acc is not None:
                 seen.add(key)
                 problems.append(
-                    "%s: %s on %s now measures %.2f:1 and clears its floor — retire "
+                    "%s: %s on %s (%s) now measures %.2f:1 and clears its floor — retire "
                     "its ACCEPTED_SHORTFALLS entry (recorded %.2f)"
-                    % (tier, fg, bg, ratio, acc["measured"]))
+                    % (tier, fg, bg, role, shown, acc["measured"]))
     for key in ACCEPTED_SHORTFALLS:
         if key not in seen:
             problems.append(
-                "ACCEPTED_SHORTFALLS names %s on %s (%s), which no PAIRS row tests "
-                "— an accepted shortfall must stay measured" % key)
+                "ACCEPTED_SHORTFALLS names %s on %s as %s (%s), which no PAIRS row "
+                "tests — an accepted shortfall must stay measured" % key)
 
 
 def report(rows_by_tier):
     for tier, rows in rows_by_tier.items():
         print("\n%s tier" % tier.upper())
-        print("  %-11s %-11s %-11s %7s %6s  %s" % ("fg", "bg", "role", "ratio", "floor", "status"))
+        print("  %-14s %-20s %-11s %7s %6s  %s" % ("fg", "bg", "role", "ratio", "floor", "status"))
         for fg, bg, role, ratio, floor, status, where in rows:
             fl = "%.1f" % floor if floor is not None else "—"
-            print("  %-11s %-11s %-11s %6.2f:1 %6s  %s" % (fg, bg, role, ratio, fl, status))
+            print("  %-14s %-20s %-11s %6.2f:1 %6s  %s" % (fg, bg, role, ratio, fl, status))
 
 
 def main():
