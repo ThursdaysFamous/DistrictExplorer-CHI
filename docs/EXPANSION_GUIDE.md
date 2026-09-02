@@ -2473,7 +2473,7 @@ Two corollaries the same day earned:
   and none bumped it. **Ask of every gate: what is IN its surface, how did it get there,
   and what is the shape of the thing that would be outside it?** Then negative-test the
   surface itself — remove a known-good entry and confirm the gate notices — not only the
-  rule. **A gate's EXCEPTION list is part of that surface.** The retention gate's accepted
+  rule. **And so is every list that says WHICH THINGS the gate looks at.** A 2026-09-02 audit of the gates themselves found four such lists unmeasured: nine places enumerate the fleet and only five derive it, two instances shipped a provenance page no validator checked, the coverage ring's own gate validates a hand-kept anchor list and ran in no workflow at all, and the county-coverage check was a VACUUM in two of three statewide instances — walking an empty dispatch table and printing "0 dispatched counties all inside the coverage ring" as though it were a result. **A check that cannot fail is worse than a missing one, because its green is read as evidence.** All four were green at the time; three had already shipped a real fault earlier. **A gate's EXCEPTION list is part of that surface too.** The retention gate's accepted
   drops are consulted only where a diff observes the field going away, so the day after the
   drop merges nothing observes it and the exception goes silent forever — a permanent hole
   in the gate with no line anywhere saying so, and a docstring claiming the opposite. Every
@@ -2598,6 +2598,8 @@ Run these before every merge; `smoke-test.yml` runs them on every PR and push to
 | `build_coverage_gaps.py --check` | a gap record that drifted from the guidebook |
 | `check_roster_retention.py --base origin/main` | a roster field that silently stopped being published |
 | `check_cache_version.py --base origin/main` | a cache-first data file changed without its instance's `CACHE_NAME` |
+| `validate_instance_registration.py` | an instance folder that some table, the fleet manifest or a CI list does not name |
+| `build_metro_outline.py --check` (per statewide instance) | the shipped ring, and an anchor list that has drifted from `METRO_COUNTY_FIPS` |
 | `validate_sources.py` | a superseded dataset, a dead source, a `blocked` source becoming reachable |
 | `validate_card_links.py` | a URL a reader would click that no longer resolves |
 | `validate_workflow_deps.py` | an instance script importing outside its own tree |

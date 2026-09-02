@@ -1822,6 +1822,70 @@ def build_geojson(rings):
     }
 
 
+# --- the anchor registry: one anchor per served county, and no county both ----
+#
+# THE ANCHOR LIST IS THIS GATE'S OWN SURFACE, and until 2026-09-02 nothing
+# checked it. `--check` validates the SHIPPED ring against INSIDE/OUTSIDE and
+# never rebuilds from METRO_COUNTY_FIPS, so a county added to that tuple
+# without an anchor is green by construction — the ring is simply never asked
+# about it. That is how Wisconsin greyed out seven counties for two days with
+# every gate in the repo passing, and what its validator's
+# check_coverage_ring_tracks_roster was written for.
+#
+# The convention every instance already follows is one INSIDE anchor per served
+# county, so the count identity below turns "somebody added a FIPS and forgot
+# the anchor" (or the reverse) into a failure, offline, from source alone. A
+# true rebuild-and-diff would be stronger and needs TIGERweb, which is why it
+# is not in CI; this is what can be proven without the network.
+#
+# KEY SHAPES DIFFER BY INSTANCE AND BOTH ARE CORRECT. The reference instance
+# keys anchors "Place (County)" because its ring is a subset of its state and a
+# reader needs to know which county a town vouches for; the statewide instances
+# whose ring IS the state key them by county name alone. A check that demanded
+# either shape would fail correct instances, so county_of() accepts both.
+def county_of(anchor_key):
+    """The county an anchor vouches for, from either key shape.
+
+    "Marion (Williamson)" -> "Williamson"; "Bond, 3rd Circuit" -> "Bond";
+    "Fond du Lac" -> "Fond du Lac".
+    """
+    key = anchor_key.strip()
+    # No regex on purpose: these modules import only what they build with, and
+    # a gate should not add a dependency to say something this simple.
+    if key.endswith(")") and "(" in key:
+        key = key[key.rindex("(") + 1:-1]
+    return key.split(",")[0].strip()
+
+
+def check_anchor_registry():
+    """Problems with the anchor lists themselves, as a list of strings."""
+    problems = []
+    if len(INSIDE) != len(METRO_COUNTY_FIPS):
+        problems.append(
+            "%d INSIDE anchor(s) for %d served county/counties — every served "
+            "county carries exactly one anchor, so these must match. A county "
+            "added to METRO_COUNTY_FIPS without an anchor is never tested "
+            "against the ring, and an anchor with no county is testing ground "
+            "the wash no longer claims."
+            % (len(INSIDE), len(METRO_COUNTY_FIPS)))
+    seen = {}
+    for key in INSIDE:
+        seen.setdefault(county_of(key), []).append(key)
+    for county, keys in sorted(seen.items()):
+        if len(keys) > 1:
+            problems.append(
+                "%s has %d INSIDE anchors (%s) — with one anchor per county the "
+                "count identity above cannot tell a doubled county from a "
+                "missing one" % (county, len(keys), ", ".join(sorted(keys))))
+    both = sorted({county_of(k) for k in INSIDE} & {county_of(k) for k in OUTSIDE})
+    if both:
+        problems.append(
+            "%s appear(s) in BOTH INSIDE and OUTSIDE — when a county joins, its "
+            "OUTSIDE anchor moves rather than being left behind, or the ring is "
+            "asserted to both contain and exclude the same ground" % ", ".join(both))
+    return problems
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[1])
     ap.add_argument("--out", default=OUT_PATH)
@@ -1836,7 +1900,8 @@ def main():
         # rings_of() flattens Polygon and MultiPolygon alike, so the anchor test
         # reads the file the same way whether or not the served area is one region.
         rings = rings_of(shipped["features"][0])
-        problems = validate(rings) + check_envelopes(rings)
+        problems = (check_anchor_registry() + validate(rings)
+                    + check_envelopes(rings))
 
         with open(args.state_out) as f:
             shipped_state = json.load(f)
@@ -1866,7 +1931,8 @@ def main():
     # docstring: the two rings share the river borders and must not drift apart.
     state_rings = [simplify(r) for r in rings_of(fetch_state())]
 
-    problems = (validate(rings) + check_envelopes(rings) + validate_state(state_rings)
+    problems = (check_anchor_registry()
+                + validate(rings) + check_envelopes(rings) + validate_state(state_rings)
                 + containment_problems(rings, state_rings))
     for p in problems:
         print("FATAL: %s" % p, file=sys.stderr)

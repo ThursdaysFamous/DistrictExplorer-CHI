@@ -356,12 +356,59 @@ def main():
 
     check_sw_lists(repo_root, app_dir)
 
+    # 5. the public sources page, if this instance ships one, still accounts
+    # for every layer and is still reachable from the app.
+    n_sourced = check_sources_page(html, repo_root)
+
     print(
         "validate_index: OK — inline script parses, %d registerLayer( calls, "
         "LAYER_AREA_RANK covers all %d ids, no inline datasets, %d well-formed "
         "METRO_EXPLORERS entries, all data/app files present and cached in "
-        "exactly one sw.js list" % (n, len(EXPECT_LAYER_IDS), n_metros)
+        "exactly one sw.js list%s"
+        % (n, len(EXPECT_LAYER_IDS), n_metros,
+           "" if n_sourced is None else
+           ", sources page linked and covering all %d layers" % n_sourced)
     )
+
+
+SOURCES_PAGE = "sources.html"
+
+
+def check_sources_page(html, repo_root):
+    """The public sources page accounts for every registered layer, and the app
+    still links to it. Returns the number of layers covered, or None if this
+    instance ships no such page.
+
+    PORTED FROM THE REFERENCE INSTANCE 2026-09-02, WHICH IS THE POINT: this
+    instance shipped a sources.html with a full matrix, linked from index.html,
+    and its validator had no check for either — the reference instance,
+    Wisconsin and Iowa all had one. So two of five instances published a
+    provenance page that nothing gated: a layer could ship there with no row,
+    or the link could be removed, with every gate green.
+
+    Two failure modes, neither of which any other gate sees. A layer that ships
+    without a matrix row leaves a reader reading the page as complete when it
+    isn't — silence about a source reads as "there is no source". And a page
+    nothing links to is a page nobody reads: the credits row that used to sit
+    in the footer was self-evidently reachable, a separate page is only as
+    reachable as its pointer. The row-per-layer content itself is generated
+    from the same worksheet list as EXPECT_LAYER_IDS
+    (scripts/generate_metro_files.py), so this checks the OUTCOME rather than
+    trusting that the generator ran."""
+    path = os.path.join(repo_root, SOURCES_PAGE)
+    if not os.path.exists(path):
+        return None
+    page = open(path, encoding="utf-8").read()
+    missing = [lid for lid in EXPECT_LAYER_IDS if ('id="layer-%s"' % lid) not in page]
+    if missing:
+        fail("%s has no matrix row for %d layer(s): %s — regenerate with "
+             "scripts/generate_metro_files.py after adding the layer's source "
+             "block to the worksheet"
+             % (SOURCES_PAGE, len(missing), ", ".join(missing)))
+    if SOURCES_PAGE not in html:
+        fail("index.html no longer links to %s — the page ships but nothing in "
+             "the app points a reader at it" % SOURCES_PAGE)
+    return len(EXPECT_LAYER_IDS)
 
 
 def _point_in_geometry(lng, lat, geom):
