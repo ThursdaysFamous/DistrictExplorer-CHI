@@ -216,6 +216,38 @@ def render(d):
               f"[form / contact page]({route}) | {why} |")
         a("")
 
+    a("## The data desk")
+    a("")
+    a("Chris's note, 2026-09-02: **address the data reporter or data editor where an outlet has "
+      "one.** For a pitch whose entire subject is a dataset nobody had assembled, they are the "
+      "reader who knows immediately why 91 counties took months. Every person here was read off "
+      "the OUTLET'S OWN staff or author page and every address comes from that page's own markup "
+      "— none is inferred from a firstname.lastname pattern, which is the one thing the research "
+      "rules forbid outright. The send still goes to the desk; the data reporter is who the first "
+      "line names.")
+    a("")
+    desk = [(o, b) for o in d["outlets"] for b in o["bylines"] if b.get("data_desk")]
+    withaddr = sum(1 for _, b in desk if b.get("address"))
+    a(f"{len(desk)} across {len({o['name'] for o, _ in desk})} outlets; {withaddr} publish a "
+      f"personal address, {len(desk) - withaddr} do not (reach those through the outlet's desk "
+      f"address above and name them in the first line).")
+    a("")
+    a("| Wave | Outlet | Who | Title / why | Address | Source |")
+    a("|---|---|---|---|---|---|")
+    for o, b in sorted(desk, key=lambda r: (r[0].get("wave", 9), r[0]["name"], r[1]["name"])):
+        addr = f"`{b['address']}`" if b.get("address") else "*none published*"
+        a(f"| {o.get('wave','')} | {esc(o['name'])} | {esc(b['name'])} | {esc(b.get('beat',''))} "
+          f"| {addr} | [page]({b.get('source_url','')}) |")
+    a("")
+    neg = [o for o in d["outlets"] if o.get("data_desk_finding")]
+    if neg:
+        a("**Measured absences.** A page that loaded and does not name a data desk is an answer, "
+          "not a blank — it is what stops the next pass re-probing the same page.")
+        a("")
+        for o in sorted(neg, key=lambda x: x["name"]):
+            a(f"- **{esc(o['name'])}** — {esc(o['data_desk_finding'])}")
+        a("")
+
     a("## Bylines worth addressing a pitch to")
     a("")
     a("The plan's rule stands: **send to the desk, name the reporter in the first line.** A "
