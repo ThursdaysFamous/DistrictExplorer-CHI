@@ -2611,6 +2611,50 @@ DOCUMENT_ROSTERS = [
     # That is a letter, not a user-agent string, and nothing here will quietly
     # rename a client to get past a file that says no.
     {
+        # ASHLAND, 2026-09-02 — the seventh, and the first found BEFORE it was
+        # ever scheduled rather than after weeks of weekly runs. The reader that
+        # produced these rows is scrape_ashland_board() above, kept for the day
+        # the county says yes; the ward witness it ran scored 29 of the 30 wards
+        # the page names in LTSB's same-numbered district, the thirtieth being
+        # City of Ashland ward 18, which the county puts in District 11 and the
+        # state files in District 8.
+        "fips": "55003", "name": "Ashland", "seats": 21,
+        "read_on": "2026-09-02",
+        "source_url": "https://ashlandcountywi.gov/bos",
+        "how": "read once from the county's own board page; its robots.txt "
+               "disallows the whole site to every agent it does not name, so "
+               "this roster is never re-fetched",
+        "why": "The county asks automated readers not to crawl its site, so "
+               "this name is a dated capture rather than the weekly re-read "
+               "the other named counties get.",
+        "roles": {"5": "Vice Chair", "21": "Chair"},
+        # district -> (name, e-mail, phone); district 1 publishes
+        # "Phone: Confidential" and ships with none
+        "members": {
+            "1": ('Elizabeth Gehred', 'elizabeth.gehred@ashlandcountywi.gov', None),
+            "2": ('Thomas D. Trudeau', 'thomas.trudeau@ashlandcountywi.gov', '715-209-3920'),
+            "3": ('Laura L. Nagro', 'laura.nagro@ashlandcountywi.gov', '715-216-1886'),
+            "4": ('William Metzinger', 'william.metzinger@ashlandcountywi.gov', '715-682-5942'),
+            "5": ('Clarence Campbell', 'clarence.campbell@ashlandcountywi.gov', '715-292-1160'),
+            "6": ('Bradley Ray', 'bradley.ray@ashlandcountywi.gov', '715-513-6067'),
+            "7": ('(Donald) Patrick Kinney', 'patrick.kinney@ashlandcountywi.gov', '715-682-9198'),
+            "8": ('Richard Pufall', 'richard.pufall@ashlandcountywi.gov', '715-682-6116'),
+            "9": ('Elizabeth A. Franek', 'elizabeth.franek@ashlandcountywi.gov', '715-969-6732'),
+            "10": ('Paul Wilharm', 'paul.wilharm@ashlandcountywi.gov', '612-685-0445'),
+            "11": ('Ronald Sztyndor', 'ronald.sztyndor@ashlandcountywi.gov', '845-517-7725'),
+            "12": ('Benjamen Connors Sr.', 'benjamen.connors@ashlandcountywi.gov', '715-292-1728'),
+            "13": ('Philip Livingston', 'philip.livingston@ashlandcountywi.gov', '715-292-5339'),
+            "14": ('George E. Bussey', 'george.bussey@ashlandcountywi.gov', '715-209-2508'),
+            "15": ('Marques Jolma', 'philip.livingston@ashlandcountywi.gov', '715-413-1928'),
+            "16": ('Shawn Sederholm', 'shawn.sederholm@ashlandcountywi.gov', '715-209-0841'),
+            "17": ('Terrance Van Buren', 'terrance.vanburen@ashlandcountywi.gov', None),
+            "18": ('James R. Schultz', 'james.schultz@ashlandcountywi.gov', '715-278-3781'),
+            "19": ('Gary Eder. Jr.', 'gary.eder@ashlandcountywi.gov', '715-663-0727'),
+            "20": ('(Wilfred) David Meindl', 'dave.meindl@ashlandcountywi.gov', '715-769-3355'),
+            "21": ('Gary A. Mertig', 'gary.mertig@ashlandcountywi.gov', '715-661-0243'),
+        },
+    },
+    {
         "fips": "55033", "name": "Dunn", "seats": 29,
         "read_on": "2026-08-31",
         "source_url": "https://dunncountywi.gov/supervisors",
@@ -5084,11 +5128,87 @@ def ward_number_witness(fips, county, wards, seats, min_pairs=None, munis=None):
                            "same-numbered district and %d land one off — the "
                            "document is numbered against a different plan"
                            % (county, max(shifts)))
-    if hit < 0.95 * listed:
-        raise RuntimeError("%s: only %d of %d listed wards land in LTSB's "
-                           "same-numbered district — the county's composition and "
-                           "the state's filing no longer describe one plan"
-                           % (county, hit, listed))
+    # A WARD LTSB DOES NOT HAVE AT ALL IS NOT EVIDENCE ABOUT THE NUMBERING, and
+    # conflating the two cases is what this separates. There are two ways a
+    # listed pair can miss: the ward EXISTS in LTSB's filing under a different
+    # district — a real disagreement about which seat that ground belongs to,
+    # the thing this witness is for — or the ward is ABSENT from the county's
+    # ward fabric entirely, which says the two publishers disagree about what
+    # wards exist and says nothing whatever about district numbers. Sawyer is
+    # the case: its Supervisory Districts page names City of Hayward ward 6 and
+    # Town of Hayward ward 8, and LTSB's filing runs the city to ward 5 and the
+    # town to ward 7. Every ward the two publishers BOTH name agrees on its
+    # district. Counting those two as numbering disagreements refused a county
+    # whose numbering agrees completely.
+    #
+    # THE ABSENT ONES ARE STILL BOUNDED AND STILL PRINTED. A page naming a few
+    # wards the state has since consolidated is an ordinary stale paragraph; a
+    # page where a third of the wards do not exist is a page describing a
+    # different decade, and that is a reason to stop rather than to ship.
+    exists = {k for v in ltsb.values() for k in v}
+    absent = sorted((k for d, v in wards.items() for k in v - ltsb.get(d, set())
+                     if k not in exists), key=_order)
+    comparable = listed - len(absent)
+    # AND A WARD MISSING FROM *THIS COUNTY'S* SLICE MAY SIT IN THE NEXT COUNTY'S.
+    # The query above is per CNTY_FIPS, so a municipality that CROSSES a county
+    # line has its other wards filed under the neighbour. Marathon is the case:
+    # its composition names City of Marshfield wards 1, 2 and 3, LTSB files
+    # Marathon's Marshfield as wards 12, 16 and 19, and 1-3 are there under WOOD
+    # County — the city straddles the line. Calling those "absent from LTSB" is
+    # simply wrong, and a wrong explanation printed weekly is how the next
+    # reader is misled. Sawyer's two are the other kind: City of Hayward runs to
+    # ward 5 and Town of Hayward to ward 7 in the only county either sits in.
+    # One extra request, and only when there is something to explain.
+    crossing = set()
+    if absent:
+        try:
+            names = sorted({k[1] for k in absent})
+            where = " OR ".join("MCD_NAME='%s'" % n for n in
+                                sorted({str(a.get("attributes", {}).get("MCD_NAME"))
+                                        for a in feats
+                                        if _jk_norm(str(a.get("attributes", {})
+                                                        .get("MCD_NAME", ""))) in names}))
+            if where:
+                other = _fetch_json(
+                    LTSB_WARD_QUERY + "?where=%s&outFields=MCD_NAME,CTV,WARDID,"
+                    "CNTY_FIPS&returnGeometry=false&f=json"
+                    % urllib.parse.quote(where))
+                for f in other.get("features") or []:
+                    a = f.get("attributes") or {}
+                    if str(a.get("CNTY_FIPS")) == fips:
+                        continue
+                    crossing.add((str(a.get("CTV", "")).lower()[:1],
+                                  _jk_norm(str(a.get("MCD_NAME", ""))),
+                                  int(str(a.get("WARDID") or 0))))
+        except Exception as e:      # noqa: BLE001 - the explanation, never the source
+            print("  note    %-12s could not check whether the unmatched wards sit "
+                  "in a neighbouring county (%s)" % (county, e), file=sys.stderr)
+    across = [k for k in absent if k in crossing]
+    nowhere = [k for k in absent if k not in crossing]
+    if across:
+        print("  note    %-12s %d listed ward(s) are filed under a NEIGHBOURING "
+              "county, because that municipality crosses the county line (%s) — "
+              "not a numbering disagreement"
+              % (county, len(across),
+                 ", ".join("%s %s w%d" % k for k in across)[:180]), file=sys.stderr)
+    if nowhere:
+        print("  note    %-12s %d listed ward(s) are in LTSB's filing for NO county "
+              "(%s) — the two publishers differ on which wards exist, which is "
+              "not evidence about district numbers; the ratio below is over the "
+              "%d that both name"
+              % (county, len(nowhere),
+                 ", ".join("%s %s w%d" % k for k in nowhere)[:180], comparable),
+              file=sys.stderr)
+    if len(absent) > 0.25 * listed:
+        raise RuntimeError("%s: %d of %d listed wards are absent from LTSB's filing "
+                           "for this county — the document is describing a ward "
+                           "fabric the state no longer has; re-read it"
+                           % (county, len(absent), listed))
+    if hit < 0.95 * comparable:
+        raise RuntimeError("%s: only %d of %d listed wards that LTSB also has land "
+                           "in its same-numbered district — the county's "
+                           "composition and the state's filing no longer describe "
+                           "one plan" % (county, hit, comparable))
 
     # THE MUNICIPALITY SET IS THE STRONGER TEST WHERE A DOCUMENT STATES IT, and
     # it is the one that reaches a district named whole. Every municipality the
@@ -5112,8 +5232,27 @@ def ward_number_witness(fips, county, wards, seats, min_pairs=None, munis=None):
         # name lands in LTSB's same-numbered district. Failing that would be
         # refusing a roster for saying less than the state, not for saying
         # something different. The shortfall is printed so it cannot go unseen.
-        conflict = {d: (sorted(v - filed.get(d, set())), sorted(filed.get(d, set())))
-                    for d, v in munis.items() if v - filed.get(d, set())}
+        # A MUNICIPALITY PRESENT ONLY THROUGH A WARD LTSB DOES NOT HAVE IS THE
+        # ABSENT-WARD CASE AGAIN, not a numbering conflict. Sawyer's District 11
+        # names "Town of Hayward, Ward 8"; LTSB's Town of Hayward stops at ward
+        # 7, so the municipality lands in the county's D11 set purely because of
+        # a ward the state's filing has no row for. Counting that as two
+        # publishers describing different plans refuses a county whose every
+        # shared ward agrees. THE CHECK KEEPS ITS TEETH: a municipality the
+        # county names WHOLE — no ward at all — that LTSB does not file under
+        # that number is still a conflict, because there is no absent ward to
+        # explain it; and so is one whose listed wards LTSB has but files
+        # elsewhere.
+        def _only_via_absent(d, key):
+            here = {k for k in wards.get(d, set()) if k[:2] == key}
+            return bool(here) and all(k not in exists for k in here)
+
+        conflict = {}
+        for d, v in munis.items():
+            extra = sorted((k for k in v - filed.get(d, set())
+                            if not _only_via_absent(d, k)), key=_order)
+            if extra:
+                conflict[d] = (extra, sorted(filed.get(d, set()), key=_order))
         if conflict:
             first = min(conflict)
             raise RuntimeError(
@@ -5315,7 +5454,17 @@ TYPE_LETTER = {"city": "c", "cities": "c", "town": "t", "towns": "t",
 # is NOT an item separator. The optional digits are Clark, whose District 27
 # reads "Town of Grant Ward," with no number at all — masking it keeps the bare
 # word out of the municipality name.
-COMP_WARDS = re.compile(r"(?i),?\s*\bWards?\b(?:\s*\d+(?:\s*[,&\u2013-]\s*\d+)*)?")
+# THE RUN CONTINUES ACROSS THE WORD "and", NOT ONLY ACROSS PUNCTUATION. This
+# accepted , & – and - between the numbers of one ward run and not "and", so
+# Sawyer's "City of Hayward Wards 5 and 6" matched as "Wards 5" alone: ward 6
+# fell out of the run, COMP_SEP then split the leftover " and 6" into a part
+# with no municipality name, and the pair was DROPPED SILENTLY. Nothing shipped
+# wrong — the pairs found were right — but every "N and M" county was witnessed
+# on half its wards while the log printed a confident hit/listed ratio over the
+# smaller number. _ward_numbers() below already split on "and"; it was never
+# reached with the second number.
+COMP_WARDS = re.compile(
+    r"(?i),?\s*\bWards?\b(?:\s*\d+(?:\s*(?:[,&\u2013-]|\band\b)\s*\d+)*)?")
 COMP_SEP = re.compile(r"(?i)[,;&]|\band\b")
 
 
@@ -6703,6 +6852,478 @@ def scrape_langlade_board(spec):
     municipality_name_witness(spec["fips"], county, texts, seats)
     rows = {str(d): r for d, r in out.items()}
     return attach_unique_roles(roles, rows, county), spec["source_url"]
+
+
+# --- Ashland: read once, then STOPPED by the county's own robots.txt ---------
+#
+# THE CRAWL STOPS AND THE NAMES STAY — the seventh county on that footing, after
+# Jackson, Richland, Rusk, Polk, Dunn and Pepin. ashlandcountywi.gov publishes
+#
+#     User-agent: *
+#     Disallow: /
+#
+# naming half a dozen search engines above it with narrow /admin/ and /manager/
+# rules; this project's clients are none of them, so the whole site is
+# disallowed to it. wi/scripts/validate_robots.py caught that on the run that
+# would have added this county to the weekly schedule — the reader below had
+# already been written and had already resolved all 21 seats — so what ships is
+# the roster AS READ on 2026-09-02, in DOCUMENT_ROSTERS, never re-fetched, with
+# its card saying the county ASKED rather than refused. robots.txt governs
+# RETRIEVAL, not what already-public information may be shown, and stopping the
+# fetch is exactly what the file asks for. THE READER IS KEPT rather than
+# deleted: it is what the county's own say-so would re-enable, and it carries
+# the two traps below, which are about the page rather than the schedule.
+# Nothing here will quietly rename a client to get past a file that says no.
+#
+# ashlandcountywi.gov/bos gives each of the 21 districts a <p>: a <strong>
+# header reading "DISTRICT n: <composition> (District n Map)", then the
+# supervisor, their home address, "Phone: ..." and "Email: ...".
+#
+# THE COMPOSITION CARRIES A SECOND KIND OF DISTRICT AND IT MUST BE CUT FIRST.
+# The header reads "City of Ashland - Wards 1 & 2 - Aldermanic 1": the city's
+# ALDERMANIC districts, which are a different fabric from the county's wards
+# and are none of this layer's business. Fed to parse_composition() whole, the
+# trailing "- Aldermanic 1" is absorbed into the municipality NAME and the
+# district resolves as the city of "ashlandaldermanic" — a municipality that
+# exists nowhere, so every pair misses and the county is refused for a reason
+# that has nothing to do with its numbering. The annotation is cut at the
+# separator before the word.
+#
+# THE HEADER'S OWN MAP LINK IS ALSO INSIDE THE <strong>, so "(District n Map)"
+# comes out of the same string and is removed with it.
+#
+# "Phone: Confidential" IS A PUBLISHED REFUSAL, NOT A NUMBER. District 1 says
+# it; that supervisor ships with no phone rather than with the word.
+#
+# ONE WARD IS FILED DIFFERENTLY BY THE TWO PUBLISHERS AND THE SEAT STILL SHIPS.
+# The county's District 11 reads "City of Ashland - Wards 18, 19 & 20"; LTSB
+# files ward 18 in District 8 (with ward 21) and District 11 as wards 19 and 20.
+# Twenty-nine of the thirty wards this page names land in LTSB's same-numbered
+# district; that one does not. LINCOLN'S RULE DOES NOT REACH IT AND THE
+# DIFFERENCE IS MEASURED, NOT ASSUMED: Lincoln withheld a seat because the
+# county assigned a MAJORITY of that district's ground elsewhere (its own map
+# agreed with only 48% of it). Ward 18 is 3.8% of District 8 by area — ward 21
+# is the other 96.2% — so withholding District 8 would deny a correct name to
+# almost everyone in it in order to handle one small city ward. What a reader
+# standing in ward 18 sees is District 8 and District 8's supervisor, because
+# the card reads their district from LTSB's geometry, and the county would say
+# District 11. That is recorded here and in the gap record rather than smoothed
+# away, and neither publisher is preferred: nothing here decides which is right.
+#
+# EVERY SUPERVISOR'S HOME ADDRESS IS ON THIS PAGE AND NONE IS READ.
+ASHLAND_BOARD = {
+    "fips": "55003", "name": "Ashland", "seats": 21,
+    "source_url": "https://ashlandcountywi.gov/bos",
+    "domain": "ashlandcountywi.gov",
+}
+# THE HEADER TAG CARRIES ATTRIBUTES ON ONE BLOCK OF TWENTY-ONE. District 14's
+# is <strong style="font-size: 12pt;"> where the other twenty are bare, so a
+# pattern requiring a bare tag reads this page as a twenty-seat board and the
+# seat-set gate refuses the county — for a style attribute on one paragraph.
+AS_BLOCK = re.compile(
+    r"(?is)<strong[^>]*>\s*District\s*(\d{1,2})\s*:(.*?)</strong>"
+    r"(.*?)(?=<strong[^>]*>\s*District\s*\d|\Z)")
+AS_ALDER = re.compile(r"(?i)\s*[-–—]\s*Aldermanic\b.*$")
+AS_MAPLINK = re.compile(r"(?is)\(\s*<a[^>]*>.*?</a>\s*\)|\(\s*District\s*\d+\s*Map\s*\)")
+AS_MAIL = re.compile(r"(?i)mailto:\s*([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+)")
+AS_PHONE = re.compile(r"(?i)Phone\s*:?\s*\(?(\d{3})\)?[-.\s]?(\d{3})[-.\s](\d{4})")
+AS_ROLE = re.compile(r"(?i),\s*((?:Vice[-\s]?)?Chair(?:man|person|woman)?)\s*$")
+AS_MIN_EMAILS = 18          # 21 of 21 today
+AS_MIN_PHONES = 16          # 20 of 21 today; district 1 publishes "Confidential"
+AS_MIN_WARD_PAIRS = 24      # 30 today, MEASURED off the page
+
+
+def _as_lines(chunk):
+    chunk = re.sub(r"(?i)<br\s*/?>", "\n", chunk)
+    chunk = re.sub(r"<[^>]+>", " ", chunk)
+    return [x for x in (re.sub(r"\s+", " ", l).strip()
+                        for l in html_lib.unescape(chunk).replace("\xa0", " ").split("\n"))
+            if x]
+
+
+def scrape_ashland_board(spec):
+    """All 21 seats or nothing, out of the county's own board page."""
+    county, seats = spec["name"], spec["seats"]
+    page = fetch(spec["source_url"])
+    out, wards, munis, numbers, roles = {}, {}, {}, {}, {}
+    for m in AS_BLOCK.finditer(page):
+        district = int(m.group(1))
+        if district in out:
+            raise RuntimeError("%s: two blocks state district %d" % (county, district))
+        head = AS_MAPLINK.sub(" ", m.group(2))
+        head = AS_ALDER.sub("", _as_lines(head)[0] if _as_lines(head) else "")
+        body = m.group(3)
+        lines = _as_lines(body)
+        if not lines:
+            raise RuntimeError("%s: district %d's block carries no text after its "
+                               "header — the page has reshaped" % (county, district))
+        who = lines[0]
+        role = None
+        got = AS_ROLE.search(who)
+        if got:
+            role = re.sub(r"\s+", " ", got.group(1)).strip()
+            who = AS_ROLE.sub("", who)
+        if VACANT.search(who):
+            out[district] = {"name": None, "vacant": True, "role": None}
+        else:
+            name = clean(who)[0]
+            if not _reads_as_name(name):
+                raise RuntimeError("%s: district %d resolved the name %r, which "
+                                   "does not read as a name — re-read %s"
+                                   % (county, district, name, spec["source_url"]))
+            entry = {"name": name, "vacant": False, "role": None}
+            mail = AS_MAIL.search(body)
+            if mail:
+                entry["email"] = mail.group(1).lower()
+            tel = AS_PHONE.search(" ".join(lines))
+            if tel:
+                numbers[district] = ["-".join(tel.groups())]
+            out[district] = entry
+            if role:
+                roles[district] = role
+        if not head:
+            raise RuntimeError("%s: district %d's header states no composition — "
+                               "it is what witnesses the numbering"
+                               % (county, district))
+        wards[district], munis[district] = parse_composition(head)
+
+    seen = sorted(out)
+    if seen != list(range(1, seats + 1)):
+        raise RuntimeError("%s: the page lists districts %s, not 1..%d — re-read %s"
+                           % (county, seen, seats, spec["source_url"]))
+    drop_shared_phones(county, numbers, out)
+    live = [d for d, r in out.items() if not r["vacant"]]
+    names = [out[d]["name"] for d in live]
+    if len(set(names)) != len(names):
+        raise RuntimeError("%s: the same person is filed under two districts (%s)"
+                           % (county, sorted({n for n in names if names.count(n) > 1})))
+    emails = sum(1 for d in live if out[d].get("email"))
+    phones = sum(1 for d in live if out[d].get("phone"))
+    own = sum(1 for d in live
+              if (out[d].get("email") or "").endswith("@" + spec["domain"]))
+    if emails < AS_MIN_EMAILS or phones < AS_MIN_PHONES:
+        raise RuntimeError("%s: %d e-mails and %d phones across %d filled seats "
+                           "(floors %d/%d) — the blocks have reshaped and contact "
+                           "is being dropped silently"
+                           % (county, emails, phones, len(live),
+                              AS_MIN_EMAILS, AS_MIN_PHONES))
+    if own != emails:
+        raise RuntimeError("%s: %d of %d mailboxes are on %s — a block has shifted"
+                           % (county, own, emails, spec["domain"]))
+    print("  %-12s %d seats, %d phones, %d e-mails (district 1 publishes 'Phone: "
+          "Confidential' and ships with none; no home address is read, and every "
+          "block prints one)" % (county, seats, phones, emails), file=sys.stderr)
+    ward_number_witness(spec["fips"], county, wards, seats,
+                        min_pairs=AS_MIN_WARD_PAIRS, munis=munis)
+    rows = {str(d): r for d, r in out.items()}
+    return attach_unique_roles(roles, rows, county), spec["source_url"]
+
+
+# --- Douglas: a four-column table keyed by ORDINAL WORDS ----------------------
+#
+# douglascountywi.gov/647/Members-by-District is a Telerik-authored table:
+# District | Member | Address | Phone, one row per seat. THE DISTRICT IS AN
+# ORDINAL WORD — "1st District", "2nd District", "21st District" — so a reader
+# looking for "District n" finds NOTHING on this page and measures the county
+# as publishing no district column. It publishes the best one in the state.
+#
+# THE MEMBER CELL IS THE MAILTO ANCHOR, and the address cell beside it is a
+# HOME ADDRESS that is not read. A vacant seat carries the word in place of the
+# anchor, with the county's own zero-width-space padding around it.
+#
+# A COMPOSITION IS PUBLISHED FOR EIGHT OF THE TWENTY-ONE AND IS DELIBERATELY
+# NOT USED AS A WITNESS. The rural rows describe PARTS of municipalities in
+# prose — "West 3/4 of the Town of Superior", "Summit (Southern portion)" —
+# which parse_composition() reduces to municipalities that do not exist
+# ("westofthe", "summitsouthernportion") because it is built for lists of whole
+# municipalities and wards, not for fractions of them. A witness that scores
+# junk against LTSB is worse than none: it either fails a correct county or,
+# tuned until it passes, agrees with nothing in particular. So the district key
+# here rests on the county's own ordinal column and the seat set being exactly
+# 1..21 — Florence's position, for a different reason, and said rather than
+# implied.
+DOUGLAS_TABLE = {
+    "fips": "55031", "name": "Douglas", "seats": 21,
+    "source_url": "https://douglascountywi.gov/647/Members-by-District",
+    "domain": "douglascountywi.gov",
+}
+DG_ROW = re.compile(r"(?is)<tr[^>]*>(.*?)</tr>")
+DG_CELL = re.compile(r"(?is)<t[dh][^>]*>(.*?)</t[dh]>")
+# THE ORDINAL IS NOT THE WHOLE CELL ON EVERY ROW. Superior's thirteen city
+# districts print "1st District" and nothing else; the eight rural ones print
+# their composition in the SAME cell — "16th District Towns of Brule,
+# Cloverland, Lakeside and Maple". Anchored at the end, this matched thirteen
+# rows of twenty-one and the seat-set gate refused the county.
+DG_ORDINAL = re.compile(r"(?i)^\s*(\d{1,2})\s*(?:st|nd|rd|th)\s+District\b\s*(.*)$")
+DG_MAIL = re.compile(r"(?i)mailto:\s*([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+)")
+DG_PHONE = re.compile(r"\(?(\d{3})\)?[-.\s]?(\d{3})[-.\s](\d{4})")
+DG_MIN_EMAILS = 16          # 20 of 20 filled seats today
+DG_MIN_PHONES = 16          # 20 of 20
+
+
+def _dg_text(chunk):
+    chunk = re.sub(r"(?i)<br\s*/?>", " ", chunk)
+    return re.sub(r"\s+", " ", html_lib.unescape(re.sub(r"<[^>]+>", " ", chunk))
+                  .replace("\xa0", " ").replace("​", "")).strip()
+
+
+def scrape_douglas_table(spec):
+    """All 21 seats or nothing, out of the county's Members by District table."""
+    county, seats = spec["name"], spec["seats"]
+    page = fetch(spec["source_url"])
+    out, numbers = {}, {}
+    for row in DG_ROW.findall(page):
+        cells = DG_CELL.findall(row)
+        if len(cells) < 4:
+            continue
+        said = DG_ORDINAL.match(_dg_text(cells[0]))
+        if not said:
+            continue
+        district = int(said.group(1))
+        if district in out:
+            raise RuntimeError("%s: two rows state district %d" % (county, district))
+        who = _dg_text(cells[1])
+        if VACANT.search(who) or not who:
+            out[district] = {"name": None, "vacant": True, "role": None}
+            continue
+        name = clean(who)[0]
+        if not _reads_as_name(name):
+            raise RuntimeError("%s: district %d resolved the name %r, which does "
+                               "not read as a name — re-read %s"
+                               % (county, district, name, spec["source_url"]))
+        entry = {"name": name, "vacant": False, "role": None}
+        mail = DG_MAIL.search(cells[1])
+        if mail:
+            entry["email"] = mail.group(1).lower()
+        # CELL 2 IS THE HOME ADDRESS AND IS NOT READ.
+        tel = DG_PHONE.search(_dg_text(cells[3]))
+        if tel:
+            numbers[district] = ["-".join(tel.groups())]
+        out[district] = entry
+
+    seen = sorted(out)
+    if seen != list(range(1, seats + 1)):
+        raise RuntimeError("%s: the table lists districts %s, not 1..%d — re-read %s"
+                           % (county, seen, seats, spec["source_url"]))
+    drop_shared_phones(county, numbers, out)
+    live = [d for d, r in out.items() if not r["vacant"]]
+    names = [out[d]["name"] for d in live]
+    if len(set(names)) != len(names):
+        raise RuntimeError("%s: the same person is filed under two districts (%s)"
+                           % (county, sorted({n for n in names if names.count(n) > 1})))
+    emails = sum(1 for d in live if out[d].get("email"))
+    phones = sum(1 for d in live if out[d].get("phone"))
+    if emails < DG_MIN_EMAILS or phones < DG_MIN_PHONES:
+        raise RuntimeError("%s: %d e-mails and %d phones across %d filled seats "
+                           "(floors %d/%d) — the table has reshaped and contact is "
+                           "being dropped silently"
+                           % (county, emails, phones, len(live),
+                              DG_MIN_EMAILS, DG_MIN_PHONES))
+    vacant = sorted(d for d, r in out.items() if r["vacant"])
+    print("  %-12s %d seats, %d filled, %d phones, %d e-mails (the address column "
+          "is home addresses and is never read)"
+          % (county, seats, len(live), phones, emails), file=sys.stderr)
+    if vacant:
+        print("  note %-12s the county marks district %s vacant in its own table"
+              % (county, ", ".join(str(d) for d in vacant)), file=sys.stderr)
+    print("  witness %-12s districts read from the county's ORDINAL column "
+          "(1st..%dst); the eight rural rows also describe their composition, in "
+          "prose about PARTS of municipalities, which is not reduced to a ward "
+          "set — so the key rests on that column and the seat set"
+          % (county, seats), file=sys.stderr)
+    return {str(d): r for d, r in out.items()}, spec["source_url"]
+
+
+# --- Sawyer: CivicPlus's NEW responsive directory, which is not the h-card one -
+#
+# THE FLEET'S FIRST COUNTY ON CIVICPLUS'S REWRITTEN STAFF DIRECTORY. Door and
+# Oconto are CivicPlus too and share HCARD_* above — <li class="widgetItem
+# h-card"> with p-name, p-job-title, p-tel fields. Sawyer's directory has none
+# of that: it is Bootstrap list-group rows, zero h-cards, zero p-name. A reader
+# that assumed "CivicPlus means h-cards" measures this county as publishing
+# nothing. THE PLATFORM IS NOT THE MARKUP, and other counties will migrate.
+#
+# THE CANONICAL URL REDIRECTS INTO THE NEW ONE. /directory.aspx?did=33 answers
+# 302 to /m/directory/department?did=33 — the `/m/` path is not a mobile
+# variant to be avoided, it is where this template lives now. The .aspx form is
+# fetched because it is the stable CivicPlus address and follows the template
+# wherever it goes next.
+#
+# THE JOB TITLE IS PRINTED TWICE PER ROW AND BOTH COPIES MUST AGREE. The
+# template emits one for each breakpoint (`d-sm-block d-none` and `d-sm-none
+# d-block`), so every row states its district twice. Unlike Forest — where the
+# duplicate headings belong to NEIGHBOURING members and only the first may be
+# read — these are the same member's, so the honest use is to require them
+# equal rather than to pick one.
+#
+# THE COMPOSITION IS ON A THIRD PAGE. The directory names people and the board
+# page is prose; /264/Supervisory-Districts publishes all fifteen districts'
+# towns, villages, cities and wards, which is what makes the ward witness
+# possible here where Florence had none.
+#
+# THAT PAGE ALSO FOUND A SILENT DEFECT IN THE SHARED COMPOSITION PARSER.
+# Sawyer writes "City of Hayward Wards 5 and 6", and COMP_WARDS continued a
+# ward run across , & – and - but NOT across the word "and" — so ward 6 fell
+# out of the run and was dropped without a word, while the witness printed a
+# confident ratio over the smaller number. Fixed at COMP_WARDS; see the note
+# there.
+#
+# EACH MEMBER'S OWN EMPLOYEE PAGE IS THE SECOND SURFACE, restating the name and
+# "District N Supervisor" independently of the row it was read from.
+#
+# TWO COUNTY MAIL DOMAINS ARE IN USE — sawyercountygov.org and sawyercounty.gov
+# — and both are the county's; each address ships exactly as published.
+#
+# NO CHAIR IS NAMED ON ANY COUNTY SURFACE, so no role ships. The Blue Book has
+# one and build_wi_county_officer_roster.py already reconciles that separately;
+# inventing a title here from a book the county has not confirmed is not this
+# scraper's job.
+SAWYER_DIRECTORY = {
+    "fips": "55113", "name": "Sawyer", "seats": 15,
+    "source_url": "https://www.sawyercounty.gov/directory.aspx?did=33",
+    "composition_url": "https://www.sawyercounty.gov/264/Supervisory-Districts",
+}
+SW_ROW = re.compile(r'(?is)<li class="list-group-item[^"]*"[^>]*>(.*?)</li>')
+SW_LINK = re.compile(r'(?is)<a href="([^"]*employee\?eid=\d+)"[^>]*>(.*?)</a>')
+SW_TITLE = re.compile(r'(?is)<div class="[^"]*\bd-(?:sm-block d-none|sm-none d-block)\b[^"]*"[^>]*>(.*?)</div>')
+SW_DISTRICT = re.compile(r"(?i)^District\s*(\d+)\s*Supervisor$")
+SW_MAIL = re.compile(r'(?i)mailto:([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+)')
+SW_PHONE = re.compile(r"\(?(\d{3})\)?[-.\s]?(\d{3})[-.\s](\d{4})")
+SW_COMP = re.compile(r"(?i)District\s*(\d+)\s*[-–]\s*([^\n<]{4,300})")
+SW_MIN_EMAILS = 13          # 15 of 15 today
+SW_MIN_PHONES = 9           # 11 of 15 today; four publish none
+SW_MIN_WARD_PAIRS = 20      # 27 today, MEASURED off the composition page
+
+
+def _sw_text(chunk):
+    return re.sub(r"\s+", " ", html_lib.unescape(
+        re.sub(r"<[^>]+>", " ", chunk)).replace("\xa0", " ")).strip()
+
+
+def scrape_sawyer_directory(spec):
+    """All 15 seats or nothing, witnessed by each member's own employee page."""
+    county, seats = spec["name"], spec["seats"]
+    page = fetch(spec["source_url"])
+    rows = SW_ROW.findall(page)
+    if not rows:
+        raise RuntimeError("%s: no directory rows on %s — the county has moved off "
+                           "this template; re-read the page"
+                           % (county, spec["source_url"]))
+
+    out, links, numbers = {}, {}, {}
+    for row in rows:
+        link = SW_LINK.search(row)
+        if not link:
+            continue
+        titles = [t for t in (_sw_text(x) for x in SW_TITLE.findall(row)) if t]
+        if not titles:
+            raise RuntimeError("%s: a directory row states no job title (%r) — the "
+                               "district is read from it, so this cannot ship"
+                               % (county, _sw_text(link.group(2))[:40]))
+        # BOTH BREAKPOINT COPIES ARE THIS MEMBER'S AND MUST AGREE — see above.
+        if len(set(titles)) != 1:
+            raise RuntimeError("%s: a row prints its title as %s — the template's "
+                               "two copies disagree, which is what a reshaped row "
+                               "looks like" % (county, sorted(set(titles))))
+        said = SW_DISTRICT.match(titles[0])
+        if not said:
+            raise RuntimeError("%s: a directory row is titled %r rather than "
+                               "'District N Supervisor' — re-read %s"
+                               % (county, titles[0], spec["source_url"]))
+        district = int(said.group(1))
+        if district in out:
+            raise RuntimeError("%s: two rows state district %d" % (county, district))
+        who = _sw_text(link.group(2))
+        if VACANT.search(who):
+            out[district] = {"name": None, "vacant": True, "role": None}
+            links[district] = urllib.parse.urljoin(spec["source_url"], link.group(1))
+            continue
+        name = clean(who)[0]
+        if not _reads_as_name(name):
+            raise RuntimeError("%s: district %d resolved the name %r, which does "
+                               "not read as a name — re-read %s"
+                               % (county, district, name, spec["source_url"]))
+        entry = {"name": name, "vacant": False, "role": None}
+        mail = SW_MAIL.search(row)
+        if mail:
+            entry["email"] = mail.group(1).lower()
+        tel = SW_PHONE.search(_sw_text(row))
+        if tel:
+            numbers[district] = ["-".join(tel.groups())]
+        out[district] = entry
+        links[district] = urllib.parse.urljoin(spec["source_url"], link.group(1))
+
+    seen = sorted(out)
+    if seen != list(range(1, seats + 1)):
+        raise RuntimeError("%s: the directory lists districts %s, not 1..%d — "
+                           "re-read %s" % (county, seen, seats, spec["source_url"]))
+
+    drop_shared_phones(county, numbers, out)
+
+    live = [d for d, r in out.items() if not r["vacant"]]
+    names = [out[d]["name"] for d in live]
+    if len(set(names)) != len(names):
+        raise RuntimeError("%s: the same person is filed under two districts (%s)"
+                           % (county, sorted({n for n in names if names.count(n) > 1})))
+
+    # EACH MEMBER'S OWN EMPLOYEE PAGE: the name and the district, again.
+    for n, district in enumerate(sorted(out)):
+        if n:
+            time.sleep(0.4)             # 15 pages of somebody else's server
+        own = _sw_text(fetch(links[district]))
+        want = "District %d Supervisor" % district
+        if want.lower() not in own.lower():
+            raise RuntimeError("%s: district %d's own employee page does not state "
+                               "%r — the directory row and the member's own page "
+                               "disagree about which seat this is (%s)"
+                               % (county, district, want, links[district]))
+        if not out[district]["vacant"] and \
+                name_fold(out[district]["name"]) not in name_fold(own):
+            raise RuntimeError("%s: the directory files district %d to %r and that "
+                               "member's own page does not name them — the two "
+                               "county surfaces disagree about who this is"
+                               % (county, district, out[district]["name"]))
+
+    emails = sum(1 for d in live if out[d].get("email"))
+    phones = sum(1 for d in live if out[d].get("phone"))
+    if emails < SW_MIN_EMAILS or phones < SW_MIN_PHONES:
+        raise RuntimeError("%s: %d e-mails and %d phones across %d filled seats "
+                           "(floors %d/%d) — the rows have reshaped and contact is "
+                           "being dropped silently"
+                           % (county, emails, phones, len(live),
+                              SW_MIN_EMAILS, SW_MIN_PHONES))
+
+    print("  %-12s %d seats, %d phones, %d e-mails across two county mail domains, "
+          "both shipped as published" % (county, seats, phones, emails),
+          file=sys.stderr)
+    print("  witness %-12s %d/%d seats' own employee pages confirm their name and "
+          "district" % (county, seats, seats), file=sys.stderr)
+
+    # THE THIRD PAGE: the county's own district-to-ward composition.
+    wards, munis = {}, {}
+    try:
+        comp = fetch(spec["composition_url"])
+    except Exception as e:      # noqa: BLE001 - the witness, never the source
+        print("  WITNESS SKIPPED %-9s the Supervisory Districts page is "
+              "unreachable (%s) — the roster ships unwitnessed this run"
+              % (county, e), file=sys.stderr)
+        comp = None
+    if comp:
+        flat = re.sub(r"(?i)<br\s*/?>|</(p|div|li)>", "\n", comp)
+        flat = html_lib.unescape(re.sub(r"<[^>]+>", " ", flat))
+        for m in SW_COMP.finditer(flat):
+            d = int(m.group(1))
+            if d in out:
+                wards[d], munis[d] = parse_composition(m.group(2))
+        if sorted(wards) != list(range(1, seats + 1)):
+            raise RuntimeError("%s: the Supervisory Districts page states %s, not "
+                               "districts 1..%d — re-read %s"
+                               % (county, sorted(wards), seats,
+                                  spec["composition_url"]))
+        ward_number_witness(spec["fips"], county, wards, seats,
+                            min_pairs=SW_MIN_WARD_PAIRS, munis=munis)
+    rows_out = {str(d): r for d, r in out.items()}
+    return rows_out, spec["source_url"]
 
 
 # --- Florence: the same vendor CMS again, with a seat the county leaves empty -
@@ -8298,6 +8919,8 @@ SINGLE_COUNTY_CARRIERS = (
     (BARRON_TABLE, "barron-table"),
     (FOREST_CARDS, "forest-cards"),
     (FLORENCE_BOARD, "florence-board"),
+    (SAWYER_DIRECTORY, "sawyer-directory"),
+    (DOUGLAS_TABLE, "douglas-table"),
 )
 
 
@@ -8360,6 +8983,12 @@ def main():
                 source_url, read_from = src["source_url"], "live"
             elif strategy == "florence-board":
                 districts, _doc = scrape_florence_board(src)
+                source_url, read_from = src["source_url"], "live"
+            elif strategy == "sawyer-directory":
+                districts, _doc = scrape_sawyer_directory(src)
+                source_url, read_from = src["source_url"], "live"
+            elif strategy == "douglas-table":
+                districts, _doc = scrape_douglas_table(src)
                 source_url, read_from = src["source_url"], "live"
             elif strategy == "archive":
                 districts, archived_at = scrape_archive_county(src)

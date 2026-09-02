@@ -165,7 +165,7 @@ EXPECT_COUNTIES = 72
 # Hand-verified; see the module docstring for why this is not derived.
 COUNTY_SITES = {
     "55001": ("Adams", "https://www.co.adams.wi.us/"),
-    "55003": ("Ashland", "https://ashlandcountywi.gov/"),
+    "55003": ("Ashland", "https://ashlandcountywi.gov/bos"),  # its board page, one paragraph per district with the supervisor and composition
     "55005": ("Barron", "https://www.barroncountywi.gov/index.asp?SEC=%7bB7F5AB49-3697-4A2E-8327-26847A43F33E%7d&Type=B_BASIC"),  # the county's canonical County Board page. It names two people and LINKS the table that names all 29, on the county's other site — see the docstring; wi_county_board_scraper.py reads that one
     "55007": ("Bayfield", "https://bayfieldcounty.wi.gov/295/Board-of-Supervisors"),  # county page confirms 1..13
     "55009": ("Brown", "https://www.browncountywi.gov/government/county-board-of-supervisors/"),  # county page confirms 1..26
@@ -179,7 +179,7 @@ COUNTY_SITES = {
     "55025": ("Dane", "https://board.danecounty.gov/Supervisors"),
     "55027": ("Dodge", "https://www.co.dodge.wi.gov/government/county-board/members"),  # county page confirms 1..33
     "55029": ("Door", "https://co.door.wi.gov/"),
-    "55031": ("Douglas", "https://douglascountywi.gov/"),
+    "55031": ("Douglas", "https://douglascountywi.gov/647/Members-by-District"),  # its Members by District table, keyed by ORDINAL words
     "55033": ("Dunn", "https://dunncountywi.gov/supervisors"),  # county page confirms 1..29
     "55035": ("Eau Claire", "https://eauclairecounty.gov/board_of_supervisors/district_representatives.php"),  # county page confirms 1..29
     "55037": ("Florence", "https://www.florencecountywi.com/government/boards_and_committees/"),  # its board list, which names all 12 with their districts; the county home page this table had names nobody
@@ -250,7 +250,7 @@ COUNTY_SITES = {
     # 2026-09-02 with its whole 19-seat roster published two clicks in.
     "55109": ("St Croix", "https://sccwi.gov/477/County-Board-of-Supervisors"),  # county page confirms 1..19
     "55111": ("Sauk", "https://www.co.sauk.wi.us/countyboard/sauk-county-board-members"),
-    "55113": ("Sawyer", "https://www.sawyercounty.gov/"),
+    "55113": ("Sawyer", "https://www.sawyercounty.gov/directory.aspx?did=33"),  # its Board of Supervisors staff directory; redirects to the /m/ responsive template
     "55115": ("Shawano", "https://www.co.shawano.wi.us/county_board/"),  # county page confirms 1..27
     "55117": ("Sheboygan", "https://sheboygancounty.com/"),
     "55119": ("Taylor", "https://co.taylor.wi.us/"),

@@ -134,6 +134,7 @@ def fetched_urls():
     """[(url, why)] — every address this instance requests on a schedule."""
     import wi_county_board_scraper as board
     import wi_county_officer_contact_scraper as officers
+    _excluded_specs_are_unscheduled(board)
     out = []
     for fips, name, seats, strategy, url in board.COUNTIES:
         out.append((url, "%s board roster (%s)" % (name, strategy)))
@@ -201,7 +202,34 @@ def fetched_urls():
 #   the whole table is excepted here and its `live` entries are added back by
 #   name in the loop above. That inversion is deliberate: an entry that starts
 #   re-trying its page appears in this surface the moment it gains the key.
-NOT_FETCHED = {"CARRIED_CONTACTS", "DOCUMENT_ROSTERS"}
+NOT_FETCHED = {"CARRIED_CONTACTS", "DOCUMENT_ROSTERS",
+               # ASHLAND_BOARD is a reader kept for the day the county says
+               # yes, not a schedule: ashlandcountywi.gov disallows the whole
+               # site to every agent it does not name, so the roster moved to
+               # DOCUMENT_ROSTERS and nothing dispatches this spec. The spec
+               # stays because the reader needs it if the crawl is ever
+               # re-enabled — see the scraper's Ashland section.
+               "ASHLAND_BOARD"}
+# AN EXCLUSION THAT CANNOT SILENTLY BECOME A LIE. Naming a spec here says
+# "nothing fetches this", and the one way that stops being true is somebody
+# re-registering it in SINGLE_COUNTY_CARRIERS — at which point the gate that
+# exists to notice a disallowed crawl would be looking away from exactly the
+# county it was hidden for. So the claim is CHECKED rather than trusted.
+CARRIER_REGISTERED = "SINGLE_COUNTY_CARRIERS"
+
+
+def _excluded_specs_are_unscheduled(board):
+    """A NOT_FETCHED spec must not be registered as a live carrier."""
+    registered = {id(spec) for spec, _strategy
+                  in getattr(board, CARRIER_REGISTERED, ())}
+    wrong = sorted(n for n in NOT_FETCHED
+                   if id(getattr(board, n, None)) in registered)
+    if wrong:
+        raise SystemExit(
+            "robots: FAIL — %s is listed in NOT_FETCHED (as not fetched) and is "
+            "ALSO registered in %s, so it IS fetched weekly and this gate would "
+            "not have checked its host. Either take it out of NOT_FETCHED or out "
+            "of the carrier list." % (", ".join(wrong), CARRIER_REGISTERED))
 
 
 def _strings(obj):
