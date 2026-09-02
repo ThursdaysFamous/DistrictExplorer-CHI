@@ -190,7 +190,7 @@ COUNTY_SITES = {
     # Measured 2026-08-29 while re-probing the counties this instance had
     # recorded as refusing browser headers.
     "55039": ("Fond Du Lac", "https://www.fdlco.wi.gov/"),
-    "55041": ("Forest", "https://co.forest.wi.gov/"),
+    "55041": ("Forest", "https://co.forest.wi.gov/county-board-supervisors"),  # its board page, which names all 21; the county HOME page this table had names nobody. Note the bare host answers and www. does not — the opposite of Barron
     "55043": ("Grant", "https://co.grant.wi.gov/"),  # county page confirms 1..17
     "55045": ("Green", "https://greencountywi.org/164/County-Board-of-Supervisors"),  # county page confirms 1..31
     "55047": ("Green Lake", "https://www.greenlakecountywi.gov/"),
