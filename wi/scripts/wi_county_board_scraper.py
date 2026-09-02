@@ -6589,14 +6589,19 @@ LANGLADE_BOARD = {
     "origin": "https://www.co.langlade.wi.us",
     "domain": "co.langlade.wi.us",
 }
-LG_HEAD = re.compile(r"(?is)<b>\s*(Chairperson|Vice-Chair|Board Members)\s*</b>")
-LG_ROW = re.compile(
-    r'(?is)<a href="(?P<url>[^"]*\bi=[0-9a-f]+)">(?P<name>[^<]+)</a>\s*-\s*'
+DMI_HEAD = re.compile(r"(?is)<b>\s*(Chairperson|Vice-Chair|Board Members)\s*</b>")
+# THE ANCHOR CARRIES ATTRIBUTES ON SOME OF THIS VENDOR'S SITES AND NONE ON
+# OTHERS: Langlade writes <a href="...">, Florence writes
+# <a href="..." class="bold-link">. The tightened form matched zero of
+# Florence's twelve rows and would have read as "this county publishes no
+# board list" rather than as a regex one attribute too strict.
+DMI_ROW = re.compile(
+    r'(?is)<a\s+href="(?P<url>[^"]*\bi=[0-9a-f]+)"[^>]*>(?P<name>[^<]+)</a>\s*-\s*'
     r'District\s*#\s*(?P<district>\d{1,2})\s*-?\s*(?P<composition>[^<]*)')
-LG_OWN_NAME = re.compile(r"(?is)\bName:\s*\|?\s*([^|<]{2,60}?)\s*\|")
-LG_OWN_DIST = re.compile(r"(?is)\bDistrict\s*#:\s*\|?\s*(\d{1,2})\b")
-LG_PHONE = re.compile(r"(?is)\bPhone Number:\s*\|?\s*(\d{3})[-.\s](\d{3})[-.\s](\d{4})\b")
-LG_MAIL = re.compile(r"(?is)\bEmail Address:\s*\|?\s*([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+)")
+DMI_OWN_NAME = re.compile(r"(?is)\bName:\s*\|?\s*([^|<]{2,60}?)\s*\|")
+DMI_OWN_DIST = re.compile(r"(?is)\bDistrict\s*#:\s*\|?\s*(\d{1,2})\b")
+DMI_PHONE = re.compile(r"(?is)\bPhone Number:\s*\|?\s*(\d{3})[-.\s](\d{3})[-.\s](\d{4})\b")
+DMI_MAIL = re.compile(r"(?is)\bEmail Address:\s*\|?\s*([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+)")
 LG_MIN_PHONES = 18      # 21 of 21 today
 LG_MIN_EMAILS = 13      # 16 of 21 today; five supervisors publish none
 
@@ -6605,7 +6610,7 @@ def scrape_langlade_board(spec):
     """All seats or nothing, witnessed by each member's own page and mailbox."""
     county, seats = spec["name"], spec["seats"]
     page = fetch(spec["source_url"])
-    heads = [(m.start(), m.group(1)) for m in LG_HEAD.finditer(page)]
+    heads = [(m.start(), m.group(1)) for m in DMI_HEAD.finditer(page)]
     if len(heads) != 3:
         raise RuntimeError("%s: the page carries %d of its three office headings "
                            "(Chairperson, Vice-Chair, Board Members) — it has "
@@ -6614,7 +6619,7 @@ def scrape_langlade_board(spec):
     out, roles, texts, links = {}, {}, {}, {}
     for n, (start, office) in enumerate(heads):
         end = heads[n + 1][0] if n + 1 < len(heads) else len(page)
-        for m in LG_ROW.finditer(page[start:end]):
+        for m in DMI_ROW.finditer(page[start:end]):
             district = int(m.group("district"))
             if district in out:
                 raise RuntimeError("%s: two rows state district %d (%r and %r)"
@@ -6649,7 +6654,7 @@ def scrape_langlade_board(spec):
         if n:
             time.sleep(0.4)             # 21 pages of somebody else's server
         own = dmi_flat(fetch(links[district]))
-        said_name, said_dist = LG_OWN_NAME.search(own), LG_OWN_DIST.search(own)
+        said_name, said_dist = DMI_OWN_NAME.search(own), DMI_OWN_DIST.search(own)
         if not (said_name and said_dist):
             raise RuntimeError("%s: %s's own page states no Name/District pair — "
                                "the member pages have reshaped and the list's "
@@ -6666,11 +6671,11 @@ def scrape_langlade_board(spec):
                                "disagree about which seat this is"
                                % (county, out[district]["name"], district,
                                   said_dist.group(1)))
-        tel = LG_PHONE.search(own)
+        tel = DMI_PHONE.search(own)
         if tel:
             out[district]["phone"] = "-".join(tel.groups())
             phones += 1
-        mail = LG_MAIL.search(own)
+        mail = DMI_MAIL.search(own)
         if mail:
             # THE DISTRICT-KEYED MAILBOX MUST NAME ITS OWN DISTRICT.
             want = "district%d@%s" % (district, spec["domain"])
@@ -6696,6 +6701,218 @@ def scrape_langlade_board(spec):
           "district; %d/%d mailboxes are the county's own district-keyed address"
           % (county, seats, seats, emails, emails), file=sys.stderr)
     municipality_name_witness(spec["fips"], county, texts, seats)
+    rows = {str(d): r for d, r in out.items()}
+    return attach_unique_roles(roles, rows, county), spec["source_url"]
+
+
+# --- Florence: the same vendor CMS again, with a seat the county leaves empty -
+#
+# THE THIRD COUNTY ON THIS CMS (after Menominee and Langlade), which is why the
+# readers it shares are named DMI_* rather than LG_* now. Its board list carries
+# the same <b>Chairperson</b> / <b>Vice-Chair</b> / <b>Board Members</b>
+# headings over "Surname, Given - District # N" rows, and the same ?i=<hash>
+# page per member restating Name, District #, Phone Number and Email Address.
+#
+# THE PAGE THE RECORD HAD ON FILE WAS THE COUNTY HOME PAGE. Its board list is
+# at /government/boards_and_committees/ — the fifth county running whose roster
+# was one link from a URL this repo already carried.
+#
+# ONE ROW IS A SEAT, NOT A PERSON, AND is_name() WOULD HAVE SHIPPED IT. The
+# county files its empty seat as a member: the list reads "Position, Vacant"
+# and the member page behind it says Name: Vacant Position, District #: 1. Read
+# the way Langlade's rows are read, that flips to "Vacant Position", passes
+# is_name() — two capitalised words — and ships as District 1's supervisor. The
+# vacancy is therefore tested BEFORE the name is built, on both surfaces, and
+# the seat renders as the vacancy it is.
+#
+# THERE IS NO WARD OR MUNICIPALITY WITNESS HERE AND THAT IS A MEASUREMENT.
+# Langlade's rows carry the towns and wards after the district number; Florence
+# writes "- District # 2" and stops, on every row, and no other county surface
+# states a composition either. So the district key rests on the two statements
+# the county does make — the list's row and that member's own page, which must
+# agree — plus the seat set being exactly 1..12. That is weaker than Barron's
+# 63/63 wards and it is what this county publishes; inventing a composition
+# from LTSB's own file to check LTSB with is not a witness.
+#
+# A THIRD COUNTY SURFACE NAMES THE ELEVEN. /government/committees/?committees=
+# <hash> for the County Board lists the members with no districts, and the
+# eleven filled seats must be exactly that set — a check the vacancy would
+# otherwise hide, since a list of eleven under a twelve-seat board looks like a
+# missed row from either direction.
+#
+# SIX OF THE ELEVEN MAILBOXES ARE PERSONAL ADDRESSES — gmail, outlook, yahoo,
+# chartermi.net, florwi.org — and five are on florencecountywi.gov. THE COUNTY
+# PUBLISHES EACH ONE AS THE WAY TO REACH THAT SUPERVISOR, so each ships as
+# published; a county-domain gate of the kind St. Croix's table gets would
+# refuse this county for how its supervisors take mail. For the same reason
+# there is no surname-agreement check on the address here: cskel@chartermi.net
+# is Charles Kellstrom and maddmatt45@yahoo.com is Matt Brunette, and a gate
+# demanding the surname would fail on real, correct rows. NOTE THE COUNTY'S OWN
+# DOMAINS DIFFER: the site is florencecountywi.com and the mailboxes are
+# florencecountywi.gov.
+#
+# EVERY MEMBER PAGE PRINTS A HOME ADDRESS AND NONE IS READ.
+FLORENCE_BOARD = {
+    "fips": "55037", "name": "Florence", "seats": 12,
+    "source_url": "https://www.florencecountywi.com/government/boards_and_committees/",
+    "board_url": ("https://www.florencecountywi.com/government/committees/"
+                  "?committees=8a8ed99cd68d"),
+}
+FL_VACANT_ROW = re.compile(r"(?i)^\s*position\s*,\s*vacant\s*$")
+FL_VACANT_OWN = re.compile(r"(?i)^\s*vacant\s+position\s*$")
+FL_MEMBER_BLOCK = re.compile(r"(?is)County Board Members\s*:?(.*?)(?:<h\d|Minutes)")
+FL_MIN_PHONES = 9           # 11 of 11 filled seats today
+FL_MIN_EMAILS = 9           # 11 of 11
+
+
+def scrape_florence_board(spec):
+    """All 12 seats or nothing, each witnessed by that member's own page."""
+    county, seats = spec["name"], spec["seats"]
+    page = fetch(spec["source_url"])
+    heads = [(m.start(), m.group(1)) for m in DMI_HEAD.finditer(page)]
+    if len(heads) != 3:
+        raise RuntimeError("%s: the page carries %d of its three office headings "
+                           "(Chairperson, Vice-Chair, Board Members) — it has "
+                           "been rebuilt; re-read %s"
+                           % (county, len(heads), spec["source_url"]))
+
+    out, roles, links = {}, {}, {}
+    for n, (start, office) in enumerate(heads):
+        end = heads[n + 1][0] if n + 1 < len(heads) else len(page)
+        for m in DMI_ROW.finditer(page[start:end]):
+            district = int(m.group("district"))
+            if district in out:
+                raise RuntimeError("%s: two rows state district %d" % (county, district))
+            listed = html_lib.unescape(m.group("name"))
+            links[district] = urllib.parse.urljoin(
+                spec["source_url"], html_lib.unescape(m.group("url")))
+            # THE VACANCY IS TESTED BEFORE THE NAME IS BUILT — see the note
+            # above; "Position, Vacant" flips to a plausible person otherwise.
+            if FL_VACANT_ROW.match(listed):
+                out[district] = {"name": None, "vacant": True, "role": None}
+                if office != "Board Members":
+                    raise RuntimeError("%s: district %d is vacant and sits under "
+                                       "the %r heading — an empty seat cannot "
+                                       "hold an office" % (county, district, office))
+                continue
+            name = surname_first(county, listed)
+            # _reads_as_name(), NOT is_name(): district 8 is "John (Jack)
+            # Bomberg" and the per-token test rejects "(Jack)". This file
+            # already answered that for Richland's "Melvin (Bob) Frank" — the
+            # nickname is stripped for the TEST and the county's own spelling
+            # is what ships — so this reuses it rather than loosening is_name,
+            # which a first draft here did and which silently shadowed the
+            # existing NICKNAME pattern.
+            if not _reads_as_name(name):
+                raise RuntimeError("%s: district %d resolved the name %r, which "
+                                   "does not read as a name — re-read %s"
+                                   % (county, district, name, spec["source_url"]))
+            out[district] = {"name": name, "vacant": False, "role": None}
+            if office != "Board Members":
+                roles[district] = office
+
+    seen = sorted(out)
+    if seen != list(range(1, seats + 1)):
+        raise RuntimeError("%s: the page lists districts %s, not 1..%d — the "
+                           "board's composition has changed; re-read %s"
+                           % (county, seen, seats, spec["source_url"]))
+    named = [r["name"] for r in out.values() if not r["vacant"]]
+    if len(set(named)) != len(named):
+        raise RuntimeError("%s: the same person is filed under two districts (%s)"
+                           % (county, sorted({n for n in named if named.count(n) > 1})))
+
+    phones = emails = 0
+    for n, district in enumerate(sorted(out)):
+        if n:
+            time.sleep(0.4)             # 12 pages of somebody else's server
+        own = dmi_flat(fetch(links[district]))
+        said_name, said_dist = DMI_OWN_NAME.search(own), DMI_OWN_DIST.search(own)
+        if not (said_name and said_dist):
+            raise RuntimeError("%s: district %d's own page states no Name/District "
+                               "pair — the member pages have reshaped and the "
+                               "list's district would be unwitnessed (%s)"
+                               % (county, district, links[district]))
+        if int(said_dist.group(1)) != district:
+            raise RuntimeError("%s: the list files district %d and that member's "
+                               "own page says %s — the two county surfaces "
+                               "disagree about which seat this is"
+                               % (county, district, said_dist.group(1)))
+        if out[district]["vacant"]:
+            # THE SECOND SURFACE MUST ALSO SAY EMPTY. A list that still reads
+            # "Position, Vacant" over a page that now names somebody is a seat
+            # that has been filled and half-updated, and shipping the vacancy
+            # would tell that district it has no supervisor when it does.
+            if not FL_VACANT_OWN.match(said_name.group(1)):
+                raise RuntimeError("%s: the list files district %d as vacant and "
+                                   "its own page names %r — the seat may have "
+                                   "been filled; re-read both"
+                                   % (county, district, said_name.group(1).strip()))
+            continue
+        if name_fold(said_name.group(1)) != name_fold(out[district]["name"]):
+            raise RuntimeError("%s: the list files %r where their own page says "
+                               "%r — the two county surfaces disagree about who "
+                               "this is" % (county, out[district]["name"],
+                                            said_name.group(1).strip()))
+        tel = DMI_PHONE.search(own)
+        if tel:
+            out[district]["phone"] = "-".join(tel.groups())
+            phones += 1
+        mail = DMI_MAIL.search(own)
+        if mail:
+            # AS PUBLISHED — see the note above on the six personal addresses.
+            out[district]["email"] = mail.group(1).lower()
+            emails += 1
+
+    live = [d for d, r in out.items() if not r["vacant"]]
+    if phones < FL_MIN_PHONES or emails < FL_MIN_EMAILS:
+        raise RuntimeError("%s: %d phones and %d e-mails across %d filled seats "
+                           "(floors %d/%d) — the member pages have reshaped and "
+                           "contact is being dropped silently"
+                           % (county, phones, emails, len(live),
+                              FL_MIN_PHONES, FL_MIN_EMAILS))
+
+    # THE THIRD SURFACE: the County Board committee page's own member list.
+    try:
+        board = FL_MEMBER_BLOCK.search(fetch(spec["board_url"]))
+    except Exception as e:      # noqa: BLE001 - the witness, never the source
+        print("  WITNESS SKIPPED %-9s the County Board committee page is "
+              "unreachable (%s) — the roster ships without its third surface "
+              "this run" % (county, e), file=sys.stderr)
+        board = None
+    if board:
+        # THE NAMES ARE ANCHOR TEXTS INSIDE TABLE CELLS, not lines: a first
+        # draft split the block on <br> and paragraph tags and compared eleven
+        # flattened <td bgcolor=...> strings against eleven names. The witness
+        # caught it, which is the point of having it.
+        listed = {name_fold(clean(html_lib.unescape(t))[0])
+                  for t in re.findall(r"(?is)<a[^>]*>([^<]{2,60})</a>", board.group(1))
+                  if _reads_as_name(clean(html_lib.unescape(t))[0])}
+        ours = {name_fold(out[d]["name"]) for d in live}
+        if listed != ours:
+            raise RuntimeError(
+                "%s: the County Board page names %s and the district list names "
+                "%s — two county surfaces disagree about who sits on this board"
+                % (county, sorted(listed - ours) or "no one extra",
+                   sorted(ours - listed) or "no one extra"))
+        print("  witness %-12s %d/%d filled seats appear on the county's separate "
+              "County Board page" % (county, len(ours), len(live)), file=sys.stderr)
+
+    vacant = sorted(d for d, r in out.items() if r["vacant"])
+    print("  %-12s %d seats, %d filled, %d phones, %d e-mails (%d of them on the "
+          "county's own domain and the rest personal addresses it publishes as "
+          "the way to reach that supervisor; no home address is read)"
+          % (county, seats, len(live), phones, emails,
+             sum(1 for d in live if (out[d].get("email") or "")
+                 .endswith("@florencecountywi.gov"))), file=sys.stderr)
+    if vacant:
+        print("  note %-12s the county files district %s as an empty seat on BOTH "
+              "its surfaces — the list row reads 'Position, Vacant' and would "
+              "otherwise flip to a plausible person's name"
+              % (county, ", ".join(str(d) for d in vacant)), file=sys.stderr)
+    print("  witness %-12s %d/%d seats' own pages confirm their district; no ward "
+          "or municipality composition is published for this county, so the key "
+          "rests on those two statements and the seat set"
+          % (county, seats, seats), file=sys.stderr)
     rows = {str(d): r for d, r in out.items()}
     return attach_unique_roles(roles, rows, county), spec["source_url"]
 
@@ -8080,6 +8297,7 @@ SINGLE_COUNTY_CARRIERS = (
     (LANGLADE_BOARD, "langlade-board"),
     (BARRON_TABLE, "barron-table"),
     (FOREST_CARDS, "forest-cards"),
+    (FLORENCE_BOARD, "florence-board"),
 )
 
 
@@ -8139,6 +8357,9 @@ def main():
                 source_url, read_from = src["source_url"], "live"
             elif strategy == "forest-cards":
                 districts, _doc = scrape_forest_cards(src)
+                source_url, read_from = src["source_url"], "live"
+            elif strategy == "florence-board":
+                districts, _doc = scrape_florence_board(src)
                 source_url, read_from = src["source_url"], "live"
             elif strategy == "archive":
                 districts, archived_at = scrape_archive_county(src)

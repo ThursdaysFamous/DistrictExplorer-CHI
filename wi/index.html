@@ -8657,8 +8657,8 @@ function initWisconsinExplorer() {
    *
    * THE SUPERVISOR IS NAMED WHERE A COUNTY PUBLISHES ONE, AND NOWHERE ELSE.
    * Wisconsin publishes no statewide roster, so the people come from each
-   * county's own page: 67 of the 72 have a district-keyed member list this
-   * can reach (1,506 seats — 58 read weekly, and NINE carried as dated
+   * county's own page: 68 of the 72 have a district-keyed member list this
+   * can reach (1,518 seats — 59 read weekly, and NINE carried as dated
    * documents in two classes that the card itself distinguishes. Taylor,
    * Lafayette and La Crosse are BLOCKED, their hosts answering a captcha or
    * a Cloudflare challenge to every automated client. Jackson, Richland,
@@ -8666,7 +8666,7 @@ function initWisconsinExplorer() {
    * sites serves this client perfectly well and every one publishes a
    * robots.txt disallowing it, so the crawl stopped on 2026-08-31 and the
    * names stayed, dated — those rows carry their own `asOfWhy` and the card
-   * says the county ASKED rather than refused), and the other 5 publish
+   * says the county ASKED rather than refused), and the other 4 publish
    * prose or images with no district column. ST. CROIX LEFT THAT LIST ON 2026-09-02 AND ITS PAGE
    * NEVER CHANGED EITHER: its home page — the URL this repo itself had on
    * file — links nothing about the board, and its board landing page is prose
@@ -8719,7 +8719,16 @@ function initWisconsinExplorer() {
    * names, so only the first is that seat's — a read that takes the last or
    * joins them ships two thirds of this board wrong with every name on it
    * real. The four "District N - Vacant" headings leak the same way, so the
-   * vacancy test is per HEADING, never per card. CLARK LEFT THAT LIST ON 2026-09-01 AND ITS PAGE NEVER
+   * vacancy test is per HEADING, never per card. FLORENCE FOLLOWED IT THE
+   * SAME DAY, the third county on the vendor CMS Menominee and Langlade run,
+   * and its roster was again one link from a URL this repo already had. ITS
+   * EMPTY SEAT IS FILED AS A MEMBER: the list row reads "Position, Vacant"
+   * and flips to a plausible two-word name if read as a person, so the
+   * vacancy is tested before the name is built and on BOTH county surfaces.
+   * No ward or municipality composition is published anywhere for this
+   * county, so its district key rests on the list and each member's own page
+   * agreeing, plus the seats running exactly 1..12 — weaker than the counties
+   * that print their wards, and said rather than papered over. CLARK LEFT THAT LIST ON 2026-09-01 AND ITS PAGE NEVER
    * CHANGED: its board page names the chair, the vice chair and the clerk, and
    * the other 29 names are eleven pages into the Clerk's Official Directory,
    * which that same site links. A district in an unnamed county keeps the honest card:
