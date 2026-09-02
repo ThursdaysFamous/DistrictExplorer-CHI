@@ -107,8 +107,9 @@ jobs:
       # the dark tier composed over the light one exactly as the cascade does
       # it. It exists because the palette had 54 aria attributes of care behind
       # it and not one number saying its footer meta was legible: light --faint
-      # reads 2.5:1 on white, below even the bar for LARGE text, and dark mode
-      # paints white on a violet that holds it at 2.7:1. Known shortfalls are
+      # reads 2.5:1 on white, below even the bar for LARGE text, dark mode
+      # paints white on violets that hold it at 2.7:1 and 1.9:1, and the skip
+      # link was 1.2:1 in dark until this gate found it. Known shortfalls are
       # recorded WITH their measured value and printed on every run; the gate
       # fails on anything new, on a recorded value that moves in either
       # direction, and on an accepted entry that nothing tests. Stdlib only.
