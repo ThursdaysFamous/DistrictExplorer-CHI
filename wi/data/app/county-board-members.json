@@ -182,6 +182,240 @@
   "phone": "715-325-7329",
   "sourceUrl": "https://www.co.adams.wi.us/government/county-board"
  },
+ "5500501": {
+  "county": "Barron",
+  "district": 1,
+  "email": "scott.bachowski2@co.barron.wi.us",
+  "name": "Scott Bachowski",
+  "phone": "715-931-0502",
+  "sourceUrl": "https://www.co.barron.wi.us/board.cfm"
+ },
+ "5500502": {
+  "county": "Barron",
+  "district": 2,
+  "email": "diane.vaughn@co.barron.wi.us",
+  "name": "Diane Vaughn",
+  "phone": "715-642-2706",
+  "sourceUrl": "https://www.co.barron.wi.us/board.cfm"
+ },
+ "5500503": {
+  "county": "Barron",
+  "district": 3,
+  "email": "mark.eby@co.barron.wi.us",
+  "name": "Mark Eby",
+  "phone": "715-520-0426",
+  "sourceUrl": "https://www.co.barron.wi.us/board.cfm"
+ },
+ "5500504": {
+  "county": "Barron",
+  "district": 4,
+  "email": "dennis.sandmann@co.barron.wi.us",
+  "name": "Dennis Sandmann",
+  "phone": "715-418-9271",
+  "sourceUrl": "https://www.co.barron.wi.us/board.cfm"
+ },
+ "5500505": {
+  "county": "Barron",
+  "district": 5,
+  "email": "karolyn.bartlett@co.barron.wi.us",
+  "name": "Karolyn Bartlett",
+  "phone": "715-837-1039",
+  "role": "Vice Chair",
+  "sourceUrl": "https://www.co.barron.wi.us/board.cfm"
+ },
+ "5500506": {
+  "county": "Barron",
+  "district": 6,
+  "email": "bradley.wolf@co.barron.wi.us",
+  "name": "Bradley Wolf",
+  "phone": "715-651-7947",
+  "sourceUrl": "https://www.co.barron.wi.us/board.cfm"
+ },
+ "5500507": {
+  "county": "Barron",
+  "district": 7,
+  "name": "Bill Schradle",
+  "phone": "715-948-2827",
+  "sourceUrl": "https://www.co.barron.wi.us/board.cfm"
+ },
+ "5500508": {
+  "county": "Barron",
+  "district": 8,
+  "email": "jamie.mccready@co.barron.wi.us",
+  "name": "Jamie McCready",
+  "phone": "715-419-0187",
+  "sourceUrl": "https://www.co.barron.wi.us/board.cfm"
+ },
+ "5500509": {
+  "county": "Barron",
+  "district": 9,
+  "email": "jim.gores@co.barron.wi.us",
+  "name": "Jim Gores",
+  "phone": "715-357-3720",
+  "sourceUrl": "https://www.co.barron.wi.us/board.cfm"
+ },
+ "5500510": {
+  "county": "Barron",
+  "district": 10,
+  "email": "gary.nelson@co.barron.wi.us",
+  "name": "Gary Nelson",
+  "phone": "715-537-5388",
+  "sourceUrl": "https://www.co.barron.wi.us/board.cfm"
+ },
+ "5500511": {
+  "county": "Barron",
+  "district": 11,
+  "email": "carsten.ellison@co.barron.wi.us",
+  "name": "Carsten Ellison",
+  "phone": "715-205-0011",
+  "sourceUrl": "https://www.co.barron.wi.us/board.cfm"
+ },
+ "5500512": {
+  "county": "Barron",
+  "district": 12,
+  "email": "pete.olson@co.barron.wi.us",
+  "name": "Peter Olson",
+  "phone": "715-637-5719",
+  "sourceUrl": "https://www.co.barron.wi.us/board.cfm"
+ },
+ "5500513": {
+  "county": "Barron",
+  "district": 13,
+  "email": "kathy.krug@co.barron.wi.us",
+  "name": "Kathy Krug",
+  "phone": "715-205-1387",
+  "sourceUrl": "https://www.co.barron.wi.us/board.cfm"
+ },
+ "5500514": {
+  "county": "Barron",
+  "district": 14,
+  "email": "carol.moen@co.barron.wi.us",
+  "name": "Carol Moen",
+  "phone": "715-458-2821",
+  "sourceUrl": "https://www.co.barron.wi.us/board.cfm"
+ },
+ "5500515": {
+  "county": "Barron",
+  "district": 15,
+  "email": "fran.langman@co.barron.wi.us",
+  "name": "Fran Langman",
+  "phone": "715-859-2269",
+  "sourceUrl": "https://www.co.barron.wi.us/board.cfm"
+ },
+ "5500516": {
+  "county": "Barron",
+  "district": 16,
+  "email": "louie.okey@co.barron.wi.us",
+  "name": "Louie Okey",
+  "phone": "715-520-7414",
+  "role": "Chair",
+  "sourceUrl": "https://www.co.barron.wi.us/board.cfm"
+ },
+ "5500517": {
+  "county": "Barron",
+  "district": 17,
+  "email": "patti.anderson@co.barron.wi.us",
+  "name": "Patti Anderson",
+  "phone": "715-234-2963",
+  "sourceUrl": "https://www.co.barron.wi.us/board.cfm"
+ },
+ "5500518": {
+  "county": "Barron",
+  "district": 18,
+  "email": "randall.cook@co.barron.wi.us",
+  "name": "Randall Cook Sr.",
+  "phone": "715-761-2231",
+  "sourceUrl": "https://www.co.barron.wi.us/board.cfm"
+ },
+ "5500519": {
+  "county": "Barron",
+  "district": 19,
+  "email": "craig.fowler@co.barron.wi.us",
+  "name": "Craig Fowler",
+  "phone": "715-651-9679",
+  "sourceUrl": "https://www.co.barron.wi.us/board.cfm"
+ },
+ "5500520": {
+  "county": "Barron",
+  "district": 20,
+  "email": "jeff.miller@co.barron.wi.us",
+  "name": "Jeff Miller",
+  "phone": "715-651-6534",
+  "sourceUrl": "https://www.co.barron.wi.us/board.cfm"
+ },
+ "5500521": {
+  "county": "Barron",
+  "district": 21,
+  "email": "lauren.wentz@co.barron.wi.us",
+  "name": "Lauren Wentz",
+  "phone": "330-205-6116",
+  "sourceUrl": "https://www.co.barron.wi.us/board.cfm"
+ },
+ "5500522": {
+  "county": "Barron",
+  "district": 22,
+  "email": "stacey.wenzel@co.barron.wi.us",
+  "name": "Stacey Wenzel",
+  "phone": "715-205-1958",
+  "sourceUrl": "https://www.co.barron.wi.us/board.cfm"
+ },
+ "5500523": {
+  "county": "Barron",
+  "district": 23,
+  "email": "dana.heller@co.barron.wi.us",
+  "name": "Dana Paul Heller",
+  "phone": "715-736-3636",
+  "sourceUrl": "https://www.co.barron.wi.us/board.cfm"
+ },
+ "5500524": {
+  "county": "Barron",
+  "district": 24,
+  "email": "robert.anderson@co.barron.wi.us",
+  "name": "Robert Anderson",
+  "phone": "715-296-2929",
+  "sourceUrl": "https://www.co.barron.wi.us/board.cfm"
+ },
+ "5500525": {
+  "county": "Barron",
+  "district": 25,
+  "email": "pete.schneider@co.barron.wi.us",
+  "name": "Pete Schneider",
+  "phone": "715-205-7717",
+  "sourceUrl": "https://www.co.barron.wi.us/board.cfm"
+ },
+ "5500526": {
+  "county": "Barron",
+  "district": 26,
+  "email": "audrey.kusilek@co.barron.wi.us",
+  "name": "Audrey Kusilek",
+  "phone": "715-205-8843",
+  "sourceUrl": "https://www.co.barron.wi.us/board.cfm"
+ },
+ "5500527": {
+  "county": "Barron",
+  "district": 27,
+  "email": "shelley.effertz@co.barron.wi.us",
+  "name": "Shelley Effertz",
+  "phone": "715-419-2843",
+  "sourceUrl": "https://www.co.barron.wi.us/board.cfm"
+ },
+ "5500528": {
+  "county": "Barron",
+  "district": 28,
+  "email": "craig.turcott@co.barron.wi.us",
+  "name": "Craig Turcott",
+  "phone": "715-671-8280",
+  "role": "2nd Vice Chair",
+  "sourceUrl": "https://www.co.barron.wi.us/board.cfm"
+ },
+ "5500529": {
+  "county": "Barron",
+  "district": 29,
+  "email": "dennis.jenkins@co.barron.wi.us",
+  "name": "Dennis Jenkins",
+  "phone": "715-671-8192",
+  "sourceUrl": "https://www.co.barron.wi.us/board.cfm"
+ },
  "5500701": {
   "county": "Bayfield",
   "district": 1,

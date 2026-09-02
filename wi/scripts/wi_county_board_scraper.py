@@ -6671,6 +6671,249 @@ def scrape_langlade_board(spec):
     return attach_unique_roles(roles, rows, county), spec["source_url"]
 
 
+# --- Barron: the county's OTHER site, one click from the page we already had ---
+#
+# THE COUNTY RUNS TWO SITES AND THE ROSTER IS ON THE ONE NOBODY LOOKED AT.
+# barroncountywi.gov is the modern CMS; its County Board page is 75 KB of prose
+# and names TWO people. www.co.barron.wi.us is the county's older ColdFusion
+# site, where the committee lists, department heads, municipal officers, fire
+# wardens and meeting archives all still live — and /board.cfm is a complete
+# district-keyed table: all 29 districts, each with the municipalities and wards
+# it is made of, its supervisor, a phone, and a county mailbox.
+#
+# THIS FILE HAD BOTH HALVES OF THE ANSWER AND NEVER JOINED THEM. The gap record
+# put Barron among the counties that "answer 503", and the 2026-08-26 sweep that
+# corrected it got as far as the right conclusion — "neither is the county:
+# barroncountywi.gov and co.shawano.wi.us both serve their board pages" — put
+# barroncountywi.gov in build_wi_county_board_directory.py's table, and stopped
+# there. IT NEVER ASKED WHETHER THAT PAGE NAMES ANYONE. It does not; but it
+# LINKS this one, twice, under the anchor text "Individual Contact Information
+# for County Board Supervisors" and "Individual County Board Supervisor Contact
+# Information". That is the St. Croix shape a third time: the page this repo had
+# on file is prose and the table is one click further, behind a link that says
+# exactly what it is. A CORRECTION THAT FIXES A LINK IS NOT A LOOK AT A COUNTY.
+#
+# THE BARE HOST IS NOT THE WWW HOST, and that is why the 503/reset record read
+# as final. co.barron.wi.us resolves to 173.248.55.40 and fails the TLS
+# handshake from here; www.co.barron.wi.us resolves to 173.248.55.39 and answers
+# 200 with the table, reproducibly, over both HTTP/1.1 and h2. WHAT THIS PROJECT
+# CANNOT SAY IS WHY THE BARE ONE FAILS: this sandbox's egress gateway re-signs
+# every certificate, so the chain openssl prints for that host is the proxy's
+# and not the county's, and a reset seen here may be the proxy's too. The
+# scraper's vantage is CI, the record says only what was measured, and the host
+# that ships is the one that answered. (Marathon and Racine taught the same
+# lesson from the other side — a 301 to www that a redirect-following probe
+# recorded as the final 403.)
+#
+# THE DISTRICT NUMBER IS IN THE ROW ABOVE THE SUPERVISOR'S ROW. Each seat is
+# TWO <tr>s: a 3-cell row carrying the number, the composition and a link to
+# that district's map PDF, then a 5-cell row whose first cell is empty and whose
+# other four are name, address, phone and mailbox. A reader that flattens the
+# table and walks cells pairs every supervisor with nothing at all, and one that
+# takes "the first number in the row" pairs them with a house number. So the
+# rows are paired explicitly, and a 3-cell row that is not followed by its
+# 5-cell partner fails the county rather than shifting the rest by one — the
+# Franklin grid trap in a different vendor's markup.
+#
+# THE ADDRESS COLUMN IS NEVER READ. It is 28 home addresses (District 2's cell
+# is the literal string ",", which is what a supervisor who publishes none looks
+# like here). No county in this fleet ships one.
+#
+# THE OFFICER BLOCK STATES ITS THREE ROLES TWICE, IN TWO FORMATS, and both are
+# required to agree: a list ("Louie Okey, Chairman") and the photo caption below
+# it ("L-R: Louie Okey-Chair, ..."). Two renderings of one fact on one page is a
+# weaker witness than two pages, and it is what this county publishes; it would
+# still catch the caption and the list drifting apart, which is how a board that
+# has re-organised usually looks before someone updates both.
+BARRON_TABLE = {
+    "fips": "55005", "name": "Barron", "seats": 29,
+    "source_url": "https://www.co.barron.wi.us/board.cfm",
+    "domain": "co.barron.wi.us",
+}
+BR_ROW = re.compile(r"(?is)<tr[^>]*>(.*?)</tr>")
+BR_CELL = re.compile(r"(?is)<t[dh][^>]*>(.*?)</t[dh]>")
+BR_MAIL = re.compile(r"(?i)\b([A-Za-z0-9._%+-]+@co\.barron\.wi\.us)\b")
+BR_PHONE = re.compile(r"(?<!\d)(\d{3})[-.\s](\d{3})[-.\s](\d{4})(?!\d)")
+# "Louie Okey, Chairman" — the list. The caption is "Louie Okey-Chair".
+BR_LIST_ROLE = re.compile(r"(?i)([A-Z][A-Za-z.'\-]+(?:\s+[A-Z][A-Za-z.'\-]+){1,3})\s*,\s*"
+                          r"((?:2nd\s+)?(?:Vice\s+)?Chair(?:man|person|woman)?)\b")
+BR_CAPTION_ROLE = re.compile(r"(?i)([A-Z][A-Za-z.'\-]+(?:\s+[A-Z][A-Za-z.'\-]+){1,3})\s*-\s*"
+                             r"((?:2nd\s+)?(?:Vice\s+)?Chair(?:man|person|woman)?)\b")
+BR_MIN_EMAILS = 26          # 28 of 29 today; District 7 publishes none
+BR_MIN_PHONES = 27          # 29 of 29 today
+BR_MIN_WARD_PAIRS = 55      # 63 today, and 63 is the whole of what this page
+                            # can give: nine of the 29 districts name a
+                            # municipality with NO ward (District 4 is
+                            # "Town of Prairie Lake" entire), which
+                            # contributes to the municipality-set check and
+                            # to no ward pair. The first floor here was 90,
+                            # guessed from St. Croix's 131 rather than
+                            # measured, and it failed the county on its own
+                            # invention — a floor is a measurement of what
+                            # the source publishes, never a target for it.
+
+
+def _br_flat(cell):
+    """One table cell as text."""
+    cell = re.sub(r"(?i)<br\s*/?>", " ", cell)
+    cell = re.sub(r"<[^>]+>", " ", cell)
+    return re.sub(r"\s+", " ", html_lib.unescape(cell).replace("\xa0", " ")).strip()
+
+
+def _br_role(text):
+    """{name: role} from one rendering of the officer block."""
+    out = {}
+    for pattern in (BR_LIST_ROLE, BR_CAPTION_ROLE):
+        got = {}
+        for who, what in pattern.findall(text):
+            got[clean(who)[0]] = re.sub(r"\s+", " ", what).strip()
+        if got:
+            out.setdefault(id(pattern), got)
+    return out
+
+
+def scrape_barron_table(spec):
+    """All 29 seats or nothing, out of the county's own board.cfm table."""
+    county, seats = spec["name"], spec["seats"]
+    page = fetch(spec["source_url"])
+
+    rows = BR_ROW.findall(page)
+    if not rows:
+        raise RuntimeError("%s: no table rows on %s — the page has been rebuilt; "
+                           "re-read it" % (county, spec["source_url"]))
+
+    out, wards, munis, numbers, pending = {}, {}, {}, {}, None
+    for row in rows:
+        cells = [_br_flat(c) for c in BR_CELL.findall(row)]
+        raw = BR_CELL.findall(row)
+        if len(cells) == 3 and re.fullmatch(r"\d{1,2}", cells[0]):
+            if pending is not None:
+                raise RuntimeError(
+                    "%s: district %s's row is followed by another district row "
+                    "rather than by its supervisor — the two-row pairing has "
+                    "broken and every seat below would shift" % (county, pending[0]))
+            pending = (cells[0], cells[1])
+            continue
+        if len(cells) == 5 and cells[0] == "" and pending is not None:
+            district = int(pending[0])
+            name = clean(cells[1])[0]
+            if not is_name(name):
+                raise RuntimeError("%s: district %d resolved the name %r — that is "
+                                   "not a name, and the columns have shifted"
+                                   % (county, district, name))
+            entry = {"name": name, "vacant": False, "role": None}
+            # CELL 2 IS THE HOME ADDRESS AND IS NOT READ.
+            got = BR_PHONE.search(cells[3])
+            if got:
+                numbers[district] = ["-".join(got.groups())]
+            mail = BR_MAIL.search(raw[4])
+            if mail:
+                entry["email"] = mail.group(1).lower()
+            wards[district], munis[district] = parse_composition(pending[1])
+            if not munis[district]:
+                raise RuntimeError("%s: district %d's composition names no "
+                                   "municipality (%r) — that column is what "
+                                   "witnesses the numbering, so this cannot ship "
+                                   "unchecked" % (county, district, pending[1][:80]))
+            out[district] = entry
+            pending = None
+    if pending is not None:
+        raise RuntimeError("%s: district %s's row has no supervisor row after it — "
+                           "the table ends mid-seat" % (county, pending[0]))
+
+    seen = sorted(out)
+    if seen != list(range(1, seats + 1)):
+        raise RuntimeError("%s: the table lists districts %s, not 1..%d — re-read "
+                           "%s" % (county, seen, seats, spec["source_url"]))
+
+    drop_shared_phones(county, numbers, out)
+
+    names = [r["name"] for r in out.values()]
+    if len(set(names)) != len(names):
+        dupes = sorted({n for n in names if names.count(n) > 1})
+        raise RuntimeError("%s: the same person is filed under two districts (%s)"
+                           % (county, dupes))
+
+    emails = sum(1 for r in out.values() if r.get("email"))
+    phones = sum(1 for r in out.values() if r.get("phone"))
+    agree = sum(1 for r in out.values() if r.get("email")
+                and name_fold(r["name"].split()[-1]) in name_fold(r["email"].split("@")[0]))
+    if emails < BR_MIN_EMAILS or phones < BR_MIN_PHONES:
+        raise RuntimeError("%s: %d e-mails and %d phones across %d seats (floors "
+                           "%d/%d) — the contact columns have reshaped and contact "
+                           "is being dropped silently"
+                           % (county, emails, phones, seats,
+                              BR_MIN_EMAILS, BR_MIN_PHONES))
+    if agree < emails - 1:
+        raise RuntimeError("%s: only %d of %d mailboxes carry their own "
+                           "supervisor's surname — a row has shifted"
+                           % (county, agree, emails))
+
+    # THE OFFICER BLOCK, STATED TWICE ON THE PAGE IN TWO FORMATS.
+    head = page[:page.index("board.cfm") if "board.cfm" in page else len(page)]
+    block = _br_flat(page[:page.index("Related Documents")]) \
+        if "Related Documents" in page else _br_flat(page)
+    listed = {clean(w)[0]: re.sub(r"\s+", " ", r).strip()
+              for w, r in BR_LIST_ROLE.findall(block)}
+    caption = {clean(w)[0]: re.sub(r"\s+", " ", r).strip()
+               for w, r in BR_CAPTION_ROLE.findall(block)}
+    if not listed or not caption:
+        raise RuntimeError("%s: the officer block no longer states its roles both "
+                           "ways (list %s, caption %s) — it is the only check on "
+                           "who chairs this board" % (county, listed, caption))
+    if set(listed) != set(caption):
+        raise RuntimeError("%s: the officer list names %s and the photo caption "
+                           "names %s — the page's two statements disagree and "
+                           "neither is guessed at"
+                           % (county, sorted(listed), sorted(caption)))
+    for who, what in list(listed.items()):
+        low = what.lower()
+        norm = ("2nd Vice Chair" if low.startswith("2nd")
+                else "Vice Chair" if "vice" in low else "Chair")
+        cap = caption[who].lower()
+        cap_norm = ("2nd Vice Chair" if cap.startswith("2nd")
+                    else "Vice Chair" if "vice" in cap else "Chair")
+        if norm != cap_norm:
+            raise RuntimeError("%s: %s is %r in the list and %r in the caption"
+                               % (county, who, what, caption[who]))
+        listed[who] = norm
+    del head
+
+    # THE OFFICER BLOCK NAMES PEOPLE; attach_unique_roles() KEYS ON DISTRICTS.
+    # The first draft here passed the name-keyed dict straight in, and it did
+    # exactly nothing: every lookup was districts.get("Louie Okey"), every miss
+    # was silent, and the run printed three officers it had not attached while
+    # all 29 seats, both witnesses and every count guard stayed green. So the
+    # join is explicit and it FAILS rather than shrugging — an officer the
+    # table does not name, or names twice, is a page that has moved out from
+    # under this reader, not a title to drop quietly. The join is printed each
+    # run, the way Vermilion's surname flip and Clay's role join are.
+    by_district = {}
+    for who, role in sorted(listed.items()):
+        hits = [d for d, r in out.items() if name_fold(r["name"]) == name_fold(who)]
+        if len(hits) != 1:
+            raise RuntimeError("%s: the officer block names %r as %s and the "
+                               "table matches %d supervisors — a role is never "
+                               "attached to a guess"
+                               % (county, who, role, len(hits)))
+        by_district[hits[0]] = role
+        print("  join %-12s %s (%s) -> district %d"
+              % (county, who, role, hits[0]), file=sys.stderr)
+
+    print("  %-12s %d seats, %d phones, %d e-mails (the address column is 28 "
+          "home addresses and is never read)"
+          % (county, seats, phones, emails), file=sys.stderr)
+    print("  witness %-12s %d/%d mailboxes carry their own supervisor's surname; "
+          "officers %s stated twice on the page and agreeing"
+          % (county, agree, emails,
+             ", ".join("%s (%s)" % (k, v) for k, v in sorted(listed.items()))),
+          file=sys.stderr)
+    ward_number_witness(spec["fips"], county, wards, seats,
+                        min_pairs=BR_MIN_WARD_PAIRS, munis=munis)
+    rows_out = {str(d): r for d, r in out.items()}
+    return attach_unique_roles(by_district, rows_out, county), spec["source_url"]
+
+
 # --- Waupaca: the Clerk's Directory of Public Officials, as a live page --------
 #
 # THE COUNTY BOARD'S OWN PAGE NAMES NOBODY. waupacacounty-wi.gov's
@@ -7581,6 +7824,7 @@ SINGLE_COUNTY_CARRIERS = (
     (CHIPPEWA_DIRECTORY, "chippewa-directory"),
     (MENOMINEE_BOARD, "menominee-board"),
     (LANGLADE_BOARD, "langlade-board"),
+    (BARRON_TABLE, "barron-table"),
 )
 
 
@@ -7634,6 +7878,9 @@ def main():
                 source_url, read_from = src["source_url"], "live"
             elif strategy == "langlade-board":
                 districts, _doc = scrape_langlade_board(src)
+                source_url, read_from = src["source_url"], "live"
+            elif strategy == "barron-table":
+                districts, _doc = scrape_barron_table(src)
                 source_url, read_from = src["source_url"], "live"
             elif strategy == "archive":
                 districts, archived_at = scrape_archive_county(src)

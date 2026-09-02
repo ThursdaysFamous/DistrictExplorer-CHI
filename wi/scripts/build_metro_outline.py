@@ -117,7 +117,8 @@ TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
 # county-board-members.json, in BOTH directions, and it runs on every PR with
 # no network. A rule with no gate is a comment.
 METRO_COUNTY_FIPS = (
-    "001", "007", "009", "011", "013", "015", "017", "019",
+    "001", "005", "007", "009", "011", "013", "015", "017",
+    "019",
     "021", "023", "025", "027", "029", "033", "035", "039",
     "043", "045", "047", "049", "053", "055", "057", "059",
     "061", "063", "065", "067", "069", "071", "073", "075",
@@ -190,6 +191,7 @@ SIMPLIFY_TOLERANCE_M = 25
 # Representative points taken from the shipped TIGER county geometry.
 INSIDE = {
     "Adams": (43.94586, -89.77671),
+    "Barron": (45.42366, -91.84865),
     "Bayfield": (46.6808, -91.18773),
     "Brown": (44.46004, -87.97772),
     "Buffalo": (44.31089, -91.72133),
@@ -257,7 +259,6 @@ INSIDE = {
 }
 OUTSIDE = {
     "Ashland": (46.64701, -90.68578),
-    "Barron": (45.42366, -91.84865),
     "Douglas": (46.52585, -91.92275),
     "Florence": (45.86728, -88.37551),
     "Forest": (45.72458, -88.86156),

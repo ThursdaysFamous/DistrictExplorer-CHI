@@ -103,6 +103,22 @@ every one of them a link that PASSED the sweep that built this table:
     co.shawano.wi.us both serve their board pages to this client. A HOST IS
     NOT A COUNTY (Illinois learned the same thing at Knox).
 
+    BARRON, 2026-09-02: THAT FIX WAS RIGHT AND IT STOPPED AT THE FRONT DOOR.
+    Finding the host that serves a county's board page is not the same as
+    reading it, and this line went in without anyone asking whether the page
+    NAMES ANYONE. It does not — 75 KB of prose and two people — so Barron
+    stayed in the "publishes no district-keyed member list" gap for a week
+    while its own board page linked the roster twice, as "Individual Contact
+    Information for County Board Supervisors". That table lives on the
+    county's OTHER site, www.co.barron.wi.us/board.cfm: all 29 districts with
+    their wards, supervisor, phone and county mailbox, now the scraper's
+    source. Two further corrections came with it. The bare host and the www
+    host are DIFFERENT ADDRESSES (173.248.55.40 and .39) and only the bare one
+    fails, so "co.barron.wi.us resets" was true of a host and read as true of
+    a site. And WHY it fails is not something this project can state from
+    here: the sandbox's egress gateway re-signs every certificate, so a chain
+    read from this vantage is the proxy's, and a reset seen here may be too.
+
 Only ONE of the six was reachable-but-wrong in a way a status check could
 ever have seen. The other five are the hollow-page class scripts/
 validate_card_links.py already measures for the Illinois cards and that this
@@ -150,7 +166,7 @@ EXPECT_COUNTIES = 72
 COUNTY_SITES = {
     "55001": ("Adams", "https://www.co.adams.wi.us/"),
     "55003": ("Ashland", "https://ashlandcountywi.gov/"),
-    "55005": ("Barron", "https://www.barroncountywi.gov/index.asp?SEC=%7bB7F5AB49-3697-4A2E-8327-26847A43F33E%7d&Type=B_BASIC"),  # its County Board page; co.barron.wi.us resets, see the docstring
+    "55005": ("Barron", "https://www.barroncountywi.gov/index.asp?SEC=%7bB7F5AB49-3697-4A2E-8327-26847A43F33E%7d&Type=B_BASIC"),  # the county's canonical County Board page. It names two people and LINKS the table that names all 29, on the county's other site — see the docstring; wi_county_board_scraper.py reads that one
     "55007": ("Bayfield", "https://bayfieldcounty.wi.gov/295/Board-of-Supervisors"),  # county page confirms 1..13
     "55009": ("Brown", "https://www.browncountywi.gov/government/county-board-of-supervisors/"),  # county page confirms 1..26
     "55011": ("Buffalo", "https://www.buffalocountywi.gov/"),
@@ -354,13 +370,35 @@ def _cross_check_scraper_hosts():
         # below describes, so the card keeps linking the county's own site while
         # the roster is read from the Clerk's.
         "55135": "the county's own site and the Clerk's directory of officials",
+        # Barron is the third, and it is the reason this gate now reads the
+        # single-county carriers too. barroncountywi.gov is the county's
+        # canonical County Board page and names two people; the table naming
+        # all 29 is on the county's OTHER site, www.co.barron.wi.us/board.cfm,
+        # which that page links twice. Both are the county's, both answer, and
+        # each is right for its own job — the card sends a reader to the board
+        # page, the scraper reads the roster.
+        "55005": "the county's board page and the roster table it links on the "
+                 "county's other site",
     }
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     try:
         from wi_county_board_scraper import COUNTIES as SCRAPED
+        from wi_county_board_scraper import SINGLE_COUNTY_CARRIERS
     except ImportError as e:  # pragma: no cover - the scraper is stdlib-only
         raise RuntimeError("cannot import wi_county_board_scraper to cross-check "
                            "hosts (%s)" % e)
+
+    # THE CARRIERS THIS GATE COULD NOT SEE. It compared COUNTIES alone, so the
+    # eight counties read by a carrier of their own — Clark, Pierce, Marathon,
+    # St. Croix, Chippewa, Menominee, Langlade, Barron — were outside it
+    # entirely, and a directory link that went stale for any of them would have
+    # gone on pointing readers at a dead page with this gate reporting a count
+    # and no disagreement. Barron is how that surfaced: it is a real two-host
+    # county, and the gate whose whole job is to notice two hosts never saw it.
+    # A gate's own coverage is a claim, and this one was never measured.
+    SCRAPED = list(SCRAPED) + [
+        (spec["fips"], spec["name"], spec.get("seats"), None, spec["source_url"])
+        for spec, _strategy in SINGLE_COUNTY_CARRIERS]
 
     def host(url):
         h = urllib.parse.urlparse(url).netloc.lower()
