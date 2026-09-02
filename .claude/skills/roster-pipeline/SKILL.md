@@ -235,6 +235,7 @@ workflow passes nothing. Iowa: one state aggregate, every file and workflow
 ## 11. Nevers
 
 - Never floor a count the source states exactly; never lower a floor to get a build to write.
+- Never derive a floor from another unit's document — count the field on the page in front of you and put the measured figure in the comment; a guessed floor failed a correct county and reads exactly like the publisher having broken something.
 - Never invent a field the page does not publish; never add a field the card does not render and call it shipped.
 - Never import shapely, pypdf or requests anywhere in a script a workflow runs directly — the entry point is walked whole; a module it imports keeps such imports function-local.
 - Never carry a districted county forward; never treat a zero parse as an empty board.

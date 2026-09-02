@@ -60,6 +60,16 @@ strings inside a site's own JavaScript bundle for other hosts it names.
 sheriff and treasurer — before it goes in any record; results carry same-name
 counties in other states and same-name businesses.
 
+**An aggregate is not its records — open ONE before concluding a field is
+absent.** A staff directory of 213 mailboxes can contain the word *district*
+zero times while every member's own entry states their district and the wards
+it is made of, and a board page listing every supervisor with no district can
+LINK all of those entries in the anchors the names were read out of. A summary
+view is compiled for a purpose that is not yours. One level down, the same
+rule: read the page BODY, not its navigation. And try BOTH prefixes — `www.`
+and bare are a per-county measurement, one county answering on each, so a
+record naming one has tested half the front door.
+
 **The catalogue query that needs nothing from the county.** An unauthenticated
 search of `arcgis.com/sharing/rest/search` for the county's name finds the GIS
 org a county's own site never links — Vermilion's 26 services were found this
@@ -273,8 +283,10 @@ lints; the unbounded `blocker` field holds every host, date and status;
 `blocked` / `data-quality`). Record the blocker you MEASURED, in its
 vocabulary — unresponsive, licence-gated, split-precinct, raster-only are
 different claims with different routes out; "no source exists" is almost never
-one of them. When a build disproves its own record, rewriting the record is
-part of the build.
+one of them — and in the four-part form the gap-record skill requires: the URL
+tried, the client, the date, what came back, concluding about that URL and
+never about the county. When a build disproves its own record, rewriting the
+record is part of the build.
 
 Then, in order:
 

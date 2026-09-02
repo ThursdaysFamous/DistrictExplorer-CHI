@@ -2100,6 +2100,34 @@ states once and generally.
 measurement of a WEBSITE as a fact about an AGENCY.** It has now happened in both states,
 at county scale and at state scale, and it has been expensive every time.
 
+**AND THE RULE ABOVE, WRITTEN HERE FIRST, DID NOT STOP IT HAPPENING EIGHT MORE TIMES.**
+On 2026-09-02 Wisconsin's last eight counties shipped in a day — Lincoln, Barron, Forest,
+Florence, Sawyer, Ashland, Douglas, Iron — and **not one of them had started publishing
+anything new**. Every one was already publishing when this project recorded that it was
+not. So the failure is not that the rule was unknown; it is that the rule is a conclusion
+and the records were written in a form no later reader could check it against. Hence:
+
+> **THE FORM OF A BLOCKER RECORD IS A RULE, NOT A STYLE.** A blocker must carry the URL
+> tried, the CLIENT it was tried with, the DATE, and WHAT CAME BACK — and it must state
+> its conclusion **about that URL**, never about the body. "Forest does not resolve" is
+> unfalsifiable and was wrong; "GET `https://co.forest.wi.gov/` with the pinned browser
+> headers on 2026-08-25 → 200, zero occurrences of `district`" is a fact, and the next
+> reader sees at a glance that ONE address was tried. Every one of the eight records was
+> accurate about its page and false as written. The unbounded `blocker` field exists
+> precisely to hold this; nothing about it is too long.
+
+Two corollaries the same day earned:
+
+- **Finding the host that serves a board page is not reading it.** Barron's record was
+  *corrected* a week before it shipped — a sweep found the working host and put it in the
+  directory table — and nobody opened the page. It is 75 KB of prose naming two people,
+  and it LINKS the roster twice, under anchor text that says exactly what it is. **A
+  correction that fixes a link is not a look at a county**, and the fix must end with the
+  question the record answers: does this page NAME anyone?
+- **The direction of a working prefix is a per-county measurement.** Barron answers on
+  `www.` and fails bare; Forest answers bare and fails on `www.`. Neither is a default,
+  and a record naming one without the other has tested half the county's front door.
+
 - **A blocked website is not a blocked agency.** Knox County's record said its site
   "refuses every request" — true of the website, written as though it described the county.
   Knox has four hosts: the site denies, its GIS server serves freely, its CMS serves the
@@ -2196,6 +2224,18 @@ at county scale and at state scale, and it has been expensive every time.
   inside a single district. Before writing a county off for want of a precinct-to-district
   TABLE, check whether it publishes the two LAYERS.
 
+- **AN AGGREGATE IS NOT ITS RECORDS, and an index is not the document.** This is the
+  navigation rule one level up, and it cost Wisconsin its last county. Iron's own staff
+  directory — 832 KB, 213 mailboxes — contains the word *district* **zero times**, and its
+  board page lists all fifteen seats with their titles and no districts. Both were
+  read, both readings were correct, and the county was recorded as publishing no
+  district-keyed roster. Every one of its fourteen filled seats has an entry in that same
+  directory stating its district and the towns and wards the district is made of, and the
+  board page **links all fourteen, in the anchors the names were read out of**. A summary view is
+  compiled for a purpose that is not yours; when a listing omits the field you need,
+  **open one record before concluding the field is absent**. The same day, on the same
+  CMS, another county's per-member pages had been enumerated an hour earlier — so the
+  method was known and simply not applied to the county that needed it.
 - **Read the page BODY, not its navigation.** Iowa's auditor scraper shipped with a docstring
   saying the Secretary of State published no readable statewide roster because the page "links
   out to each county's own page rather than listing names itself". The page's county DROPDOWN is
@@ -2254,6 +2294,26 @@ at county scale and at state scale, and it has been expensive every time.
   MEMBER` vs `CO. BD. MEMBER D8`), so searching one vocabulary returned zero matches in a
   report that carried three such contests. The plausible explanation already written into
   this project's own docs was wrong, and measuring it was what showed that.
+- **An independent witness disagreeing has THREE explanations, not two.** Wisconsin checks
+  every county's published ward composition against the state's own ward layer, and the
+  first version sorted each unmatched ward into "the county is wrong" or "the state is
+  wrong". Both were wrong for Marathon: its composition names City of Marshfield wards 1-3,
+  the state files Marathon's Marshfield as 12, 16 and 19, and 1-3 exist under **Wood**
+  County, because the city straddles the line. So an unmatched unit is one of three things
+  — it sits elsewhere in the same county under a different spelling, it sits in a
+  NEIGHBOURING county because its municipality crosses the border, or it exists nowhere —
+  and only the third is evidence about the document. Costing one extra query, and only when
+  there is something to explain, the check now says which; before that it printed a
+  confident wrong explanation weekly. **A witness that can only say "mismatch" will be read
+  as saying "the source is stale."**
+- **A floor is a measurement of what a source publishes, never a target for it.** Every
+  scraper floors its counts so a silently-emptied field fails the weekly run. Barron's ward
+  floor was set to 90 by scaling from ANOTHER county's document; Barron publishes 63,
+  and a correct build failed on a number this project invented. Count the field on the page
+  in front of you, set the floor a little under THAT, and write the measured figure in the
+  comment ("25 today: five districts are whole municipalities carrying no ward number").
+  A floor derived from another unit is a guess wearing a gate's clothes — and the failure
+  it produces looks exactly like the publisher having broken something.
 
 ## 5.3 What the card is allowed to say
 
@@ -2401,6 +2461,47 @@ at county scale and at state scale, and it has been expensive every time.
   wrong for weeks in ways nothing could catch, because the thing they described was a
   website, a name, or an assumption. When a build disproves its own gap record, rewriting
   that record is part of the build, not follow-up work.
+- **A gate's own coverage is a claim nobody measured.** Every gate here answers "is X
+  true of the things I look at", and what it looks at is a list somebody wrote once.
+  Three fired on the same day. Wisconsin's robots gate proved every scraped host is
+  permitted, and could not see a host moved onto the excluded list and left registered as
+  a live carrier. The directory cross-check compared 41 counties against the scraper and
+  was blind to the 8 that ride a different table, so a wrong hostname in either could not
+  disagree with the other. And `validate_index.py` checks that each data file sits in
+  exactly ONE of the service worker's two lists — a real question, and a different one
+  from whether the cache version moved, so five merged PRs rewrote a cache-first file
+  and none bumped it. **Ask of every gate: what is IN its surface, how did it get there,
+  and what is the shape of the thing that would be outside it?** Then negative-test the
+  surface itself — remove a known-good entry and confirm the gate notices — not only the
+  rule. **A gate's EXCEPTION list is part of that surface.** The retention gate's accepted
+  drops are consulted only where a diff observes the field going away, so the day after the
+  drop merges nothing observes it and the exception goes silent forever — a permanent hole
+  in the gate with no line anywhere saying so, and a docstring claiming the opposite. Every
+  exception list in this repo now re-checks itself against the SHIPPED tree and fails on an
+  entry that is orphaned (its file or its source is gone) or stale (the thing it excused is
+  back), which `validate_card_links.py` and `validate_contrast.py` already did.
+- **A check that has never failed has not been tested, and neither has a retry path.**
+  The cache gate above was written, its negative test passed, and it failed on its first
+  real use: it read the committed `HEAD` where a merge gate must read the working tree,
+  and in CI those are identical, which is exactly how such a gate looks green forever
+  while measuring nothing. Its negative test had passed for the wrong reason too — the
+  file it perturbed happened to be current on `main`, so nothing differed. The same shape
+  with the opposite sign: a scraper's live-retry path, guarded by "this county will
+  probably keep refusing", carried a crash for weeks and ran **on the single day the
+  county's challenged page answered** — a rung that exists for one day in a hundred must
+  be exercised on the other ninety-nine, by forcing it. Prove a failure the gate must
+  catch, on the tree shape it will actually see; a green you have not made go red is a
+  green you have not read.
+- **Before changing shared code, look for the shared answer.** A name-validity helper
+  used by every county was loosened to admit one county's `John (Jack) Bomberg`, whose
+  per-token test rejects `(Jack)`; the change shadowed an existing nickname pattern and
+  broke name detection fleet-wide. The file already contained a helper written for exactly
+  that class of name — a parenthesised nickname, stripped for the TEST while the county's
+  own spelling ships — added for another county's `Melvin (Bob) Frank` weeks earlier. The
+  cost is not the bug — that was caught in minutes — it is that a shared function is the
+  one place where a local fix is a fleet-wide change, and the second implementation is
+  usually already there. **Grep the shared module for the problem before editing it for
+  the case.**
 
 ---
 
@@ -2496,20 +2597,39 @@ Run these before every merge; `smoke-test.yml` runs them on every PR and push to
 | `node <tag>/scripts/smoke_test.mjs` | boot, exact layer count, ground-truth classification, negative point, failure isolation, coverage-hide, permalink stability |
 | `build_coverage_gaps.py --check` | a gap record that drifted from the guidebook |
 | `check_roster_retention.py --base origin/main` | a roster field that silently stopped being published |
+| `check_cache_version.py --base origin/main` | a cache-first data file changed without its instance's `CACHE_NAME` |
 | `validate_sources.py` | a superseded dataset, a dead source, a `blocked` source becoming reachable |
 | `validate_card_links.py` | a URL a reader would click that no longer resolves |
 | `validate_workflow_deps.py` | an instance script importing outside its own tree |
 | `build_landing_page.py` / `build_privacy_page.py` / `build_manifests.py` / `build_dark_map_palette.py` `--check` | root and per-instance generated pages, and a layer colour with no dark twin |
 | `landing_test.mjs` / `page_consistency_test.mjs` | the root's generated pages in a real browser |
 
-**Two gates deserve their reasoning.** `check_roster_retention.py` exists because every
+**Three gates deserve their reasoning.** `check_roster_retention.py` exists because every
 other roster guard floors a COUNT: a county's seven published e-mail addresses once went
 empty while seven rows in, seven rows out kept every floor satisfied. It measures **per
 source**, not per file — pooled across a shared roster file, one county's vanishing column
-reads as an 18% dip that passes everything. And `validate_sources.py` inverts for sources
+reads as an 18% dip that passes everything; and its `ACCEPTED_DROPS` entries are re-audited
+against the shipped tree every run, so an exception cannot outlive its reason in silence.
+And `validate_sources.py` inverts for sources
 carrying `"blocked"`: unreachable is reported OK and **reachable-again is the WARN**, because
 that is the state a human can act on. Without the flag the monthly issue reopens with the
 same no-op warnings forever, which is how a report stops being read.
+
+`check_cache_version.py` guards the one thing a cache-first policy costs, and it is the
+gate an expansion is most likely to need. **Cache-first data has a second, invisible
+shipping step.** Each instance's service worker serves rosters network-first, so a changed
+officeholder reaches a returning visitor at once, and serves boundary geometry cache-first,
+which is instant and works offline and reaches that visitor **only when `CACHE_NAME`
+changes**. `metro-outline.json` — the coverage wash — is cache-first, and every county a
+state adds rewrites it. Wisconsin added seven counties across five PRs; every one rewrote
+that ring, none bumped the cache, and returning visitors got the new supervisors on their
+cards and the old wash on their map, **greying out the very counties that had just been
+added** — the app contradicting itself with every gate green. The gate takes the cache-first
+list from the BASE's `sw.js`, because that is what a returning visitor already holds; it
+asks for no bump on network-first files, whose weekly roster PRs would turn the bump into
+noise nobody reads; and it requires a DIFFERENT name, not an increment, because any
+different name evicts the old cache. **For an expansion the rule is simply: if the change
+touches a file in `GEOMETRY_URLS`, the same change bumps `CACHE_NAME`.**
 
 ## 6.6 Post-expansion operations
 
