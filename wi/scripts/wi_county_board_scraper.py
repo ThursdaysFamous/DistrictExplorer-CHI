@@ -935,6 +935,7 @@ import html as html_lib
 import io
 import json
 import os
+import random
 import re
 import ssl
 import sys
@@ -2508,6 +2509,44 @@ ARCGIS_COUNTIES = [
                         "services/Milwaukee_County_Supervisory_Districts/FeatureServer/46"),
         "witness": {"client": "milwaukeecounty", "body_id": 138},
     },
+    # LINCOLN (2026-09-02) — THE ENCLAVE THAT WAS NEVER A BLOCKED COUNTY.
+    # www.co.lincoln.wi.us sits behind a Cloudflare MANAGED challenge
+    # (`cf-mitigated: challenge`, not the flat Akamai deny this file records
+    # elsewhere) and refuses every client here, /media/<id> documents included.
+    # Its robots.txt answers 200 and permits them; the challenge is what
+    # refuses. THE COUNTY IS NOT ITS WEBSITE: maps.co.lincoln.wi.us is a
+    # second host on a different address, off the Cloudflare edge, running a
+    # public ArcGIS Server whose WebMerc_Admin service is titled
+    # "Administrative Layers for Lincoln County WI" and whose layer 5 is
+    # Supervisor Districts — with SupervisorName and SupervisorPhone on every
+    # one of the 22. Its ROOT is a stock IIS splash, the hollow-page class
+    # build_wi_county_board_directory.py already records, which is why a
+    # status sweep would have called the host nothing.
+    #
+    # A SECOND PUBLISHER AGREES ON THE PEOPLE: the Blue Book (April 2025)
+    # gives Lincoln 22 seats and names Jesse Boyd its board chair; the layer
+    # has 22 districts and its district 10 is Jesse Boyd. That is what rules
+    # out the Coles case — a layer whose roster column is a stale snapshot.
+    #
+    # AND ONE SEAT IS WITHHELD BECAUSE THE TWO PUBLISHERS DRAW IT DIFFERENTLY.
+    # See district_geometry_witness(): Town of Merrill ward 2 is district 21
+    # in LTSB's filing and district 9 on the county's own map. The card reads
+    # the reader's district from LTSB's geometry, so on that ground it would
+    # name district 21's supervisor while the county says the seat is
+    # district 9's. Twenty-one seats ship; that one names nobody and says why.
+    {
+        "fips": "55069", "name": "Lincoln", "seats": 22,
+        "layer": ("https://maps.co.lincoln.wi.us/arcgis/rest/services/"
+                  "WebMerc_Admin/MapServer/5"),
+        "fields": {"district": "SuperID_Numeric", "name": "SupervisorName",
+                   "phone": "SupervisorPhone", "url": "SuperIDLink"},
+        "source_url": ("https://maps.co.lincoln.wi.us/arcgis/rest/services/"
+                       "WebMerc_Admin/MapServer/5"),
+        "district_witness": (
+            "The county's own map and the state's filing put this district's "
+            "boundary in different places, so which supervisor represents part "
+            "of this ground is not settled and no name is shown."),
+    },
     {
         "fips": "55101", "name": "Racine", "seats": 21,
         "layer": ("https://services1.arcgis.com/z1oAk3W6cWVD8swZ/arcgis/rest/"
@@ -3831,6 +3870,129 @@ def _fold_person(name):
     return toks[0] + "|" + toks[-1]
 
 
+# --- the district-key witness for a roster that rides a county's own layer ----
+#
+# A ROSTER KEYED BY DISTRICT NUMBER IS ONLY AS GOOD AS THE TWO PUBLISHERS
+# AGREEING WHAT THAT NUMBER MEANS ON THE GROUND. The card decides which
+# district a reader is in from the SHIPPED LTSB geometry and then names that
+# district's supervisor from the county. Where the county's own map draws a
+# district differently, those two steps answer about different ground, and the
+# card names somebody who does not represent the reader.
+#
+# Lincoln is why this exists and it is not hypothetical: 4,000 random points
+# inside that county put 97.90% in the same-numbered district on both
+# publishers' maps, and the whole of the remainder is one lobe — Town of
+# Merrill ward 2, which LTSB files in supervisory district 21 and the county's
+# own layer draws in district 9. Both agree it is that ward; they disagree
+# about its district. LTSB is internally consistent (its ward file and its
+# district polygons agree), and the county's ward layer carries no district
+# field and cannot arbitrate. So the disagreement stands, and the two districts
+# it touches are WITHHELD rather than preferred.
+#
+# THE SAMPLE IS PER DISTRICT AND THE SHIPPED FILE IS THE PROBE SOURCE, so this
+# costs ONE request: the county's layer generalised to ~50 m, which is far
+# finer than the disagreement it is looking for. Points come from the LTSB
+# districts already on disk. A district is disputed when fewer than
+# DISTRICT_AGREE_MIN of its probes land in the same-numbered county district;
+# boundary noise moves one or two probes, a redrawn boundary moves most.
+DISTRICT_PROBES = 40
+DISTRICT_AGREE_MIN = 0.90
+
+
+def _ring_hit(pt, ring):
+    x, y = pt
+    hit = False
+    for i in range(len(ring)):
+        x1, y1 = ring[i][0], ring[i][1]
+        x2, y2 = ring[(i + 1) % len(ring)][0], ring[(i + 1) % len(ring)][1]
+        if (y1 > y) != (y2 > y) and x < (x2 - x1) * (y - y1) / (y2 - y1) + x1:
+            hit = not hit
+    return hit
+
+
+def _geo_parts(geom):
+    """GeoJSON polygon parts — a MultiPolygon's parts are NOT one polygon's holes.
+
+    Lincoln has two multipart districts (17 and 21) and reading their parts as
+    holes flips the answer for exactly the district the witness is about.
+    """
+    if geom["type"] == "Polygon":
+        return [geom["coordinates"]]
+    return geom["coordinates"]
+
+
+def _geo_contains(pt, geom):
+    for poly in _geo_parts(geom):
+        if _ring_hit(pt, poly[0]) and not any(_ring_hit(pt, h) for h in poly[1:]):
+            return True
+    return False
+
+
+def district_geometry_witness(fips, county, layer, seats):
+    """{disputed district numbers} — the county's own map against LTSB's.
+
+    A FETCH FAILURE IS NOT A DISAGREEMENT: an unreachable witness says nothing,
+    so it stands aside and the caller ships unwitnessed with the log saying so.
+    A witness that RUNS and finds a district redrawn returns it, and the caller
+    withholds that seat rather than choosing between two publishers.
+    """
+    try:
+        shipped = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                               "..", "data", "app",
+                               "county-supervisory-districts.json")
+        with open(shipped) as f:
+            ltsb = {int(x["properties"]["SUPERID"]): x["geometry"]
+                    for x in json.load(f)["features"]
+                    if x["properties"]["CNTY_FIPS"] == fips}
+        data = _fetch_json(layer + "/query?where=1%3D1&outFields=" +
+                           "SuperID_Numeric&returnGeometry=true&outSR=4326"
+                           "&maxAllowableOffset=0.0005&f=geojson")
+        cty = {int(f["properties"]["SuperID_Numeric"]): f["geometry"]
+               for f in data.get("features") or []}
+        if not ltsb or not cty:
+            raise RuntimeError("no districts on one side")
+    except Exception as e:          # noqa: BLE001 - the witness, never the source
+        print("  WITNESS SKIPPED %-9s district geometry unreachable (%s) — the "
+              "roster ships unwitnessed this run" % (county, e), file=sys.stderr)
+        return set()
+    if sorted(ltsb) != sorted(cty) != list(range(1, seats + 1)):
+        raise RuntimeError(
+            "%s: the shipped map draws districts %s and the county's own layer "
+            "draws %s — one of the two has been redistricted and neither is "
+            "guessed at" % (county, sorted(ltsb), sorted(cty)))
+
+    rng = random.Random(20260902)
+    disputed, worst = set(), {}
+    for d, geom in sorted(ltsb.items()):
+        xs = [c[0] for p in _geo_parts(geom) for r in p for c in r]
+        ys = [c[1] for p in _geo_parts(geom) for r in p for c in r]
+        got = agree = 0
+        tries = 0
+        while got < DISTRICT_PROBES and tries < DISTRICT_PROBES * 400:
+            tries += 1
+            pt = (rng.uniform(min(xs), max(xs)), rng.uniform(min(ys), max(ys)))
+            if not _geo_contains(pt, geom):
+                continue
+            got += 1
+            if _geo_contains(pt, cty[d]):
+                agree += 1
+        if not got:
+            continue                # a district too thin to sample says nothing
+        share = float(agree) / got
+        worst[d] = share
+        if share < DISTRICT_AGREE_MIN:
+            disputed.add(d)
+    overall = sum(worst.values()) / len(worst) if worst else 0.0
+    print("  witness %-12s %d/%d districts drawn the same by the county and the "
+          "state (mean agreement %.1f%%)"
+          % (county, seats - len(disputed), seats, 100.0 * overall), file=sys.stderr)
+    for d in sorted(disputed):
+        print("  DISPUTED %-9s district %d: only %.0f%% of its ground is district "
+              "%d on the county's own map — the seat is WITHHELD, not preferred"
+              % (county, d, 100.0 * worst[d], d), file=sys.stderr)
+    return disputed
+
+
 def scrape_arcgis_county(spec):
     """District -> member rows read as ATTRIBUTES off the county's own layer."""
     fields = spec["fields"]
@@ -3862,6 +4024,10 @@ def scrape_arcgis_county(spec):
         entry = {"name": member, "vacant": False, "role": role}
         if email:
             entry["email"] = email
+        if fields.get("phone") and a.get(fields["phone"]):
+            tel = re.search(r"(\d{3})\D*(\d{3})\D*(\d{4})", str(a[fields["phone"]]))
+            if tel:
+                entry["phone"] = "-".join(tel.groups())
         if fields.get("url") and a.get(fields["url"]):
             entry["url"] = str(a[fields["url"]]).strip()
         rows[d] = entry
@@ -3869,6 +4035,14 @@ def scrape_arcgis_county(spec):
         missing = sorted(set(range(1, spec["seats"] + 1)) - set(rows))
         raise RuntimeError("%s: layer resolved %d of %d districts (missing %s)"
                            % (spec["name"], len(rows), spec["seats"], missing))
+    # THE DISTRICT KEY, WHERE THE COUNTY PUBLISHES ITS OWN MAP OF IT. A seat
+    # the two publishers draw differently is WITHHELD — see
+    # district_geometry_witness() for Lincoln's measured lobe.
+    if spec.get("district_witness"):
+        for d in district_geometry_witness(spec["fips"], spec["name"], spec["layer"],
+                                           spec["seats"]):
+            rows[d] = {"name": None, "vacant": False, "role": None,
+                       "withheld": True, "withheld_why": spec["district_witness"]}
     witness = spec.get("witness")
     if witness:
         recs = _fetch_json("https://webapi.legistar.com/v1/%s/officerecords"
@@ -3879,7 +4053,7 @@ def scrape_arcgis_county(spec):
         today = time.strftime("%Y-%m-%dT%H:%M:%S", time.gmtime())
         current = {_fold_person(r["OfficeRecordFullName"]) for r in recs
                    if (r.get("OfficeRecordEndDate") or "9999") > today}
-        layer_names = {_fold_person(v["name"]) for v in rows.values()}
+        layer_names = {_fold_person(v["name"]) for v in rows.values() if v.get("name")}
         if layer_names != current:
             raise RuntimeError(
                 "%s: the GIS layer and the Legistar witness disagree on the bench "

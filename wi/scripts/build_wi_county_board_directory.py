@@ -188,7 +188,14 @@ COUNTY_SITES = {
     "55063": ("La Crosse", "https://lacrossecounty.org/"),
     "55065": ("Lafayette", "https://lafayettecountywi.org/"),
     "55067": ("Langlade", "https://www.co.langlade.wi.us/government/board_and_committees/"),  # county page confirms 1..21
-    "55069": ("Lincoln", "https://co.lincoln.wi.us/"),
+    # THE CARD'S FOOTER LINK IS FOR A READER'S BROWSER, NOT FOR THIS CLIENT.
+    # Lincoln's site sits behind a Cloudflare managed challenge that refuses
+    # every automated client here and that a person's browser clears without
+    # noticing, so this URL is unreachable to the probe above and correct on
+    # the card. The county's board page (bc-county-board) is what its own GIS
+    # layer links from every district, and it is where a reader checking a
+    # name should land.
+    "55069": ("Lincoln", "https://www.co.lincoln.wi.us/bc-county-board"),
     "55071": ("Manitowoc", "https://manitowoccountywi.gov/"),
     "55073": ("Marathon", "https://marathoncounty.gov/"),
     "55075": ("Marinette", "https://www.marinettecountywi.gov/county_board/"),

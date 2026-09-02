@@ -8657,8 +8657,8 @@ function initWisconsinExplorer() {
    *
    * THE SUPERVISOR IS NAMED WHERE A COUNTY PUBLISHES ONE, AND NOWHERE ELSE.
    * Wisconsin publishes no statewide roster, so the people come from each
-   * county's own page: 64 of the 72 have a district-keyed member list this
-   * can reach (1,434 seats — 55 read weekly, and NINE carried as dated
+   * county's own page: 65 of the 72 have a district-keyed member list this
+   * can reach (1,456 seats — 56 read weekly, and NINE carried as dated
    * documents in two classes that the card itself distinguishes. Taylor,
    * Lafayette and La Crosse are BLOCKED, their hosts answering a captcha or
    * a Cloudflare challenge to every automated client. Jackson, Richland,
@@ -8666,12 +8666,9 @@ function initWisconsinExplorer() {
    * sites serves this client perfectly well and every one publishes a
    * robots.txt disallowing it, so the crawl stopped on 2026-08-31 and the
    * names stayed, dated — those rows carry their own `asOfWhy` and the card
-   * says the county ASKED rather than refused), and the other 8 do not —
-   * Forest does not resolve, Lincoln refuses every client this file sends
-   * (and is now an ENCLAVE — a hole in the scope wash, enclosed by five
-   * served neighbours since Langlade joined), and the remaining 6 publish
-   * prose or images with
-   * no district column. ST. CROIX LEFT THAT LIST ON 2026-09-02 AND ITS PAGE
+   * says the county ASKED rather than refused), and the other 7 do not —
+   * Forest does not resolve, and the remaining 6 publish prose or images
+   * with no district column. ST. CROIX LEFT THAT LIST ON 2026-09-02 AND ITS PAGE
    * NEVER CHANGED EITHER: its home page — the URL this repo itself had on
    * file — links nothing about the board, and its board landing page is prose
    * naming none of the nineteen. The table naming all of them is one click
@@ -8688,7 +8685,21 @@ function initWisconsinExplorer() {
    * RUNS THE SAME VENDOR CMS and shares its reader: its member pages
    * re-state the district and carry a phone plus, for 16 of 21, the
    * county's own district-keyed mailbox, and its composition is witnessed
-   * on municipality NAMES because it writes ordinal ward words. CLARK LEFT THAT LIST ON 2026-09-01 AND ITS PAGE NEVER
+   * on municipality NAMES because it writes ordinal ward words. LINCOLN
+   * LEFT THAT LIST THE FOLLOWING DAY AND WAS NEVER A BLOCKED COUNTY: what
+   * refuses every client here is its WEBSITE, behind a Cloudflare managed
+   * challenge, and the county runs a second host that site never links —
+   * maps.co.lincoln.wi.us, a public ArcGIS Server whose Supervisor
+   * Districts layer names all 22 supervisors with a phone each. Its join
+   * also closed the one-day enclave its own absence had opened. ONE OF ITS
+   * SEATS NAMES NOBODY, and that is a third state this card can be in:
+   * 4,000 sampled points put 97.9% of the county in the same-numbered
+   * district on the county's map and on LTSB's filing, and the whole
+   * remainder is one lobe — Town of Merrill ward 2, district 21 to LTSB and
+   * district 9 to the county. The card reads the reader's district from
+   * LTSB, so on that ground it would name district 21's supervisor against
+   * the county's own word; district 21 therefore names nobody and says why,
+   * which is neither vacant nor unpublished. CLARK LEFT THAT LIST ON 2026-09-01 AND ITS PAGE NEVER
    * CHANGED: its board page names the chair, the vice chair and the clerk, and
    * the other 29 names are eleven pages into the Clerk's Official Directory,
    * which that same site links. A district in an unnamed county keeps the honest card:
@@ -8773,7 +8784,18 @@ function initWisconsinExplorer() {
         primary: true
       }]));
       var member = result.member;
-      if (member && member.vacant) {
+      if (member && member.withheld) {
+        // TWO PUBLISHERS DRAW THIS DISTRICT DIFFERENTLY, so which supervisor
+        // represents part of its ground is not settled and this app does not
+        // choose one. That is a THIRD state, distinct from vacant (the county
+        // says the seat is empty) and from silence (nobody publishes a name),
+        // and the reader is told which it is rather than left to guess.
+        wrap.appendChild(renderFieldStack([{
+          label: "Supervisor",
+          value: "Not named — " + String(member.withheldWhy ||
+            "two publishers disagree about this district's boundary.")
+        }]));
+      } else if (member && member.vacant) {
         // The county says nobody holds this seat. Saying so is the honest
         // answer; omitting the row would read as "we could not find out".
         wrap.appendChild(renderFieldStack([{ label: "Supervisor", value: "Vacant" }]));
