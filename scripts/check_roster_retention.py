@@ -48,7 +48,20 @@ checkout fails loudly instead of going quietly green.
 ACCEPTING A REAL DROP. A consolidated election can legitimately empty a column
 for a while. Record it in ACCEPTED_DROPS with a reason and a date rather than
 loosening a threshold for everyone — same posture as validate_sources.py's
-`blocked` flag, and it prints a line every run so an entry cannot rot quietly.
+`blocked` flag.
+
+AND EVERY ACCEPTED ENTRY IS AUDITED AGAINST THE SHIPPED TREE, not only against
+the diff. This docstring used to claim an entry "prints a line every run so an
+entry cannot rot quietly", and that was false the day after the drop merged:
+the entry is consulted only where THIS diff observes the field going away, so
+once the drop is on the base branch nothing observes it and the exception goes
+silent forever — carrying a permanent hole in the gate's coverage with no line
+anywhere saying so. audit_accepted() closes it: every entry is printed on every
+run, an entry naming a file that has left the tree FAILS as orphaned, and an
+entry whose field is BACK on records FAILS as stale, because an exception that
+outlives its reason is a field this gate has quietly stopped watching. Same
+property as validate_card_links.py's EXPECTED_UNREACHABLE and
+validate_contrast.py's ACCEPTED_SHORTFALLS, which both already had it.
 
 Usage:
     python3 scripts/check_roster_retention.py                  # vs HEAD
@@ -199,6 +212,74 @@ def groups_of(payload):
     if not groups or len(groups) > MAX_GROUPS_FOR_PER_GROUP:
         return {}
     return groups
+
+
+def audit_accepted():
+    """Findings for the exception list itself: (severity, key, message).
+
+    An accepted drop is read ONLY where a diff shows the field disappearing, so
+    the moment the drop is merged the entry stops being consulted and stops
+    being printed. That is a gate measuring less than it claims with nothing
+    saying so, which is the failure this whole file exists to catch, happening
+    to its own exception list. So the list is checked against what is ACTUALLY
+    SHIPPED: the file must still be there, and the field must still be gone.
+    """
+    out = []
+    for key in sorted(ACCEPTED_DROPS):
+        why = ACCEPTED_DROPS[key]
+        parts = key.split(":")
+        if len(parts) < 2 or not parts[0].endswith(".json"):
+            out.append(("FAIL", key, "is not in the form `<instance>/data/app/"
+                                     "<file>.json:<field>` (or `:<group>:<field>`), "
+                                     "so nothing can check it."))
+            continue
+        label, rest = parts[0], parts[1:]
+        full = os.path.join(REPO_ROOT, label)
+        if not os.path.isfile(full):
+            out.append(("FAIL", key, "names `%s`, which is not in the tree. The "
+                                     "exception has outlived its file — delete it."
+                        % label))
+            continue
+        try:
+            with open(full, encoding="utf-8") as f:
+                payload = json.load(f)
+        except (ValueError, OSError) as e:
+            out.append(("FAIL", key, "names `%s`, which does not read as JSON (%s)."
+                        % (label, e)))
+            continue
+        counts, _ = coverage(payload)
+        groups = groups_of(payload)
+        back = None
+        if len(rest) == 1:
+            name = rest[0]
+            if counts.get(name, 0) >= MIN_PRESENT:
+                back = ("the field `%s` is back on %d record(s)"
+                        % (name, counts[name]))
+            elif name in groups and len(records_in(groups[name])) >= MIN_PRESENT:
+                back = ("the source `%s` is back with %d record(s)"
+                        % (name, len(records_in(groups[name]))))
+        else:
+            group, field = rest[0], rest[1]
+            if group not in groups:
+                # Unlike the two-part shape, this one is unambiguous: a group
+                # that is gone makes the entry unevaluable forever, so it is a
+                # dead exception rather than a field still legitimately absent.
+                out.append(("FAIL", key, "names the source `%s` in `%s`, which "
+                                         "that file no longer has. The exception "
+                                         "can never be evaluated again — delete "
+                                         "it. Recorded: %s" % (group, label, why)))
+                continue
+            sub, _ = coverage(groups[group])
+            if sub.get(field, 0) >= MIN_PRESENT:
+                back = ("`%s` is back on %d of %s's record(s)"
+                        % (field, sub[field], group))
+        if back:
+            out.append(("FAIL", key, "is STALE — %s. Retire the entry so the gate "
+                                     "watches the field again; a fix must remove "
+                                     "its exception. Recorded: %s" % (back, why)))
+        else:
+            out.append(("OK-accepted", key, why))
+    return out
 
 
 # Where the roster files live in a commit, newest layout first. The app moved
@@ -383,6 +464,10 @@ def main():
                              if skipped else ""), file=sys.stderr)
         sys.exit(1)
 
+    # The exception list is audited against the SHIPPED tree, so an entry keeps
+    # printing (and can start failing) long after the diff that recorded it.
+    findings += [(sev, key, msg) for sev, key, msg in audit_accepted()]
+
     fails = [f for f in findings if f[0] == "FAIL"]
     accepted = [f for f in findings if f[0] == "OK-accepted"]
 
@@ -397,11 +482,16 @@ def main():
         lines += ["- **%s** — %s" % (p, m) for _, p, m in fails] + [""]
     if accepted:
         lines += ["## Accepted drops (%d)" % len(accepted), "",
-                  "Recorded in `ACCEPTED_DROPS`. Each is a field this check has "
-                  "stopped watching — re-read them now and then.", ""]
+                  "Recorded in `ACCEPTED_DROPS`, and re-checked against the "
+                  "shipped tree on every run. Each is a field this check has "
+                  "stopped watching — read them now and then, and retire any "
+                  "whose reason has passed.", ""]
         lines += ["- **%s** — %s" % (p, m) for _, p, m in accepted] + [""]
     if not fails and not accepted:
         lines += ["Every field still appears on about as many records as before.", ""]
+    elif not fails:
+        lines += ["Every field still appears on about as many records as before, "
+                  "apart from the accepted drops above.", ""]
     report = "\n".join(lines).rstrip() + "\n"
 
     sys.stdout.write(report)
@@ -410,11 +500,12 @@ def main():
             f.write(report)
 
     if fails:
-        print("check-roster-retention: FAIL — %d field(s) stopped being published"
-              % len(fails), file=sys.stderr)
+        print("check-roster-retention: FAIL — %d field(s) stopped being published "
+              "or carry a stale exception" % len(fails), file=sys.stderr)
         sys.exit(1)
-    print("check-roster-retention: OK — %d roster files, no field lost its records"
-          % checked)
+    print("check-roster-retention: OK — %d roster files, no field lost its records "
+          "(%d accepted drop(s), each re-checked against the shipped tree)"
+          % (checked, len(accepted)))
 
 
 if __name__ == "__main__":

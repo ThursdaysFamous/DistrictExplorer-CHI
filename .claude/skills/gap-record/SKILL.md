@@ -60,8 +60,17 @@ more letters; the voice — what DOES work in the same breath, one plain
 sentence of cause, what would close it — is the guidebook's.
 
 **`blocker`** — unbounded, never shipped, an append-only dated log in record
-voice for the next maintainer. Open with the date and method of the first
-measurement (`Checked 2 Aug 2026 …`, `MEASURED 2026-08-26 by …`); prefix
+voice for the next maintainer. **Four elements or it is not a measurement: the
+URL tried, the CLIENT it was tried with, the DATE, and WHAT CAME BACK — and the
+conclusion states what is true of THAT URL, never of the body.** "Forest does
+not resolve" is unfalsifiable and was wrong; "GET https://co.forest.wi.gov/
+with the pinned browser headers, 2026-08-25 → 200, zero occurrences of
+district" is a fact whose next reader sees at a glance that ONE address was
+tried. Eight Wisconsin counties shipped in a day in 2026 and not one had
+started publishing anything new: every record was accurate about its page and
+false as written, and the form is what would have shown it. Open with the date
+and method of the first measurement (`Checked 2 Aug 2026 …`,
+`MEASURED 2026-08-26 by …`); prefix
 every later finding with a dated tag — CORRECTED, RE-MEASURED, SWEPT, PARTLY
 CLOSED, CLOSED, ANSWERED — and keep the disproved sentence in place under its
 correction. Every host, date and status goes here, in the vocabulary of what
@@ -121,5 +130,6 @@ and the steward battery.
 
 - Never a hostname, a status code or a date in a reader field.
 - Never "no website" for a domain that resolves and refuses; never "no source exists" for a blocker that was measured as something else.
+- Never a conclusion about a body from one URL, and never a blocker missing its client or its date.
 - Never edit the record without regenerating every file in §7.
 - Never retire an unserved county's record.

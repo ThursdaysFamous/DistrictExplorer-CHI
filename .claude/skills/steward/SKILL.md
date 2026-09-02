@@ -66,6 +66,7 @@ python3 scripts/validate_shell_continuations.py
 python3 scripts/validate_workflow_deps.py
 python3 scripts/validate_skills.py                       # every skill's pointers resolve
 python3 scripts/check_roster_retention.py --base origin/main
+python3 scripts/check_cache_version.py --base origin/main       # cache-first data vs CACHE_NAME
 
 # --- per-instance static gate (every instance, run from the repo ROOT)
 python3 scripts/validate_index.py    il/index.html
@@ -106,6 +107,7 @@ nearly always **a publisher changing what it publishes**, not a defect in the
 diff. Where the red is tells you what it is:
 
 - **A red bot PR** is `smoke-test.yml` on the bot branch. `check_roster_retention.py` red = a field stopped being published: read the failure (it names the file, the field and the per-source coverage), look at the publisher's page before touching anything, and either record a legitimate drop in `ACCEPTED_DROPS` with a reason and a date or fix the scraper. A generated-page `--check` red (`build_history_page.py`, `build_county_status.py`) on a bot PR = the WORKFLOW file lacks the regenerate + `git add` step for a file its tiles count; fix `.github/workflows/<job>.yml`, not the branch, or it is red again next week (`update-county-commissioners-roster.yml` regenerates neither, and `build_county_status.py` reads that file's keys).
+- **`check_cache_version.py` red** = the change rewrote a file the instance's `sw.js` serves CACHE-FIRST (its `GEOMETRY_URLS` list — `metro-outline.json` above all, which every county join rewrites) without bumping that instance's `CACHE_NAME`. The fix is the bump, in this same change, and any different name will do — it is not an increment. Do NOT satisfy it by moving the file to the network-first list: a returning visitor otherwise keeps the old geometry indefinitely and sees new officeholders drawn against a stale map, which is the failure the gate exists for and which no other gate can see.
 - **A red scheduled RUN** in the Actions tab, with no PR at all, is a scraper failing or a builder REFUSING to write — its count guard or floor tripped before the PR step existed. That refusal is the builder working. Diagnose the source; do not lower the floor. `roster-health.yml` is what gives that red an owner.
 - **The monthly source issue** is never red: `validate-sources.yml` keeps its job green and opens one tracking issue. A host recorded as `blocked` reported REACHABLE is the deliberate inversion — becoming reachable is the actionable state, and the fix is to reconsider the block, not to silence it.
 - **A bot PR with NO checks is worse than a red one**: the PAT that makes bot PRs run CI has expired, and the retention gate never ran. Never merge on green-by-absence; check `BOT_PR_TOKEN` first (`CLAUDE.md`, the `BOT_PR_TOKEN` paragraph).
