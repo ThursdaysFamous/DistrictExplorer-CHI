@@ -72,15 +72,16 @@ GEOMETRY = os.path.join(APP_DATA_DIR, "county-supervisory-districts.json")
 RAW = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache", "wi_county_boards_raw.json")
 OUT = os.path.join(APP_DATA_DIR, "county-board-members.json")
 
-MIN_COUNTIES = 61      # 63 ship one (41 board pages + 2 county GIS layers + Fond du
+MIN_COUNTIES = 62      # 64 ship one (41 board pages + 2 county GIS layers + Fond du
                        # Lac through the Internet Archive + Dodge's constituent
                        # directory + Kenosha's witnessed directory PDF + Adams's
                        # directory PDF + Clark's, Pierce's and Marathon's
                        # directories + St. Croix's own district table +
                        # Chippewa's board-page h-cards + Menominee's joint
-                       # County/Town board + Columbia's framed table + NINE by
-                       # dated document); tolerates two dark
-MIN_SEATS = 1340       # 1413 today; the tolerance is the two largest boards
+                       # County/Town board + Langlade's board page +
+                       # Columbia's framed table + NINE by dated document);
+                       # tolerates two dark
+MIN_SEATS = 1361       # 1434 today; the tolerance is the two largest boards
                        # (Dane 37 + Outagamie 36) going dark in one run, which is
                        # what a floor is for — it is never lowered to fit a result
 
