@@ -377,6 +377,47 @@ Tag these `utm_source=press-wire`. The **#** column is the tier (send tier 1 fir
 | [City Limits](https://citylimits.org/) | New York City | [form / contact page](https://citylimits.org/contact/) | USE THE CONTACT FORM. City Limits publishes no readable inbound editorial email address anywhere on its own site. 1. EVERY address on citylimits.org is Cloudflare email-obfuscated, and per the honesty rules none is reconstructed here. I fet |
 | [Bay Area Reporter](https://www.ebar.com/) | San Francisco & Bay Area | [form / contact page](https://www.ebar.com/) | SEND TO: news@ebar.com. Address the pitch to Matthew S. Bajko (Political Notebook) or John Ferrannini (D8/City Hall) by name in the subject or first line, but send it to the desk — see the address caveat below. WHY THE SOURCE IS THE PRINT M |
 
+## The data desk
+
+Chris's note, 2026-09-02: **address the data reporter or data editor where an outlet has one.** For a pitch whose entire subject is a dataset nobody had assembled, they are the reader who knows immediately why 91 counties took months. Every person here was read off the OUTLET'S OWN staff or author page and every address comes from that page's own markup — none is inferred from a firstname.lastname pattern, which is the one thing the research rules forbid outright. The send still goes to the desk; the data reporter is who the first line names.
+
+24 across 18 outlets; 16 publish a personal address, 8 do not (reach those through the outlet's desk address above and name them in the first line).
+
+| Wave | Outlet | Who | Title / why | Address | Source |
+|---|---|---|---|---|---|
+| 1 | Chalkbeat Chicago | Kae Petrin | Data and Graphics Reporter — the title exactly as Chalkbeat's staff page prints it. THE data byline for this pitch. | `kpetrin@chalkbeat.org` | [page](https://www.chalkbeat.org/pages/our-staff/) |
+| 1 | Chicago Sun-Times | Justin Myers | Graphics editor, and the AP's former DATA EDITOR — 'a data journalist, visual journalist, developer'. Runs Interactives and Graphics. No personal address published. | *none published* | [page](https://chicago.suntimes.com/authors/justin-myers) |
+| 1 | Chicago Sun-Times | Keenan Chen | Data journalist (the staff page groups him under Data journalism as 'data reporter, public safety') — investigative data; ex-First Draft. | `kchen@chicagopublicmedia.org` | [page](https://chicago.suntimes.com/keenan-chen) |
+| 1 | WBEZ / Chicago Public Media | Alden Loury | Senior editor, data projects — his own page: 'leads a team of data journalists collaborating with the newsrooms of BOTH WBEZ and the Chicago Sun-Times'. The single best data target on this list. | `aloury@wbez.org` | [page](https://www.wbez.org/author/alden-loury) |
+| 1 | WBEZ / Chicago Public Media | Andjela Padejski | Data journalist — 'builds interactive stories that investigate and expose complex systems'. | `apadejski@wbez.org` | [page](https://www.wbez.org/author/andjela-padejski) |
+| 1 | WBEZ / Chicago Public Media | Cam Rodriguez | Data journalist at WBEZ and the Sun-Times; previously a Local Investigations Fellow at the New York Times. NO personal address is published — reach the desk or Loury. | *none published* | [page](https://www.wbez.org/cam-rodriguez) |
+| 2 | Invisible Institute | trina reynolds-tyler | Director of Data — the data-journalism lead, closest fit for a civic-geospatial-data pitch | *none published* | [page](https://invisible.institute/staff) |
+| 2 | The Harvey World Herald | Matt Chapman | Freelance Investigative Data Reporter — a Chicago-area FOIA and police-data specialist the Herald lists on its own staff page; his work runs in the Reader, the TRiiBE and the Chicago Reporter, so he is a route into several of them at once. No address published. | *none published* | [page](https://harveyworld.org/staff/) |
+| 3 | Ballotpedia | Daniel Anderson | Associate Director, Elections & Data — the data side of elections coverage; the natural reader for a claim about inconsistent government geospatial di… | *none published* | [page](https://ballotpedia.org/Ballotpedia:Staff) |
+| 3 | St. Louis Post-Dispatch | Josh Renaud | Developer and data journalist | `jrenaud@post-dispatch.com` | [page](https://www.stltoday.com/contact/staff/) |
+| 4 | Bay City News / Local News Matters | Chloe Rowlands | Tech & Data Manager; leads BCN's data journalism team. Staff page verbatim: "She also leads a team of data journalists at Bay City News who use data t… | `chloe@baycitynews.com` | [page](https://localnewsmatters.org/about-bay-city-news/about-our-staff/) |
+| 4 | Gothamist / WNYC | Joe Hong | Investigative Reporter, Data — the team page's own grouping. No personal address is published anywhere on it. | *none published* | [page](https://gothamist.com/our-team) |
+| 4 | KQED | Lisa Pickoff-White | Data Journalist and Senior Producer — "KQED's data reporter"; brings complex topics to life through data visualisation. NO ADDRESS SHIPS: her address sits in the staff page's own JSON payload next to "display_author_email": false, so KQED has deliberately withheld it. Reach the newsroom desk and name her. | *none published* | [page](https://www.kqed.org/news/staff) |
+| 4 | Mission Local | Xueer Lu | Data Reporter — 'works on data and covers the Excelsior'. NOTE the domain: Mission Local publishes staff mail on missionlocal.COM while the site is .org. | `xueer@missionlocal.com` | [page](https://missionlocal.org/about/) |
+| 4 | San Francisco Chronicle | Christian Leonard | Data Reporter. NOTE the domain: the Chronicle's own directory publishes this one on hearst.com, not sfchronicle.com. | `Christian.Leonard@hearst.com` | [page](https://www.sfchronicle.com/contact) |
+| 4 | San Francisco Chronicle | Dan Kopf | Data Editor — the title as the Chronicle's own staff directory prints it. | `dankopf@sfchronicle.com` | [page](https://www.sfchronicle.com/contact) |
+| 4 | San Francisco Chronicle | Nami Sumida | Data Visualization Developer — uses data and graphics to cover elections, local government and education. | `nami.sumida@sfchronicle.com` | [page](https://www.sfchronicle.com/author/nami-sumida/) |
+| 4 | San Francisco Chronicle | Sriharsha Devulapalli | Graphics Reporter. | `sriharsha.devulapalli@sfchronicle.com` | [page](https://www.sfchronicle.com/contact) |
+| 4 | The Capital Times | Brandon Raygo | Graphics editor — oversees the visual brand. Adjacent to a data desk rather than one; the Cap Times publishes no data reporter. | `braygo@captimes.com` | [page](https://captimes.com/staff/) |
+| 4 | The City Reporter (formerly THE CITY) | Sam Rabiyah | Contributing Editor working on data and news applications; previously a news applications developer and reporter. The civic-tech / small-builder angle… | `srabiyah@thecityreporter.nyc` | [page](https://www.thecityreporter.nyc/team/) |
+| 4 | Wisconsin Watch | Hongyu Liu | Data investigative reporter — 'conducts data analysis and creates interactive narratives and graphics'; master's in data journalism, Columbia. | `hliu@wisconsinwatch.org` | [page](https://wisconsinwatch.org/staff) |
+| 5 | Government Technology | Ben Miller (listed as Benjamin Miller on the staff page) | Associate Editor, GT Data and Business — data and business reporting; the government-data-practices angle | `bmiller@govtech.com` | [page](https://www.govtech.com/about) |
+| 5 | MuckRock | Dillon Bergin | Senior Investigative and Data Journalist — "uses data and public records to power investigative reporting with partner newsrooms. | *none published* | [page](https://www.muckrock.com/staff/) |
+| 5 | NICAR-L (Investigative Reporters and Editors) | David Herzog | Director of Data & Research Services at IRE; academic adviser to NICAR (National Institute for Computer-Assisted Reporting); Journalism Professions pr… | `dherzog@ire.org` | [page](https://www.ire.org/about-ire/ire-staff/) |
+
+**Measured absences.** A page that loaded and does not name a data desk is an answer, not a blank — it is what stops the next pass re-probing the same page.
+
+- **Block Club Chicago** — NO DATA DESK — measured 2026-09-02. The full team page renders (103 role words: 51 reporters, 46 editors) and the word 'data' appears ONCE, 'graphics' never. This is an absence on a page that loaded, not a page that failed.
+- **Chicago Tribune** — NO DATA BYLINE OBTAINABLE — measured 2026-09-02. The Tribune publishes no staff directory (already recorded above) AND its author pages state no job title at all, so there is no Tribune page that says who its data desk is. Aggregators (Muck Rack, Feedspot, SignalHire) claim to know; they are scraped contact brokers and this list does not cite them.
+- **Injustice Watch** — NO DATA DESK — measured 2026-09-02. Its 'Visual Reporter' creates visual ART for stories; that is illustration, not data journalism.
+- **KQED** — HAS a data desk (Lisa Pickoff-White, Data Journalist and Senior Producer) but publishes NO address for her: the staff page's payload carries one beside "display_author_email": false. Found by the mechanical check flagging it MARKUP_ONLY — the same class as the Tribune's dead newsroom@ — and dropped, because an address the publisher switched off is not a published address.
+- **The San Francisco Standard** — NO DATA JOURNALIST — measured 2026-09-02. Its staff page does carry 'Senior Data & Analytics Manager' and 'Senior Data Engineer', which are business and engineering roles, not newsroom ones. A data title is not a data desk.
+
 ## Bylines worth addressing a pitch to
 
 The plan's rule stands: **send to the desk, name the reporter in the first line.** A personal address is listed only where the outlet publishes it on its own staff page, and a desk address outlives any reporter's move between now and the send.
@@ -389,10 +430,13 @@ The plan's rule stands: **send to the desk, name the reporter in the first line.
 | Capitol News Illinois | Hannah Meisel | Statehouse & Chicago Reporter — covering Illinois government and politics since 2014. The only staffer whose title spans both Springfield and Chicago,… |
 | Chalkbeat Chicago | Makiya Seminera | Reporter, Chalkbeat Chicago — covers how decisions by political officials in Springfield and Washington affect students in Chicago and elsewhere in Il… |
 | Chalkbeat Chicago | Becky Vevea | Bureau Chief, Chalkbeat Chicago — a decade at WBEZ on city politics and schools before Chalkbeat; currently bylining the board race directly (Aug 27 2… |
+| Chalkbeat Chicago | Kae Petrin | Data and Graphics Reporter — the title exactly as Chalkbeat's staff page prints it. THE data byline for this pitch. |
 | Chi Hack Night | Samantha Goodman | Co-President, Chi Hack Night (appointed 2024-2026). Listed on the org's own board page; a talk pitch would reasonably be addressed to the co-president… |
 | Chi Hack Night | Sneha Jalukar | Co-President, Chi Hack Night (appointed 2022-2026). |
 | Chicago Sun-Times | Fran Spielman | City Hall reporter — the paper's long-running City Hall byline; closest fit to the ward/alder and city-district angle |
 | Chicago Sun-Times | Emmanuel Camarillo | Education reporter — the byline for the elected school board districts pitch, which the launch plan names as the strongest single story |
+| Chicago Sun-Times | Keenan Chen | Data journalist (the staff page groups him under Data journalism as 'data reporter, public safety') — investigative data; ex-First Draft. |
+| Chicago Sun-Times | Justin Myers | Graphics editor, and the AP's former DATA EDITOR — 'a data journalist, visual journalist, developer'. Runs Interactives and Graphics. No personal address published. |
 | Cicero Independiente | Luis Velazquez | Editor. Cicero-raised; the outlet's editorial lead and the person a local-government / public-records pitch should be addressed to. |
 | Cicero Independiente | april Alonso | Digital Editor. Cicero resident; bilingual storytelling and digital formats — the natural editor for a civic web tool. |
 | City Cast Chicago (and its Hey Chicago newsletter) | Emmi Mack | Newsletter editor — writes the Hey Chicago daily newsletter. The strongest byline to address the pitch to if you lead with the newsletter, since the n… |
@@ -413,6 +457,9 @@ The plan's rule stands: **send to the desk, name the reporter in the first line.
 | The TRiiBE | Morgan Elise Johnson | Co-founder and owner (business/publishing side, documentary and video). Named on the same Wikipedia entry as Walden; not confirmed as an editorial con… |
 | WBEZ / Chicago Public Media | Sarah Karp | Education reporter — WBEZ's CPS/school-board reporter. THE byline for the elected-school-board pitch, which the launch plan calls the strongest single… |
 | WBEZ / Chicago Public Media | Dave McKinney | Editor, politics and government (WBEZ and the Sun-Times) — the desk editor for the districts/redistricting and government-records angle |
+| WBEZ / Chicago Public Media | Alden Loury | Senior editor, data projects — his own page: 'leads a team of data journalists collaborating with the newsrooms of BOTH WBEZ and the Chicago Sun-Times'. The single best data target on this list. |
+| WBEZ / Chicago Public Media | Andjela Padejski | Data journalist — 'builds interactive stories that investigate and expose complex systems'. |
+| WBEZ / Chicago Public Media | Cam Rodriguez | Data journalist at WBEZ and the Sun-Times; previously a Local Investigations Fellow at the New York Times. NO personal address is published — reach the desk or Loury. |
 | Axios Chicago | Monica Eng | Axios Chicago reporter — the closest fit on this staff to the school-board pitch. Her own Axios author page lists "What to know about Chicago school b… |
 | Axios Chicago | Justin Kaufmann | Axios Chicago — co-author of the daily newsletter. Named in Axios's own sign-up copy: "Get smarter, faster on what matters in Chicago with Monica Eng,… |
 | Chicago Public Square | Charlie Meyerson | Publisher, editor and sole writer of Chicago Public Square — daily Chicago news aggregation, media criticism and civic affairs |
@@ -454,6 +501,7 @@ The plan's rule stands: **send to the desk, name the reporter in the first line.
 | Inside Publications (Skyline, Inside Booster, News-Star) | Bob Zuley | Ward-level development and zoning — the single best beat fit. His story in the current edition covers an Aug. 12 community meeting hosted by 43rd Ward… |
 | The Harvey World Herald | Kristin McKee | News Editor — previously civic editor; the editorial decision-maker for a civic/data news pitch at this newsroom |
 | The Harvey World Herald | Maureen Dunne | Civic Reporter — "her reporting focuses on Chicago's cultures and communities, city politics and the judicial system"; her work has appeared in Injust… |
+| The Harvey World Herald | Matt Chapman | Freelance Investigative Data Reporter — a Chicago-area FOIA and police-data specialist the Herald lists on its own staff page; his work runs in the Reader, the TRiiBE and the Chicago Reporter, so he is a route into several of them at once. No address published. |
 | The Lansing Journal | Meredith Shamburger | Lansing Village Board and Lansing School District 158 — the single best-fit byline at this outlet. |
 | The Lansing Journal | Nuha Abdessalam | Schools and education (Sunnybrook School District 171, Heritage Middle School, Nathan Hale Elementary) plus local history/community. Best fit for the… |
 | Beverly Review | Erin Gessert | Editor — writes the bulk of the paper's community news herself; five of the six bylines on the current homepage are hers (Rainbow Cone centenary, a Go… |
@@ -523,6 +571,7 @@ The plan's rule stands: **send to the desk, name the reporter in the first line.
 | PBS Wisconsin / Here & Now | Zac Schultz | Senior Political Reporter, "Here & Now". His own bio names "state and local races" and school district referendums as his territory — the closest fit… |
 | The Capital Times | Enjoyiana Nururdin | Local government reporter — community, politics, public services and safety in the Madison region. Closest single beat match for a civic-district look… |
 | The Capital Times | Olivia Herken | State government and politics reporter — inner workings and outcomes of policymaking, effectiveness of state government services, state and federal el… |
+| The Capital Times | Brandon Raygo | Graphics editor — oversees the visual brand. Adjacent to a data desk rather than one; the Cap Times publishes no data reporter. |
 | Urban Milwaukee | Graham Kilmer | Milwaukee County government — 'Graham Kilmer covers Milwaukee County government for Urban Milwaukee.' This is the single closest beat match in the new… |
 | Urban Milwaukee | Jeramey Jannene | Real estate and city government / City Hall — Common Council, aldermanic districts, development. President and Co-founder. |
 | Votebeat Wisconsin | Alexander Shur | Reporter, Votebeat Wisconsin — Wisconsin election administration, clerks, ballot processing, results reporting (recent bylines: 'System errors held up… |
@@ -533,6 +582,7 @@ The plan's rule stands: **send to the desk, name the reporter in the first line.
 | Wisconsin Examiner | Ruth Conniff | Commentary/opinion; governor's race, energy, data centers. Widely understood to be the outlet's top editor, but NO fetched page confirms a title, so t… |
 | Wisconsin Watch | Jim Malewitz | Managing editor — "oversees Wisconsin Watch's statewide newsroom from Madison"; the senior editor to address a statewide pitch to |
 | Wisconsin Watch | Matthew DeFour | Statehouse bureau chief — state and local government; "four years as state politics editor" at the Wisconsin State Journal. Best fit for the policy/re… |
+| Wisconsin Watch | Hongyu Liu | Data investigative reporter — 'conducts data analysis and creates interactive narratives and graphics'; master's in data journalism, Columbia. |
 | City Cast Madison (and its Madison Minutes newsletter) | Bianca Martin | Podcast Host, City Cast Madison — the daily Madison news podcast. Hosts the local-government and civic episodes: on the site she is credited hosting a… |
 | City Cast Madison (and its Madison Minutes newsletter) | Hayley Sperling | Executive Producer. Does original on-the-ground reporting as well as producing — credited on the site as having been at a police-shooting protest and… |
 | Green Bay Press-Gazette / USA TODAY NETWORK-Wisconsin | Jesse Lin | Community/politics reporter — the closest beat match to civic district boundaries and who represents you |
@@ -578,6 +628,7 @@ The plan's rule stands: **send to the desk, name the reporter in the first line.
 | City Limits | Patrick Spauster | Housing and Homelessness Reporter — strongest single fit. His bio states he "leads the newsroom's data reporting projects" and he holds a masters in U… |
 | Gothamist / WNYC | Brigid Bergin | Senior Reporter, Politics, democracy and voting systems |
 | Gothamist / WNYC | Jon Campbell | Reporter, Politics, Albany and policymaking |
+| Gothamist / WNYC | Joe Hong | Investigative Reporter, Data — the team page's own grouping. No personal address is published anywhere on it. |
 | Hell Gate | Christopher Robbins | General assignment reporter and blogger — "covers transportation, policing, politics, billionaires, and trash, among other subjects." Former editor at… |
 | Hell Gate | Esther Wang | Writer based in New York City; "Prior to Hell Gate, she was a senior politics reporter at Jezebel and a columnist for The New Republic." Politics/elec… |
 | Queens Daily Eagle | Ryan Schwach | Queens politics and elected officials — borough pols, City Council members, flooding and infrastructure, labor. Best byline fit for a civic district-l… |
@@ -600,8 +651,10 @@ The plan's rule stands: **send to the desk, name the reporter in the first line.
 | 48 Hills | Marke Bieschke | Publisher; Arts & Culture Editor; Co-Founder (writes the 'BIG WEEK' arts column as 'Marke B.'). |
 | KQED | Guy Marzorati | Correspondent, KQED California Politics and Government Desk (San Jose). Reports on state and local politics and PRODUCES KQED's digital voter guide —… |
 | KQED | Marisa Lagos | Correspondent, KQED California Politics and Government Desk; co-host of Political Breakdown. Named in the credits for KQED's 2026 Primary Voter Guide. |
+| KQED | Lisa Pickoff-White | Data Journalist and Senior Producer — "KQED's data reporter"; brings complex topics to life through data visualisation. NO ADDRESS SHIPS: her address sits in the staff page's own JSON payload next to "display_author_email": false, so KQED has deliberately withheld it. Reach the newsroom desk and name her. |
 | Mission Local | Io Yeh Gilman | City Hall and S.F. politics (Report for America corps member) — the closest beat match for a Board of Supervisors / district-boundary story |
 | Mission Local | Oscar Palma | Mission District and other District 9 neighborhoods — the only staffer whose published beat is stated in supervisorial-district terms, which is exactl… |
+| Mission Local | Xueer Lu | Data Reporter — 'works on data and covers the Excelsior'. NOTE the domain: Mission Local publishes staff mail on missionlocal.COM while the site is .org. |
 | San Francisco Public Press | Michael Stoll | Senior editor and co-founder — the senior editorial decision-maker named on the masthead. Recent bylines on California climate/EV policy and SF protes… |
 | San Francisco Public Press | Madison Alvarado | Reporter — strongest beat fit. Her recent bylines are tagged City Hall, Government & Politics, Politics and Land use, including 'Fall Ballot Measures… |
 | The San Francisco Standard | Gabriel Lorenzo Greschler | Politics Reporter — 'covers San Francisco's government for The Standard'. BEST FIT: his recent work is squarely City Hall and supervisor districts (e.… |
@@ -616,6 +669,9 @@ The plan's rule stands: **send to the desk, name the reporter in the first line.
 | San Francisco Bay View National Black Newspaper | JR Valrey | Editor in Chief. 26-year Bay View veteran (former writer, associate editor, Oakland Bureau Chief); focus on political accountability and community jou… |
 | San Francisco Chronicle | J.D. Morris | City Hall Reporter — covers San Francisco City Hall, focused on Mayor Daniel Lurie. Bylined the Chronicle's coverage of the 2022 supervisor redistrict… |
 | San Francisco Chronicle | Nami Sumida | Data Visualization Developer — uses data and graphics to cover elections, local government and education. |
+| San Francisco Chronicle | Dan Kopf | Data Editor — the title as the Chronicle's own staff directory prints it. |
+| San Francisco Chronicle | Christian Leonard | Data Reporter. NOTE the domain: the Chronicle's own directory publishes this one on hearst.com, not sfchronicle.com. |
+| San Francisco Chronicle | Sriharsha Devulapalli | Graphics Reporter. |
 | San Francisco Examiner | Patrick Hoge | SF politics / City Hall — bylined 5 of the recent stories I sampled in the Politics section, including "SF Mayor signs a $16.9 billion budget supes su… |
 | San Francisco Examiner | Troy Wolverton | Technology, venture and startups — columnist. The homepage publishes a standing tip invitation for him with an email and a Signal number. |
 | Civic Tech Field Guide | Matt Stempeck | Curator and project lead of the Civic Tech Field Guide; writes/edits the collection and the newsletter |

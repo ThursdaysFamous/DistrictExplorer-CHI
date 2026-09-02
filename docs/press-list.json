@@ -195,7 +195,8 @@
    "wave": 1,
    "link": "https://districtry.com/il/?utm_source=press-chi&utm_medium=email&utm_campaign=districtry-launch",
    "sent_on": "2026-08-31",
-   "sent_to": "newsroom@blockclubchi.org"
+   "sent_to": "newsroom@blockclubchi.org",
+   "data_desk_finding": "NO DATA DESK — measured 2026-09-02. The full team page renders (103 role words: 51 reporters, 46 editors) and the word 'data' appears ONCE, 'graphics' never. This is an absence on a page that loaded, not a page that failed."
   },
   {
    "name": "Capitol News Illinois",
@@ -298,6 +299,13 @@
      "name": "Becky Vevea",
      "beat": "Bureau Chief, Chalkbeat Chicago — a decade at WBEZ on city politics and schools before Chalkbeat; currently bylining the board race directly (Aug 27 2…",
      "address": "bvevea@chalkbeat.org",
+     "source_url": "https://www.chalkbeat.org/pages/our-staff/"
+    },
+    {
+     "name": "Kae Petrin",
+     "data_desk": true,
+     "beat": "Data and Graphics Reporter — the title exactly as Chalkbeat's staff page prints it. THE data byline for this pitch.",
+     "address": "kpetrin@chalkbeat.org",
      "source_url": "https://www.chalkbeat.org/pages/our-staff/"
     }
    ],
@@ -406,6 +414,20 @@
      "beat": "Education reporter — the byline for the elected school board districts pitch, which the launch plan names as the strongest single story",
      "address": "ecamarillo@suntimes.com",
      "source_url": "https://chicago.suntimes.com/authors/emmanuel-camarillo"
+    },
+    {
+     "name": "Keenan Chen",
+     "data_desk": true,
+     "beat": "Data journalist (the staff page groups him under Data journalism as 'data reporter, public safety') — investigative data; ex-First Draft.",
+     "address": "kchen@chicagopublicmedia.org",
+     "source_url": "https://chicago.suntimes.com/keenan-chen"
+    },
+    {
+     "name": "Justin Myers",
+     "data_desk": true,
+     "beat": "Graphics editor, and the AP's former DATA EDITOR — 'a data journalist, visual journalist, developer'. Runs Interactives and Graphics. No personal address published.",
+     "address": "",
+     "source_url": "https://chicago.suntimes.com/authors/justin-myers"
     }
    ],
    "notes": "SEND TO metro@suntimes.com. This is the rare case where the outlet publishes an address explicitly and solely for press releases, in its own words: \"If you'd like to send a press release to our newsroom editors, please email metro@suntimes.com.\" That beats a generic tips inbox for a launch announcement. Cc tips@suntimes.com, which is the newsroom's general inbound address published on the contact page, the tips page and the masthead. DO NOT use wire@suntimes.com for this pitch. The same published sentence scopes it to breaking news and event advisories, and the launch plan's own framing (a tool that already shipped, plus a school-board explainer hook) is neither. Using it would put the pitch in front of a desk clearing same-day copy. DO NOT…",
@@ -768,7 +790,8 @@
    "link": "https://districtry.com/il/?utm_source=press-chi&utm_medium=email&utm_campaign=districtry-launch",
    "intro": "The judicial subcircuit is the least understood district on a Cook County ballot, and you are the only newsroom that treats it as a beat. I've built a free lookup that returns a reader's subcircuit from their address, along with every other district they vote in. It is open source and there is no account.",
    "sent_on": "2026-09-01",
-   "sent_to": "tips@injusticewatch.org"
+   "sent_to": "tips@injusticewatch.org",
+   "data_desk_finding": "NO DATA DESK — measured 2026-09-02. Its 'Visual Reporter' creates visual ART for stories; that is illustration, not data journalism."
   },
   {
    "name": "Invisible Institute",
@@ -810,7 +833,8 @@
      "name": "trina reynolds-tyler",
      "beat": "Director of Data — the data-journalism lead, closest fit for a civic-geospatial-data pitch",
      "address": "",
-     "source_url": "https://invisible.institute/staff"
+     "source_url": "https://invisible.institute/staff",
+     "data_desk": true
     }
    ],
    "notes": "SEND TO info@invisibleinstitute.com, cc media@invisibleinstitute.com. Both were read verbatim on https://invisible.institute/contact, which is the only page on the site publishing either; both are live mailto: links, neither is obfuscated, image-based or JS-revealed, so nothing here was reconstructed from a pattern. NO INBOUND CONTACT FORM EXISTS. /contact carries only a newsletter signup (\"The View from the Ground\"), whose \"user@domain.com\" placeholder appears in the page source across the site and is NOT an address. Two other pages that look like inbound routes are not: /mailroom is an INTERNAL STAFF page (\"Use the form below to send outgoing mail... leave the envelope or package in the Invisible Institute outbox in the downstairs office\"…",
@@ -955,6 +979,27 @@
      "beat": "Editor, politics and government (WBEZ and the Sun-Times) — the desk editor for the districts/redistricting and government-records angle",
      "address": "dmckinney@wbez.org",
      "source_url": "https://www.wbez.org/author/dave-mckinney"
+    },
+    {
+     "name": "Alden Loury",
+     "data_desk": true,
+     "beat": "Senior editor, data projects — his own page: 'leads a team of data journalists collaborating with the newsrooms of BOTH WBEZ and the Chicago Sun-Times'. The single best data target on this list.",
+     "address": "aloury@wbez.org",
+     "source_url": "https://www.wbez.org/author/alden-loury"
+    },
+    {
+     "name": "Andjela Padejski",
+     "data_desk": true,
+     "beat": "Data journalist — 'builds interactive stories that investigate and expose complex systems'.",
+     "address": "apadejski@wbez.org",
+     "source_url": "https://www.wbez.org/author/andjela-padejski"
+    },
+    {
+     "name": "Cam Rodriguez",
+     "data_desk": true,
+     "beat": "Data journalist at WBEZ and the Sun-Times; previously a Local Investigations Fellow at the New York Times. NO personal address is published — reach the desk or Loury.",
+     "address": "",
+     "source_url": "https://www.wbez.org/cam-rodriguez"
     }
    ],
    "notes": "SEND IT TO news@wbez.org. It is WBEZ's own newsroom inbox, published three separate times on three pages I fetched (/pressroom, /contact, /about/staff), and the /pressroom wording explicitly invites a \"story idea\", not just breaking news. Nothing was inferred from a pattern — every address below was read as a live mailto: link in the fetched HTML. WBEZ AND THE CHICAGO SUN-TIMES ARE ONE NEWSROOM. Chicago Public Media acquired the Sun-Times in 2022; wbez.org/about/staff is a single combined masthead covering both, and its \"Contact the newsroom\" line offers tips@suntimes.com and news@wbez.org as alternatives to each other. The launch plan lists WBEZ and the Sun-Times city desk as two separate outlets — they share editors and a tipline. Pitch W…",
@@ -1222,7 +1267,8 @@
    "sent_on": null,
    "attempted_on": "2026-09-01",
    "attempted_to": "newsroom@chicagotribune.com",
-   "attempt_outcome": "bounced the same minute — address not found. Re-routed to aquig@chicagotribune.com (A.D. Quig, Cook County government / City Hall); NOT yet re-sent."
+   "attempt_outcome": "bounced the same minute — address not found. Re-routed to aquig@chicagotribune.com (A.D. Quig, Cook County government / City Hall); NOT yet re-sent.",
+   "data_desk_finding": "NO DATA BYLINE OBTAINABLE — measured 2026-09-02. The Tribune publishes no staff directory (already recorded above) AND its author pages state no job title at all, so there is no Tribune page that says who its data desk is. Aggregators (Muck Rack, Feedspot, SignalHire) claim to know; they are scraped contact brokers and this list does not cite them."
   },
   {
    "name": "Daily Herald",
@@ -2272,6 +2318,13 @@
      "beat": "Civic Reporter — \"her reporting focuses on Chicago's cultures and communities, city politics and the judicial system\"; her work has appeared in Injust…",
      "address": "",
      "source_url": "https://harveyworld.org/staff/"
+    },
+    {
+     "name": "Matt Chapman",
+     "data_desk": true,
+     "beat": "Freelance Investigative Data Reporter — a Chicago-area FOIA and police-data specialist the Herald lists on its own staff page; his work runs in the Reader, the TRiiBE and the Chicago Reporter, so he is a route into several of them at once. No address published.",
+     "address": "",
+     "source_url": "https://harveyworld.org/staff/"
     }
    ],
    "notes": "SEND TO tips@harveyworld.org. It is the only address on the site labelled for inbound news, it is a plain-text mailto: link on the fetched contact page (no Cloudflare obfuscation, no image, no JS reveal — verified in the raw HTML: mailto:tips@harveyworld.org, zero data-cfemail attributes on any page fetched), and the contact FORM is not an alternative route for news because its required \"Reason\" dropdown offers only General Interest, Customer Service and Sponsorship Opportunities. DO NOT DEFAULT TO press@harveyworld.org. It exists and is published, but the outlet defines it in the opposite direction from the usual meaning: \"If you are a member of the media looking to speak with a reporter from the Harvey World Herald.\" That is an inbox for…",
@@ -2603,7 +2656,8 @@
      "name": "Daniel Anderson",
      "beat": "Associate Director, Elections & Data — the data side of elections coverage; the natural reader for a claim about inconsistent government geospatial di…",
      "address": "",
-     "source_url": "https://ballotpedia.org/Ballotpedia:Staff"
+     "source_url": "https://ballotpedia.org/Ballotpedia:Staff",
+     "data_desk": true
     }
    ],
    "notes": "SEND TO: media@ballotpedia.org, addressed to the Local Expansion / Elections & Data beat (Doug Kronaizl, Daniel Anderson). Second, separate approach: the HappyFox form at https://ballotpedia.happyfox.com/new using its \"Submit information\" framing — that is Ballotpedia's own published route for telling its editors about a resource, and it reaches the editorial staff rather than communications. NO REPORTER ADDRESSES ARE PUBLISHED. I fetched https://ballotpedia.org/Ballotpedia:Staff and extracted its body: it lists ~55 staff with names, titles and join years across Executive, Content, Elections and Data, Elections Team, Local Expansion Team, News Team, Volunteers, Features, Ballot Measures, Events, Law, Policy and Communications — and contains…",
@@ -3596,7 +3650,8 @@
      "name": "Josh Renaud",
      "beat": "Developer and data journalist",
      "address": "jrenaud@post-dispatch.com",
-     "source_url": "https://www.stltoday.com/contact/staff/"
+     "source_url": "https://www.stltoday.com/contact/staff/",
+     "data_desk": true
     },
     {
      "name": "David Hunn",
@@ -4384,6 +4439,13 @@
      "beat": "State government and politics reporter — inner workings and outcomes of policymaking, effectiveness of state government services, state and federal el…",
      "address": "oherken@captimes.com",
      "source_url": "https://captimes.com/staff/"
+    },
+    {
+     "name": "Brandon Raygo",
+     "data_desk": true,
+     "beat": "Graphics editor — oversees the visual brand. Adjacent to a data desk rather than one; the Cap Times publishes no data reporter.",
+     "address": "braygo@captimes.com",
+     "source_url": "https://captimes.com/staff/"
     }
    ],
    "notes": "THE ONE THING THAT CHANGES THE PLAN'S DEFAULT RULE: the Cap Times publishes an explicit, unambiguous policy that press releases should NOT go to the tips inbox or the tips form. Verbatim, from https://captimes.com/about/send-us-tips/: \"For general feedback or press releases, please email an editor or reporter directly rather than using one of the methods for tips below.\" The launch plan's rule (\"prefer a desk/tips inbox; a named person's address only if the outlet publishes it on its own staff page\") resolves cleanly here: the outlet publishes every staff address itself, in plain text, on https://captimes.com/staff/, AND asks for exactly that routing. So send to kkyle@captimes.com (news and investigations editor, whose stated remit is local…",
@@ -4660,6 +4722,13 @@
      "beat": "Statehouse bureau chief — state and local government; \"four years as state politics editor\" at the Wisconsin State Journal. Best fit for the policy/re…",
      "address": "mdefour@wisconsinwatch.org",
      "source_url": "https://wisconsinwatch.org/about/staff/"
+    },
+    {
+     "name": "Hongyu Liu",
+     "data_desk": true,
+     "beat": "Data investigative reporter — 'conducts data analysis and creates interactive narratives and graphics'; master's in data journalism, Columbia.",
+     "address": "hliu@wisconsinwatch.org",
+     "source_url": "https://wisconsinwatch.org/staff"
     }
    ],
    "notes": "SEND TO: editor@wisconsinwatch.org, and separately drop the same thing into the tip form — the newsroom says outright that the form is how it organizes and tracks inbound and that it does its best to tell tipsters whether it will follow up. Both are institutional, both were read on fetched pages. NO PRESS-RELEASE POLICY IS PUBLISHED. I fetched /contact/, /about/staff/ and the republishing guidelines and found no statement that Wisconsin Watch does or does not accept press releases, and no embargo policy anywhere. Absence of a stated policy is not permission — treat this as an unknown, not a yes. THE REPORTER ADDRESSES ARE SAFE TO USE HERE, unusually. The launch-plan rule bars inferred personal addresses, but its own exception applies: Wisco…",
@@ -5964,6 +6033,13 @@
      "beat": "Reporter, Politics, Albany and policymaking",
      "address": "jcampbell@wnyc.org",
      "source_url": "https://gothamist.com/staff/jon-campbell"
+    },
+    {
+     "name": "Joe Hong",
+     "data_desk": true,
+     "beat": "Investigative Reporter, Data — the team page's own grouping. No personal address is published anywhere on it.",
+     "address": "",
+     "source_url": "https://gothamist.com/our-team"
     }
    ],
    "notes": "SUBMISSION POLICY — READ THIS FIRST. Gothamist's own tips page carries an explicit press-release exclusion, in bold, immediately above the email address: \"Note: press releases, pitches and other unrelated messages will not receive a response if sent via these modes of communication.\" (https://gothamist.com/tips). It sits in the intro paragraph covering all four listed routes — email, Signal, postal mail and SecureDrop. So tips@gothamist.com is still the correct and only published newsroom inbox, and is worth sending to, but the outlet has stated in advance that a press release sent there is unlikely to get a reply. RECOMMENDED ROUTE.",
@@ -6142,7 +6218,8 @@
      "name": "Sam Rabiyah",
      "beat": "Contributing Editor working on data and news applications; previously a news applications developer and reporter. The civic-tech / small-builder angle…",
      "address": "srabiyah@thecityreporter.nyc",
-     "source_url": "https://www.thecityreporter.nyc/team/"
+     "source_url": "https://www.thecityreporter.nyc/team/",
+     "data_desk": true
     }
    ],
    "notes": "SEND TO: tips@thecityreporter.nyc, or the General News Tip form at https://www.thecityreporter.nyc/contact/ (the newsroom says the form is faster). press@thecityreporter.nyc is a fine cc but read its label honestly — it sits on the page where THEY publish their own press releases and is captioned \"for media inquiries\", i.e. the comms desk. THE REBRAND IS REAL AND RECENT. The Press Room's own top item is \"THE CITY becomes The City Reporter\", dated May 29, 2026. Every address above is on the NEW domain, @thecityreporter.nyc. The old domain still resolves: https://www.thecity.nyc/ returns HTTP 301 to https://www.thecityreporter.nyc/. That is a web redirect only — it says nothing about whether old @thecity.nyc mailboxes still deliver, and I did…",
@@ -6606,12 +6683,20 @@
      "beat": "Correspondent, KQED California Politics and Government Desk; co-host of Political Breakdown. Named in the credits for KQED's 2026 Primary Voter Guide.",
      "address": "",
      "source_url": "https://www.kqed.org/news/staff"
+    },
+    {
+     "name": "Lisa Pickoff-White",
+     "data_desk": true,
+     "beat": "Data Journalist and Senior Producer — \"KQED's data reporter\"; brings complex topics to life through data visualisation. NO ADDRESS SHIPS: her address sits in the staff page's own JSON payload next to \"display_author_email\": false, so KQED has deliberately withheld it. Reach the newsroom desk and name her.",
+     "address": "",
+     "source_url": "https://www.kqed.org/news/staff"
     }
    ],
    "notes": "SEND TO: assignmentdesk@kqed.org (phone (415) 553-2361). It is KQED's own labelled News Tips address and is confirmed on two independent KQED pages. Address the pitch to Guy Marzorati by name — he produces KQED's digital voter guide, which is the closest existing product to districtry at this outlet — and cc gmarzorati@KQED.org, which KQED publishes itself on its staff page. IMPORTANT FINDING — WHY SOME REPORTER ADDRESSES ARE DELIBERATELY OMITTED. KQED's CMS emits a per-author flag, \"display_author_email\", in the page data. Only Guy Marzorati and Joe Fitzgerald Rodriguez are set to TRUE, and only their addresses actually render on the staff page. Marisa Lagos, Scott Shafer, Alex Hall, Katie DeBenedetti and Tara Siler all have addresses sitt…",
    "wave": 4,
    "link": "https://districtry.com/ca/?utm_source=press-sf&utm_medium=email&utm_campaign=districtry-launch",
-   "intro": "Before a voter guide can help, a voter has to know which districts they are in, and in San Francisco that means eleven supervisor districts, ten police districts and dozens of school attendance areas. I built a free lookup that returns them from one address."
+   "intro": "Before a voter guide can help, a voter has to know which districts they are in, and in San Francisco that means eleven supervisor districts, ten police districts and dozens of school attendance areas. I built a free lookup that returns them from one address.",
+   "data_desk_finding": "HAS a data desk (Lisa Pickoff-White, Data Journalist and Senior Producer) but publishes NO address for her: the staff page's payload carries one beside \"display_author_email\": false. Found by the mechanical check flagging it MARKUP_ONLY — the same class as the Tribune's dead newsroom@ — and dropped, because an address the publisher switched off is not a published address."
   },
   {
    "name": "Mission Local",
@@ -6665,6 +6750,13 @@
      "name": "Oscar Palma",
      "beat": "Mission District and other District 9 neighborhoods — the only staffer whose published beat is stated in supervisorial-district terms, which is exactl…",
      "address": "oscar.palma@missionlocal.com",
+     "source_url": "https://missionlocal.org/about/"
+    },
+    {
+     "name": "Xueer Lu",
+     "data_desk": true,
+     "beat": "Data Reporter — 'works on data and covers the Excelsior'. NOTE the domain: Mission Local publishes staff mail on missionlocal.COM while the site is .org.",
+     "address": "xueer@missionlocal.com",
      "source_url": "https://missionlocal.org/about/"
     }
    ],
@@ -6771,7 +6863,8 @@
    "notes": "HEADLINE FINDING: The San Francisco Standard publishes NO news-tips email, no city-desk email, no general newsroom email and no press-release address. I fetched the homepage, /tips/, /about/, /contact-us/, /ethics-standards/, /staff/ and six individual author pages. The six outlet-level addresses that exist (corrections@, ideas@, help@, support@, media@, permissions@) are all on /contact-us/ and every one is labelled for something other than news. Send the release through the TIPS FORM at https://sfstandard.com/tips/, and address it to a named politics reporter using the address the outlet itself publishes on that reporter's own author page. THE INBOUND NEWS ROUTE IS THE FORM, AND THE OUTLET ROUTES EVERYTHING THERE ITSELF.",
    "wave": 4,
    "link": "https://districtry.com/ca/?utm_source=press-sf&utm_medium=email&utm_campaign=districtry-launch",
-   "intro": "While the zone plan slips another year, attendance areas are still what decides a kid's tiebreaker, and most parents cannot draw theirs. I built a free map that shows the attendance area for any San Francisco address, along with the supervisor and police district."
+   "intro": "While the zone plan slips another year, attendance areas are still what decides a kid's tiebreaker, and most parents cannot draw theirs. I built a free map that shows the attendance area for any San Francisco address, along with the supervisor and police district.",
+   "data_desk_finding": "NO DATA JOURNALIST — measured 2026-09-02. Its staff page does carry 'Senior Data & Analytics Manager' and 'Senior Data Engineer', which are business and engineering roles, not newsroom ones. A data title is not a data desk."
   },
   {
    "name": "Bay Area Reporter",
@@ -6874,7 +6967,8 @@
      "name": "Chloe Rowlands",
      "beat": "Tech & Data Manager; leads BCN's data journalism team. Staff page verbatim: \"She also leads a team of data journalists at Bay City News who use data t…",
      "address": "chloe@baycitynews.com",
-     "source_url": "https://localnewsmatters.org/about-bay-city-news/about-our-staff/"
+     "source_url": "https://localnewsmatters.org/about-bay-city-news/about-our-staff/",
+     "data_desk": true
     }
    ],
    "notes": "SEND IT TO newsroom@baycitynews.com. It is the outlet's own declared inbox for \"Tips, Pitches, Corrections\", it is published in plain text on four separate pages I fetched, and the FAQ answers the exact question with it. Address the release to a named editor in the salutation (Alise Maripuu for the SF government/elections beat, or Dan Rosenheim for the enterprise/policy angle) but SEND to the desk, per the launch plan's rule. SUBMISSION POLICY: none published. I looked on the About page, the FAQ, \"Our Policies at a Glance\" and the pitching guide. There is NO stated press-release policy, NO stated embargo policy, NO statement that they do not accept press releases, and NO required form. Nothing asks for a phone number. So there is no policy…",
@@ -7048,7 +7142,29 @@
      "name": "Nami Sumida",
      "beat": "Data Visualization Developer — uses data and graphics to cover elections, local government and education.",
      "address": "nami.sumida@sfchronicle.com",
-     "source_url": "https://www.sfchronicle.com/author/nami-sumida/"
+     "source_url": "https://www.sfchronicle.com/author/nami-sumida/",
+     "data_desk": true
+    },
+    {
+     "name": "Dan Kopf",
+     "data_desk": true,
+     "beat": "Data Editor — the title as the Chronicle's own staff directory prints it.",
+     "address": "dankopf@sfchronicle.com",
+     "source_url": "https://www.sfchronicle.com/contact"
+    },
+    {
+     "name": "Christian Leonard",
+     "data_desk": true,
+     "beat": "Data Reporter. NOTE the domain: the Chronicle's own directory publishes this one on hearst.com, not sfchronicle.com.",
+     "address": "Christian.Leonard@hearst.com",
+     "source_url": "https://www.sfchronicle.com/contact"
+    },
+    {
+     "name": "Sriharsha Devulapalli",
+     "data_desk": true,
+     "beat": "Graphics Reporter.",
+     "address": "sriharsha.devulapalli@sfchronicle.com",
+     "source_url": "https://www.sfchronicle.com/contact"
     }
    ],
    "notes": "RECOMMENDED SEND: metro@sfchronicle.com, cc/or follow up with J.D. Morris (City Hall) and Nami Sumida (data/elections). metro@ is the only address on this list the Chronicle itself labels as taking press releases. FETCH NOTE — READ THIS BEFORE RE-CHECKING. www.sfchronicle.com returns HTTP 403 to WebFetch and to datacenter clients generally. It is NOT down and NOT blocking humans: the same URLs return HTTP 200 with a normal browser User-Agent via curl, which is how every page cited here was actually read. Do not record the Chronicle as unreachable on the strength of a 403. A CORRECTION WORTH KEEPING. Search-engine summaries repeatedly asserted that metro@sfchronicle.com and the phone number appear on https://www.sfchronicle.com/newsroom_cont…",
@@ -7220,7 +7336,8 @@
      "name": "Ben Miller (listed as Benjamin Miller on the staff page)",
      "beat": "Associate Editor, GT Data and Business — data and business reporting; the government-data-practices angle",
      "address": "bmiller@govtech.com",
-     "source_url": "https://www.govtech.com/authors/Ben-Miller.html"
+     "source_url": "https://www.govtech.com/about",
+     "data_desk": true
     }
    ],
    "notes": "WHAT IS AND ISN'T PUBLISHED. GovTech publishes NO generic inbound editorial inbox — no tips@, no news@, no editorial@. I fetched the homepage, /about, /submissions.html and the contact form, and probed /contact, /contact-us, /tips and /about-us (all 404). The About Us page is the masthead and it publishes an individual @govtech.com address for every editor and writer in plain text (no Cloudflare obfuscation, no JS reveal — I confirmed the addresses in the raw HTML). That satisfies the launch plan's exception: these are reporter/editor addresses the outlet itself publishes on its own staff page, so they are safe to use. Any generic address you may have seen elsewhere (a \"govtech.editorial@gmail.com\" circulates in third-party media databases)…",
@@ -7298,7 +7415,8 @@
      "name": "Dillon Bergin",
      "beat": "Senior Investigative and Data Journalist — \"uses data and public records to power investigative reporting with partner newsrooms.",
      "address": "",
-     "source_url": "https://www.muckrock.com/staff/"
+     "source_url": "https://www.muckrock.com/staff/",
+     "data_desk": true
     },
     {
      "name": "Anna Massoglia",
@@ -8135,7 +8253,8 @@
      "name": "David Herzog",
      "beat": "Director of Data & Research Services at IRE; academic adviser to NICAR (National Institute for Computer-Assisted Reporting); Journalism Professions pr…",
      "address": "dherzog@ire.org",
-     "source_url": "https://www.ire.org/about-ire/ire-staff/"
+     "source_url": "https://www.ire.org/about-ire/ire-staff/",
+     "data_desk": true
     },
     {
      "name": "Adam Rhodes",
