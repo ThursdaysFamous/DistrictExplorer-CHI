@@ -4989,12 +4989,24 @@ def ward_number_witness(fips, county, wards, seats, min_pairs=None, munis=None):
     # numbers agree exactly would be refusing the wrong thing. Relabelled pairs
     # are counted and printed, never silently absorbed.
     relabelled = set()
+    # A TYPE OF None MEANS THE DOCUMENT NEVER SAID, which is a different thing
+    # from saying it wrong and is not a relabelling. Forest writes its towns
+    # bare — "Argonne, Ward 1, Hiles, Lincoln, Ward 1" — and spells out only
+    # the one name that is two municipalities in that county ("Town of
+    # Crandon", "City of Crandon"). So the COUNTY names the municipality and
+    # LTSB SUPPLIES THE TYPE, which is a resolution rather than an assumption:
+    # a bare name LTSB files under two types stays None, matches nothing, and
+    # falls out as a stray, so the witness FAILS rather than picking one.
+    # Assuming "bare means town" would have been right in Forest and is
+    # exactly the guess this returns a measurement instead of.
+    supplied = set()
 
     def settle(key):
-        """The county's (type, name[, ward]) with a redundant type corrected."""
+        """The county's (type, name[, ward]) with the type corrected or supplied."""
         filed = types_by_name.get(key[1])
         if filed and len(filed) == 1 and key[0] not in filed:
-            relabelled.add((key[0], key[1], next(iter(filed))))
+            (supplied if key[0] is None else relabelled).add(
+                (key[0], key[1], next(iter(filed))))
             return (next(iter(filed)),) + key[1:]
         return key
 
@@ -5021,18 +5033,35 @@ def ward_number_witness(fips, county, wards, seats, min_pairs=None, munis=None):
               for off in (1, -1)]
     print("  witness %-12s %d/%d listed wards in LTSB's own district (shifts %d/%d)"
           % (county, hit, listed, shifts[0], shifts[1]), file=sys.stderr)
+    if supplied:
+        print("  note    %-12s %d municipality name(s) carry no town/village/city "
+              "word in the document; LTSB files each under exactly one type here, "
+              "so the type comes from the state's own filing: %s"
+              % (county, len(supplied),
+                 ", ".join("%s (%s)" % (n, t)
+                           for _, n, t in sorted(supplied, key=lambda k: k[1]))[:200]),
+              file=sys.stderr)
     if relabelled:
         for was, name, now in sorted(relabelled):
             print("  note    %-12s the document calls %s a '%s' and LTSB files it as "
                   "a '%s'; that name is only one municipality here, so the wards "
                   "decide" % (county, name, was, now), file=sys.stderr)
-    stray = sorted(k for d, v in wards.items() for k in v - ltsb.get(d, set()))
+    # SORT KEY, NOT THE TUPLE: a type can be None here (see settle() above), and
+    # an UNRESOLVED one is precisely the case this note has to survive to print
+    # — sorting None against 't' raises TypeError and would crash the failure
+    # path instead of reporting it.
+    def _order(k):
+        return (str(k[0]),) + tuple(str(x) for x in k[1:])
+
+    stray = sorted((k for d, v in wards.items() for k in v - ltsb.get(d, set())),
+                   key=_order)
     if stray:
         print("  note    %-12s %d listed ward(s) are not in LTSB's same-numbered "
               "district: %s" % (county, len(stray),
                                 ", ".join("%s %s w%d in D%d" % (k[0], k[1], k[2], d)
                                           for d, v in sorted(wards.items())
-                                          for k in sorted(v - ltsb.get(d, set())))[:220]),
+                                          for k in sorted(v - ltsb.get(d, set()),
+                                                          key=_order))[:220]),
               file=sys.stderr)
     # THE SHIFT TEST IS COMPARATIVE, NOT ABSOLUTE. It asks whether the county's
     # numbering fits LTSB's file BETTER at its own offset than one district
@@ -6914,6 +6943,231 @@ def scrape_barron_table(spec):
     return attach_unique_roles(by_district, rows_out, county), spec["source_url"]
 
 
+# --- Forest: GoDaddy ContentCards, where two of every three names are wrong ---
+#
+# co.forest.wi.gov/county-board-supervisors answers 200 and names all 21
+# districts. The county HOME page — the URL this repo had on file — names
+# nobody, which is the Barron and St. Croix shape a fourth time, and the reason
+# the record read "Forest does not resolve" was never re-tested against the
+# page a reader actually lands on. NOTE THE DIRECTION IS THE OPPOSITE OF
+# BARRON'S: here the bare host answers and `www.` fails, so neither prefix is
+# the safe default and the working one is a measurement per county.
+#
+# THE PAGE GIVES EVERY SUPERVISOR THREE <h4> HEADINGS AND TWO OF THEM ARE
+# SOMEBODY ELSE. This is a GoDaddy Website Builder site: each seat is a
+# ContentCard whose Block holds three ContentCardHeading elements, one shown per
+# breakpoint, and the two hidden ones carry the names of NEIGHBOURING cards.
+# District 4's card reads "Scott Goode", "Brian Piasini", "Sam Augustin- County
+# Board Chair" in that order; only the first is District 4's supervisor. A
+# reader that takes the last <h4>, or joins them, or searches the card for a
+# name, ships two thirds of this board wrong — and it would look entirely
+# plausible, because every name on the page is a real Forest County supervisor.
+# ONLY h4[0] IS THE SEAT'S OWN. `data-aid="CONTENT_HEADLINE1_RENDERED"` marks
+# the right one on FOUR of the twenty-one cards and nothing on the rest, so
+# that attribute cannot be the selector either; position is.
+#
+# THE SAME LEAK MAKES THE VACANCY TEST PER-HEADING, NOT PER-CARD. Four seats
+# are empty and the county says so in the name itself — "District 12 - Vacant".
+# Those strings leak into other cards' hidden headings exactly like the names
+# do: District 11's card carries "District 12 - Vacant" as its third <h4>, and
+# District 15's carries "District 16 - Vacant". A card-wide search for the word
+# marks THREE live supervisors vacant. That is Chippewa's stale-notice trap in
+# a different vendor's markup, and the answer is the same one: read the seat's
+# own element, never the page around it.
+#
+# THE DISTRICT KEY IS WITNESSED BY THE COUNTY'S OWN MAILBOXES. Every filled
+# seat's card carries districtN@ — district9@ on the card that says District 9,
+# all seventeen — so the number is stated twice per card by two different
+# mechanisms, and the builder requires them to agree. The four vacant seats
+# publish no address, which is consistent: there is nobody to write to. Two
+# domains are in use (@co.forest.wi.us and @co.forest.wi.gov, four seats on the
+# latter); both are the county's and each ships as published.
+#
+# THE COMPOSITION NAMES MUNICIPALITIES WITHOUT SAYING WHAT THEY ARE, which is
+# why ward_number_witness() learned to take a type of None. Forest writes
+# "Argonne", "Hiles", "Popple River" bare and spells out only the one name that
+# is two municipalities in this county — "Town of Crandon" and "City of
+# Crandon". So the type is SUPPLIED BY LTSB rather than assumed: fourteen names,
+# thirteen of which the state files under exactly one type. "Bare means town"
+# would have been correct here and is still a guess; resolving it against the
+# state's own filing is a measurement, and an ambiguous bare name resolves to
+# nothing, strays, and fails the county rather than being picked.
+#
+# EACH MUNICIPALITY IS ITS OWN <p>, which is what makes this safe to read at
+# all. "Argonne, Ward 1" and "Hiles" and "Lincoln, Ward 1" are three paragraphs,
+# so there is no comma to guess about — one line is one municipality with an
+# optional ward, and District 7's "Wabeno Ward 3" (no comma at all) parses the
+# same way.
+#
+# EVERY SUPERVISOR'S HOME ADDRESS IS ON THIS PAGE AND NONE IS READ.
+FOREST_CARDS = {
+    "fips": "55041", "name": "Forest", "seats": 21,
+    "source_url": "https://co.forest.wi.gov/county-board-supervisors",
+}
+FR_CARD = re.compile(r'(?is)<div data-ux="ContentCard"[^>]*>(.*?)'
+                     r'(?=<div data-ux="GridCell"|<div data-ux="ContentCards"|\Z)')
+FR_H4 = re.compile(r"(?is)<h4[^>]*>(.*?)</h4>")
+FR_BODY = re.compile(r'(?is)<div data-ux="ContentCardText".*?>(.*?)</div>')
+FR_P = re.compile(r"(?is)<p[^>]*>(.*?)</p>")
+FR_DISTRICT = re.compile(r"(?i)^District\s*(\d+)$")
+FR_VACANT = re.compile(r"(?i)^District\s*(\d+)\s*[-–]\s*Vacant$")
+FR_MAIL = re.compile(r"(?i)mailto:\s*(district(\d+)@[A-Za-z0-9.-]+)")
+FR_PHONE = re.compile(r"^\(?(\d{3})\)?[-.\s]?(\d{3})[-.\s](\d{4})$")
+FR_ROLE = re.compile(r"\s*[-–]\s*((?:1st|2nd|3rd)?\s*(?:Vice\s*)?"
+                     r"(?:County\s+Board\s+)?Chair(?:man|person|woman)?)\s*$", re.I)
+FR_LINE = re.compile(r"(?i)^(?:(town|city|village)\s+of\s+)?(.+?)"
+                     r"(?:\s*,?\s*wards?\s*(\d+))?$")
+FR_TYPE = {"town": "t", "city": "c", "village": "v"}
+FR_MIN_EMAILS = 15          # 17 of 17 filled seats today
+FR_MIN_PHONES = 15          # 17 of 17
+FR_MIN_WARD_PAIRS = 20      # 25 today, MEASURED: five districts are whole
+                            # municipalities carrying no ward number at all
+                            # (District 3 is Alvin, Caswell, Popple River and
+                            # Ross entire). Barron's first floor was guessed
+                            # from another county's document and failed a good
+                            # build; this one is counted off the page.
+
+
+def _fr_text(chunk):
+    """One markup chunk as flat text."""
+    return re.sub(r"\s+", " ", html_lib.unescape(
+        re.sub(r"<[^>]+>", " ", chunk)).replace("\xa0", " ")).strip()
+
+
+def scrape_forest_cards(spec):
+    """All 21 seats or nothing, out of the county's own supervisors page."""
+    county, seats = spec["name"], spec["seats"]
+    page = fetch(spec["source_url"])
+    cards = FR_CARD.findall(page)
+    if not cards:
+        raise RuntimeError("%s: no ContentCard blocks on %s — the county has "
+                           "rebuilt its site; re-read the page"
+                           % (county, spec["source_url"]))
+
+    out, wards, munis, numbers = {}, {}, {}, {}
+    for card in cards:
+        heads = FR_H4.findall(card)
+        if not heads:
+            continue
+        # h4[0] AND ONLY h4[0] — see the note above; the others are neighbours.
+        head = _fr_text(heads[0])
+        body = FR_BODY.search(card)
+        if not body:
+            raise RuntimeError("%s: a supervisor card carries no text block "
+                               "(heading %r) — the card shape has changed"
+                               % (county, head[:40]))
+        lines = [x for x in (_fr_text(p) for p in FR_P.findall(body.group(1))) if x]
+        at = [i for i, l in enumerate(lines) if FR_DISTRICT.match(l)]
+        if len(at) != 1:
+            raise RuntimeError("%s: a card states its district %d times (heading "
+                               "%r) — one card, one district"
+                               % (county, len(at), head[:40]))
+        district = int(FR_DISTRICT.match(lines[at[0]]).group(1))
+        if district in out:
+            raise RuntimeError("%s: district %d appears on two cards" % (county, district))
+
+        empty = FR_VACANT.match(head)
+        if empty:
+            # THE COUNTY'S OWN WORD, from this card's own heading. If it names
+            # a different district than the card does, the leak described above
+            # has reached h4[0] and nothing here is trustworthy.
+            if int(empty.group(1)) != district:
+                raise RuntimeError("%s: a card for district %d is headed %r — the "
+                                   "hidden headings have displaced the real one"
+                                   % (county, district, head))
+            entry = {"name": None, "vacant": True, "role": None}
+        else:
+            role = None
+            got = FR_ROLE.search(head)
+            if got:
+                role = re.sub(r"\s+", " ", got.group(1)).strip()
+                head = FR_ROLE.sub("", head)
+            name = clean(head)[0]
+            if not is_name(name):
+                raise RuntimeError("%s: district %d resolved the name %r — that is "
+                                   "not a name, and the card has reshaped"
+                                   % (county, district, name))
+            entry = {"name": name, "vacant": False, "role": role}
+            mail = FR_MAIL.search(card)
+            if mail:
+                # THE MAILBOX IS THE SECOND STATEMENT OF THE DISTRICT NUMBER.
+                if int(mail.group(2)) != district:
+                    raise RuntimeError("%s: the card that says District %d carries "
+                                       "%s — the page states this seat's number "
+                                       "two ways and they disagree"
+                                       % (county, district, mail.group(1)))
+                entry["email"] = mail.group(1).lower()
+            for line in lines[:at[0]]:
+                if FR_PHONE.match(line):
+                    numbers[district] = ["-".join(FR_PHONE.match(line).groups())]
+                    break
+            # EVERY OTHER LINE BEFORE THE DISTRICT IS A HOME ADDRESS. Not read.
+
+        w, m = set(), set()
+        for line in lines[at[0] + 1:]:
+            got = FR_LINE.match(line)
+            if not got:
+                continue
+            ctv = FR_TYPE.get((got.group(1) or "").lower()) or None
+            name = _jk_norm(got.group(2))
+            if not name:
+                continue
+            m.add((ctv, name))
+            if got.group(3):
+                w.add((ctv, name, int(got.group(3))))
+        if not m:
+            raise RuntimeError("%s: district %d's card names no municipality — the "
+                               "composition is what witnesses the numbering, so "
+                               "this cannot ship unchecked" % (county, district))
+        wards[district], munis[district] = w, m
+        out[district] = entry
+
+    seen = sorted(out)
+    if seen != list(range(1, seats + 1)):
+        raise RuntimeError("%s: the page lists districts %s, not 1..%d — re-read %s"
+                           % (county, seen, seats, spec["source_url"]))
+
+    drop_shared_phones(county, numbers, out)
+
+    live = {d: r for d, r in out.items() if not r["vacant"]}
+    names = [r["name"] for r in live.values()]
+    if len(set(names)) != len(names):
+        dupes = sorted({n for n in names if names.count(n) > 1})
+        raise RuntimeError("%s: the same person is filed under two districts (%s) "
+                           "— the hidden headings have displaced a real one"
+                           % (county, dupes))
+
+    emails = sum(1 for r in live.values() if r.get("email"))
+    phones = sum(1 for r in live.values() if r.get("phone"))
+    if emails < FR_MIN_EMAILS or phones < FR_MIN_PHONES:
+        raise RuntimeError("%s: %d e-mails and %d phones across %d filled seats "
+                           "(floors %d/%d) — the card body has reshaped and "
+                           "contact is being dropped silently"
+                           % (county, emails, phones, len(live),
+                              FR_MIN_EMAILS, FR_MIN_PHONES))
+
+    vacant = sorted(d for d, r in out.items() if r["vacant"])
+    print("  %-12s %d seats, %d filled, %d phones, %d e-mails (no home address is "
+          "read, and every filled card prints one)"
+          % (county, seats, len(live), phones, emails), file=sys.stderr)
+    if vacant:
+        print("  note %-12s the county marks districts %s vacant, in the seat's own "
+              "heading — those names leak into neighbouring cards' hidden "
+              "headings, so the test is per heading and never per card"
+              % (county, ", ".join(str(d) for d in vacant)), file=sys.stderr)
+    print("  witness %-12s %d/%d filled seats carry the county's own "
+          "district-keyed mailbox, each agreeing with its card's district number"
+          % (county, emails, len(live)), file=sys.stderr)
+    ward_number_witness(spec["fips"], county, wards, seats,
+                        min_pairs=FR_MIN_WARD_PAIRS, munis=munis)
+    roles = {d: r["role"] for d, r in out.items() if r.get("role")}
+    rows = {str(d): dict(r) for d, r in out.items()}
+    for r in rows.values():
+        r.pop("role", None)
+        r["role"] = None
+    return attach_unique_roles(roles, rows, county), spec["source_url"]
+
+
 # --- Waupaca: the Clerk's Directory of Public Officials, as a live page --------
 #
 # THE COUNTY BOARD'S OWN PAGE NAMES NOBODY. waupacacounty-wi.gov's
@@ -7825,6 +8079,7 @@ SINGLE_COUNTY_CARRIERS = (
     (MENOMINEE_BOARD, "menominee-board"),
     (LANGLADE_BOARD, "langlade-board"),
     (BARRON_TABLE, "barron-table"),
+    (FOREST_CARDS, "forest-cards"),
 )
 
 
@@ -7881,6 +8136,9 @@ def main():
                 source_url, read_from = src["source_url"], "live"
             elif strategy == "barron-table":
                 districts, _doc = scrape_barron_table(src)
+                source_url, read_from = src["source_url"], "live"
+            elif strategy == "forest-cards":
+                districts, _doc = scrape_forest_cards(src)
                 source_url, read_from = src["source_url"], "live"
             elif strategy == "archive":
                 districts, archived_at = scrape_archive_county(src)

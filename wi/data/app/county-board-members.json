@@ -2954,6 +2954,169 @@
   "phone": "(920) 266-5828",
   "sourceUrl": "https://www.fdlco.wi.gov/government/county-board-supervisors"
  },
+ "5504101": {
+  "county": "Forest",
+  "district": 1,
+  "email": "district1@co.forest.wi.us",
+  "name": "Don Dehart Jr",
+  "phone": "715-784-0784",
+  "sourceUrl": "https://co.forest.wi.gov/county-board-supervisors"
+ },
+ "5504102": {
+  "county": "Forest",
+  "district": 2,
+  "email": "district2@co.forest.wi.us",
+  "name": "John Potters",
+  "phone": "715-490-0126",
+  "sourceUrl": "https://co.forest.wi.gov/county-board-supervisors"
+ },
+ "5504103": {
+  "county": "Forest",
+  "district": 3,
+  "email": "district3@co.forest.wi.us",
+  "name": "Sam Augustin",
+  "phone": "715-889-0475",
+  "role": "County Board Chair",
+  "sourceUrl": "https://co.forest.wi.gov/county-board-supervisors"
+ },
+ "5504104": {
+  "county": "Forest",
+  "district": 4,
+  "email": "district4@co.forest.wi.us",
+  "name": "Scott Goode",
+  "phone": "715-889-2201",
+  "sourceUrl": "https://co.forest.wi.gov/county-board-supervisors"
+ },
+ "5504105": {
+  "county": "Forest",
+  "district": 5,
+  "email": "district5@co.forest.wi.us",
+  "name": "Brian Piasini",
+  "phone": "715-889-2387",
+  "sourceUrl": "https://co.forest.wi.gov/county-board-supervisors"
+ },
+ "5504106": {
+  "county": "Forest",
+  "district": 6,
+  "email": "district6@co.forest.wi.gov",
+  "name": "Irene Spencer",
+  "phone": "715-889-3182",
+  "sourceUrl": "https://co.forest.wi.gov/county-board-supervisors"
+ },
+ "5504107": {
+  "county": "Forest",
+  "district": 7,
+  "email": "district7@co.forest.wi.us",
+  "name": "Lloyd Fulcer",
+  "phone": "715-473-2541",
+  "sourceUrl": "https://co.forest.wi.gov/county-board-supervisors"
+ },
+ "5504108": {
+  "county": "Forest",
+  "district": 8,
+  "email": "district8@co.forest.wi.us",
+  "name": "Tom Tallier",
+  "phone": "715-314-0600",
+  "sourceUrl": "https://co.forest.wi.gov/county-board-supervisors"
+ },
+ "5504109": {
+  "county": "Forest",
+  "district": 9,
+  "email": "district9@co.forest.wi.us",
+  "name": "Terry Lukas",
+  "phone": "715-889-1394",
+  "role": "1st Vice Chair",
+  "sourceUrl": "https://co.forest.wi.gov/county-board-supervisors"
+ },
+ "5504110": {
+  "county": "Forest",
+  "district": 10,
+  "email": "district10@co.forest.wi.us",
+  "name": "Ronald Karl",
+  "phone": "715-674-3602",
+  "role": "2nd Vice Chair",
+  "sourceUrl": "https://co.forest.wi.gov/county-board-supervisors"
+ },
+ "5504111": {
+  "county": "Forest",
+  "district": 11,
+  "email": "district11@co.forest.wi.us",
+  "name": "Mike Miller",
+  "phone": "715-616-2421",
+  "sourceUrl": "https://co.forest.wi.gov/county-board-supervisors"
+ },
+ "5504112": {
+  "county": "Forest",
+  "district": 12,
+  "sourceUrl": "https://co.forest.wi.gov/county-board-supervisors",
+  "vacant": true
+ },
+ "5504113": {
+  "county": "Forest",
+  "district": 13,
+  "email": "district13@co.forest.wi.us",
+  "name": "Jimmy Landru Jr",
+  "phone": "715-478-5023",
+  "sourceUrl": "https://co.forest.wi.gov/county-board-supervisors"
+ },
+ "5504114": {
+  "county": "Forest",
+  "district": 14,
+  "sourceUrl": "https://co.forest.wi.gov/county-board-supervisors",
+  "vacant": true
+ },
+ "5504115": {
+  "county": "Forest",
+  "district": 15,
+  "email": "district15@co.forest.wi.us",
+  "name": "Al Thompson",
+  "phone": "715-491-3277",
+  "sourceUrl": "https://co.forest.wi.gov/county-board-supervisors"
+ },
+ "5504116": {
+  "county": "Forest",
+  "district": 16,
+  "sourceUrl": "https://co.forest.wi.gov/county-board-supervisors",
+  "vacant": true
+ },
+ "5504117": {
+  "county": "Forest",
+  "district": 17,
+  "email": "district17@co.forest.wi.gov",
+  "name": "Patrick Daniels",
+  "phone": "715-889-3415",
+  "sourceUrl": "https://co.forest.wi.gov/county-board-supervisors"
+ },
+ "5504118": {
+  "county": "Forest",
+  "district": 18,
+  "sourceUrl": "https://co.forest.wi.gov/county-board-supervisors",
+  "vacant": true
+ },
+ "5504119": {
+  "county": "Forest",
+  "district": 19,
+  "email": "district19@co.forest.wi.gov",
+  "name": "Michelle Berdan",
+  "phone": "715-570-3751",
+  "sourceUrl": "https://co.forest.wi.gov/county-board-supervisors"
+ },
+ "5504120": {
+  "county": "Forest",
+  "district": 20,
+  "email": "district20@co.forest.wi.us",
+  "name": "Brooke Dewing",
+  "phone": "715-451-5598",
+  "sourceUrl": "https://co.forest.wi.gov/county-board-supervisors"
+ },
+ "5504121": {
+  "county": "Forest",
+  "district": 21,
+  "email": "district21@co.forest.wi.gov",
+  "name": "Micah Dewing",
+  "phone": "715-889-0371",
+  "sourceUrl": "https://co.forest.wi.gov/county-board-supervisors"
+ },
  "5504301": {
   "county": "Grant",
   "district": 1,
