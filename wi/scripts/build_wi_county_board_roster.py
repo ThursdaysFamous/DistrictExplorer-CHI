@@ -72,14 +72,15 @@ GEOMETRY = os.path.join(APP_DATA_DIR, "county-supervisory-districts.json")
 RAW = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache", "wi_county_boards_raw.json")
 OUT = os.path.join(APP_DATA_DIR, "county-board-members.json")
 
-MIN_COUNTIES = 60      # 62 ship one (41 board pages + 2 county GIS layers + Fond du
+MIN_COUNTIES = 61      # 63 ship one (41 board pages + 2 county GIS layers + Fond du
                        # Lac through the Internet Archive + Dodge's constituent
                        # directory + Kenosha's witnessed directory PDF + Adams's
                        # directory PDF + Clark's, Pierce's and Marathon's
                        # directories + St. Croix's own district table +
-                       # Chippewa's board-page h-cards + Columbia's framed
-                       # table + NINE by dated document); tolerates two dark
-MIN_SEATS = 1335       # 1408 today; the tolerance is the two largest boards
+                       # Chippewa's board-page h-cards + Menominee's joint
+                       # County/Town board + Columbia's framed table + NINE by
+                       # dated document); tolerates two dark
+MIN_SEATS = 1340       # 1413 today; the tolerance is the two largest boards
                        # (Dane 37 + Outagamie 36) going dark in one run, which is
                        # what a floor is for — it is never lowered to fit a result
 
@@ -201,6 +202,30 @@ def main():
                 row["documentUrl"] = entry["document_url"]
             roster[key] = row
             total += 1
+
+        # THE SUPERVISORS WHO HOLD NO DISTRICT, under a county-keyed entry
+        # beside the districts. Only Menominee has any: its joint County/Town
+        # board seats seven, five by ward and two elected countywide, and one
+        # of the two is the Vice-Chair. A district-keyed roster has no slot for
+        # a member elected countywide, and omitting them ships a five-member
+        # board for a seven-member body — the Alexander (Illinois) case, where
+        # a card that names fewer people than the body seats has to SAY so
+        # rather than let the absence read as completeness. Every district card
+        # in the county names them beneath its own supervisor, because a reader
+        # in ward 3 is represented by all three.
+        #
+        # The key is deliberately not a district key: `<fips>-at-large` cannot
+        # collide with the seven-digit SUPER_FIPS the districts use, so a card
+        # looking up a district can never find this row by accident.
+        if entry.get("at_large"):
+            roster["%s-at-large" % fips] = {
+                "county": entry["county"],
+                "sourceUrl": entry["source_url"],
+                "atLarge": [
+                    dict([("name", m["name"])] + ([("role", m["role"])] if m.get("role") else []))
+                    for m in entry["at_large"]
+                ],
+            }
 
     if total < MIN_SEATS:
         raise RuntimeError("%d seats resolved, floor is %d" % (total, MIN_SEATS))

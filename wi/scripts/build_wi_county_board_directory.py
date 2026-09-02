@@ -193,7 +193,11 @@ COUNTY_SITES = {
     "55073": ("Marathon", "https://marathoncounty.gov/"),
     "55075": ("Marinette", "https://www.marinettecountywi.gov/county_board/"),
     "55077": ("Marquette", "https://www.marquettecountywi.gov/government/county-board-supervisors/"),  # county page confirms 1..17
-    "55078": ("Menominee", "https://www.co.menominee.wi.us/"),
+    # `seats` here is the DISTRICT count read back from the shipped geometry,
+    # and Menominee is the one county where that is not the size of its board:
+    # the joint County/Town board seats seven, five by ward and two elected
+    # countywide. The card states both, from the roster's own at-large row.
+    "55078": ("Menominee", "https://www.co.menominee.wi.us/county-board/"),  # county page confirms 1..5
     "55079": ("Milwaukee", "https://county.milwaukee.gov/EN"),
     "55081": ("Monroe", "https://co.monroe.wi.us/"),
     # /307 is the MAP INDEX — 31 links to 31 PDFs with nobody's name on them —

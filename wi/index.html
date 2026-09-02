@@ -8649,8 +8649,8 @@ function initWisconsinExplorer() {
    *
    * THE SUPERVISOR IS NAMED WHERE A COUNTY PUBLISHES ONE, AND NOWHERE ELSE.
    * Wisconsin publishes no statewide roster, so the people come from each
-   * county's own page: 62 of the 72 have a district-keyed member list this
-   * can reach (1,408 seats — 53 read weekly, and NINE carried as dated
+   * county's own page: 63 of the 72 have a district-keyed member list this
+   * can reach (1,413 seats — 54 read weekly, and NINE carried as dated
    * documents in two classes that the card itself distinguishes. Taylor,
    * Lafayette and La Crosse are BLOCKED, their hosts answering a captcha or
    * a Cloudflare challenge to every automated client. Jackson, Richland,
@@ -8658,9 +8658,9 @@ function initWisconsinExplorer() {
    * sites serves this client perfectly well and every one publishes a
    * robots.txt disallowing it, so the crawl stopped on 2026-08-31 and the
    * names stayed, dated — those rows carry their own `asOfWhy` and the card
-   * says the county ASKED rather than refused), and the other 10 do not —
+   * says the county ASKED rather than refused), and the other 9 do not —
    * Forest does not resolve, Lincoln answers a challenge, and the remaining
-   * 8 publish prose or images with
+   * 7 publish prose or images with
    * no district column. ST. CROIX LEFT THAT LIST ON 2026-09-02 AND ITS PAGE
    * NEVER CHANGED EITHER: its home page — the URL this repo itself had on
    * file — links nothing about the board, and its board landing page is prose
@@ -8669,7 +8669,12 @@ function initWisconsinExplorer() {
    * TRAP OF ITS OWN: its board page carries a stale VACANCY NOTICE for
    * District 6 above a card naming the supervisor who holds it, so the
    * vacancy test here is per CARD and never per page, and all 21 seats are
-   * re-confirmed against the county's separate staff directory. CLARK LEFT THAT LIST ON 2026-09-01 AND ITS PAGE NEVER
+   * re-confirmed against the county's separate staff directory. MENOMINEE
+   * IS THE ONE BOARD WHOSE MEMBERS ARE NOT ALL DISTRICTED: its joint
+   * County/Town board seats seven, five by ward — which LTSB files as
+   * districts 1 to 5, one for one — and two elected COUNTYWIDE, who ride a
+   * county-keyed `<fips>-at-large` row and are named on every district card
+   * in the county rather than dropped for holding no district. CLARK LEFT THAT LIST ON 2026-09-01 AND ITS PAGE NEVER
    * CHANGED: its board page names the chair, the vice chair and the clerk, and
    * the other 29 names are eleven pages into the Clerk's Official Directory,
    * which that same site links. A district in an unnamed county keeps the honest card:
@@ -8723,13 +8728,22 @@ function initWisconsinExplorer() {
         var entry = (parts[1] && fips != null) ? parts[1][String(fips)] : null;
         var superFips = findPropCI(props, ["super_fips"]);
         var member = (parts[2] && superFips != null) ? parts[2][String(superFips)] : null;
+        // THE SUPERVISORS WHO HOLD NO DISTRICT, under a county-keyed row beside
+        // the districts. Only Menominee has any: its joint County/Town board
+        // seats seven, five by ward and two elected countywide, one of whom is
+        // the Vice-Chair. A district-keyed lookup can never find them, and a
+        // card that named only the district supervisor would show five of a
+        // seven-member board. The key cannot collide with a district's
+        // seven-digit SUPER_FIPS, so this lookup is a miss everywhere else.
+        var atLarge = (parts[2] && fips != null) ? parts[2][String(fips) + "-at-large"] : null;
         return {
           seq: seq,
           district: findPropCI(props, ["superid"]),
           county: findPropCI(props, ["cnty_name"]),
           seats: entry ? entry.seats : null,
           countyUrl: entry ? entry.url : null,
-          member: member || null
+          member: member || null,
+          atLarge: (atLarge && atLarge.atLarge) || null
         };
       });
     },
@@ -8805,10 +8819,32 @@ function initWisconsinExplorer() {
               "named counties get.")
         }]));
       }
+      // AT-LARGE SUPERVISORS REPRESENT THE WHOLE COUNTY, so they belong on
+      // every district card in it — a reader in ward 3 is represented by their
+      // own supervisor AND by both of these. They are badged differently from
+      // the district's own, because telling a reader that somebody represents
+      // their district when they represent the county would be worse than
+      // leaving them off.
+      if (result.atLarge && result.atLarge.length) {
+        for (var ai = 0; ai < result.atLarge.length; ai++) {
+          var al = result.atLarge[ai];
+          if (!al || !al.name) continue;
+          var alPerson = { name: String(al.name), badge: "Supervisor at large" };
+          if (al.role) alPerson.note = String(al.role);
+          wrap.appendChild(renderPersonRows([alPerson]));
+        }
+      }
       if (result.seats) {
-        wrap.appendChild(renderFieldStack([
-          { label: "Board", value: String(result.seats) + " supervisory districts" }
-        ]));
+        // The board's OWN size, which is the district count only where every
+        // seat is districted. Menominee seats seven for five districts, and a
+        // card reading "5 supervisory districts" beside seven names would
+        // contradict itself.
+        var board = String(result.seats) + " supervisory districts";
+        if (result.atLarge && result.atLarge.length) {
+          board += " + " + String(result.atLarge.length) + " supervisor" +
+            (result.atLarge.length === 1 ? "" : "s") + " elected at large";
+        }
+        wrap.appendChild(renderFieldStack([{ label: "Board", value: board }]));
       }
       return wrap;
     },
