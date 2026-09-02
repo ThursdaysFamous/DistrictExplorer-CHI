@@ -156,7 +156,7 @@ COUNTY_SITES = {
     "55011": ("Buffalo", "https://www.buffalocountywi.gov/"),
     "55013": ("Burnett", "https://burnettcountywi.gov/264/Supervisors"),  # county page confirms 1..21
     "55015": ("Calumet", "https://calumetcounty.org/"),
-    "55017": ("Chippewa", "https://chippewacountywi.gov/"),
+    "55017": ("Chippewa", "https://chippewacountywi.gov/162/County-Board-Supervisors"),  # county page confirms 1..21
     "55019": ("Clark", "https://www.clarkcountywi.gov/"),
     "55021": ("Columbia", "https://www.co.columbia.wi.us/ColumbiaCounty/"),
     "55023": ("Crawford", "https://www.crawfordcountywi.gov/"),

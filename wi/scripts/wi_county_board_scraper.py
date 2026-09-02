@@ -5880,6 +5880,191 @@ def scrape_st_croix_table(spec):
     return {str(d): r for d, r in out.items()}, spec["source_url"]
 
 
+# --- Chippewa: h-cards on the board page, witnessed by the staff directory ----
+#
+# THE PAGE CARRIES A STALE VACANCY NOTICE ABOVE A DIRECTORY THAT CONTRADICTS IT,
+# and that is the whole trap. Above the member cards, in hand-typed prose, sits
+# "Seeking County Board Supervisor for District 6" — applications due 4:30 p.m.
+# on Tuesday, 16 June 2026, for a term running to April 2028. Twelve cards
+# further down, District 6 is Les Danielson, with a phone and a county mailbox,
+# and the county's own full staff directory says the same. The seat was filled
+# and the notice was never taken down. ANY READING THAT LOOKED FOR THE WORD —
+# a `VACANT` sweep of the page, which is exactly what this file does for the
+# counties that mark empty seats — SHIPS A TWENTY-SEAT BOARD FOR A COUNTY THAT
+# SEATS TWENTY-ONE, and drops a named supervisor who is in office. So the
+# vacancy test is per CARD here and never per page: prose above a directory is
+# not the directory, and the CMS module is the surface the county maintains.
+#
+# TWO COUNTY SURFACES, AND BOTH MUST NAME THE SAME PERSON IN THE SAME DISTRICT.
+# The board page's widget and the county's full staff directory
+# (chippewacountywi.gov/Directory.aspx) are separate renderings, and the second
+# is what settles District 6 rather than this project deciding which half of one
+# page to believe. The witness is cheap — one extra fetch — and it is the check
+# that would catch a widget left stale the way the notice was.
+#
+# THE DISTRICT COMES OUT OF EACH CARD'S OWN JOB TITLE ("District 7, Chair"),
+# never out of position: the widget happens to run 1..21 in order today, and an
+# adjacency reading would survive that and scramble the board the day it stops.
+# The role rides the same string, after the comma.
+#
+# THERE IS NO WARD WITNESS FOR THIS COUNTY AND THAT IS A MEASUREMENT. Clark,
+# Pierce, Marathon and St. Croix each print the municipalities and wards their
+# districts are made of, which is what lets ward_number_witness() prove the
+# county and the state number the same districts. Chippewa publishes 21
+# per-district map PDFs and a countywide map whose only table gives each
+# district's POPULATION and deviation — no composition anywhere, and LTSB's ward
+# layer carries no population field to compare that table against. So Chippewa
+# ships on the same footing as the 41 other board-page counties: the district
+# key is the county's own statement on its own card, cross-checked against a
+# second county surface, and the run log says so rather than leaving the absence
+# to be inferred.
+#
+# THE MAILBOX IS NAME-KEYED, NOT DISTRICT-KEYED — jflater@ for James Flater —
+# so unlike Door's districtN@ it witnesses the NAME rather than the district.
+# It still earns its gate: a card boundary that moved would put a name against
+# somebody else's mailbox on nearly every seat at once. The surname is taken
+# past a generational suffix, because District 17 is "George Rohmeyer, Jr." and
+# the last WORD of that is "Jr.".
+CHIPPEWA_DIRECTORY = {
+    "fips": "55017", "name": "Chippewa", "seats": 21,
+    "source_url": "https://chippewacountywi.gov/162/County-Board-Supervisors",
+    "witness_url": "https://chippewacountywi.gov/Directory.aspx",
+    "domain": "chippewacountywi.gov",
+}
+CH_DIST = re.compile(r"(?i)^District\s*(\d{1,2})\b")
+CH_MAIL = re.compile(r'(?i)mailto:\s*([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+)')
+CH_PHONE = re.compile(r"\b(\d{3})[-.\s](\d{3})[-.\s](\d{4})\b")
+CH_SUFFIX = re.compile(r"(?i)^(?:jr|sr|ii|iii|iv|v)\.?$")
+CH_MIN_EMAILS = 19       # 21 of 21 today
+CH_MIN_PHONES = 19       # 21 of 21 today
+
+
+def _ch_surname(name):
+    """The surname, looking past a generational suffix ("Rohmeyer, Jr.")."""
+    parts = [p.strip(",") for p in name.replace(",", " ").split() if p.strip(",")]
+    while len(parts) > 1 and CH_SUFFIX.match(parts[-1]):
+        parts.pop()
+    return parts[-1] if parts else ""
+
+
+def scrape_chippewa_directory(spec):
+    """All seats or nothing, from the board page's h-cards, witnessed twice."""
+    county, seats = spec["name"], spec["seats"]
+    page = fetch(spec["source_url"])
+    out, numbers, roles = {}, {}, {}
+    for m in HCARD_ITEM.finditer(page):
+        body = m.group(1)
+        name, title = HCARD_NAME.search(body), HCARD_TITLE.search(body)
+        if not (name and title):
+            continue
+        who = " ".join(html_lib.unescape(_TAG.sub(" ", name.group(1))).split())
+        office = " ".join(html_lib.unescape(_TAG.sub(" ", title.group(1))).split())
+        stated = CH_DIST.match(office)
+        if not stated:
+            continue                    # a card on this page that is not a seat
+        district = int(stated.group(1))
+        if not (1 <= district <= seats):
+            raise RuntimeError("%s: a card states district %d on a %d-seat board "
+                               "— re-read %s" % (county, district, seats,
+                                                 spec["source_url"]))
+        if district in out:
+            raise RuntimeError("%s: two cards state district %d (%r and %r)"
+                               % (county, district, out[district]["name"], who))
+        # THE VACANCY TEST IS PER CARD — see the note above. A page-wide sweep
+        # would find the stale notice and empty a seat somebody holds.
+        if VACANT.search(who):
+            out[district] = {"name": None, "vacant": True, "role": None}
+            continue
+        if not is_name(who):
+            raise RuntimeError("%s: district %d resolved %r, which does not read "
+                               "as a name — re-read %s"
+                               % (county, district, who, spec["source_url"]))
+        row = {"name": clean(who)[0], "vacant": False, "role": None}
+        mail = CH_MAIL.search(body)
+        if mail:
+            row["email"] = mail.group(1).lower()
+        tel = HCARD_TEL.search(body)
+        if tel:
+            got = CH_PHONE.search(
+                " ".join(html_lib.unescape(_TAG.sub(" ", tel.group(1))).split()))
+            if got:
+                numbers[district] = ["-".join(got.groups())]
+        role = STRUCTURED_ROLE.search(office)
+        if role:
+            roles[district] = role_case(role.group(1))
+        out[district] = row
+
+    seen = sorted(out)
+    if seen != list(range(1, seats + 1)):
+        raise RuntimeError("%s: the directory states districts %s, not 1..%d — "
+                           "the widget has reshaped; re-read %s"
+                           % (county, seen, seats, spec["source_url"]))
+    drop_shared_phones(county, numbers, out)
+
+    named = {d: r for d, r in out.items() if not r["vacant"]}
+    names = [r["name"] for r in named.values()]
+    if len(set(names)) != len(names):
+        dupes = sorted({n for n in names if names.count(n) > 1})
+        raise RuntimeError("%s: the same person is filed under two districts (%s)"
+                           % (county, dupes))
+    emails = sum(1 for r in named.values() if r.get("email"))
+    phones = sum(1 for r in named.values() if r.get("phone"))
+    own = sum(1 for r in named.values()
+              if (r.get("email") or "").endswith("@" + spec["domain"]))
+    agree = sum(1 for r in named.values() if r.get("email")
+                and name_fold(_ch_surname(r["name"])) in name_fold(r["email"].split("@")[0]))
+    want_mail = CH_MIN_EMAILS - (seats - len(named))
+    want_tel = CH_MIN_PHONES - (seats - len(named))
+    if emails < want_mail or phones < want_tel:
+        raise RuntimeError("%s: %d e-mails and %d phones across %d seats (floors "
+                           "%d/%d) — the widget has reshaped and contact is being "
+                           "dropped silently"
+                           % (county, emails, phones, seats, want_mail, want_tel))
+    if own != emails or agree < emails - 1:
+        raise RuntimeError("%s: %d of %d mailboxes are on %s and %d agree with "
+                           "their own supervisor's surname — a card boundary has "
+                           "moved" % (county, own, emails, spec["domain"], agree))
+
+    # THE SECOND COUNTY SURFACE. A fetch failure is not a disagreement.
+    try:
+        raw = fetch(spec["witness_url"])
+    except Exception as e:              # noqa: BLE001 - the witness, never the source
+        print("  WITNESS SKIPPED %-9s staff directory unreachable (%s) — the "
+              "roster ships on the board page alone this run" % (county, e),
+              file=sys.stderr)
+    else:
+        # MATCHED ON LETTERS AND DIGITS ALONE, in both directions. The two
+        # surfaces punctuate the same fact differently — the directory renders
+        # each field in its own tag, so flattening gives "Les Danielson | |
+        # District 6", and clean() has already turned "George Rohmeyer, Jr."
+        # into "George Rohmeyer Jr". Comparing the stripped forms asks the only
+        # question that matters (does this name sit against this district) and
+        # is not defeated by either side's markup. The trailing guard is what
+        # keeps district 2 from matching district 21.
+        directory = re.sub(r"[^a-z0-9]", "",
+                           html_lib.unescape(_TAG.sub(" ", raw)).lower())
+        missing = [(d, r["name"]) for d, r in sorted(named.items())
+                   if not re.search(re.escape(name_fold(r["name"]) + "district%d" % d)
+                                    + r"(?!\d)", directory)]
+        if missing:
+            raise RuntimeError(
+                "%s: the county's own staff directory does not put %s — the "
+                "board page and the staff directory disagree about who holds "
+                "which seat, and neither is guessed at"
+                % (county, "; ".join("%s in district %d" % (n, d)
+                                     for d, n in missing)))
+        print("  witness %-12s %d/%d supervisors named in the same district by "
+              "the county's own staff directory" % (county, len(named), seats),
+              file=sys.stderr)
+
+    print("  %-12s %d seats, %d phones, %d e-mails; %d/%d mailboxes agree with "
+          "their own surname. NO WARD WITNESS: the county publishes district "
+          "maps and a population table, never a composition"
+          % (county, seats, phones, emails, agree, emails), file=sys.stderr)
+    rows = {str(d): r for d, r in out.items()}
+    return attach_unique_roles(roles, rows, county), spec["source_url"]
+
+
 # --- Waupaca: the Clerk's Directory of Public Officials, as a live page --------
 #
 # THE COUNTY BOARD'S OWN PAGE NAMES NOBODY. waupacacounty-wi.gov's
@@ -6787,6 +6972,7 @@ SINGLE_COUNTY_CARRIERS = (
     (PIERCE_DIRECTORY, "pierce-directory"),
     (MARATHON_DIRECTORY, "marathon-directory"),
     (ST_CROIX_TABLE, "st-croix-table"),
+    (CHIPPEWA_DIRECTORY, "chippewa-directory"),
 )
 
 
@@ -6830,6 +7016,9 @@ def main():
                 source_url, read_from = src["source_url"], "live"
             elif strategy == "st-croix-table":
                 districts, _doc = scrape_st_croix_table(src)
+                source_url, read_from = src["source_url"], "live"
+            elif strategy == "chippewa-directory":
+                districts, _doc = scrape_chippewa_directory(src)
                 source_url, read_from = src["source_url"], "live"
             elif strategy == "archive":
                 districts, archived_at = scrape_archive_county(src)

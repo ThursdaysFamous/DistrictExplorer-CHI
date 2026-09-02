@@ -199,7 +199,32 @@ def validate(entries, layer_ids, outlines):
             if slug not in outlines:
                 problems.append("%s: county %r has no data/app/%s-county-outline.json"
                                 % (where, slug, slug))
+        problems.extend(counted_prose_problems(where, e))
     return problems
+
+
+# "In 12 of Wisconsin's 72 counties…" ABOVE A LIST OF ELEVEN. That shipped on
+# 2026-09-02 and every gate stayed green, because the gates compare the shipped
+# JSON to the guidebook and the two agreed — on a number that was wrong in both.
+# A COUNT IN PROSE IS A CLAIM ABOUT THE ARRAY BESIDE IT, and it is the one thing
+# an equality check between two copies can never see. The cause was a
+# multi-replacement edit whose last assertion failed, so none of the earlier
+# replacements were written and nobody re-read the file; the count then went
+# stale silently for one release. This makes the prose answer to the data.
+COUNTED_PROSE = re.compile(r"(?i)\bIn (\d+) of\b")
+
+
+def counted_prose_problems(where, entry):
+    """A gap whose summary counts counties must count the ones it lists."""
+    counties = entry.get("counties") or []
+    if not counties:
+        return []                        # a gap with no county list counts nothing
+    said = COUNTED_PROSE.search(str(entry.get("summary") or ""))
+    if said and int(said.group(1)) != len(counties):
+        return ["%s: the summary says %s counties and `counties` lists %d — the "
+                "panel would print a number above a list that contradicts it"
+                % (where, said.group(1), len(counties))]
+    return []
 
 
 def render(entries):
