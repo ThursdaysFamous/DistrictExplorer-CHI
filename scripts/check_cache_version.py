@@ -106,8 +106,15 @@ def main():
     problems, checked = [], 0
     for tag in _instances():
         sw_path = "%s/sw.js" % tag
-        head_sw = _at("HEAD", sw_path) or open(
-            os.path.join(REPO_ROOT, sw_path), encoding="utf-8").read()
+        # THE WORKING TREE IS THE HEAD SIDE, not the last commit. Reading
+        # HEAD made this gate fail its own first real use: the bump was made
+        # and regenerated but not yet committed, so it compared the base's
+        # cache name against the PREVIOUS commit's and reported a change that
+        # had already been fixed. In CI the two are the same thing — the
+        # checkout IS the commit — which is exactly why a gate can be wrong
+        # this way and still look green there. Compare what is on disk.
+        with open(os.path.join(REPO_ROOT, sw_path), encoding="utf-8") as fh:
+            head_sw = fh.read()
         base_sw = _at(args.base, sw_path)
         if base_sw is None:
             continue                     # a new instance has nothing to go stale

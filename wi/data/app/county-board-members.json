@@ -4149,6 +4149,124 @@
   "name": "Kevin Butteris",
   "sourceUrl": "https://www.iowacountywi.gov/departments/countyboard/county-board-members"
  },
+ "5505101": {
+  "county": "Iron",
+  "district": 1,
+  "email": "brad.buccanero@ironcountywi.org",
+  "name": "Brad Buccanero",
+  "phone": "715-208-4056",
+  "sourceUrl": "https://www.co.iron.wi.gov/190/County-Board"
+ },
+ "5505102": {
+  "county": "Iron",
+  "district": 2,
+  "email": "joseph.pinardi@ironcountywi.org",
+  "name": "Joseph Pinardi",
+  "phone": "906-364-1855",
+  "sourceUrl": "https://www.co.iron.wi.gov/190/County-Board"
+ },
+ "5505103": {
+  "county": "Iron",
+  "district": 3,
+  "sourceUrl": "https://www.co.iron.wi.gov/190/County-Board",
+  "vacant": true
+ },
+ "5505104": {
+  "county": "Iron",
+  "district": 4,
+  "email": "larry.youngs@ironcountywi.org",
+  "name": "Larry Youngs",
+  "phone": "715-561-3168",
+  "role": "Chair",
+  "sourceUrl": "https://www.co.iron.wi.gov/190/County-Board"
+ },
+ "5505105": {
+  "county": "Iron",
+  "district": 5,
+  "email": "willard.stutz@ironcountywi.org",
+  "name": "Willard Stutz",
+  "phone": "715-561-4145",
+  "sourceUrl": "https://www.co.iron.wi.gov/190/County-Board"
+ },
+ "5505106": {
+  "county": "Iron",
+  "district": 6,
+  "email": "roy.haeger@ironcountywi.org",
+  "name": "Roy Haeger",
+  "phone": "715-862-2822",
+  "sourceUrl": "https://www.co.iron.wi.gov/190/County-Board"
+ },
+ "5505107": {
+  "county": "Iron",
+  "district": 7,
+  "email": "brandon.snyder@ironcountywi.org",
+  "name": "Brandon Snyder",
+  "phone": "906-364-2093",
+  "sourceUrl": "https://www.co.iron.wi.gov/190/County-Board"
+ },
+ "5505108": {
+  "county": "Iron",
+  "district": 8,
+  "email": "jeffrey.nevala@ironcountywi.org",
+  "name": "Jeffrey Nevala",
+  "phone": "651-249-0053",
+  "sourceUrl": "https://www.co.iron.wi.gov/190/County-Board"
+ },
+ "5505109": {
+  "county": "Iron",
+  "district": 9,
+  "email": "patrick.hanson@ironcountywi.org",
+  "name": "Patrick Hanson",
+  "phone": "715-561-3446",
+  "sourceUrl": "https://www.co.iron.wi.gov/190/County-Board"
+ },
+ "5505110": {
+  "county": "Iron",
+  "district": 10,
+  "email": "steven.finco@ironcountywi.org",
+  "name": "Steven Finco",
+  "phone": "715-208-0312",
+  "role": "Vice Chair",
+  "sourceUrl": "https://www.co.iron.wi.gov/190/County-Board"
+ },
+ "5505111": {
+  "county": "Iron",
+  "district": 11,
+  "email": "david.mcnutt@ironcountywi.org",
+  "name": "David McNutt",
+  "sourceUrl": "https://www.co.iron.wi.gov/190/County-Board"
+ },
+ "5505112": {
+  "county": "Iron",
+  "district": 12,
+  "email": "karen.lauer@ironcountywi.org",
+  "name": "Karen Lauer",
+  "phone": "715-410-8361",
+  "sourceUrl": "https://www.co.iron.wi.gov/190/County-Board"
+ },
+ "5505113": {
+  "county": "Iron",
+  "district": 13,
+  "email": "roxanne.lutgen@ironcountywi.org",
+  "name": "Roxanne Lutgen",
+  "phone": "715-367-6680",
+  "sourceUrl": "https://www.co.iron.wi.gov/190/County-Board"
+ },
+ "5505114": {
+  "county": "Iron",
+  "district": 14,
+  "email": "tanner.hiller@ironcountywi.org",
+  "name": "Tanner Hiller",
+  "phone": "715-776-0190",
+  "sourceUrl": "https://www.co.iron.wi.gov/190/County-Board"
+ },
+ "5505115": {
+  "county": "Iron",
+  "district": 15,
+  "email": "gary.kessler@ironcountywi.org",
+  "name": "Gary Kessler",
+  "sourceUrl": "https://www.co.iron.wi.gov/190/County-Board"
+ },
  "5505301": {
   "asOf": "the county's own page, captured 2026-08-31",
   "asOfWhy": "The county asks automated readers not to crawl its site, so this name is a dated capture rather than the weekly re-read the other named counties get.",

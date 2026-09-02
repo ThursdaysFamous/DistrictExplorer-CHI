@@ -120,7 +120,8 @@ METRO_COUNTY_FIPS = (
     "001", "003", "005", "007", "009", "011", "013", "015",
     "017", "019",
     "021", "023", "025", "027", "029", "031", "033", "035", "037",
-    "039", "041", "043", "045", "047", "049", "053", "055", "057",
+    "039", "041", "043", "045", "047", "049", "051", "053", "055",
+    "057",
     "059",
     "061", "063", "065", "067", "069", "071", "073", "075",
     "077", "078", "079", "081", "083", "085", "087", "089",
@@ -216,6 +217,7 @@ INSIDE = {
     "Green": (42.67898, -89.60243),
     "Green Lake": (43.80746, -89.02684),
     "Iowa": (43.0113, -90.13346),
+    "Iron": (46.38983, -90.34647),
     "Jackson": (44.33432, -90.74153),
     "Jefferson": (43.02123, -88.77694),
     "Juneau": (43.94612, -90.13402),
@@ -263,9 +265,15 @@ INSIDE = {
     "Winnebago": (44.06844, -88.64513),
     "Wood": (44.46637, -90.02113),
 }
-OUTSIDE = {
-    "Iron": (46.38983, -90.34647),
-}
+# EMPTY, AND THAT IS THE POINT. Every OUTSIDE anchor this file has ever carried
+# was a Wisconsin county whose supervisors nobody here could name; Iron was the
+# last, and it joined 2026-09-02. The dissolve is now the whole state, so there
+# is no in-state ground left to prove the wash STOPS at — the negative test
+# that remains is the smoke suite's own out-of-state point, which sits off the
+# north-west corner. A county that ever leaves the roster puts its anchor back
+# here, and check_coverage_ring_tracks_roster() in validate_index.py fails the
+# merge gate until it does.
+OUTSIDE = {}
 
 
 def fetch_counties():
