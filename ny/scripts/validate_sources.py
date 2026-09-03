@@ -220,17 +220,21 @@ TIGERWEB = {
                                "CD121 roll; the layer-name scan watches for it"},
         {"layer": "NY State Senate District", "index": 1,
          "app_file": "state-senate-districts.json",
-         "expect_name": "2024 State Legislative Districts - Upper",
+         "expect_name": "2026 State Legislative Districts - Upper",
          "watch_pattern": r"(\d{4}) State Legislative Districts - Upper",
-         "current": 2024,
-         "vintage": "NY Senate: 2022 special-master (Cervas) map",
+         "current": 2026,
+         "vintage": "NY Senate: 2022 special-master (Cervas) map, republished under "
+                    "TIGERweb's 2026 vintage (the 2024 edition moved to layer indices "
+                    "5/9; MEASURED 2026-09-03 as the same lines, not a redraw)",
          "expected_successor": "a newer-year SLDU layer (next redraw or post-2030 census)"},
         {"layer": "NY State Assembly District", "index": 2,
          "app_file": "state-assembly-districts.json",
-         "expect_name": "2024 State Legislative Districts - Lower",
+         "expect_name": "2026 State Legislative Districts - Lower",
          "watch_pattern": r"(\d{4}) State Legislative Districts - Lower",
-         "current": 2024,
-         "vintage": "NY Assembly: map signed Apr 24, 2023 (effective 2024)",
+         "current": 2026,
+         "vintage": "NY Assembly: map signed Apr 24, 2023 (effective 2024), republished "
+                    "under TIGERweb's 2026 vintage (MEASURED 2026-09-03 as the same "
+                    "lines, not a redraw)",
          "expected_successor": "a newer-year SLDL layer (next redraw or post-2030 census)"},
     ],
 }

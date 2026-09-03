@@ -199,7 +199,12 @@ represents them TODAY; showing not-yet-effective districts is a correctness bug,
      the builder fetches TIGERweb directly (`STATE='17'`) and simplifies, so steps 2–4 (shapefile
      intake / `data/` conversion) don't apply — the builder *is* the intake. On a redistricting or a
      TIGERweb vintage roll (CD120 → CD121, or a new "State Legislative Districts" layer — both have now
-     been seen: the CD roll landed 2026-09-03, and the SLD layers moved 2024 → 2026), update the
+     been seen, and they behaved DIFFERENTLY. The CD roll (2026-09-03) RETIRED its field, so every
+     builder naming CD119 broke. The SLD roll to 2026, measured the same day, changed only the layer
+     NAME: indices 1/2 still serve upper/lower, SLDU/SLDL survived, and all 12 chambers across the
+     fleet measured geometrically identical (~180,000 sampled points, 17 sub-metre disagreements) —
+     so it needed no rebuild at all, only the vintage pin in ny/scripts/validate_sources.py. Check
+     WHICH KIND a roll is before assuming a rebuild), update the
      `LAYERS` dict in `build_legislative_boundaries.py` (TIGERweb layer index, district field,
      `min_features`), re-run it (same ≥99.5% / zero-topology-break gate), and **update the
      `data_files.geometry` feature counts in `metro-worksheet.json`** so `validate_index.py` matches.
