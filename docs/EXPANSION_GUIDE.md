@@ -2492,6 +2492,21 @@ Two corollaries the same day earned:
   be exercised on the other ninety-nine, by forcing it. Prove a failure the gate must
   catch, on the tree shape it will actually see; a green you have not made go red is a
   green you have not read.
+- **A RED from a hand-built harness is more likely the harness than the code.** The rule
+  above says prove a gate can fail; its twin says do not believe the failure until the
+  harness itself is witnessed. Three times in one session an ad-hoc verification returned
+  a confident negative and was wrong every time, and each first reading was "the new code
+  is broken". An isolated call to a new validator check was handed the repo ROOT as its
+  `repo_root`, so it read the reference instance's county list instead of the instance
+  under test and reported eleven spurious failures. A browser harness stubbed a Census
+  service with Esri-shaped JSON where the loader asks for `f=geojson`, so the layer found
+  no feature and the card fell back to its empty note — which looks exactly like a broken
+  join. The same harness then keyed a municipality by a GEOID typed from memory
+  (`5530250` for a Greendale that is `5531125`), so the lookup missed and the officeholder
+  row was absent — which looks exactly like a broken render. **Before believing a harness's
+  no, make it say yes about something already known true**: point it at a case that must
+  pass, and only trust the failure once the control passes beside it. A harness is written
+  in minutes and reviewed by nobody; the code it doubts has usually been through a gate.
 - **Before changing shared code, look for the shared answer.** A name-validity helper
   used by every county was loosened to admit one county's `John (Jack) Bomberg`, whose
   per-token test rejects `(Jack)`; the change shadowed an existing nickname pattern and
