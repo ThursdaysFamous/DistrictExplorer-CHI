@@ -661,29 +661,15 @@ jobs:
           branch="bot/municipal-officials-update"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          # BRANCH FROM MAIN'S CURRENT TIP, NOT FROM THE CHECKOUT WE STARTED WITH.
-          # This run takes ~30 minutes, actions/checkout is shallow, and main
-          # moves underneath it. On 2026-09-02 main gained five commits during
-          # the window, one of which edited .github/workflows/. The branch was
-          # cut from the stale checkout, so by push time it carried a DIFFERENT
-          # version of that workflow file than main's tip — which GitHub reads
-          # as the push updating a workflow, and refuses for a token without
-          # `workflow` scope:
-          #
-          #   ! [remote rejected] ... refusing to allow a Personal Access Token
-          #   to create or update workflow `.github/workflows/...` without
-          #   `workflow` scope
-          #
-          # Re-cutting from the fetched tip leaves this branch differing from
-          # main in the roster files ALONE, so there is no workflow change in
-          # the push to refuse. It also fixes a quieter problem: a PR opened
-          # from a stale base shows unrelated files as behind.
-          #
-          # The working tree still holds the rebuilt rosters, and git carries
-          # them across. If main happened to change those same roster files
-          # mid-run, this errors instead of pushing — which is the right
-          # outcome: two writers on one file needs a person, and a failed run
-          # here preserves the shipped data rather than replacing it.
+          # Cut the branch from main's CURRENT tip, not from the checkout this
+          # run started with. actions/checkout is shallow, these runs take tens
+          # of minutes, and if main gains a .github/workflows/ change meanwhile,
+          # the branch ends up differing from main THERE too — which GitHub reads
+          # as the push updating a workflow and refuses for a token without
+          # `workflow` scope. Measured 2026-09-02 on update-municipal-officials.
+          # Re-cutting leaves this branch differing from main in its data file(s)
+          # alone; the rebuilt files are carried across, and a run where main
+          # touched those same files errors instead of pushing, which is right.
           git fetch --depth=1 origin main
           git checkout -B "$branch" FETCH_HEAD
           git add il/data/app/municipal-officials.json il/data/app/cook-library-trustees.json il/data/app/township-officials.json il/history.html
