@@ -8,12 +8,13 @@
     "counties_unresearched": 0
   },
   "gap_records": 100,
-  "places": 5,
+  "places": 6,
   "layers": {
     "il": 39,
     "ny": 27,
     "ca": 16,
     "wi": 31,
-    "ia": 19
+    "ia": 19,
+    "mi": 5
   }
 }

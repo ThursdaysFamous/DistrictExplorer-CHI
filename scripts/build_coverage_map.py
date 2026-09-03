@@ -24,9 +24,13 @@ extent (91 of 102 counties vs. all of Illinois); Wisconsin's happen to
 coincide today (all 72 counties carry a county-board entry) but are still two
 distinct geometries, because a DIFFERENT county-dispatched concept can lag
 behind. Iowa shipped complete across all 99 counties from its first PR, so it
-carries one tier only (AREAS below gives it no state_outline). New York City
-and San Francisco are city instances, not county-dispatched at all, and get a
-point marker at their bbox center rather than a wash.
+carries one tier only (AREAS below gives it no state_outline). Michigan is one
+tier for a different reason worth stating: it has no county-DISPATCHED layer at
+all — its commissioner districts come from ONE statewide state-published
+compilation covering all 83 counties, so there is no narrower tier that could
+ever lag. New York City and San Francisco are city instances, not
+county-dispatched at all, and get a point marker at their bbox center rather
+than a wash.
 
     python3 scripts/build_coverage_map.py            # write coverage-map.html
     python3 scripts/build_coverage_map.py --check    # drift gate; exit 1 on diff
@@ -63,11 +67,13 @@ LEAFLET_CSS_INTEGRITY = "sha512-Zcn6bjR/8RZbLEpLIeOwNtzREBAJnUKESxces60Mpoj+2oko
 
 # tag -> {outline, state_outline}. state_outline is None for a single-tier
 # instance (Iowa: complete across all 99 counties from PR 0, so there is no
-# narrower dispatched tier to distinguish from the statewide one).
+# narrower dispatched tier to distinguish from the statewide one. Michigan:
+# no county-dispatched layer exists at all, so there is no second tier to draw).
 AREAS = {
     "il": {"outline": "il/data/app/metro-outline.json", "state_outline": "il/data/app/il-state-outline.json"},
     "wi": {"outline": "wi/data/app/metro-outline.json", "state_outline": "wi/data/app/wi-state-outline.json"},
     "ia": {"outline": "ia/data/app/metro-outline.json", "state_outline": None},
+    "mi": {"outline": "mi/data/app/metro-outline.json", "state_outline": None},
 }
 # tag -> point marker (bbox center — no new hand-typed coordinate, derived
 # from the same bbox METRO_EXPLORERS already carries for the sibling-metro

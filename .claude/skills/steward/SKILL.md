@@ -66,9 +66,11 @@ python3 scripts/validate_shell_continuations.py
 python3 scripts/validate_workflow_deps.py
 python3 scripts/validate_skills.py                       # every skill's pointers resolve
 python3 scripts/validate_instance_registration.py         # every instance named in every table
+python3 scripts/validate_instance_assets.py               # every same-origin asset a page names exists
 python3 scripts/build_metro_outline.py --check           # IL ring + anchor registry
 python3 wi/scripts/build_metro_outline.py --check
 python3 ia/scripts/build_metro_outline.py --check
+python3 mi/scripts/build_metro_outline.py --check
 python3 scripts/check_roster_retention.py --base origin/main
 python3 scripts/check_cache_version.py --base origin/main       # cache-first data vs CACHE_NAME
 
@@ -78,6 +80,7 @@ python3 ca/scripts/validate_index.py ca/index.html
 python3 ny/scripts/validate_index.py ny/index.html
 python3 wi/scripts/validate_index.py wi/index.html
 python3 ia/scripts/validate_index.py ia/index.html
+python3 mi/scripts/validate_index.py mi/index.html
 
 # --- browser gates: ONE server at the repo root, every instance
 python3 -m http.server 8000 &
@@ -86,6 +89,7 @@ BASE_URL=http://localhost:8000/ca/ node ca/scripts/smoke_test.mjs
 BASE_URL=http://localhost:8000/ny/ node ny/scripts/smoke_test.mjs
 BASE_URL=http://localhost:8000/wi/ node wi/scripts/smoke_test.mjs
 BASE_URL=http://localhost:8000/ia/ node ia/scripts/smoke_test.mjs
+BASE_URL=http://localhost:8000/mi/ node mi/scripts/smoke_test.mjs
 BASE_URL=http://localhost:8000      node scripts/landing_test.mjs
 BASE_URL=http://localhost:8000      node scripts/page_consistency_test.mjs
 ```

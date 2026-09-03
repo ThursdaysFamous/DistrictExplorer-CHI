@@ -36,7 +36,7 @@ project's permission and you do not need the ODbL.
 ### 2. State, county and municipal public records
 
 Most boundaries and every officeholder roster come from Illinois, Wisconsin,
-Iowa, New York and California state agencies, county clerks, county GIS
+Iowa, Michigan, New York and California state agencies, county clerks, county GIS
 offices, election authorities and municipal websites — as open data portals,
 ArcGIS services, certified election canvasses, or published pages. These are
 public records, and this project asserts no ownership of them. Where a
