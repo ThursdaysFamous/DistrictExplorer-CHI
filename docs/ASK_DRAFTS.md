@@ -690,3 +690,85 @@ A directory that does not list someone has not said they left.
 * **Silence** → follow up at ~3 weeks and again 2 weeks later, per this file's cadence,
   before recording the route unresponsive. The display continues meanwhile: the existing
   authorization was given for this site and has not been withdrawn.
+
+---
+
+## Ask 7 — Wisconsin Legislative Reference Bureau: the Blue Book's reuse terms
+
+**This ask is about a source already in production, which is why it is worth sending.**
+`wi-county-officers.json` — 72 counties x 7 offices — and `wi-county-clerks.json` are
+built weekly from the *Wisconsin Blue Book*'s own county-officer tables, fetched from
+`docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf`.
+The Blue Book's front matter reads **"(c)2025 Joint Committee on Legislative
+Organization, Wisconsin Legislature. All rights reserved."**, and the volume is sold
+through the Legislature's Document Sales Unit.
+
+Measured 2026-09-02, and this is the reason for the ask: **there is no recorded
+reasoning anywhere in this repo for why that notice does not apply.** Zero mentions of
+copyright, licence or attribution in `wi_county_clerk_scraper.py`,
+`build_wi_county_clerk_roster.py` or `build_wi_county_officer_roster.py`; nothing in
+`LICENSE-DATA.md`; and the worksheet's own source block calls it "a state publication",
+which is an assumption rather than a finding. Under this project's own rules an "All
+rights reserved" string is not automatically a refusal — it was the text of a REQUIRED
+NOTICE for Des Moines's ward layer and a real block for Piatt County's GIS — so it has to
+be established, not inferred. It has been shipping unestablished.
+
+A second reason to ask now: section `190_population_and_political_divisions` carries
+per-municipality data this project would use if the terms allow — year of incorporation
+for every city and village, each municipality's county (multi-county memberships
+included), county seats, and the Department of Administration's own current population
+estimates. None of it is shipped today.
+
+**Recipient:** `lrb-reference-services@legis.wisconsin.gov`, the Bureau's published
+reference desk and the Blue Book's own service address. `lrb.legal@legis.wisconsin.gov`
+is also published; it is deliberately NOT cc'd, because cc-ing legal staff who were
+never on the thread reads as an escalation — the draft instead invites the Bureau to
+route it there itself.
+
+> **Subject:** Reuse terms for Blue Book reference tables
+>
+> Dear Reference Services,
+>
+> I run districtry (https://districtry.com/wi/), a free, non-commercial site that shows
+> Wisconsinites which civic districts cover any point in the state and who represents
+> them there.
+>
+> The site currently names each county's clerk, board chair, executive, sheriff,
+> district attorney, treasurer, clerk of circuit court, coroner and register of deeds.
+> Those names come from the 2025-2026 Blue Book's county-officer tables, refreshed
+> weekly and shown with the date of the Blue Book's own April 2025 snapshot and a link
+> back to the Bureau. Only the officeholder facts are used; no part of the volume is
+> republished, and the PDF is not redistributed.
+>
+> I want to be sure that use is acceptable to you, and to ask about one extension. The
+> Blue Book's population and political subdivisions section carries the year each city
+> and village was incorporated, which counties each municipality lies in, and the county
+> seats. I would like to show those on the corresponding cards, credited to the Blue
+> Book in the same way.
+>
+> I am asking because the volume's front matter reserves all rights, and I would rather
+> have your answer than my assumption. If either use needs a different form of credit,
+> or a licence, or if the answer is simply no, please just tell me — a clear no is a
+> genuinely useful answer, and I will record it and act on it.
+>
+> If this is really a question for the Bureau's legal staff, I am happy to be redirected
+> rather than have you forward it.
+>
+> Thank you for your time,
+> <YOUR NAME>
+> <YOUR E-MAIL>
+
+### What each answer means
+
+* **Yes, both** → record `ANSWERED <date>` with the wording, note the credit form the
+  Bureau asks for, and the section `190` fields become a build (the county card gains a
+  county seat, the municipality card a year of incorporation).
+* **Yes to what ships, no to the extension** → the existing use is settled and written
+  down for the first time; the extension closes for good.
+* **No** → this is a real outcome and the ask must not pretend otherwise: the county
+  officers and clerks are the Blue Book's, so a no means finding another source for
+  them or dropping them, and the county card's officer rows come out. Both roster files
+  and the weekly workflow would be affected.
+* **Silence** → follow up at ~3 weeks and again 2 weeks later, per this file's cadence,
+  before recording the route unresponsive. The existing display continues meanwhile;
+  nothing has been withdrawn.
