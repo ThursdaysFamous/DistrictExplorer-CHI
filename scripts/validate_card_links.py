@@ -1215,6 +1215,170 @@ def render(rows, cites, origin, prefixes):
     return "\n".join(lines).rstrip() + "\n"
 
 
+# ---------------------------------------------------------------------------
+# THE OTHER HALF OF THE SURFACE: e-mail addresses.
+#
+# This gate has always extracted `url:` and `href=` and nothing else, while the
+# app ships MORE e-mail addresses than URLs — a county clerk's, a board
+# member's, a village president's — every one of them rendered on a card as a
+# way to reach a named public official, and not one of them verified by
+# anything. A dead link is a dead end; an undeliverable address is worse,
+# because the reader writes to it and hears nothing back.
+#
+# RESOLVE MX, NEVER A. This is the whole trap, and it was measured before the
+# check was written: resolving the shipped domains by A record condemns 33 of
+# them, of which 23 route mail perfectly well and simply have no website —
+# `kanecoboard.org` carries 25 Kane board addresses and `board.wincoil.gov` 20
+# Winnebago ones, and an A-record test would have reported 45 sitting officials
+# as uncontactable. A mail-only domain is normal, not broken. Only a domain
+# with no MX at all genuinely cannot receive mail.
+#
+# NETWORK TROUBLE IS NOT A FINDING. A query that cannot complete is skipped and
+# counted, never reported — a flaky runner must not look like a dead county.
+# Same rule, same reason, as the DNS resolution above and as the mx_report the
+# clerk builder has run over its own 101 addresses since August; this generalises
+# that from one file to every instance's data/app.
+EMAIL_RE = re.compile(r"[A-Za-z0-9._%%+-]+@([A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?"
+                      r"(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?)+)")
+DOH_URL = "https://dns.google/resolve"
+DOH_TYPES = {"MX": 15, "A": 1, "AAAA": 28}
+
+
+def emails_from_app_data(directory):
+    """{address: [citation, ...]} for every e-mail in one instance's data/app."""
+    out = collections.defaultdict(list)
+    rel_dir = os.path.relpath(directory, REPO_ROOT).replace(os.sep, "/")
+    for path in sorted(glob.glob(os.path.join(directory, "*.json"))):
+        name = os.path.basename(path)
+        try:
+            with open(path, encoding="utf-8") as f:
+                payload = json.load(f)
+        except (ValueError, OSError):
+            continue  # the URL pass above already reported this file
+
+        def walk(node, where):
+            if isinstance(node, dict):
+                for k, v in node.items():
+                    walk(v, where + "/" + str(k))
+            elif isinstance(node, list):
+                for i, v in enumerate(node):
+                    walk(v, where + "/" + str(i))
+            elif isinstance(node, str) and "@" in node:
+                for m in EMAIL_RE.finditer(node):
+                    out[m.group(0)].append("%s/%s%s" % (rel_dir, name, where))
+
+        walk(payload, "")
+    return out
+
+
+def emails_from_pages(names):
+    """{address: [citation, ...]} for mailto: addresses in the authored pages."""
+    out = collections.defaultdict(list)
+    for name in names:
+        path = os.path.join(REPO_ROOT, name)
+        if not os.path.exists(path):
+            continue
+        with open(path, encoding="utf-8") as f:
+            for n, line in enumerate(f, 1):
+                if "mailto:" not in line:
+                    continue
+                for chunk in line.split("mailto:")[1:]:
+                    m = EMAIL_RE.match(chunk)
+                    if m:
+                        out[m.group(0)].append("%s:%d (mailto)" % (name, n))
+    return out
+
+
+def collect_emails():
+    """{address: [citation, ...]} across every instance and authored page."""
+    cites = collections.defaultdict(list)
+    for source in [emails_from_pages(AUTHORED_PAGES)] + \
+                  [emails_from_app_data(d) for d in APP_DATA_DIRS]:
+        for addr, where in source.items():
+            cites[addr].extend(where)
+    return cites
+
+
+def _doh(session, name, rtype, timeout=15):
+    resp = session.get(DOH_URL, params={"name": name, "type": rtype},
+                       headers={"Accept": "application/dns-json"}, timeout=timeout)
+    resp.raise_for_status()
+    data = resp.json()
+    return [a.get("data") for a in (data.get("Answer") or [])
+            if a.get("type") == DOH_TYPES[rtype]]
+
+
+def mail_findings(domains, attempts=3):
+    """[(domain, detail)] for domains that cannot receive mail, plus counts.
+
+    Returns (findings, checked, skipped). A domain is a finding only when the
+    query SUCCEEDED and said there is no route: no MX at all, or MX hosts that
+    themselves do not resolve. Anything that could not be asked is skipped.
+    """
+    session = requests.Session()
+    cache, findings, checked, skipped = {}, [], 0, 0
+
+    def query(name, rtype):
+        key = (name, rtype)
+        if key in cache:
+            return cache[key]
+        last = None
+        for attempt in range(attempts):
+            try:
+                cache[key] = _doh(session, name, rtype)
+                return cache[key]
+            except Exception as exc:  # noqa: BLE001 - retried, then skipped
+                last = exc
+                time.sleep(1.5 * (attempt + 1))
+        raise RuntimeError(last)
+
+    for domain in sorted(domains):
+        try:
+            mx = query(domain, "MX")
+            if not mx:
+                findings.append((domain, "no MX record — mail to this domain "
+                                         "cannot be delivered at all"))
+            else:
+                hosts = [m.split()[-1].rstrip(".") for m in mx if m.split()]
+                if not any(query(h, "A") or query(h, "AAAA") for h in hosts):
+                    findings.append((domain, "MX host(s) %s do not resolve — the "
+                                             "mail route points nowhere"
+                                             % ", ".join(hosts)))
+            checked += 1
+        except Exception:  # noqa: BLE001 - network trouble is never a finding
+            skipped += 1
+    return findings, checked, skipped
+
+
+def render_mail(cites, findings, checked, skipped):
+    lines = ["", "# E-mail deliverability", ""]
+    domains = sorted({a.rsplit("@", 1)[1].lower() for a in cites})
+    lines.append("**%d address(es) across %d domain(s)** — %d checked, %d skipped "
+                 "for network trouble, **%d finding(s)**."
+                 % (len(cites), len(domains), checked, skipped, len(findings)))
+    lines.append("")
+    if not findings:
+        lines.append("Every shipped address sits on a domain with a live mail route.")
+        lines.append("")
+        return "\n".join(lines)
+    lines.append("An address on a domain with no mail route is a contact a reader "
+                 "cannot use and will get no bounce from. Fix the source, or drop "
+                 "the address — never leave it rendering.")
+    lines.append("")
+    by_domain = collections.defaultdict(list)
+    for addr in cites:
+        by_domain[addr.rsplit("@", 1)[1].lower()].append(addr)
+    for domain, detail in findings:
+        addrs = sorted(by_domain[domain])
+        lines.append("- **%s** — %s. %d address(es): %s"
+                     % (domain, detail, len(addrs), ", ".join("`%s`" % a for a in addrs[:6])
+                        + (" …" if len(addrs) > 6 else "")))
+        for a in addrs[:2]:
+            lines.append("    - cited at %s" % cite_summary(cites[a], limit=2))
+    lines.append("")
+    return "\n".join(lines)
+
+
 def main():
     ap = argparse.ArgumentParser(
         description="Check every card link and roster sourceUrl the app renders.")
@@ -1259,6 +1423,10 @@ def main():
                  len(AUTHORED_PAGES), ", ".join(AUTHORED_PAGES)))
         for host, count in sorted(hosts.items()):
             print("  %4d  %s" % (count, host))
+        mail = collect_emails()
+        mail_domains = {a.rsplit("@", 1)[1].lower() for a in mail}
+        print("  %d e-mail addresses across %d domains (offline; nothing resolved)"
+              % (len(mail), len(mail_domains)))
         return
 
     if requests is None:
@@ -1269,13 +1437,23 @@ def main():
     rows = evaluate(cites, origin, probe_all(list(cites)))
     check_expected_list_still_earned(cites, rows)
 
-    report = render(rows, cites, origin, prefixes)
+    mail_cites = collect_emails()
+    mail_bad, mail_checked, mail_skipped = mail_findings(
+        {a.rsplit("@", 1)[1].lower() for a in mail_cites})
+
+    report = render(rows, cites, origin, prefixes) + render_mail(
+        mail_cites, mail_bad, mail_checked, mail_skipped)
     sys.stdout.write(report)
     if args.report:
         with open(args.report, "w", encoding="utf-8") as f:
             f.write(report)
 
-    status = ("fail" if any(s == FAIL for s, _, _, _ in rows)
+    # A domain with no mail route FAILS, at the same weight as a dead card link
+    # and for the same reason: this repo chose to render the address. It is a
+    # small and self-retiring signal — about ten domains against several
+    # hundred, mostly transcription slips in a county's own directory — and a
+    # county fixing its page clears the finding by itself.
+    status = ("fail" if mail_bad or any(s == FAIL for s, _, _, _ in rows)
               else "warn" if any(s == WARN for s, _, _, _ in rows) else "ok")
     if args.status_file:
         with open(args.status_file, "w", encoding="utf-8") as f:

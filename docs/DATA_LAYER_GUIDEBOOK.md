@@ -7261,6 +7261,31 @@ Winnebago), and fail on a domain with no MX. It is ~10 findings against 480 doma
 small and specific rather than a monthly wall. It also cannot calcify: a county fixing its page clears the
 finding by itself.
 
+**SHIPPED 2026-09-03, and it found more than it was written for.** `validate_card_links.py`
+now extracts e-mail addresses off the same discovered surface as the URLs — every authored
+page's `mailto:` plus every string in every instance's `data/app` — and resolves MX per domain
+over DNS-over-HTTPS with retries, generalising the `mx_report` the clerk builder had been
+running over its own 101 addresses since August. A no-MX domain FAILS, at the same weight as a
+dead card link and for the same reason: this repo chose to render the address. Network trouble
+is skipped and counted, never reported.
+
+The measurement above held exactly where it mattered: **`kanecoboard.org` and
+`board.wincoil.gov` are NOT flagged** — the two mail-only domains whose 45 officials an
+A-record test would have condemned — while all ten known-undeliverable domains are.
+
+The fleet has grown since that note and so has the surface: **3,330 addresses across 766
+domains, 22 findings, 0 skipped, 111 seconds.** Twelve are the transcription slips already
+described. Ten were unknown, and five of those are ONE bug rather than five: Iowa's
+`ia_county_officer_email_scraper.py` matches a domain with `[A-Za-z0-9.-]+`, which runs
+greedily past a valid TLD into whatever text a tag-strip glued on after it, so four SHERIFF
+addresses ship as `...@crawfordso.netOfficeAdmin`, `...@delawarecountyia.us1225W.HowardSt`,
+`...@jonescountyiowa.govStateIDNo` and `...@claycounty.iowa.govclaycountysheriffsoffice.com`,
+every one of them rendering as an unusable `mailto:` on a live card. A fifth, Monroe's
+treasurer, is truncated to `monroecounty.iowa` where its two siblings correctly say
+`monroecounty.iowa.gov`. That is Iowa's pipeline to fix and is recorded here rather than done
+inside an Illinois change; the gate names each address and its JSON path, so the fix has
+nothing left to find.
+
 ### ISBE's County Officers Book — a statewide chair source nothing here reads (found 2026-08-20)
 
 Found while re-measuring Adams, whose own website refuses every automated visit:
