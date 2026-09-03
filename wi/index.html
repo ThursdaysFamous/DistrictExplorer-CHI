@@ -8436,6 +8436,25 @@ function initWisconsinExplorer() {
   var loadWiMunicipalExecutives = makeCached(function () {
     return fetchJSONWithRetry("data/app/wi-municipal-executives.json", {}, 2);
   });
+  // The municipal CLERK, in all 608 of Wisconsin's cities and villages — the
+  // one municipal officer the state aggregates statewide. From the Elections
+  // Commission's own directory, which it sent on request and also publishes at
+  // a URL nothing here can fetch (wi/scripts/build_wi_municipal_clerks.py and
+  // wi/data/source/wec/README.md carry the arrangement).
+  //
+  // A CLERK IS NOT AN EXECUTIVE. The clerk runs the municipality's elections
+  // and keeps its records; the mayor or village president leads it. Both can
+  // appear on this card and each is labelled, because collapsing them would
+  // tell a reader in 589 municipalities that they had been shown their
+  // municipality's leader when they had not.
+  //
+  // TWO FIELDS ARE ABSENT BY MEASUREMENT, NOT BY OVERSIGHT — no e-mail (the
+  // clerks asked the Commission to withhold them, and the file carries none to
+  // ship) and no address (the Commission's file cannot tell a village hall
+  // from the clerk's own house, and demonstrably contains both).
+  var loadWiMunicipalClerks = makeCached(function () {
+    return fetchJSONWithRetry("data/app/wi-municipal-clerks.json", {}, 2);
+  });
 
   registerLayer({
     id: "county",
@@ -9292,18 +9311,22 @@ function initWisconsinExplorer() {
       // degrades to the identity card this layer shipped with.
       return Promise.all([
         queryFeatureAt(loadPlaces, point),
-        loadWiMunicipalExecutives().catch(function () { return null; })
+        loadWiMunicipalExecutives().catch(function () { return null; }),
+        loadWiMunicipalClerks().catch(function () { return null; })
       ]).then(function (parts) {
         var feature = parts[0];
         if (!feature) return null; // unincorporated — the engine renders this layer's own emptyNote
         var props = feature.properties || {};
         var geoid = findPropCI(props, ["geoid"]);
-        var exec = (parts[1] && geoid != null) ? parts[1][String(geoid)] : null;
+        var key = geoid != null ? String(geoid) : null;
+        var exec = (parts[1] && key) ? parts[1][key] : null;
+        var clerk = (parts[2] && key) ? parts[2][key] : null;
         return {
           seq: seq,
           name: findPropCI(props, ["name"]),
           geoid: geoid,
-          executive: exec || null
+          executive: exec || null,
+          clerk: clerk || null
         };
       });
     },
@@ -9335,7 +9358,54 @@ function initWisconsinExplorer() {
           wrap.appendChild(renderFieldStack(stack));
         }
       }
+      // THE CLERK — statewide, and the one officer this card can name
+      // everywhere. Kept in its own labelled block below the executive so the
+      // two offices never read as one: in 589 of these 608 municipalities the
+      // clerk is the ONLY name here, and an unlabelled row would be taken for
+      // the mayor or village president.
+      //
+      // THE DATE IS PART OF THE ANSWER, not a footnote. The Commission stamps
+      // each record with its own last-updated date and they run from 2017 to
+      // 2026 — Lannon's is nine years old — so the card dates the row it is
+      // showing rather than implying the whole directory is current. Same
+      // posture as the polling block above: prose in the reader's own
+      // sentence, never a badge, never behind an expander.
+      var clerk = result.clerk;
+      if (clerk) {
+        var staff = [];
+        if (clerk.clerk) {
+          var lead = { name: String(clerk.clerk), badge: "Clerk" };
+          // Phone rides the clerk because it is the office's published line;
+          // there is no e-mail to ride it (see the loader's comment).
+          if (clerk.phone) lead.phone = String(clerk.phone);
+          staff.push(lead);
+        }
+        if (clerk.deputyClerk) {
+          staff.push({ name: String(clerk.deputyClerk), badge: "Deputy Clerk" });
+        }
+        if (staff.length) {
+          wrap.appendChild(renderSectionLabel("Municipal clerk"));
+          wrap.appendChild(renderPersonRows(staff));
+        }
+        if (staff.length && clerk.recordUpdated) {
+          wrap.appendChild(renderFieldStack([{
+            label: "As of",
+            value: "Wisconsin Elections Commission clerk directory — this " +
+              "municipality's record was last updated " +
+              String(clerk.recordUpdated) + "."
+          }]));
+        }
+      }
       return wrap;
+    },
+    primaryLink: function (result) {
+      // The municipality's OWN website, as the Commission's directory
+      // publishes it (545 of 608 carry one). Carried through the roster in a
+      // field named `url`, which is what puts it in validate_card_links.py's
+      // published class — somebody else's address, capped at WARN.
+      var clerk = result.clerk;
+      if (!clerk || !clerk.url) return null;
+      return { label: "Official municipal website", url: String(clerk.url) };
     }
   });
 
