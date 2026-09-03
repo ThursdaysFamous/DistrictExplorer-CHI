@@ -8425,6 +8425,17 @@ function initWisconsinExplorer() {
   var loadWiCountyOfficers = makeCached(function () {
     return fetchJSONWithRetry("data/app/wi-county-officers.json", {}, 2);
   });
+  // Milwaukee County's 19 municipal executives (mayors and village presidents).
+  // The county's layer is the only source in Wisconsin that names them as
+  // data, and it is stale by construction for the purpose — its own
+  // dataLastEditDate is 2024-07-30 and these offices are elected every April
+  // of even years — so a NAME reaches this card only where the municipality's
+  // OWN page witnessed it at build time (wi/scripts/build_wi_municipal_
+  // executives.py). A withheld municipality still gets its office title and
+  // the reason, which is the honest answer rather than a blank.
+  var loadWiMunicipalExecutives = makeCached(function () {
+    return fetchJSONWithRetry("data/app/wi-municipal-executives.json", {}, 2);
+  });
 
   registerLayer({
     id: "county",
@@ -9276,22 +9287,54 @@ function initWisconsinExplorer() {
     query: function (point, seq) {
       // point-first (queryFeatureAt): one place polygon instead of the
       // statewide incorporated-places download
-      return queryFeatureAt(loadPlaces, point).then(function (feature) {
+      // The executive roster is a small same-origin file and its failure is
+      // not this layer's failure: the place still answers, so a roster miss
+      // degrades to the identity card this layer shipped with.
+      return Promise.all([
+        queryFeatureAt(loadPlaces, point),
+        loadWiMunicipalExecutives().catch(function () { return null; })
+      ]).then(function (parts) {
+        var feature = parts[0];
         if (!feature) return null; // unincorporated — the engine renders this layer's own emptyNote
         var props = feature.properties || {};
+        var geoid = findPropCI(props, ["geoid"]);
+        var exec = (parts[1] && geoid != null) ? parts[1][String(geoid)] : null;
         return {
           seq: seq,
           name: findPropCI(props, ["name"]),
-          geoid: findPropCI(props, ["geoid"])
+          geoid: geoid,
+          executive: exec || null
         };
       });
     },
     render: function (result) {
+      // Card convention: identity -> officeholder -> office -> contact -> link.
       var wrap = cardEl("div", "card-flush");
       wrap.appendChild(renderBodyIntro({
         title: result.name != null ? String(result.name) : "Unknown place",
         note: result.geoid != null ? "FIPS " + String(result.geoid) : null
       }));
+      var ex = result.executive;
+      if (ex) {
+        if (ex.name && !ex.withheld) {
+          var person = { name: String(ex.name) };
+          if (ex.office) person.badge = String(ex.office);
+          if (ex.phone) person.phone = String(ex.phone);
+          if (ex.email) person.email = String(ex.email);
+          wrap.appendChild(renderPersonRows([person]));
+        } else {
+          // WITHHELD IS AN ANSWER, and the card says which one. The office is
+          // known and named; the person is not, and the reason is the
+          // reader's to weigh rather than ours to hide behind a blank.
+          var stack = [];
+          if (ex.office) stack.push({ label: "Office", value: String(ex.office) });
+          stack.push({
+            label: "Who holds it",
+            value: "Not shown — " + String(ex.withheldWhy || "not witnessed") + "."
+          });
+          wrap.appendChild(renderFieldStack(stack));
+        }
+      }
       return wrap;
     }
   });
