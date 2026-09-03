@@ -688,7 +688,7 @@
     ]
   },
   "sw": {
-    "cache_name": "nyc-district-explorer-shell-v14",
+    "cache_name": "nyc-district-explorer-shell-v15",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",

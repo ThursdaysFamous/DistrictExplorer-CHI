@@ -2527,7 +2527,7 @@
     ]
   },
   "sw": {
-    "cache_name": "districtry-il-shell-v4",
+    "cache_name": "districtry-il-shell-v5",
     "shell_urls": [
       "./",
       "./sources.html",

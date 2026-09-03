@@ -61,7 +61,7 @@ STATE_BBOX = {"minLng": -93.09, "minLat": 42.29, "maxLng": -86.04, "maxLat": 47.
 #   layer:    TIGERweb Legislative MapServer layer index (0 US House, 1 upper, 2 lower)
 #   fields:   outFields kept from TIGERweb. The app's extractDistrictNumber reads
 #             SLDU/SLDL directly; congress uses the NAME fallback since TIGERweb
-#             ships CD119, not a bare number.
+#             ships CD120, not a bare number.
 #   out:      the data/app file index.html fetches for this layer
 #   simplify: mapshaper Visvalingam retain % (topology-aware, keep-shapes)
 #   min_features: count guard — the real district count (a ZZ water
@@ -69,7 +69,16 @@ STATE_BBOX = {"minLng": -93.09, "minLat": 42.29, "maxLng": -86.04, "maxLat": 47.
 LAYERS = {
     "us-house": {
         "layer": 0,
-        "fields": ["CD119", "NAME", "BASENAME", "GEOID", "STATE"],
+        # CD120, not CD119: TIGERweb rolled its congressional layer to the
+        # 120th Congress ("120th Congressional Districts; January 1, 2026
+        # vintage"). The retired field is GONE, not deprecated, and the
+        # service answers a query naming it with HTTP 200 carrying a JSON
+        # error envelope -- {"error":{"code":400,...}} with no "features"
+        # key -- so a status-code check reads it as success. This builder's
+        # own no-features guard is what surfaces it, as
+        # "returned no features": read that as "the vintage rolled".
+        # Measured 2026-09-03.
+        "fields": ["CD120", "NAME", "BASENAME", "GEOID", "STATE"],
         "out": "congress-districts.json",
         "simplify": "12%",
         "min_features": 8,   # 8 WI congressional districts (+ ZZ)

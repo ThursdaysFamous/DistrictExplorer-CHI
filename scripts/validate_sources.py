@@ -623,7 +623,7 @@ PROVENANCE = [
     {"layer": "U.S. House districts (IL)",
      "app_file": "congress-districts.json",
      "source_url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer/0?f=json",
-     "note": "TIGERweb Legislative layer 0 (STATE=17), pre-built by build_legislative_boundaries.py. Redrawn ~once a decade."},
+     "note": "TIGERweb Legislative layer 0 (STATE=17), pre-built by build_legislative_boundaries.py. Redrawn ~once a decade. Built against TIGERweb's 120th-Congress layer (field CD120, Jan 1 2026 vintage); the retired CD119 field is gone and a query naming it returns an HTTP-200 JSON error envelope with no features key, so a rebuild on the old name fails as no-features."},
     {"layer": "IL State Senate districts",
      "app_file": "il-senate-districts.json",
      "source_url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer/1?f=json",

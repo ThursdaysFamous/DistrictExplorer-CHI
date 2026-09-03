@@ -28,7 +28,7 @@ districts; classification must agree). If validation fails, nothing is written.
 
 Property fields are trimmed to what the app reads so the file stays small:
 extractDistrictNumber() keys case-insensitively on the chamber's numeric field
-(CD119 / SLDU / SLDL — NYC's districtFields read each directly); GEOID is kept as
+(CD120 / SLDU / SLDL — NYC's districtFields read each directly); GEOID is kept as
 a stable per-feature key for validation. Every kept field matches what
 index.html's query() computes, so classification is byte-identical to the live
 layer.
@@ -58,14 +58,23 @@ NY_FIPS = "36"
 #   layer:    TIGERweb Legislative MapServer layer index (0 US House, 1 NY Senate/Upper, 2 NY Assembly/Lower)
 #   fields:   outFields kept from TIGERweb. district_field is read by the app's
 #             extractDistrictNumber case-insensitively — NYC's districtFields
-#             include cd119/sldu/sldl, so CD119/SLDU/SLDL are read directly.
+#             include cd120/sldu/sldl, so CD120/SLDU/SLDL are read directly.
 #   out:      the data/app file index.html fetches for this layer
 #   simplify: mapshaper Visvalingam retain % (topology-aware, keep-shapes)
 #   min_features: count guard — refuse to write a suspiciously short result
 LAYERS = {
     "congress": {
         "layer": 0,
-        "fields": ["CD119", "NAME", "BASENAME", "GEOID", "STATE"],
+        # CD120, not CD119: TIGERweb rolled its congressional layer to the
+        # 120th Congress ("120th Congressional Districts; January 1, 2026
+        # vintage"). The retired field is GONE, not deprecated, and the
+        # service answers a query naming it with HTTP 200 carrying a JSON
+        # error envelope -- {"error":{"code":400,...}} with no "features"
+        # key -- so a status-code check reads it as success. This builder's
+        # own no-features guard is what surfaces it, as
+        # "returned no features": read that as "the vintage rolled".
+        # Measured 2026-09-03.
+        "fields": ["CD120", "NAME", "BASENAME", "GEOID", "STATE"],
         "out": "congress-districts.json",
         "simplify": "12%",
         "min_features": 26,  # 26 NY congressional districts (TIGERweb ships no water pseudo-district for NY)

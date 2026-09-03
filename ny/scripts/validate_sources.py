@@ -20,7 +20,7 @@ silently supersedes with a new one:
     same failure mode: a "2030 Neighborhood Tabulation Areas" dataset will one
     day appear beside the one in use.
   * Census TIGERweb rolls its congressional layer name and field alias with
-    each Congress (CD119 → CD121). NY redistricts congressional maps
+    each Congress (CD120 → CD121). NY redistricts congressional maps
     aggressively off-cycle — three maps in three years — so this watch is a
     REDISTRICTING_RUNBOOK detection-layer requirement, not a nicety.
   * The three offline anchors (borough, judicial district, municipal court)
@@ -44,7 +44,7 @@ What it checks (findings carry a severity — FAIL, WARN, or OK):
   3. TIGERweb Legislative MapServer: the layer index the BUILDER queries still
      carries its expected name (an in-place roll means the pre-built file the
      app now serves predates it and a rebuild is due)                     [FAIL]
-     and the layer list is scanned for a successor vintage (CD119 → CD120/121,
+     and the layer list is scanned for a successor vintage (CD120 → CD121,
      2024 SLD → newer); the pre-built files also get a presence check.    [WARN]
   4. Anchor provenance: the cited source still resolves, and the built
      data/app file is present.                              [WARN / FAIL if gone]
@@ -202,7 +202,7 @@ SOCRATA = [
 # means the shipped pre-built file predates a roll and a rebuild is due [FAIL],
 # and a higher watch_pattern capture anywhere in the layer list means the
 # successor vintage has been published and the file should be regenerated [WARN].
-# This is the runbook's CD119 → CD120/CD121 watch; NY makes it non-optional
+# This is the runbook's CD120 → CD121 watch; NY makes it non-optional
 # (three congressional maps in three years), and it doubles as the staleness
 # detector the pre-build otherwise hides (a static file can't announce its
 # own vintage).
@@ -211,13 +211,13 @@ TIGERWEB = {
     "layers": [
         {"layer": "U.S. House District (NY)", "index": 0,
          "app_file": "congress-districts.json",
-         "expect_name": "119th Congressional Districts",
+         "expect_name": "120th Congressional Districts",
          "watch_pattern": r"(\d+)(?:st|nd|rd|th) Congressional Districts",
-         "current": 119,
-         "vintage": "119th Congress (Jan 1, 2025 TIGERweb vintage; field alias CD119FP); "
+         "current": 120,
+         "vintage": "120th Congress (Jan 1, 2026 TIGERweb vintage; field CD120); "
                     "NY map enacted Feb 28, 2024",
-         "expected_successor": "a '120th/121st Congressional Districts' layer — the "
-                               "CD119 -> CD121 roll; the layer-name scan watches for it"},
+         "expected_successor": "a '121st Congressional Districts' layer — the CD120 -> "
+                               "CD121 roll; the layer-name scan watches for it"},
         {"layer": "NY State Senate District", "index": 1,
          "app_file": "state-senate-districts.json",
          "expect_name": "2024 State Legislative Districts - Upper",
