@@ -839,7 +839,7 @@ table.matrix code {
   <section class="matrix-section">
     <h2>The layer matrix</h2>
     <!-- ==== GENERATED:BEGIN layer-matrix ==== -->
-      <p class="matrix-lede">19 layers — 7 political and legislative, 2 public safety, 5 schools, 5 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
+      <p class="matrix-lede">20 layers — 7 political and legislative, 2 public safety, 6 schools, 5 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
       <nav class="matrix-nav" aria-label="Jump to a layer group">
         <a href="#political">Political &amp; legislative</a>
         <a href="#safety">Public safety</a>
@@ -980,7 +980,7 @@ table.matrix code {
       </section>
 
       <section class="matrix-group" id="schools">
-        <h2>Schools <span class="matrix-count">5 layers</span></h2>
+        <h2>Schools <span class="matrix-count">6 layers</span></h2>
         <p class="matrix-blurb">The district, the attendance zone, and the schools nearest the point.</p>
         <div class="matrix-wrap">
           <table class="matrix">
@@ -988,6 +988,18 @@ table.matrix code {
               <tr><th scope="col">Layer</th><th scope="col">What it answers</th><th scope="col">Boundary source</th><th scope="col">Who it names</th><th scope="col">Where it applies</th></tr>
             </thead>
             <tbody>
+              <tr id="layer-iowa-aea">
+                <th scope="row"><span class="layer-name">Area Education Agency</span><code>iowa-aea</code></th>
+                <td data-label="What it answers">The Area Education Agency covering the point — the regional body that supplies special-education, media and professional services to every school district inside it, with the agency's own phone and website.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://services.arcgis.com/vPD5PVLI6sfkZ5E4/arcgis/rest/services/CurrentIowaSchoolDistricts/FeatureServer/0" target="_blank" rel="noopener">BUILT, NOT COPIED: the shipped school-district fabric dissolved by the Department of Education's own in-band AEA_NUM, joined on DistrictNCESCode = Census GEOID (324/324 exact, both directions, no alias table). The Department's own published AEA polygon is stamped &quot;for the 2019-2020 school year&quot; and serves only as the build-time WITNESS — 99.8% point agreement, with all 324 districts confirmed still sitting inside their own agency's published shape. Pre-built by ia/scripts/build_ia_aea.py.</a></li>
+                    <li><a href="https://iowaaea.org/find-my-aea/" target="_blank" rel="noopener">Each agency's own name, phone and website come from the Iowa AEA system's own Find My AEA directory, keyed on the same two-digit agency code the Department's geometry carries — nine for nine, with both publishers' names required to agree before the build writes.</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">None, and the reason is statutory rather than a missing source: Iowa Code §273.8 gives ZERO of an agency's nine directors a popular election. Five are elected by the boards of directors of the member school districts on a population-weighted vote, and four are appointed by the member districts' superintendents. The card says how they are chosen, and names the agency, its phone and its site instead.</td>
+                <td data-label="Where it applies">Iowa — statewide, all nine agencies. Every school district belongs to one (Iowa Code ch. 273), so the nine tile the state exactly.</td>
+              </tr>
               <tr id="layer-school-district-unified">
                 <th scope="row"><span class="layer-name">School District (Unified)</span><code>school-district-unified</code></th>
                 <td data-label="What it answers">The unified school district covering the point.</td>

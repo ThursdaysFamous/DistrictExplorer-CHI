@@ -5979,6 +5979,7 @@ function initIowaExplorer() {
   var LAYER_AREA_RANK = [
     "us-house",          // Congressional districts — the largest districts a state carries below the state itself
     "ia-judicial-district", // 8 districts averaging 12.4 counties apiece (5-22 counties) — smaller than the 4 U.S. House districts' ~25-county average, larger than every other layer
+    "iowa-aea",          // 9 agencies tiling the state exactly, because the 324 school districts do — fractionally smaller on average than the 8 judicial districts above them and far larger than the 50 Senate districts below
     "ia-senate",         // 50 Senate districts, each the union of two whole House districts
     "county",            // 99 counties, pre-built from TIGERweb; the fork's offline anchor layer
     "ia-house",          // 100 House districts; two nest exactly inside each Senate district
@@ -9835,6 +9836,105 @@ function initIowaExplorer() {
     }
   });
 
+  /* ---------- 17. Area Education Agency — the schools family's widest fabric ----------
+   * Iowa Code ch. 273: every school district belongs to one of nine AEAs,
+   * which supply it with special-education, media and professional services.
+   * The nine therefore tile the state exactly, because the districts do.
+   *
+   * THE GEOMETRY IS BUILT, NOT COPIED, AND THAT IS THE WHOLE LAYER. The
+   * Department of Education publishes an AEA polygon and it is stamped "for
+   * the 2019-2020 school year" — six school years back, on a fabric this repo
+   * has already watched move (Orient-Macksburg dissolved into Nodaway Valley
+   * for 2026-2027). Its own CURRENT district layer, though, carries AEA_NUM in
+   * band on every one of the 324 districts, so ia/scripts/build_ia_aea.py
+   * dissolves the districts THIS APP ALREADY SHIPS by that attribute. Two
+   * consequences worth knowing while reading this card: the AEA edges are the
+   * same edges school-district-unified draws, so the two nest exactly instead
+   * of seaming; and the published FY20 polygon is demoted to the build's
+   * WITNESS, where it confirmed 99.8% agreement and — the test that actually
+   * matters — that all 324 districts still sit inside their own agency.
+   *
+   * IDENTITY AND CONTACT ONLY, FOR A STATUTORY REASON. Iowa Code §273.8 gives
+   * a voter NO say in an AEA's nine directors: five are elected by the boards
+   * of the member school districts on a population-weighted vote, four are
+   * appointed by those districts' superintendents. So the card explains how
+   * they are chosen rather than naming them — Wisconsin's wtcs-district
+   * posture. What it CAN name is the agency, and the agencies name themselves:
+   * the phone and site here come from the Iowa AEA system's own Find My AEA
+   * directory, keyed on the same two-digit code the geometry carries. ---------- */
+  var loadIaAeas = makeCached(function () {
+    return fetchJSONWithRetry("data/app/ia-aeas.json", {}, 2);
+  });
+
+  registerLayer({
+    id: "iowa-aea",
+    group: "schools",
+    label: "Area Education Agency",
+    overlay: {
+      load: loadIaAeas,
+      // olive-gold, wide dash: the schools family's largest fabric, read apart
+      // from the school-district greens inside it and the community-college
+      // browns beside it
+      style: { color: "#6B6320", weight: 1.5, fillColor: "#B3A64A", fillOpacity: 0.05, dashArray: "10 4" }
+    },
+    hoverName: function (feature) {
+      var v = findPropCI(feature.properties || {}, ["name"]);
+      return v != null ? String(v) : null;
+    },
+    query: function (point, seq) {
+      return queryFeatureAt(loadIaAeas, point).then(function (feature) {
+        if (!feature) return null;
+        var props = feature.properties || {};
+        return {
+          seq: seq,
+          name: findPropCI(props, ["name"]),
+          aea: findPropCI(props, ["aea"]),
+          districts: findPropCI(props, ["districts"]),
+          population: findPropCI(props, ["population"]),
+          phone: findPropCI(props, ["phone"]),
+          url: findPropCI(props, ["url"])
+        };
+      });
+    },
+    render: function (result) {
+      var wrap = cardEl("div", "card-flush");
+      var note = null;
+      if (result.aea != null && result.districts != null) {
+        note = "Agency " + String(result.aea) + " \u00B7 serves " +
+          Number(result.districts).toLocaleString() + " school districts";
+      }
+      wrap.appendChild(renderLinkRow({
+        title: result.name != null ? String(result.name) : "Unknown agency",
+        note: note,
+        phone: result.phone != null ? String(result.phone) : null
+      }));
+      var rows = [];
+      if (result.population != null) {
+        rows.push({ label: "2020 population", value: Number(result.population).toLocaleString() });
+      }
+      rows.push({
+        label: "Board",
+        value: "Nine directors, and a voter elects none of them (Iowa Code \u00A7273.8): " +
+          "five are chosen by the boards of the member school districts in a " +
+          "population-weighted vote, and four are appointed by those districts' " +
+          "superintendents."
+      });
+      rows.push({
+        label: "What it does",
+        value: "An AEA is a service agency, not a school district \u2014 it runs no schools " +
+          "and levies no tax of its own. It supplies special-education, media and " +
+          "professional services to every district inside it (Iowa Code ch. 273)."
+      });
+      wrap.appendChild(renderFieldStack(rows));
+      return wrap;
+    },
+    primaryLink: function (result) {
+      var url = safeHttpUrl(result.url);
+      if (url && result.name) return { label: String(result.name), url: url };
+      return { label: "Iowa's Area Education Agencies", url: "https://iowaaea.org/find-my-aea/" };
+    }
+  });
+
   /* =========================================================================
    * GROWING THIS FORK — docs/EXPANSION_GUIDE.md Part 3 (deepening a state)
    * and Part 4 (a new concept). Phase 1 of docs/IA_EXPANSION_PLAN.md is now
@@ -10405,7 +10505,7 @@ function initIowaExplorer() {
   // standard"): representation first, then services, then geography broad ->
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
-  var LAYER_SIDEBAR_RANK = ["us-house", "ia-judicial-district", "ia-senate", "ia-house", "county", "county-subdivision", "municipality", "dsm-ward", "county-supervisor", "school-district-unified", "school-director-district", "community-college", "cc-director-district", "zip-code", "precinct", "police-station", "fire-station", "school-site", "post-office"];
+  var LAYER_SIDEBAR_RANK = ["us-house", "ia-judicial-district", "ia-senate", "ia-house", "county", "county-subdivision", "municipality", "dsm-ward", "county-supervisor", "school-district-unified", "school-director-district", "community-college", "cc-director-district", "iowa-aea", "zip-code", "precinct", "police-station", "fire-station", "school-site", "post-office"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -10506,10 +10606,10 @@ function initIowaExplorer() {
     "#1B5E3F": "#5FB387", "#1B7A3D": "#57CC79", "#1B8A91": "#4FD6DF", "#1F7A3A": "#5ACC75",
     "#2E9E6B": "#5AE9A4", "#2F6B3A": "#6EBE7A", "#41B6E6": "#C2EAFF", "#444B54": "#919BA8",
     "#4A2E8C": "#9A7BFC", "#4B2E83": "#9E7BF1", "#4C8F59": "#82DB92", "#5C4B8C": "#AA94EE",
-    "#6B7280": "#B0BACD", "#6FBF7F": "#9FFFB1", "#7A0B1E": "#EA5B63", "#7A4B12": "#D69550",
-    "#7A5C3E": "#CEA57C", "#8A5A1E": "#E3A155", "#8C2E4A": "#F37293", "#8F7BC4": "#D0C1FE",
-    "#A98B6C": "#F2CAA0", "#B0316E": "#FE86B7", "#C98A3E": "#FECE9B", "#D06A9C": "#FEBCD9",
-    "#D89A4E": "#FEDDB9"};
+    "#6B6320": "#BAAF59", "#6B7280": "#B0BACD", "#6FBF7F": "#9FFFB1", "#7A0B1E": "#EA5B63",
+    "#7A4B12": "#D69550", "#7A5C3E": "#CEA57C", "#8A5A1E": "#E3A155", "#8C2E4A": "#F37293",
+    "#8F7BC4": "#D0C1FE", "#A98B6C": "#F2CAA0", "#B0316E": "#FE86B7", "#B3A64A": "#F4E36A",
+    "#C98A3E": "#FECE9B", "#D06A9C": "#FEBCD9", "#D89A4E": "#FEDDB9"};
   /* ==== GENERATED:END dark-map-palette ==== */
   /* ==== ENGINE:BEGIN districtry-theme ==== */
   /* The theme controller and the wordmark fleet switch, shared for the same

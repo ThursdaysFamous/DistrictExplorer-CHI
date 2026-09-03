@@ -27,90 +27,49 @@ the wording unreviewable and the batch uncountable. This file is the drafts.
 
 ## What is NOT here, and why
 
-**Do not send a treasurer-address ask yet — 48 counties' worth.** A source that may close
-most of it is unbuilt: `iowatreasurers.org` publishes a per-county treasurer page at
-`index.php?module=treashome&idCounty=<N>` carrying e-mail addresses, and this project's
-own record calls that site "a payment portal that names nobody", which is **wrong**. It is
-not a quick win either, and both reasons are measured:
+**The Iowa county-officer tranche is withdrawn, not held.** Fifteen counties were drafted
+and filled (19 questions across them) and **none was ever sent**. They are gone from this
+file because the operator is reviewing Iowa's county sites **by hand**, the exercise that
+worked for Wisconsin — and a hand review reaches precisely the pages that stopped the
+probe. Six of the fifteen were blocked by a site that **refuses this client** or sits
+**behind a challenge**, which is an access control this project does not route around and
+a person opening the page in a browser closes for free. Sending the batch first would ask
+fifteen county auditors for details the review is about to read off their own sites.
 
-* **Its key is unreliable.** `idCounty=51` and `idCounty=77` return the *same* county
-  (byte-identical Jefferson County addresses), so the id is not a 1..99 alphabetical
-  index and nothing may be keyed on it until that is understood.
-* **It disagrees with ISAC about who the treasurer is.** `idCounty=1` (Adair) names
-  *Marilee Kerber*; the shipped roster, from ISAC, names *Brenda Wallace*. That is a
-  divergence to resolve, not a tiebreak to guess.
+**The treasurer-address batch is not here because the route was built.** An earlier edition
+of this section held a 48-county ask pending `iowatreasurers.org`, calling that route
+"unbuilt". It was built on 2026-08-29 and it works, with two gates the sweep proved
+necessary: the site serves **another county's complete, plausible page with no error and no
+404** for eleven of its ninety-nine ids, so the page must identify as the county AND the
+address's domain must fit it; and no NAME is ever read from it. Between that and the
+counties' own sites, 346 officer e-mail addresses ship. The residue — 34 treasurers and 11
+sheriffs — is the manual review's, not an ask's.
 
-Asking 48 counties for an address that turns out to be published would spend the
-operator's credibility with county offices on a question they can already answer by
-sending a link. Build or rule out that route first; whatever it cannot close becomes a
-batch here, using the same template as Ask 1.
+**What stays here is institutional.** Asks 3, 4 and 5 go to a state agency, not a county:
+none is a question a county-site review can answer, and each is a single question with a
+citable yes or no at the end of it.
 
 ---
 
-## Ask 1 — Iowa county officers: one missing address or name
+## Ask 1 — Iowa county officers — **WITHDRAWN 2026-09-03, never sent**
 
-**15 recipients** (below). Each county gets **one** e-mail even where two things are
-missing. The recipient is the county **auditor**, whose address this project holds for
-all 99 counties and who is the county's own records and elections officer (Iowa Code
-§47.2) — not a guessed `treasurer@` or `sheriff@` address, which is precisely what the
-honesty rules forbid inventing.
+Drafted 2026-08-29 as a template plus fifteen filled per-county e-mails: one to each
+county auditor, asking for a single missing officer e-mail address or for which of two
+published names currently holds an office. **It was never sent, and the ledger says so
+rather than forgetting it existed** — a withdrawn ask and an unanswered one are different
+claims, and only one of them means a source refused.
 
-Every one of these was probed first: the county's own site was read for a published
-address, and an address shipped only where the officeholder's own name vouched for it or
-its form made it an office mailbox. **A page window is not a witness** — the first draft
-of that probe returned a *deputy's* personal address in 4 of 7 counties.
+Withdrawn because the operator is reviewing Iowa's county sites by hand (see *What is NOT
+here* above). The questions themselves are unchanged and are recorded where a person
+doing that review will meet them: the per-county reasons in
+`ia/scripts/.cache/ia_county_officer_emails.json` (site published none readable / refuses
+this client / sits behind a challenge), and the five counties where two directories name
+different people and the card therefore names **neither** — Davis (sheriff), Henry and
+Keokuk (county attorney), Humboldt and Jasper (recorder).
 
-> **Subject:** A missing contact detail for <COUNTY> County
->
-> Dear <AUDITOR NAME>,
->
-> I run districtry (https://districtry.com/ia/), a free, non-commercial site that shows
-> Iowans which civic districts cover any point in the state and who represents them
-> there. It already lists <COUNTY> County's auditor, treasurer, recorder, sheriff,
-> county attorney and board of supervisors, from your county's own site, the Iowa State
-> Association of Counties' directory and the state associations' published rosters.
->
-> One thing I could not find published anywhere is **<THE MISSING THING>**. If there is
-> an address your office is content to have listed publicly, a one-line reply is all I
-> need.
->
-> If you would rather it not be listed, please just say so — I will record that and stop
-> asking, and the card will keep pointing readers to the county's own page instead. A no
-> is genuinely a useful answer.
->
-> Two things I do not do, in case they are a concern: I never publish home addresses or
-> personal contact details of any kind, and where a source is unclear about who holds an
-> office I leave the name off rather than guess it.
->
-> Thank you for your time,
-> <YOUR NAME>
-> <YOUR E-MAIL>
-
-### Recipients
-
-| COUNTY        | AUDITOR              | WRITE TO                         | ASKING FOR                                 | WHY NOT PUBLISHED                   |
-|---------------|----------------------|----------------------------------|--------------------------------------------|-------------------------------------|
-| Cass          | Kathy Somers         | auditor@casscoia.us              | sheriff's e-mail                           | site published none we could read   |
-| Davis         | Kristi Goodson       | auditor@daviscountyiowa.org      | the name of the sheriff                    | two publishers disagree on the name |
-| Hardin        | Jolene Pieters       | jpieters@hardincountyia.gov      | sheriff's e-mail                           | site refuses this client            |
-| Henry         | Robin Detrick        | rdetrick@henrycountyiowa.us      | the name of the county attorney            | two publishers disagree on the name |
-| Humboldt      | Trish Erickson       | terickson@humboldtcountyia.org   | sheriff's e-mail; the name of the recorder | site published none we could read   |
-| Jasper        | Jenna Jennings       | jjennings@jaspercounty.iowa.gov  | the name of the recorder                   | two publishers disagree on the name |
-| Johnson       | Julie Persons        | elections@johnsoncountyiowa.gov  | sheriff's e-mail                           | site published none we could read   |
-| Keokuk        | Christy Bates        | auditor@keokukcountyia.com       | the name of the county attorney            | two publishers disagree on the name |
-| Linn          | Todd Taylor          | todd.taylor@linncountyiowa.gov   | sheriff's e-mail                           | site published none we could read   |
-| Mitchell      | Rachel Foster        | rfoster@mitchellcoia.us          | sheriff's e-mail                           | site published none we could read   |
-| Osceola       | Rochelle Van Tilburg | rvantilburg@osceolacoia.org      | sheriff's e-mail                           | site sits behind a challenge        |
-| Palo Alto     | Carmen Moser         | cmoser@paloaltocounty.iowa.gov   | sheriff's e-mail                           | site sits behind a challenge        |
-| Pottawattamie | Mary Ann Hanusa      | elections@pottcounty-ia.gov      | sheriff's e-mail                           | site refuses this client            |
-| Van Buren     | Lisa Plecker         | lplecker@vanburencounty.iowa.gov | sheriff's e-mail                           | site published none we could read   |
-| Washington    | Tamera Stewart       | tstewart@co.washington.ia.us     | sheriff's e-mail                           | site published none we could read   |
-
-Fill `<THE MISSING THING>` from the **Asking for** column, e.g. *"an e-mail address for
-Sheriff <name>"* or *"which of two people currently holds the office of county
-recorder — two published directories name different people"*. For the four counties
-whose row reads *two publishers disagree on the name*, name both people and ask which is
-correct; that is a smaller, easier question than an open one.
+**If the review does not close them, redraft from what it measured** rather than restoring
+this text: a page that has been read by a person is a different starting point from one
+that was only probed.
 
 ---
 
@@ -231,332 +190,6 @@ thing this project resolves rather than assumes.
 > Thank you for your time,
 > <YOUR NAME>
 > <YOUR E-MAIL>
-
----
-
-## Tranche 1 — the 15 county asks, filled and ready to send
-
-Generated from the shipped rosters and the 2026-08-29 probe, so every name, number and reason below is the one the site actually holds. Fill `<YOUR NAME>` and `<YOUR E-MAIL>`, then send. **Record the send date in `ia/WATCH.md` the day it goes, not before.**
-
-### Cass County — Kathy Somers <auditor@casscoia.us>
-
-> **Subject:** An e-mail address for the Cass County Sheriff's Office
->
-> Dear Kathy Somers,
->
-> I run districtry (https://districtry.com/ia/), a free, non-commercial site that shows Iowans which civic districts cover any point in the state and who represents them there. For Cass County it names the county's elected officers from your county's own website, the Iowa State Association of Counties' member directory, and the state associations' published rosters.
->
-> There is one thing I could not establish from any of them:
->
-> - **An e-mail address for Sheriff John Westering.** I have the name and a phone number, but the Iowa State Sheriffs' & Deputies' Association directory I read carries no address for Cass County, and I could not find one published on the county's website.
->
-> A short reply on that would be a real help — and if you would rather any of it not be listed, please just say so.
-> I will record that and stop asking, and the page will keep pointing readers to the county's own site instead. A no is genuinely a useful answer.
->
-> Two things I do not do, in case they are a concern: I never publish home addresses or personal contact details of any kind, and where sources disagree about who holds an office I leave the name off rather than guess.
->
-> Thank you for your time,
-> <YOUR NAME>
-> <YOUR E-MAIL>
-
-### Davis County — Kristi Goodson <auditor@daviscountyiowa.org>
-
-> **Subject:** Two directories name different people for Davis County
->
-> Dear Kristi Goodson,
->
-> I run districtry (https://districtry.com/ia/), a free, non-commercial site that shows Iowans which civic districts cover any point in the state and who represents them there. For Davis County it names the county's elected officers from your county's own website, the Iowa State Association of Counties' member directory, and the state associations' published rosters.
->
-> There is one thing I could not establish from any of them:
->
-> - **Which of two people is your sheriff.** The Iowa State Association of Counties' member directory names **Zachary Dunlavy**; the Sheriffs' own statewide directory names **Dave Davis**. Rather than pick one, I currently show no name at all for that office.
->
-> A short reply on that would be a real help — and if you would rather any of it not be listed, please just say so.
-> I will record that and stop asking, and the page will keep pointing readers to the county's own site instead. A no is genuinely a useful answer.
->
-> Two things I do not do, in case they are a concern: I never publish home addresses or personal contact details of any kind, and where sources disagree about who holds an office I leave the name off rather than guess.
->
-> Thank you for your time,
-> <YOUR NAME>
-> <YOUR E-MAIL>
-
-### Hardin County — Jolene Pieters <jpieters@hardincountyia.gov>
-
-> **Subject:** An e-mail address for the Hardin County Sheriff's Office
->
-> Dear Jolene Pieters,
->
-> I run districtry (https://districtry.com/ia/), a free, non-commercial site that shows Iowans which civic districts cover any point in the state and who represents them there. For Hardin County it names the county's elected officers from your county's own website, the Iowa State Association of Counties' member directory, and the state associations' published rosters.
->
-> There is one thing I could not establish from any of them:
->
-> - **An e-mail address for Sheriff David McDaniel.** I have the name and a phone number, but the Iowa State Sheriffs' & Deputies' Association directory I read carries no address for Hardin County, and the county's website refuses automated requests, so I could not check it.
->
-> A short reply on that would be a real help — and if you would rather any of it not be listed, please just say so.
-> I will record that and stop asking, and the page will keep pointing readers to the county's own site instead. A no is genuinely a useful answer.
->
-> Two things I do not do, in case they are a concern: I never publish home addresses or personal contact details of any kind, and where sources disagree about who holds an office I leave the name off rather than guess.
->
-> Thank you for your time,
-> <YOUR NAME>
-> <YOUR E-MAIL>
-
-### Henry County — Robin Detrick <rdetrick@henrycountyiowa.us>
-
-> **Subject:** A couple of questions about Henry County's officer list
->
-> Dear Robin Detrick,
->
-> I run districtry (https://districtry.com/ia/), a free, non-commercial site that shows Iowans which civic districts cover any point in the state and who represents them there. For Henry County it names the county's elected officers from your county's own website, the Iowa State Association of Counties' member directory, and the state associations' published rosters.
->
-> There are 2 things I could not establish from any of them:
->
-> - **Which of two people is your county attorney.** The Iowa State Association of Counties' member directory names **Darin Stater**; the County Attorneys' own statewide directory names **Becky Wilson**. Rather than pick one, I currently show no name at all for that office.
-> - **How many supervisors Henry County has, and who they are.** The directory I read lists 4. Iowa Code §331.201 provides for three or five, so rather than publish a board I am unsure of, the site currently shows none for Henry County.
->
-> A short reply to any of these would be a real help — and if you would rather any of it not be listed, please just say so.
-> I will record that and stop asking, and the page will keep pointing readers to the county's own site instead. A no is genuinely a useful answer.
->
-> Two things I do not do, in case they are a concern: I never publish home addresses or personal contact details of any kind, and where sources disagree about who holds an office I leave the name off rather than guess.
->
-> Thank you for your time,
-> <YOUR NAME>
-> <YOUR E-MAIL>
-
-### Humboldt County — Trish Erickson <terickson@humboldtcountyia.org>
-
-> **Subject:** A couple of questions about Humboldt County's officer list
->
-> Dear Trish Erickson,
->
-> I run districtry (https://districtry.com/ia/), a free, non-commercial site that shows Iowans which civic districts cover any point in the state and who represents them there. For Humboldt County it names the county's elected officers from your county's own website, the Iowa State Association of Counties' member directory, and the state associations' published rosters.
->
-> There are 3 things I could not establish from any of them:
->
-> - **An e-mail address for Sheriff Dean Kruger.** I have the name and a phone number, but the Iowa State Sheriffs' & Deputies' Association directory I read carries no address for Humboldt County, and I could not find one published on the county's website.
-> - **Which of two people is your recorder.** The Iowa State Association of Counties' member directory names **Diane Amundson**; the Recorders' own statewide directory names **Nicole Niemeyer**. Rather than pick one, I currently show no name at all for that office.
-> - **How many supervisors Humboldt County has, and who they are.** The directory I read lists 6. Iowa Code §331.201 provides for three or five, so rather than publish a board I am unsure of, the site currently shows none for Humboldt County.
->
-> A short reply to any of these would be a real help — and if you would rather any of it not be listed, please just say so.
-> I will record that and stop asking, and the page will keep pointing readers to the county's own site instead. A no is genuinely a useful answer.
->
-> Two things I do not do, in case they are a concern: I never publish home addresses or personal contact details of any kind, and where sources disagree about who holds an office I leave the name off rather than guess.
->
-> Thank you for your time,
-> <YOUR NAME>
-> <YOUR E-MAIL>
-
-### Jasper County — Jenna Jennings <jjennings@jaspercounty.iowa.gov>
-
-> **Subject:** Two directories name different people for Jasper County
->
-> Dear Jenna Jennings,
->
-> I run districtry (https://districtry.com/ia/), a free, non-commercial site that shows Iowans which civic districts cover any point in the state and who represents them there. For Jasper County it names the county's elected officers from your county's own website, the Iowa State Association of Counties' member directory, and the state associations' published rosters.
->
-> There is one thing I could not establish from any of them:
->
-> - **Which of two people is your recorder.** The Iowa State Association of Counties' member directory names **Denise Allan**; the Recorders' own statewide directory names **Joseph Otto**. Rather than pick one, I currently show no name at all for that office.
->
-> A short reply on that would be a real help — and if you would rather any of it not be listed, please just say so.
-> I will record that and stop asking, and the page will keep pointing readers to the county's own site instead. A no is genuinely a useful answer.
->
-> Two things I do not do, in case they are a concern: I never publish home addresses or personal contact details of any kind, and where sources disagree about who holds an office I leave the name off rather than guess.
->
-> Thank you for your time,
-> <YOUR NAME>
-> <YOUR E-MAIL>
-
-### Johnson County — Julie Persons <elections@johnsoncountyiowa.gov>
-
-> **Subject:** An e-mail address for the Johnson County Sheriff's Office
->
-> Dear Julie Persons,
->
-> I run districtry (https://districtry.com/ia/), a free, non-commercial site that shows Iowans which civic districts cover any point in the state and who represents them there. For Johnson County it names the county's elected officers from your county's own website, the Iowa State Association of Counties' member directory, and the state associations' published rosters.
->
-> There is one thing I could not establish from any of them:
->
-> - **An e-mail address for Sheriff Brad Kunkel.** I have the name and a phone number, but the Iowa State Sheriffs' & Deputies' Association directory I read carries no address for Johnson County, and I could not find one published on the county's website.
->
-> A short reply on that would be a real help — and if you would rather any of it not be listed, please just say so.
-> I will record that and stop asking, and the page will keep pointing readers to the county's own site instead. A no is genuinely a useful answer.
->
-> Two things I do not do, in case they are a concern: I never publish home addresses or personal contact details of any kind, and where sources disagree about who holds an office I leave the name off rather than guess.
->
-> Thank you for your time,
-> <YOUR NAME>
-> <YOUR E-MAIL>
-
-### Keokuk County — Christy Bates <auditor@keokukcountyia.com>
-
-> **Subject:** A couple of questions about Keokuk County's officer list
->
-> Dear Christy Bates,
->
-> I run districtry (https://districtry.com/ia/), a free, non-commercial site that shows Iowans which civic districts cover any point in the state and who represents them there. For Keokuk County it names the county's elected officers from your county's own website, the Iowa State Association of Counties' member directory, and the state associations' published rosters.
->
-> There are 2 things I could not establish from any of them:
->
-> - **An e-mail address for Sheriff Casey Hinnah.** I have the name and a phone number, but the Iowa State Sheriffs' & Deputies' Association directory I read carries no address for Keokuk County, and I could not find one published on the county's website.
-> - **Which of two people is your county attorney.** The Iowa State Association of Counties' member directory names **Amber Thompson**; the County Attorneys' own statewide directory names **Maddison Denny**. Rather than pick one, I currently show no name at all for that office.
->
-> A short reply to any of these would be a real help — and if you would rather any of it not be listed, please just say so.
-> I will record that and stop asking, and the page will keep pointing readers to the county's own site instead. A no is genuinely a useful answer.
->
-> Two things I do not do, in case they are a concern: I never publish home addresses or personal contact details of any kind, and where sources disagree about who holds an office I leave the name off rather than guess.
->
-> Thank you for your time,
-> <YOUR NAME>
-> <YOUR E-MAIL>
-
-### Linn County — Todd Taylor <todd.taylor@linncountyiowa.gov>
-
-> **Subject:** An e-mail address for the Linn County Sheriff's Office
->
-> Dear Todd Taylor,
->
-> I run districtry (https://districtry.com/ia/), a free, non-commercial site that shows Iowans which civic districts cover any point in the state and who represents them there. For Linn County it names the county's elected officers from your county's own website, the Iowa State Association of Counties' member directory, and the state associations' published rosters.
->
-> There is one thing I could not establish from any of them:
->
-> - **An e-mail address for Sheriff Brian Gardner.** I have the name and a phone number, but the Iowa State Sheriffs' & Deputies' Association directory I read carries no address for Linn County, and I could not find one published on the county's website.
->
-> A short reply on that would be a real help — and if you would rather any of it not be listed, please just say so.
-> I will record that and stop asking, and the page will keep pointing readers to the county's own site instead. A no is genuinely a useful answer.
->
-> Two things I do not do, in case they are a concern: I never publish home addresses or personal contact details of any kind, and where sources disagree about who holds an office I leave the name off rather than guess.
->
-> Thank you for your time,
-> <YOUR NAME>
-> <YOUR E-MAIL>
-
-### Mitchell County — Rachel Foster <rfoster@mitchellcoia.us>
-
-> **Subject:** An e-mail address for the Mitchell County Sheriff's Office
->
-> Dear Rachel Foster,
->
-> I run districtry (https://districtry.com/ia/), a free, non-commercial site that shows Iowans which civic districts cover any point in the state and who represents them there. For Mitchell County it names the county's elected officers from your county's own website, the Iowa State Association of Counties' member directory, and the state associations' published rosters.
->
-> There is one thing I could not establish from any of them:
->
-> - **An e-mail address for Sheriff Gregory Beaver.** I have the name and a phone number, but the Iowa State Sheriffs' & Deputies' Association directory I read carries no address for Mitchell County, and I could not find one published on the county's website.
->
-> A short reply on that would be a real help — and if you would rather any of it not be listed, please just say so.
-> I will record that and stop asking, and the page will keep pointing readers to the county's own site instead. A no is genuinely a useful answer.
->
-> Two things I do not do, in case they are a concern: I never publish home addresses or personal contact details of any kind, and where sources disagree about who holds an office I leave the name off rather than guess.
->
-> Thank you for your time,
-> <YOUR NAME>
-> <YOUR E-MAIL>
-
-### Osceola County — Rochelle Van Tilburg <rvantilburg@osceolacoia.org>
-
-> **Subject:** An e-mail address for the Osceola County Sheriff's Office
->
-> Dear Rochelle Van Tilburg,
->
-> I run districtry (https://districtry.com/ia/), a free, non-commercial site that shows Iowans which civic districts cover any point in the state and who represents them there. For Osceola County it names the county's elected officers from your county's own website, the Iowa State Association of Counties' member directory, and the state associations' published rosters.
->
-> There is one thing I could not establish from any of them:
->
-> - **An e-mail address for Sheriff Kevin Wollmuth.** I have the name and a phone number, but the Iowa State Sheriffs' & Deputies' Association directory I read carries no address for Osceola County, and the county's website sits behind a challenge page I do not try to work around.
->
-> A short reply on that would be a real help — and if you would rather any of it not be listed, please just say so.
-> I will record that and stop asking, and the page will keep pointing readers to the county's own site instead. A no is genuinely a useful answer.
->
-> Two things I do not do, in case they are a concern: I never publish home addresses or personal contact details of any kind, and where sources disagree about who holds an office I leave the name off rather than guess.
->
-> Thank you for your time,
-> <YOUR NAME>
-> <YOUR E-MAIL>
-
-### Palo Alto County — Carmen Moser <cmoser@paloaltocounty.iowa.gov>
-
-> **Subject:** An e-mail address for the Palo Alto County Sheriff's Office
->
-> Dear Carmen Moser,
->
-> I run districtry (https://districtry.com/ia/), a free, non-commercial site that shows Iowans which civic districts cover any point in the state and who represents them there. For Palo Alto County it names the county's elected officers from your county's own website, the Iowa State Association of Counties' member directory, and the state associations' published rosters.
->
-> There is one thing I could not establish from any of them:
->
-> - **An e-mail address for Sheriff John King.** I have the name and a phone number, but the Iowa State Sheriffs' & Deputies' Association directory I read carries no address for Palo Alto County, and the county's website sits behind a challenge page I do not try to work around.
->
-> A short reply on that would be a real help — and if you would rather any of it not be listed, please just say so.
-> I will record that and stop asking, and the page will keep pointing readers to the county's own site instead. A no is genuinely a useful answer.
->
-> Two things I do not do, in case they are a concern: I never publish home addresses or personal contact details of any kind, and where sources disagree about who holds an office I leave the name off rather than guess.
->
-> Thank you for your time,
-> <YOUR NAME>
-> <YOUR E-MAIL>
-
-### Pottawattamie County — Mary Ann Hanusa <elections@pottcounty-ia.gov>
-
-> **Subject:** An e-mail address for the Pottawattamie County Sheriff's Office
->
-> Dear Mary Ann Hanusa,
->
-> I run districtry (https://districtry.com/ia/), a free, non-commercial site that shows Iowans which civic districts cover any point in the state and who represents them there. For Pottawattamie County it names the county's elected officers from your county's own website, the Iowa State Association of Counties' member directory, and the state associations' published rosters.
->
-> There is one thing I could not establish from any of them:
->
-> - **An e-mail address for Sheriff Andy Brown.** I have the name and a phone number, but the Iowa State Sheriffs' & Deputies' Association directory I read carries no address for Pottawattamie County, and the county's website refuses automated requests, so I could not check it.
->
-> A short reply on that would be a real help — and if you would rather any of it not be listed, please just say so.
-> I will record that and stop asking, and the page will keep pointing readers to the county's own site instead. A no is genuinely a useful answer.
->
-> Two things I do not do, in case they are a concern: I never publish home addresses or personal contact details of any kind, and where sources disagree about who holds an office I leave the name off rather than guess.
->
-> Thank you for your time,
-> <YOUR NAME>
-> <YOUR E-MAIL>
-
-### Van Buren County — Lisa Plecker <lplecker@vanburencounty.iowa.gov>
-
-> **Subject:** An e-mail address for the Van Buren County Sheriff's Office
->
-> Dear Lisa Plecker,
->
-> I run districtry (https://districtry.com/ia/), a free, non-commercial site that shows Iowans which civic districts cover any point in the state and who represents them there. For Van Buren County it names the county's elected officers from your county's own website, the Iowa State Association of Counties' member directory, and the state associations' published rosters.
->
-> There is one thing I could not establish from any of them:
->
-> - **An e-mail address for Sheriff Brad Hudson.** I have the name and a phone number, but the Iowa State Sheriffs' & Deputies' Association directory I read carries no address for Van Buren County, and I could not find one published on the county's website.
->
-> A short reply on that would be a real help — and if you would rather any of it not be listed, please just say so.
-> I will record that and stop asking, and the page will keep pointing readers to the county's own site instead. A no is genuinely a useful answer.
->
-> Two things I do not do, in case they are a concern: I never publish home addresses or personal contact details of any kind, and where sources disagree about who holds an office I leave the name off rather than guess.
->
-> Thank you for your time,
-> <YOUR NAME>
-> <YOUR E-MAIL>
-
-### Washington County — Tamera Stewart <tstewart@co.washington.ia.us>
-
-> **Subject:** An e-mail address for the Washington County Sheriff's Office
->
-> Dear Tamera Stewart,
->
-> I run districtry (https://districtry.com/ia/), a free, non-commercial site that shows Iowans which civic districts cover any point in the state and who represents them there. For Washington County it names the county's elected officers from your county's own website, the Iowa State Association of Counties' member directory, and the state associations' published rosters.
->
-> There is one thing I could not establish from any of them:
->
-> - **An e-mail address for Sheriff Jared Schneider.** I have the name and a phone number, but the Iowa State Sheriffs' & Deputies' Association directory I read carries no address for Washington County, and I could not find one published on the county's website.
->
-> A short reply on that would be a real help — and if you would rather any of it not be listed, please just say so.
-> I will record that and stop asking, and the page will keep pointing readers to the county's own site instead. A no is genuinely a useful answer.
->
-> Two things I do not do, in case they are a concern: I never publish home addresses or personal contact details of any kind, and where sources disagree about who holds an office I leave the name off rather than guess.
->
-> Thank you for your time,
-> <YOUR NAME>
-> <YOUR E-MAIL>
-
 
 ---
 
@@ -773,6 +406,64 @@ route it there itself.
   before recording the route unresponsive. The existing display continues meanwhile;
   nothing has been withdrawn.
 
+---
+
+## Ask 8 — Iowa Secretary of State: a statewide list of city clerks
+
+**This is the ask Iowa never made, and Wisconsin's whole municipal tier rests on its
+counterpart.** Wisconsin ships a clerk for all 608 of its cities and villages because ONE
+publisher — the Wisconsin Elections Commission — holds all 1,848 municipalities in one file,
+and it arrived in reply to a single e-mail, answered in 22 minutes. Iowa's structural
+counterpart is the Secretary of State: city elections run under Iowa Code ch. 376 through the
+county commissioners of elections, so a list of who to contact in each city has to exist
+somewhere in that chain.
+
+Measured first, 2026-09-03, so the ask is not for something already published: `sos.iowa.gov`
+answers 200 to a browser request, and neither its **Schools & Cities** page (which explains
+city and school elections to voters) nor its **Research & Data** page links a clerk directory
+or any document of that kind. The Iowa League of Cities publishes every city's phone and
+website and names no person. No county publishes its cities' officials as map data.
+
+*Practical note for sending:* the Secretary of State's contact page publishes a form and three
+phone numbers rather than an e-mail address, so this may need to go through the form or through
+the Elections Division directly.
+
+> **Subject:** Is there a statewide list of Iowa city clerks?
+>
+> Dear Elections Division,
+>
+> I run districtry (https://districtry.com/ia/), a free, non-commercial site that shows
+> Iowans which civic districts cover any point in the state and who represents them there.
+> It already carries Iowa's precincts, supervisor districts, school districts, community
+> colleges and judicial districts from the Legislature's and the Department of Education's
+> own published services, and all six elected county offices in all 99 counties.
+>
+> The one level it cannot answer for is the city. It knows all 939 of Iowa's incorporated
+> places and, outside Des Moines, cannot name a single mayor, council member or clerk,
+> because I can find no statewide source. Is there a list of Iowa's city clerks — names and
+> office contact details — held anywhere in your office or by the county commissioners of
+> elections, in any form you would be willing to share? A spreadsheet or a PDF is perfectly
+> usable; it does not need to be a published dataset.
+>
+> If no such list exists, or exists but is not something you can share, that is a completely
+> acceptable answer — I would record it and stop looking, and the site would keep pointing
+> readers at the city's own website instead. I would rather know than guess, and I never
+> publish a name I cannot source.
+>
+> Thank you for your time,
+> <YOUR NAME>
+> <YOUR E-MAIL>
+
+### What each answer means
+
+* **A list arrives** — Iowa's City card can name a clerk in every city that has one, the way
+  Wisconsin's does, and the `ia-municipal-officeholders` gap record closes.
+* **"We do not hold that"** — a clean, citable no. The gap record's blocker gains a fourth
+  measured route and the remaining ones are the per-city ladder and the per-city GIS route
+  (Des Moines and Waterloo both already publish their council members in band).
+* **"The county auditors would have it"** — that is a pointer, and a good one: it turns 99
+  asks into a route this project already has the addresses for, since all 99 auditors ship in
+  `ia/data/app/ia-county-auditors.json` with an e-mail apiece.
 
 ---
 
@@ -801,7 +492,7 @@ official's name wrong is the cheapest possible way to lose a reader.
 
 ---
 
-## Ask 8 — Bureau County: permission the licence does not grant, or the free route instead
+## Ask 9 — Bureau County: permission the licence does not grant, or the free route instead
 
 > **NOT YET ASKED — DRAFTED.** GIS Technician Christine Anderson sent a signed-user
 > agreement and a $150 invoice on **2026-08-12**; nothing has been sent back since, so this
@@ -859,7 +550,7 @@ official's name wrong is the cheapest possible way to lose a reader.
 
 ---
 
-## Ask 9 — Clark County: direct contact for the board, and which building serves each precinct
+## Ask 10 — Clark County: direct contact for the board, and which building serves each precinct
 
 > **NOT YET ASKED — DRAFTED**, two questions on one thread. Clerk Lee already answered this
 > project once, in a single sentence that unblocked the whole county ("The County Board is
@@ -897,7 +588,7 @@ official's name wrong is the cheapest possible way to lose a reader.
 
 ---
 
-## Ask 10 — CCGISC: the licence question behind two whole counties
+## Ask 11 — CCGISC: the licence question behind two whole counties
 
 > **NOT YET ASKED — DRAFTED.** Champaign and Piatt are the only two Illinois counties this
 > project records as blocked for a LEGAL rather than a technical reason: the Champaign
@@ -948,7 +639,7 @@ Jennifer Harper, Piatt County Clerk — `countyclerk@piatt.gov`
 
 ---
 
-## Ask 11 — the four second follow-ups that are now due
+## Ask 12 — the four second follow-ups that are now due
 
 > **This file's rule 3 is "follow up at ~3 weeks, again 2 weeks later, and only then record
 > the route UNRESPONSIVE."** Four Illinois asks have had exactly ONE follow-up and are past

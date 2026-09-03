@@ -5982,7 +5982,8 @@ function initMichiganExplorer() {
     "us-house",          // 13 congressional districts — the largest districts Michigan carries below the state itself
     "mi-senate",         // 38 Senate districts — larger on average than a county, smaller than a congressional district
     "county",            // 83 counties, pre-built from TIGERweb; the instance's offline anchor layer
-    "mi-house"           // 110 House districts — the finest political tiling this instance ships today
+    "mi-house",          // 110 House districts — the finest political tiling this instance ships today
+    "county-commissioner" // 619 districts across all 83 counties — the finest tiling this instance ships, smaller than a state House district
   ];
   /* ==== GENERATED:END layer-area-rank ==== */
   /* ==== ENGINE:BEGIN layer-registry ==== */
@@ -8536,6 +8537,46 @@ function initMichiganExplorer() {
     style: { color: "#8C2E4A", weight: 2, fillColor: "#8C2E4A", fillOpacity: 0.05, dashArray: "5 1 2 1" }
   });
 
+
+  /* ---------- 5. County Commissioner District — the flagship ----------
+   * Pre-built from the Michigan Bureau of Elections' own statewide
+   * compilation (mi/scripts/build_mi_commissioner_districts.py): every
+   * county's board plan, filed under MCL 46.401-46.405, in one file. 619
+   * districts across all 83 counties. Every Michigan county elects its
+   * commissioners by single-member district, so a polygon is the honest
+   * surface everywhere — there is no at-large county to carve out.
+   *
+   * THIS CARD NAMES NOBODY, ON PURPOSE. The source ships a Commissioner and
+   * Party on all 619 polygons and the builder DROPS them, for a measured
+   * reason: the column holds the certified November 2024 election winners,
+   * not the people now in office. It still names a Wayne County commissioner
+   * who died in June 2025. The builder refuses to write if those columns ever
+   * reach data/app/, and the note row below tells the reader plainly what the
+   * app does and does not know. ---------- */
+  var loadMiCommissionerDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/mi-commissioner-districts.json", {}, 2);
+  });
+
+  registerPolygonLayer({
+    id: "county-commissioner",
+    group: "political",
+    label: "County Commissioner District",
+    loader: loadMiCommissionerDistricts,
+    style: { color: "#1B7A3D", weight: 2, fillColor: "#2E9E6B", fillOpacity: 0.06 },
+    fields: [
+      { name: "district", label: "District", keys: ["district"], primary: true },
+      { name: "county", label: "County", keys: ["county"] },
+      // 611 of 619 carry this; the factory shows a keyed row only when it
+      // hits, so Baraga 1 and the seven Cheboygan districts simply omit it.
+      { name: "population", label: "Population (2020 apportionment)", keys: ["population"] },
+      { label: "Your commissioner",
+        value: "Not named here. Michigan publishes these districts with the November 2024 " +
+               "election winner attached, but that list is not maintained — it still names " +
+               "commissioners who have since died, resigned or been replaced — so this app " +
+               "does not repeat it. Your county's own board page is the current source." }
+    ]
+  });
+
   /* ==== ENGINE:BEGIN hover-explorer ==== */
   /* =========================================================================
    * HOVER EXPLORER — a live popup (on by default, toggled bottom-left) that
@@ -9095,7 +9136,7 @@ function initMichiganExplorer() {
   // standard"): representation first, then services, then geography broad ->
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
-  var LAYER_SIDEBAR_RANK = ["us-house", "mi-senate", "mi-house", "county"];
+  var LAYER_SIDEBAR_RANK = ["us-house", "mi-senate", "mi-house", "county-commissioner", "county"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -9192,8 +9233,9 @@ function initMichiganExplorer() {
      carries the method and the measurements behind it, and its --check fails
      when a layer colour moves and its dark counterpart does not. */
   /* ==== GENERATED:BEGIN dark-map-palette ==== */
-  var DST_DARK_MAP_COLORS = { "#14181C": "#696F76", "#41B6E6": "#C6EBFE", "#444B54": "#929BA8",
-    "#4A2E8C": "#9B7CFD", "#6B7280": "#B1BBCE", "#8C2E4A": "#F47294"};
+  var DST_DARK_MAP_COLORS = { "#14181C": "#696F76", "#1B7A3D": "#58CD7A", "#2E9E6B": "#5BEAA5",
+    "#41B6E6": "#C6EBFE", "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD", "#6B7280": "#B1BBCE",
+    "#8C2E4A": "#F47294"};
   /* ==== GENERATED:END dark-map-palette ==== */
   /* ==== ENGINE:BEGIN districtry-theme ==== */
   /* The theme controller and the wordmark fleet switch, shared for the same

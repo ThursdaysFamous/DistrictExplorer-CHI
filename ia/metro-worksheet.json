@@ -56,7 +56,26 @@
       }
     },
     {
-      "id": "ia-senate", "label": "Iowa Senate District", "group": "political", "area_rank": 3,
+      "id": "iowa-aea", "label": "Area Education Agency", "group": "schools", "area_rank": 3,
+      "rank_note": "9 agencies tiling the state exactly, because the 324 school districts do — fractionally smaller on average than the 8 judicial districts above them and far larger than the 50 Senate districts below",
+      "source": {
+        "answers": "The Area Education Agency covering the point — the regional body that supplies special-education, media and professional services to every school district inside it, with the agency's own phone and website.",
+        "boundary": [
+          {
+            "label": "BUILT, NOT COPIED: the shipped school-district fabric dissolved by the Department of Education's own in-band AEA_NUM, joined on DistrictNCESCode = Census GEOID (324/324 exact, both directions, no alias table). The Department's own published AEA polygon is stamped \"for the 2019-2020 school year\" and serves only as the build-time WITNESS — 99.8% point agreement, with all 324 districts confirmed still sitting inside their own agency's published shape. Pre-built by ia/scripts/build_ia_aea.py.",
+            "url": "https://services.arcgis.com/vPD5PVLI6sfkZ5E4/arcgis/rest/services/CurrentIowaSchoolDistricts/FeatureServer/0"
+          },
+          {
+            "label": "Each agency's own name, phone and website come from the Iowa AEA system's own Find My AEA directory, keyed on the same two-digit agency code the Department's geometry carries — nine for nine, with both publishers' names required to agree before the build writes.",
+            "url": "https://iowaaea.org/find-my-aea/"
+          }
+        ],
+        "people": "None, and the reason is statutory rather than a missing source: Iowa Code §273.8 gives ZERO of an agency's nine directors a popular election. Five are elected by the boards of directors of the member school districts on a population-weighted vote, and four are appointed by the member districts' superintendents. The card says how they are chosen, and names the agency, its phone and its site instead.",
+        "applies": "Iowa — statewide, all nine agencies. Every school district belongs to one (Iowa Code ch. 273), so the nine tile the state exactly."
+      }
+    },
+    {
+      "id": "ia-senate", "label": "Iowa Senate District", "group": "political", "area_rank": 4,
       "rank_note": "50 Senate districts, each the union of two whole House districts",
       "source": {
         "answers": "The Iowa Senate district covering the point, and the senator holding it.",
@@ -66,7 +85,7 @@
       }
     },
     {
-      "id": "county", "label": "County", "group": "geography", "area_rank": 4,
+      "id": "county", "label": "County", "group": "geography", "area_rank": 5,
       "rank_note": "99 counties, pre-built from TIGERweb; the fork's offline anchor layer",
       "source": {
         "answers": "Which county contains the point, and its county auditor (Iowa's county election commissioner, Iowa Code 47.2).",
@@ -76,7 +95,7 @@
       }
     },
     {
-      "id": "ia-house", "label": "Iowa House District", "group": "political", "area_rank": 5,
+      "id": "ia-house", "label": "Iowa House District", "group": "political", "area_rank": 6,
       "rank_note": "100 House districts; two nest exactly inside each Senate district",
       "source": {
         "answers": "The Iowa House district covering the point, and the representative holding it.",
@@ -86,7 +105,7 @@
       }
     },
     {
-      "id": "county-supervisor", "label": "County Supervisor District", "group": "political", "area_rank": 6,
+      "id": "county-supervisor", "label": "County Supervisor District", "group": "political", "area_rank": 7,
       "rank_note": "The flagship layer: 270 features across 98 counties, PLANTYPE-aware (at-large / residence-district / single-member)",
       "source": {
         "answers": "The county supervisor district covering the point (where drawn), the county's election plan (at-large, residence-district-elected-countywide, or single-member district), and the board's size.",
@@ -101,7 +120,7 @@
       }
     },
     {
-      "id": "school-district-unified", "label": "School District (Unified)", "group": "schools", "area_rank": 7,
+      "id": "school-district-unified", "label": "School District (Unified)", "group": "schools", "area_rank": 8,
       "rank_note": "324 unified school districts, statewide — the only school-district tiling Iowa runs (TIGER's elementary/secondary layers measure zero)",
       "source": {
         "answers": "The unified school district covering the point.",
@@ -116,7 +135,7 @@
       "id": "school-director-district",
       "label": "School Director District",
       "group": "schools",
-      "area_rank": 8,
+      "area_rank": 9,
       "rank_note": "716 director districts inside the 324 school districts — the sub-district fabric a board is elected from, where a district elects by district at all",
       "source": {
         "answers": "The school board director district covering the point — or, where the district elects its whole board at large, that fact.",
@@ -128,7 +147,7 @@
       }
     },
     {
-      "id": "community-college", "label": "Community College", "group": "schools", "area_rank": 9,
+      "id": "community-college", "label": "Community College", "group": "schools", "area_rank": 10,
       "rank_note": "15 merged areas, shipped as published (no dissolve) — larger on average than a school district, ranked beside it",
       "source": {
         "answers": "The community college merged area covering the point, and its director-district count.",
@@ -143,7 +162,7 @@
       "id": "cc-director-district",
       "label": "CC Director District",
       "group": "schools",
-      "area_rank": 10,
+      "area_rank": 11,
       "rank_note": "123 director districts inside the 15 community college merged areas — the sub-fabric a college's board of trustees is elected from (Iowa Code 260C.11)",
       "source": {
         "answers": "The community college director district covering the point — the sub-district its board of trustees is elected from.",
@@ -155,7 +174,7 @@
       }
     },
     {
-      "id": "county-subdivision", "label": "County Subdivision", "group": "geography", "area_rank": 11,
+      "id": "county-subdivision", "label": "County Subdivision", "group": "geography", "area_rank": 12,
       "rank_note": "1,663 records tiling the state, live from TIGERweb (no data/app file) — 1,600 civil townships, 62 incorporated cities that double as their own subdivision record, and one federal reservoir carried as unorganized territory",
       "source": {
         "answers": "The civil township, or incorporated-city subdivision record, covering the point — and its type.",
@@ -167,7 +186,7 @@
       }
     },
     {
-      "id": "municipality", "label": "City", "group": "geography", "area_rank": 12,
+      "id": "municipality", "label": "City", "group": "geography", "area_rank": 13,
       "rank_note": "939 incorporated cities, live from TIGERweb (no data/app file) — small dense pockets within the county-subdivision fabric, so smaller on average than a civil township despite fewer records",
       "source": {
         "answers": "The incorporated city covering the point, if any.",
@@ -179,7 +198,7 @@
       }
     },
     {
-      "id": "dsm-ward", "label": "Des Moines City Council Ward", "group": "political", "area_rank": 13,
+      "id": "dsm-ward", "label": "Des Moines City Council Ward", "group": "political", "area_rank": 14,
       "rank_note": "The instance's first CITY tier: 4 wards averaging 22.7 sq mi inside one 90.66 sq mi city, so strictly smaller than the City that contains them and larger than a precinct",
       "source": {
         "answers": "Which of Des Moines's four council wards covers the point, the council member it elects, and the three seats no ward carries — the mayor and both at-large council members, who are elected by the whole city.",
@@ -193,7 +212,7 @@
       }
     },
     {
-      "id": "zip-code", "label": "ZIP Code", "group": "geography", "area_rank": 14,
+      "id": "zip-code", "label": "ZIP Code", "group": "geography", "area_rank": 15,
       "rank_note": "Census ZCTAs by Iowa envelope (no data/app file) — 1,443 features measured in-envelope, smaller on average than an incorporated city",
       "source": {
         "answers": "The ZIP Code Tabulation Area (ZCTA) covering the point.",
@@ -204,7 +223,7 @@
       }
     },
     {
-      "id": "precinct", "label": "Precinct", "group": "political", "area_rank": 15,
+      "id": "precinct", "label": "Precinct", "group": "political", "area_rank": 16,
       "rank_note": "1,660 election precincts, pre-built (mapshaper-simplified from the Legislature's own ArcGIS layer) — identity-only, no roster; ranked with the other fine-grained political boundaries",
       "source": {
         "answers": "The election precinct covering the point, and its county.",
@@ -215,7 +234,7 @@
       }
     },
     {
-      "id": "police-station", "label": "Police Station", "group": "safety", "area_rank": 16,
+      "id": "police-station", "label": "Police Station", "group": "safety", "area_rank": 17,
       "rank_note": "Nearest-3 point layer (449 stations in the state envelope) — not a containment boundary; ranked with the amenity points",
       "source": {
         "answers": "The three nearest police stations, straight-line distance.",
@@ -226,7 +245,7 @@
       }
     },
     {
-      "id": "fire-station", "label": "Fire Station", "group": "safety", "area_rank": 17,
+      "id": "fire-station", "label": "Fire Station", "group": "safety", "area_rank": 18,
       "rank_note": "Nearest-3 point layer (1,262 stations in the state envelope) — denser than the police set, so ranked after it",
       "source": {
         "answers": "The three nearest fire stations, straight-line distance.",
@@ -237,7 +256,7 @@
       }
     },
     {
-      "id": "school-site", "label": "School Location", "group": "schools", "area_rank": 18,
+      "id": "school-site", "label": "School Location", "group": "schools", "area_rank": 19,
       "rank_note": "Nearest-3 point layer (1,321 public school buildings, pre-built) — not a containment boundary; ranked with the amenity points",
       "source": {
         "answers": "The three nearest public school buildings, straight-line distance.",
@@ -248,7 +267,7 @@
       }
     },
     {
-      "id": "post-office", "label": "Post Office", "group": "geography", "area_rank": 19,
+      "id": "post-office", "label": "Post Office", "group": "geography", "area_rank": 20,
       "rank_note": "Nearest-3 point layer, straight-line distance — not a containment boundary, ranked last",
       "source": {
         "answers": "The three nearest post offices, straight-line distance.",
@@ -259,7 +278,7 @@
       }
     }
   ],
-  "min_register_layer": 13,
+  "min_register_layer": 14,
   "anchor_point": { "lat": 42.0494, "lng": -92.9071, "note": "downtown Marshalltown, Marshall County" },
   "anchors": [
     { "layer": "county", "expected": "Marshall County" },
@@ -287,7 +306,8 @@
       { "file": "ia-precincts.json", "min_features": 1660, "max_features": 1660, "note": "1,660 election precincts across all 99 counties, pre-built by ia/scripts/build_ia_precincts.py from the Iowa Legislature's own ArcGIS org's Iowa_Precincts layer (Visvalingam-simplified from ~18MB raw to under 3MB, 2,000-point agreement gate; polling-place fields never fetched)." },
       { "file": "ia-judicial-districts.json", "min_features": 8, "max_features": 8, "note": "8 judicial election districts, whole-county unions dissolved from state-counties.json by ia/scripts/build_ia_judicial_district.py, per Iowa Code SS602.6107/602.6109 and double-witnessed at build time against the LSAFiscal organization's own published district polygons." },
       { "file": "ia-community-colleges.json", "min_features": 15, "max_features": 15, "note": "15 community college merged areas, shipped as published (no dissolve) from the Iowa Legislature's own ArcGIS org by ia/scripts/build_ia_community_colleges.py, witnessed against a second LSA layer on name set, 2020 census population (3,190,369) and director-district count (124)." },
-      { "file": "dsm-wards.json", "min_features": 4, "max_features": 4, "note": "The City of Des Moines's four council wards, shipped as published (no dissolve) from the city's own Wards feature service by ia/scripts/build_dsm_wards.py. Gated twice: the wards must still tile the city's own City Boundary layer (0.0070% uncovered in 753 perimeter fragments, largest 3,482 m² — a hole is one large compact part, so the largest fragment is capped as well as the total), and simplification must add no overlap to the source's own 14 m sliver along the ward 1/2 edge. Carries verbatim the City of Des Moines disclaimer its terms of use require, which the card renders." }
+      { "file": "dsm-wards.json", "min_features": 4, "max_features": 4, "note": "The City of Des Moines's four council wards, shipped as published (no dissolve) from the city's own Wards feature service by ia/scripts/build_dsm_wards.py. Gated twice: the wards must still tile the city's own City Boundary layer (0.0070% uncovered in 753 perimeter fragments, largest 3,482 m² — a hole is one large compact part, so the largest fragment is capped as well as the total), and simplification must add no overlap to the source's own 14 m sliver along the ward 1/2 edge. Carries verbatim the City of Des Moines disclaimer its terms of use require, which the card renders." },
+      { "file": "ia-aeas.json", "min_features": 9, "max_features": 9, "note": "Iowa's nine Area Education Agencies (Iowa Code ch. 273), built by ia/scripts/build_ia_aea.py as a DISSOLVE of the shipped school-district fabric by the Department of Education's own in-band AEA_NUM — not from the Department's published AEA polygon, which is stamped for the 2019-2020 school year. Three gates: the NCES join must stay 324/324 with no leftovers either way, the dissolve must not self-overlap, and every one of the 324 districts must still read as its own agency in the published FY20 polygon — the test that asks whether a district has CHANGED agency, which is the only way an AEA line moves." }
     ],
     "rosters": [
       { "file": "congress-roster.json", "min_keys": 4, "note": "U.S. House roster, refreshed weekly by update-ia-congress-roster.yml." },
@@ -303,7 +323,7 @@
     ]
   },
   "sw": {
-    "cache_name": "districtry-ia-shell-v4",
+    "cache_name": "districtry-ia-shell-v5",
     "shell_urls": ["./", "./manifest.webmanifest", "./icons/icon-192.png", "./icons/icon-512.png", "./icons/apple-touch-icon.png", "./icons/icon-maskable-512.png", "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js", "https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.24.0/maplibre-gl.min.js", "./vendor/leaflet-maplibre-gl.js"]
   },
   "data_sources": { "registry": "ia/scripts/validate_sources.py" },

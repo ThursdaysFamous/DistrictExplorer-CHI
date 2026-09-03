@@ -127,6 +127,23 @@ PROVENANCE = [
         ),
     },
     {
+        "layer": "county-commissioner",
+        "app_file": "mi-commissioner-districts.json",
+        "source_url": "https://gisagocss.state.mi.us/arcgis/rest/services/OpenData/boundaries/MapServer/10",
+        "note": (
+            "The flagship: every county's board plan, filed under MCL 46.401-46.405 and "
+            "compiled by the Bureau of Elections into one statewide layer -- 619 districts, "
+            "all 83 counties. Pre-built by mi/scripts/build_mi_commissioner_districts.py. "
+            "TWO WATCHES, AND THE ENDPOINT ONLY CARRIES ONE. Geometry: the layer has no "
+            "editingInfo and no date field at all, so a republish is invisible here; the only "
+            "machine-readable signal is the AGO item's `modified` epoch at "
+            "arcgis.com/sharing/rest/content/items/4c8d0d854ac04d8787cb3cf6dab7fbec (1764783222000 "
+            "= 2025-12-03 when last read), together with its title's own vNN suffix. People: the "
+            "layer's Commissioner/Party columns are the certified November 2024 winners, not a "
+            "roster, and are DROPPED at build -- gap mi-commissioner-roster."
+        ),
+    },
+    {
         "layer": "county",
         "app_file": "state-counties.json",
         "source_url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer/1",
@@ -135,20 +152,12 @@ PROVENANCE = [
 ]
 
 ENDPOINTS = [
-    {
-        # NOT A SHIPPED LAYER YET -- watched from arrival on purpose. This is the
-        # flagship this instance is built toward: one statewide layer carrying
-        # every county's commissioner districts (and each commissioner's name and
-        # party), compiled by the Bureau of Elections from the filings MCL
-        # 46.404/46.405 requires. Its AGO item states the licence outright ("this
-        # dataset is a public record and...there are no restrictions on the use,
-        # reproduction, or distribution"). If it moves or goes away before the
-        # layer ships, the monthly issue is where that surfaces.
-        "layer": "county-commissioner (planned)",
-        "url": "https://gisagocss.state.mi.us/arcgis/rest/services/OpenData/boundaries/MapServer/10?f=json",
-    },
+    # This instance's layers all ship as pre-built data/app/ files, so there is
+    # no live runtime endpoint to watch here yet. The commissioner layer's
+    # source is watched through PROVENANCE above (it is a built file), and its
+    # real staleness signal is the AGO ITEM's `modified` timestamp rather than
+    # anything on the state's REST endpoint — see that entry's note.
 ]
-
 FAIL, WARN, OK = "FAIL", "WARN", "OK"
 
 
