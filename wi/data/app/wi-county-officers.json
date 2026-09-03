@@ -3256,51 +3256,32 @@
   },
   "executive": {
    "name": "Joshua Schoemann",
-   "title": "County Executive",
-   "url": "https://www.washcowisco.gov/departments/county_executive",
-   "checked": true
+   "title": "County Executive"
   },
   "treasurer": {
    "name": "Scott M Henke",
-   "party": "Republican",
-   "url": "https://www.washcowisco.gov/departments/county_treasurer",
-   "checked": true
+   "party": "Republican"
   },
   "clerkOfCircuitCourt": {
    "name": "Sherry Coykendall",
-   "party": "Republican",
-   "url": "https://www.washcowisco.gov/departments/clerk_of_circuit_court",
-   "phone": "(262) 365-5133",
-   "checked": true
+   "party": "Republican"
   },
   "registerOfDeeds": {
    "name": "Lisa Budish",
-   "party": "Republican",
-   "url": "https://www.washcowisco.gov/departments/register_of_deeds",
-   "checked": true
+   "party": "Republican"
   },
   "districtAttorney": {
    "name": "Barry Braatz",
-   "party": "Republican",
-   "url": "https://www.washcowisco.gov/departments/district_attorney",
-   "checked": true
+   "party": "Republican"
   },
   "sheriff": {
    "name": "Martin Schulteis",
-   "party": "Republican",
-   "url": "https://www.washcowisco.gov/elected_officials/sheriff_s_office",
-   "phone": "262-335-4378",
-   "checked": true
+   "party": "Republican"
   },
   "coroner": {
    "name": "Debbie Stodola",
-   "title": "Medical Examiner (appointed)",
-   "url": "https://www.washcowisco.gov/departments/medical_examiner",
-   "phone": "414-516-4300",
-   "checked": true
-  },
-  "contactChecked": 7,
-  "contactCheckedWeekly": 7
+   "title": "Medical Examiner (appointed)"
+  }
  },
  "55133": {
   "county": "Waukesha",
