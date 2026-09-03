@@ -95,7 +95,7 @@ MIN_REGISTER_LAYER = 4
 # count above — this per-id list is the direct module-loss guard. Emitted in
 # LAYER_AREA_RANK order; check 5 keeps the two naming the same set.
 EXPECT_LAYER_IDS = [
-    "us-house", "mi-senate", "county", "mi-house",
+    "us-house", "mi-senate", "county", "mi-house", "county-commissioner",
 ]
 
 # file -> (min features, max features) for the boundary layers fetched by the app.
@@ -105,6 +105,7 @@ GEOMETRY_FILES = {
     "congress-districts.json": (13, 13),  # U.S. House districts, pre-built from TIGERweb Legislative layer 0 (field CD120 — the 120th Congress; CD119 is retired and its query 400s).
     "mi-senate-districts.json": (38, 38),  # Michigan Senate districts, pre-built by mi/scripts/build_legislative_boundaries.py (2,000-point agreement gate).
     "mi-house-districts.json": (110, 110),  # Michigan House districts, pre-built by mi/scripts/build_legislative_boundaries.py (2,000-point agreement gate).
+    "mi-commissioner-districts.json": (619, 619),  # All 619 county commissioner districts across all 83 counties, pre-built by mi/scripts/build_mi_commissioner_districts.py from the Bureau of Elections' statewide compilation (2,000-point agreement gate at 100.00%, per-county 1..N numbering check, MCL 46.401(1) 5..21 board-size check, and a guard that REFUSES the file if the source's Commissioner/Party columns ever reach data/app/). 611 of 619 carry an apportionment population; Baraga District 1 and all seven Cheboygan districts do not, and the card omits the row rather than showing a blank.
 }
 
 # file -> minimum key count (officeholder rosters).

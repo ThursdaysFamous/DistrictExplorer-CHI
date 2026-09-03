@@ -141,6 +141,21 @@ WI's per-date calendar lives in `wi/WATCH.md` — including the standing mid-dec
 legislative maps have moved off the census cycle before, so a court-ordered remap is a live trigger
 here in a way it is not in most states.
 
+
+### MI (5 layers)
+
+| Layer | Exposure class | Enacting authority | What breaks |
+|---|---|---|---|
+| U.S. House (MI) | Decennial + **PROVEN mid-decade elsewhere in this vintage** | MI Independent Citizens Redistricting Commission (2018 Prop 2) | geometry (`mi/scripts/build_legislative_boundaries.py congress` rebuild + agreement gate), roster join. The FIELD is versioned and the old name is REMOVED, not deprecated: `CD120` today, and a query naming a retired `CD119` returns HTTP 200 carrying a JSON 400 envelope, so the builder dies as "no features" — read that as "the vintage rolled" |
+| MI Senate / House | Decennial | MI Independent Citizens Redistricting Commission | geometry (same builder, `mi-senate` / `mi-house`) + both roster joins. The SLD layer indices (1/2) roll their NAME in place — 2024 → 2026 observed 2026-09-03 — while `SLDU`/`SLDL` survive, so a vintage roll here needs no rebuild unless the lines actually moved; measure before assuming |
+| County commissioner districts | **Decennial, on the census cycle** | each county's apportionment commission, filed under MCL 46.401-46.405 and compiled statewide by the Bureau of Elections | geometry (`mi/scripts/build_mi_commissioner_districts.py` rebuild — 619/83 exact-count guards, per-county 1..N numbering, MCL 46.401(1)'s 5..21 board-size check, and the guard that refuses the file if the source's officeholder columns reappear). The 2021 plans run the 2020-census cycle, so the next apportionment is ~2031. **THE ENDPOINT CANNOT ANNOUNCE A REPUBLISH**: the layer has no `editingInfo`, no `lastEditDate` and no date field at all, so the only machine-readable staleness signal is the AGO item's own `modified` epoch on arcgis.com — a watch that polls only `gisagocss.state.mi.us` can never detect one |
+| County | TIGER-rolling | Census Bureau vintage | pre-built `state-counties.json` on rebuild; the coverage ring (`mi/scripts/build_metro_outline.py`) is dissolved from the SAME fabric, so a county rebuild wants an outline rebuild and a `--check` |
+
+MI's per-date calendar lives in `mi/WATCH.md`. Note the roster axis moves on a DIFFERENT clock from
+the geometry here: commissioner terms went to FOUR years under PA 121-122 of 2021, so the boards
+seated January 2025 run to December 2028 and the live risk is mid-term vacancies rather than an
+election.
+
 ---
 
 ## The detection layer (executable NOW)
