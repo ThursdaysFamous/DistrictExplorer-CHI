@@ -839,14 +839,14 @@ table.matrix code {
   <section class="matrix-section">
     <h2>The layer matrix</h2>
     <!-- ==== GENERATED:BEGIN layer-matrix ==== -->
-      <p class="matrix-lede">4 layers — 3 political and legislative, 1 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
+      <p class="matrix-lede">5 layers — 4 political and legislative, 1 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
       <nav class="matrix-nav" aria-label="Jump to a layer group">
         <a href="#political">Political &amp; legislative</a>
         <a href="#geography">Geography &amp; amenities</a>
       </nav>
 
       <section class="matrix-group" id="political">
-        <h2>Political &amp; legislative <span class="matrix-count">3 layers</span></h2>
+        <h2>Political &amp; legislative <span class="matrix-count">4 layers</span></h2>
         <p class="matrix-blurb">Districts that elect somebody — from your ward to your seat in Congress.</p>
         <div class="matrix-wrap">
           <table class="matrix">
@@ -886,6 +886,17 @@ table.matrix code {
                 </td>
                 <td data-label="Who it names">mi-house-members.json, rebuilt weekly by CI from the Open States current-people export (name, party, e-mail, personal site) — all 110 seats. NO CAPITOL CONTACT BLOCK SHIPS FOR THE HOUSE, and that is a measurement rather than an omission: Open States carries no capitol phone or address for any Michigan legislator, and house.mi.gov could not be reached from this project's build environment (TLS: &quot;unable to get local issuer certificate&quot;, with the egress proxy's CA bundle explicitly supplied, while senate.michigan.gov answers 200 on identical flags). Whether that is the House site's own incomplete certificate chain or an artifact of this sandbox is unresolved and carries one CI-side probe before it is recorded as anything more — see mi/WATCH.md.</td>
                 <td data-label="Where it applies">Michigan — statewide, all 110 districts.</td>
+              </tr>
+              <tr id="layer-county-commissioner">
+                <th scope="row"><span class="layer-name">County Commissioner District</span><code>county-commissioner</code></th>
+                <td data-label="What it answers">The county commissioner district covering the point, its county, and the population it was apportioned on.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://gisagocss.state.mi.us/arcgis/rest/services/OpenData/boundaries/MapServer/10" target="_blank" rel="noopener">Michigan Department of State, Bureau of Elections — &quot;2021 County Commissioner Districts&quot;, the statewide compilation of the plans county apportionment commissions file under MCL 46.401-46.405; all 83 counties in one service, pre-built and shipped with the app. Its AGO item states the licence outright: &quot;This dataset is a public record and ... there are no restrictions on the use, reproduction, or distribution of this dataset.&quot; (The Hub SITE item carries a separate CC-BY-SA; that is the site application, not this dataset, and its share-alike is not inherited.) The layer is named for its 2021 adoption year, labelled 2022 by the state's own viewer for the first election held under it, and backed by a feature class called CCD_2022_Edit — three names, one layer.</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">NONE, and that is a measurement rather than an omission. The source carries a Commissioner and Party on every one of its 619 polygons, which looks like a free roster and is not one: the item's own description says the values were &quot;derived from the canvased November 2024 election results&quot;, so the column is a list of CERTIFIED ELECTION WINNERS, not of officeholders. That is why it is 100% filled — a district always has a winner — and the fill rate is evidence against maintenance, not for it. Measured 2026-09-03 across 12 counties read district-by-district against their own board pages (123 districts) plus ~40 more in a second pass: 93.5% named the right person, and every single miss ran the same direction, the layer naming the 2024 winner and the county naming their replacement. Wayne County District 5 still names a commissioner who died on 10 June 2025. Four further rows misspell a real surname. So the names are dropped at the build rather than shipped with a caveat, and the honest route to Michigan commissioner names — each county's own board page — is a later change with its own weekly refresh. Recorded as gap mi-commissioner-roster.</td>
+                <td data-label="Where it applies">Michigan — statewide, all 83 counties, 619 districts. Every Michigan county elects its commissioners by single-member district (MCL 46.401-46.405); none elects at large, so a polygon is the honest surface everywhere.</td>
               </tr>
             </tbody>
           </table>
