@@ -382,7 +382,7 @@
             "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Places_CouSub_ConCity_SubMCD/MapServer/4"
           }
         ],
-        "people": "No roster is joined yet; municipal officials are a per-county build (docs/EXPANSION_GUIDE.md §3.4).",
+        "people": "Milwaukee County's 19 municipal executives — mayors and village presidents — from Milwaukee County GIS & Land Information's own layer, joined by place GEOID. It is the only source in Wisconsin that names them as data, and its own last data edit predates the April 2026 election that fills these offices, so a NAME is shown only where the municipality's own page witnessed it at build time; where it could not be witnessed the card names the office and says why the person is not shown. Elsewhere in the state no roster is joined yet — municipal officials are a per-county build (docs/EXPANSION_GUIDE.md §3.4).",
         "applies": "Wisconsin — statewide."
       }
     },
@@ -1401,81 +1401,6 @@
     ],
     "rosters": [
       {
-        "file": "congress-roster.json",
-        "min_keys": 8,
-        "note": "U.S. House roster for the state, built from unitedstates/congress-legislators by bootstrap_state.py and refreshed weekly by update-wi-congress-roster.yml (min tightened at bootstrap)."
-      },
-      {
-        "file": "wi-senate-members.json",
-        "min_keys": 31,
-        "note": "State Senate roster from the Open States current-people export (wi.csv), refreshed weekly by update-wi-legislature-roster.yml; the floor tolerates transient vacancies (33 seats)."
-      },
-      {
-        "file": "wi-assembly-members.json",
-        "min_keys": 94,
-        "note": "State Assembly roster from the Open States current-people export (wi.csv), refreshed weekly by update-wi-legislature-roster.yml; the floor tolerates transient vacancies (99 seats)."
-      },
-      {
-        "file": "coverage-gaps.json",
-        "min_keys": 1,
-        "note": "The Data gaps panel's content; seeded minimal by bootstrap_state.py, grown as the fork records real gaps."
-      },
-      {
-        "file": "county-board-directory.json",
-        "min_keys": 72,
-        "note": "One row per county: board size read back from the shipped geometry, plus the county's own official page for the card's footer link. Built by wi/scripts/build_wi_county_board_directory.py; not a roster of people — Wisconsin publishes none statewide."
-      },
-      {
-        "file": "county-board-members.json",
-        "min_keys": 1244,
-        "note": "County board supervisors for ALL 72 counties (1,590 seats — every supervisory seat the state files — 1,572 named, 17 the counties themselves mark vacant and 1 withheld) — 41 read weekly from each county's own host, in six page shapes with each county's reading direction pinned (Waupaca's is the Clerk's Directory of Public Officials, Door's and Oconto's are CivicPlus staff-directory cards); Milwaukee and Racine off their own GIS layers (Milwaukee Legistar-witnessed on every run); Fond du Lac through the Internet Archive with the county asked first and the capture's age gated; Dodge from its paginated constituent directory; Kenosha's and Adams's from directory PDFs; Clark's 29 from the County Clerk's own 44-page Official Directory, whose link is discovered by its anchor text because the county serves it from a content hash, and whose per-district ward composition is checked against LTSB's own ward filing before it ships; Pierce's 17 from its annual county directory, read in two columns so the home addresses beside each supervisor are dropped, with the name checked against that seat's own county mailbox and again against the directory's sideways summary index, and the URL pinned because the host's robots.txt allows documents and forbids the pages that would link them; St. Croix's 19 from the county's own five-column Districts & Supervisors table, whose ward column witnesses 131 of 131 wards and all 19 municipality sets against LTSB's filing, whose chair marks are read from the NAME cell alone because four COMMITTEE cells also say (Chair), and whose address column is not read at all because it mixes the Government Center with home addresses and nothing separates them; Chippewa's 21 from the CivicPlus h-cards on its board page, each stating its own district, with every seat re-confirmed against the county's full staff directory and the page's own stale VACANCY NOTICE deliberately not read — it advertises District 6 above a card naming the supervisor who holds it; Menominee's joint County/Town board, the only one in the state whose members are not all districted, where LTSB files ward N as district N for all five and the two supervisors elected COUNTYWIDE ride a county-keyed `<fips>-at-large` row so the card can name all seven rather than five of a seven-member body; Langlade's 21 from the same vendor CMS Menominee runs, each member's own page read to re-state the district and to take the phone and the county's district-keyed mailbox (never the home address all 21 pages print), witnessed on municipality NAMES rather than ward numbers because that county writes ordinal ward words for its city districts and three ward notations inside one town list; Iron's 15 from each member's OWN directory page, the only surface in that county stating a district — its board page names all fifteen with their roles and none, and its 832 KB aggregate directory contains the word district not once, so the county was recorded here as publishing nothing until the member pages the board page itself links were opened; its one empty seat is identified by elimination and gated on the board page's vacancy count agreeing; Sawyer's 15 from the Board of Supervisors staff directory on CivicPlus's NEWER responsive template — not the h-card widget Door and Oconto use — with each member's own employee page read again to re-state the district, and its ward composition taken from a THIRD county page; Ashland's 21 read ONCE from its board page and then carried as a dated document, because that county's robots.txt disallows the whole site to every agent it does not name — the reader is kept for the day the county says yes, and it is what measured the ALDERMANIC annotation that must be cut before the composition parses and the one ward (City of Ashland 18) the county and the state file differently, shipped because that ward is 3.8% of the district; Douglas's 21 from a table whose district column is ORDINAL WORDS, so a reader looking for “District n” finds nothing on the best such page in the state; Florence's 12 from its board list on the same vendor CMS Menominee and Langlade run, each member's own page read to re-state the district and take the contact — its one empty seat is filed as a MEMBER (the row reads “Position, Vacant” and flips to a plausible person's name if read as one), so the vacancy is tested before the name is built and on both surfaces, and a third county page listing the eleven filled seats must name exactly them; no ward or municipality composition is published anywhere for this county, so the district key rests on the two statements the county does make; Forest's 21 from the GoDaddy ContentCards on its own supervisors page, where each card carries THREE headings and only the first is that seat's — the other two hold neighbouring cards' names, and the four “District N - Vacant” headings leak the same way, so both the name and the vacancy are read from the seat's own first heading and never from the card around it; its district-keyed mailbox re-states each number and must agree, its municipalities are named with no town/village/city word so the type is supplied by LTSB's own filing rather than assumed, and every card's home address is skipped; Barron's 29 from board.cfm on www.co.barron.wi.us — the county's older site, which its canonical board page links twice as “Individual Contact Information for County Board Supervisors” while naming two people itself — read as PAIRED ROWS, because each seat is two table rows with the district number in the one ABOVE the supervisor, witnessed 63/63 on wards and 29/29 on municipalities against the state's filing, its three officers stated twice on the page in two formats and gated to agree, and its address column never read; Lincoln's 22 off a Supervisor Districts layer on maps.co.lincoln.wi.us — a second county host its Cloudflare-challenged website never links — with the DISTRICT KEY itself witnessed by sampling the county's own polygons against the shipped state filing, which found district 21 drawn differently by the two and withheld that one seat rather than preferring a publisher; Columbia's from the table its listing page frames from a second county host; and NINE carried as dated documents that are never re-fetched: Taylor, Lafayette and La Crosse behind a captcha or a Cloudflare challenge, and Jackson, Richland, Rusk, Polk, Dunn and Pepin because each of those sites publishes a robots.txt disallowing the whole site to every agent it does not name. Five of the six were scraped weekly until 2026-08-31, when wi/scripts/validate_robots.py swept every host this instance fetches; the crawl stopped and the dated names stayed, and their cards say the county ASKS rather than refuses. Calumet, Buffalo, Jackson, Waupaca, Door, Oconto and Pepin (2026-08-31) are the 51st to 57th. Roles pass a uniqueness gate, because Calumet's page labels two supervisors Vice-Chairperson where its own minutes name one. Built by wi/scripts/build_wi_county_board_roster.py, checked seat-for-seat against the shipped district geometry and refused outright if a county that shipped last week resolves nothing this week. Every county names its supervisors."
-      },
-      {
-        "file": "wi-circuit-judges.json",
-        "min_keys": 69,
-        "note": "The circuit-court bench — every circuit's judges with branch and direct phone where wicourts publishes them, plus the courthouse — keyed by the same circuit keys the geometry carries. Built by wi/scripts/build_wi_circuit_court_roster.py from the wicourts scrape; refreshed weekly by update-wi-circuit-court-roster.yml, whose composition assertion doubles as the circuit map's redistricting tripwire."
-      },
-      {
-        "file": "wi-court-of-appeals-roster.json",
-        "min_keys": 4,
-        "note": "The Court of Appeals bench — sixteen judges keyed by district with role, direct phone and chambers, the 4/4/3/5 seat split gated at scrape time. Built by wi/scripts/build_wi_coa_roster.py; refreshed weekly by update-wi-court-of-appeals-roster.yml, whose composition assertion is the appeals map's redistricting tripwire."
-      },
-      {
-        "file": "wi-county-clerks.json",
-        "min_keys": 72,
-        "note": "All 72 county clerks — name, party-or-appointed per the Blue Book's own legend, office, hours, phone, fax, e-mail — keyed by county GEOID. Built by wi/scripts/build_wi_county_clerk_roster.py from the two cross-gating open publishers; refreshed weekly by update-wi-county-clerk-roster.yml. Milwaukee's entry carries the statutory election-commission note."
-      },
-      {
-        "file": "mps-school-board-members.json",
-        "min_keys": 3,
-        "note": "The nine Milwaukee Board of School Directors (at-large president + districts 1-8, keyed to the geometry's DISTRICT values) with roles, term expirations and the Board office's contact, under {members, office, sourceUrl}. Built by wi/scripts/build_mps_school_board_roster.py from the district's own directors page with the committee-list witness; refreshed weekly by update-mps-school-board-roster.yml."
-      },
-      {
-        "file": "wi-alderpersons.json",
-        "min_keys": 6,
-        "note": "The alderperson roster for the six big cities with a verified, witnessed route (Milwaukee, Madison, Green Bay, Kenosha, Racine, Waukesha — 94 seats), keyed by the municipality's statewide COUSUBFP and zero-padded district id, the geometry file's exact key pair. Built by wi/scripts/build_wi_alderperson_roster.py with per-city, per-field floors and a geometry cross-gate; refreshed weekly by update-wi-alderperson-roster.yml."
-      },
-      {
-        "file": "wi-county-officers.json",
-        "min_keys": 72,
-        "note": "72 counties x 7 offices from the Blue Book's county-officer tables (build_wi_county_officer_roster.py; layout-aware x-position parse, chair-seats witness, Menominee pin, shared-DA footnote). Dated April 2025 on every card; refreshed weekly with the clerk scrape."
-      },
-      {
-        "file": "mke-polling-places.json",
-        "min_keys": 356,
-        "note": "Milwaukee ward -> polling place pairing (build_mke_polling_places.py; CC-BY city dataset, ward keys gated equal to LTSB's Milwaukee wards, every pair witnessed against the city's own REST layer, places pointed and bbox-gated). Dated per dataset edition; rebuilt per election, not weekly."
-      },
-      {
-        "file": "mpd-district-captains.json",
-        "min_keys": 7,
-        "note": "MPD district captains roster (mpd_captains_scraper.py + build_mpd_captains_roster.py from the city's own per-district pages; keys exactly 1-7, >=6 named, name implies rank, sourceUrl pinned to the city's district path). Refreshed weekly by update-mpd-captains-roster.yml as a reviewed bot PR."
-      },
-      {
-        "file": "madison-polling-places.json",
-        "min_keys": 130,
-        "note": "Madison ward -> polling place pairing (build_madison_polling_places.py; the city's open-data polling layer is one point per ward, ward keys gated equal to LTSB's Madison wards AND the city's own ward layer, points bbox-gated). The layer publishes no edition date, so records are dated as read; rebuilt per election, not weekly."
-      },
-      {
         "file": "adams-polling-places.json",
         "min_keys": 35,
         "note": "Adams County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 39 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
@@ -1540,6 +1465,26 @@
         "min_keys": 81,
         "note": "Columbia County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 90 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
         "dynamic_reference": true
+      },
+      {
+        "file": "congress-roster.json",
+        "min_keys": 8,
+        "note": "U.S. House roster for the state, built from unitedstates/congress-legislators by bootstrap_state.py and refreshed weekly by update-wi-congress-roster.yml (min tightened at bootstrap)."
+      },
+      {
+        "file": "county-board-directory.json",
+        "min_keys": 72,
+        "note": "One row per county: board size read back from the shipped geometry, plus the county's own official page for the card's footer link. Built by wi/scripts/build_wi_county_board_directory.py; not a roster of people — Wisconsin publishes none statewide."
+      },
+      {
+        "file": "county-board-members.json",
+        "min_keys": 1244,
+        "note": "County board supervisors for ALL 72 counties (1,590 seats — every supervisory seat the state files — 1,572 named, 17 the counties themselves mark vacant and 1 withheld) — 41 read weekly from each county's own host, in six page shapes with each county's reading direction pinned (Waupaca's is the Clerk's Directory of Public Officials, Door's and Oconto's are CivicPlus staff-directory cards); Milwaukee and Racine off their own GIS layers (Milwaukee Legistar-witnessed on every run); Fond du Lac through the Internet Archive with the county asked first and the capture's age gated; Dodge from its paginated constituent directory; Kenosha's and Adams's from directory PDFs; Clark's 29 from the County Clerk's own 44-page Official Directory, whose link is discovered by its anchor text because the county serves it from a content hash, and whose per-district ward composition is checked against LTSB's own ward filing before it ships; Pierce's 17 from its annual county directory, read in two columns so the home addresses beside each supervisor are dropped, with the name checked against that seat's own county mailbox and again against the directory's sideways summary index, and the URL pinned because the host's robots.txt allows documents and forbids the pages that would link them; St. Croix's 19 from the county's own five-column Districts & Supervisors table, whose ward column witnesses 131 of 131 wards and all 19 municipality sets against LTSB's filing, whose chair marks are read from the NAME cell alone because four COMMITTEE cells also say (Chair), and whose address column is not read at all because it mixes the Government Center with home addresses and nothing separates them; Chippewa's 21 from the CivicPlus h-cards on its board page, each stating its own district, with every seat re-confirmed against the county's full staff directory and the page's own stale VACANCY NOTICE deliberately not read — it advertises District 6 above a card naming the supervisor who holds it; Menominee's joint County/Town board, the only one in the state whose members are not all districted, where LTSB files ward N as district N for all five and the two supervisors elected COUNTYWIDE ride a county-keyed `<fips>-at-large` row so the card can name all seven rather than five of a seven-member body; Langlade's 21 from the same vendor CMS Menominee runs, each member's own page read to re-state the district and to take the phone and the county's district-keyed mailbox (never the home address all 21 pages print), witnessed on municipality NAMES rather than ward numbers because that county writes ordinal ward words for its city districts and three ward notations inside one town list; Iron's 15 from each member's OWN directory page, the only surface in that county stating a district — its board page names all fifteen with their roles and none, and its 832 KB aggregate directory contains the word district not once, so the county was recorded here as publishing nothing until the member pages the board page itself links were opened; its one empty seat is identified by elimination and gated on the board page's vacancy count agreeing; Sawyer's 15 from the Board of Supervisors staff directory on CivicPlus's NEWER responsive template — not the h-card widget Door and Oconto use — with each member's own employee page read again to re-state the district, and its ward composition taken from a THIRD county page; Ashland's 21 read ONCE from its board page and then carried as a dated document, because that county's robots.txt disallows the whole site to every agent it does not name — the reader is kept for the day the county says yes, and it is what measured the ALDERMANIC annotation that must be cut before the composition parses and the one ward (City of Ashland 18) the county and the state file differently, shipped because that ward is 3.8% of the district; Douglas's 21 from a table whose district column is ORDINAL WORDS, so a reader looking for “District n” finds nothing on the best such page in the state; Florence's 12 from its board list on the same vendor CMS Menominee and Langlade run, each member's own page read to re-state the district and take the contact — its one empty seat is filed as a MEMBER (the row reads “Position, Vacant” and flips to a plausible person's name if read as one), so the vacancy is tested before the name is built and on both surfaces, and a third county page listing the eleven filled seats must name exactly them; no ward or municipality composition is published anywhere for this county, so the district key rests on the two statements the county does make; Forest's 21 from the GoDaddy ContentCards on its own supervisors page, where each card carries THREE headings and only the first is that seat's — the other two hold neighbouring cards' names, and the four “District N - Vacant” headings leak the same way, so both the name and the vacancy are read from the seat's own first heading and never from the card around it; its district-keyed mailbox re-states each number and must agree, its municipalities are named with no town/village/city word so the type is supplied by LTSB's own filing rather than assumed, and every card's home address is skipped; Barron's 29 from board.cfm on www.co.barron.wi.us — the county's older site, which its canonical board page links twice as “Individual Contact Information for County Board Supervisors” while naming two people itself — read as PAIRED ROWS, because each seat is two table rows with the district number in the one ABOVE the supervisor, witnessed 63/63 on wards and 29/29 on municipalities against the state's filing, its three officers stated twice on the page in two formats and gated to agree, and its address column never read; Lincoln's 22 off a Supervisor Districts layer on maps.co.lincoln.wi.us — a second county host its Cloudflare-challenged website never links — with the DISTRICT KEY itself witnessed by sampling the county's own polygons against the shipped state filing, which found district 21 drawn differently by the two and withheld that one seat rather than preferring a publisher; Columbia's from the table its listing page frames from a second county host; and NINE carried as dated documents that are never re-fetched: Taylor, Lafayette and La Crosse behind a captcha or a Cloudflare challenge, and Jackson, Richland, Rusk, Polk, Dunn and Pepin because each of those sites publishes a robots.txt disallowing the whole site to every agent it does not name. Five of the six were scraped weekly until 2026-08-31, when wi/scripts/validate_robots.py swept every host this instance fetches; the crawl stopped and the dated names stayed, and their cards say the county ASKS rather than refuses. Calumet, Buffalo, Jackson, Waupaca, Door, Oconto and Pepin (2026-08-31) are the 51st to 57th. Roles pass a uniqueness gate, because Calumet's page labels two supervisors Vice-Chairperson where its own minutes name one. Built by wi/scripts/build_wi_county_board_roster.py, checked seat-for-seat against the shipped district geometry and refused outright if a county that shipped last week resolves nothing this week. Every county names its supervisors."
+      },
+      {
+        "file": "coverage-gaps.json",
+        "min_keys": 1,
+        "note": "The Data gaps panel's content; seeded minimal by bootstrap_state.py, grown as the fork records real gaps."
       },
       {
         "file": "crawford-polling-places.json",
@@ -1608,15 +1553,15 @@
         "dynamic_reference": true
       },
       {
-        "file": "green-polling-places.json",
-        "min_keys": 54,
-        "note": "Green County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 60 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
-        "dynamic_reference": true
-      },
-      {
         "file": "green-lake-polling-places.json",
         "min_keys": 36,
         "note": "Green Lake County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 41 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "green-polling-places.json",
+        "min_keys": 54,
+        "note": "Green County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 60 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
         "dynamic_reference": true
       },
       {
@@ -1686,6 +1631,11 @@
         "dynamic_reference": true
       },
       {
+        "file": "madison-polling-places.json",
+        "min_keys": 130,
+        "note": "Madison ward -> polling place pairing (build_madison_polling_places.py; the city's open-data polling layer is one point per ward, ward keys gated equal to LTSB's Madison wards AND the city's own ward layer, points bbox-gated). The layer publishes no edition date, so records are dated as read; rebuilt per election, not weekly."
+      },
+      {
         "file": "manitowoc-polling-places.json",
         "min_keys": 80,
         "note": "Manitowoc County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 89 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
@@ -1722,10 +1672,25 @@
         "dynamic_reference": true
       },
       {
+        "file": "mke-polling-places.json",
+        "min_keys": 356,
+        "note": "Milwaukee ward -> polling place pairing (build_mke_polling_places.py; CC-BY city dataset, ward keys gated equal to LTSB's Milwaukee wards, every pair witnessed against the city's own REST layer, places pointed and bbox-gated). Dated per dataset edition; rebuilt per election, not weekly."
+      },
+      {
         "file": "monroe-polling-places.json",
         "min_keys": 77,
         "note": "Monroe County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 86 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
         "dynamic_reference": true
+      },
+      {
+        "file": "mpd-district-captains.json",
+        "min_keys": 7,
+        "note": "MPD district captains roster (mpd_captains_scraper.py + build_mpd_captains_roster.py from the city's own per-district pages; keys exactly 1-7, >=6 named, name implies rank, sourceUrl pinned to the city's district path). Refreshed weekly by update-mpd-captains-roster.yml as a reviewed bot PR."
+      },
+      {
+        "file": "mps-school-board-members.json",
+        "min_keys": 3,
+        "note": "The nine Milwaukee Board of School Directors (at-large president + districts 1-8, keyed to the geometry's DISTRICT values) with roles, term expirations and the Board office's contact, under {members, office, sourceUrl}. Built by wi/scripts/build_mps_school_board_roster.py from the district's own directors page with the committee-list witness; refreshed weekly by update-mps-school-board-roster.yml."
       },
       {
         "file": "oconto-polling-places.json",
@@ -1896,6 +1861,46 @@
         "dynamic_reference": true
       },
       {
+        "file": "wi-alderpersons.json",
+        "min_keys": 6,
+        "note": "The alderperson roster for the six big cities with a verified, witnessed route (Milwaukee, Madison, Green Bay, Kenosha, Racine, Waukesha — 94 seats), keyed by the municipality's statewide COUSUBFP and zero-padded district id, the geometry file's exact key pair. Built by wi/scripts/build_wi_alderperson_roster.py with per-city, per-field floors and a geometry cross-gate; refreshed weekly by update-wi-alderperson-roster.yml."
+      },
+      {
+        "file": "wi-assembly-members.json",
+        "min_keys": 94,
+        "note": "State Assembly roster from the Open States current-people export (wi.csv), refreshed weekly by update-wi-legislature-roster.yml; the floor tolerates transient vacancies (99 seats)."
+      },
+      {
+        "file": "wi-circuit-judges.json",
+        "min_keys": 69,
+        "note": "The circuit-court bench — every circuit's judges with branch and direct phone where wicourts publishes them, plus the courthouse — keyed by the same circuit keys the geometry carries. Built by wi/scripts/build_wi_circuit_court_roster.py from the wicourts scrape; refreshed weekly by update-wi-circuit-court-roster.yml, whose composition assertion doubles as the circuit map's redistricting tripwire."
+      },
+      {
+        "file": "wi-county-clerks.json",
+        "min_keys": 72,
+        "note": "All 72 county clerks — name, party-or-appointed per the Blue Book's own legend, office, hours, phone, fax, e-mail — keyed by county GEOID. Built by wi/scripts/build_wi_county_clerk_roster.py from the two cross-gating open publishers; refreshed weekly by update-wi-county-clerk-roster.yml. Milwaukee's entry carries the statutory election-commission note."
+      },
+      {
+        "file": "wi-county-officers.json",
+        "min_keys": 72,
+        "note": "72 counties x 7 offices from the Blue Book's county-officer tables (build_wi_county_officer_roster.py; layout-aware x-position parse, chair-seats witness, Menominee pin, shared-DA footnote). Dated April 2025 on every card; refreshed weekly with the clerk scrape."
+      },
+      {
+        "file": "wi-court-of-appeals-roster.json",
+        "min_keys": 4,
+        "note": "The Court of Appeals bench — sixteen judges keyed by district with role, direct phone and chambers, the 4/4/3/5 seat split gated at scrape time. Built by wi/scripts/build_wi_coa_roster.py; refreshed weekly by update-wi-court-of-appeals-roster.yml, whose composition assertion is the appeals map's redistricting tripwire."
+      },
+      {
+        "file": "wi-municipal-executives.json",
+        "min_keys": 19,
+        "note": "Milwaukee County's 19 municipal executives (mayors and village presidents) keyed by place GEOID, from the county GIS & Land Information layer — the only source in Wisconsin that names them as data. The layer's own dataLastEditDate is 2024-07-30 and these offices are elected every April of even years, so a NAME ships only where the municipality's OWN page witnessed it (wi_municipal_executive_scraper.py + build_wi_municipal_executives.py); 9 witnessed and 10 withheld with the reason at first build. Refreshed weekly."
+      },
+      {
+        "file": "wi-senate-members.json",
+        "min_keys": 31,
+        "note": "State Senate roster from the Open States current-people export (wi.csv), refreshed weekly by update-wi-legislature-roster.yml; the floor tolerates transient vacancies (33 seats)."
+      },
+      {
         "file": "winnebago-polling-places.json",
         "min_keys": 142,
         "note": "Winnebago County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 158 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
@@ -1977,6 +1982,11 @@
       "file": "wi-validate-sources.yml",
       "purpose": "source freshness (WI manifest: TIGERweb, LTSB supervisory + ward witness, rosters)",
       "schedule": "1st of month 13:00 UTC"
+    },
+    {
+      "file": "update-wi-municipal-executive-roster.yml",
+      "purpose": "Milwaukee County municipal executives (mayors and village presidents), each name witnessed against the municipality's own page before it ships",
+      "schedule": "Thu 16:30 UTC"
     }
   ],
   "geocoder": {
