@@ -49,6 +49,7 @@ import sys
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 WORKFLOW = os.path.join(".github", "workflows", "smoke-test.yml")
+DEPLOY = os.path.join(".github", "workflows", "deploy-pages.yml")
 
 problems = []
 
@@ -131,6 +132,36 @@ def check_tables(expected):
                  % (module, attr, sorted(extra)))
 
 
+def dark_instances():
+    """Tags whose whole folder is blanket-excluded from the Pages deploy.
+
+    A NEW STATE ARRIVES DARK, AND metros.json IS THE SWITCH THAT PUBLISHES IT.
+    An instance is built over several PRs, and until it is finished its folder
+    carries one blanket `<tag>/**` line in deploy-pages.yml's EXCLUDES so
+    nothing half-built reaches the site. metros.json is the other half of that
+    posture: `render_cards()` in build_landing_page.py and `sync_fleet()` in
+    generate_metro_files.py filter nothing, so an entry there renders a live,
+    clickable landing card the day it lands — and for an excluded folder that
+    card is a 404. Iowa's own arrival PR measured exactly this and deferred
+    both to go-live together (docs/IA_EXPANSION_PLAN.md PR 0).
+
+    So the manifest check below is not "every instance is listed"; it is "every
+    instance is listed IF AND ONLY IF it is published", which catches the 404
+    case as well as the invisible-instance case. The deploy exclude is the
+    signal because it is the thing that actually decides, rather than a second
+    list somebody has to remember to keep.
+    """
+    try:
+        src = read(DEPLOY)
+    except OSError as e:
+        fail("cannot read %s (%s) — cannot tell a dark instance from a "
+             "published one" % (DEPLOY, e))
+        return set()
+    # The blanket form only: `wi/data/source` and friends narrow a LIVE
+    # instance and must not read as darkness.
+    return set(re.findall(r"'(\w+)/\*\*'", src))
+
+
 def check_manifest(expected):
     """metros.json is the fleet's own list, and the landing page renders it."""
     try:
@@ -143,8 +174,12 @@ def check_manifest(expected):
     if isinstance(entries, dict):
         entries = list(entries.values())
     tags = {e.get("tag") for e in entries if isinstance(e, dict) and e.get("tag")}
-    missing = expected - tags
+    dark = dark_instances() & expected
+    published = expected - dark
+
+    missing = published - tags
     extra = tags - expected
+    listed_but_dark = sorted(tags & dark)
     if missing:
         fail("metros.json has no entry tagged %s — the fleet manifest drives the "
              "landing page, the coverage map and the privacy page, so an "
@@ -152,6 +187,16 @@ def check_manifest(expected):
     if extra:
         fail("metros.json is tagged %s, which is not an instance in this tree"
              % sorted(extra))
+    if listed_but_dark:
+        fail("metros.json lists %s while deploy-pages.yml still excludes the "
+             "whole folder — the landing page would render a live card linking "
+             "to a path the deploy does not publish, i.e. a 404. Publish the "
+             "instance (narrow the exclude) in the same change that lists it, "
+             "or take it back out of the manifest." % listed_but_dark)
+    if dark:
+        print("validate-instance-registration: %s dark (blanket-excluded from "
+              "the deploy, so deliberately absent from metros.json)"
+              % ", ".join(sorted(dark)))
 
 
 # The three per-instance command lists in the CI workflow. Each is five literal

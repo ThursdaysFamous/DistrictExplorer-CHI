@@ -537,7 +537,7 @@
     ]
   },
   "sw": {
-    "cache_name": "district-explorer-shell-sf-v9",
+    "cache_name": "district-explorer-shell-sf-v10",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",

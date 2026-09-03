@@ -23,7 +23,7 @@ tremors that are already happening.
 | By April 1, 2031 (statutory) | P.L. 94-171 redistricting data delivered to states | State map-drawing can begin; start state-layer watch. |
 | 2031–2032 | States redraw congressional + state-legislative maps, effective for 2032 elections | Congress + state Senate/House layers change in every metro. |
 | 2032–2033 | Municipal remaps (wards, council, commissioner, ERSB) | City-level layers change. |
-| Rolling, post-enactment | Census TIGERweb publishes new CD vintage | TIGERweb layer index + field names roll (CD119 → CD121). |
+| Rolling, post-enactment | Census TIGERweb publishes new CD vintage | TIGERweb layer index + field names roll. **OBSERVED 2026-09-03: CD119 → CD120** (not CD121 as this table long guessed), layer renamed "120th Congressional Districts; January 1, 2026 vintage". The old field is REMOVED and its query returns an HTTP-200 error envelope. |
 
 The 2030 statutory deadline is April 1, 2031 (13 U.S.C. 141(c): delivery "no later than April 1,
 2031"), but the 2020 cycle slipped to Aug/Sep 2021 due to COVID. Do not assume the deadline holds.
@@ -54,7 +54,9 @@ The 2030 statutory deadline is April 1, 2031 (13 U.S.C. 141(c): delivery "no lat
 Classify every layer by redistricting exposure. What breaks for any changed layer: anchor geometry
 (data/app files), ground-truth points + smoke assertions, LAYER_AREA_RANK ordering, roster join
 keys (district numbers can be renumbered, not just redrawn), TIGERweb layer index + field names
-(the field alias `CD119FP` is Congress-numbered and rolls to `CD121FP`), Socrata dataset ids (new
+(the field is Congress-numbered and rolled `CD119` → `CD120` on 2026-09-03; note it is a BARE
+`CD119`/`CD120`, never the `CD119FP` alias this runbook used to name — the app field lists that
+said `cd119fp` never matched anything and silently used the NAME regex fallback), Socrata dataset ids (new
 id per vintage), and service-worker cached geometry (needs CACHE_NAME bump). **Permalinks
 survive:** they encode lat/lng, not district ids, so a point permalink still resolves — it simply
 resolves to the NEW district after geometry updates, which is correct behavior. This is confirmed
@@ -139,15 +141,32 @@ WI's per-date calendar lives in `wi/WATCH.md` — including the standing mid-dec
 legislative maps have moved off the census cycle before, so a court-ordered remap is a live trigger
 here in a way it is not in most states.
 
+
+### MI (5 layers)
+
+| Layer | Exposure class | Enacting authority | What breaks |
+|---|---|---|---|
+| U.S. House (MI) | Decennial + **PROVEN mid-decade elsewhere in this vintage** | MI Independent Citizens Redistricting Commission (2018 Prop 2) | geometry (`mi/scripts/build_legislative_boundaries.py congress` rebuild + agreement gate), roster join. The FIELD is versioned and the old name is REMOVED, not deprecated: `CD120` today, and a query naming a retired `CD119` returns HTTP 200 carrying a JSON 400 envelope, so the builder dies as "no features" — read that as "the vintage rolled" |
+| MI Senate / House | Decennial | MI Independent Citizens Redistricting Commission | geometry (same builder, `mi-senate` / `mi-house`) + both roster joins. The SLD layer indices (1/2) roll their NAME in place — 2024 → 2026 observed 2026-09-03 — while `SLDU`/`SLDL` survive, so a vintage roll here needs no rebuild unless the lines actually moved; measure before assuming |
+| County commissioner districts | **Decennial, on the census cycle** | each county's apportionment commission, filed under MCL 46.401-46.405 and compiled statewide by the Bureau of Elections | geometry (`mi/scripts/build_mi_commissioner_districts.py` rebuild — 619/83 exact-count guards, per-county 1..N numbering, MCL 46.401(1)'s 5..21 board-size check, and the guard that refuses the file if the source's officeholder columns reappear). The 2021 plans run the 2020-census cycle, so the next apportionment is ~2031. **THE ENDPOINT CANNOT ANNOUNCE A REPUBLISH**: the layer has no `editingInfo`, no `lastEditDate` and no date field at all, so the only machine-readable staleness signal is the AGO item's own `modified` epoch on arcgis.com — a watch that polls only `gisagocss.state.mi.us` can never detect one |
+| County | TIGER-rolling | Census Bureau vintage | pre-built `state-counties.json` on rebuild; the coverage ring (`mi/scripts/build_metro_outline.py`) is dissolved from the SAME fabric, so a county rebuild wants an outline rebuild and a `--check` |
+
+MI's per-date calendar lives in `mi/WATCH.md`. Note the roster axis moves on a DIFFERENT clock from
+the geometry here: commissioner terms went to FOUR years under PA 121-122 of 2021, so the boards
+seated January 2025 run to December 2028 and the live risk is mid-term vacancies rather than an
+election.
+
 ---
 
 ## The detection layer (executable NOW)
 
 Extend `scripts/validate_sources.py`:
 - Add a per-source `vintage` field to the manifest and an `expected_successor` watch. For TIGERweb
-  CD layers: watch for the appearance of CD120/CD121 layer names on the TIGERweb MapServer (the
-  current live layer is the 119th, "119th Congressional Districts; January 1, 2025 vintage," field
-  alias `CD119FP`; a new Congress rolls both the layer name and the field). For Socrata: the
+  CD layers: watch for the appearance of a CD121 layer name on the TIGERweb MapServer (the
+  current live layer is the 120th, "120th Congressional Districts; January 1, 2026 vintage," field
+  `CD120` — rolled from the 119th on 2026-09-03; a new Congress rolls both the layer name and the
+  field, and the 119th is still served at `tigerWMS_ACS2025/MapServer/54` if a vintage diff is ever
+  needed). For Socrata: the
   existing newer-edition catalog search already handles year-versioned ids (CPS attendance
   boundaries). For shapefile sources: monitor the per-layer provenance page listed in the manifest.
 - Add a "redistricting-watch" section to the monthly tracking issue that validate_sources.py
@@ -194,7 +213,13 @@ represents them TODAY; showing not-yet-effective districts is a correctness bug,
      built by **`scripts/build_legislative_boundaries.py`**. This changes the drill for those layers:
      the builder fetches TIGERweb directly (`STATE='17'`) and simplifies, so steps 2–4 (shapefile
      intake / `data/` conversion) don't apply — the builder *is* the intake. On a redistricting or a
-     TIGERweb vintage roll (CD119 → CD121, or a new "State Legislative Districts" layer), update the
+     TIGERweb vintage roll (CD120 → CD121, or a new "State Legislative Districts" layer — both have now
+     been seen, and they behaved DIFFERENTLY. The CD roll (2026-09-03) RETIRED its field, so every
+     builder naming CD119 broke. The SLD roll to 2026, measured the same day, changed only the layer
+     NAME: indices 1/2 still serve upper/lower, SLDU/SLDL survived, and all 12 chambers across the
+     fleet measured geometrically identical (~180,000 sampled points, 17 sub-metre disagreements) —
+     so it needed no rebuild at all, only the vintage pin in ny/scripts/validate_sources.py. Check
+     WHICH KIND a roll is before assuming a rebuild), update the
      `LAYERS` dict in `build_legislative_boundaries.py` (TIGERweb layer index, district field,
      `min_features`), re-run it (same ≥99.5% / zero-topology-break gate), and **update the
      `data_files.geometry` feature counts in `metro-worksheet.json`** so `validate_index.py` matches.

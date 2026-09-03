@@ -1,0 +1,382 @@
+{
+  "1": {
+    "name": "Erika Geiss",
+    "party": "Democratic",
+    "email": "SenEGeiss@senate.michigan.gov",
+    "url": "https://senatedems.com/geiss",
+    "capitolOffice": [
+      "Suite 5500, Binsfeld Office Building",
+      "Phone: 517-373-7800"
+    ]
+  },
+  "2": {
+    "name": "Sylvia Santana",
+    "party": "Democratic",
+    "email": "SenSSantana@senate.michigan.gov",
+    "url": "https://senatedems.com/santana",
+    "capitolOffice": [
+      "Suite 5600, Binsfeld Office Building",
+      "Phone: 517-373-0990"
+    ]
+  },
+  "3": {
+    "name": "Stephanie Chang",
+    "party": "Democratic",
+    "email": "SenSChang@senate.michigan.gov",
+    "url": "https://senatedems.com/chang",
+    "capitolOffice": [
+      "Suite 4100, Binsfeld Office Building",
+      "Phone: 517-373-7346"
+    ]
+  },
+  "4": {
+    "name": "Darrin Camilleri",
+    "party": "Democratic",
+    "email": "SenDCamilleri@senate.michigan.gov",
+    "url": "https://housedems.com/camilleri",
+    "capitolOffice": [
+      "S-2, Capitol Building",
+      "Phone: 517-373-7918"
+    ]
+  },
+  "5": {
+    "name": "Dayna Polehanki",
+    "party": "Democratic",
+    "email": "SenDPolehanki@senate.michigan.gov",
+    "url": "https://senatedems.com/polehanki",
+    "capitolOffice": [
+      "S-310, Capitol Building",
+      "Phone: 517-373-7350"
+    ]
+  },
+  "6": {
+    "name": "Mary Cavanagh",
+    "party": "Democratic",
+    "email": "SenMCavanagh@senate.michigan.gov",
+    "url": "https://housedems.com/mary-cavanagh/",
+    "capitolOffice": [
+      "Suite 6500, Binsfeld Office Building",
+      "Phone: 517-373-7748"
+    ]
+  },
+  "7": {
+    "name": "Jeremy Moss",
+    "party": "Democratic",
+    "email": "SenJMoss@senate.michigan.gov",
+    "url": "https://senatedems.com/moss",
+    "capitolOffice": [
+      "S-132, Capitol Building",
+      "Phone: 517-373-7888"
+    ]
+  },
+  "8": {
+    "name": "Mallory McMorrow",
+    "party": "Democratic",
+    "email": "SenMMcMorrow@senate.michigan.gov",
+    "url": "https://senatedems.com/mcmorrow",
+    "capitolOffice": [
+      "Suite 6100, Binsfeld Office Building",
+      "Phone: 517-373-2523"
+    ]
+  },
+  "9": {
+    "name": "Michael Webber",
+    "party": "Republican",
+    "email": "SenMWebber@senate.michigan.gov",
+    "url": "https://www.senatormichaelwebber.com",
+    "capitolOffice": [
+      "Suite 3200, Binsfeld Office Building",
+      "Phone: 517-373-0994"
+    ]
+  },
+  "10": {
+    "name": "Paul Wojno",
+    "party": "Democratic",
+    "email": "SenPWojno@senate.michigan.gov",
+    "url": "https://senatedems.com/wojno",
+    "capitolOffice": [
+      "Suite 6300, Binsfeld Office Building",
+      "Phone: 517-373-8360"
+    ]
+  },
+  "11": {
+    "name": "Veronica Klinefelt",
+    "party": "Democratic",
+    "email": "SenVKlinefelt@senate.michigan.gov",
+    "url": "https://senatedems.com/klinefelt",
+    "capitolOffice": [
+      "Suite 6600, Binsfeld Office Building",
+      "Phone: 517-373-7670"
+    ]
+  },
+  "12": {
+    "name": "Kevin Hertel",
+    "party": "Democratic",
+    "email": "SenKHertel@senate.michigan.gov",
+    "url": "https://housedems.com/hertel",
+    "capitolOffice": [
+      "Suite 7600, Binsfeld Office Building",
+      "Phone: 517-373-7315"
+    ]
+  },
+  "13": {
+    "name": "Rosemary Bayer",
+    "party": "Democratic",
+    "email": "SenRBayer@senate.michigan.gov",
+    "url": "https://senatedems.com/bayer",
+    "capitolOffice": [
+      "Suite 3100, Binsfeld Office Building",
+      "Phone: 517-373-2417"
+    ]
+  },
+  "14": {
+    "name": "Sue Shink",
+    "party": "Democratic",
+    "email": "SenSShink@senate.michigan.gov",
+    "url": "https://senatedems.com/shink",
+    "capitolOffice": [
+      "Suite 4200, Binsfeld Office Building",
+      "Phone: 517-373-2426"
+    ]
+  },
+  "15": {
+    "name": "Jeff Irwin",
+    "party": "Democratic",
+    "email": "SenJIrwin@senate.michigan.gov",
+    "url": "https://senatedems.com/irwin",
+    "capitolOffice": [
+      "Suite 5100, Binsfeld Office Building",
+      "Phone: 517-373-2406"
+    ]
+  },
+  "16": {
+    "name": "Joe Bellino",
+    "party": "Republican",
+    "email": "SenJBellino@senate.michigan.gov",
+    "url": "https://gophouse.org/representatives/southeast/bellino/",
+    "capitolOffice": [
+      "Suite 5300, Binsfeld Office Building",
+      "Phone: 517-373-5932"
+    ]
+  },
+  "17": {
+    "name": "Jonathan Lindsey",
+    "party": "Republican",
+    "email": "SenJLindsey@senate.michigan.gov",
+    "url": "https://www.senatorjonathanlindsey.com",
+    "capitolOffice": [
+      "Suite 3500, Binsfeld Office Building",
+      "Phone: 517-373-3543"
+    ]
+  },
+  "18": {
+    "name": "Thomas Albert",
+    "party": "Republican",
+    "email": "SenTAlbert@senate.michigan.gov",
+    "url": "https://gophouse.org/representatives/westmi/albert/",
+    "capitolOffice": [
+      "Suite 4500, Binsfeld Office Building",
+      "Phone: 517-373-1734"
+    ]
+  },
+  "19": {
+    "name": "Sean McCann",
+    "party": "Democratic",
+    "email": "SenSMcCann@senate.michigan.gov",
+    "url": "https://senatedems.com/mccann",
+    "capitolOffice": [
+      "Suite 7100, Binsfeld Office Building",
+      "Phone: 517-373-5100"
+    ]
+  },
+  "20": {
+    "name": "Aric Nesbitt",
+    "party": "Republican",
+    "email": "SenANesbitt@senate.michigan.gov",
+    "url": "https://www.senatoraricnesbitt.com",
+    "capitolOffice": [
+      "S-105, Capitol Building",
+      "Phone: 517-373-0793"
+    ]
+  },
+  "21": {
+    "name": "Sarah Anthony",
+    "party": "Democratic",
+    "email": "SenSAnthony@senate.michigan.gov",
+    "url": "https://housedems.com/anthony",
+    "capitolOffice": [
+      "S-324, Capitol Building",
+      "Phone: 517-373-6960"
+    ]
+  },
+  "22": {
+    "name": "Lana Theis",
+    "party": "Republican",
+    "email": "SenLTheis@senate.michigan.gov",
+    "url": "https://www.senatorlanatheis.com",
+    "capitolOffice": [
+      "Suite 7400, Binsfeld Office Building",
+      "Phone: 517-373-2420"
+    ]
+  },
+  "23": {
+    "name": "Jim Runestad",
+    "party": "Republican",
+    "email": "SenJRunestad@senate.michigan.gov",
+    "url": "https://www.senatorjimrunestad.com",
+    "capitolOffice": [
+      "Suite 7500, Binsfeld Office Building",
+      "Phone: 517-373-1758"
+    ]
+  },
+  "24": {
+    "name": "Ruth Johnson",
+    "party": "Republican",
+    "email": "SenRJohnson@senate.michigan.gov",
+    "url": "https://www.senatorruthjohnson.com",
+    "capitolOffice": [
+      "Suite 7300, Binsfeld Office Building",
+      "Phone: 517-373-1636"
+    ]
+  },
+  "25": {
+    "name": "Dan Lauwers",
+    "party": "Republican",
+    "email": "SenDLauwers@senate.michigan.gov",
+    "url": "https://www.senatordanlauwers.com",
+    "capitolOffice": [
+      "S-9, Capitol Building",
+      "Phone: 517-373-7708"
+    ]
+  },
+  "26": {
+    "name": "Kevin Daley",
+    "party": "Republican",
+    "email": "SenKDaley@senate.michigan.gov",
+    "url": "https://senatorkevindaley.com/",
+    "capitolOffice": [
+      "Suite 5200, Binsfeld Office Building",
+      "Phone: 517-373-1777"
+    ]
+  },
+  "27": {
+    "name": "John Cherry",
+    "party": "Democratic",
+    "email": "SenJCherry@senate.michigan.gov",
+    "url": "https://housedems.com/cherry",
+    "capitolOffice": [
+      "Suite 3600, Binsfeld Office Building",
+      "Phone: 517-373-0142"
+    ]
+  },
+  "28": {
+    "name": "Sam Singh",
+    "party": "Democratic",
+    "email": "SenSSingh@senate.michigan.gov",
+    "url": "https://senatedems.com/singh",
+    "capitolOffice": [
+      "S-8, Capitol Building",
+      "Phone: 517-373-3447"
+    ]
+  },
+  "29": {
+    "name": "Winnie Brinks",
+    "party": "Democratic",
+    "email": "SenWBrinks@senate.michigan.gov",
+    "url": "https://senatedems.com/brinks",
+    "capitolOffice": [
+      "S-102, Capitol Building",
+      "Phone: 517-373-1801"
+    ]
+  },
+  "30": {
+    "name": "Mark Huizenga",
+    "party": "Republican",
+    "email": "SenMHuizenga@senate.michigan.gov",
+    "url": "https://SenatorMarkHuizenga.com",
+    "capitolOffice": [
+      "Suite 7200, Binsfeld Office Building",
+      "Phone: 517-373-0797"
+    ]
+  },
+  "31": {
+    "name": "Roger Victory",
+    "party": "Republican",
+    "email": "SenRVictory@senate.michigan.gov",
+    "url": "https://www.senatorrogervictory.com",
+    "capitolOffice": [
+      "Suite 6400, Binsfeld Office Building",
+      "Phone: 517-373-6920"
+    ]
+  },
+  "32": {
+    "name": "Jon Bumstead",
+    "party": "Republican",
+    "email": "SenJBumstead@senate.michigan.gov",
+    "url": "https://www.senatorjonbumstead.com",
+    "capitolOffice": [
+      "Suite 4600, Binsfeld Office Building",
+      "Phone: 517-373-1635"
+    ]
+  },
+  "33": {
+    "name": "Rick Outman",
+    "party": "Republican",
+    "email": "SenROutman@senate.michigan.gov",
+    "url": "https://www.senatorrickoutman.com",
+    "capitolOffice": [
+      "Suite 4400, Binsfeld Office Building",
+      "Phone: 517-373-3760"
+    ]
+  },
+  "34": {
+    "name": "Roger Hauck",
+    "party": "Republican",
+    "email": "SenRHauck@senate.michigan.gov",
+    "url": "https://gophouse.org/representatives/central/hauck/",
+    "capitolOffice": [
+      "Suite 3300, Binsfeld Office Building",
+      "Phone: 517-373-1760"
+    ]
+  },
+  "35": {
+    "name": "Chedrick Greene",
+    "party": "Democratic",
+    "email": "SenCGreene@senate.michigan.gov",
+    "url": "https://senatedems.com/greene/",
+    "capitolOffice": [
+      "Suite 5400, Binsfeld Office Building",
+      "Phone: 517-373-1725"
+    ]
+  },
+  "36": {
+    "name": "Michele Hoitenga",
+    "party": "Republican",
+    "email": "SenMHoitenga@senate.michigan.gov",
+    "url": "https://www.senatormichelehoitenga.com",
+    "capitolOffice": [
+      "Suite 3400, Binsfeld Office Building",
+      "Phone: 517-373-7946"
+    ]
+  },
+  "37": {
+    "name": "John Damoose",
+    "party": "Republican",
+    "email": "SenJDamoose@senate.michigan.gov",
+    "url": "https://repdamoose.com",
+    "capitolOffice": [
+      "Suite 4300, Binsfeld Office Building",
+      "Phone: 517-373-2413"
+    ]
+  },
+  "38": {
+    "name": "Ed McBroom",
+    "party": "Republican",
+    "email": "SenEMcBroom@senate.michigan.gov",
+    "url": "https://senatoredmcbroom.com/",
+    "capitolOffice": [
+      "Suite 6200, Binsfeld Office Building",
+      "Phone: 517-373-7840"
+    ]
+  }
+}

@@ -10,7 +10,8 @@ through two mechanisms the master defines:
 
 - **Detection layer (live here):** `scripts/validate_sources.py` carries the
   NYC source manifest with per-source `vintage` / `expected_successor` fields
-  and the TIGERweb congressional layer-name watch (CD119 → CD121), run monthly
+  and the TIGERweb congressional layer-name watch (now CD120 → CD121; the CD119 → CD120 roll
+  landed 2026-09-03 and the watch caught it), run monthly
   by `.github/workflows/validate-sources.yml`.
 - **Response facts:** `metro-worksheet.json` (the live per-fork source of
   truth; the historical conformance record is archived at

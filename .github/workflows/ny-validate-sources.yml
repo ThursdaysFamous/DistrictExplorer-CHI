@@ -6,7 +6,7 @@ name: Validate layer sources (NYC)
 # one — NYC school-zone datasets are re-published under a NEW Socrata id every
 # school year, the 2020 NTAs will one day gain a 2030 successor, and Census
 # TIGERweb rolls its congressional layer in place with each Congress
-# (CD119 → CD121). This workflow replaces check-school-zone-ids.yml, whose
+# (CD120 → CD121; the CD119 → CD120 roll landed 2026-09-03). This workflow replaces check-school-zone-ids.yml, whose
 # school-zone catalog search is folded into ny/scripts/validate_sources.py (it
 # also inherits that workflow's monthly cron slot).
 #

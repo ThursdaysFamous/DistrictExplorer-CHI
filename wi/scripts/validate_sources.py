@@ -80,7 +80,7 @@ PROVENANCE = [
         "layer": "us-house",
         "app_file": "congress-districts.json",
         "source_url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer/0",
-        "note": "Congressional districts pre-built from TIGERweb by bootstrap_state.py; redraws each decennial cycle (WATCH.md).",
+        "note": "Congressional districts pre-built from TIGERweb by bootstrap_state.py; redraws each decennial cycle (WATCH.md). Built against TIGERweb's 120th-Congress layer (field CD120, Jan 1 2026 vintage); the retired CD119 field is gone and a query naming it returns an HTTP-200 JSON error envelope with no features key, so a rebuild on the old name fails as no-features.",
     },
     {
         "layer": "us-house",
