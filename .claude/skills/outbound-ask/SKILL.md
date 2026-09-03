@@ -38,8 +38,11 @@ Then check whether someone ELSE already publishes it — a state site, a results
 vendor, the clerk domain in `il/data/app/il-county-clerks.json` — because
 asking dozens of counties for an address that turns out to be published
 spends the operator's credibility on a question they can answer with a link.
-`docs/ASK_DRAFTS.md` § "What is NOT here, and why" records one such ask being
-HELD, with the measured reasons; do not send it past them.
+`docs/ASK_DRAFTS.md` § "What is NOT here, and why" records both outcomes with
+their measured reasons: one 48-county batch HELD until the route it was waiting
+on got built (it did, and the batch was never needed), and one 15-county tranche
+WITHDRAWN unsent once a person began reading those sites by hand. Neither is the
+same as unanswered; keep the three apart in the ledger.
 
 ## 2. Pick the recipient by who owns the record
 
@@ -52,7 +55,7 @@ can read as an escalation.
 
 ## 3. Write to the template shape
 
-Ask 1 in `docs/ASK_DRAFTS.md` is the skeleton: a subject naming the ONE thing;
+Ask 3 in `docs/ASK_DRAFTS.md` is the skeleton: a subject naming the ONE thing;
 who you are, the instance URL, free and non-commercial; what already ships for
 this unit and from which named sources; the one thing not found and WHY it is
 missing; a request for a one-line reply; and an explicit line that a "no" is a
