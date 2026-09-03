@@ -138,6 +138,7 @@ import socket
 import sys
 import time
 import urllib.parse
+import zlib
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from scraper_common import UA_CHROME_WIN_126  # noqa: E402  (shared machinery — do not fork)
@@ -706,6 +707,30 @@ def meta_refresh_target(text, url):
     return urllib.parse.urljoin(url, at.group(1).strip()) if at else None
 
 
+def _decompress(blob, encoding):
+    """Best-effort decode of a peeked, possibly TRUNCATED compressed body.
+
+    The peek is capped at HOLLOW_PEEK_BYTES, so a stream longer than that is
+    cut mid-member and decompression is expected to end early — the partial
+    output is still the right measurement for a page small enough to be called
+    hollow. None means "could not measure", never "empty".
+    """
+    try:
+        if encoding == "gzip":
+            d = zlib.decompressobj(16 + zlib.MAX_WBITS)
+        elif encoding in ("deflate", "zlib"):
+            d = zlib.decompressobj()
+        elif encoding == "br":
+            import brotli  # optional; absent means we simply do not measure
+            return brotli.decompress(blob)
+        else:
+            return None
+        out = d.decompress(blob)
+        return out if out else None
+    except Exception:
+        return None
+
+
 def peek_body(url, via_stdlib=False):
     """(size, first few KB of text) for an HTML-ish answer, else None.
 
@@ -717,8 +742,23 @@ def peek_body(url, via_stdlib=False):
     Reads at most HOLLOW_PEEK_BYTES so a megabyte PDF costs nothing, and
     measures only HTML-ish answers — a 400-byte SVG or a small PDF is a
     document doing its job. Content-Length is trusted when the server sends
-    one; otherwise the peeked length is the measurement, which is exact for
-    anything this small.
+    one AND the body is not compressed; otherwise the peeked length is the
+    measurement, which is exact for anything this small.
+
+    CONTENT-LENGTH ON A COMPRESSED RESPONSE IS THE COMPRESSED SIZE, and
+    trusting it measured a page a reader sees at a size no reader ever gets.
+    `elections.schuyler.il.us` is 1,705 bytes of real page — a titled
+    "Schuyler County Election Results" heading over the results table — served
+    gzipped with `Content-Length: 805`. Against HOLLOW_MAX_BYTES of 1,200 that
+    read as a hollow answer, and the monthly issue reported a working county
+    citation as one that "answers nothing", which is worse than missing a dead
+    link: it sends someone to replace a link that was fine. `requests` already
+    hands back DECODED bytes here (`decode_content=True`), so the fix is to
+    stop overriding a correct measurement with a header describing something
+    else. The stdlib rung does not decode, so it decompresses before measuring
+    and declines to measure at all if that fails — an unmeasured page reads as
+    fine, which is the safe direction for a check whose false positive costs a
+    maintainer a wild goose chase.
     """
     if via_stdlib:
         try:
@@ -729,8 +769,14 @@ def peek_body(url, via_stdlib=False):
                     return None
                 head = r.read(HOLLOW_PEEK_BYTES) or b""
                 declared = r.headers.get("Content-Length")
+                encoding = (r.headers.get("Content-Encoding") or "").strip().lower()
         except Exception:
             return None
+        if encoding and encoding != "identity":
+            head = _decompress(head, encoding)
+            if head is None:
+                return None       # unmeasurable: never report a page as hollow
+            declared = None       # the header described the compressed body
         try:
             size = int(declared) if declared is not None else len(head)
         except (TypeError, ValueError):
@@ -751,6 +797,9 @@ def peek_body(url, via_stdlib=False):
     finally:
         resp.close()
     declared = resp.headers.get("Content-Length")
+    if (resp.headers.get("Content-Encoding") or "").strip().lower() not in ("", "identity"):
+        # `head` is already decoded; the header is not about it.
+        declared = None
     try:
         size = int(declared) if declared is not None else len(head)
     except ValueError:

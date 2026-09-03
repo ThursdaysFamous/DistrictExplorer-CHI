@@ -81,7 +81,7 @@ COUNTY_POP_2020 = 4437
 EXPECTED_VTDS = 7
 EXPECTED_PRECINCTS = 5
 
-ELECTIONS_URL = "https://www.calhouncountyil.gov/government/county-clerk/elections/"
+ELECTIONS_URL = "https://www.calhouncountyil.gov/departments/county-clerk-and-recorder/elections/"
 RESULTS_URL = ("https://www.elections.il.gov/ElectionOperations/"
                "ElectionVoteTotals.aspx")
 SOURCE_LABEL = ("Census 2020 voting districts dissolved into the county's five "
