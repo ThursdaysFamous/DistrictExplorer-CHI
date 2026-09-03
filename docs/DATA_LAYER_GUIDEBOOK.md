@@ -6459,6 +6459,58 @@ host, so ISBE covers the county but not that county's own archive).
 `0` (Calhoun 2026, all of Brown 2020). Zero is not a measurement, and a floor keyed on it
 would fire on the publisher's blank rather than on a real loss.
 
+**BUILT 2026-09-03 as `scripts/isbe_precinct_fabric.py`, and use 2 is the one that shipped.**
+`--list` names every election and whether it carries CSVs; `--compare OLDER NEWER` diffs two
+elections' precinct-name sets per authority; `--shipped` narrows that to the counties whose
+precincts this app actually publishes. Filenames are DISCOVERED, not guessed — the office
+code and the election's tag are not derivable from the election id, so the script replays the
+page's own election-dropdown postback and reads the links, preferring a STATEWIDE office
+because a congressional file covers only part of the state.
+
+**The comparison is election-to-election, and comparing against the SHIPPED layer instead
+was tried first and is wrong.** On the 2026 primary it agrees exactly for 20 of the 33
+counties that ship a precinct layer and disagrees for 13 — and the disagreements are not
+drift. Richland reports 30 names against 21 shipped precincts, which is precisely the NINE
+sub-precinct reporting units its own gap record already documents. A county may report a
+precinct in parts; that is a fact about ISBE's reporting units, not about the fabric moving.
+Two elections read under the same county's own conventions cancel all of it.
+
+**TWO NORMALISATIONS, BOTH MEASURED RATHER THAN GUESSED, AND THE SECOND IS WHAT MAKES THIS
+USABLE.** ISBE reports ballot CLASSES as if they were precincts. Without excluding them the
+first statewide run called 72 of 108 authorities changed, most of it because the 2024
+General's `PRESIDENTIAL ONLY BALLOT` row does not exist on a 2026 ballot — a lost "precinct"
+in thirty-odd counties at once, which is the cry-wolf death this check would have died of.
+Sweeping both elections found 130 such names in three families (`-F12`/`-FED01`/`FEDERAL-F03`;
+`PE01 FED ONLY`, `FED ONLY 16TH DEM`; `PRESIDENT ONLY`, `PRESIDENTIAL BALLOT ONLY`). Excluding
+them takes 72 to 41. Each pattern is deliberately narrow: `-(F|FED)\d+` matches digits after
+the dash and nothing else, because Calhoun's `HARDIN-GILEAD` and `BELLEVIEW-HAMBURG` are
+merged precincts whose real names end in `-<letters>`, and a rule stripping any trailing
+`-TOKEN` would have eaten them.
+
+**VALIDATED AGAINST A CHANGE THIS PROJECT HAD ALREADY RECORDED INDEPENDENTLY.** Comparing the
+2022 and 2024 generals reproduces Calhoun's 7-to-5 merge exactly, and names which precincts
+combined: `BELLEVIEW PRECINCT` + `HAMBURG PRECINCT` to `BELLEVIEW-HAMBURG`, `HARDIN` +
+`GILEAD` to `HARDIN-GILEAD`.
+
+**WHAT THE ROUTE CANNOT SEE, measured: CONSOLIDATED ELECTIONS carry no by-office CSV at all.**
+Ids 68 (2025), 64 (2023) and 59 (2021) each link zero files where every general and primary
+links 18-23. So a county that re-precincts for an April municipal election surfaces here only
+at the next November. `--list` says so before a comparison rather than failing part-way
+through one.
+
+**THE FIRST RUN'S ACTIONABLE OUTPUT (2024 General to 2026 Primary): 41 authorities moved, 15
+of them counties whose precincts this app ships.** Four of the fifteen GAINED precincts the
+shipped layer does not have, which is the shape that matters most — Cass 21 to 23, Greene 22
+to 25, Johnson 16 to 17, Scott 10 to 11. Jackson (67 to 63), Warren (30 to 29) and Perry
+(27 to 28) also moved on count. Four more are the reporting-unit shape rather than the fabric
+(Cumberland, Menard, Richland, McDonough), and four are pure renaming at an unchanged count —
+Hancock and Jefferson simply gained a full stop (`ST ALBANS` to `ST. ALBANS`, `MT VERNON` to
+`MT. VERNON`), Schuyler and White renumbered their suffixes. **None of the fifteen is
+rebuilt here**: each needs its own county's source and its own verification, and a tripwire
+that also rebuilt what it found would be doing the one thing this project asks a human to
+sign off on.
+
+
 ### ISBE's county-board STRUCTURE table — every county's board shape, at an unknown date (found 2026-08-21)
 
 Found while settling Saline's board form, and nothing in this repo read it.
