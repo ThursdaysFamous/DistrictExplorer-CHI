@@ -30,8 +30,8 @@
         "url": "https://www.kendallcountyil.gov/county-board/board-members/seth-wormley"
       }
     ],
-    "sourceUrl": "https://www.kendallcountyil.gov/county-board/board-members",
-    "seats": 5
+    "seats": 5,
+    "sourceUrl": "https://www.kendallcountyil.gov/county-board/board-members"
   },
   "2": {
     "members": [
@@ -66,7 +66,7 @@
         "url": "https://www.kendallcountyil.gov/county-board/board-members/brooke-shanley"
       }
     ],
-    "sourceUrl": "https://www.kendallcountyil.gov/county-board/board-members",
-    "seats": 5
+    "seats": 5,
+    "sourceUrl": "https://www.kendallcountyil.gov/county-board/board-members"
   }
 }
