@@ -5997,7 +5997,7 @@ function initWisconsinExplorer() {
     "municipality",      // Incorporated places (TIGERweb Places, live) — 608 in Wisconsin, 190 cities + 418 villages and not one of the state's 1,242 towns; a point in a town gets the layer's own words for unincorporated
     "zip-code",          // Census ZCTAs by Wisconsin envelope (the ZCTA layer has no STATE field); server-generalized
     "mpd-district",      // Milwaukee's seven police districts — a seventh of the city each, the largest of the city-scoped tier; the fleet's second city police-district layer
-    "mps-school-board",  // Milwaukee's eight school board districts — an eighth of the city each, larger than the average aldermanic district statewide; the fleet's second elected school board and this instance's first city-scoped layer
+    "mps-school-board",  // the two school boards Wisconsin elects BY DISTRICT — Milwaukee's eight and Racine Unified's nine; every other board in the state is at large and has no geometry to draw
     "mpd-squad-area",    // The 25 MPD patrol squad areas — a twenty-fifth of the city each, nested inside the seven police districts (subOf), between the MPS board's eighths and the aldermanic fabric
     "aldermanic-district", // 838 city and village council districts — each a union of wards, smaller than a ZCTA, above the ward layer they dissolve from
     "ward",              // 7,161 municipal wards — the ballot sub-unit every district is built from; smaller than a ZCTA on average, above the amenity points
@@ -10084,29 +10084,80 @@ function initWisconsinExplorer() {
     }
   });
 
-  /* ---------- 21. MPS School Board — the fleet's second elected school board ----------
-   * City-scoped (Wisconsin's first coverage-gated layer): statute names the
-   * districted minority of Wisconsin school boards exactly — MPS (ch. 119,
-   * eight numbered districts + one at-large director) and Racine Unified,
-   * whose geometry is PDF-only and stays the recorded gap rusd-school-board.
-   * Geometry is the city's own layer, reprojected by the city's own server
-   * and witnessed at build time against the CKAN shapefile's area shares
+  /* ---------- 21. Elected School Board — BOTH of Wisconsin's, on one toggle ----------
+   * Statute names the districted minority of Wisconsin school boards exactly,
+   * and there are two of them: MPS (ch. 119, eight numbered districts + one
+   * at-large director) and Racine Unified (s. 120.42(1)(d)2, nine). Every
+   * other board in the state is elected at large and has no geometry to draw.
+   * So this is ONE layer answering for both, the county-board dispatcher's
+   * shape at city scale — a reader in Racine and a reader in Milwaukee are
+   * asking the same question.
+   *
+   * THE TWO GEOMETRIES COME FROM COMPLETELY DIFFERENT ROUTES and that is the
+   * interesting part. Milwaukee publishes its districts as data: the city's
+   * own ArcGIS layer, reprojected by the city's own server and witnessed at
+   * build time against the CKAN shapefile's area shares
    * (wi/scripts/build_mps_school_board_districts.py — the flaky
-   * milwaukeemaps host is fetched at BUILD TIME only, never here). The
-   * roster is the district's own directors page, cross-witnessed against
-   * the board index's committee lists (mps_school_board_scraper.py, weekly
-   * CI). Outside the MPS tiling — anywhere that isn't Milwaukee — the layer
-   * hides entirely, the ERSB precedent. ---------- */
+   * milwaukeemaps host is fetched at BUILD TIME only, never here). Racine
+   * Unified publishes NO geometry at all; its nine districts are unions of
+   * WHOLE WARDS, and RUSD's own board-election page states the composition
+   * ward by ward, so the shapes are a dissolve of the LTSB ward layer this
+   * instance already carries — no map is read and nothing is georeferenced
+   * (wi/scripts/build_rusd_school_board_districts.py, whose union is
+   * witnessed against the Census's own Racine School District).
+   *
+   * Both files are merged at load into one overlay, each feature tagged with
+   * the board it belongs to, so there is one coverage test rather than two
+   * and the toggle hides everywhere neither board reaches — the ERSB
+   * precedent. Rosters are separate because the boards are: Milwaukee's has
+   * an at-large seat and a shared office; Racine's names a phone and an
+   * e-mail per member and one seat the district itself declares vacant.
+   * ---------- */
   var loadMpsBoardDistricts = makeCached(function () {
     return fetchJSONWithRetry("data/app/mps-school-board-districts.json", {}, 2);
   });
   var loadMpsBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/mps-school-board-members.json", {}, 2);
   });
+  var loadRusdBoardDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/rusd-school-board-districts.json", {}, 2);
+  });
+  var loadRusdBoardMembers = makeCached(function () {
+    return fetchJSONWithRetry("data/app/rusd-school-board-members.json", {}, 2);
+  });
+
+  // One overlay over two files. Each feature is tagged with its board so the
+  // card, the hover label and the roster lookup all read the FEATURE rather
+  // than re-testing the point against two tilings — the two boards are 25
+  // miles apart and cannot overlap, but reading the answer off the feature
+  // that matched is the same discipline the county dispatcher uses.
+  var BOARD_MPS = "mps", BOARD_RUSD = "rusd";
+  var loadElectedBoardDistricts = makeCached(function () {
+    return Promise.all([loadMpsBoardDistricts(), loadRusdBoardDistricts()])
+      .then(function (parts) {
+        var feats = [];
+        [[parts[0], BOARD_MPS], [parts[1], BOARD_RUSD]].forEach(function (pair) {
+          ((pair[0] && pair[0].features) || []).forEach(function (f) {
+            var props = {};
+            Object.keys(f.properties || {}).forEach(function (k) {
+              props[k] = f.properties[k];
+            });
+            props.board = pair[1];
+            feats.push({ type: "Feature", properties: props, geometry: f.geometry });
+          });
+        });
+        return { type: "FeatureCollection", features: feats };
+      });
+  });
+
+  function boardLabel(board) {
+    return board === BOARD_RUSD ? "Racine Unified" : "MPS";
+  }
+
   function milwaukeeCoverage(point) {
-    // the MPS tiling IS the city for this layer's purposes; a load failure
-    // rejects through to the engine's fail-open, so an outage never hides
-    // the toggle for a Milwaukee reader
+    // the MPS tiling IS the city for the Milwaukee city layers' purposes; a
+    // load failure rejects through to the engine's fail-open, so an outage
+    // never hides those toggles for a Milwaukee reader
     return loadMpsBoardDistricts().then(function (geojson) {
       return !!findFeatureContaining(geojson, point);
     });
@@ -10115,40 +10166,57 @@ function initWisconsinExplorer() {
   registerLayer({
     id: "mps-school-board",
     group: "schools",
-    label: "MPS School Board District",
-    coverage: milwaukeeCoverage,
+    // The id stays `mps-school-board` because it is in shipped `layers=`
+    // permalinks and in LAYER_SIDEBAR_RANK; the LABEL had to change, because
+    // a card headed "MPS" over a Racine reader's district would simply be
+    // wrong. "Elected" is the load-bearing word: it separates this from the
+    // three school-DISTRICT tilings, and names what makes these two boards
+    // different from every other board in the state.
+    label: "Elected School Board District",
+    coverage: function (point) {
+      return loadElectedBoardDistricts().then(function (geojson) {
+        return !!findFeatureContaining(geojson, point);
+      });
+    },
     overlay: {
-      load: loadMpsBoardDistricts,
+      load: loadElectedBoardDistricts,
       // the reference instance's elected-school-board green, kept for parity
       style: { color: "#2E8C6A", weight: 2, fillColor: "#2E8C6A", fillOpacity: 0.05, dashArray: "2 2" }
     },
     hoverName: function (feature) {
-      var d = findPropCI(feature.properties || {}, ["district"]);
-      return d != null ? "MPS Board District " + String(d) : null;
+      var props = feature.properties || {};
+      var d = findPropCI(props, ["district"]);
+      if (d == null) return null;
+      return boardLabel(props.board) + " Board District " + String(d);
     },
     query: function (point, seq) {
       // the roster is a small same-origin file and its failure is not this
       // layer's failure: the district still answers, identity-only
-      return Promise.all([
-        queryFeatureAt(loadMpsBoardDistricts, point),
-        loadMpsBoardMembers().catch(function () { return null; })
-      ]).then(function (parts) {
-        var feature = parts[0];
+      return queryFeatureAt(loadElectedBoardDistricts, point).then(function (feature) {
         if (!feature) return null;
-        var district = String(findPropCI(feature.properties || {}, ["district"]));
-        var roster = parts[1];
-        return {
-          seq: seq,
-          district: district,
-          member: roster && roster.members ? roster.members[district] || null : null,
-          atLarge: roster && roster.members ? roster.members.AL || null : null,
-          office: roster ? roster.office || null : null,
-          sourceUrl: roster ? roster.sourceUrl : null
-        };
+        var props = feature.properties || {};
+        var board = props.board === BOARD_RUSD ? BOARD_RUSD : BOARD_MPS;
+        var district = String(findPropCI(props, ["district"]));
+        var wards = Array.isArray(props.wards) ? props.wards : null;
+        var load = board === BOARD_RUSD ? loadRusdBoardMembers : loadMpsBoardMembers;
+        return load().catch(function () { return null; }).then(function (roster) {
+          var members = roster && roster.members ? roster.members : null;
+          return {
+            seq: seq,
+            board: board,
+            district: district,
+            wards: wards,
+            member: members ? members[district] || null : null,
+            // only Milwaukee elects one; Racine's nine are all districted
+            atLarge: board === BOARD_MPS && members ? members.AL || null : null,
+            office: roster ? roster.office || null : null,
+            sourceUrl: roster ? roster.sourceUrl : null
+          };
+        });
       });
     },
     cardIdentifier: function (result) {
-      return "MPS Board District " + result.district;
+      return boardLabel(result.board) + " Board District " + result.district;
     },
     render: function (result) {
       var wrap = cardEl("div", "card-flush");
@@ -10160,8 +10228,29 @@ function initWisconsinExplorer() {
         if (bits.length) person.note = bits.join(" · ");
         return person;
       }
-      if (result.member) {
+      // A SEAT THE DISTRICT ITSELF DECLARES EMPTY SAYS SO. Racine Unified's
+      // District 2 has been vacant since 2026-08-20 by RUSD's own notice, and
+      // the roster ships that row rather than dropping it — a card that simply
+      // named nobody would read as a layer that does not know who represents
+      // you, which is a different and worse claim than "nobody does".
+      if (result.member && result.member.vacant && !result.member.name) {
+        wrap.appendChild(renderFieldStack([
+          { label: "Seat", value: "Vacant — " + boardLabel(result.board) +
+            " publishes a notice of vacancy for this district and has not yet " +
+            "named a member." }
+        ]));
+      } else if (result.member) {
         wrap.appendChild(renderPersonRows([directorRow(result.member, false)]));
+      }
+      // Racine's members carry their own phone and e-mail; Milwaukee's ride
+      // one shared board office, rendered further down.
+      if (result.member && !result.member.vacant &&
+          (result.member.phone || result.member.email)) {
+        wrap.appendChild(renderLinkRow({
+          phone: result.member.phone ? String(result.member.phone) : null,
+          email: result.member.email ? String(result.member.email) : null,
+          links: []
+        }));
       }
       if (result.atLarge) {
         wrap.appendChild(renderSectionLabel("Citywide"));
@@ -10186,7 +10275,12 @@ function initWisconsinExplorer() {
     },
     primaryLink: function (result) {
       var url = safeHttpUrl(result.sourceUrl);
-      if (url) return { label: "Board directors", url: url };
+      var label = result.board === BOARD_RUSD ? "Board of Education" : "Board directors";
+      if (url) return { label: label, url: url };
+      if (result.board === BOARD_RUSD) {
+        return { label: "Racine Unified Board of Education",
+                 url: "https://www.rusd.org/o/rusd/page/board-of-education" };
+      }
       return { label: "Milwaukee Board of School Directors", url: "https://www.milwaukeepublicschools.org/about/board" };
     }
   });

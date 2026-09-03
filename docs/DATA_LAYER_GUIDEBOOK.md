@@ -1792,20 +1792,6 @@ detail into `blocker`.
       "wanted": "For any city or village with districts on the map: a page pairing each aldermanic or trustee district with the member holding it. A statewide open roster of municipal officials would close this gap wholesale."
     },
     {
-      "id": "rusd-school-board",
-      "concept": "Elected school board districts",
-      "area": "Racine Unified School District",
-      "counties": [
-        "racine"
-      ],
-      "kind": "no-source",
-      "layer": "mps-school-board",
-      "summary": "Racine Unified is the only Wisconsin school board besides Milwaukee's elected by geographic district, and its nine district boundaries aren't on the map — the district publishes them only as picture maps, not as data.",
-      "why": "Statute names exactly two districted school boards in the state. Milwaukee's ships because its city publishes real geometry; Racine Unified publishes its election districts only as map documents no program can read as boundaries.",
-      "blocker": "MEASURED 2026-08-25 (the phase-2 research pass) and unchanged at ship time: RUSD's nine election districts (Wis. Stat. 120.42(1)(d)2) are published solely as ArcMap-generated PDFs on the district's site — no feature service, no shapefile, no CKAN presence, and Racine's own city/county GIS surfaces carry aldermanic and supervisory layers but nothing for RUSD. The honest routes, in order: a Jackson-style vector-path extraction IF the PDFs carry real path objects (unverified — step one is checking for paths, and a raster scan stays shut), or asking RUSD for the boundary file; never a raster trace. The roster side is open — RUSD's board page is readable — so geometry is the whole blocker.",
-      "wanted": "RUSD's nine election-district boundaries as data — a shapefile or feature service from the district, or its map republished with coordinates."
-    },
-    {
       "id": "french-island-census-lag",
       "concept": "Municipal identity",
       "area": "Village of French Island (La Crosse County) — the former Town of Campbell",
@@ -2023,6 +2009,70 @@ detail into `blocker`.
 }
 ```
 
+## Closed record - Racine Unified's board districts (opened 2026-08-25, closed 2026-09-03)
+
+This was the `rusd-school-board` gap in the Wisconsin block above, and it is
+closed: all nine Racine Unified board election districts ship, and the elected
+school board card now answers for BOTH of the boards Wisconsin elects by
+district. The entry is out of the gaps block because a closed gap must not
+render in a reader's Data gaps panel.
+
+**ITS BLOCKER WAS NEVER WRONG ABOUT THE WORLD AND WAS WRONG ABOUT THE ROUTES,
+which is the reusable part.** It said RUSD publishes its districts only as
+ArcMap PDFs - true, and still true - and then listed the ways out: "a
+Jackson-style vector-path extraction IF the PDFs carry real path objects
+(unverified - step one is checking for paths, and a raster scan stays shut), or
+asking RUSD for the boundary file; never a raster trace." Two routes, both about
+the MAP. **The districts are unions of WHOLE WARDS and RUSD publishes the
+composition as a table, so no map was ever needed.**
+
+The maps say so themselves, in a caption this project had read and not used:
+each prints "District Boundaries generated from WSL LTSB's WISE-LR software"
+over "U.S. Census Bureau 2020 TIGER Municipal Boundary and Block Data", and
+LTSB's ward layer is a live layer this instance already fetches. **A SOURCE'S
+OWN CREDIT LINE NAMES THE UPSTREAM YOU MAY ALREADY HAVE.**
+
+THE JACKSON QUESTION IS ANSWERED ANYWAY, so nobody re-runs it: all 21 of RUSD's
+district-map PDFs were read 2026-09-03 and carry ZERO filled path objects.
+District 1's content stream is 4,881 `S` (stroke) operators and 73 `Do` (raster
+basemap tiles), with two `f*` and three `B*` fills - the legend swatches. The
+overview sheet is the same with 25. There are no filled district polygons to
+read, so that route is measured shut and it does not matter.
+
+**WHAT SHIPS, AND WHAT WITNESSES IT.** RUSD's board-election documents page
+carries a one-page PDF titled "Election District by Municipality" naming every
+ward in each of the nine districts: 116 wards across 7 municipalities, each
+municipality's wards running 1..n with no gap and no ward claimed twice. Those
+116 join LTSB's current Racine County filing 116 of 116, with no ward in an RUSD
+municipality left unclaimed, and one alias - RUSD writes "Mt. Pleasant" where
+LTSB writes "Mount Pleasant". Dissolved, the union reproduces the Census's own
+Racine School District on 99.98 per cent of 4,000 sampled points, with the two
+bounding boxes identical to four decimals; the single disagreement is a boundary
+sliver from the shipped TIGER file's own simplification. That is a DIFFERENT
+PUBLISHER agreeing, not the source checking itself.
+
+**THREE TRAPS ARE RECORDED WITH IT.** (1) The composition PDF is served as
+`Districts-Up-for-Election-2026.pdf`, which reads like one ballot's seat list
+and is the full nine-district map; RUSD's board page says districts 2, 4, 5 and
+6 are up in April 2027, so a near-identically named four-district document is a
+live risk - the builder therefore discovers the document BY CONTENT (page-1
+title) and its partition gate refuses a partial one. (2) The page's own TITLE is
+"Election District by Municipality", so anchoring the positional parse on the
+word Municipality finds the title rather than the header row and reports one
+column group instead of three; the anchor is "Ward", which the title lacks.
+(3) A NEWSPAPER'S COMPOSITION IS NOT THE DISTRICT'S. The 2021 press account of
+the plan gives a different composition under an older ward numbering - Racine
+wards only to 36, where the district's own table runs to 57 - and building on it
+would have shipped nine wrong districts that each looked plausible.
+
+**THE ROSTER HALF WAS ALREADY OPEN AND IS NOW BUILT**: RUSD's own Board of
+Education page names eight of nine members with a role, phone, e-mail and term
+each, and declares District 2 vacant as of 2026-08-20 - which the card states
+rather than passing over, because a card that simply named nobody reads as a
+layer that does not know. Its blocker, verbatim, as the measurement record:
+
+> MEASURED 2026-08-25 (the phase-2 research pass) and unchanged at ship time: RUSD's nine election districts (Wis. Stat. 120.42(1)(d)2) are published solely as ArcMap-generated PDFs on the district's site — no feature service, no shapefile, no CKAN presence, and Racine's own city/county GIS surfaces carry aldermanic and supervisory layers but nothing for RUSD. The honest routes, in order: a Jackson-style vector-path extraction IF the PDFs carry real path objects (unverified — step one is checking for paths, and a raster scan stays shut), or asking RUSD for the boundary file; never a raster trace. The roster side is open — RUSD's board page is readable — so geometry is the whole blocker.
+
 ## Closed record — Wisconsin county board supervisors (opened 2026-08-25, closed 2026-09-02)
 
 This was the `county-officials` gap in the Wisconsin block above. It is closed:
@@ -2117,7 +2167,7 @@ Fleet totals: **Chicago 39 · NYC 27 · SF 16 · Wisconsin 31 · Iowa 19** layer
 | District Attorney (districted) | n/a (Cook State's Attorney is one countywide office) | SHIPPED `district-attorney` (5 borough DAs) | NO HONEST ANALOG (one citywide DA)⁷ | NO HONEST ANALOG — the District Attorney is elected county-wide, per county | n/a — Iowa's prosecutor is the county attorney, a county-level office, not a multi-county DA district | NOT SHIPPED — this instance ships the national tier plus the commissioner flagship; not yet researched |
 | Borough president / by-county executive | n/a | SHIPPED `borough-president` | n/a | NO HONEST ANALOG — no borough tier; the county executive/administrator is county-wide | n/a — Iowa has no county-executive office of this kind | NOT SHIPPED — this instance ships the national tier plus the commissioner flagship; not yet researched |
 | Community district / board (appointed, labeled so) | n/a | SHIPPED `community-district` | n/a | NO HONEST ANALOG — no city-wide community-board tier statewide | NOT SHIPPED — not yet researched for this instance | NOT SHIPPED — this instance ships the national tier plus the commissioner flagship; not yet researched |
-| Elected school board (districted) | SHIPPED `school-board` (ERSB) | NO HONEST ANALOG³ | NO HONEST ANALOG (at-large board)⁴ | SHIPPED `mps-school-board` (2026-08-26) — the fleet's second elected school board and Wisconsin's first coverage-gated layer, city-scoped exactly as the phase-3 record designed: geometry from the city's own MPS layer (AGO/MPS_School_Districts/1 — the earlier `election_geography/3` note was the same product's other door), server-reprojected out of NAD27 Wisconsin South and WITNESSED at build time against the CKAN shapefile's area shares (0.04% max difference); the roster from the district's own directors page (at-large president + districts 1-8, roles, staggered term expirations), cross-witnessed against the board index's committee lists, with the Board's one shared contact form collapsed to a board-level link. Districts adopted 2022-02-25, redraw each census. RUSD stays the measured gap `rusd-school-board` — its nine election districts publish only as ArcMap-generated PDFs (a Jackson-style vector-path extraction or an ask to RUSD, never a raster trace) | NOT SHIPPED — Iowa's 324 unified school districts elect boards at-large or by director district depending on the district (`school-district-unified` identity ships in a later phase-1 PR, `school-director-district` — 728, in-band on the state's own ArcGIS org — in phase 3); no statewide roster of school-board members found | NOT SHIPPED — this instance ships the national tier plus the commissioner flagship; not yet researched |
+| Elected school board (districted) | SHIPPED `school-board` (ERSB) | NO HONEST ANALOG³ | NO HONEST ANALOG (at-large board)⁴ | SHIPPED `mps-school-board` (2026-08-26) — the fleet's second elected school board and Wisconsin's first coverage-gated layer, city-scoped exactly as the phase-3 record designed: geometry from the city's own MPS layer (AGO/MPS_School_Districts/1 — the earlier `election_geography/3` note was the same product's other door), server-reprojected out of NAD27 Wisconsin South and WITNESSED at build time against the CKAN shapefile's area shares (0.04% max difference); the roster from the district's own directors page (at-large president + districts 1-8, roles, staggered term expirations), cross-witnessed against the board index's committee lists, with the Board's one shared contact form collapsed to a board-level link. Districts adopted 2022-02-25, redraw each census. **RACINE UNIFIED JOINED THE SAME TOGGLE 2026-09-03 and the layer's label is now `Elected School Board District`, because a card headed MPS over a Racine reader's district would be wrong.** Its gap `rusd-school-board` is closed, and by a route that gap had not listed: RUSD publishes no geometry at all, but its districts are unions of WHOLE WARDS and its own board-election page states the composition ward by ward, so the nine are a dissolve of LTSB's live ward layer — 116 wards over 7 municipalities, an exact partition joining 116 of 116, witnessed against the Census's own Racine School District at 99.98% of 4,000 points with identical bounding boxes. NO MAP IS READ: all 21 of RUSD's district PDFs carry ZERO filled path objects (4,881 strokes over 73 raster tiles; the only fills are legend swatches), so the Jackson route is measured shut and turned out to be beside the point. Roster from RUSD's own board page — 8 of 9 named with role, phone, e-mail and term, and District 2 VACANT by the district's own notice, which the card states rather than passing over | NOT SHIPPED — Iowa's 324 unified school districts elect boards at-large or by director district depending on the district (`school-district-unified` identity ships in a later phase-1 PR, `school-director-district` — 728, in-band on the state's own ArcGIS org — in phase 3); no statewide roster of school-board members found | NOT SHIPPED — this instance ships the national tier plus the commissioner flagship; not yet researched |
 | Parent-elected education council | n/a | SHIPPED `cec` | n/a | NO HONEST ANALOG | n/a | NOT SHIPPED — this instance ships the national tier plus the commissioner flagship; not yet researched |
 | Technical / community college district | NOT SHIPPED — Illinois community college districts are a recorded future concept (`docs/EXPANSION_GUIDE.md` Part 5) | not evaluated (CUNY is a university system, not a district tiling) | not evaluated | SHIPPED `wtcs-district` (16, 2026-08-27 — phase 4's stretch item and a NEW fleet concept row): DPI's own Technical College Districts layer, server-generalized (~55 m; full precision is 9.2 MB for 16 features), under FIVE gates in `wi/scripts/build_wi_wtcs_districts.py` — exactly 16; names/abbrevs distinct; a SEAT WITNESS pinning each college's home city inside its own district (verified 16/16 before pinning — the check a bare count never makes); overlaps under 1e-3 deg² (2.1e-4 measured, generalization slivers); and the union's ONE lawful interior hole being LAKE WINNEBAGO, required present — the lake belongs to no district, so the standard empty state there is the true answer. Two failed gate drafts are part of the record: sampling the state outline "found" 43 holes that were all Great Lakes water, and the TIGER school-district fabric carries the same territorial water — TEST A TILING'S INTEGRITY FROM ITS OWN UNION, never from a water-bearing reference. IDENTITY-ONLY BY STATUTE: the board is APPOINTED (Wis. Stat. 38.08), the card says so and names no one, linking wtcs.edu (unreachable from the dev sandbox at first build — a sandbox-side fact per the WEC probe's lesson; the monthly report watches the DPI item). The layer's "2019" title is the LTSB vintage lesson again: the content carries Northwood, the 2021 rename | SHIPPED `community-college` (2026-08-28, phase 2 PR 6) — 15 merged areas (Iowa Code 260C.11) shipped AS PUBLISHED from the Iowa Legislature's own ArcGIS org, no dissolve. THE CURRENT LAYER WAS CHOSEN OVER AN OLDER ONE FOR A CONFIRMED REASON: the org carries two vintages of the same 15 polygons, and the newer (`CC_2026update`, edited 2026-07-02) fixes a real coding bug the older `CommColleges2020` (2021-12-15) carries — Southeastern Community College coded "08" there against the correct "16" its own institutional history states ("chartered as Merged Area XVI"), corroborated independently by the trustees' association's own I-VII/IX-XVI numbering (no "VIII" survives in current use). THREE INDEPENDENT WITNESSES gate the build, all exact: the 15 college names match a second LSA layer one for one; that layer's population sums to Iowa's exact 2020 census total, 3,190,369; and its director-district count sums to 124 — precisely the "124 locally elected trustees" figure the state trustees' association states in prose on its own site. BOARDS ARE GENUINELY ELECTED, unlike Wisconsin's appointed WTCS: Iowa Code 260C.11 — "one member elected from each director district ... by the electors of the respective district," four-year terms — confirmed against the current statute text, cross-checked against Justia and legis.iowa.gov's own section listing. NO ROSTER SHIPS, and the reason is not "not yet built" but a measured absence of one clean source: the trustees' association page (`ccforiowa.org/about/board-members-officers`) — the only statewide candidate — publishes 15 rows, one seat per college (its own governing table), not the 124 individual trustees; DMACC, Kirkwood and Iowa Western were each confirmed live to publish a clean per-district roster on their OWN site instead, meaning the real roster is 15 separate publishers, not one. `cc-director-district` (the 123-feature sub-district layer, `CC_DD2023`) STAYS UNSHIPPED FOR A MEASURED REASON TOO, not merely deferred: it is confirmed short exactly one polygon — Des Moines Area Community College's own site names 9 sitting trustees across Districts 1-9, but the layer carries only 8 Des Moines Area features, District 2 entirely absent rather than merely mis-drawn, and the org's own `NumberofDirectorDistricts` field (124 total, matching the population/name witnesses independently) confirms DMACC's true count is 9. A districted card built on that layer today would misrepresent a real elected seat as unrepresented territory | NOT SHIPPED — this instance ships the national tier plus the commissioner flagship; not yet researched |
 | Elected regional transit board | NO HONEST ANALOG⁸ | NO HONEST ANALOG⁸ | SHIPPED `bart-director` (9 districts, BART's own ArcGIS + hand-verified roster) | NOT SHIPPED — transit authorities are municipal/county, appointed rather than elected by district | NOT SHIPPED — not yet researched for this instance | NOT SHIPPED — this instance ships the national tier plus the commissioner flagship; not yet researched |
@@ -9687,7 +9737,7 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
 | `school-district-elementary` | School District (Elementary) | schools | Polygon | live TIGERweb School L2 | — | — |
 | `school-site` | School Location, incl. private (nearest 3) | schools | NearestPt | pre-built `school-sites.json` — DPI's own AGO org, public L20 (paged past the 2,000 cap) + private L2, 2,966 placed sites; DPI's 152 placeless virtual-program rows skipped by shape, never by the (measured-inconsistent) VIRTUAL flag (build_wi_school_sites.py) | — (proximity only; DPI's reference-use licence on the sources page) | — |
 | `wtcs-district` | Technical College District | schools | Bespoke | pre-built `wtcs-districts.json` — DPI's 16 WTCS districts, server-generalized, five-gate build incl. the per-college seat witness and the Lake-Winnebago-only hole rule (build_wi_wtcs_districts.py; operator rebuild) | — (identity-only by statute: the board is APPOINTED, Wis. Stat. 38.08 — the card states it and links wtcs.edu) | — (statewide; open water honestly in no district) |
-| `mps-school-board` | MPS School Board District | schools | Bespoke | pre-built `mps-school-board-districts.json` — the city's own layer server-reprojected, witnessed against the CKAN shapefile's area shares at 0.04% max difference (build_mps_school_board_districts.py; adopted 2022-02-25, redraws each census; the flaky milwaukeemaps host is build-time only) | `mps-school-board-members.json` (9 directors: at-large president + districts 1-8, roles + term expirations + the Board's shared contact form, weekly CI with the committee-list witness); RUSD is gap `rusd-school-board` | `milwaukeeCoverage` — the MPS tiling; hides outside Milwaukee |
+| `mps-school-board` | Elected School Board District | schools | Bespoke | BOTH of Wisconsin's districted boards, one toggle over two pre-built files. `mps-school-board-districts.json` — the city's own layer server-reprojected, witnessed against the CKAN shapefile's area shares at 0.04% max difference (build_mps_school_board_districts.py; adopted 2022-02-25, redraws each census; the flaky milwaukeemaps host is build-time only). `rusd-school-board-districts.json` — RUSD publishes NO geometry, so its nine are a DISSOLVE of LTSB's live ward layer on the composition RUSD's own board-election page states ward by ward (116 wards / 7 municipalities, exact partition, 116-of-116 join), witnessed against the Census's own Racine School District at 99.98% on 4,000 points; its 21 map PDFs carry ZERO filled paths, so the Jackson route is measured shut and unneeded (build_rusd_school_board_districts.py) | `mps-school-board-members.json` (9 directors: at-large president + districts 1-8, roles + term expirations + the Board's shared contact form, weekly CI with the committee-list witness) + `rusd-school-board-members.json` (9 seats: 8 named with role, phone, e-mail and term, 1 vacant by RUSD's own notice and SAID so on the card; weekly CI, each seat's own 'District N Schools' label required to agree with its heading) | the union of the two tilings — hides everywhere else, because every other Wisconsin board is elected at large |
 | `county` | County | geography | Bespoke | pre-built (TIGERweb State_County, 72 — offline anchor) | `wi-county-clerks.json` (Blue Book × clerks' association cross-gated, 72/72, weekly CI; Milwaukee's statutory election-commission note) + `wi-county-officers.json` (phase 4: seven more offices per county from the Blue Book's officer tables, DATED April 2025 — chair-seats witness, Menominee 7-vs-5 pin, shared Menominee/Shawano DA footnote; the board chair reconciled weekly against the board roster — supersede/confirm/withhold) | — |
 | `county-subdivision` | County Subdivision | geography | Bespoke | live TIGERweb CouSub — 1,925 records tiling the state: 1,242 towns, 452 village and 219 city records, 12 Great-Lakes water | — | subOf `county`; gap `french-island-census-lag` |
 | `aldermanic-district` | Aldermanic District | political | Bespoke | pre-built `aldermanic-districts.json` — LTSB's coded city/village wards dissolved on COUSUBFP+ALDERID (838 districts, 155 municipalities; ten incomplete filings excluded, gap `aldermanic-incomplete-filings`), BAS pre-dissolve witness 867/867, 100.000% point agreement (build_wi_aldermanic_districts.py; operator rebuild per Jan/Jul filing window) | `wi-alderpersons.json` (6 witnessed cities, 94 seats, weekly CI — Milwaukee GIS × Legistar, Madison district pages, Green Bay directory, Kenosha GIS × certified canvass, Racine, Waukesha; the rest gap `alderperson-rosters`); trustee-district villages render "Trustee District" | — |

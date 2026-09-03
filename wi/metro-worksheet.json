@@ -428,12 +428,12 @@
     },
     {
       "id": "mps-school-board",
-      "label": "MPS School Board District",
+      "label": "Elected School Board District",
       "group": "schools",
       "area_rank": 20,
-      "rank_note": "Milwaukee's eight school board districts — an eighth of the city each, larger than the average aldermanic district statewide; the fleet's second elected school board and this instance's first city-scoped layer",
+      "rank_note": "the two school boards Wisconsin elects BY DISTRICT — Milwaukee's eight and Racine Unified's nine; every other board in the state is at large and has no geometry to draw",
       "source": {
-        "answers": "The Milwaukee Public Schools board district covering the point, its elected director, and the at-large director the whole city elects — with each seat's term expiration and the Board office's contact. Statute names Wisconsin's districted school boards exactly (most elect at large): MPS and Racine Unified, whose geometry no publisher ships as data — the Data gaps panel records it.",
+        "answers": "The elected school board district covering the point and the member holding it. Statute names Wisconsin's districted school boards exactly and there are two: Milwaukee Public Schools (eight districts plus an at-large director) and Racine Unified (nine). Every other board in the state is elected at large, so there is no district to draw and this layer hides.",
         "boundary": [
           {
             "label": "City of Milwaukee — MPS Board Districts, the city's own ArcGIS layer, reprojected by the city's own server and pre-built by wi/scripts/build_mps_school_board_districts.py; the districts were adopted 25 February 2022 (the district's directors page states it) and redraw each census",
@@ -442,10 +442,14 @@
           {
             "label": "City of Milwaukee open data — the same districts as a shapefile (CC-BY), the build-time witness: every district's share of the city must agree between the two before the file ships",
             "url": "https://data.milwaukee.gov/dataset/milwaukee-public-school-board-districts"
+          },
+          {
+            "label": "Racine Unified School District — the district's own \"Election District by Municipality\" table, which names every ward in each of the nine districts; the shapes are a dissolve of the Legislative Technology Services Bureau's live ward layer (wi/scripts/build_rusd_school_board_districts.py), witnessed against the Census's own Racine School District. RUSD's district maps are raster-backed PDFs with no vector district polygons, so no map is read",
+            "url": "https://www.rusd.org/documents/about/board-of-education/board-election-information/642739"
           }
         ],
-        "people": "mps-school-board-members.json, rebuilt weekly by CI from the district's own directors page (one heading per seat: the at-large president and districts 1-8), cross-witnessed against the board index's committee lists — two surfaces the district maintains separately must name the same directors. The Board's shared contact form and office phone ride the card; outside Milwaukee the layer hides entirely.",
-        "applies": "City of Milwaukee only — the layer hides everywhere else (the MPS tiling is the coverage test)."
+        "people": "mps-school-board-members.json, rebuilt weekly by CI from the district's own directors page (one heading per seat: the at-large president and districts 1-8), cross-witnessed against the board index's committee lists — two surfaces the district maintains separately must name the same directors. The Board's shared contact form and office phone ride the card; outside Milwaukee the layer hides entirely. Racine Unified's nine come from rusd-school-board-members.json, rebuilt weekly from the district's own Board of Education page (each seat's own \"District N Schools\" label must agree with the heading above it, so a reordered page fails rather than filing every member under a neighbour's district); its members carry a phone and an e-mail each, and the one seat RUSD declares vacant says so on the card.",
+        "applies": "City of Milwaukee and the Racine Unified School District only — the layer hides everywhere else, because everywhere else elects its board at large."
       }
     },
     {
@@ -1327,6 +1331,12 @@
         "note": "Milwaukee's eight MPS board districts, the city's own layer server-reprojected and witnessed at build time against the CKAN shapefile's area shares (wi/scripts/build_mps_school_board_districts.py). Redraws each decennial census (adopted 2022-02-25); an operator rebuild."
       },
       {
+        "file": "rusd-school-board-districts.json",
+        "min_features": 9,
+        "max_features": 9,
+        "note": "Racine Unified's nine board election districts (Wis. Stat. 120.42(1)(d)2), the other half of Wisconsin's districted-school-board pair. RUSD publishes NO geometry: the districts are unions of WHOLE WARDS and its own board-election page states the composition ward by ward, so these are a dissolve of LTSB's live ward layer — 116 wards across 7 municipalities, witnessed against the Census's own Racine School District (wi/scripts/build_rusd_school_board_districts.py). An operator rebuild: moves when RUSD redistricts or Racine re-wards."
+      },
+      {
         "file": "aldermanic-districts.json",
         "min_features": 838,
         "max_features": 838,
@@ -1691,6 +1701,11 @@
         "file": "mps-school-board-members.json",
         "min_keys": 3,
         "note": "The nine Milwaukee Board of School Directors (at-large president + districts 1-8, keyed to the geometry's DISTRICT values) with roles, term expirations and the Board office's contact, under {members, office, sourceUrl}. Built by wi/scripts/build_mps_school_board_roster.py from the district's own directors page with the committee-list witness; refreshed weekly by update-mps-school-board-roster.yml."
+      },
+      {
+        "file": "rusd-school-board-members.json",
+        "min_keys": 3,
+        "note": "The nine Racine Unified Board of Education members, keyed to the geometry's district values, with role, phone, e-mail and term expiration under {members, office, sourceUrl} — plus the one seat RUSD's own notice of vacancy declares empty, shipped as a row rather than dropped. Built by wi/scripts/build_rusd_school_board_roster.py from the district's own board page; refreshed weekly by update-rusd-school-board-roster.yml."
       },
       {
         "file": "oconto-polling-places.json",
@@ -2346,7 +2361,7 @@
     ]
   },
   "sw": {
-    "cache_name": "districtry-wi-shell-v32",
+    "cache_name": "districtry-wi-shell-v33",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
@@ -2398,6 +2413,11 @@
       "file": "update-mps-school-board-roster.yml",
       "purpose": "MPS school board directors from the district's own directors page (committee-list witness)",
       "schedule": "Mon 15:30 UTC"
+    },
+    {
+      "file": "update-rusd-school-board-roster.yml",
+      "purpose": "Racine Unified Board of Education roster (the district's own board page)",
+      "schedule": "Mon 17:30 UTC"
     },
     {
       "file": "update-wi-alderperson-roster.yml",
@@ -2580,6 +2600,11 @@
       }
     ],
     "entries": [
+      {
+        "date": "2026-09-03",
+        "title": "Racine Unified's school board districts join the map",
+        "body": "Click anywhere in Racine, Mount Pleasant, Caledonia, Sturtevant, Elmwood Park, North Bay or Wind Point and the school board card now names the Racine Unified board member who represents you, with their phone, e-mail and when their term ends. Wisconsin elects exactly two school boards by district — Milwaukee's and Racine Unified's — and until today only Milwaukee's was on the map. The card is renamed Elected School Board District, because it now answers for both. Racine Unified does not publish its district boundaries as data anywhere, and this project had recorded that as the blocker for a week. It was the wrong blocker: the districts are built out of whole voting wards, and the district's own board-election page lists every ward in every district. So the shapes are those wards joined together — 116 of them across seven municipalities — using the statewide ward map the app already carries. No picture of a map was read and nothing was traced. The result was checked against a completely different publisher: put together, the nine districts reproduce the Census Bureau's own outline of the Racine Unified School District almost exactly. One seat, District 2, is empty — the district posted a notice of vacancy in August — and the card says so, rather than quietly showing nothing, because a card that names nobody looks like a card that does not know."
+      },
       {
         "date": "2026-09-03",
         "title": "Every Wisconsin municipality now names its clerk",
