@@ -1,0 +1,170 @@
+{
+  "5509500950": {
+    "clerk": "Christine Genung",
+    "municipality": "Alden",
+    "phone": "715-248-7859",
+    "recordUpdated": "2025-06-25",
+    "url": "https://www.townofalden.com/"
+  },
+  "5509502350": {
+    "clerk": "Lisa Carlson",
+    "deputyClerk": "Janice Carlson",
+    "municipality": "Apple River",
+    "phone": "715-268-6506",
+    "recordUpdated": "2024-12-27",
+    "url": "http://townofappleriver.com/"
+  },
+  "5509504500": {
+    "clerk": "Janet Mabry",
+    "municipality": "Balsam Lake",
+    "phone": "715-554-2028",
+    "recordUpdated": "2023-12-28"
+  },
+  "5509505825": {
+    "clerk": "Wendy Coleman",
+    "deputyClerk": "Roxy King",
+    "municipality": "Beaver",
+    "phone": "715-205-4396",
+    "recordUpdated": "2024-01-02"
+  },
+  "5509507700": {
+    "clerk": "Janel Belle Isle",
+    "municipality": "Black Brook",
+    "phone": "651-245-8929",
+    "recordUpdated": "2023-11-02",
+    "url": "https://www.blackbrookwi.gov/"
+  },
+  "5509508750": {
+    "clerk": "Ellen Gnan",
+    "municipality": "Bone Lake",
+    "phone": "651-307-1143",
+    "recordUpdated": "2025-03-07",
+    "url": "http://www.townofbonelake.org/"
+  },
+  "5509514837": {
+    "clerk": "Jane Schmidt",
+    "municipality": "Clam Falls",
+    "phone": "715-371-2368",
+    "recordUpdated": "2024-01-16",
+    "url": "https://townofclamfalls.com/"
+  },
+  "5509515125": {
+    "clerk": "Tracy Lablanc",
+    "municipality": "Clayton",
+    "phone": "715-948-2564",
+    "recordUpdated": "2023-11-02",
+    "url": "http://townofclaytonwi.com"
+  },
+  "5509515275": {
+    "clerk": "Janelle M Johnson",
+    "municipality": "Clear Lake",
+    "phone": "715-948-2189",
+    "recordUpdated": "2023-11-02"
+  },
+  "5509524450": {
+    "clerk": "David Anderson",
+    "deputyClerk": "Melody Jacobs",
+    "municipality": "Eureka",
+    "phone": "715-483-9899",
+    "recordUpdated": "2023-12-28",
+    "url": "https://townofeureka.org/"
+  },
+  "5509525350": {
+    "clerk": "Steven Swanson",
+    "municipality": "Farmington",
+    "phone": "715-294-2370",
+    "recordUpdated": "2025-05-28",
+    "url": "https://www.farmingtontown.com/"
+  },
+  "5509528350": {
+    "clerk": "Sue Knutson",
+    "municipality": "Garfield",
+    "phone": "715-497-4336",
+    "recordUpdated": "2026-01-27",
+    "url": "https://www.townofgarfield.com/"
+  },
+  "5509528725": {
+    "clerk": "Cheryl True",
+    "municipality": "Georgetown",
+    "phone": "715-857-5788",
+    "recordUpdated": "2023-11-02"
+  },
+  "5509538400": {
+    "clerk": "Deanne Moravitz",
+    "municipality": "Johnstown",
+    "phone": "715-497-3043",
+    "recordUpdated": "2023-11-02",
+    "url": "http://www.pipelakes.org/johnstown-township"
+  },
+  "5509541900": {
+    "clerk": "Debra Tretsven",
+    "municipality": "Laketown",
+    "phone": "715-566-1944",
+    "recordUpdated": "2024-12-19"
+  },
+  "5509544475": {
+    "clerk": "Stephanie Ann Marciniak",
+    "municipality": "Lincoln",
+    "phone": "715-268-4747",
+    "recordUpdated": "2025-02-03",
+    "url": "https://townoflincoln-wi.com/"
+  },
+  "5509545775": {
+    "clerk": "Kathy Hudson",
+    "municipality": "Lorain",
+    "phone": "715-653-2252",
+    "recordUpdated": "2025-04-16"
+  },
+  "5509546225": {
+    "clerk": "Patsy Gustafson",
+    "municipality": "Luck",
+    "phone": "715-648-5569",
+    "recordUpdated": "2026-06-10"
+  },
+  "5509546900": {
+    "clerk": "Anna Weaver",
+    "municipality": "McKinley",
+    "phone": "715-296-6722",
+    "recordUpdated": "2023-11-02"
+  },
+  "5509552100": {
+    "clerk": "Cheryl Kloehn",
+    "municipality": "Milltown",
+    "phone": "715-825-3002",
+    "recordUpdated": "2025-02-27",
+    "url": "http://milltowntownship.com/"
+  },
+  "5509560475": {
+    "clerk": "Danielle Pratt",
+    "municipality": "Osceola",
+    "phone": "715-755-3060 EXT 1",
+    "recordUpdated": "2024-01-11",
+    "url": "https://www.townofosceola.com/"
+  },
+  "5509570575": {
+    "clerk": "Janet Krueger",
+    "municipality": "St. Croix Falls",
+    "phone": "715-483-1851",
+    "recordUpdated": "2025-10-31",
+    "url": "https://townofstcroixfallswi.gov/"
+  },
+  "5509577050": {
+    "clerk": "Melissa McQuay",
+    "municipality": "Sterling",
+    "phone": "715-220-9399",
+    "recordUpdated": "2023-12-11",
+    "url": "https://townofsterling.com/"
+  },
+  "5509586350": {
+    "clerk": "Phyllis Wilder",
+    "municipality": "West Sweden",
+    "phone": "715-327-8951",
+    "recordUpdated": "2026-03-02",
+    "url": "https://tn.westsweden.wi.gov/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

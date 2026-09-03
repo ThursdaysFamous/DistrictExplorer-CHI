@@ -1,0 +1,157 @@
+{
+  "5503316300": {
+    "clerk": "Kelly Bartholomew",
+    "municipality": "Colfax",
+    "phone": "715-704-0312",
+    "recordUpdated": "2025-01-09",
+    "url": "https://www.townofcolfax.com/"
+  },
+  "5503321150": {
+    "clerk": "Sally Rasmussen",
+    "municipality": "Dunn",
+    "phone": "715-308-1830",
+    "recordUpdated": "2024-10-14",
+    "url": "https://www.townofdunn.com/"
+  },
+  "5503322375": {
+    "clerk": "Martha Hartung",
+    "municipality": "Eau Galle",
+    "phone": "715-283-4910",
+    "recordUpdated": "2024-10-14"
+  },
+  "5503323350": {
+    "clerk": "Kelly Bartholomew",
+    "municipality": "Elk Mound",
+    "phone": "715-704-0312",
+    "recordUpdated": "2025-01-09",
+    "url": "http://www.townofelkmound.com/"
+  },
+  "5503330300": {
+    "clerk": "Pam Meinen",
+    "deputyClerk": "Peggy Johnson",
+    "municipality": "Grant",
+    "phone": "715-962-0010",
+    "recordUpdated": "2025-09-30",
+    "url": "https://townofgrant-dunn.com/"
+  },
+  "5503333400": {
+    "clerk": "Samantha Bird",
+    "municipality": "Hay River",
+    "phone": "715-556-0169",
+    "recordUpdated": "2024-10-14",
+    "url": "https://townofhr.com/"
+  },
+  "5503346175": {
+    "clerk": "Tracy Glenz",
+    "municipality": "Lucas",
+    "phone": "715-235-3853",
+    "recordUpdated": "2024-10-14",
+    "url": "http://townoflucas.org/"
+  },
+  "5503351050": {
+    "clerk": "Charisse Sutliff",
+    "municipality": "Menomonie",
+    "phone": "715-523-3428",
+    "recordUpdated": "2024-10-14",
+    "url": "https://www.townofmenomonie.com/"
+  },
+  "5503356775": {
+    "clerk": "Katie Bovee",
+    "deputyClerk": "Becky Segebrecht",
+    "municipality": "New Haven",
+    "phone": "715-643-3703",
+    "recordUpdated": "2024-10-16",
+    "url": "https://townofnewhavenwi.com/"
+  },
+  "5503360725": {
+    "clerk": "Beverly Bernier",
+    "municipality": "Otter Creek",
+    "phone": "715-658-0131",
+    "recordUpdated": "2023-12-28",
+    "url": "http://townofottercreek.com/"
+  },
+  "5503362125": {
+    "clerk": "Rebecca Richardson",
+    "municipality": "Peru",
+    "phone": "715-672-4325",
+    "recordUpdated": "2024-10-14"
+  },
+  "5503366550": {
+    "clerk": "Cheryl Miller",
+    "municipality": "Red Cedar",
+    "phone": "715-556-5034",
+    "recordUpdated": "2023-11-02",
+    "url": "https://redcedar.gov/"
+  },
+  "5503368700": {
+    "clerk": "Kelly S Boardman",
+    "municipality": "Rock Creek",
+    "phone": "715-563-3478",
+    "recordUpdated": "2024-10-09",
+    "url": "https://www.townofrockcreek.org/"
+  },
+  "5503371425": {
+    "clerk": "Pam Meinen",
+    "municipality": "Sand Creek",
+    "phone": "715-658-1795",
+    "recordUpdated": "2024-10-14",
+    "url": "https://www.co.dunn.wi.us/sandcreek"
+  },
+  "5503373300": {
+    "clerk": "Joe Boesl",
+    "municipality": "Sheridan",
+    "phone": "715-205-6193",
+    "recordUpdated": "2024-10-09",
+    "url": "http://www.sheridantownship.org"
+  },
+  "5503373375": {
+    "clerk": "Ashley Score",
+    "municipality": "Sherman",
+    "phone": "715-702-1413",
+    "recordUpdated": "2024-10-14"
+  },
+  "5503375750": {
+    "clerk": "Mary Strand",
+    "municipality": "Spring Brook",
+    "phone": "715-664-8545",
+    "recordUpdated": "2024-09-16",
+    "url": "https://www.spring-brook.org/"
+  },
+  "5503376650": {
+    "clerk": "Valerie Windsor",
+    "municipality": "Stanton",
+    "phone": "715-665-2568",
+    "recordUpdated": "2024-10-14",
+    "url": "https://townofstanton.org/"
+  },
+  "5503378975": {
+    "clerk": "Doris Meyer",
+    "municipality": "Tainter",
+    "phone": "715-235-3165",
+    "recordUpdated": "2023-11-02",
+    "url": "http://www.townoftainter.org/"
+  },
+  "5503379775": {
+    "clerk": "Katie Moll",
+    "municipality": "Tiffany",
+    "phone": "715-607-1805",
+    "recordUpdated": "2024-10-14"
+  },
+  "5503385975": {
+    "clerk": "Beth Hein",
+    "municipality": "Weston",
+    "phone": "715-505-7076",
+    "recordUpdated": "2025-06-06"
+  },
+  "5503387375": {
+    "clerk": "Denise Schlough",
+    "municipality": "Wilson",
+    "phone": "715-949-1938",
+    "recordUpdated": "2024-10-14"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

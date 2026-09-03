@@ -1,0 +1,167 @@
+{
+  "5508300175": {
+    "clerk": "Jean A Hansen",
+    "municipality": "Abrams",
+    "phone": "920-826-2299",
+    "recordUpdated": "2023-12-01",
+    "url": "https://townofabrams.com/"
+  },
+  "5508304275": {
+    "clerk": "Alan Sleeter",
+    "deputyClerk": "Pat Sleeter",
+    "municipality": "Bagley",
+    "phone": "920-590-0198",
+    "recordUpdated": "2025-10-06"
+  },
+  "5508309375": {
+    "clerk": "Jamie Waller",
+    "deputyClerk": "Brooke Kriescher",
+    "municipality": "Brazeau",
+    "phone": "920-897-3855",
+    "recordUpdated": "2026-07-22",
+    "url": "http://townofbrazeau.com/"
+  },
+  "5508309425": {
+    "clerk": "Kristen Telford",
+    "municipality": "Breed",
+    "phone": "920-842-2166",
+    "recordUpdated": "2023-11-29",
+    "url": "https://townofbreedwi.org/"
+  },
+  "5508314125": {
+    "clerk": "Colleen Walgurski",
+    "deputyClerk": "Cindy Kroll",
+    "municipality": "Chase",
+    "phone": "920-822-1560",
+    "recordUpdated": "2026-06-05",
+    "url": "http://townofchase.org/"
+  },
+  "5508320475": {
+    "clerk": "Cheryl C Field",
+    "deputyClerk": "Linda Vandenlangenberg",
+    "municipality": "Doty",
+    "phone": "715-276-7554",
+    "recordUpdated": "2025-11-04",
+    "url": "https://townofdoty.org/"
+  },
+  "5508329075": {
+    "clerk": "Renee Carlson",
+    "municipality": "Gillett",
+    "phone": "920-855-1000",
+    "recordUpdated": "2025-05-12"
+  },
+  "5508335925": {
+    "clerk": "Becky Dickson",
+    "deputyClerk": "Mary Woods",
+    "municipality": "How",
+    "phone": "920-842-9851",
+    "recordUpdated": "2023-12-20"
+  },
+  "5508342075": {
+    "clerk": "Michelle Moczynski",
+    "municipality": "Lakewood",
+    "phone": "715-276-3579",
+    "recordUpdated": "2025-12-16",
+    "url": "http://www.lakewoodwisconsin.org/"
+  },
+  "5508343350": {
+    "clerk": "Dawn Van Ark",
+    "municipality": "Lena",
+    "phone": "715-281-4672",
+    "recordUpdated": "2024-01-02"
+  },
+  "5508345175": {
+    "clerk": "Amy Peterson",
+    "municipality": "Little River",
+    "phone": "920-373-7095",
+    "recordUpdated": "2024-09-12",
+    "url": "https://townoflittleriver.com/"
+  },
+  "5508345275": {
+    "clerk": "Lisa Glinski",
+    "municipality": "Little Suamico",
+    "phone": "920-826-7655",
+    "recordUpdated": "2026-03-23",
+    "url": "https://townoflittlesuamico.com/"
+  },
+  "5508349000": {
+    "clerk": "Cindy Tousey",
+    "municipality": "Maple Valley",
+    "phone": "920-598-0601",
+    "recordUpdated": "2023-12-28"
+  },
+  "5508354200": {
+    "clerk": "Erin Mooers",
+    "municipality": "Morgan",
+    "phone": "920-846-0699",
+    "recordUpdated": "2022-09-22",
+    "url": "http://www.townofmorgan.org/"
+  },
+  "5508354630": {
+    "clerk": "Lynn M Kauzlaric",
+    "municipality": "Mountain",
+    "phone": "715-276-6474",
+    "recordUpdated": "2024-07-26",
+    "url": "https://www.townofmountain.com/"
+  },
+  "5508359375": {
+    "clerk": "Lori Scanlan",
+    "municipality": "Oconto",
+    "phone": "920-834-4351",
+    "recordUpdated": "2023-11-02"
+  },
+  "5508359425": {
+    "clerk": "Susan Mogged",
+    "municipality": "Oconto Falls",
+    "phone": "920-373-6663",
+    "recordUpdated": "2024-01-10",
+    "url": "http://townofocontofalls.org/"
+  },
+  "5508361900": {
+    "clerk": "Trudie Chico",
+    "municipality": "Pensaukee",
+    "phone": "920-826-2010",
+    "recordUpdated": "2025-05-05",
+    "url": "https://townofpensaukee.org/"
+  },
+  "5508368400": {
+    "clerk": "Beth Hartman",
+    "deputyClerk": "Sarah Debbink",
+    "municipality": "Riverview",
+    "phone": "715-276-6914",
+    "recordUpdated": "2026-03-09"
+  },
+  "5508376450": {
+    "clerk": "Lisa Peitersen",
+    "municipality": "Spruce",
+    "phone": "920-829-5111",
+    "recordUpdated": "2023-12-28",
+    "url": "https://www.townofspruce.net/"
+  },
+  "5508377300": {
+    "clerk": "Terrah J Patton",
+    "municipality": "Stiles",
+    "phone": "920-634-5348",
+    "recordUpdated": "2024-07-18",
+    "url": "https://townofstiles.org/"
+  },
+  "5508380325": {
+    "clerk": "Linda Ziegler",
+    "municipality": "Townsend",
+    "phone": "715-276-6856",
+    "recordUpdated": "2023-07-26",
+    "url": "https://www.townsendwisconsin.org/"
+  },
+  "5508381475": {
+    "clerk": "Tracy A Winkler",
+    "municipality": "Underhill",
+    "phone": "920-855-2924",
+    "recordUpdated": "2023-11-19",
+    "url": "https://townofunderhill.com/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

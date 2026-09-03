@@ -1,0 +1,161 @@
+{
+  "5510703600": {
+    "clerk": "Chris McGinnis",
+    "municipality": "Atlanta",
+    "phone": "715-415-2377",
+    "recordUpdated": "2023-12-28",
+    "url": "http://www.townofatlanta.com/"
+  },
+  "5510707175": {
+    "clerk": "Sandra Rassbach",
+    "deputyClerk": "Cecelia Stencil",
+    "municipality": "Big Bend",
+    "phone": "715-225-0764",
+    "recordUpdated": "2025-05-05",
+    "url": "https://townofbigbend.com/"
+  },
+  "5510707225": {
+    "clerk": "Margaret Fiser",
+    "municipality": "Big Falls",
+    "phone": "715-532-7480",
+    "recordUpdated": "2023-12-01"
+  },
+  "5510713550": {
+    "clerk": "Geralyn Felske",
+    "municipality": "Cedar Rapids",
+    "phone": "715-403-1321",
+    "recordUpdated": "2025-05-22"
+  },
+  "5510720000": {
+    "clerk": "Mary Ann Patricia Metzger",
+    "municipality": "Dewey",
+    "phone": "715-532-9141",
+    "recordUpdated": "2023-12-01"
+  },
+  "5510726100": {
+    "clerk": "Missy Kroening",
+    "municipality": "Flambeau",
+    "phone": "715-415-2933",
+    "recordUpdated": "2026-03-10",
+    "url": "https://townofflambeau.com/"
+  },
+  "5510730375": {
+    "clerk": "Connie Meyer",
+    "municipality": "Grant",
+    "phone": "715-314-0165",
+    "recordUpdated": "2023-11-02"
+  },
+  "5510731775": {
+    "clerk": "Steffani Unterschuetz",
+    "municipality": "Grow",
+    "phone": "715-403-0798",
+    "recordUpdated": "2023-12-01"
+  },
+  "5510733300": {
+    "clerk": "Shirley A Severson",
+    "municipality": "Hawkins",
+    "phone": "715-585-6366",
+    "recordUpdated": "2026-02-02"
+  },
+  "5510736125": {
+    "clerk": "Jolene Zeman",
+    "municipality": "Hubbard",
+    "phone": "715-532-9848",
+    "recordUpdated": "2023-12-28"
+  },
+  "5510742950": {
+    "clerk": "Charidy Ludescher",
+    "municipality": "Lawrence",
+    "phone": "715-668-5210",
+    "recordUpdated": "2023-12-18"
+  },
+  "5510749625": {
+    "clerk": "Carol Luce",
+    "municipality": "Marshall",
+    "phone": "715-563-1763",
+    "recordUpdated": "2023-11-29"
+  },
+  "5510755175": {
+    "clerk": "Tracey Larsen",
+    "municipality": "Murry",
+    "phone": "715-868-8063",
+    "recordUpdated": "2026-01-27",
+    "url": "https://townofmurry.com/"
+  },
+  "5510767600": {
+    "clerk": "Allison Grubba",
+    "municipality": "Richland",
+    "phone": "507-272-8578",
+    "recordUpdated": "2025-05-05"
+  },
+  "5510770275": {
+    "clerk": "Anne Konvicka",
+    "municipality": "Rusk",
+    "phone": "715-642-3399",
+    "recordUpdated": "2024-01-03",
+    "url": "https://www.townofrusk.com"
+  },
+  "5510774975": {
+    "clerk": "April Eckes",
+    "municipality": "South Fork",
+    "phone": "715-826-0293",
+    "recordUpdated": "2023-12-28"
+  },
+  "5510777775": {
+    "clerk": "Carol Lynn Arndt",
+    "municipality": "Strickland",
+    "phone": "715-415-2888",
+    "recordUpdated": "2024-10-17"
+  },
+  "5510777850": {
+    "clerk": "Caroline Vanderloop",
+    "municipality": "Stubbs",
+    "phone": "715-595-3682",
+    "recordUpdated": "2026-04-03",
+    "url": "https://townofstubbs.com/"
+  },
+  "5510779575": {
+    "clerk": "Becky Smith",
+    "municipality": "Thornapple",
+    "phone": "920-393-9348",
+    "recordUpdated": "2026-05-22",
+    "url": "https://townofthornapple.org/"
+  },
+  "5510780950": {
+    "clerk": "Skye Neidermann",
+    "municipality": "True",
+    "phone": "715-415-2169",
+    "recordUpdated": "2025-05-05"
+  },
+  "5510783675": {
+    "clerk": "Debra Klund",
+    "municipality": "Washington",
+    "phone": "715-868-1310",
+    "recordUpdated": "2026-04-05"
+  },
+  "5510787125": {
+    "clerk": "Lynn Sances",
+    "municipality": "Wilkinson",
+    "phone": "715-699-4053",
+    "recordUpdated": "2025-10-30"
+  },
+  "5510787175": {
+    "clerk": "Mary Jane Nelson",
+    "deputyClerk": "Judith Simpson",
+    "municipality": "Willard",
+    "phone": "715-595-4141",
+    "recordUpdated": "2023-11-29",
+    "url": "https://www.townofwillardwi.com/"
+  },
+  "5510787450": {
+    "clerk": "Cindy Fairchild",
+    "municipality": "Wilson",
+    "phone": "715-939-9173",
+    "recordUpdated": "2025-05-05"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

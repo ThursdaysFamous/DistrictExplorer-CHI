@@ -8455,6 +8455,20 @@ function initWisconsinExplorer() {
   var loadWiMunicipalClerks = makeCached(function () {
     return fetchJSONWithRetry("data/app/wi-municipal-clerks.json", {}, 2);
   });
+  // THE TOWN half of the same directory, ONE FILE PER COUNTY: 1,239 towns is
+  // ~582 KB in one file and ~4 KB per county, and this is a network-first
+  // roster fetched on a click. The county comes out of the subdivision GEOID
+  // the card already holds — `55` + county + subdivision — so there is no
+  // name-to-slug table on either side to drift, which is the one thing the
+  // polling files' own slug key cannot claim.
+  var townClerkCache = {};
+  function loadTownClerks(countyFips) {
+    if (!townClerkCache[countyFips]) {
+      townClerkCache[countyFips] = fetchJSONWithRetry(
+        "data/app/town-clerks-" + countyFips + ".json", {}, 2);
+    }
+    return townClerkCache[countyFips];
+  }
 
   registerLayer({
     id: "county",
@@ -9223,7 +9237,8 @@ function initWisconsinExplorer() {
         var props = feature.properties || {};
         var name = findPropCI(props, ["name"]);
         var base = findPropCI(props, ["basename"]);
-        return {
+        var geoid = findPropCI(props, ["geoid"]);
+        var result = {
           seq: seq,
           name: name,
           // the civil-division type, taken from what TIGER's own NAME carries
@@ -9233,8 +9248,24 @@ function initWisconsinExplorer() {
                  String(name).indexOf(String(base)) === 0)
             ? String(name).slice(String(base).length).trim().toLowerCase()
             : null,
-          geoid: findPropCI(props, ["geoid"])
+          geoid: geoid,
+          clerk: null
         };
+        // TOWNS ONLY. A city or village is told two lines below that it "also
+        // answers on the City or Village card", and that is where its clerk
+        // is — putting the same row on both cards at one point would read as
+        // two different answers. A town has no other card, which is the whole
+        // reason this block exists.
+        if (result.kind !== "town" || geoid == null) return result;
+        var county = String(geoid).slice(2, 5);
+        // A roster miss is not this layer's failure: the subdivision still
+        // answers, so the card degrades to the identity it shipped with.
+        return loadTownClerks(county).catch(function () { return null; })
+          .then(function (file) {
+            if (seq !== state.sequence) return result;
+            if (file) result.clerk = file[String(geoid)] || null;
+            return result;
+          });
       });
     },
     render: function (result) {
@@ -9258,7 +9289,49 @@ function initWisconsinExplorer() {
           { label: "Type", value: KIND_NOTE[result.kind] }
         ]));
       }
+      // THE TOWN CLERK. This is the only card that answers for a town, so it
+      // is the only place the state's one statewide municipal officer can
+      // reach the 1,239 of them. Same block, same labels and the same
+      // per-record date as the City or Village card, because it is the same
+      // directory — a reader who moves between the two cards should not have
+      // to work out whether they are being told the same kind of thing.
+      //
+      // Three of TIGER's 1,242 towns have no clerk row and the card simply
+      // shows none, which is correct: nobody publishes one. All three are a
+      // town/village boundary the Census and the Commission draw differently
+      // (wi/scripts/build_wi_municipal_clerks.py names them).
+      var clerk = result.clerk;
+      if (clerk) {
+        var staff = [];
+        if (clerk.clerk) {
+          var lead = { name: String(clerk.clerk), badge: "Clerk" };
+          if (clerk.phone) lead.phone = String(clerk.phone);
+          staff.push(lead);
+        }
+        if (clerk.deputyClerk) {
+          staff.push({ name: String(clerk.deputyClerk), badge: "Deputy Clerk" });
+        }
+        if (staff.length) {
+          wrap.appendChild(renderSectionLabel("Town clerk"));
+          wrap.appendChild(renderPersonRows(staff));
+        }
+        if (staff.length && clerk.recordUpdated) {
+          wrap.appendChild(renderFieldStack([{
+            label: "As of",
+            value: "Wisconsin Elections Commission clerk directory — this " +
+              "town's record was last updated " + String(clerk.recordUpdated) + "."
+          }]));
+        }
+      }
       return wrap;
+    },
+    primaryLink: function (result) {
+      // The town's own website where the directory publishes one (830 of the
+      // 1,239 do). A city or village gets no link here on purpose: its own
+      // card already carries it, and this card has just told the reader so.
+      var clerk = result.clerk;
+      if (!clerk || !clerk.url) return null;
+      return { label: "Official town website", url: String(clerk.url) };
     }
   });
 

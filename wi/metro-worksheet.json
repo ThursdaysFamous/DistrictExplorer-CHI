@@ -364,7 +364,7 @@
             "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Places_CouSub_ConCity_SubMCD/MapServer/1"
           }
         ],
-        "people": "No roster is joined; the card names the subdivision.",
+        "people": "For a TOWN — and only a town — the card names the town CLERK, with the deputy clerk where the state lists one, the office phone, the town's own website and the date the state's record of that town was last updated. All 1,239 of Wisconsin's towns that the Elections Commission files a clerk for, from its own statewide directory, joined to this layer by county-subdivision GEOID and shipped one file per county. This is the ONLY card that answers for a town, which is why the clerk sits here. A city or village gets no clerk row on this card by design: the card already tells that reader their municipality also answers on the City or Village card, and its clerk is there, so repeating it would put one row on two cards at a single point. THREE of TIGER's 1,242 town records carry no clerk and the card shows none — Harrison (Calumet) and Bloomfield (Walworth), where a village incorporated out of the town and the Commission files only the village, and Campbell (La Crosse), which is the Census's own older name for the Village of French Island. The directory carries NO e-mail address (the clerks asked the Commission to withhold them) and this project ships NO address from it, because the file cannot tell a town hall from a clerk's own house. The town BOARD — chair and supervisors — is named nowhere: that is the Data gaps panel's `municipal-officers` record.",
         "applies": "Wisconsin — statewide."
       }
     },
@@ -1807,6 +1807,432 @@
         "dynamic_reference": true
       },
       {
+        "file": "town-clerks-001.json",
+        "min_keys": 18,
+        "note": "Adams County's 17 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-003.json",
+        "min_keys": 14,
+        "note": "Ashland County's 13 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-005.json",
+        "min_keys": 26,
+        "note": "Barron County's 25 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-007.json",
+        "min_keys": 26,
+        "note": "Bayfield County's 25 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-009.json",
+        "min_keys": 14,
+        "note": "Brown County's 13 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-011.json",
+        "min_keys": 18,
+        "note": "Buffalo County's 17 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-013.json",
+        "min_keys": 22,
+        "note": "Burnett County's 21 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-015.json",
+        "min_keys": 9,
+        "note": "Calumet County's 8 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-017.json",
+        "min_keys": 24,
+        "note": "Chippewa County's 23 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-019.json",
+        "min_keys": 34,
+        "note": "Clark County's 33 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-021.json",
+        "min_keys": 22,
+        "note": "Columbia County's 21 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-023.json",
+        "min_keys": 12,
+        "note": "Crawford County's 11 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-025.json",
+        "min_keys": 33,
+        "note": "Dane County's 32 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-027.json",
+        "min_keys": 24,
+        "note": "Dodge County's 23 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-029.json",
+        "min_keys": 15,
+        "note": "Door County's 14 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-031.json",
+        "min_keys": 17,
+        "note": "Douglas County's 16 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-033.json",
+        "min_keys": 23,
+        "note": "Dunn County's 22 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-035.json",
+        "min_keys": 14,
+        "note": "Eau Claire County's 13 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-037.json",
+        "min_keys": 9,
+        "note": "Florence County's 8 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-039.json",
+        "min_keys": 22,
+        "note": "Fond du Lac County's 21 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-041.json",
+        "min_keys": 15,
+        "note": "Forest County's 14 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-043.json",
+        "min_keys": 34,
+        "note": "Grant County's 33 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-045.json",
+        "min_keys": 17,
+        "note": "Green County's 16 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-047.json",
+        "min_keys": 11,
+        "note": "Green Lake County's 10 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-049.json",
+        "min_keys": 15,
+        "note": "Iowa County's 14 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-051.json",
+        "min_keys": 11,
+        "note": "Iron County's 10 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-053.json",
+        "min_keys": 22,
+        "note": "Jackson County's 21 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-055.json",
+        "min_keys": 17,
+        "note": "Jefferson County's 16 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-057.json",
+        "min_keys": 20,
+        "note": "Juneau County's 19 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-059.json",
+        "min_keys": 6,
+        "note": "Kenosha County's 5 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-061.json",
+        "min_keys": 11,
+        "note": "Kewaunee County's 10 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-063.json",
+        "min_keys": 12,
+        "note": "La Crosse County's 11 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-065.json",
+        "min_keys": 19,
+        "note": "Lafayette County's 18 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-067.json",
+        "min_keys": 18,
+        "note": "Langlade County's 17 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-069.json",
+        "min_keys": 17,
+        "note": "Lincoln County's 16 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-071.json",
+        "min_keys": 19,
+        "note": "Manitowoc County's 18 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-073.json",
+        "min_keys": 40,
+        "note": "Marathon County's 39 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-075.json",
+        "min_keys": 19,
+        "note": "Marinette County's 18 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-077.json",
+        "min_keys": 15,
+        "note": "Marquette County's 14 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-078.json",
+        "min_keys": 2,
+        "note": "Menominee County's 1 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-081.json",
+        "min_keys": 25,
+        "note": "Monroe County's 24 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-083.json",
+        "min_keys": 24,
+        "note": "Oconto County's 23 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-085.json",
+        "min_keys": 21,
+        "note": "Oneida County's 20 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-087.json",
+        "min_keys": 20,
+        "note": "Outagamie County's 19 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-089.json",
+        "min_keys": 7,
+        "note": "Ozaukee County's 6 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-091.json",
+        "min_keys": 9,
+        "note": "Pepin County's 8 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-093.json",
+        "min_keys": 18,
+        "note": "Pierce County's 17 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-095.json",
+        "min_keys": 25,
+        "note": "Polk County's 24 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-097.json",
+        "min_keys": 18,
+        "note": "Portage County's 17 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-099.json",
+        "min_keys": 18,
+        "note": "Price County's 17 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-101.json",
+        "min_keys": 5,
+        "note": "Racine County's 4 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-103.json",
+        "min_keys": 17,
+        "note": "Richland County's 16 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-105.json",
+        "min_keys": 21,
+        "note": "Rock County's 20 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-107.json",
+        "min_keys": 25,
+        "note": "Rusk County's 24 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-109.json",
+        "min_keys": 22,
+        "note": "St. Croix County's 21 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-111.json",
+        "min_keys": 23,
+        "note": "Sauk County's 22 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-113.json",
+        "min_keys": 17,
+        "note": "Sawyer County's 16 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-115.json",
+        "min_keys": 26,
+        "note": "Shawano County's 25 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-117.json",
+        "min_keys": 16,
+        "note": "Sheboygan County's 15 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-119.json",
+        "min_keys": 23,
+        "note": "Taylor County's 22 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-121.json",
+        "min_keys": 16,
+        "note": "Trempealeau County's 15 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-123.json",
+        "min_keys": 22,
+        "note": "Vernon County's 21 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-125.json",
+        "min_keys": 15,
+        "note": "Vilas County's 14 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-127.json",
+        "min_keys": 16,
+        "note": "Walworth County's 15 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-129.json",
+        "min_keys": 22,
+        "note": "Washburn County's 21 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-131.json",
+        "min_keys": 13,
+        "note": "Washington County's 12 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-133.json",
+        "min_keys": 9,
+        "note": "Waukesha County's 8 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-135.json",
+        "min_keys": 23,
+        "note": "Waupaca County's 22 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-137.json",
+        "min_keys": 19,
+        "note": "Waushara County's 18 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-139.json",
+        "min_keys": 16,
+        "note": "Winnebago County's 15 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
+        "file": "town-clerks-141.json",
+        "min_keys": 23,
+        "note": "Wood County's 22 town clerk(s) keyed by county-subdivision GEOID, read by the County Subdivision card — the only card that answers for a town. From the Elections Commission's statewide directory via wi/scripts/build_wi_municipal_clerks.py, which gates the statewide total at 1,239 across 71 counties (Milwaukee has no towns). One file per county because the whole set is ~582 KB and this is a network-first roster fetched on a click. Floor is the EXACT key count, towns plus the _source block: Wisconsin's town fabric does not drift between censuses, so a change here should cost a human two edits, not one.",
+        "dynamic_reference": true
+      },
+      {
         "file": "trempealeau-polling-places.json",
         "min_keys": 49,
         "note": "Trempealeau County ward → polling place pairing for the 2026 General Election — wi/scripts/build_wi_polling_places.py, from the workbook the Wisconsin Elections Commission sent 2026-08-27 (wi/data/source/wec/). PROVISIONAL until the Commission publishes its November edition; 55 of the county's LTSB wards are paired, and the card names the election, the provisional status and MyVote as the confirmation route.",
@@ -2156,8 +2582,8 @@
     "entries": [
       {
         "date": "2026-09-03",
-        "title": "Every Wisconsin city and village now names its clerk",
-        "body": "Click any point inside one of Wisconsin's 608 cities and villages and the City or Village card now names the municipal clerk — the officer who runs that municipality's elections and keeps its records — with their office phone, the municipality's own website, and the date the state's record of them was last updated. Until today that card named somebody in nineteen municipalities, all of them in Milwaukee County; everywhere else it gave you a name for the place and nothing about who works there.\n\nThe source is the Wisconsin Elections Commission's own statewide clerk directory, which the Commission sent when asked. It is worth being plain about what it is and is not. A clerk is not a mayor and is not a council: the card labels the clerk block separately for exactly that reason, because in 589 of these 608 municipalities the clerk is the only name on the card and an unlabelled row would read as the person who leads the place. Who governs your city or village is still not something this app can tell you outside a handful of cities, and that remains recorded in the Data gaps panel rather than quietly left blank.\n\nTwo things the Commission's file contains are deliberately not shown. It carries no e-mail addresses at all — the clerks asked for those to be left out, and going and finding them somewhere else would work around a decision the people named made for themselves. And it carries street addresses that this app does not print, because the file gives no way to tell a village hall from a clerk's own house and it demonstrably contains both: several clerks serve more than one municipality and file the same single address under each of them, which is how you can tell the address belongs to the person rather than the building.\n\nEach row carries its own date because the Commission updates each municipality separately, and those dates run from 2017 to 2026. One card showing a 2017 date and another showing 2026 is the honest picture; a single 'as of today' stamped across all 608 would not have been."
+        "title": "Every Wisconsin municipality now names its clerk",
+        "body": "Click anywhere in Wisconsin and the card for the municipality you are standing in now names its clerk. For a city or village that is the City or Village card; for a town — and Wisconsin has 1,239 of them, covering most of the state's land — it is the County Subdivision card, which is the only card that answers for a town at all. Either way you get the clerk — the officer who runs that municipality's elections and keeps its records — with their office phone, the municipality's own website, and the date the state's record of them was last updated. Until today those cards named somebody in nineteen municipalities, all of them in Milwaukee County; everywhere else you got a name for the place and nothing about who works there. That is 1,847 municipalities, and every one of them now has a name on it.\n\nThe source is the Wisconsin Elections Commission's own statewide clerk directory, which the Commission sent when asked. It is worth being plain about what it is and is not. A clerk is not a mayor and is not a council: the card labels the clerk block separately for exactly that reason, because in 589 of these 608 municipalities the clerk is the only name on the card and an unlabelled row would read as the person who leads the place. Who governs your municipality — the council, the village board, the town board — is still not something this app can tell you outside a handful of cities, and that remains recorded in the Data gaps panel rather than quietly left blank.\n\nTwo things the Commission's file contains are deliberately not shown. It carries no e-mail addresses at all — the clerks asked for those to be left out, and going and finding them somewhere else would work around a decision the people named made for themselves. And it carries street addresses that this app does not print, because the file gives no way to tell a village hall from a clerk's own house and it demonstrably contains both: several clerks serve more than one municipality and file the same single address under each of them, which is how you can tell the address belongs to the person rather than the building.\n\nThree towns out of 1,242 show no clerk, and that is not an oversight: in each case the Census and the state disagree about whether the place is still a town, and nobody publishes a clerk for the version the map draws. The card says nothing rather than guessing.\\n\\nEach row carries its own date because the Commission updates each municipality separately, and those dates run from 2017 to 2026. One card showing a 2017 date and another showing 2026 is the honest picture; a single 'as of today' stamped across all 608 would not have been."
       },
       {
         "date": "2026-09-02",

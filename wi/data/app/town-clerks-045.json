@@ -1,0 +1,120 @@
+{
+  "5504500325": {
+    "clerk": "Dan Crandall",
+    "municipality": "Adams",
+    "phone": "608-543-3443",
+    "recordUpdated": "2024-11-15",
+    "url": "http://www.adamstownshipwi.com/"
+  },
+  "5504500775": {
+    "clerk": "Deb Cline",
+    "municipality": "Albany",
+    "phone": "608-558-4787",
+    "recordUpdated": "2025-05-05",
+    "url": "https://townofalbanywi.com/"
+  },
+  "5504510100": {
+    "clerk": "Chris Gallagher",
+    "municipality": "Brooklyn",
+    "phone": "608-455-6411",
+    "recordUpdated": "2023-12-28",
+    "url": "https://townofbrooklyn.org/"
+  },
+  "5504511725": {
+    "clerk": "Karen Signer",
+    "municipality": "Cadiz",
+    "phone": "608-558-9910",
+    "recordUpdated": "2024-01-02"
+  },
+  "5504515000": {
+    "clerk": "Jacqueline Boss",
+    "deputyClerk": "James Rutledge",
+    "municipality": "Clarno",
+    "phone": "608-214-3628",
+    "recordUpdated": "2024-01-09",
+    "url": "https://townofclarno.com/"
+  },
+  "5504519075": {
+    "clerk": "Emma Brugger",
+    "deputyClerk": "Ann L Schwartz",
+    "municipality": "Decatur",
+    "phone": "608-897-4965",
+    "recordUpdated": "2023-12-29",
+    "url": "https://townofdecatur.com/"
+  },
+  "5504524725": {
+    "clerk": "Dawn Marie Sass",
+    "municipality": "Exeter",
+    "phone": "608-424-1697",
+    "recordUpdated": "2026-08-03",
+    "url": "https://townofexeter-wi.gov/"
+  },
+  "5504537875": {
+    "clerk": "Amy McCullough",
+    "municipality": "Jefferson",
+    "phone": "608-934-5255",
+    "recordUpdated": "2026-01-16",
+    "url": "https://jeffersontown-greenwi.gov/"
+  },
+  "5504538550": {
+    "clerk": "Billie J Reynolds",
+    "municipality": "Jordan",
+    "phone": "608-325-5593",
+    "recordUpdated": "2024-01-02"
+  },
+  "5504553775": {
+    "clerk": "Peggy Murphy",
+    "municipality": "Monroe",
+    "phone": "608-558-6821",
+    "recordUpdated": "2024-01-09",
+    "url": "http://www.monroetownship.info/"
+  },
+  "5504554850": {
+    "clerk": "Joni Waelchli-Buehl",
+    "municipality": "Mount Pleasant",
+    "phone": "608-938-1154",
+    "recordUpdated": "2026-06-01",
+    "url": "https://townofmtpleasantwi.gov/"
+  },
+  "5504556725": {
+    "clerk": "Darla Kramer",
+    "municipality": "New Glarus",
+    "phone": "608-527-2390",
+    "recordUpdated": "2026-03-16",
+    "url": "https://townofnewglarus.com/"
+  },
+  "5504576075": {
+    "clerk": "Louis Mendes",
+    "deputyClerk": "Arlinda Faessler",
+    "municipality": "Spring Grove",
+    "phone": "608-897-4643",
+    "recordUpdated": "2025-04-16",
+    "url": "https://www.townofspringgrove.com/"
+  },
+  "5504578875": {
+    "clerk": "Catrina Bennett",
+    "municipality": "Sylvester",
+    "phone": "608-862-1884",
+    "recordUpdated": "2024-01-09",
+    "url": "https://townofsylvesterwi.com/"
+  },
+  "5504583625": {
+    "clerk": "Steven Krebs",
+    "municipality": "Washington",
+    "phone": "608-347-3462",
+    "recordUpdated": "2025-05-09",
+    "url": "https://townofwashingtongreencounty.com/"
+  },
+  "5504589475": {
+    "clerk": "Brenda Hackbart",
+    "municipality": "York",
+    "phone": "608-527-8125",
+    "recordUpdated": "2025-01-08",
+    "url": "https://townofyork.org/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

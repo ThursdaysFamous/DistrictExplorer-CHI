@@ -1,0 +1,148 @@
+{
+  "5512306900": {
+    "clerk": "Tina Dahl",
+    "municipality": "Bergen",
+    "phone": "608-498-6227",
+    "recordUpdated": "2026-01-29",
+    "url": "https://tn.bergen.wi.gov/"
+  },
+  "5512314675": {
+    "clerk": "Tanya Glunz",
+    "municipality": "Christiana",
+    "phone": "608-634-4184",
+    "recordUpdated": "2023-06-22"
+  },
+  "5512315675": {
+    "clerk": "Lori Hemmersbach",
+    "municipality": "Clinton",
+    "phone": "608-792-5757",
+    "recordUpdated": "2023-10-04",
+    "url": "https://tn.clinton.wi.gov/"
+  },
+  "5512316875": {
+    "clerk": "Sara Rudie",
+    "municipality": "Coon",
+    "phone": "608-452-3966",
+    "recordUpdated": "2023-12-28",
+    "url": "http://www.tn.coon.wi.gov/page/home"
+  },
+  "5512326550": {
+    "clerk": "Denise Valentine",
+    "municipality": "Forest",
+    "phone": "608-489-2608",
+    "recordUpdated": "2025-05-27",
+    "url": "https://townofforest.com/"
+  },
+  "5512327400": {
+    "clerk": "Tracy Thelen",
+    "municipality": "Franklin",
+    "phone": "608-675-3773",
+    "recordUpdated": "2024-01-02"
+  },
+  "5512328650": {
+    "clerk": "Jerome Pedretti",
+    "municipality": "Genoa",
+    "phone": "608-689-2808",
+    "recordUpdated": "2023-11-28"
+  },
+  "5512331625": {
+    "clerk": "Mary A Stanek",
+    "municipality": "Greenwood",
+    "phone": "608-489-3584",
+    "recordUpdated": "2023-12-22",
+    "url": "https://tn.greenwood.wi.gov/page/home"
+  },
+  "5512332225": {
+    "clerk": "Jacqueline Stalsberg",
+    "municipality": "Hamburg",
+    "phone": "608-769-0004",
+    "recordUpdated": "2026-01-27",
+    "url": "https://tn.hamburg.wi.gov/"
+  },
+  "5512332725": {
+    "clerk": "Carolyn Parr",
+    "municipality": "Harmony",
+    "phone": "608-632-0820",
+    "recordUpdated": "2024-08-05",
+    "url": "http://tn.harmony.wi.gov/"
+  },
+  "5512334850": {
+    "clerk": "Jennifer Burchell",
+    "municipality": "Hillsboro",
+    "phone": "608-489-3464",
+    "recordUpdated": "2023-12-22"
+  },
+  "5512337975": {
+    "clerk": "Kelsey Vance",
+    "municipality": "Jefferson",
+    "phone": "608-769-6943",
+    "recordUpdated": "2026-05-05"
+  },
+  "5512339475": {
+    "clerk": "Dana Lee",
+    "municipality": "Kickapoo",
+    "phone": "608-629-5848",
+    "recordUpdated": "2025-11-19",
+    "url": "https://www.tn.kickapoo.wi.gov/page/home"
+  },
+  "5512343900": {
+    "clerk": "Sharon Engh",
+    "municipality": "Liberty",
+    "phone": "608-606-0865",
+    "recordUpdated": "2024-02-29",
+    "url": "https://townoflibertywi.us/"
+  },
+  "5512376725": {
+    "clerk": "Kristi Jensen",
+    "deputyClerk": "Jake Spry",
+    "municipality": "Stark",
+    "phone": "608-386-6692",
+    "recordUpdated": "2025-06-18",
+    "url": "https://tn.stark.wi.gov/"
+  },
+  "5512377075": {
+    "clerk": "Kay Yanske",
+    "municipality": "Sterling",
+    "phone": "608-675-3360",
+    "recordUpdated": "2023-12-06"
+  },
+  "5512381675": {
+    "clerk": "Fay Urban",
+    "municipality": "Union",
+    "phone": "608-528-4437",
+    "recordUpdated": "2023-12-22",
+    "url": "http://townofunionvernon.us/"
+  },
+  "5512382950": {
+    "clerk": "Nathan Campbell",
+    "municipality": "Viroqua",
+    "phone": "608-606-0208",
+    "recordUpdated": "2023-01-18",
+    "url": "https://www.vernoncounty.org/government/municipalities/town_of_viroqua.php"
+  },
+  "5512385050": {
+    "clerk": "Ardene Wirts",
+    "municipality": "Webster",
+    "phone": "608-606-1444",
+    "recordUpdated": "2023-12-11",
+    "url": "https://www.tn.webster.wi.gov/page/home"
+  },
+  "5512386525": {
+    "clerk": "Cindy Eisenman",
+    "municipality": "Wheatland",
+    "phone": "608-648-3583",
+    "recordUpdated": "2025-03-12",
+    "url": "https://www.town-of-wheatland.com/"
+  },
+  "5512386900": {
+    "clerk": "Mona Spohn",
+    "municipality": "Whitestown",
+    "phone": "608-625-4603",
+    "recordUpdated": "2025-04-30"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

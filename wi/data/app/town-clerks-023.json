@@ -1,0 +1,77 @@
+{
+  "5502309550": {
+    "clerk": "Kate Krachey",
+    "deputyClerk": "Linda Smrcina",
+    "municipality": "Bridgeport",
+    "phone": "608-412-3714",
+    "recordUpdated": "2023-11-02"
+  },
+  "5502315075": {
+    "clerk": "Charity Smith",
+    "municipality": "Clayton",
+    "phone": "608-624-5653",
+    "recordUpdated": "2025-10-09",
+    "url": "https://townclayton.com/"
+  },
+  "5502321925": {
+    "clerk": "Sam Tesar, JR",
+    "municipality": "Eastman",
+    "phone": "608-874-4345",
+    "recordUpdated": "2025-11-24",
+    "url": "http://townofeastman.com/"
+  },
+  "5502327700": {
+    "clerk": "Peggy Thompson",
+    "municipality": "Freeman",
+    "phone": "608-792-4570",
+    "recordUpdated": "2023-11-28"
+  },
+  "5502332500": {
+    "clerk": "Lucy Schwem",
+    "municipality": "Haney",
+    "phone": "608-872-2279",
+    "recordUpdated": "2025-02-24"
+  },
+  "5502349275": {
+    "clerk": "Angela Sailer",
+    "municipality": "Marietta",
+    "phone": "608-331-0545",
+    "recordUpdated": "2025-09-11"
+  },
+  "5502365075": {
+    "clerk": "Tarra L Brewer",
+    "municipality": "Prairie du Chien",
+    "phone": "608-326-8014",
+    "recordUpdated": "2024-10-09"
+  },
+  "5502372275": {
+    "clerk": "Donna M Bell",
+    "municipality": "Scott",
+    "phone": "608-872-2414",
+    "recordUpdated": "2025-11-12"
+  },
+  "5502372500": {
+    "clerk": "Julie Payne",
+    "municipality": "Seneca",
+    "phone": "608-874-4944",
+    "recordUpdated": "2026-07-24",
+    "url": "https://thetownofseneca.com/"
+  },
+  "5502382100": {
+    "clerk": "Tanya Peterson",
+    "municipality": "Utica",
+    "phone": "608-606-3336",
+    "recordUpdated": "2024-10-24"
+  },
+  "5502384750": {
+    "clerk": "Shawna L Walz",
+    "municipality": "Wauzeka",
+    "phone": "608-412-0232",
+    "recordUpdated": "2023-11-02"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

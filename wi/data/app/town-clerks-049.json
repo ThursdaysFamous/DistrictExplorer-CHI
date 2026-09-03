@@ -1,0 +1,105 @@
+{
+  "5504902575": {
+    "clerk": "Cheryl Schmidt",
+    "deputyClerk": "Julie Jensen",
+    "municipality": "Arena",
+    "phone": "608-753-2185",
+    "recordUpdated": "2024-01-10",
+    "url": "https://www.townofarena.org/"
+  },
+  "5504909600": {
+    "clerk": "Kirstin K Melton",
+    "municipality": "Brigham",
+    "phone": "608-924-1013",
+    "recordUpdated": "2025-06-30",
+    "url": "https://brighamtown.com/"
+  },
+  "5504915875": {
+    "clerk": "Leah Spicer",
+    "deputyClerk": "Emily Lardman",
+    "municipality": "Clyde",
+    "phone": "608-217-1137",
+    "recordUpdated": "2022-09-22",
+    "url": "https://townofclyde.wordpress.com/"
+  },
+  "5504920375": {
+    "clerk": "Sara J Olson",
+    "municipality": "Dodgeville",
+    "phone": "608-935-5808",
+    "recordUpdated": "2023-11-24",
+    "url": "http://www.townofdodgeville.com/"
+  },
+  "5504922525": {
+    "clerk": "Cheryl Kelley",
+    "municipality": "Eden",
+    "phone": "608-279-6542",
+    "recordUpdated": "2025-05-01"
+  },
+  "5504934475": {
+    "clerk": "Lauree Aulik",
+    "deputyClerk": "Lois Nankee",
+    "municipality": "Highland",
+    "phone": "608-574-4658",
+    "recordUpdated": "2025-04-22"
+  },
+  "5504944650": {
+    "clerk": "Sam Palzkill",
+    "municipality": "Linden",
+    "phone": "608-574-7204",
+    "recordUpdated": "2023-12-29"
+  },
+  "5504951725": {
+    "clerk": "Tammy McFall",
+    "municipality": "Mifflin",
+    "phone": "608-943-6894",
+    "recordUpdated": "2024-03-25"
+  },
+  "5504953125": {
+    "clerk": "Sam Palzkill",
+    "municipality": "Mineral Point",
+    "phone": "608-574-7204",
+    "recordUpdated": "2024-08-27"
+  },
+  "5504954425": {
+    "clerk": "Mary Kolb",
+    "municipality": "Moscow",
+    "phone": "608-523-1381",
+    "recordUpdated": "2026-02-02"
+  },
+  "5504965700": {
+    "clerk": "Sheila Wardell",
+    "deputyClerk": "Lori Peat",
+    "municipality": "Pulaski",
+    "phone": "608-604-5627",
+    "recordUpdated": "2025-06-30",
+    "url": "https://townofpulaskiwi.gov/"
+  },
+  "5504967900": {
+    "clerk": "Nicole Wieczorek",
+    "deputyClerk": "Nancy Parkos",
+    "municipality": "Ridgeway",
+    "phone": "608-924-2247",
+    "recordUpdated": "2022-03-11",
+    "url": "https://townofridgeway.org/"
+  },
+  "5504983150": {
+    "clerk": "Megan Yager",
+    "municipality": "Waldwick",
+    "phone": "608-574-4028",
+    "recordUpdated": "2025-06-11",
+    "url": "https://www.townofwaldwick.org"
+  },
+  "5504989350": {
+    "clerk": "Eric Cates",
+    "deputyClerk": "Mary Lloyd-Jones",
+    "municipality": "Wyoming",
+    "phone": "608-512-7327",
+    "recordUpdated": "2025-12-22",
+    "url": "https://townofwyomingwi.gov/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}
