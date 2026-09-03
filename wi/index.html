@@ -9780,10 +9780,17 @@ function initWisconsinExplorer() {
   var loadCongressRoster = makeCached(function () {
     return fetchJSONWithRetry("data/app/congress-roster.json", {}, 2);
   });
-  // TIGERweb's numbered-district field renames each Congress (CD119FP,
-  // CD118FP, …) — newest first; extractDistrictNumber adds a name-field
-  // regex fallback behind these.
-  var CONGRESS_DISTRICT_FIELDS = ["cd119fp", "cd118fp", "cdfp", "cd"];
+  // TIGERweb's numbered-district field renames each Congress, and the retired
+  // name is REMOVED rather than deprecated — CD120 is current (the 120th
+  // Congress, January 1 2026 vintage). Newest first; cd119 stays behind it so
+  // this list reads a file built before the roll as well as after it.
+  //
+  // THE cd119fp/cd118fp NAMES THIS REPLACED NEVER MATCHED ANYTHING: TIGERweb
+  // ships a bare CD119/CD120, not an "fp"-suffixed alias, so findPropCI missed
+  // every one and extractDistrictNumber silently fell through to its NAME regex
+  // ("Congressional District 13" -> 13). That fallback is why the card was
+  // right anyway, and why nothing ever surfaced the mismatch.
+  var CONGRESS_DISTRICT_FIELDS = ["cd120", "cd119", "cdfp", "cd"];
 
   registerIlgaChamber({
     id: "us-house",

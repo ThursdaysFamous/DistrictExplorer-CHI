@@ -16500,7 +16500,7 @@ function initChiExplorer() {
   var loadCongressRoster = makeCached(function () {
     return fetchJSONWithRetry("data/app/congress-roster.json", {}, 2);
   });
-  var CONGRESS_DISTRICT_FIELDS = ["cd119fp", "cd118fp", "cdfp", "cd"];
+  var CONGRESS_DISTRICT_FIELDS = ["cd120", "cd119", "cdfp", "cd"];
 
   // ---- The U.S. House card is registered below via registerIlgaChamber (the
   // shared chamber factory, defined further down), alongside the IL Senate /
