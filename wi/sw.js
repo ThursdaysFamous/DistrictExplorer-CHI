@@ -234,6 +234,7 @@ const ROSTER_URLS = [
   "./data/app/wi-county-clerks.json",
   "./data/app/wi-county-officers.json",
   "./data/app/wi-court-of-appeals-roster.json",
+  "./data/app/wi-municipal-clerks.json",
   "./data/app/wi-municipal-executives.json",
   "./data/app/wi-senate-members.json",
   "./data/app/winnebago-polling-places.json",

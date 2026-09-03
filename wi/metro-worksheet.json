@@ -382,7 +382,7 @@
             "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Places_CouSub_ConCity_SubMCD/MapServer/4"
           }
         ],
-        "people": "Milwaukee County's 19 municipal executives — mayors and village presidents — from Milwaukee County GIS & Land Information's own layer, joined by place GEOID. It is the only source in Wisconsin that names them as data, and its own last data edit predates the April 2026 election that fills these offices, so a NAME is shown only where the municipality's own page witnessed it at build time; where it could not be witnessed the card names the office and says why the person is not shown. Elsewhere in the state no roster is joined yet — municipal officials are a per-county build (docs/EXPANSION_GUIDE.md §3.4).",
+        "people": "Milwaukee County's 19 municipal executives — mayors and village presidents — from Milwaukee County GIS & Land Information's own layer, joined by place GEOID. It is the only source in Wisconsin that names them as data, and its own last data edit predates the April 2026 election that fills these offices, so a NAME is shown only where the municipality's own page witnessed it at build time; where it could not be witnessed the card names the office and says why the person is not shown. STATEWIDE, and in all 608 cities and villages, the card also names the municipal CLERK — a different officer, labelled separately, from the Wisconsin Elections Commission's own clerk directory (the Commission sent it on request; it also publishes it at elections.wi.gov/clerks/directory, which refuses automation). Each clerk row carries the Commission's OWN per-record last-updated date, which runs from 2017 to 2026, and the card states that date rather than implying the whole directory is current. The directory carries NO e-mail address — the clerks asked the Commission to withhold them — and this project ships NO address from it, because the file cannot tell a village hall from a clerk's own house and demonstrably contains both. The municipality's governing BODY is still unnamed outside Milwaukee County: that is a per-county build (docs/EXPANSION_GUIDE.md §3.4) and the Data gaps panel's `municipal-officers` record.",
         "applies": "Wisconsin — statewide."
       }
     },
@@ -1891,6 +1891,11 @@
         "note": "The Court of Appeals bench — sixteen judges keyed by district with role, direct phone and chambers, the 4/4/3/5 seat split gated at scrape time. Built by wi/scripts/build_wi_coa_roster.py; refreshed weekly by update-wi-court-of-appeals-roster.yml, whose composition assertion is the appeals map's redistricting tripwire."
       },
       {
+        "file": "wi-municipal-clerks.json",
+        "min_keys": 608,
+        "note": "The municipal CLERK in all 608 Wisconsin cities and villages, keyed by place GEOID — the one municipal officer the state aggregates statewide, from the Elections Commission's own directory (sent 2026-08-27, ticket 123582; also published at elections.wi.gov/clerks/directory, which refuses automation). wi/scripts/build_wi_municipal_clerks.py joins it to the same TIGERweb place fabric the card reads, 608 of 608. Clerk 608, deputy 361, phone 608, website 545; each row carries the Commission's OWN per-record last-updated date (2017-2026) and the card states it. NO e-mail (withheld at the clerks' request) and NO address (the file cannot tell a village hall from a clerk's house). An OPERATOR build, not a weekly one — there is no fetchable URL."
+      },
+      {
         "file": "wi-municipal-executives.json",
         "min_keys": 19,
         "note": "Milwaukee County's 19 municipal executives (mayors and village presidents) keyed by place GEOID, from the county GIS & Land Information layer — the only source in Wisconsin that names them as data. The layer's own dataLastEditDate is 2024-07-30 and these offices are elected every April of even years, so a NAME ships only where the municipality's OWN page witnessed it (wi_municipal_executive_scraper.py + build_wi_municipal_executives.py); 9 witnessed and 10 withheld with the reason at first build. Refreshed weekly."
@@ -2149,6 +2154,11 @@
       }
     ],
     "entries": [
+      {
+        "date": "2026-09-03",
+        "title": "Every Wisconsin city and village now names its clerk",
+        "body": "Click any point inside one of Wisconsin's 608 cities and villages and the City or Village card now names the municipal clerk — the officer who runs that municipality's elections and keeps its records — with their office phone, the municipality's own website, and the date the state's record of them was last updated. Until today that card named somebody in nineteen municipalities, all of them in Milwaukee County; everywhere else it gave you a name for the place and nothing about who works there.\n\nThe source is the Wisconsin Elections Commission's own statewide clerk directory, which the Commission sent when asked. It is worth being plain about what it is and is not. A clerk is not a mayor and is not a council: the card labels the clerk block separately for exactly that reason, because in 589 of these 608 municipalities the clerk is the only name on the card and an unlabelled row would read as the person who leads the place. Who governs your city or village is still not something this app can tell you outside a handful of cities, and that remains recorded in the Data gaps panel rather than quietly left blank.\n\nTwo things the Commission's file contains are deliberately not shown. It carries no e-mail addresses at all — the clerks asked for those to be left out, and going and finding them somewhere else would work around a decision the people named made for themselves. And it carries street addresses that this app does not print, because the file gives no way to tell a village hall from a clerk's own house and it demonstrably contains both: several clerks serve more than one municipality and file the same single address under each of them, which is how you can tell the address belongs to the person rather than the building.\n\nEach row carries its own date because the Commission updates each municipality separately, and those dates run from 2017 to 2026. One card showing a 2017 date and another showing 2026 is the honest picture; a single 'as of today' stamped across all 608 would not have been."
+      },
       {
         "date": "2026-09-02",
         "title": "Iron County completes Wisconsin — all 72 counties name your supervisor",
