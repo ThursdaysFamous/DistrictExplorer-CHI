@@ -345,9 +345,11 @@ class — so the layer label ships as **"City" from day one**, skipping the misl
 Illinois's `municipality` layer went through. Empty state outside every incorporated place reads
 "unincorporated township land," which is a true and complete answer given `county-subdivision` already
 covers the township fabric. No statewide municipal-officials source was found in the research pass
-(Iowa League of Cities is a membership directory with no public officials export located; **execution
-note: check `data.iowa.gov`'s Socrata catalog for a city-officials dataset before finalizing this as a
-recorded gap** — that host 403s from this sandbox and was not checked past the proxy). Per-city rosters
+(**both halves of that were re-measured on 2026-09-03 and one was wrong**: the League's own city
+directory is NOT gated and publishes a phone for 935 of 948 cities while naming nobody, so it is a
+shippable City-card improvement rather than a dead end; and the execution note's `data.iowa.gov`
+check was run — the host answers 200 while `api.us.socrata.com` reports "Domain not found" for it,
+so it is a client-rendered catalog of state-agency datasets and not a Socrata portal at all). Per-city rosters
 are phase 3–4 work (Des Moines, Cedar Rapids) and a later per-county ladder, not phase 1.
 `min_register_layer` → 8.
 
@@ -1032,6 +1034,15 @@ which no statewide publisher names, and keying supervisors to their own district
 in phase 3 lands a current per-election edition — `IowaPollingPlaces` joined to `precinct` by `PPID`
 under the full Wisconsin display contract (election named, provisional wording while pre-certification,
 pull dated, retired once the election passes) — the August 2024 item never ships labeled "current."
+**The municipal probe ran on 2026-09-03 and its yield was three findings and no build** (the full
+measurement is the `ia-municipal-officeholders` gap record): the League of Cities is NOT gated
+and publishes a phone for 935 of 948 cities while naming nobody; the Secretary of State
+publishes no clerk directory on either its Schools & Cities or its Research & Data page, so the
+WEC-shaped ask was drafted rather than skipped; and an ArcGIS catalog sweep found no Iowa
+analogue of Milwaukee County's `Municipal_Executives` layer but did find **Waterloo** publishing
+5 wards that name their own councilperson, both at-large members and a council-page link in band
+— a second city tier on the `dsm-ward` pattern, subject to the same Coles rule (the in-band
+names are the witness, the city's own page is the authority).
 **Cedar Rapids tier** from Linn County's own `ElectionsCityCouncilDistrict` layer (VERIFIED exists,
 modified within the research pass's own week) plus its roster from `cedar-rapids.org`. NG911 tier ships
 here if HSEMD answered in phase 3. ~~Area Education Agency geometry resolved one way or the
@@ -1047,8 +1058,16 @@ Department's own 2019-2020 polygon.
 No party offices or caucus/precinct-committee units (standing fleet rule). No guessed officeholders
 anywhere in any phase — not supervisors (no statewide roster exists), not school or community-college
 board members (no per-body source proven yet), not township trustees (unsourced), not municipal
-officials statewide (League of Cities is membership-gated; only the per-city ladder and per-city GIS
-routes are real). No boundaries nobody publishes: no soil-and-water-conservation-district geometry
+officials statewide — **and the parenthesis this sentence used to carry was measurably wrong.**
+It read "League of Cities is membership-gated"; it is not. `iowaleague.org/cities/` answers 200
+to an ordinary browser request with 948 city rows carrying a phone for 935 and a website for 536,
+and names NO PERSON in any column — right about the officeholders, wrong about the directory, and
+the difference matters because that table alone would give every Iowa city card its own phone
+number and front door. The officeholder gap is now recorded properly as
+`ia-municipal-officeholders` (2026-09-03, four routes measured), the SoS ask that Wisconsin's
+whole municipal tier rests on is drafted at last (`docs/ASK_DRAFTS.md` Ask 8), and the per-city
+GIS route has a second city ready: Waterloo's `Wards_view` names each ward's councilperson and
+both at-large members in band. No boundaries nobody publishes: no soil-and-water-conservation-district geometry
 (elected, ASSERTED Iowa Code 161A.5, but the only located layer is LSA-vintage 2016 — backlog, not a
 phase 1–4 layer), no county-hospital-trustee, ag-extension-council, drainage-district, or
 benefited-fire-district geometry, no judicial election sub-district layer at launch (data exists, not

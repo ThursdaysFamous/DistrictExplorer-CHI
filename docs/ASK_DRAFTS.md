@@ -405,3 +405,62 @@ route it there itself.
 * **Silence** → follow up at ~3 weeks and again 2 weeks later, per this file's cadence,
   before recording the route unresponsive. The existing display continues meanwhile;
   nothing has been withdrawn.
+
+---
+
+## Ask 8 — Iowa Secretary of State: a statewide list of city clerks
+
+**This is the ask Iowa never made, and Wisconsin's whole municipal tier rests on its
+counterpart.** Wisconsin ships a clerk for all 608 of its cities and villages because ONE
+publisher — the Wisconsin Elections Commission — holds all 1,848 municipalities in one file,
+and it arrived in reply to a single e-mail, answered in 22 minutes. Iowa's structural
+counterpart is the Secretary of State: city elections run under Iowa Code ch. 376 through the
+county commissioners of elections, so a list of who to contact in each city has to exist
+somewhere in that chain.
+
+Measured first, 2026-09-03, so the ask is not for something already published: `sos.iowa.gov`
+answers 200 to a browser request, and neither its **Schools & Cities** page (which explains
+city and school elections to voters) nor its **Research & Data** page links a clerk directory
+or any document of that kind. The Iowa League of Cities publishes every city's phone and
+website and names no person. No county publishes its cities' officials as map data.
+
+*Practical note for sending:* the Secretary of State's contact page publishes a form and three
+phone numbers rather than an e-mail address, so this may need to go through the form or through
+the Elections Division directly.
+
+> **Subject:** Is there a statewide list of Iowa city clerks?
+>
+> Dear Elections Division,
+>
+> I run districtry (https://districtry.com/ia/), a free, non-commercial site that shows
+> Iowans which civic districts cover any point in the state and who represents them there.
+> It already carries Iowa's precincts, supervisor districts, school districts, community
+> colleges and judicial districts from the Legislature's and the Department of Education's
+> own published services, and all six elected county offices in all 99 counties.
+>
+> The one level it cannot answer for is the city. It knows all 939 of Iowa's incorporated
+> places and, outside Des Moines, cannot name a single mayor, council member or clerk,
+> because I can find no statewide source. Is there a list of Iowa's city clerks — names and
+> office contact details — held anywhere in your office or by the county commissioners of
+> elections, in any form you would be willing to share? A spreadsheet or a PDF is perfectly
+> usable; it does not need to be a published dataset.
+>
+> If no such list exists, or exists but is not something you can share, that is a completely
+> acceptable answer — I would record it and stop looking, and the site would keep pointing
+> readers at the city's own website instead. I would rather know than guess, and I never
+> publish a name I cannot source.
+>
+> Thank you for your time,
+> <YOUR NAME>
+> <YOUR E-MAIL>
+
+### What each answer means
+
+* **A list arrives** — Iowa's City card can name a clerk in every city that has one, the way
+  Wisconsin's does, and the `ia-municipal-officeholders` gap record closes.
+* **"We do not hold that"** — a clean, citable no. The gap record's blocker gains a fourth
+  measured route and the remaining ones are the per-city ladder and the per-city GIS route
+  (Des Moines and Waterloo both already publish their council members in band).
+* **"The county auditors would have it"** — that is a pointer, and a good one: it turns 99
+  asks into a route this project already has the addresses for, since all 99 auditors ship in
+  `ia/data/app/ia-county-auditors.json` with an e-mail apiece.
