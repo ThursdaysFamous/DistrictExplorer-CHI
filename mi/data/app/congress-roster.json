@@ -1,0 +1,199 @@
+{
+  "1": {
+    "name": "Jack Bergman",
+    "party": "Republican",
+    "url": "https://bergman.house.gov",
+    "capitolOffice": [
+      "566 Cannon House Office Building",
+      "Washington, DC 20515",
+      "Phone: 202-225-4735"
+    ],
+    "districtOffice": [
+      "1396 Douglas Drive, Suite 22B",
+      "Traverse City, MI 49696",
+      "Phone: 231-944-7633"
+    ]
+  },
+  "2": {
+    "name": "John R. Moolenaar",
+    "party": "Republican",
+    "url": "https://moolenaar.house.gov",
+    "capitolOffice": [
+      "246 Cannon House Office Building",
+      "Washington, DC 20515",
+      "Phone: 202-225-3561"
+    ],
+    "districtOffice": [
+      "431 North McEwan Street",
+      "Clare, MI 48617",
+      "Phone: 989-802-6040"
+    ]
+  },
+  "3": {
+    "name": "Hillary J. Scholten",
+    "party": "Democrat",
+    "url": "https://scholten.house.gov",
+    "capitolOffice": [
+      "1317 Longworth House Office Building",
+      "Washington, DC 20515",
+      "Phone: 202-225-3831"
+    ],
+    "districtOffice": [
+      "110 Michigan Street NW",
+      "Grand Rapids, MI 49503",
+      "Phone: 616-451-8383"
+    ]
+  },
+  "4": {
+    "name": "Bill Huizenga",
+    "party": "Republican",
+    "url": "https://huizenga.house.gov",
+    "capitolOffice": [
+      "2232 Rayburn House Office Building",
+      "Washington, DC 20515",
+      "Phone: 202-225-4401"
+    ],
+    "districtOffice": [
+      "5228 Lovers Lane, Suite 108",
+      "Portage, MI 49002",
+      "Phone: 269-569-8595"
+    ]
+  },
+  "5": {
+    "name": "Tim Walberg",
+    "party": "Republican",
+    "url": "https://walberg.house.gov",
+    "capitolOffice": [
+      "2266 Rayburn House Office Building",
+      "Washington, DC 20515",
+      "Phone: 202-225-6276"
+    ],
+    "districtOffice": [
+      "401 W. Michigan Ave.",
+      "Jackson, MI 49201",
+      "Phone: 517-780-9075"
+    ]
+  },
+  "6": {
+    "name": "Debbie Dingell",
+    "party": "Democrat",
+    "url": "https://debbiedingell.house.gov",
+    "capitolOffice": [
+      "102 Cannon House Office Building",
+      "Washington, DC 20515",
+      "Phone: 202-225-4071"
+    ],
+    "districtOffice": [
+      "2006 Hogback Road, Suite 7",
+      "Ann Arbor, MI 48105",
+      "Phone: 734-481-1100"
+    ]
+  },
+  "7": {
+    "name": "Tom Barrett",
+    "party": "Republican",
+    "url": "https://barrett.house.gov",
+    "capitolOffice": [
+      "1232 Longworth House Office Building",
+      "Washington, DC 20515",
+      "Phone: 202-225-4872"
+    ],
+    "districtOffice": [
+      "328 W Ottawa St, Suite A",
+      "Lansing, MI 48933",
+      "Phone: 517-993-0510"
+    ]
+  },
+  "8": {
+    "name": "Kristen McDonald Rivet",
+    "party": "Democrat",
+    "url": "https://mcdonaldrivet.house.gov",
+    "capitolOffice": [
+      "1408 Longworth House Office Building",
+      "Washington, DC 20515",
+      "Phone: 202-225-3611"
+    ],
+    "districtOffice": [
+      "601 Saginaw St, Suite 403",
+      "Flint, MI 48502",
+      "Phone: 810-238-8627"
+    ]
+  },
+  "9": {
+    "name": "Lisa C. McClain",
+    "party": "Republican",
+    "url": "https://mcclain.house.gov",
+    "capitolOffice": [
+      "562 Cannon House Office Building",
+      "Washington, DC 20515",
+      "Phone: 202-225-2106"
+    ],
+    "districtOffice": [
+      "30 N Broadway St.",
+      "Lake Orion, MI 48362",
+      "Phone: 586-697-9300"
+    ]
+  },
+  "10": {
+    "name": "John James",
+    "party": "Republican",
+    "url": "https://james.house.gov",
+    "capitolOffice": [
+      "1519 Longworth House Office Building",
+      "Washington, DC 20515",
+      "Phone: 202-225-4961"
+    ],
+    "districtOffice": [
+      "30500 Van Dyke Avenue, Suite 306",
+      "Warren District Office",
+      "Warren, MI 48093",
+      "Phone: 586-498-7122"
+    ]
+  },
+  "11": {
+    "name": "Haley M. Stevens",
+    "party": "Democrat",
+    "url": "https://stevens.house.gov",
+    "capitolOffice": [
+      "2411 Rayburn House Office Building",
+      "Washington, DC 20515",
+      "Phone: 202-225-8171"
+    ],
+    "districtOffice": [
+      "30500 Northwestern Highway, Suite 525",
+      "Farmington Hills, MI 48334",
+      "Phone: 734-853-3040"
+    ]
+  },
+  "12": {
+    "name": "Rashida Tlaib",
+    "party": "Democrat",
+    "url": "https://tlaib.house.gov",
+    "capitolOffice": [
+      "2438 Rayburn House Office Building",
+      "Washington, DC 20515",
+      "Phone: 202-225-5126"
+    ],
+    "districtOffice": [
+      "26080 Berg Rd.",
+      "Southfield, MI 48033",
+      "Phone: 313-203-7540"
+    ]
+  },
+  "13": {
+    "name": "Shri Thanedar",
+    "party": "Democrat",
+    "url": "https://thanedar.house.gov",
+    "capitolOffice": [
+      "154 Cannon House Office Building",
+      "Washington, DC 20515",
+      "Phone: 202-225-5802"
+    ],
+    "districtOffice": [
+      "400 Monroe Street, Suite 420",
+      "Suite 420",
+      "Detroit, MI 48226",
+      "Phone: 313-880-2400"
+    ]
+  }
+}

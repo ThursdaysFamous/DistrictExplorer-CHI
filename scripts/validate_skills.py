@@ -85,7 +85,7 @@ DESCRIPTION_MAX = 1024
 # A token is a repo path when it starts in one of these roots or carries a
 # path separator and a known extension. Placeholders make it a pattern (a
 # `<county>_board_scraper.py` names a family, not a file).
-PATH_ROOTS = ("scripts/", "docs/", "engine/", "il/", "ny/", "ca/", "wi/", "ia/",
+PATH_ROOTS = ("scripts/", "docs/", "engine/", "il/", "ny/", "ca/", "wi/", "ia/", "mi/",
               ".claude/", ".github/", "districtry/", "data/", "schema/")
 PATH_EXT = (".py", ".md", ".json", ".yml", ".yaml", ".mjs", ".js", ".html",
             ".txt", ".css", ".sh")
