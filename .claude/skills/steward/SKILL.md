@@ -10,7 +10,7 @@ districtry pull request. It carries only what the default PR-driving rules and
 `CLAUDE.md` do **not** already say. Everything about architecture, the ENGINE
 fences, the honesty rules and the layer contract lives in `CLAUDE.md`
 (Illinois's, at the repo root) and `ca/CLAUDE.md`, `ny/CLAUDE.md`,
-`wi/CLAUDE.md`, `ia/CLAUDE.md`, is loaded on every turn, and is deliberately
+`wi/CLAUDE.md`, `ia/CLAUDE.md`, `mi/CLAUDE.md`, is loaded on every turn, and is deliberately
 **not** restated here — two documents stating one convention is how
 `ENGINE_SYNC.md` drifted from the fences it described.
 
@@ -46,6 +46,7 @@ python3 scripts/generate_metro_files.py --check          # GENERATED regions vs 
 python3 scripts/build_coverage_gaps.py --check
 python3 scripts/build_coverage_gaps.py --check --metro wisconsin --out wi/data/app/coverage-gaps.json
 python3 scripts/build_coverage_gaps.py --check --metro iowa      --out ia/data/app/coverage-gaps.json
+python3 scripts/build_coverage_gaps.py --check --metro michigan  --out mi/data/app/coverage-gaps.json
 python3 scripts/build_coverage_gaps.py --check --metro nyc       --out ny/data/app/coverage-gaps.json
 python3 scripts/build_coverage_gaps.py --check --metro sf        --out ca/data/app/coverage-gaps.json
 python3 wi/scripts/build_wi_county_board_directory.py --check

@@ -41,7 +41,7 @@ Chicago District Explorer: a single-file, dependency-light web app. Click a poin
 ## Running & testing
 
 This list undercounts what actually runs: CI (`.github/workflows/smoke-test.yml`) has grown to 19
-static gates plus a Playwright smoke test per instance (`il`/`ca`/`ny`/`wi`/`ia`) plus 2 root-page
+static gates plus a Playwright smoke test per instance (`il`/`ca`/`ny`/`wi`/`ia`/`mi`) plus 2 root-page
 tests, one static-gate addition at a time, and nobody kept this section in step. Treat the workflow
 file as the source of truth for the full battery and its order; `.claude/skills/steward/SKILL.md`
 mirrors it as locally-runnable commands with per-gate rationale, for driving a PR to green. What

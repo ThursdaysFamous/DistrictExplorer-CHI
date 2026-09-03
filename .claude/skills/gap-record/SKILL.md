@@ -115,6 +115,7 @@ and a mention in the changelog entry; no gate can see that step. A
 python3 scripts/build_coverage_gaps.py                                                     # Illinois
 python3 scripts/build_coverage_gaps.py --metro wisconsin --out wi/data/app/coverage-gaps.json
 python3 scripts/build_coverage_gaps.py --metro iowa      --out ia/data/app/coverage-gaps.json
+python3 scripts/build_coverage_gaps.py --metro michigan  --out mi/data/app/coverage-gaps.json
 python3 scripts/build_history_page.py            # the history tiles COUNT the shipped gap files
 python3 scripts/build_county_status.py
 ```

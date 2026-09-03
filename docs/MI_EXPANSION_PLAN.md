@@ -29,9 +29,13 @@
 > neither Iowa's nor Wisconsin's plan did.
 
 > Planning document, researched and verified 2026-09-03. `docs/IA_EXPANSION_PLAN.md` is the
-> precedent for a committed phase plan; like it, this file moves to `docs/archive/` when phase 1
-> ships and the shipped instance (`mi/metro-worksheet.json`, `mi/CLAUDE.md`, the guidebook's
-> Michigan column) supersedes it. Sources marked **VERIFIED** were fetched or queried on
+> precedent for a committed phase plan; like it, this file STAYS IN `docs/` and is APPENDED TO
+> when a phase ships (the header used to say it moves to `docs/archive/`; git says otherwise —
+> Iowa's go-live commit 258022d appended 43 lines to `docs/IA_EXPANSION_PLAN.md` and renamed
+> nothing, and the only archived plan, `docs/archive/WI_PHASE2_PLAN.md`, closed a PHASE rather
+> than a go-live). The shipped instance (`mi/metro-worksheet.json`, `mi/CLAUDE.md`, the
+> guidebook's Michigan column) supersedes it as the record of what IS; this stays the record of
+> what was decided and why. Sources marked **VERIFIED** were fetched or queried on
 > 2026-09-03 — endpoint, count, licence and failure mode recorded from the response, not from a
 > catalog page. Facts marked **ASSERTED** are Michigan civic-structure claims carried from the
 > research pass without a second independent fetch; each must be pinned to a primary citation in
@@ -39,7 +43,7 @@
 
 ## Why Michigan, and why now
 
-The fleet is five instances as of 2026-09-03: Illinois (91 counties, the reference
+The fleet was five instances when this was written on 2026-09-03 (Michigan made it six the same day): Illinois (91 counties, the reference
 implementation), NYC, SF, Wisconsin (all 72 counties) and Iowa (all 99). Michigan was chosen as
 the sixth from a five-state recon pass across the states bordering the existing
 Illinois/Wisconsin/Iowa footprint, scored on one question: **does a single statewide publisher

@@ -242,6 +242,50 @@ try {
     await ctx.close();
   }
 
+  // --- 1c-bis. a point inside TWO bboxes reaches the right one -------------
+  //
+  // Every probe above is its own bbox's CENTRE, which the comment at 1c
+  // concedes: nothing there exercises the case where two instances both claim
+  // a point and the tie-break has to choose. Michigan made that case real and
+  // then had it TUNED BY HAND, which is exactly when a behaviour wants pinning.
+  // Its TIGERweb county fabric is water-inclusive, so the state's own bbox runs
+  // west across Lake Michigan far enough to contain Chicago's and Wisconsin's
+  // own centres; the fleet bbox was narrowed to the fabric clipped at
+  // lng >= -87.60 to clear validate_index. Door County still sits inside BOTH
+  // Michigan's narrowed box and Wisconsin's, so it is the real overlap probe.
+  //
+  // Ironwood is here as the honest counter-case rather than an aspiration: it
+  // is Michigan land that routes to WISCONSIN, because it sits west of the
+  // narrowed box and inside wi's, which is where it went before Michigan
+  // existed. No axis-aligned rectangle separates the western UP from Wisconsin
+  // — they share longitudes — so this asserts the CURRENT measured behaviour,
+  // and the fix (smallest bbox AREA rather than nearest CENTRE) is an open
+  // question in mi/WATCH.md. If that lands, this expectation flips to "mi" and
+  // the flip is the point: the test says what the fleet does today, out loud.
+  const OVERLAP_PROBES = [
+    { name: "Sturgeon Bay, Wisconsin", lat: 44.8342, lng: -87.3773, tag: "wi",
+      why: "inside both wi's and Michigan's narrowed bbox" },
+    { name: "Ironwood, Michigan", lat: 46.4547, lng: -90.1710, tag: "wi",
+      why: "Michigan land WEST of its own hand-off box — pre-existing, recorded in mi/WATCH.md" },
+  ];
+  for (const probe of OVERLAP_PROBES) {
+    const ctx = await browser.newContext({ serviceWorkers: "block" });
+    const page = await ctx.newPage();
+    await page.route("**/photon.komoot.io/**", photonStub([
+      photonFeature(...UNCOVERED_POINT),
+      photonFeature(probe.lat, probe.lng),
+    ]));
+    await stubInstances(page);
+    await page.goto(BASE + "/", { waitUntil: "domcontentloaded" });
+    await page.fill("#search-input", probe.name);
+    await page.click("#search-button");
+    await page.waitForTimeout(700);
+    const u = new URL(page.url());
+    check(`${probe.name} opens /${probe.tag}/ (${probe.why})`,
+      u.pathname === `/${probe.tag}/`, page.url());
+    await ctx.close();
+  }
+
   // --- 1d. an address nobody covers SAYS SO, and never guesses -------------
   //
   // The honesty rule this whole project runs on, applied to the front door: a
