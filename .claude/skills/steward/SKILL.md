@@ -126,7 +126,13 @@ diff. Where the red is tells you what it is:
 A gate that fails is usually right. Before changing code to satisfy one, state
 what the gate is actually asserting and why the current tree violates it — the
 most common correct fix in this repo is to run a generator, not to edit an
-artifact. When regenerating: `build_brand_tokens.py` before `compose_app.py`
+artifact. **A HAND-BUILT HARNESS THAT FAILS IS USUALLY WRONG**, and
+the two are opposite reflexes: a gate has been through review and many runs, a
+throwaway verification script has been through neither. Three ad-hoc harnesses
+in one session each returned a confident negative about correct code — a wrong
+`repo_root`, an Esri-shaped stub where the loader wanted `f=geojson`, and a
+GEOID typed from memory. Before believing a harness's no, make it say yes about
+a case already known true, and read the two side by side. When regenerating: `build_brand_tokens.py` before `compose_app.py`
 (both scripts' docstrings agree; `--check` is order-independent);
 `generate_metro_files.py` on either side of those (the two docstrings
 disagree on its place and `compose_app.py` says they cannot contend for a
