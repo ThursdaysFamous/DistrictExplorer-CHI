@@ -1418,8 +1418,9 @@
  "5501902": {
   "county": "Clark",
   "district": 2,
-  "name": "Raymond Mulderink",
-  "phone": "715-654-5219",
+  "email": "David.Martin@co.clark.wi.us",
+  "name": "David Martin",
+  "phone": "715-654-5318",
   "sourceUrl": "https://www.clarkcountywi.gov/"
  },
  "5501903": {
@@ -1433,10 +1434,9 @@
  "5501904": {
   "county": "Clark",
   "district": 4,
-  "email": "tom.wilcox@co.clark.wi.us",
-  "name": "Tom Wilcox",
-  "phone": "715-743-5225",
-  "role": "Chairperson",
+  "email": "Kallcarl63@gmail.com",
+  "name": "Carl Kallberg",
+  "phone": "715-229-2538",
   "sourceUrl": "https://www.clarkcountywi.gov/"
  },
  "5501905": {
@@ -1490,9 +1490,10 @@
  "5501911": {
   "county": "Clark",
   "district": 11,
-  "email": "slfamilyfoods@yahoo.com",
+  "email": "scott.jalling@co.clark.wi.us",
   "name": "Scott Jalling",
   "phone": "715-613-4895",
+  "role": "Vice Chairperson",
   "sourceUrl": "https://www.clarkcountywi.gov/"
  },
  "5501912": {
@@ -1514,9 +1515,9 @@
  "5501914": {
   "county": "Clark",
   "district": 14,
-  "email": "mainstgreenwood@gmail.com",
-  "name": "Luke Smith",
-  "phone": "715-937-2512",
+  "email": "jeromekremp@yahoo.ocm",
+  "name": "Jerome Krempasky",
+  "phone": "715-937-2856",
   "sourceUrl": "https://www.clarkcountywi.gov/"
  },
  "5501915": {
@@ -1538,9 +1539,9 @@
  "5501917": {
   "county": "Clark",
   "district": 17,
-  "name": "Chuck Rueth",
-  "phone": "715-255-8387",
-  "role": "Vice Chairperson",
+  "email": "Tony.Horvath@co.clark.wi.us",
+  "name": "Tony Horvath",
+  "phone": "715-316-5252",
   "sourceUrl": "https://www.clarkcountywi.gov/"
  },
  "5501918": {
@@ -1598,8 +1599,10 @@
  "5501925": {
   "county": "Clark",
   "district": 25,
+  "email": "kgerhardt@co.clark.wi.us",
   "name": "Kenneth Gerhardt",
-  "phone": "715-743-3391",
+  "phone": "715-743-5225",
+  "role": "Chairperson",
   "sourceUrl": "https://www.clarkcountywi.gov/"
  },
  "5501926": {
@@ -1620,9 +1623,9 @@
  "5501928": {
   "county": "Clark",
   "district": 28,
-  "email": "bikertrash3@yahoo.com",
-  "name": "William Neville",
-  "phone": "715-743-2448",
+  "email": "spralle@centurylink.net",
+  "name": "Scott Pralle",
+  "phone": "715-533-0901",
   "sourceUrl": "https://www.clarkcountywi.gov/"
  },
  "5501929": {
@@ -11221,8 +11224,8 @@
  "5513933": {
   "county": "Winnebago",
   "district": 33,
-  "sourceUrl": "https://www.winnebagocountywi.gov/703",
-  "vacant": true
+  "name": "Butch Dodd",
+  "sourceUrl": "https://www.winnebagocountywi.gov/703"
  },
  "5513934": {
   "county": "Winnebago",
