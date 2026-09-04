@@ -567,14 +567,25 @@ METRO_COUNTY_FIPS = ("031", "043", "197", "097", "089", "111", "093",
                      # in all ELEVEN precincts, the same denominator the
                      # presidential contest on that ballot reports.
                      #
-                     # THE FIRST COUNTY TO JOIN WITH ITS ROSTER KNOWINGLY SHORT.
-                     # The county publishes two of its three members and its
-                     # minutes stop in May 2024, so the third seat is named by no
-                     # source anywhere. The card prints "1 of 3 seats not listed
-                     # in the county's directory" rather than either padding the
-                     # list or showing two names without comment — concealing a
-                     # seat and inventing one are the same failure from opposite
-                     # directions, and the ask to its Clerk stays open.
+                     # IT JOINED WITH ITS ROSTER KNOWINGLY SHORT — THE FIRST
+                     # COUNTY TO, AND THE ASK CLOSED IT THE NEXT DAY. On the day
+                     # of the join the county published two of its three members
+                     # and its minutes stopped in May 2024, so the third seat was
+                     # named by no source anywhere; the card printed "1 of 3 seats
+                     # not listed in the county's directory" rather than padding
+                     # the list or showing two names without comment, because
+                     # concealing a seat and inventing one are the same failure
+                     # from opposite directions.
+                     #
+                     # CORRECTED 2026-09-04. That is history, not the current
+                     # state, and this comment went on asserting it for twelve
+                     # days. The Clerk & Recorder's office answered on 2026-08-24
+                     # and il-county-commissioners.json has shipped all THREE
+                     # since — James (Jim) Smith as Chairman, Larry (Steve) Essex
+                     # as Vice Chairman, Joe E. Griggs as Member — with `seats`
+                     # dropped from the entry, so boardDirectoryShortfallNote
+                     # correctly renders nothing. The ask is closed. Read the
+                     # roster from that file, never from this comment.
                      #
                      # A MAINLAND JOIN AT THE SOUTHERN TIP: its only Illinois
                      # neighbours are Union (served on 2026-08-22) and Pulaski,
@@ -825,10 +836,18 @@ DISPATCH_COUNTY_FIPS = {
     "clinton": "027",
     "warren": "187",
     "knox": "095",
-    # Moultrie is deliberately ABSENT: its board is elected at large, so it has
-    # no district geometry, no dispatch entry and no toggle — its members ride
-    # the County card via data/app/il-county-commissioners.json. It appears in
-    # METRO_COUNTY_FIPS above and must not appear here (§1.5).,
+    # The rule this list enforces (§1.5): an at-large county's BOARD needs no
+    # dispatch entry at all — no district geometry, no toggle — because its
+    # members ride the County card via data/app/il-county-commissioners.json.
+    # Such a county belongs in METRO_COUNTY_FIPS above and reaches this list
+    # only if it gains a dispatched layer of some OTHER kind.
+    #
+    # CORRECTED 2026-09-04: Moultrie stood here as the worked example of a
+    # county that "must not appear here", 25 lines above the line that adds it.
+    # Both were right on their own day and the pair was a contradiction inside
+    # one dict from 2026-08-21, when Moultrie gained a PRECINCT entry (see the
+    # Greene/Scott/Moultrie note below). An at-large board is a reason to skip
+    # this list for the BOARD concept, never a reason to skip the county.
     # Precinct-only dispatch entries: both elect their boards at large,
     # so their members ride the County card and what they gain here is the
     # precinct answer alone (2026-08-20).

@@ -6668,6 +6668,31 @@ counter-example cost nothing.
 
 ### The frontier, classified by board form (2026-08-21)
 
+> **UPDATED 2026-09-04 — SEVENTEEN OF THESE TWENTY-EIGHT HAVE SHIPPED; ELEVEN
+> REMAIN.** Everything below is the 2026-08-21 snapshot and is kept as one, but
+> it opens on "28 remaining unserved counties" and its per-row *Reachable?*
+> column has been overtaken row by row, so read as a queue it is now mostly a
+> completion log. **`docs/COUNTY_STATUS.md` is the authority on who is left**
+> (generated; `--check` in CI): Bureau, Champaign, Christian, Fayette, Ford,
+> Henderson, Jasper, Lawrence, Marion, Piatt, Pope. Eight of the ten at-large
+> rows shipped (all but Henderson and Pope) and nine of the eighteen districted
+> ones (Clay, Cumberland, Douglas, Hancock, Jackson, Knox, Union, Vermilion,
+> Wayne), several of them by routes this table's "blocked at the website" column
+> could not see — the COLES PATTERN for Gallatin, the ArcGIS catalog for
+> Vermilion, a vendor swept one election slug wide for Pulaski and Hardin.
+>
+> **And the 2007 table got two of its twenty-eight rows BACKWARDS, in OPPOSITE
+> directions** — which is a sharper measurement of it than "Richland is proven
+> wrong in it" below. Richland it read AT-LARGE and the county ships SEVEN
+> NUMBERED DISTRICTS; Union it read Single-Member with five districts and the
+> county's own certified returns count all five lettered seats in 20 of 20
+> precincts, which is countywide. So the table's error rate is not one row and
+> it does not lean one way: it cannot be trusted to say a county needs geometry
+> OR to say it does not. Use it to know what to look for, exactly as the
+> paragraph above this heading says, and settle the form from a certified
+> document every time.
+
+
 The structure table above was read for **all 28 remaining unserved counties in one
 fetch**, which turns "28 counties left" into two piles that need completely different
 work. **Read this as research ORDERING, never as fact** — the table is 2007-vintage and
