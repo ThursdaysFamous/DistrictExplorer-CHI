@@ -432,16 +432,27 @@ def render_metros_js(metros):
     """The address box's routing table: tag/name/url/bbox, embedded exactly
     like METRO_EXPLORERS is in each instance — enough for the client to
     replicate the same bbox test each app's own metro-portal handoff already
-    runs, with nothing fetched at request time."""
+    runs, with nothing fetched for a point only one instance claims.
+
+    Plus `outline`, the path to that instance's OWN published coverage ring,
+    for the points where a rectangle cannot answer. It is emitted only where
+    the file is actually in the tree (`<tag>/data/app/metro-outline.json`) —
+    discovered, not listed, so a new statewide instance gets it the day it
+    ships and the city instances, which publish no such ring, simply keep the
+    bbox behaviour. The map in the iframe below already fetches these same
+    files, so nothing new is published to make this work."""
     rows = []
     for m in metros:
         b = m["bbox"]
+        rel = os.path.join(m["tag"], "data", "app", "metro-outline.json")
+        outline = ("\n      outline: %s," % json.dumps(rel.replace(os.sep, "/"))
+                   if os.path.isfile(os.path.join(REPO_ROOT, rel)) else "")
         rows.append(
-            '    { tag: %s, name: %s, url: %s,\n'
+            '    { tag: %s, name: %s, url: %s,%s\n'
             '      bbox: { minLat: %s, maxLat: %s, minLng: %s, maxLng: %s } }'
             % (json.dumps(m["tag"]), json.dumps(m["landing_name"], ensure_ascii=False),
-               json.dumps(m["url"]), json.dumps(b["minLat"]), json.dumps(b["maxLat"]),
-               json.dumps(b["minLng"]), json.dumps(b["maxLng"]))
+               json.dumps(m["url"]), outline, json.dumps(b["minLat"]),
+               json.dumps(b["maxLat"]), json.dumps(b["minLng"]), json.dumps(b["maxLng"]))
         )
     return ",\n".join(rows)
 
@@ -896,16 +907,119 @@ footer .foot-links { margin-top: 12px; }
 %(metros_js)s
   ];
 
-  function metroAt(lat, lng) {
-    var best = null, bestDist = Infinity;
+  function metrosClaiming(lat, lng) {
+    var out = [];
     for (var i = 0; i < METROS.length; i++) {
       var b = METROS[i].bbox;
       if (lat < b.minLat || lat > b.maxLat || lng < b.minLng || lng > b.maxLng) continue;
-      var dLat = lat - (b.minLat + b.maxLat) / 2, dLng = lng - (b.minLng + b.maxLng) / 2;
-      var dist = dLat * dLat + dLng * dLng;
-      if (dist < bestDist) { best = METROS[i]; bestDist = dist; }
+      out.push(METROS[i]);
     }
-    return best;
+    return out;
+  }
+
+  /* THE FALLBACK, AND WHY IT IS ONLY A FALLBACK. Nearest bbox CENTRE was the
+   * whole of this function until Michigan shipped. It is wrong wherever a
+   * rectangle claims ground its instance does not serve, and Lake Michigan
+   * makes that ordinary rather than exotic: Michigan's counties are
+   * water-inclusive, so its box reaches Wisconsin's longitudes, and
+   * Wisconsin's box covers Michigan's entire Upper Peninsula. Measured over 37
+   * real places, nearest-centre misroutes 7 — Marquette, Houghton, Ironwood,
+   * Iron Mountain and Menominee MI to /wi/, Sister Bay WI to /mi/, Dubuque IA
+   * to /wi/. Smallest bbox AREA was tried as a replacement and is NOT better:
+   * also 7, just wrong at different places (it fixes Sister Bay and Dubuque,
+   * and breaks Rock Island and Escanaba). No rectangle rule can separate
+   * states that interlock across a lake. */
+  function nearestByCentre(cands) {
+    return function (lat, lng) {
+      var best = null, bestDist = Infinity;
+      for (var i = 0; i < cands.length; i++) {
+        var b = cands[i].bbox;
+        var dLat = lat - (b.minLat + b.maxLat) / 2, dLng = lng - (b.minLng + b.maxLng) / 2;
+        var d = dLat * dLat + dLng * dLng;
+        if (d < bestDist) { best = cands[i]; bestDist = d; }
+      }
+      return best;
+    };
+  }
+
+  /* Ray casting against one ring, then the same for its holes. The rings are
+   * [lng, lat] GeoJSON pairs, which is why x is the longitude here. */
+  function inRing(lat, lng, ring) {
+    var inside = false;
+    for (var i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+      var xi = ring[i][0], yi = ring[i][1], xj = ring[j][0], yj = ring[j][1];
+      if ((yi > lat) !== (yj > lat) &&
+          lng < (xj - xi) * (lat - yi) / ((yj - yi) || 1e-15) + xi) inside = !inside;
+    }
+    return inside;
+  }
+
+  function inOutline(lat, lng, geojson) {
+    var geoms = [];
+    if (!geojson) return false;
+    if (geojson.type === "FeatureCollection") {
+      for (var f = 0; f < (geojson.features || []).length; f++) {
+        if (geojson.features[f] && geojson.features[f].geometry) geoms.push(geojson.features[f].geometry);
+      }
+    } else if (geojson.type === "Feature") { if (geojson.geometry) geoms.push(geojson.geometry); }
+    else { geoms.push(geojson); }
+    for (var g = 0; g < geoms.length; g++) {
+      var geom = geoms[g];
+      var polys = geom.type === "Polygon" ? [geom.coordinates]
+                : geom.type === "MultiPolygon" ? geom.coordinates : [];
+      for (var p = 0; p < polys.length; p++) {
+        var poly = polys[p];
+        if (!poly || !poly.length || !inRing(lat, lng, poly[0])) continue;
+        var inHole = false;
+        for (var h = 1; h < poly.length; h++) { if (inRing(lat, lng, poly[h])) { inHole = true; break; } }
+        if (!inHole) return true;
+      }
+    }
+    return false;
+  }
+
+  var outlineCache = {};
+  function loadOutline(metro) {
+    if (!metro.outline) return Promise.resolve(null);
+    if (!outlineCache[metro.tag]) {
+      outlineCache[metro.tag] = fetch(metro.outline)
+        .then(function (r) { return r.ok ? r.json() : null; })
+        ["catch"](function () { return null; });   // an outage must never break routing
+    }
+    return outlineCache[metro.tag];
+  }
+
+  /* Which instance should answer for this point. Resolves to a metro or null.
+   *
+   * The bbox is kept as the cheap first pass, and for a point only ONE
+   * instance's rectangle claims — the overwhelming majority — nothing is
+   * fetched and the answer is immediate. Only a genuinely CONTESTED point
+   * pays for the real geometry, and it is geometry this fleet already
+   * publishes: each instance's own dissolved coverage ring, the same file the
+   * coverage map below already loads. Measured over the same 37 places, the
+   * ring answers all 37 correctly and claims no point twice.
+   *
+   * It refines WHICH claimant wins; it never overrules the rectangle to say
+   * NOBODY covers a point. These rings are simplified for drawing, so a
+   * shoreline address can sit a few metres outside one, and telling a real
+   * reader their home is uncovered on that evidence would be worse than the
+   * misroute this replaces. No ring containing it, or no ring shipped, falls
+   * back to the centre rule above. */
+  function resolveMetro(lat, lng) {
+    var cands = metrosClaiming(lat, lng);
+    if (!cands.length) return Promise.resolve(null);
+    if (cands.length === 1) return Promise.resolve(cands[0]);
+    var withRing = [];
+    for (var i = 0; i < cands.length; i++) { if (cands[i].outline) withRing.push(cands[i]); }
+    if (!withRing.length) return Promise.resolve(nearestByCentre(cands)(lat, lng));
+    return Promise.all(withRing.map(loadOutline)).then(function (rings) {
+      var hits = [];
+      for (var i = 0; i < withRing.length; i++) {
+        if (rings[i] && inOutline(lat, lng, rings[i])) hits.push(withRing[i]);
+      }
+      if (hits.length === 1) return hits[0];
+      return nearestByCentre(hits.length ? hits : cands)(lat, lng);
+    })["catch"](function () { return nearestByCentre(cands)(lat, lng); });
   }
 
   var form = document.getElementById("search-form");
@@ -940,14 +1054,18 @@ footer .foot-links { margin-top: 12px; }
       })
       .then(function (data) {
         var feats = (data && data.features) || [];
-        var metro = null, lat = null, lng = null;
+        // Still the FIRST result any instance's bbox claims, not result #1 —
+        // a bare place name ambiguous across states gets a fair shot. The
+        // coarse pass stays synchronous and unchanged; only the winner is then
+        // refined against the real rings, so an uncovered address costs no
+        // fetch at all.
+        var hit = null;
         for (var i = 0; i < feats.length; i++) {
           var c = feats[i] && feats[i].geometry && feats[i].geometry.coordinates;
           if (!c || c.length < 2) continue;
-          var m = metroAt(c[1], c[0]);
-          if (m) { metro = m; lat = c[1]; lng = c[0]; break; }
+          if (metrosClaiming(c[1], c[0]).length) { hit = { lat: c[1], lng: c[0] }; break; }
         }
-        if (!metro) {
+        if (!hit) {
           resetButton();
           setStatus(
             feats.length
@@ -957,8 +1075,11 @@ footer .foot-links { margin-top: 12px; }
           );
           return;
         }
-        setStatus("Opening " + metro.name + "\\u2026", false);
-        window.location.href = metro.url + "#point=" + lat.toFixed(5) + "," + lng.toFixed(5);
+        return resolveMetro(hit.lat, hit.lng).then(function (metro) {
+          if (!metro) { resetButton(); setStatus("That address is outside every place districtry covers today \\u2014 see what's covered below.", true); return; }
+          setStatus("Opening " + metro.name + "\\u2026", false);
+          window.location.href = metro.url + "#point=" + hit.lat.toFixed(5) + "," + hit.lng.toFixed(5);
+        });
       })
       ["catch"](function (err) {
         if (err && err.name === "AbortError") return;

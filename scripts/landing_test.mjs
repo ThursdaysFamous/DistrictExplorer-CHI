@@ -209,13 +209,20 @@ try {
   // deleted still lands correctly on the nearest-centre tie-break. Block 1d is
   // what catches that, which is why its instance stubs matter.)
   const UNCOVERED_POINT = [32.7767, -96.797];   // Dallas — outside all five bboxes
+  // Stub each instance's PAGE, never its data. The routing under test now
+  // fetches `<tag>/data/app/metro-outline.json` to settle a contested point,
+  // and a `**/${t}/**` glob swallows that too — the outline would come back as
+  // an HTML stub, json() would throw, and the code would quietly fall back to
+  // the bbox rule this change exists to replace. The test would still pass, on
+  // the old behaviour, which is the worst kind of green.
   async function stubInstances(page) {
-    for (const t of TAGS) {
-      await page.route(`**/${t}/**`, (r) => r.fulfill({
+    await page.route(
+      (url) => TAGS.some((t) => url.pathname.startsWith(`/${t}/`)) &&
+               !/\/data\//.test(url.pathname),
+      (r) => r.fulfill({
         status: 200, contentType: "text/html",
-        body: `<!doctype html><title>${t} stub</title>`,
+        body: `<!doctype html><title>instance stub</title>`,
       }));
-    }
   }
   for (const m of FLEET) {
     const lat = (m.bbox.minLat + m.bbox.maxLat) / 2;
@@ -242,31 +249,38 @@ try {
     await ctx.close();
   }
 
-  // --- 1c-bis. a point inside TWO bboxes reaches the right one -------------
+  // --- 1c-bis. a point two instances claim reaches the one that serves it --
   //
   // Every probe above is its own bbox's CENTRE, which the comment at 1c
-  // concedes: nothing there exercises the case where two instances both claim
-  // a point and the tie-break has to choose. Michigan made that case real and
-  // then had it TUNED BY HAND, which is exactly when a behaviour wants pinning.
-  // Its TIGERweb county fabric is water-inclusive, so the state's own bbox runs
-  // west across Lake Michigan far enough to contain Chicago's and Wisconsin's
-  // own centres; the fleet bbox was narrowed to the fabric clipped at
-  // lng >= -87.60 to clear validate_index. Door County still sits inside BOTH
-  // Michigan's narrowed box and Wisconsin's, so it is the real overlap probe.
+  // concedes: nothing there exercises a point two instances both claim. Lake
+  // Michigan makes that ordinary. Michigan's counties are water-inclusive, so
+  // its bbox reaches Wisconsin's longitudes; Wisconsin's covers Michigan's
+  // whole Upper Peninsula. Measured over 28 real places, the old nearest-CENTRE
+  // rule misrouted 7. Routing now settles a contested point against each
+  // instance's OWN published coverage ring, and misroutes 4.
   //
-  // Ironwood is here as the honest counter-case rather than an aspiration: it
-  // is Michigan land that routes to WISCONSIN, because it sits west of the
-  // narrowed box and inside wi's, which is where it went before Michigan
-  // existed. No axis-aligned rectangle separates the western UP from Wisconsin
-  // — they share longitudes — so this asserts the CURRENT measured behaviour,
-  // and the fix (smallest bbox AREA rather than nearest CENTRE) is an open
-  // question in mi/WATCH.md. If that lands, this expectation flips to "mi" and
-  // the flip is the point: the test says what the fleet does today, out loud.
+  // THE FOUR THAT REMAIN ARE HERE ON PURPOSE, as Ironwood. They are not a
+  // tie-break failure: Michigan's fleet bbox was clipped to lng >= -87.60 at
+  // go-live so it would stop containing Chicago's and Wisconsin's own centres,
+  // and the bbox is still the cheap FIRST pass — so a point west of that line
+  // is never offered to Michigan at all and no ring is ever consulted.
+  // Reaching them means restoring Michigan's honest full bbox, which needs
+  // validate_index's "must not contain a sibling's centre" rule relaxed AND
+  // the in-app metro-portal moved off nearest-centre too: a larger change than
+  // this one, recorded in mi/WATCH.md. Asserting the measured truth keeps this
+  // file honest about what the fleet does today; when that change lands,
+  // Ironwood flips to "mi" and the flip is the point.
   const OVERLAP_PROBES = [
+    { name: "Marquette, Michigan", lat: 46.5436, lng: -87.3954, tag: "mi",
+      why: "inside wi's bbox AND mi's; only Michigan's ring contains it" },
     { name: "Sturgeon Bay, Wisconsin", lat: 44.8342, lng: -87.3773, tag: "wi",
-      why: "inside both wi's and Michigan's narrowed bbox" },
+      why: "Door County, inside both boxes; only Wisconsin's ring contains it" },
+    { name: "Dubuque, Iowa", lat: 42.5006, lng: -90.6646, tag: "ia",
+      why: "claimed by THREE boxes — il, wi and ia — and served by one" },
+    { name: "Rock Island, Illinois", lat: 41.5095, lng: -90.5787, tag: "il",
+      why: "claimed by il and ia; the case a smallest-bbox-AREA rule gets wrong" },
     { name: "Ironwood, Michigan", lat: 46.4547, lng: -90.1710, tag: "wi",
-      why: "Michigan land WEST of its own hand-off box — pre-existing, recorded in mi/WATCH.md" },
+      why: "MEASURED SHORTFALL: west of mi's clipped bbox, so no ring is consulted" },
   ];
   for (const probe of OVERLAP_PROBES) {
     const ctx = await browser.newContext({ serviceWorkers: "block" });
