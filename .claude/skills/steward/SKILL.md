@@ -74,6 +74,7 @@ python3 ia/scripts/build_metro_outline.py --check
 python3 mi/scripts/build_metro_outline.py --check
 python3 scripts/build_press_list.py --check                # PRESS_LIST.md vs press-list.json
 python3 scripts/validate_doc_counts.py                    # "N layers" in prose vs the worksheets
+python3 scripts/isbe_precinct_fabric.py --selftest         # the five Jasper-test reconciliation causes
 python3 scripts/check_roster_retention.py --base origin/main
 python3 scripts/check_cache_version.py --base origin/main       # cache-first data vs CACHE_NAME
 

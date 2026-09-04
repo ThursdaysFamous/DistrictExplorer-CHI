@@ -337,6 +337,18 @@ jobs:
       - name: Layer counts in prose match the worksheets
         run: python3 scripts/validate_doc_counts.py
 
+      # The Jasper test decides whether a county's precinct fabric is still the
+      # Census 2020 fabric, and its five reconciliation causes are the
+      # difference between reading a county as re-precincted and reading it as
+      # buildable — measured, ten counties were false-rejected in one sweep.
+      # Each cause is safe only because of a guard (exactly 17 characters; no
+      # other ordinal on the stem; the roman alphabet restricted to I/V/X so
+      # DIX survives), and a guard nothing exercises is a guard that erodes.
+      # This runs those guards against the worked examples. Stdlib only, and no
+      # network: --jasper is the networked mode and is deliberately not run here.
+      - name: Precinct-fabric reconciliation causes still hold
+        run: python3 scripts/isbe_precinct_fabric.py --selftest
+
       # A roster's count guard proves it still has twelve members; it proves
       # nothing about whether those twelve still carry an e-mail. On 2026-08-08
       # Cloudflare's e-mail obfuscation quietly emptied all seven of Brown
