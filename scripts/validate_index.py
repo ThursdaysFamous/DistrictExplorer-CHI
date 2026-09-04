@@ -45,6 +45,7 @@ Usage:
     python3 scripts/validate_index.py [path/to/index.html]
 """
 
+import glob
 import json
 import os
 import re
@@ -693,6 +694,11 @@ def main():
     # every layer and is still reachable from the app.
     n_sourced = check_sources_page(html, repo_root)
 
+    # 7. every districted board card either names an office or is recorded as
+    # not naming one. The record's county list is hand-kept and has gone stale
+    # twice; this is what compares it against the dispatch table.
+    offices = check_board_office_gap_scope(html, app_dir)
+
     print(
         "validate_index: OK — inline script parses, %d registerLayer( calls, "
         "LAYER_AREA_RANK + LAYER_SIDEBAR_RANK cover all %d ids, no inline datasets, %d well-formed "
@@ -701,6 +707,9 @@ def main():
         % (n, len(EXPECT_LAYER_IDS), n_metros, n_counties,
            "" if n_sourced is None else
            ", sources page linked and covering all %d layers" % n_sourced)
+        + ("" if offices is None else
+           ", %d board cards name an office and all %d that do not are recorded"
+           % offices)
     )
 
 
@@ -976,6 +985,194 @@ def check_county_coverage_list(html, repo_root):
              "dropped — restore it."
              % ", ".join(undispatched))
     return len(seen_counties)
+
+
+# The board-office gap's two escape hatches, each measured and each re-audited
+# below so it cannot outlive its reason. These counties DO name an office on
+# the card and no file in this repo carries it, because the app fetches the
+# address live at render time — a file scan can only ever read them as absent.
+BOARD_OFFICE_LIVE_RENDER = {
+    "cook": "a District Office row per commissioner, from the live "
+            "loadCommissionerOffices() table",
+    "lake": "the shared county building at 18 N County St, Waukegan, from the "
+            "ADDR/CITY/ZIP fields on its own boundary GIS",
+}
+
+BOARD_OFFICE_GAP = "county-board-office-addresses"
+
+
+def _board_office_ships(app_dir, keys):
+    """{county key} for districted boards whose SHIPPED roster names an office.
+
+    Two shapes are current and both are read: `board.address`, the hoisted
+    block eleven counties use, and a per-district `officeAddress`, which is
+    how Vermilion stores the same string nine times over.
+
+    Scoped to files whose name says board or commission ON PURPOSE. Several
+    counties ship polling-place files with an address per precinct
+    (`logan-precinct-polling.json` carries 27), and a county's polling places
+    are not its board's office — a scan wide enough to see them would report
+    every such county as answered.
+    """
+    ships = {}
+    for path in sorted(glob.glob(os.path.join(app_dir, "*.json"))):
+        base = os.path.basename(path)[:-len(".json")]
+        if "board" not in base and "commission" not in base:
+            continue
+        owners = [k for k in keys if base.startswith(k + "-")]
+        if len(owners) != 1:
+            continue                      # il-county-commissioners, school-board-*
+        try:
+            with open(path, encoding="utf-8") as fh:
+                data = json.load(fh)
+        except (OSError, ValueError):
+            continue
+        found = _first_office_address(data)
+        if found:
+            ships.setdefault(owners[0], "%s: %s" % (base, found[:60]))
+    return ships
+
+
+def _first_office_address(node):
+    """The first non-empty board.address / officeAddress anywhere in a roster."""
+    if isinstance(node, dict):
+        board = node.get("board")
+        if isinstance(board, dict) and isinstance(board.get("address"), str) \
+                and board["address"].strip():
+            return board["address"].strip()
+        for key, value in node.items():
+            if key == "officeAddress" and isinstance(value, str) and value.strip():
+                return value.strip()
+            hit = _first_office_address(value)
+            if hit:
+                return hit
+    elif isinstance(node, list):
+        for value in node:
+            hit = _first_office_address(value)
+            if hit:
+                return hit
+    return None
+
+
+def check_board_office_gap_scope(html, app_dir):
+    """Every districted board card names an office or is RECORDED as not.
+
+    THE BUG THIS EXISTS FOR, TWICE. `county-board-office-addresses` is the
+    instance's largest card-order gap and its county list is hand-kept, so it
+    tracks the dispatch table only for as long as somebody keeps typing into
+    it. On 2026-08-20 the record named 21 counties while 47 qualified, and its
+    own blocker calls that "the real defect" — 26 counties carrying the same
+    absence with nothing recording it, which makes the generated
+    docs/COUNTY_STATUS.md call them COMPLETE, since a served county with no
+    open gap is finished by that table's own definition. It then happened
+    again: six counties that joined between 21 and 26 August (Clay, Douglas,
+    Hancock, Jackson, Richland, Wayne) landed after that re-measure and none
+    was added, so the gap understated itself by six for a fortnight while
+    every gate stayed green. A hand-kept list that nothing compares against
+    the dispatch table goes stale at the speed the frontier moves.
+
+    So this derives the answer rather than trusting either side, and fails in
+    all four directions — the understatement above, an OVERSTATEMENT (Adams
+    shipped a courthouse address for weeks while the record still claimed it
+    as missing, found by hand on 2026-09-04), an orphan (the record naming a
+    county whose board card no longer dispatches at all), and a stale
+    live-render exception. Three of the four are cases the project has
+    actually shipped.
+
+    What it deliberately does NOT do is read the render code. A first draft
+    matched office-ish strings in each entry's renderer and reported Shelby as
+    answered, because "board office e-mail" is a label on an e-mail row; the
+    address it would have credited does not exist, and Shelby's roster has no
+    board block at all. The DATA is the honest witness for a shipped address —
+    with the two live-render counties named above, which is why that list is
+    an explicit table and not a regex.
+    """
+    gaps_path = os.path.join(app_dir, "coverage-gaps.json")
+    if not os.path.exists(gaps_path):
+        return None                        # a fork with no gaps panel
+    with open(gaps_path, encoding="utf-8") as fh:
+        gaps = json.load(fh)
+    record = gaps.get(BOARD_OFFICE_GAP)
+    if record is None:
+        return None
+
+    chunks = re.split(r"\n  (register[A-Za-z]*)\(\{", html)
+    keys = []
+    for i in range(1, len(chunks) - 1, 2):
+        if chunks[i] != "registerCountyLayer":
+            continue
+        body = chunks[i + 1]
+        lid = re.search(r'id:\s*"([a-z-]+)"', body)
+        if lid and lid.group(1) == "county-board":
+            keys = re.findall(r'key:\s*"([a-z-]+)"', body)
+    if not keys:
+        fail("no county-board dispatch entries found, but data/app/"
+             "coverage-gaps.json still carries the %s record. Either the "
+             "dispatch table moved and this check can no longer read it, or "
+             "the record outlived its layer." % BOARD_OFFICE_GAP)
+
+    keys = set(keys)
+    recorded = set(record.get("counties") or [])
+    ships = _board_office_ships(app_dir, keys)
+    answered = set(ships) | set(BOARD_OFFICE_LIVE_RENDER)
+
+    orphan = sorted(recorded - keys)
+    if orphan:
+        fail("%s names %s with no county-board dispatch entry: %s. The "
+             "record tracks the DISTRICTED board card, so a county that moved "
+             "to the at-large County card (or lost its entry) belongs out of "
+             "this list, not in it."
+             % (BOARD_OFFICE_GAP,
+                "counties" if len(orphan) > 1 else "a county",
+                ", ".join(orphan)))
+
+    overstated = sorted(recorded & answered)
+    if overstated:
+        fail("%s: %s. The record would tell a reader the card names no "
+             "office while the card names one — remove %s from its counties "
+             "list and re-count its summary."
+             % (BOARD_OFFICE_GAP,
+                "these counties ship an office anyway" if len(overstated) > 1
+                else "this county ships an office anyway",
+                ", ".join("%s (%s)" % (c, ships.get(c) or BOARD_OFFICE_LIVE_RENDER[c])
+                          for c in overstated)))
+
+    unrecorded = sorted(keys - answered - recorded)
+    if unrecorded:
+        fail("districted board %s NO office and that no gap "
+             "record mentions: %s. An unrecorded absence reads as COMPLETE in "
+             "docs/COUNTY_STATUS.md, whose own legend says a served county "
+             "with no open gap is finished. Add them to the %s record's "
+             "counties list in docs/DATA_LAYER_GUIDEBOOK.md's gaps block, "
+             "re-count its summary, and run scripts/build_coverage_gaps.py."
+             % ("cards that name" if len(unrecorded) > 1 else "card that names",
+                ", ".join(unrecorded), BOARD_OFFICE_GAP))
+
+    stale = sorted(c for c in BOARD_OFFICE_LIVE_RENDER if c not in keys)
+    if stale:
+        fail("BOARD_OFFICE_LIVE_RENDER in %s names %s that no longer "
+             "dispatch%s a board card: %s. Retire the entry."
+             % (os.path.basename(__file__),
+                "counties" if len(stale) > 1 else "a county",
+                "" if len(stale) > 1 else "es", ", ".join(stale)))
+    superseded = sorted(set(BOARD_OFFICE_LIVE_RENDER) & set(ships))
+    if superseded:
+        fail("BOARD_OFFICE_LIVE_RENDER excuses %s whose address now ships "
+             "in a file: %s. The exception exists only for an address a file "
+             "scan cannot see — retire the entry so the measurement stands on "
+             "the data."
+             % ("counties" if len(superseded) > 1 else "a county",
+                ", ".join("%s (%s)" % (c, ships[c]) for c in superseded)))
+
+    stated = re.search(r"(\d+) county board cards name no office",
+                       record.get("summary") or "")
+    missing = len(keys) - len(answered)
+    if stated and int(stated.group(1)) != missing:
+        fail("%s's summary says %s county board cards name no office; %d do. "
+             "The summary is what the app's Data gaps panel prints, so it is "
+             "the number a reader sees."
+             % (BOARD_OFFICE_GAP, stated.group(1), missing))
+    return len(answered), missing
 
 
 if __name__ == "__main__":
