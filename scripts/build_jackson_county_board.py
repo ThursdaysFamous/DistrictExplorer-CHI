@@ -38,6 +38,25 @@ from scraper_common import make_fail  # noqa: E402  (shared machinery — do not
 
 BOARD_URL = "https://jacksoncounty-il.gov/158/County-Board"
 
+# The county's own "County Board" contact block on BOARD_URL: a "Physical
+# Address" line under that heading, with the board's phone, its fax and its
+# office hours beside it. ATTRIBUTION IN WORDS is what makes this safe to
+# publish — the same rule Logan, Jefferson and Jo Daviess shipped on — and it
+# is why the home-page discriminator does not disqualify it. That test asks
+# whether an address is merely the county's own template repeated on every
+# page, and it can only settle an address found by PROXIMITY; Jackson's home
+# page carries this street because the board sits in the county building,
+# which is true of most counties and says nothing about the attribution.
+# The page separately states where the board MEETS, which is a different
+# place from where its office is, so both ship and each says which it is.
+BOARD = {
+    "address": "1001 Walnut Street, Murphysboro, IL 62966",
+    "phone": "618-687-7240",
+    "hours": "Monday through Friday, 8 am to 4 pm",
+    "meets": "Courthouse, 2nd-floor Courtroom 4 — third Tuesday of each month, 6 pm",
+    "sourceUrl": BOARD_URL,
+}
+
 EXPECT_DISTRICTS = 7
 EXPECT_MEMBERS = EXPECT_DISTRICTS * SEATS_PER_DISTRICT      # 14 seats
 MIN_EMAILS = 12         # measured 14/14; a directory that stops publishing them fails
@@ -96,6 +115,8 @@ def main():
     if len(chairs) > 1 or len(vices) > 1:
         fail("the page badges %d chair(s) and %d vice chair(s) — expected at most "
              "one of each" % (len(chairs), len(vices)))
+
+    roster["board"] = dict(BOARD)
 
     out_path = os.path.join(out_dir, "jackson-county-board-members.json")
     with open(out_path, "w", encoding="utf-8") as handle:

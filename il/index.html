@@ -19418,7 +19418,8 @@ function initChiExplorer() {
             if (!feature) return null;
             var district = findPropCI(feature.properties || {}, ["district"]);
             var entry = district != null ? results[1][String(district)] : null;
-            return { seq: seq, district: district, entry: entry };
+            return { seq: seq, district: district, entry: entry,
+                     board: results[1] && results[1].board };
           });
         },
         render: function (result) {
@@ -19438,6 +19439,23 @@ function initChiExplorer() {
               return p;
             })));
           }
+          // The county's own contact table on the County Board page, under an
+          // "Address:" label with the board's phone and fax. An earlier sweep
+          // read this as site chrome because the home page carries the same
+          // street under "Administration Office" — but the county's contact
+          // page lists SIX distinct department addresses, so these blocks are
+          // per-department, and a proximity test cannot overturn an
+          // attribution the county states in words.
+          var fields = [];
+          if (result.board && result.board.address) {
+            fields.push({ label: "Board office",
+                          value: String(result.board.address) });
+          }
+          if (result.board && result.board.phone) {
+            fields.push({ label: "Board office phone",
+                          value: String(result.board.phone) });
+          }
+          if (fields.length) wrap.appendChild(renderFieldStack(fields));
           return wrap;
         },
         cardIdentifier: function (result) {
@@ -20686,7 +20704,8 @@ function initChiExplorer() {
               district: district,
               precincts: findPropCI(props, ["precincts"]),
               partialPrecincts: findPropCI(props, ["partialprecincts"]),
-              entry: district != null ? results[1][String(district)] : null
+              entry: district != null ? results[1][String(district)] : null,
+              board: results[1] && results[1].board
             };
           });
         },
@@ -20710,6 +20729,31 @@ function initChiExplorer() {
               value: result.partialPrecincts.join(", ") +
                 " — the county's own results report these precincts under two districts"
             });
+          }
+          // The county publishes a "County Board" contact block naming a
+          // Physical Address, the board's phone and its office hours, and
+          // says separately that the board MEETS in the courthouse's
+          // second-floor Courtroom 4 — a different place from the office, so
+          // each row says which it is rather than letting one address stand
+          // for both. Attribution in words is what makes this the board's
+          // rather than the county's: the same street sits on the home page
+          // because the board sits in the county building, which is true of
+          // most counties and settles nothing on its own.
+          if (result.board && result.board.address) {
+            fields.push({ label: "Board office",
+                          value: String(result.board.address) });
+          }
+          if (result.board && result.board.phone) {
+            fields.push({ label: "Board office phone",
+                          value: String(result.board.phone) });
+          }
+          if (result.board && result.board.hours) {
+            fields.push({ label: "Board office hours",
+                          value: String(result.board.hours) });
+          }
+          if (result.board && result.board.meets) {
+            fields.push({ label: "Board meets at",
+                          value: String(result.board.meets) });
           }
           if (fields.length) wrap.appendChild(renderFieldStack(fields));
           return wrap;
