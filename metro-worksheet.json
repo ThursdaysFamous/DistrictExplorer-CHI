@@ -1706,7 +1706,7 @@
       {
         "file": "municipal-ward-coverage.json",
         "min_features": 50,
-        "max_features": 70,
+        "max_features": 76,
         "note": "Ward-electing municipalities' outlines, tagged by dispatch entry — the cheap same-origin coverage test for every non-Chicago entry of the ward layer, metro or not (build_municipal_ward_coverage.py; Rockford is the first outside the metro, Moline and Silvis the first on the Mississippi, Mendota the first whose seats were already in the roster before its geometry was). 56 municipalities across twenty-one entries after the pass-6 ward tranche (2026-08-02) added thirteen sources / twenty-two cities."
       },
       {
@@ -2535,7 +2535,7 @@
     ]
   },
   "sw": {
-    "cache_name": "districtry-il-shell-v8",
+    "cache_name": "districtry-il-shell-v9",
     "shell_urls": [
       "./",
       "./sources.html",

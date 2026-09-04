@@ -16151,6 +16151,43 @@ function initChiExplorer() {
 
   // One dispatch entry per ward source; every suburban source shares this
   // query/card because its loader has already normalized the field names.
+  /* Madison County's ward-electing cities ride ONE county layer — MadCo_Wards
+   * on the county GIS's own org, public with an empty licenceInfo, 31 polygons
+   * — keyed by a MUNCIPAL attribute the county spells without its first I, so
+   * the lookup asks for the county's spelling first and the correct one second
+   * rather than assuming either.
+   *
+   * EVERY NAME ON THESE CARDS COMES FROM THE ROSTER, NOT THE MAP. The layer
+   * carries OFFICIAL, ADDRESS, PHONE, EMAIL and URL columns on all 31 rows and
+   * fills none of them on any of them (re-measured 2026-09-04, on data the
+   * county otherwise maintains), which is what `madison-ward-officials`
+   * recorded. The seats were already shipped from the regional directory, so
+   * the shapes are the only half that was missing: Alton 7 and Edwardsville 7
+   * one seat per ward, Granite City 5, Troy 4 and Venice 4 with TWO seats each,
+   * all five joining ward-for-ward.
+   *
+   * THE CITY OF MADISON'S FOUR WARDS NAME NOBODY, deliberately. The directory
+   * lists its eight council members with no ward against any of them, so its
+   * cards give the ward and stop — the Quincy posture, recorded rather than
+   * guessed, because splitting eight names across four wards would be an
+   * invention the source does not support. */
+  var MADISON_WARD_SERVICE = "https://services.arcgis.com/Z0kKj2K728ngqqrp/" +
+    "arcgis/rest/services/MadCo_Wards/FeatureServer/40";
+  var loadMadisonWards = makeCached(function () {
+    return loadArcGISGeoJSON(MADISON_WARD_SERVICE).then(function (geojson) {
+      var feats = [];
+      (geojson.features || []).forEach(function (f) {
+        var p = f.properties || {};
+        var muni = findPropCI(p, ["muncipal", "municipal"]);
+        if (!muni) return;   // a row with no city cannot be joined to a roster
+        var num = /(\d+)/.exec(String(findPropCI(p, ["ward"]) || ""));
+        feats.push(wardFeature(f, String(muni), "Ward", num ? num[1] : null));
+      });
+      if (!feats.length) throw new Error("Madison ward service returned no usable geometry");
+      return { type: "FeatureCollection", features: feats };
+    });
+  });
+
   function municipalWardEntry(key, loadGeometry) {
     return {
       key: key,
@@ -16430,6 +16467,7 @@ function initChiExplorer() {
       municipalWardEntry("kane-cities", loadKaneCityWards),
       municipalWardEntry("dupage-cities", loadDupageCityWards),
       municipalWardEntry("mchenry-city", loadMchenryCityWards),
+      municipalWardEntry("madison-cities", loadMadisonWards),
       municipalWardEntry("kendall-cities", loadKendallCityWards),
       municipalWardEntry("pontiac", loadPontiacWards),
       municipalWardEntry("mclean-cities", loadMcleanCityWards),
