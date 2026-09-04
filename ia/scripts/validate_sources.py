@@ -549,14 +549,34 @@ ENDPOINTS = [
     # CAUGHT #718: the layer's metadata was reachable and always would be,
     # while the app's own enveloped QUERY was answering HTTP 200 with an Esri
     # error envelope and zero features, so the ZIP overlay never drew for
-    # weeks. This asks the question the app asks — the same envelope, in the
-    # same Esri {xmin,...} comma form — and min_count makes the answer count.
+    # weeks.
+    #
+    # THE ENVELOPE IS SENT AS A JSON OBJECT, WITH KEY NAMES, BECAUSE THE KEY
+    # NAMES WERE THE BUG. Iowa's loader was ported carrying METRO_BBOX's
+    # {minLng,minLat,maxLng,maxLat} where Esri wants {xmin,ymin,xmax,ymax},
+    # and `JSON.stringify` is how the app builds it. Esri also accepts a bare
+    # comma form (`-96.69,40.32,...`), and two independent fixes for #718 --
+    # this one and the Michigan session's -- reached for different ones; the
+    # merge of the two is where it showed. MEASURED 2026-09-04, all three
+    # against this same layer:
+    #
+    #     comma form                 -> {"count":1443}
+    #     JSON object, xmin/ymin/... -> {"count":1443}
+    #     JSON object, minLng/...    -> {"error":{"code":400}}
+    #
+    # The comma form has NO KEY NAMES, so it returns the right answer whatever
+    # the app's object is keyed on -- it is a valid query that tests a
+    # different question, and it would have passed all the way through #718.
+    # This row sends the shape the app sends, and `min_count` is what makes
+    # the answer count rather than the status code.
     {
         "layer": "zip-code",
         "url": ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
                 "PUMA_TAD_TAZ_UGA_ZCTA/MapServer/11/query?where=1%3D1"
-                "&geometry=-96.69%2C40.32%2C-90.09%2C43.55&geometryType=esriGeometryEnvelope"
-                "&inSR=4326&spatialRel=esriSpatialRelIntersects&returnCountOnly=true&f=json"),
+                "&geometry=%7B%22xmin%22%3A-96.69%2C%22ymin%22%3A40.32%2C"
+                "%22xmax%22%3A-90.09%2C%22ymax%22%3A43.55%7D"
+                "&geometryType=esriGeometryEnvelope&inSR=4326"
+                "&spatialRel=esriSpatialRelIntersects&returnCountOnly=true&f=json"),
         "min_count": 1300,  # 1,443 measured 2026-09-04; floor set below it, not at it
     },
     {
@@ -774,7 +794,9 @@ def check_endpoints(findings, offline):
             findings.add(FAIL, e["layer"],
                          "the query answered HTTP 200 with an Esri ERROR ENVELOPE "
                          "(%s) — the request is malformed or the service rejected "
-                         "it, and nothing about the status code says so: %s"
+                         "it, and nothing about the status code says so. Check the "
+                         "envelope's KEY NAMES against the app's own loader first; "
+                         "that is what broke last time: %s"
                          % (res.get("error"), e["url"]))
             continue
         count = res.get("count") if isinstance(res, dict) else None

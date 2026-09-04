@@ -1030,7 +1030,22 @@ current-edition polling-place export exists beyond the 2024-08 item.
 ~~County card gains the remaining elected county officers~~ — **DONE in phase 3 PR 1** (above), and
 it did not need the Wisconsin tranche model: ISAC's member portal plus three per-office statewide
 directories covered all 99 counties in one PR. What phase 4 still owns here is the **board CHAIR**,
-which no statewide publisher names, and keying supervisors to their own districts (phase 3 PR 2). **Polling places** ship only if the SOS ask
+which no statewide publisher names, and keying supervisors to their own districts (phase 3 PR 2). **JONES COUNTY WAS MEASURED ON 2026-09-04 AND ITS NAMED ROUTE IS CLOSED** — the one Iowa county
+with no supervisor-district card at all, absent from the state's 98-county aggregate. This plan and
+the `jones-county-supervisor` gap both said its adopted-map PDF "does carry real vector path data
+(moveto/lineto/stroke operators), so a Jackson-County-IL-style extraction is plausible". **It is
+not.** The Jackson method reads FILLED path objects whose colours pair with a legend; stroke
+operators appear in nearly every vector PDF, including ones whose map body is a raster. Measured
+with pdfplumber: 554 curves, **zero filled**, plus **22 raster strips** that are the map, and the
+largest vector path on the page is an 18×14 pt road shield. Reading it would mean sampling pixels,
+which the Jackson record forbids and the Knox build proved wrong. What the PDF DOES have is a TEXT
+LAYER giving all five districts' populations and compositions (the Menard shape — look for text
+before any raster method), and that text is what closes the composition route too: **every** district
+takes PART of a township, and the state precinct layer's single `Castle Grove/Lovell/Wayne` precinct
+spans districts 1, 2 and 3. So the remaining route is the county's own GIS file, drafted as Ask 14
+and held for the operator. **A ROUTE NAMED IN A GAP RECORD IS A HYPOTHESIS UNTIL SOMEBODY OPENS THE
+FILE.**
+**Polling places** ship only if the SOS ask
 in phase 3 lands a current per-election edition — `IowaPollingPlaces` joined to `precinct` by `PPID`
 under the full Wisconsin display contract (election named, provisional wording while pre-certification,
 pull dated, retired once the election passes) — the August 2024 item never ships labeled "current."
