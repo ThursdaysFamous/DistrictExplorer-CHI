@@ -340,6 +340,26 @@ PROVENANCE = [
         "note": "123 community college director districts (Iowa Code 260C.11) inside the 15 merged areas, effective 2023-08-01. THE SERVICE'S NAME IS NOT ITS SLUG: the URL says CC_DD2023, the service calls itself CC_DirectorDistricts_FINAL, and an ArcGIS item search on the slug returns unrelated global items — search the NAME (item b89cf40cef40497e80ae8eb0a6e6d22f, owner education_iowa). Its licence is EMPTY, i.e. terms UNSTATED, which is NOT the CC0 the school-director layer's item carries; the two were checked the same way and differ. Joined to the parent on the numeric key with one asserted Southeastern 8->16 remap. Registered BESPOKE rather than through the polygon factory: the children encode the 2023 merged-area plan and the parent layer the 2026 update, so in ~0.2% of ground the two name different colleges and the card must resolve both and decline rather than contradict its own parent. Built by ia/scripts/build_ia_cc_director_districts.py; operator-rebuilt, no weekly workflow (geometry, not a roster).",
     },
     {
+        "layer": "municipality",
+        "app_file": "ia-city-contact.json",
+        "source_url": "https://iowaleague.org/cities/",
+        "note": (
+            "The office phone and website of all 939 incorporated cities — CONTACT, NEVER "
+            "OFFICEHOLDERS. The Iowa League of Cities publishes a row per city (City / "
+            "Organization / County / Population / Website / Phone) and NO COLUMN NAMES A "
+            "PERSON, which is why the ia-municipal-officeholders gap stays open beside this. "
+            "THIS SOURCE WAS ON FILE AS GATED AND IS NOT: it was recorded as 'a membership "
+            "directory with no public officials export' and, elsewhere, as membership-gated; "
+            "it answers 200 to an ordinary browser request. ONE FETCH TRAP — without an "
+            "Accept header the body arrives TRUNCATED at ~4.8 KB with zero anchors, which "
+            "reads like a JS-rendered page and is not one. Joined to TIGERweb's places by "
+            "ia/scripts/build_ia_city_contact.py, which refuses to write unless all 939 "
+            "places still get a row (one alias: the League's Jewell is TIGER's Jewell "
+            "Junction) and the nine non-joining rows keep their measured shape. Refreshed "
+            "weekly by update-ia-city-contact-roster.yml."
+        ),
+    },
+    {
         "layer": "iowa-aea",
         "app_file": "ia-aeas.json",
         "source_url": "https://services.arcgis.com/vPD5PVLI6sfkZ5E4/arcgis/rest/services/CurrentIowaSchoolDistricts/FeatureServer/0",

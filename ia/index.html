@@ -9123,6 +9123,16 @@ function initIowaExplorer() {
     TIGERWEB_SERVICES + "Places_CouSub_ConCity_SubMCD/MapServer", 4,
     "GEOID,NAME,BASENAME,STATE", "incorporated places");
 
+  // The city OFFICE's own phone and website, keyed by the same TIGER GEOID the
+  // card already reads (data/app/ia-city-contact.json,
+  // ia/scripts/build_ia_city_contact.py). NOT a roster: the Iowa League of
+  // Cities publishes a row per city and NO COLUMN NAMES A PERSON, which is why
+  // the officeholder gap below stays open while the card still gains a way to
+  // reach the city.
+  var loadCityContact = makeCached(function () {
+    return fetchJSONWithRetry("data/app/ia-city-contact.json", {}, 2);
+  });
+
   registerLayer({
     id: "municipality",
     group: "geography",
@@ -9141,14 +9151,26 @@ function initIowaExplorer() {
     },
     query: function (point, seq) {
       // point-first (queryFeatureAt): one place polygon instead of the
-      // statewide incorporated-places download
-      return queryFeatureAt(loadPlaces, point).then(function (feature) {
+      // statewide incorporated-places download. The contact file is a small
+      // same-origin read and its failure is NOT this layer's failure — the
+      // .catch is on that leg alone, so a city still answers identity-only
+      // exactly as it did before this file existed.
+      return Promise.all([
+        queryFeatureAt(loadPlaces, point),
+        loadCityContact().catch(function () { return null; })
+      ]).then(function (parts) {
+        var feature = parts[0];
         if (!feature) return null; // unincorporated — the engine renders this layer's own emptyNote
         var props = feature.properties || {};
+        var geoid = findPropCI(props, ["geoid"]);
+        var contact = (parts[1] && geoid != null) ? parts[1][String(geoid)] : null;
         return {
           seq: seq,
           name: findPropCI(props, ["name"]),
-          geoid: findPropCI(props, ["geoid"])
+          geoid: geoid,
+          phone: contact ? contact.phone : null,
+          email: contact ? contact.email : null,
+          url: contact ? contact.url : null
         };
       });
     },
@@ -9158,7 +9180,42 @@ function initIowaExplorer() {
         title: result.name != null ? String(result.name) : "Unknown place",
         note: result.geoid != null ? "FIPS " + String(result.geoid) : null
       }));
+      if (result.phone || result.email) {
+        wrap.appendChild(renderLinkRow({
+          title: "City office",
+          phone: result.phone || null,
+          email: result.email || null
+        }));
+      }
+      // WHAT THIS CARD STILL CANNOT ANSWER, said with somewhere to go. A
+      // caveat that leaves the reader nowhere is a dead end
+      // (docs/EXPANSION_GUIDE.md Part 5), so this names the limit AND the one
+      // place in the app that does better.
+      // The pointer has to match what this particular card actually shows: a
+      // city with no contact at all had been told "the phone and website
+      // above" with nothing above it, and the website is the FOOTER link,
+      // which renders BELOW. Both were caught in a browser, not in review.
+      var note = "Not shown — no statewide source names Iowa's mayors, council " +
+        "members or clerks, so this card names none rather than naming some.";
+      if (result.phone || result.email) {
+        note += " The contact above is the city's own office.";
+      }
+      if (result.url) {
+        note += " The link below goes to the city's own website.";
+      }
+      if (!result.phone && !result.email && !result.url) {
+        note += " The city directory this app reads carries no phone or website " +
+          "for it either.";
+      }
+      note += " Where a city publishes its own council districts, that card does " +
+        "name them — Des Moines today.";
+      wrap.appendChild(renderFieldStack([{ label: "City officials", value: note }]));
       return wrap;
+    },
+    primaryLink: function (result) {
+      var url = safeHttpUrl(result.url);
+      if (!url) return null;
+      return { label: (result.name ? String(result.name) : "This city") + " — official website", url: url };
     }
   });
   /* ---------- 12. Des Moines City Council Ward — the instance's first city tier ----------
