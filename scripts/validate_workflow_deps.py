@@ -96,6 +96,23 @@ IMPORT_NAME = {
 # Modules the runner always has, or that are vendored/optional by design.
 ALWAYS_AVAILABLE = {"setuptools", "pip", "pkg_resources"}
 
+# FLEET-SHARED MODULES: repo-root scripts/ files an INSTANCE builder may import
+# by putting the root on sys.path. They are not pip packages and must not be
+# reported as missing ones.
+#
+# The isolation below is deliberate and stays exactly as it was — a bare sibling
+# import inside wi/scripts/ still resolves against wi/scripts/ and never against
+# the root, so a name living in both trees cannot be walked into the wrong one.
+# A module here is only reached when the instance's own directory does NOT have
+# it, so a same-named instance file always wins.
+#
+# Keep this SHORT. A shared module is one whose whole point is that every
+# instance agrees with the others: `undeliverable` is the fleet's list of
+# addresses that cannot receive mail, and three copies of it would be three
+# different lists within a month.
+FLEET_SHARED = {"undeliverable"}
+ROOT_SCRIPTS = os.path.join(REPO_ROOT, "scripts")
+
 PIP_RE = re.compile(r"pip3?\s+install\s+([^\n]*)")
 RUN_RE = re.compile(
     r"python3?\s+((?:%s)/[A-Za-z0-9_]+\.py)"
@@ -201,7 +218,11 @@ def closure(entry, scripts_dir):
     `scripts_dir` is the instance's own directory: a sibling import inside
     ny/scripts/ resolves against ny/scripts/, never against Chicago's root
     scripts/, so a name that exists in both cannot be walked into the wrong
-    tree.
+    tree. The ONE exception is a module named in FLEET_SHARED, and it does not
+    weaken that: it is consulted only when the instance's own directory has no
+    file of that name, so a same-named instance file still wins. Such a module
+    is walked in the ROOT tree, so its own third-party imports are checked
+    against the workflow's pip line like any other.
     """
     seen, stack, third_party = set(), [entry], set()
     while stack:
@@ -217,6 +238,14 @@ def closure(entry, scripts_dir):
                 continue
             if os.path.exists(os.path.join(scripts_dir, mod + ".py")):
                 stack.append(mod)            # local module: keep walking
+            elif (mod in FLEET_SHARED
+                  and os.path.exists(os.path.join(ROOT_SCRIPTS, mod + ".py"))):
+                # A declared shared module, reached only because this instance
+                # has no file of that name. Walked in the ROOT tree so its own
+                # third-party imports are still checked.
+                sub_seen, sub_third = closure(mod, ROOT_SCRIPTS)
+                seen |= {"%s (root)" % n for n in sub_seen}
+                third_party |= sub_third
             else:
                 third_party.add(mod)
     return seen, third_party
