@@ -588,7 +588,6 @@ def main():
                     value["email"], "%s %s" % (rec.get("county") or geoid, office))
                 if kept is None:
                     del value["email"]
-    undeliverable.report_unmatched("ia-county-officers.json")
 
     payload = json.dumps(directory, indent=1, sort_keys=True) + "\n"
     if check_only:

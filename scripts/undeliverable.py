@@ -39,12 +39,30 @@ working contact. Those are REPORTED by validate_card_links.py and left to the
 monthly issue — `auditor@harrisoncountyia.org` is one today (its MX names
 mail.harrisoncountyia.org, which is NXDOMAIN on both resolvers).
 
-RETIRING AN ENTRY. When the source publishes something different, this list
-stops matching and report_unmatched() prints a RETIRE line naming the stale
-entry. Delete it then. If an address is ever reported working rather than
-re-addressed, verify by SENDING — never by assuming, which is the limit the
-White County bounce recorded from the other direction: its DNS was healthy the
-whole time.
+RETIRING AN ENTRY, AND WHY THE AUDIT IS A GATE RATHER THAN A PRINTED LINE.
+The first version of this module printed a RETIRE line from the builders and
+returned a list every caller discarded, so an entry that had outlived its
+reason was a permanent silent hole — the exact state check_roster_retention.py
+records having had to fix in ACCEPTED_DROPS. Worse, it could not have been
+trusted anyway: the "addresses seen" set was process-global, so a builder that
+skipped a county on a count guard printed a RETIRE for that county's entry
+having simply never looked at it.
+
+So the audit is `--check`, it reads the SHIPPED TREE rather than one run's
+memory, and it FAILS:
+
+  * an entry naming a data/app file that no instance has  -> orphaned
+  * an entry whose address is in the shipped tree anyway  -> the withhold
+    stopped firing, which is the failure this list exists to prevent
+
+The third test needs DNS and lives in validate_card_links.py's monthly mail
+section: a listed domain that has come BACK — resolving, with a live mail
+route — is reported so the entry can be retired. That is the same inversion
+EXPECTED_UNREACHABLE already uses, where becoming reachable is the finding.
+
+If an address is ever reported working rather than re-addressed, verify by
+SENDING — never by assuming, which is the limit the White County bounce
+recorded from the other direction: its DNS was healthy the whole time.
 """
 
 # address (lower-case) -> (scope, the measurement that justifies withholding it)
@@ -130,12 +148,6 @@ UNDELIVERABLE = {
 }
 
 
-# Every address withhold() is ASKED about, so report_unmatched() needs nothing
-# threaded through a builder. A caller that forgets to collect its own list is
-# exactly how a re-audit goes quietly vacuous.
-_SEEN = set()
-
-
 def withhold(email, where=""):
     """(address_to_ship, note) — the address, or None when it cannot receive.
 
@@ -144,7 +156,6 @@ def withhold(email, where=""):
     """
     if not email:
         return email, None
-    _SEEN.add(email.strip().lower())
     entry = UNDELIVERABLE.get(email.strip().lower())
     if entry is None:
         return email, None
@@ -156,18 +167,59 @@ def withhold(email, where=""):
     return None, reason
 
 
-def report_unmatched(scope):
-    """Print a RETIRE line for every entry in `scope` no source published.
+def audit(repo_root=None):
+    """[problem, ...] — every way this list can have gone stale, from the tree.
 
-    `scope` is the data/app file this builder writes; the addresses the run
-    encountered are whatever withhold() was asked about. An entry nothing
-    matches describes an address no longer in any source, which makes it a
-    fact about the past sitting in a live list.
+    Static: no network, no run memory. See the module docstring for why the
+    audit reads the shipped files rather than what a builder happened to see.
     """
+    import glob
+    import json
+    import os
+
+    repo_root = repo_root or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    shipped = {}                      # basename -> [paths]
+    for path in glob.glob(os.path.join(repo_root, "*", "data", "app", "*.json")):
+        shipped.setdefault(os.path.basename(path), []).append(path)
+
+    problems = []
+    scopes = sorted({sc for sc, _r in UNDELIVERABLE.values()})
+    for scope in scopes:
+        if scope not in shipped:
+            problems.append(
+                "%s is named by an entry but no instance ships a file with that "
+                "name — the entry is orphaned; delete it or fix its scope" % scope)
+
+    # An address that is still in the tree means the withhold did not fire for
+    # it: the builder stopped calling withhold(), or writes the field by a
+    # route the sweep misses. Either way the card is rendering a dead address.
+    wanted = {a: sc for a, (sc, _r) in UNDELIVERABLE.items()}
+    for scope, paths in shipped.items():
+        if scope not in scopes:
+            continue
+        for path in paths:
+            blob = open(path, encoding="utf-8").read().lower()
+            for addr, sc in wanted.items():
+                if sc == scope and addr in blob:
+                    problems.append(
+                        "%s still contains %s, which this list says is "
+                        "undeliverable — the withhold is not firing for it"
+                        % (os.path.relpath(path, repo_root), addr))
+    return problems
+
+
+def main():
     import sys
-    mine = {a for a, (sc, _r) in UNDELIVERABLE.items() if sc == scope}
-    stale = sorted(mine - _SEEN)
-    for addr in stale:
-        print("undeliverable: RETIRE %s — no source published it this run, so "
-              "the entry is stale and should be deleted" % addr, file=sys.stderr)
-    return stale
+    problems = audit()
+    if problems:
+        print("undeliverable: FAIL", file=sys.stderr)
+        for p in problems:
+            print("  - %s" % p, file=sys.stderr)
+        sys.exit(1)
+    print("undeliverable: OK — %d withheld address(es) across %d shipped file(s), "
+          "none orphaned and none still in the tree"
+          % (len(UNDELIVERABLE), len({sc for sc, _r in UNDELIVERABLE.values()})))
+
+
+if __name__ == "__main__":
+    main()

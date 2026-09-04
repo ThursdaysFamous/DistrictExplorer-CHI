@@ -272,9 +272,6 @@ def main():
             print("  %s: read from the Internet Archive capture of %s"
                   % (entry["county"], read_from.split(":", 1)[1][:8]), file=sys.stderr)
 
-    # An entry whose address the source stopped publishing is a fact
-    # about the past sitting in a live list; this says so every run.
-    undeliverable.report_unmatched("county-board-members.json")
     payload = json.dumps(roster, indent=1, sort_keys=True) + "\n"
     dated = sorted({r["county"] for r in roster.values() if r.get("asOf")})
     print("county-board-members: %d counties, %d seats (%d named, %d vacant%s)%s"

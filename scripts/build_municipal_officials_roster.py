@@ -1170,7 +1170,6 @@ def main():
 
     for geoid, entry in roster.items():
         _drop_undeliverable(entry, "%s %s" % (geoid, entry.get("name") or ""))
-    undeliverable.report_unmatched("municipal-officials.json")
 
     out_path = os.path.join(args.out_dir, "municipal-officials.json")
     with open(out_path, "w") as f:

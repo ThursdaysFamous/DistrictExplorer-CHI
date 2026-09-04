@@ -162,9 +162,6 @@ def main():
 
     out_path = os.path.join(out_dir, "washington-county-board-members.json")
     with open(out_path, "w", encoding="utf-8") as f:
-        # An entry whose address the source stopped publishing is a fact
-        # about the past sitting in a live list; this says so every run.
-        undeliverable.report_unmatched("washington-county-board-members.json")
         json.dump(roster, f, ensure_ascii=False, indent=1, sort_keys=True)
         f.write("\n")
     print("washington-board-roster: %d districts, %d members (%d phones, %d e-mails); "

@@ -143,9 +143,6 @@ def main():
 
     out_path = os.path.join(out_dir, "warren-county-board-members.json")
     with open(out_path, "w", encoding="utf-8") as handle:
-        # An entry whose address the source stopped publishing is a fact
-        # about the past sitting in a live list; this says so every run.
-        undeliverable.report_unmatched("warren-county-board-members.json")
         json.dump(roster, handle, indent=2, ensure_ascii=False, sort_keys=True)
         handle.write("\n")
     phones = sum(1 for v in roster.values() for m in v["members"] if m.get("phone"))
