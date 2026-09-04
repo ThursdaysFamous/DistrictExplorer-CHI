@@ -34,6 +34,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from build_washington_board_districts import DISTRICTS as BOUNDARY_COMPOSITION  # noqa: E402
 from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
+import undeliverable  # noqa: E402  (the fleet's withhold list)
 
 SOURCE_URL = "https://washingtonco.illinois.gov/county-board/"
 
@@ -86,8 +87,15 @@ def main():
         district = str(rec["district"])
         member = {"name": rec["name"]}
         for key in ("phone", "email"):
-            if rec.get(key):
-                member[key] = rec[key]
+            if not rec.get(key):
+                continue
+            value = rec[key]
+            if key == "email":
+                value, _why = undeliverable.withhold(
+                    value, "%s, district %s" % (member["name"], district))
+                if not value:
+                    continue
+            member[key] = value
         roster.setdefault(district, {"members": [], "sourceUrl": SOURCE_URL})
         roster[district]["members"].append(member)
         if rec.get("composition"):

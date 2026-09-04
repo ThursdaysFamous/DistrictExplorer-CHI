@@ -72,6 +72,10 @@ import re
 import sys
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # ia/
+# The withhold list is FLEET-WIDE and lives at the repo root: one measurement
+# behind one list beats three drifting copies.
+sys.path.insert(0, os.path.join(os.path.dirname(REPO_ROOT), "scripts"))
+import undeliverable  # noqa: E402
 APP_DATA_DIR = os.path.join(REPO_ROOT, "data", "app")
 CACHE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache")
 
@@ -570,6 +574,20 @@ def main():
           file=sys.stderr)
     for line in withheld_detail:
         print("  supervisors withheld: %s" % line, file=sys.stderr)
+
+    # An address on a domain that cannot receive mail is a contact a reader
+    # gets no bounce from; the withhold list drops it and keeps the name,
+    # office, party and phone beside it. Every drop and every stale entry
+    # prints.
+    for geoid, rec in directory.items():
+        if not isinstance(rec, dict):
+            continue
+        for office, value in rec.items():
+            if isinstance(value, dict) and value.get("email"):
+                kept, _why = undeliverable.withhold(
+                    value["email"], "%s %s" % (rec.get("county") or geoid, office))
+                if kept is None:
+                    del value["email"]
 
     payload = json.dumps(directory, indent=1, sort_keys=True) + "\n"
     if check_only:

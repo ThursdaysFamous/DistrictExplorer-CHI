@@ -242,6 +242,18 @@ jobs:
       - name: Workflow scripts import under their declared dependencies
         run: python3 scripts/validate_workflow_deps.py
 
+      # scripts/undeliverable.py withholds addresses that cannot receive mail
+      # from every card. Its risk is the one every exception list has: an entry
+      # outliving its reason, silently. The first draft printed a RETIRE line
+      # from the builders and returned a list every caller discarded, which is
+      # the permanent-silent-hole shape check_roster_retention.py records having
+      # had to fix in ACCEPTED_DROPS. This reads the shipped tree instead and
+      # fails on an orphaned scope or on an address the withhold stopped
+      # dropping. The third test — a withheld domain that comes back — needs DNS
+      # and runs monthly in validate_card_links.py.
+      - name: The undeliverable-address list has not gone stale
+        run: python3 scripts/undeliverable.py
+
       # A skill under .claude/skills/ is prose an agent loads at the moment it
       # starts a task, and prose that names scripts, tables, guide sections and
       # flags is a copy of facts that live elsewhere — the drift class every

@@ -36,6 +36,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from build_warren_boundaries import COUNTY_COMPOSITION  # noqa: E402
 from scraper_common import make_fail  # noqa: E402  (shared machinery — do not fork)
+import undeliverable  # noqa: E402  (the fleet's withhold list)
 
 BOARD_URL = "https://warrencountyil.gov/government/county-board/"
 
@@ -94,8 +95,15 @@ def main():
         for rec in members:
             member = {"name": re.sub(r"\s+", " ", rec["name"]).strip()}
             for key in ("role", "phone", "email", "termExpires"):
-                if rec.get(key):
-                    member[key] = re.sub(r"\s+", " ", str(rec[key])).strip()
+                if not rec.get(key):
+                    continue
+                value = re.sub(r"\s+", " ", str(rec[key])).strip()
+                if key == "email":
+                    value, _why = undeliverable.withhold(
+                        value, "%s, district %s" % (member["name"], dnum))
+                    if not value:
+                        continue
+                member[key] = value
             if rec.get("committees"):
                 member["committees"] = [re.sub(r"\s+", " ", c).strip()
                                         for c in rec["committees"]]

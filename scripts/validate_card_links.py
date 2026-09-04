@@ -1299,24 +1299,64 @@ def collect_emails():
     return cites
 
 
+# DNS rcodes this function is willing to believe. NOERROR means the answer
+# section is the truth (empty or not); NXDOMAIN means the name does not exist.
+# ANY OTHER RCODE IS THE RESOLVER FAILING TO ANSWER, NOT THE DOMAIN ANSWERING
+# "no": SERVFAIL (2) and REFUSED (5) both return an empty Answer section, which
+# read as "no MX and no A/AAAA" and gated as "cannot be delivered at all" — a
+# hard finding filed against a live domain because a resolver hiccuped. That
+# contradicted the `except Exception: network trouble is never a finding` rule
+# one screen below, which only ever saw transport errors and never a 200
+# carrying a failure rcode.
+DOH_ANSWERED = {0, 3}  # NOERROR, NXDOMAIN
+
+
 def _doh(session, name, rtype, timeout=15):
     resp = session.get(DOH_URL, params={"name": name, "type": rtype},
                        headers={"Accept": "application/dns-json"}, timeout=timeout)
     resp.raise_for_status()
     data = resp.json()
+    status = data.get("Status")
+    if status not in DOH_ANSWERED:
+        # Raised, not returned: mail_findings() counts a raise as a SKIP, which
+        # is the honest outcome for a question the resolver declined to answer.
+        raise RuntimeError("DoH rcode %r for %s %s — the resolver did not "
+                           "answer" % (status, name, rtype))
     return [a.get("data") for a in (data.get("Answer") or [])
             if a.get("type") == DOH_TYPES[rtype]]
 
 
 def mail_findings(domains, attempts=3):
-    """[(domain, detail)] for domains that cannot receive mail, plus counts.
+    """Domains that cannot receive mail, split by how certainly DNS says so.
 
-    Returns (findings, checked, skipped). A domain is a finding only when the
-    query SUCCEEDED and said there is no route: no MX at all, or MX hosts that
-    themselves do not resolve. Anything that could not be asked is skipped.
+    Returns (findings, unverified, checked, skipped). A domain is a FINDING
+    only when the query SUCCEEDED and said there is no route; anything that
+    could not be asked is skipped.
+
+    NO MX IS NOT THE SAME CLAIM AS NO MAIL, and this function used to make the
+    stronger one about every MX-less domain. RFC 5321 §5.1: when a domain has
+    no MX record but DOES resolve, the A/AAAA record is an IMPLICIT MX and mail
+    is delivered there. Three shipped domains are that shape —
+    marinettecountywi.gov (a county CLERK's address), emmetcountyia.com,
+    villageoffordheights.org — and reporting them as "cannot be delivered at
+    all" asserts something DNS cannot show. They are UNVERIFIED: only a send
+    settles them, which is exactly the limit build_county_clerk_roster.py's
+    bounce guard already records from the other direction (White County's DNS
+    was healthy and its mail still hard-bounced).
+
+    So the split is by evidence, not by severity-feel:
+
+      no MX, no A/AAAA   the domain does not exist   -> finding (fails the gate)
+      MX present, no host resolves  route points nowhere -> finding
+      null MX (RFC 7505, `0 .`)     refuses mail by policy -> finding
+      no MX, A/AAAA present         implicit MX        -> unverified (reported)
+
+    An earlier check in this repo went wrong in the mirror-image way — it
+    resolved A and condemned 33 domains of which 23 route mail fine — so the
+    rule is: NEVER decide deliverability from one record type alone.
     """
     session = requests.Session()
-    cache, findings, checked, skipped = {}, [], 0, 0
+    cache, findings, unverified, checked, skipped = {}, [], [], 0, 0
 
     def query(name, rtype):
         key = (name, rtype)
@@ -1332,50 +1372,139 @@ def mail_findings(domains, attempts=3):
                 time.sleep(1.5 * (attempt + 1))
         raise RuntimeError(last)
 
+    def resolves(name):
+        return bool(query(name, "A") or query(name, "AAAA"))
+
     for domain in sorted(domains):
         try:
             mx = query(domain, "MX")
             if not mx:
-                findings.append((domain, "no MX record — mail to this domain "
-                                         "cannot be delivered at all"))
+                if resolves(domain):
+                    unverified.append(
+                        (domain, "no MX record, but the domain resolves — mail "
+                                 "is routed to its A/AAAA record by RFC 5321 "
+                                 "§5.1 (implicit MX). Whether that host accepts "
+                                 "mail can only be settled by sending"))
+                else:
+                    findings.append(
+                        (domain, "the domain does not resolve at all (no MX, no "
+                                 "A/AAAA) — mail cannot be delivered"))
             else:
+                # RFC 7505: a single `MX 0 .` is an explicit refusal of mail.
                 hosts = [m.split()[-1].rstrip(".") for m in mx if m.split()]
-                if not any(query(h, "A") or query(h, "AAAA") for h in hosts):
+                if hosts and not any(hosts):
+                    findings.append(
+                        (domain, "null MX (RFC 7505) — the domain states it "
+                                 "accepts no mail"))
+                elif not any(resolves(h) for h in hosts if h):
                     findings.append((domain, "MX host(s) %s do not resolve — the "
                                              "mail route points nowhere"
                                              % ", ".join(hosts)))
             checked += 1
         except Exception:  # noqa: BLE001 - network trouble is never a finding
             skipped += 1
-    return findings, checked, skipped
+    return findings, unverified, checked, skipped
 
 
-def render_mail(cites, findings, checked, skipped):
+def withheld_recovered(attempts=3):
+    """[(address, detail)] for withhold-list domains that can take mail again.
+
+    THE THIRD TEST scripts/undeliverable.py's audit cannot run, because it is
+    static and this needs DNS. An entry there withholds an address from every
+    card; if the domain it names starts resolving with a live mail route, the
+    entry is withholding a working contact and must be retired. Same inversion
+    as EXPECTED_UNREACHABLE above — coming back is the finding — and the same
+    rule as everything else in this section: a query that cannot be answered is
+    skipped, never reported.
+    """
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import undeliverable
+    except ImportError:
+        return []
+    session = requests.Session()
+    out = []
+    for addr, (_scope, _reason) in sorted(undeliverable.UNDELIVERABLE.items()):
+        domain = addr.rsplit("@", 1)[1]
+        for attempt in range(attempts):
+            try:
+                mx = _doh(session, domain, "MX")
+                hosts = [m.split()[-1].rstrip(".") for m in mx if m.split()]
+                live = any(_doh(session, h, "A") or _doh(session, h, "AAAA")
+                           for h in hosts if h)
+                if not mx:
+                    live = bool(_doh(session, domain, "A")
+                                or _doh(session, domain, "AAAA"))
+                if live:
+                    out.append((addr, "the domain resolves with a mail route "
+                                      "again — retire this entry in "
+                                      "scripts/undeliverable.py so the address "
+                                      "ships, after verifying by sending"))
+                break
+            except Exception:  # noqa: BLE001 - retried, then skipped
+                time.sleep(1.5 * (attempt + 1))
+    return out
+
+
+def render_mail(cites, findings, unverified, checked, skipped, recovered=()):
     lines = ["", "# E-mail deliverability", ""]
     domains = sorted({a.rsplit("@", 1)[1].lower() for a in cites})
     lines.append("**%d address(es) across %d domain(s)** — %d checked, %d skipped "
-                 "for network trouble, **%d finding(s)**."
-                 % (len(cites), len(domains), checked, skipped, len(findings)))
+                 "for network trouble, **%d finding(s)**, %d unverified, "
+                 "%d withheld-and-recovered."
+                 % (len(cites), len(domains), checked, skipped, len(findings),
+                    len(unverified), len(recovered)))
     lines.append("")
-    if not findings:
-        lines.append("Every shipped address sits on a domain with a live mail route.")
-        lines.append("")
-        return "\n".join(lines)
-    lines.append("An address on a domain with no mail route is a contact a reader "
-                 "cannot use and will get no bounce from. Fix the source, or drop "
-                 "the address — never leave it rendering.")
-    lines.append("")
+
     by_domain = collections.defaultdict(list)
     for addr in cites:
         by_domain[addr.rsplit("@", 1)[1].lower()].append(addr)
-    for domain, detail in findings:
-        addrs = sorted(by_domain[domain])
-        lines.append("- **%s** — %s. %d address(es): %s"
-                     % (domain, detail, len(addrs), ", ".join("`%s`" % a for a in addrs[:6])
-                        + (" …" if len(addrs) > 6 else "")))
-        for a in addrs[:2]:
-            lines.append("    - cited at %s" % cite_summary(cites[a], limit=2))
-    lines.append("")
+
+    def block(rows):
+        for domain, detail in rows:
+            addrs = sorted(by_domain[domain])
+            lines.append("- **%s** — %s. %d address(es): %s"
+                         % (domain, detail, len(addrs),
+                            ", ".join("`%s`" % a for a in addrs[:6])
+                            + (" …" if len(addrs) > 6 else "")))
+            for a in addrs[:2]:
+                lines.append("    - cited at %s" % cite_summary(cites[a], limit=2))
+        lines.append("")
+
+    if findings:
+        lines.append("An address on a domain with no mail route is a contact a "
+                     "reader cannot use and will get no bounce from. Fix the "
+                     "source, or drop the address — never leave it rendering, "
+                     "and never guess a correction to somebody's contact detail.")
+        lines.append("")
+        block(findings)
+    else:
+        lines.append("No shipped address sits on a domain that DNS shows cannot "
+                     "receive mail.")
+        lines.append("")
+
+    if recovered:
+        lines.append("## Withheld addresses whose domain came back")
+        lines.append("")
+        lines.append("`scripts/undeliverable.py` is withholding these from every "
+                     "card, and their domains now resolve with a mail route. "
+                     "Verify by SENDING, then delete the entry.")
+        lines.append("")
+        for addr, detail in recovered:
+            lines.append("- **`%s`** — %s" % (addr, detail))
+        lines.append("")
+
+    # Reported, never gated: DNS cannot settle these, so failing on them would
+    # leave a red nothing in this repo can clear. They are here so an operator
+    # can decide to send and find out.
+    if unverified:
+        lines.append("## Unverified — a mail route exists but is unusual")
+        lines.append("")
+        lines.append("These resolve and so have an implicit mail route (RFC 5321 "
+                     "§5.1), but publish no MX. That is worth an operator's eye "
+                     "and is NOT a gate failure: only sending settles it.")
+        lines.append("")
+        block(unverified)
     return "\n".join(lines)
 
 
@@ -1438,22 +1567,30 @@ def main():
     check_expected_list_still_earned(cites, rows)
 
     mail_cites = collect_emails()
-    mail_bad, mail_checked, mail_skipped = mail_findings(
+    mail_bad, mail_unverified, mail_checked, mail_skipped = mail_findings(
         {a.rsplit("@", 1)[1].lower() for a in mail_cites})
 
+    mail_recovered = withheld_recovered()
     report = render(rows, cites, origin, prefixes) + render_mail(
-        mail_cites, mail_bad, mail_checked, mail_skipped)
+        mail_cites, mail_bad, mail_unverified, mail_checked, mail_skipped,
+        mail_recovered)
     sys.stdout.write(report)
     if args.report:
         with open(args.report, "w", encoding="utf-8") as f:
             f.write(report)
 
-    # A domain with no mail route FAILS, at the same weight as a dead card link
-    # and for the same reason: this repo chose to render the address. It is a
-    # small and self-retiring signal — about ten domains against several
-    # hundred, mostly transcription slips in a county's own directory — and a
-    # county fixing its page clears the finding by itself.
-    status = ("fail" if mail_bad or any(s == FAIL for s, _, _, _ in rows)
+    # A domain DNS shows cannot take mail FAILS, at the same weight as a dead
+    # card link and for the same reason: this repo chose to render the address.
+    # It is a small and self-retiring signal — mostly transcription slips in a
+    # county's own directory — and a county fixing its page clears it by itself.
+    #
+    # mail_unverified deliberately does NOT gate. Those domains resolve and so
+    # have an implicit mail route (RFC 5321 §5.1); nothing in DNS can prove they
+    # do or do not accept mail, so a failure on them would be a red that no
+    # change in this repo could clear. They are reported for an operator to act
+    # on by sending, which is the only thing that settles the question.
+    status = ("fail" if mail_bad or mail_recovered
+              or any(s == FAIL for s, _, _, _ in rows)
               else "warn" if any(s == WARN for s, _, _, _ in rows) else "ok")
     if args.status_file:
         with open(args.status_file, "w", encoding="utf-8") as f:
