@@ -2338,8 +2338,8 @@
       },
       {
         "file": "logan-county-board-members.json",
-        "min_keys": 6,
-        "note": "Logan County Board members keyed by district (6 two-member districts, 12/12 with phone and e-mail; the Chair and Vice Chair tags ride their member rows — the county says who holds them) — scraped weekly from the county's own board page. Its existence retired the entry's rule-4 branch-3 honesty floor."
+        "min_keys": 7,
+        "note": "Logan County Board members keyed by district (6 two-member districts, 12/12 with phone and e-mail; the Chair and Vice Chair tags ride their member rows — the county says who holds them) — scraped weekly from the county's own board page. Its existence retired the entry's rule-4 branch-3 honesty floor. PLUS A TOP-LEVEL 'board' ENTRY (2026-09-04) carrying the county's own \"Logan County Board Office\" block — street address, direct line and board mailbox — which is why min_keys is 6+1 rather than 6: the block is a merge gate, not merely present. The same page prints a DIFFERENT home address beside each of the twelve members and none of those is parsed or shown (the Madison/Peoria rule), so the one address that ships is the one the county itself labels as the board's."
       },
       {
         "file": "boone-county-board-members.json",
@@ -2358,8 +2358,8 @@
       },
       {
         "file": "jefferson-county-board-members.json",
-        "min_keys": 13,
-        "note": "Jefferson County Board members keyed by district (13 SINGLE-member districts; 13/13 with a phone and a per-district e-mail, district1@… — a role address rather than a personal one, which is what the county publishes) — scraped weekly from the county's own board page. THE PAGE IS AT THE SITE ROOT: /county_board/index.php, not the /government/county_board/index.php the site's own navigation links, which 404s while rendering a full-looking page. Names arrive SURNAME-FIRST and are read forward by uninvert_name() imported from build_municipal_officials_roster.py — the third source in the fleet to need that guard in one week. Chairman and Vice Chair hold district seats and are badged on their own rows."
+        "min_keys": 14,
+        "note": "Jefferson County Board members keyed by district (13 SINGLE-member districts; 13/13 with a phone and a per-district e-mail, district1@… — a role address rather than a personal one, which is what the county publishes) — scraped weekly from the county's own board page. THE PAGE IS AT THE SITE ROOT: /county_board/index.php, not the /government/county_board/index.php the site's own navigation links, which 404s while rendering a full-looking page. Names arrive SURNAME-FIRST and are read forward by uninvert_name() imported from build_municipal_officials_roster.py — the third source in the fleet to need that guard in one week. Chairman and Vice Chair hold district seats and are badged on their own rows. PLUS A TOP-LEVEL 'board' ENTRY (2026-09-04): the county publishes an \"Office/Mailing Address: Jefferson County Board / County Courthouse\" block beside a staffed line and a board mailbox, so address, phone and e-mail all ride the board rather than any member — the thirteen member rows carry no address at all. min_keys is 13+1 so the block cannot vanish silently."
       },
       {
         "file": "macon-board-district-labels.json",
@@ -2473,8 +2473,8 @@
       },
       {
         "file": "jo-daviess-county-board-members.json",
-        "min_keys": 17,
-        "note": "Jo Daviess County Board members keyed by district (17 single-member districts — the seat count the boundary module exports, so the roster and the purchased geometry cannot drift apart silently). Scraped weekly from the county's own board page at jodaviesscountyil.gov (NEVER the old jodaviess.org, which answers every URL with its home page): name, party and term on every seat, Chair/Vice-Chair badged, plus a direct phone and an e-mail per member from each member's own directory page — 16 distinct numbers at first ship, so no switchboard hoist, and personal gmail/icloud addresses carried exactly as published. A seat the county prints as VACANT ships as a counted, never named vacancy (District 16 at first ship, the Livingston posture). The directory pages also print members' HOME ADDRESSES, which the scraper never parses (the Madison/Peoria precedent). The count guard counts SEATS (named + vacant = exactly 17, districts 1..17 each once), so a vacancy is distinguishable from a parse regression — and a changed district count reads as a reapportionment, which would need the purchased boundary re-licensed."
+        "min_keys": 18,
+        "note": "Jo Daviess County Board members keyed by district (17 single-member districts — the seat count the boundary module exports, so the roster and the purchased geometry cannot drift apart silently). Scraped weekly from the county's own board page at jodaviesscountyil.gov (NEVER the old jodaviess.org, which answers every URL with its home page): name, party and term on every seat, Chair/Vice-Chair badged, plus a direct phone and an e-mail per member from each member's own directory page — 16 distinct numbers at first ship, so no switchboard hoist, and personal gmail/icloud addresses carried exactly as published. A seat the county prints as VACANT ships as a counted, never named vacancy (District 16 at first ship, the Livingston posture). The directory pages also print members' HOME ADDRESSES, which the scraper never parses (the Madison/Peoria precedent). The count guard counts SEATS (named + vacant = exactly 17, districts 1..17 each once), so a vacancy is distinguishable from a parse regression — and a changed district count reads as a reapportionment, which would need the purchased boundary re-licensed. PLUS A TOP-LEVEL 'board' ENTRY (2026-09-04) carrying WHERE THE BOARD MEETS rather than an office: the county's words are \"County Board room, Third Floor, Jo Daviess County Courthouse\", and the card's label reads \"Board meets at\" for that reason. A meeting room is not an office, and this is precisely the county whose per-member pages print the HOME addresses noted above — so the distinction is drawn in the label rather than blurred. min_keys is 17+1."
       },
       {
         "file": "cook-library-trustees.json",
