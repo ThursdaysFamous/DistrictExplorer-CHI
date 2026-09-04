@@ -211,6 +211,94 @@ def build():
     }
 
 
+def _vertices(geom):
+    """Every coordinate pair in a geometry, regardless of nesting depth."""
+    out = []
+
+    def walk(node):
+        if isinstance(node, list) and node and isinstance(node[0], (int, float)):
+            out.append(tuple(node))
+        elif isinstance(node, list):
+            for child in node:
+                walk(child)
+
+    walk(geom.get("coordinates"))
+    return out
+
+
+def _bbox(points):
+    xs = [x for x, _ in points]
+    ys = [y for _, y in points]
+    return (min(xs), min(ys), max(xs), max(ys)) if points else None
+
+
+def describe_drift(shipped, fresh):
+    """Say WHAT changed, not merely that something did.
+
+    The --check failure used to read "does not match a fresh build" and stop
+    there, which is true of a redistricting and equally true of the county
+    nudging one vertex — so the operator had to reproduce the build by hand
+    before knowing whether the answer was "ship it" or "stop everything". That
+    ambiguity is what kept this refresh red for sixteen days in Aug/Sep 2026,
+    when the whole change was McDonough tidying a ~57 x 39 m sliver off the
+    edge MC 8 and Scotland share.
+
+    This reports the shape of the difference and deliberately does not judge
+    it: a summary saying no precinct was added, no property moved, no bounding
+    box shifted and no vertex was INTRODUCED is strong evidence of a cleanup
+    rather than a boundary change, but the call stays with the person reading
+    it.
+    """
+    def index(payload):
+        return {f["properties"].get("name") or f["properties"].get("precinct"): f
+                for f in payload.get("features", [])}
+
+    old, new = index(shipped), index(fresh)
+    lines = ["  %d precinct(s) shipped, %d in the fresh build"
+             % (len(old), len(new))]
+    gone, added = sorted(set(old) - set(new)), sorted(set(new) - set(old))
+    if gone or added:
+        lines.append("  precincts removed: %s" % (gone or "none"))
+        lines.append("  precincts added:   %s" % (added or "none"))
+    else:
+        lines.append("  no precinct added or removed")
+
+    prop_changes, geom_changes, introduced, moved_bbox = [], [], 0, 0
+    for name in sorted(set(old) & set(new)):
+        if old[name]["properties"] != new[name]["properties"]:
+            keys = sorted(k for k in set(old[name]["properties"]) | set(new[name]["properties"])
+                          if old[name]["properties"].get(k) != new[name]["properties"].get(k))
+            prop_changes.append("%s (%s)" % (name, ", ".join(keys)))
+        if old[name]["geometry"] == new[name]["geometry"]:
+            continue
+        a, b = _vertices(old[name]["geometry"]), _vertices(new[name]["geometry"])
+        fresh_only = len(set(b) - set(a))
+        introduced += fresh_only
+        ba, bb = _bbox(a), _bbox(b)
+        shift = max(abs(ba[i] - bb[i]) for i in range(4)) if ba and bb else 0.0
+        if shift > 1e-7:
+            moved_bbox += 1
+        geom_changes.append(
+            "%s (%d -> %d vertices, %d new, bbox %s)"
+            % (name, len(a), len(b), fresh_only,
+               "unchanged" if shift <= 1e-7 else "moved ~%.0f m" % (shift * 111000)))
+
+    lines.append("  properties changed: %s"
+                 % ("; ".join(prop_changes) if prop_changes else "none"))
+    lines.append("  geometry changed:   %s"
+                 % ("; ".join(geom_changes) if geom_changes else "none"))
+    if geom_changes and not introduced and not moved_bbox and not prop_changes and not (gone or added):
+        lines.append("  Every fresh vertex already existed in the shipped file and no bounding "
+                     "box moved,")
+        lines.append("  which is the signature of the county SIMPLIFYING an edge rather than "
+                     "moving one.")
+    lines.append("  Read the change, then rebuild without --check to ship it "
+                 "(and bump the service-worker")
+    lines.append("  cache — this file is cache-first, so a returning visitor "
+                 "keeps the old copy otherwise).")
+    return "\n".join(lines)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--check", action="store_true",
@@ -233,6 +321,10 @@ def main():
         if shipped != text:
             print("FAIL: %s does not match a fresh build of the county's data"
                   % OUT_PATH, file=sys.stderr)
+            try:
+                print(describe_drift(json.loads(shipped), payload), file=sys.stderr)
+            except Exception as exc:  # noqa: BLE001 — a summary must never mask the failure
+                print("  (could not summarise the difference: %s)" % exc, file=sys.stderr)
             sys.exit(1)
         print("build-mcdonough-precincts: OK — shipped file matches the source "
               "(%d precincts)" % len(payload["features"]))

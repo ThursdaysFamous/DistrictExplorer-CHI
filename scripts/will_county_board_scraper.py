@@ -39,13 +39,21 @@ import re
 import sys
 import time
 
-import requests
+# Not called directly any more — get() goes through scraper_common.fetch, which
+# imports requests at CALL time so stdlib-only importers stay stdlib-only. The
+# module-scope import stays because validate_workflow_deps.py walks module-scope
+# closures: without it the gate stops demanding `requests` in this workflow's pip
+# line, and the run would break the day someone tidied that line. Every other
+# scraper_common consumer keeps it for the same reason.
+import requests  # noqa: F401
 from bs4 import BeautifulSoup, NavigableString
+from scraper_common import fetch as fetch_with_retry  # shared machinery — do not fork
 
 INDEX_URL = "https://www.willcountyboard.com/board-members.html"
 BASE = "https://www.willcountyboard.com/"
 HEADERS = {"User-Agent": "DistrictExplorer-roster-bot/1.0 (+https://chidistricts.com)"}
 TIMEOUT = 30
+FETCH_ATTEMPTS = 5
 # pages that look like member links but aren't
 NON_MEMBER = {"board-members", "about-the-board", "contact-us", "district-map", "committees"}
 
@@ -58,9 +66,31 @@ def cf_decode(hex_token):
 
 
 def get(url):
-    r = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
-    r.raise_for_status()
-    return r.text
+    """GET with backoff on throttling, via the fleet's one shared retry loop.
+
+    The county's edge answered a COLD, first-of-run request with 429 on
+    2026-08-27, and the bare raise_for_status() this replaces turned that into
+    a traceback — which froze the weekly refresh for thirteen days, because a
+    failing workflow opens no PR and the shipped roster simply keeps naming
+    whoever it named last. 429 and 5xx are now retried (honouring a numeric
+    Retry-After, capped); 403/404 still raise at once, since a refused or moved
+    page is not fixed by waiting.
+
+    Pacing is deliberately left alone. The 429 arrived on the first request of
+    the run with no prior traffic, so it is the edge's answer to this client
+    rather than to a rate, and slowing the profile loop would not have
+    prevented it. A run that degrades mid-way is already caught downstream:
+    build_will_county_board_roster.py refuses to write below MIN_EMAILS (15 of
+    the 22 members), so a throttled run fails loudly instead of shipping a
+    roster with the contact details missing.
+
+    HEADERS stays this file's own. scraper_common consolidates the retry loop
+    and deliberately not the User-Agent — several sites in this fleet treat
+    clients by fingerprint, so changing the identity is a per-county change
+    with that county's weekly run as the witness (see its module docstring).
+    """
+    return fetch_with_retry(url, HEADERS, timeout=TIMEOUT,
+                            attempts=FETCH_ATTEMPTS).text
 
 
 def parse_index(html):

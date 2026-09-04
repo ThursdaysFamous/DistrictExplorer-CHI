@@ -290,35 +290,38 @@ PROVENANCE = [
     {"layer": "Lake County Board leadership roles (roster)",
      "app_file": "lake-county-board-roles.json",
      "source_url": "https://www.lakecountyil.gov/2336/Board-Members",
-     "blocked": "the county edge 403s datacenter clients; the scraper's Internet Archive rung carries it",
      "note": "Chair/Vice-Chair tags scraped weekly from the county's own "
-             "directory (lake_county_board_roles_scraper.py; requests with an "
-             "Internet Archive fallback — the site's edge 403s datacenter "
-             "clients, so a reachability WARN here is expected, not drift). "
+             "directory (lake_county_board_roles_scraper.py). The edge 403s the "
+             "requests stack and answers the stdlib one 200, so since 2026-09-03 "
+             "the scraper reads the LIVE page on its stdlib rung instead of the "
+             "Internet Archive copy it had been riding — the roles are current "
+             "rather than as-archived, and no longer age out with the snapshot. "
              "Member names/contact stay live on the boundary GIS; the card "
              "applies a role only when this file's name matches the GIS."},
     {"layer": "Kendall County Board members (roster)",
      "app_file": "kendall-county-board-members.json",
      "source_url": "https://www.kendallcountyil.gov/county-board/board-members",
-     "blocked": "the county blocks every automated client including the Archive's crawler; roster is hand-verified (issue #234)",
-     "note": "Hand-verified 2026-07-23 against the county's own member directory "
-             "+ per-member pages (incl. the Chairman, a District 2 member); the "
-             "weekly scraper (kendall_county_board_scraper.py) attempts a "
-             "refresh, but the county currently blocks ALL automated fetch — "
-             "direct, real-browser, and the Internet Archive's crawler (SPN2 "
-             "error:no-request) — so the workflow tracks the block on a standing "
-             "issue and a reachability WARN here is expected, not drift."},
+     "note": "AUTOMATED AGAIN 2026-09-03, after six weeks hand-verified. The "
+             "county's Akamai edge refuses the requests stack and serves the "
+             "stdlib one sending a real Chromium's Sec-CH-UA hints; it needs both, "
+             "and kendall_county_board_scraper.py now carries that rung between "
+             "requests and playwright. The first live scrape reproduced the "
+             "hand-verified roster EXACTLY — 10 members, 10/10 districts and "
+             "e-mails, the shipped file content-identical — which is the check "
+             "that matters, since a rung that returns a page is not the same as "
+             "one that returns the right data. Issue #234 can close."},
     {"layer": "McHenry County Board members (roster)",
      "app_file": "mchenry-county-board-members.json",
      "source_url": "https://www.mchenrycountyil.gov/departments/county-board/meet-your-county-board-members",
-     "blocked": "the county blocks every automated client including the Archive's crawler; roster is hand-verified (issue #235)",
-     "note": "Hand-verified 2026-07-23 against the county's own member directory "
-             "(incl. the countywide-elected Chairman); the weekly scraper "
-             "(mchenry_county_board_scraper.py) attempts a refresh, but the county "
-             "currently blocks ALL automated fetch — direct, real-browser, and the "
-             "Internet Archive's crawler (SPN2 error:no-request) — so the workflow "
-             "tracks the block on a standing issue and a reachability WARN here is "
-             "expected, not drift."},
+     "note": "AUTOMATED AGAIN 2026-09-03, after six weeks hand-verified — same "
+             "Akamai posture and same stdlib+client-hints rung as Kendall. The "
+             "first live scrape reproduced the hand-verified roster EXACTLY: 19 "
+             "members including the countywide-elected Chairman, 19/19 e-mails, "
+             "the shipped file content-identical. It also surfaced a defect the "
+             "block had hidden — the builder read the profile link as `url` while "
+             "the scraper emits `source_url`, so the first automated run would "
+             "have shipped 19 members with no Profile link. check_roster_retention "
+             "caught it; the builder now reads either. Issue #235 can close."},
     {"layer": "Illinois county clerks (roster)",
      "app_file": "il-county-clerks.json",
      "source_url": "https://www.elections.il.gov/ElectionOperations/ElectionAuthorities.aspx",
@@ -787,7 +790,7 @@ PROVENANCE = [
     {"layer": "Early-voting sites (Chicago Board of Elections)",
      "app_file": "early-voting-sites.json",
      "source_url": "https://chicagoelections.gov/voting/early-voting",
-     "blocked": "the Board's site 403s non-browser clients; the file is hand-transcribed per election",
+     "blocked": "RE-MEASURED 2026-09-03: the site answers the stdlib stack 200 (62 KB) and this validator 403 — so the reachability half has lifted, and the second opinion in http_get now sees it. The flag STAYS because the reason the file is hand-made was never only reachability: the transcription carries the election name onto the card, and nothing parses the page yet. Retire it when a scraper ships (WATCH.md puts the next refresh at ~October, for the 3 Nov general)",
      "note": "Hand-transcribed per election (see WATCH.md row). The site 403s "
              "non-browser clients, so a reachability WARN here is expected, "
              "not drift — refresh the file when the Board posts the next "
@@ -1003,6 +1006,31 @@ def http_get(url, want_json=True, params=None):
         )
     except Exception as e:  # network/TLS/proxy errors are a finding, not a crash
         return False, "request failed: %s" % e
+    if resp.status_code in (401, 403):
+        # A REFUSAL BY THIS VALIDATOR IS NOT ALWAYS A REFUSAL BY THE SITE, and
+        # two of this repo's own checks disagreeing about one host is worse than
+        # either being wrong alone. validate_card_links has taken this second
+        # opinion since 2026-08-29 (Sheboygan): several county edges fingerprint
+        # urllib3's TLS ClientHello and serve the stdlib stack normally, and the
+        # Akamai ones also want the Sec-CH-UA hints a real Chromium sends.
+        #
+        # Measured 2026-09-03: Kendall, McHenry, Adams, Lake and the Chicago
+        # Board of Elections all answer that stack 200 while answering this one
+        # 403. Without this, dropping their `blocked` flags — which is the whole
+        # point of having re-measured them — would trade a monthly false BLOCK
+        # for a monthly false UNREACHABLE.
+        #
+        # Once only, and only on a refusal. A 202 interstitial below is a
+        # document about the block rather than a fingerprint of us, and a
+        # managed challenge is a question the site is entitled to ask.
+        try:
+            from scraper_common import fetch_stdlib  # noqa: PLC0415 - optional path
+            fetch_stdlib(url, timeout=HTTP_TIMEOUT)
+            return True, "HTTP %d to this validator, 200 to a stdlib client " \
+                         "(a client fingerprint, not a refusal)" % resp.status_code
+        except Exception:  # noqa: BLE001 - a second opinion that fails is no opinion
+            pass
+        return False, "HTTP %d" % resp.status_code
     if resp.status_code >= 400:
         return False, "HTTP %d" % resp.status_code
     # 202 is never a real document. "Accepted" means the request was taken for

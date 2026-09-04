@@ -90,7 +90,17 @@ jobs:
           branch="bot/richland-county-board-roster-update"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -b "$branch"
+          # Cut the branch from main's CURRENT tip, not from the checkout this
+          # run started with. actions/checkout is shallow, these runs take tens
+          # of minutes, and if main gains a .github/workflows/ change meanwhile,
+          # the branch ends up differing from main THERE too — which GitHub reads
+          # as the push updating a workflow and refuses for a token without
+          # `workflow` scope. Measured 2026-09-02 on update-municipal-officials.
+          # Re-cutting leaves this branch differing from main in its data file(s)
+          # alone; the rebuilt files are carried across, and a run where main
+          # touched those same files errors instead of pushing, which is right.
+          git fetch --depth=1 origin main
+          git checkout -B "$branch" FETCH_HEAD
           git add il/data/app/richland-county-board-members.json
           git commit -m "Update Richland County Board roster from richlandcounty.illinois.gov"
           git push -u origin "$branch" --force

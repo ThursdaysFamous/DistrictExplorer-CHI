@@ -2347,7 +2347,7 @@
       {
         "file": "grundy-county-board-members.json",
         "min_keys": 3,
-        "note": "Grundy County Board members keyed by district (3 six-member districts, 18/18 with party, the page's 'Board Member Since' year, committee assignments verbatim, phone and e-mail; the Board Chairman tag rides Drew Muffler's row as the page states it) — scraped weekly from the county's own board page."
+        "note": "Grundy County Board members keyed by district (three districts, six seats each — each district ships its `seats`, so a seat the county stops listing renders as 'N of 6 seats not listed in the county's directory' rather than silently shortening the card; the builder floors the board at 16 of 18 named, because three missing is a parser that stopped finding rows rather than a departure. The note says 'not listed', never 'vacant' — the page carries no vacancy marker, it simply stops listing a person, so we can see that a seat is unaccounted for and cannot see why). Named seats carry party, the page's 'Board Member Since' year, committee assignments verbatim, phone and e-mail; the Board Chairman tag rides the chair's own row as the page states it — scraped weekly from the county's own board page."
       },
       {
         "file": "henry-county-board-members.json",
@@ -2527,7 +2527,7 @@
     ]
   },
   "sw": {
-    "cache_name": "districtry-il-shell-v5",
+    "cache_name": "districtry-il-shell-v6",
     "shell_urls": [
       "./",
       "./sources.html",

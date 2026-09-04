@@ -30,7 +30,8 @@ WHAT IT CHECKS. For each instance, the cache-first files that differ from the
 change's base (usually `origin/main`), and whether that instance's CACHE_NAME
 differs too. A changed cache-first file with an unchanged cache name fails, and
 the message names the files, so the fix is obvious: bump `cache_name` in that
-instance's `metro-worksheet.json` and regenerate.
+instance's worksheet (`<tag>/metro-worksheet.json`, or the root one for
+Illinois) and regenerate.
 
 WHAT IT DELIBERATELY DOES NOT CHECK. Network-first files — they need no bump,
 and demanding one for every weekly roster PR would make the bump meaningless
@@ -73,6 +74,22 @@ def _instances():
            os.path.isdir(os.path.join(REPO_ROOT, name, "data", "app")):
             out.append(name)
     return out
+
+
+def _worksheet_for(tag):
+    """Where THIS instance's worksheet lives, discovered rather than assumed.
+
+    Every instance keeps its worksheet beside its app (`wi/metro-worksheet.json`)
+    except Illinois, whose repo-level files stayed at the root when R2.3 moved
+    the app down into `il/`. Printing "il/metro-worksheet.json" sent an operator
+    to a path that does not exist, in the one message whose whole job is to say
+    how to fix the failure. Discovery keeps that right if a worksheet ever
+    moves; importing generate_metro_files.INSTANCES for the same map would not,
+    because that module exits 1 without jsonschema and not as an ImportError.
+    """
+    local = os.path.join(tag, "metro-worksheet.json")
+    return local if os.path.isfile(os.path.join(REPO_ROOT, local)) \
+        else "metro-worksheet.json"
 
 
 def _cache_first(sw_text, tag):
@@ -129,10 +146,10 @@ def main():
             problems.append(
                 "  %s: %d cache-first file(s) changed and CACHE_NAME is still "
                 "%s, so a returning visitor keeps the old copy:\n%s\n"
-                "    Fix: bump \"cache_name\" in %s/metro-worksheet.json and run "
+                "    Fix: bump \"cache_name\" in %s and run "
                 "python3 scripts/generate_metro_files.py"
                 % (tag, len(stale), now.group(1),
-                   "\n".join("      " + f for f in stale), tag))
+                   "\n".join("      " + f for f in stale), _worksheet_for(tag)))
 
     if problems:
         print("check-cache-version: FAIL — a cache-first file changed without a "

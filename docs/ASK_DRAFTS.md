@@ -464,3 +464,225 @@ the Elections Division directly.
 * **"The county auditors would have it"** — that is a pointer, and a good one: it turns 99
   asks into a route this project already has the addresses for, since all 99 auditors ship in
   `ia/data/app/ia-county-auditors.json` with an e-mail apiece.
+
+---
+
+# Illinois — the asks that were drafted and never written down (added 2026-09-03)
+
+This file's own opening says why this section exists: *"Until now the drafts themselves
+lived in the operator's mail client and only their existence was recorded, in gap records
+reading `NOT YET ASKED — DRAFTED`. That made the wording unreviewable and the batch
+uncountable."* That is still true of four Illinois asks. Their gap records say a reply is
+drafted; no draft exists anywhere a person can read. They are written out below.
+
+**Addresses come from `data/app/il-county-clerks.json`**, refreshed weekly from ISBE and
+re-run 2026-09-03, rather than from a list copied into this document.
+
+**One correction that predates these drafts.** Fayette County's clerk changed while the
+clerk refresh was frozen: the shipped card named Jessica Barker for eleven days after the
+county swore in **Kara Dugan** (`kdugan@fayettecountyillinois.gov`). Any Illinois ask
+addressed to Barker is addressed to someone who has left. Fayette has no open ask today,
+but the same freeze covered every county, so check a recipient against the current roster
+before sending rather than against a draft written in August.
+
+**And one to verify before sending.** The Christian County gap record names the clerk
+"Kandi Badman"; the ISBE roster names **Jodie Badman**. The roster is the fresher source
+and is used below, but confirm the name before the envelope goes out — getting a public
+official's name wrong is the cheapest possible way to lose a reader.
+
+---
+
+## Ask 9 — Bureau County: permission the licence does not grant, or the free route instead
+
+> **NOT YET ASKED — DRAFTED.** GIS Technician Christine Anderson sent a signed-user
+> agreement and a $150 invoice on **2026-08-12**; nothing has been sent back since, so this
+> has been sitting for three weeks. The operator read both PDFs on 13 Aug: the invoice is
+> honest cost recovery, and the agreement's *Protection of Proprietary Rights* clause
+> forbids redistribution of the data "or products derived therefrom outside of licensee's
+> organization" — which is exactly what a public `bureau-county-board-districts.json` is.
+> Signing as written is off the table at any price. The clause's own tail ("without
+> permission from Bureau County GIS") is a valve, and this asks for it.
+>
+> **Do not pay the invoice before the answer arrives.** The money is not the obstacle and
+> paying first would buy a file this project could not then publish.
+
+**To:** Christine Anderson, GIS Technician, Bureau County Assessor's Office —
+`canderson@bureaucounty-il.gov`
+**Cc:** `ccao@bureaucounty-il.gov`, and County Clerk Matthew Eggers
+`countyclerk@bureaucounty-il.gov` (who opened the thread)
+**Subject:** Re: Request: 2021 county board redistricting plan — one question about the licence
+
+> Dear Ms. Anderson,
+>
+> Thank you for the user agreement and the invoice — and for finding the shapefile in the
+> first place. I want to be straightforward about one clause before I sign anything,
+> because I think the agreement was written for a different kind of user than me.
+>
+> I run districtry (https://districtry.com/il/), a free, non-commercial site that shows
+> Illinois residents which civic districts contain any point they click, and who
+> represents them there. It is not a data product and nothing on it is sold. But it does
+> work by publishing simplified boundary outlines to each visitor's browser, and the
+> agreement's Protection of Proprietary Rights clause forbids redistribution of the
+> datasets "or products derived therefrom outside of licensee's organization". A public
+> map of Bureau County's board districts is precisely such a derived product, so I cannot
+> sign the agreement as written and then do the one thing I need the file for.
+>
+> The clause says "without permission from Bureau County GIS", so my question is simply
+> whether the county is willing to give that permission for this use. Concretely, I would
+> like to publish a simplified outline of the eighteen board districts, credited to Bureau
+> County GIS, with a note that the boundaries are simplified for display and that your
+> office is authoritative. Every obligation the agreement otherwise imposes — crediting
+> the source, describing modifications — this site already does on every card.
+>
+> If that is not something the county wants to grant, that is a complete answer and I will
+> stop asking. In that case there is a second route that costs your office almost nothing
+> and needs no licence at all: a plain list of which voting precincts (or census blocks)
+> make up each of the eighteen districts. That is a public record rather than a GIS
+> product, and several Illinois counties have answered exactly that way — I rebuild the
+> boundaries myself from published census geography and the county's file never leaves
+> your office.
+>
+> Either answer closes the question, and I would rather have a clear no than leave it
+> open. Thank you for your time.
+>
+> <YOUR NAME>
+> <YOUR E-MAIL> · https://districtry.com/il/
+
+---
+
+## Ask 10 — Clark County: direct contact for the board, and which building serves each precinct
+
+> **NOT YET ASKED — DRAFTED**, two questions on one thread. Clerk Lee already answered this
+> project once, in a single sentence that unblocked the whole county ("The County Board is
+> elected by districts. I do not have maps available"), so she is a proven responder and
+> the ask should be correspondingly short. Both gap records — `clark-board-contact` and
+> `clark-precinct-polling` — get their ASKED date when this goes, never before.
+
+**To:** Laura H. Lee, County Clerk & Recorder, Clark County — `clerk@clarkcounty.illinois.gov`
+**Subject:** Two small follow-ups now that Clark County is on the map
+
+> Dear Clerk Lee,
+>
+> Thank you again for your reply in August. Knowing the board is elected by districts let
+> me build Clark County's twelve districts from your office's own certified canvasses, and
+> the county has been live on districtry (https://districtry.com/il/) since then —
+> a resident can click their address and see their board district, their member and their
+> precinct.
+>
+> Two small things would finish it, and a one-line answer to either is plenty.
+>
+> First, the board members' cards currently show the courthouse switchboard, because that
+> is the only number published. If the county has a direct phone number or e-mail for
+> individual board members that it is content to see listed publicly, I would list it. If
+> the switchboard genuinely is the route to a board member, that is a fine answer too and
+> I will say so on the card instead of leaving it ambiguous.
+>
+> Second, the precinct cards name a resident's precinct but not where they vote. If your
+> office has a list of polling places by precinct — a page, a PDF, a spreadsheet, anything
+> already prepared — I would add it. I do not need anything made specially.
+>
+> No rush on either; both are improvements rather than corrections. Thank you.
+>
+> <YOUR NAME>
+> <YOUR E-MAIL> · https://districtry.com/il/
+
+---
+
+## Ask 11 — CCGISC: the licence question behind two whole counties
+
+> **NOT YET ASKED — DRAFTED.** Champaign and Piatt are the only two Illinois counties this
+> project records as blocked for a LEGAL rather than a technical reason: the Champaign
+> County GIS Consortium sells the data under terms that forbid copying, public display and
+> rehosting, and Piatt additionally asserts "All Rights Reserved" over its GIS. Both
+> clerks have been asked directly and neither route reached the data — this is the ask
+> that goes to the party that can actually say yes.
+>
+> **The recipient is the one thing not settled here.** CCGISC's own current contact should
+> be confirmed from ccgisc.org before sending; the clerks below are cc'd because both have
+> corresponded with this project already and can vouch that the request is what it says.
+
+**To:** the Champaign County GIS Consortium — *confirm the current address from ccgisc.org*
+**Cc:** Aaron O. Ammons, Champaign County Clerk — `elections@champaigncountyclerkil.gov`;
+Jennifer Harper, Piatt County Clerk — `countyclerk@piatt.gov`
+**Subject:** Permission to display CCGISC county board and precinct boundaries on a free civic map
+
+> Dear CCGISC,
+>
+> I run districtry (https://districtry.com/il/), a free, non-commercial site that lets an
+> Illinois resident click their address and see every civic district that contains it and
+> who represents them there. It covers 91 of Illinois's 102 counties. Champaign and Piatt
+> are two of the eleven it cannot cover, and they are the only two held back by a licence
+> rather than by missing data.
+>
+> Both counties' clerks have been helpful and both pointed here: the county board district
+> and voting precinct boundaries are consortium data, and the terms I have seen permit
+> personal, transitory viewing while prohibiting copying, public display and hosting on
+> another server. I have not copied or republished anything, and I am not asking you to
+> change your licence.
+>
+> What I am asking is narrower: permission to display a simplified outline of the county
+> board districts and voting precincts of Champaign and Piatt counties on this site,
+> credited to the Champaign County GIS Consortium, with a note that the boundaries are
+> simplified for display and that CCGISC is authoritative. No parcel data, no attributes,
+> no bulk download, and no redistribution of the consortium's files — the site publishes
+> only the outline it draws.
+>
+> If the answer is no, that is genuinely useful and I will record it plainly: the two
+> counties' cards will tell residents that the boundaries exist and are licensed, rather
+> than implying nobody has them. If a narrower permission is easier to grant than the one
+> I have described, I would rather have that than nothing.
+>
+> Thank you for considering it.
+>
+> <YOUR NAME>
+> <YOUR E-MAIL> · https://districtry.com/il/
+
+---
+
+## Ask 12 — the four second follow-ups that are now due
+
+> **This file's rule 3 is "follow up at ~3 weeks, again 2 weeks later, and only then record
+> the route UNRESPONSIVE."** Four Illinois asks have had exactly ONE follow-up and are past
+> the second interval. None of them may be called unresponsive yet, and the reason is
+> written into that rule: a follow-up is a recovery mechanism, not a nudge — Clay County's
+> clerk answered the question that unblocked a whole build only on the third attempt,
+> because her spam folder had eaten the first two.
+>
+> Send these as replies on their existing threads, so the history travels with them.
+
+| County | Recipient | Asked | 1st follow-up | Owed |
+|---|---|---|---|---|
+| Ford | Kelsie Vaughn, `clerk@fordcounty.illinois.gov` | 3 Aug | 16 Aug | 2nd follow-up |
+| Christian | Jodie Badman, `elections@christiancountyil.com` | 5 Aug (+ the Taylorville 9 question 21 Aug) | 16 Aug | 2nd follow-up |
+| Piatt | Jennifer Harper, `countyclerk@piatt.gov` | 3 Aug | 16 Aug | 2nd follow-up |
+| Knox | Scott G. Erickson, `serickson@knoxcountyil.gov` | 5 Aug | 16 and 24 Aug | already two — record UNRESPONSIVE if this one is silent |
+
+Each follow-up restates the ONE question and offers a no. The Ford one, as the shape:
+
+> Dear Clerk Vaughn,
+>
+> I am following up once more on my notes of 3 and 16 August about Ford County's board
+> districts — I know these land in a busy inbox, and I would rather ask again than assume
+> an answer.
+>
+> There is only one thing I need, and either answer finishes it. The county's published
+> district map is titled 2011 but was re-uploaded in November 2021, so I cannot tell which
+> plan is currently in force. And Patton 3 appears under both District 1 and District 3,
+> which reads as the precinct being split between them.
+>
+> If you can tell me which plan the county elects under today, and how Patton 3 divides, I
+> can add Ford County to districtry (https://districtry.com/il/) — a free, non-commercial
+> site that shows Illinois residents their districts and representatives. If the map is
+> not something your office maintains, saying so is a complete answer and I will stop
+> asking.
+>
+> Thank you for your time.
+>
+> <YOUR NAME>
+> <YOUR E-MAIL> · https://districtry.com/il/
+
+**Knox is the one to watch.** It has had two follow-ups already, so a third silence is the
+point at which `knox-precinct-geometry` records the ROUTE as unresponsive — a claim about
+this ask, never about the county. Note also that Knox's own board-members page turned out
+to be readable after all (2026-09-03), so the county is less dark than its record implied;
+the precinct question is the part still genuinely open.

@@ -52,7 +52,7 @@ BOARD = {
     "note": ("Members and districts come from the roll call of Knox County's own "
              "board minutes; the county's member page cannot be read by an "
              "automated client, so no per-member phone or e-mail is published here."),
-    "sourceUrl": "https://www.knoxcountyil.gov/departments/county_board/",
+    "sourceUrl": "https://www.knoxcountyil.gov/county_board/county_board_members.php",
 }
 
 
