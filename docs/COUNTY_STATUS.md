@@ -49,13 +49,13 @@
 | Fulton | 17057 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | Gallatin | 17059 | dispatch | at-large — County card | `county-precinct` | 1 — `gallatin-board-contact` (data-quality) |
 | Greene | 17061 | dispatch | at-large — County card | `county-precinct` | none |
-| Grundy | 17063 | dispatch | districted | `county-board`, `county-precinct` | 4 — `county-board-office-addresses` (no-source); `grundy-special-districts` (no-source); `morris-ward-geometry` (no-source); `municipal-website-dead-ends` (data-quality) |
+| Grundy | 17063 | dispatch | districted | `county-board`, `county-precinct` | 3 — `grundy-special-districts` (no-source); `morris-ward-geometry` (no-source); `municipal-website-dead-ends` (data-quality) |
 | Hamilton | 17065 | dispatch | at-large — County card | `county-precinct`, `fire-district` | 1 — `hamilton-municipal-officials` (no-source) |
 | Hancock | 17067 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | Hardin | 17069 | dispatch | no board layer — see gaps | `county-precinct` | 1 — `hardin-county-board` (no-source) |
 | Henry | 17073 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `pass9-ward-seats-without-maps` (no-source) |
 | Iroquois | 17075 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 1 — `county-board-office-addresses` (no-source) |
-| Jackson | 17077 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
+| Jackson | 17077 | dispatch | districted | `county-board`, `county-precinct` | none |
 | Jefferson | 17081 | dispatch | districted | `county-board`, `county-precinct` | none |
 | Jersey | 17083 | judicial circuit | no board layer — see gaps | — | 2 — `jersey-county-board-districts` (no-source); `jodaviess-jersey-precinct-geometry` (no-source) |
 | Jo Daviess | 17085 | dispatch | districted | `county-board` | 1 — `jodaviess-jersey-precinct-geometry` (no-source) |

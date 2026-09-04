@@ -25,6 +25,25 @@ from scraper_common import make_fail  # noqa: E402  (shared machinery — do not
 
 SOURCE_URL = "https://www.grundycountyil.gov/government/county_board.php"
 
+# The county's own contact table on the County Board page: an "Address:"
+# label with the board's phone and fax beside it, under the County Board
+# heading. AN EARLIER SWEEP REJECTED THIS ADDRESS AND WAS WRONG. It applied
+# the home-page discriminator — if the county's home page carries the same
+# string, the block is site chrome and says nothing about where the board
+# sits — and grundycountyil.gov's home page does carry 1320 Union St., under
+# "Administration Office". That discriminator can only settle an address
+# found by PROXIMITY; it cannot overturn one the county attributes IN WORDS.
+# The county's own contact page settles it either way: it lists SIX distinct
+# department addresses (1320 Union St., 111 E Washington St., 310 E Dupont
+# Rd., 111 E Illinois Ave among them), so these blocks are per-department and
+# not one template repeated.
+BOARD = {
+    "address": "1320 Union Street, Morris, IL 60450",
+    "phone": "(815) 941-3400",
+    "fax": "(815) 941-3429",
+    "sourceUrl": SOURCE_URL,
+}
+
 EXPECT_DISTRICTS = ("1", "2", "3")
 EXPECT_SEATS_PER_DISTRICT = 6
 EXPECT_SEATS_TOTAL = len(EXPECT_DISTRICTS) * EXPECT_SEATS_PER_DISTRICT
@@ -114,8 +133,14 @@ def main():
             fail("only %d/18 members carry a %s (floor %d)" % (counts[k], k, floor))
 
     out_path = os.path.join(out_dir, "grundy-county-board-members.json")
+    # The board block rides beside the districts in the shipped file, and is
+    # added to a COPY so every walk below still sees districts only —
+    # `short` indexes roster[d]["members"] over sorted(roster) and a "board"
+    # key there is a KeyError, not a bad line of output.
+    payload = dict(roster)
+    payload["board"] = dict(BOARD)
     with open(out_path, "w", encoding="utf-8") as f:
-        json.dump(roster, f, indent=2, ensure_ascii=False, sort_keys=True)
+        json.dump(payload, f, indent=2, ensure_ascii=False, sort_keys=True)
         f.write("\n")
     # Name the short districts in the run's own output. A refresh that ships
     # seventeen of eighteen seats should say so where the operator reads it,

@@ -205,5 +205,11 @@
     ],
     "seats": 6,
     "sourceUrl": "https://www.grundycountyil.gov/government/county_board.php"
+  },
+  "board": {
+    "address": "1320 Union Street, Morris, IL 60450",
+    "fax": "(815) 941-3429",
+    "phone": "(815) 941-3400",
+    "sourceUrl": "https://www.grundycountyil.gov/government/county_board.php"
   }
 }

@@ -91,5 +91,12 @@
       }
     ],
     "sourceUrl": "https://jacksoncounty-il.gov/158/County-Board"
+  },
+  "board": {
+    "address": "1001 Walnut Street, Murphysboro, IL 62966",
+    "hours": "Monday through Friday, 8 am to 4 pm",
+    "meets": "Courthouse, 2nd-floor Courtroom 4 — third Tuesday of each month, 6 pm",
+    "phone": "618-687-7240",
+    "sourceUrl": "https://jacksoncounty-il.gov/158/County-Board"
   }
 }
