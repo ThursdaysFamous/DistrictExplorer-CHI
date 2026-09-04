@@ -839,7 +839,7 @@ table.matrix code {
   <section class="matrix-section">
     <h2>The layer matrix</h2>
     <!-- ==== GENERATED:BEGIN layer-matrix ==== -->
-      <p class="matrix-lede">9 layers — 4 political and legislative, 2 schools, 3 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
+      <p class="matrix-lede">10 layers — 5 political and legislative, 2 schools, 3 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
       <nav class="matrix-nav" aria-label="Jump to a layer group">
         <a href="#political">Political &amp; legislative</a>
         <a href="#schools">Schools</a>
@@ -847,7 +847,7 @@ table.matrix code {
       </nav>
 
       <section class="matrix-group" id="political">
-        <h2>Political &amp; legislative <span class="matrix-count">4 layers</span></h2>
+        <h2>Political &amp; legislative <span class="matrix-count">5 layers</span></h2>
         <p class="matrix-blurb">Districts that elect somebody — from your ward to your seat in Congress.</p>
         <div class="matrix-wrap">
           <table class="matrix">
@@ -898,6 +898,17 @@ table.matrix code {
                 </td>
                 <td data-label="Who it names">NONE, and that is a measurement rather than an omission. The source carries a Commissioner and Party on every one of its 619 polygons, which looks like a free roster and is not one: the item's own description says the values were &quot;derived from the canvased November 2024 election results&quot;, so the column is a list of CERTIFIED ELECTION WINNERS, not of officeholders. That is why it is 100% filled — a district always has a winner — and the fill rate is evidence against maintenance, not for it. Measured 2026-09-03 across 12 counties read district-by-district against their own board pages (123 districts) plus ~40 more in a second pass: 93.5% named the right person, and every single miss ran the same direction, the layer naming the 2024 winner and the county naming their replacement. Wayne County District 5 still names a commissioner who died on 10 June 2025. Four further rows misspell a real surname. So the names are dropped at the build rather than shipped with a caveat, and the honest route to Michigan commissioner names — each county's own board page — is a later change with its own weekly refresh. Recorded as gap mi-commissioner-roster.</td>
                 <td data-label="Where it applies">Michigan — statewide, all 83 counties, 619 districts. Every Michigan county elects its commissioners by single-member district (MCL 46.401-46.405); none elects at large, so a polygon is the honest surface everywhere.</td>
+              </tr>
+              <tr id="layer-precinct">
+                <th scope="row"><span class="layer-name">Precinct</span><code>precinct</code></th>
+                <td data-label="What it answers">The voting precinct covering the point, its county, and how many voters were registered in it for the 2026 cycle.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://services3.arcgis.com/dxRQUfTDNtfqZ301/arcgis/rest/services/2026_Voting_Precincts/FeatureServer/0" target="_blank" rel="noopener">Michigan Dept. of State, Bureau of Elections — &quot;2026 Voting Precincts&quot; (ArcGIS Online item c349bc2bb6c2468594d341a09f520ea8, the CURATED item: it carries the title, the licence, the validation caveat and the full field names). 3,895 features, pre-built by mi/scripts/build_mi_precincts.py (paged, Visvalingam-simplified, 2,000-point agreement gate). THE NEWEST MAP IS NOT ON THE MAPSERVER THAT CARRIES THE COMMISSIONER LAYER: that service publishes a precinct layer per cycle and stops at 2024, while the 2026 map lives on the state's ArcGIS Online org on a different host — and Michigan consolidated 4,340 precincts into 3,895 between the cycles, so building from the MapServer would have shipped a map 445 precincts wrong</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">NO OFFICEHOLDER — a precinct elects nobody; it is the unit a ballot is counted in. AND NO POLLING PLACE, which here is a fact about the source rather than a decision: the layer carries no polling field at all, so unlike Iowa's precinct builder there is nothing to decline. The card names the state's own caveat instead — the Bureau collects this from local election officials and says validation was &quot;done by most, but not all&quot; jurisdictions — and points a reader at their clerk.</td>
+                <td data-label="Where it applies">Michigan — statewide, all 3,895 precincts across all 83 counties, as drawn for the 2026 election cycle. Every precinct's county-subdivision key resolves against the Census MCD fabric this instance ships (1,530 of 1,530 distinct keys, measured 2026-09-04 — the same 1,530 on the 2024 map, because the consolidation happened WITHIN municipalities rather than between them), so the precinct and the Township or City card agree on which local government a point sits in. The state's voting-equipment column is deliberately not fetched: it changes on a different clock from the boundary.</td>
               </tr>
             </tbody>
           </table>
