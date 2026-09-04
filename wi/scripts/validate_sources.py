@@ -984,12 +984,34 @@ ENDPOINTS = [
     {
         # Nearest-3 station layers, live by the state envelope (WI plus the
         # border-state stations a reader near the line genuinely wants).
+        #
+        # THE COUNT IS CHECKED, NOT JUST FETCHED. These rows already asked for
+        # returnCountOnly and then threw the number away, so the one thing a
+        # count endpoint is for could not be seen: the app fetches each layer
+        # in a SINGLE request and ignores exceededTransferLimit, so the day a
+        # layer passes the service's maxRecordCount it silently starts serving
+        # a truncated set and every nearest-3 answer quietly gets worse. The
+        # Michigan session measured exactly that on USGS structures — 2,000 of
+        # 2,820 fetched, no error anywhere. `count_layer` names the layer whose
+        # maxRecordCount the count is measured against, read live rather than
+        # hardcoded, because a service that LOWERS its cap breaks this the same
+        # way and a pinned 2000 would never notice.
         "layer": "police-station",
         "url": "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/53/query?geometry=-92.94,42.44,-86.19,47.36&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&where=1%3D1&returnCountOnly=true&f=json",
+        "count_layer": "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/53",
     },
     {
         "layer": "fire-station",
         "url": "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/51/query?geometry=-92.94,42.44,-86.19,47.36&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&where=1%3D1&returnCountOnly=true&f=json",
+        "count_layer": "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/51",
+    },
+    {
+        # THE POST-OFFICE LAYER HAD NO COUNT ROW AT ALL — only a metadata probe
+        # further down, which answers "the service exists" and nothing about
+        # what the app receives from it.
+        "layer": "post-office",
+        "url": "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/38/query?geometry=-92.94,42.44,-86.19,47.36&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&where=1%3D1&returnCountOnly=true&f=json",
+        "count_layer": "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/38",
     },
     {
         # The Madison pair is PRE-BUILT; a count change here is the
@@ -1126,6 +1148,61 @@ def scraper_get(url):
         return False, "HTTP %d" % e.code
     except Exception as e:  # noqa: BLE001 - a finding, not a crash
         return False, "request failed: %s" % e
+
+
+# How close to the cap is close enough to say something. A layer at 90% will
+# cross it on ordinary growth well inside a year of monthly checks, and the
+# whole point is to hear about it BEFORE the app starts silently truncating.
+COUNT_HEADROOM_WARN = 0.9
+
+
+def _check_single_request_count(findings, spec):
+    """Report the layer's record count against the cap one request can return.
+
+    Reachability is the weaker half of this check. The app fetches these layers
+    in ONE request and does not look at exceededTransferLimit, so a count at or
+    past maxRecordCount means every card built from the layer is answering off a
+    truncated set with nothing raised anywhere.
+    """
+    layer = spec["layer"]
+    ok, res = http_get(spec["url"])
+    if not ok:
+        findings.add(WARN, layer,
+                     "count endpoint not reachable (%s): %s — the service may have "
+                     "been renamed or retired" % (res, spec["url"]))
+        return
+    count = res.get("count") if isinstance(res, dict) else None
+    if count is None:
+        findings.add(WARN, layer,
+                     "count endpoint answered without a count field: %r" % (res,))
+        return
+
+    ok_meta, meta = http_get(spec["count_layer"] + "?f=json")
+    cap = meta.get("maxRecordCount") if (ok_meta and isinstance(meta, dict)) else None
+    if not isinstance(cap, int) or cap <= 0:
+        findings.add(WARN, layer,
+                     "%d records in the app's envelope, but the layer's "
+                     "maxRecordCount could not be read, so whether one request "
+                     "returns them all is unknown" % count)
+        return
+
+    if count >= cap:
+        findings.add(FAIL, layer,
+                     "%d records in the app's envelope against a maxRecordCount of "
+                     "%d — the app fetches this layer in ONE request and ignores "
+                     "exceededTransferLimit, so it is now serving a TRUNCATED set "
+                     "and every nearest-N answer from it is suspect. Page the "
+                     "loader (the engine's loadArcGISPaged)." % (count, cap))
+    elif count >= cap * COUNT_HEADROOM_WARN:
+        findings.add(WARN, layer,
+                     "%d records against a maxRecordCount of %d — %.0f%% of what a "
+                     "single request can return, and this loader makes exactly one. "
+                     "Page it before it crosses." % (count, cap, 100.0 * count / cap))
+    else:
+        findings.add(OK, layer,
+                     "%d records against a maxRecordCount of %d (%.0f%%) — one "
+                     "request still returns them all"
+                     % (count, cap, 100.0 * count / cap))
 
 
 def http_get(url, want_json=True, params=None):
@@ -1299,6 +1376,9 @@ def check_endpoints(findings, offline):
     if offline:
         return
     for e in ENDPOINTS:
+        if e.get("count_layer"):
+            _check_single_request_count(findings, e)
+            continue
         ok, res = http_get(e["url"], want_json=False)
         if ok:
             findings.add(OK, e["layer"], "endpoint reachable")
