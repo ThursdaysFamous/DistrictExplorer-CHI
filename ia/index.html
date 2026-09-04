@@ -5992,7 +5992,7 @@ function initIowaExplorer() {
     "cc-director-district", // 123 director districts inside the 15 community college merged areas — the sub-fabric a college's board of trustees is elected from (Iowa Code 260C.11)
     "county-subdivision", // 1,663 records tiling the state, live from TIGERweb (no data/app file) — 1,600 civil townships, 62 incorporated cities that double as their own subdivision record, and one federal reservoir carried as unorganized territory
     "municipality",      // 939 incorporated cities, live from TIGERweb (no data/app file) — small dense pockets within the county-subdivision fabric, so smaller on average than a civil township despite fewer records
-    "city-ward",         // The instance's CITY tier: 9 wards across two cities — Des Moines's 4 averaging 22.7 sq mi inside one 90.66 sq mi city, Waterloo's 5 averaging 12.6 sq mi inside one 62.98 sq mi city — so strictly smaller than the City that contains them and larger than a precinct
+    "city-ward",         // The instance's CITY tier: 14 subdivisions across three cities — Des Moines's 4 wards averaging 22.7 sq mi inside one 90.66 sq mi city, Waterloo's 5 wards averaging 12.6 sq mi inside one 62.98 sq mi city, Cedar Rapids's 5 districts averaging 15.2 sq mi inside one 75.54 sq mi city — so strictly smaller than the City that contains them and larger than a precinct
     "zip-code",          // Census ZCTAs by Iowa envelope (no data/app file) — 1,443 features measured in-envelope, smaller on average than an incorporated city
     "precinct",          // 1,660 election precincts, pre-built (mapshaper-simplified from the Legislature's own ArcGIS layer) — identity-only, no roster; ranked with the other fine-grained political boundaries
     "police-station",    // Nearest-3 point layer (449 stations in the state envelope) — not a containment boundary; ranked with the amenity points
@@ -9499,7 +9499,13 @@ function initIowaExplorer() {
     registerLayer(spec);
   }
 
-  /* ---------- 12. Des Moines City Council Ward — the instance's first city tier ----------
+  /* ---------- 12. City Council District — the instance's city tier ----------
+   * THREE CITIES, ONE TOGGLE, and the section is written from Des Moines
+   * because it was here first. Waterloo joined 2026-09-04 and Cedar Rapids
+   * the same day; each is a dispatch entry at the bottom of this section, and
+   * each city's own vocabulary ("ward" in the first two, "district" in Cedar
+   * Rapids) reaches the card through its features' `label`.
+   *
    * Iowa Code 372.4(1)(b): a city governed on 1 July 1975 by the mayor-council
    * form with "two council members elected at large and one council member
    * from each of four wards" may continue in it, and Des Moines does. So this
@@ -9659,7 +9665,21 @@ function initIowaExplorer() {
     // A GENERIC toggle label, per docs/EXPANSION_GUIDE.md §3.1: "One style +
     // a generic toggle label per concept", with the unit's identity moving
     // into the card — which is the City row every entry renders first.
-    label: "City Council Ward",
+    //
+    // IT SAID "City Council Ward" UNTIL CEDAR RAPIDS JOINED, AND THAT WAS THE
+    // TWO CITIES' OWN WORD RATHER THAN THE CONCEPT'S. Des Moines and Waterloo
+    // elect by WARD; Cedar Rapids elects by DISTRICT and has never used the
+    // other word — its own seat pages are titled "District 1 Representative".
+    // A generic label has to be one no city is contradicted by, and "district"
+    // is what this instance already calls every other subdivision of an
+    // elected body (county-supervisor, school-director, cc-director, judicial).
+    // Each card still names the unit exactly as its city does, off the
+    // `label` property: "Ward 1" in Des Moines, "District 3" here.
+    //
+    // THE ID STAYS `city-ward`. It is in shipped `layers=` permalinks and in
+    // CONSOLIDATED_LAYER_ALIASES below, the same reasoning that kept
+    // `mps-school-board` when Racine Unified joined it.
+    label: "City Council District",
     // deep teal — a municipal hue that reads apart from county-supervisor's
     // green above it and the magenta City dots it sits inside
     style: { color: "#125E63", weight: 1.6, fillColor: "#1B8A91", fillOpacity: 0.07 },
@@ -9689,6 +9709,18 @@ function initIowaExplorer() {
         // card. He is named here in prose so the card does not imply the
         // council is the whole of the city's elected government.
         councilNote: "Two at-large members and one member from each of five wards, " +
+          "plus a mayor who is elected citywide and is not named on this card."
+      }),
+      cityWardEntry({
+        key: "cedar-rapids",
+        city: "Cedar Rapids",
+        wardsUrl: "data/app/cedar-rapids-wards.json",
+        councilUrl: "data/app/cedar-rapids-council-members.json",
+        councilLabel: "Cedar Rapids City Council",
+        // Same at-large reasoning as Waterloo's, and the mayor here IS read by
+        // the scraper — see build_cedar_rapids_council.py — so leaving her off
+        // is a demonstrated decision rather than a gap the pipeline cannot see.
+        councilNote: "Three at-large members and one member from each of five districts, " +
           "plus a mayor who is elected citywide and is not named on this card."
       })
     ]

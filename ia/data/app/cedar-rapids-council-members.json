@@ -1,0 +1,63 @@
+{
+ "citywide": [
+  {
+   "email": "ann.poe@cedar-rapids.org",
+   "name": "Ann Poe",
+   "phone": "319-350-7372",
+   "seat": "At-Large",
+   "termExpires": "2027"
+  },
+  {
+   "email": "d.maier@cedar-rapids.org",
+   "name": "David Maier",
+   "phone": "319-391-8515",
+   "seat": "At-Large",
+   "termExpires": "2027"
+  },
+  {
+   "email": "t.olson@cedar-rapids.org",
+   "name": "Tyler Olson",
+   "phone": "319-535-0635",
+   "seat": "At-Large",
+   "termExpires": "2029"
+  }
+ ],
+ "sourceUrl": "https://www.cedar-rapids.org/local_government/city_council/mayor_and_city_council/index.php",
+ "wards": {
+  "1": {
+   "email": "m.hoeger@cedar-rapids.org",
+   "name": "Martin Hoeger",
+   "phone": "319-775-7896",
+   "seat": "District 1",
+   "termExpires": "2029"
+  },
+  "2": {
+   "email": "s.overland@cedar-rapids.org",
+   "name": "Scott Overland",
+   "phone": "319-899-6709",
+   "seat": "District 2",
+   "termExpires": "2027"
+  },
+  "3": {
+   "email": "d.todd@cedar-rapids.org",
+   "name": "Dale Todd",
+   "phone": "319-775-7926",
+   "seat": "District 3",
+   "termExpires": "2029"
+  },
+  "4": {
+   "email": "scott@scotteolson.com",
+   "name": "Scott Olson",
+   "phone": "319-360-5295",
+   "seat": "District 4",
+   "termExpires": "2027"
+  },
+  "5": {
+   "email": "a.vanorny@cedar-rapids.org",
+   "name": "Ashley Vanorny",
+   "phone": "319-775-7928",
+   "seat": "District 5",
+   "termExpires": "2029"
+  }
+ }
+}
