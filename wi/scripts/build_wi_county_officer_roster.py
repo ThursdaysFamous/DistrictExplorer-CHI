@@ -101,6 +101,12 @@ import re
 import sys
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# How long a contact may be preserved after the last successful read before it
+# is dropped instead. Eight weeks on a weekly job: long enough to ride out a
+# bot-management block or a site migration, short enough that a page renamed
+# for good stops being reported as "could not be re-read this week".
+PRESERVE_MAX_DAYS = 56
 REPO_ROOT = os.path.dirname(SCRIPT_DIR)
 RAW = os.path.join(SCRIPT_DIR, ".cache", "wi_county_officers_raw.json")
 OUT = os.path.join(REPO_ROOT, "data", "app", "wi-county-officers.json")
@@ -404,6 +410,7 @@ def main():
         print("WARNING: no contact intermediate (%s) — officer rows ship "
               "without contact; run wi_county_officer_contact_scraper.py "
               "first" % os.path.relpath(CONTACTS, REPO_ROOT), file=sys.stderr)
+    today = datetime.date.today().isoformat()
     n_contact, n_diverged, n_carried, n_witness_lost = 0, 0, 0, 0
     for geoid, centry in (contacts or {}).items():
         entry = out_counties[geoid]
@@ -503,6 +510,14 @@ def main():
             if carried:
                 n_carried += 1
         entry["contactChecked"] = checked
+        if checked:
+            # THE DATE THESE CONTACTS WERE ACTUALLY READ, taken from the SCRAPE
+            # rather than this process's clock: a builder run against a week-old
+            # intermediate would otherwise date it today. Preservation carries
+            # it forward untouched, which is what makes its "captured on" true;
+            # stamping the first FAILED week instead overstated freshness by up
+            # to a week and could never age out.
+            entry["contactReadOn"] = centry.get("read_on") or carried or today
         if carried and checked:
             # The card must not tell a reader these rows are checked weekly.
             entry["contactAsOf"] = carried
@@ -551,15 +566,45 @@ def main():
             previous = json.load(open(OUT))
         except ValueError:
             previous = {}
-    today = datetime.date.today().isoformat()
-    n_preserved_counties, n_preserved_rows = 0, 0
+    n_preserved_counties, n_preserved_rows, n_expired = 0, 0, 0
+    today_d = datetime.date.fromisoformat(today)
     for geoid, entry in out_counties.items():
-        if geoid in (contacts or {}):
+        centry = (contacts or {}).get(geoid)
+        if centry and centry.get("offices"):
+            continue                       # read fine this run
+        # THE REASON IS THE SCRAPE'S, NOT A SENTENCE INVENTED HERE. A county
+        # that 404'd and a county whose pages answered with nobody on them are
+        # different facts, and stamping one on both puts a false sentence on a
+        # card. The scraper emits a `skipped` record carrying what actually
+        # happened; a county missing altogether says only that.
+        why = (centry or {}).get("skipped") or (
+            "the county's own pages were not read on this run")
+        prev = prev_entry = previous.get(geoid) or {}
+        read_on = prev.get("contactReadOn") or prev.get("contactAsOf")
+
+        # AN AGE CAP, BECAUSE A PRESERVED CONTACT MUST NOT BE IMMORTAL. Without
+        # one, a page renamed for good is carried for ever under "could not be
+        # re-read this week" — true every week, and cumulatively a lie. Eight
+        # weeks is well past any transient block on a weekly job, and the age
+        # prints every run either way, the posture CARRIED_CONTACTS already
+        # takes with its own dated rows.
+        age_days = None
+        if read_on:
+            try:
+                age_days = (today_d - datetime.date.fromisoformat(read_on)).days
+            except ValueError:
+                age_days = None
+        if age_days is not None and age_days > PRESERVE_MAX_DAYS:
+            n_expired += 1
+            print("%s: contact NOT preserved — last read %s, %d days ago, past "
+                  "the %d-day cap. %s"
+                  % (entry.get("county") or geoid, read_on, age_days,
+                     PRESERVE_MAX_DAYS, why), file=sys.stderr)
             continue
-        prev = previous.get(geoid) or {}
+
         kept = 0
         for office, rec in entry.items():
-            old = prev.get(office)
+            old = prev_entry.get(office)
             if not isinstance(rec, dict) or not isinstance(old, dict):
                 continue
             if not old.get("name") or old.get("name") != rec.get("name"):
@@ -581,20 +626,36 @@ def main():
                     continue
                 rec[field] = old[field]
                 kept += 1
-        if kept:
-            n_preserved_counties += 1
-            n_preserved_rows += kept
-            entry["contactAsOf"] = prev.get("contactAsOf") or today
-            entry["contactRetried"] = True
-            entry["contactAsOfWhy"] = (
-                prev.get("contactAsOfWhy")
-                or ("The county's own pages answered but carried none of these "
-                    "officers' names, so nothing could be read from them; the "
-                    "rows below are preserved from the last read that worked."))
-            print("%s: PRESERVED %d contact field(s) from the shipped file — the "
-                  "scrape did not reach this county (as of %s)"
-                  % (entry.get("county") or geoid, kept, entry["contactAsOf"]),
-                  file=sys.stderr)
+        if not kept:
+            continue
+        n_preserved_counties += 1
+        n_preserved_rows += kept
+        # contactChecked IS WHAT THE CARD GATES ITS WHOLE AS-OF NOTE ON. The
+        # first version of this branch set contactAsOf/contactRetried/
+        # contactAsOfWhy and not this, so a preserved county rendered its phone
+        # and page rows with NO disclosure at all and the card's own
+        # contactRetried branch was unreachable. Carried counties set it too
+        # (and withhold contactCheckedWeekly), which is exactly the shape here.
+        entry["contactChecked"] = kept
+        entry["contactAsOf"] = read_on or today
+        entry["contactRetried"] = True
+        entry["contactAsOfWhy"] = (
+            "The county's pages could not be read on this run: %s%s%s"
+            % (why[0].lower() + why[1:] if why else why,
+               "" if why.endswith(".") else ".",
+               # HONEST ABOUT THE TRANSITION. contactReadOn is new, so the first
+               # preservation after it ships has no recorded read date and the
+               # date shown is when preservation began — which is NEWER than the
+               # real one. Saying so costs a clause and retires itself: every
+               # successful run from now stamps the true date.
+               "" if age_days is not None else
+               " The date of the last successful read is not recorded, so the "
+               "date shown is when preservation began; the contacts are older "
+               "than that."))
+        print("%s: PRESERVED %d contact field(s), last read %s (%s days ago) — %s"
+              % (entry.get("county") or geoid, kept, entry["contactAsOf"],
+                 "unknown" if age_days is None else age_days, why),
+              file=sys.stderr)
 
     for base, reason in STALE_EXEC.items():
         geoid = str(geoid_by_base[base])

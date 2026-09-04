@@ -911,15 +911,35 @@ def main():
             else:
                 entries = scrape_civicplus(county, cfg, book)
         except RuntimeError as exc:
+            # A SKIP IS EMITTED, NOT OMITTED. The builder preserves a county's
+            # last-known contacts when the scrape could not read it, and it can
+            # only say WHY on the card if the reason travels with the skip. An
+            # omitted county and a county that 404'd are the same silence, and
+            # the first version of that preservation stamped one sentence about
+            # blocked bodies on every absent county — false for a county whose
+            # pages had simply moved.
             print("%s: SKIPPED — %s" % (county, exc), file=sys.stderr)
+            out[str(geoid_by_base[county])] = {
+                "county": county, "offices": {}, "skipped": str(exc)}
             continue
         if len(entries) < cfg["floor"]:
-            print("%s: SKIPPED — %d offices resolved, floor %d (a page "
-                  "reshaped; re-read it, never loosen the floor)"
-                  % (county, len(entries), cfg["floor"]), file=sys.stderr)
+            reason = ("%d of the county's offices resolved against a floor of "
+                      "%d, so the read was refused rather than shipped short"
+                      % (len(entries), cfg["floor"]))
+            print("%s: SKIPPED — %s (a page reshaped; re-read it, never loosen "
+                  "the floor)" % (county, reason), file=sys.stderr)
+            out[str(geoid_by_base[county])] = {
+                "county": county, "offices": {}, "skipped": reason}
             continue
-        out[str(geoid_by_base[county])] = {"county": county,
-                                           "offices": entries}
+        # THE READ DATE COMES FROM THE SCRAPE, NOT THE BUILDER'S CLOCK. The
+        # builder stamps `contactReadOn` so preservation can later say when a
+        # contact was last actually read; taking `today` there would date a
+        # week-old intermediate as today's — which is the same overstatement
+        # preservation was fixed to stop making, arriving from the other side.
+        out[str(geoid_by_base[county])] = {
+            "county": county,
+            "offices": entries,
+            "read_on": datetime.date.today().isoformat()}
         print("%s: %d offices (%s)" % (county, len(entries),
                                        ", ".join(sorted(entries))),
               file=sys.stderr)
