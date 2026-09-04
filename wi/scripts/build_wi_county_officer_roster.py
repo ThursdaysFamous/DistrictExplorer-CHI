@@ -94,6 +94,7 @@ rendered under their successor's name is not a stale row, it is a wrong
 one, and nothing here can re-read the page to find out which it has.
 """
 
+import datetime
 import json
 import os
 import re
@@ -514,6 +515,86 @@ def main():
             # while 14 of those rows were a capture nothing re-reads. A measured
             # tile is only as honest as the field it counts.
             entry["contactCheckedWeekly"] = checked
+
+    def _is_site_chrome(addr):
+        """The scraper's own test, borrowed rather than restated."""
+        sys.path.insert(0, SCRIPT_DIR)
+        import wi_county_officer_contact_scraper as scraper
+        return (addr or "").split("@", 1)[0].lower() in scraper.SITE_CHROME_LOCALS
+
+    # ---- preservation: a county the scrape could not read keeps last week's --
+    #
+    # A COUNTY MISSING FROM THE INTERMEDIATE IS NOT A COUNTY WITHOUT CONTACTS.
+    # This file is rebuilt from the Blue Book every run and contact fields are
+    # then added from the scrape, so a county the scraper skipped silently lost
+    # every phone, e-mail and page URL it had. On 2026-09-04 that emptied all
+    # four of Oneida's offices — from a runner that got HTTP 200 on all four
+    # pages with bodies witnessing nobody (Cloudflare bot management), while the
+    # same pages witness all four from another client and did from the runner
+    # the day before. Bot PR #709 was closed rather than merged for it.
+    #
+    # THE WITNESS RULE IS THE SAME ONE CARRIED_CONTACTS ENFORCES: a contact is
+    # preserved only where the officeholder's NAME is unchanged. The name comes
+    # from the current Blue Book every build; a predecessor's phone under a
+    # successor's name is not a stale row, it is a wrong one.
+    #
+    # This is preservation with a STATED AGE, not a CARRIED_CONTACTS-style dated
+    # carry and not a measured block — the distinction matters because Oneida's
+    # pages are readable, just not from this runner this week. A permanent
+    # hand-maintained carry would freeze data a good run should refresh, and a
+    # recorded block would claim something the 09-03 run disproves. The stamp is
+    # the date preservation BEGAN and is carried forward unchanged, so the card
+    # can say when the page was last readable rather than implying today.
+    previous = {}
+    if os.path.exists(OUT):
+        try:
+            previous = json.load(open(OUT))
+        except ValueError:
+            previous = {}
+    today = datetime.date.today().isoformat()
+    n_preserved_counties, n_preserved_rows = 0, 0
+    for geoid, entry in out_counties.items():
+        if geoid in (contacts or {}):
+            continue
+        prev = previous.get(geoid) or {}
+        kept = 0
+        for office, rec in entry.items():
+            old = prev.get(office)
+            if not isinstance(rec, dict) or not isinstance(old, dict):
+                continue
+            if not old.get("name") or old.get("name") != rec.get("name"):
+                continue          # the office turned over: let the contact go
+            for field in ("url", "phone", "email"):
+                if not old.get(field) or rec.get(field):
+                    continue
+                # PRESERVATION IS A NEW WAY FOR A BAD VALUE TO PERSIST, and it
+                # is worth closing here rather than trusting that it never
+                # happens: the scraper's site-chrome guard fires at SCRAPE
+                # time, so anything already in the shipped file predates it.
+                # Grant's sheriff carried `webmaster@co.grant.wi` — a page
+                # footer's address — until 2026-09-04, and without this a
+                # blocked week would have copied it forward for ever.
+                if field == "email" and _is_site_chrome(old[field]):
+                    print("%s/%s: NOT preserving %r — site-chrome address"
+                          % (entry.get("county") or geoid, office, old[field]),
+                          file=sys.stderr)
+                    continue
+                rec[field] = old[field]
+                kept += 1
+        if kept:
+            n_preserved_counties += 1
+            n_preserved_rows += kept
+            entry["contactAsOf"] = prev.get("contactAsOf") or today
+            entry["contactRetried"] = True
+            entry["contactAsOfWhy"] = (
+                prev.get("contactAsOfWhy")
+                or ("The county's own pages answered but carried none of these "
+                    "officers' names, so nothing could be read from them; the "
+                    "rows below are preserved from the last read that worked."))
+            print("%s: PRESERVED %d contact field(s) from the shipped file — the "
+                  "scrape did not reach this county (as of %s)"
+                  % (entry.get("county") or geoid, kept, entry["contactAsOf"]),
+                  file=sys.stderr)
 
     for base, reason in STALE_EXEC.items():
         geoid = str(geoid_by_base[base])

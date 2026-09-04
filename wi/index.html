@@ -8658,11 +8658,21 @@ function initWisconsinExplorer() {
             // weekly check it no longer gets. Same split as the board card's
             // asOfWhy: a site that refuses and a site that asks are different
             // facts, and the date is what tells the reader how much to trust.
+            // A CARRY AND A PRESERVATION ARE DIFFERENT FACTS. A carried
+            // county's pages are never re-read — its host disallows this
+            // crawler — so "are not re-read" is the truth there. A PRESERVED
+            // county is re-tried every week and simply did not answer usably
+            // this time, and telling that reader the rows are never re-read
+            // would understate them. `contactRetried` is the builder's flag
+            // for the second case.
             asOfNote += o.contactAsOf
               ? " The rows showing a phone number or office-page link were " +
-                "captured on " + String(o.contactAsOf) + " and are not " +
-                "re-read. " + (o.contactAsOfWhy ? String(o.contactAsOfWhy) :
-                "") + " They will go out of date."
+                "captured on " + String(o.contactAsOf) +
+                (o.contactRetried
+                  ? " and could not be re-read this week. "
+                  : " and are not re-read. ") +
+                (o.contactAsOfWhy ? String(o.contactAsOfWhy) + " " : "") +
+                "They will go out of date."
               : " The rows showing a phone number or office-page " +
                 "link are checked weekly against the county's own pages.";
           }
