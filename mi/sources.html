@@ -839,7 +839,7 @@ table.matrix code {
   <section class="matrix-section">
     <h2>The layer matrix</h2>
     <!-- ==== GENERATED:BEGIN layer-matrix ==== -->
-      <p class="matrix-lede">11 layers — 5 political and legislative, 2 schools, 4 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
+      <p class="matrix-lede">12 layers — 5 political and legislative, 2 schools, 5 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
       <nav class="matrix-nav" aria-label="Jump to a layer group">
         <a href="#political">Political &amp; legislative</a>
         <a href="#schools">Schools</a>
@@ -952,7 +952,7 @@ table.matrix code {
       </section>
 
       <section class="matrix-group" id="geography">
-        <h2>Geography &amp; amenities <span class="matrix-count">4 layers</span></h2>
+        <h2>Geography &amp; amenities <span class="matrix-count">5 layers</span></h2>
         <p class="matrix-blurb">The boundaries that place an address without electing anyone, plus the nearest public services.</p>
         <div class="matrix-wrap">
           <table class="matrix">
@@ -1003,6 +1003,17 @@ table.matrix code {
                 </td>
                 <td data-label="Who it names">NO OFFICEHOLDER, AND THE CARD SAYS SO — no statewide source names Michigan's mayors, village presidents, council members or clerks; the Michigan Municipal League's directory is membership-facing and the state publishes no aggregate. Recorded as gap mi-municipal-officeholders. Per-municipality rosters are later phase work, the route every other instance took.</td>
                 <td data-label="Where it applies">Michigan — statewide, all 533 incorporated places. A CITY is independent of any township; a VILLAGE remains part of one, so a village resident has two general-purpose local governments and each card names the other. Measured 2026-09-04: all 252 villages land inside a township at their TIGER interior point (235 general-law, 17 charter), zero exceptions, and the Census's own place class codes agree — every village is C1, 'does not serve as a county subdivision equivalent'.</td>
+              </tr>
+              <tr id="layer-post-office">
+                <th scope="row"><span class="layer-name">Post Office</span><code>post-office</code></th>
+                <td data-label="What it answers">The three nearest post offices to the point, by straight-line distance, with each one's address.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/38" target="_blank" rel="noopener">USGS The National Map — structures layer 38 (Post Offices), queried live at runtime by a bounding envelope (no builder script, no committed data/app file). Public domain. 1,799 points in Michigan's envelope, every one carrying name, address, city, state and ZIP, measured 2026-09-04. THE FETCH PAGES: the service caps a response at 2,000 records and returns HTTP 200 with exceededTransferLimit rather than an error, so a single request is safe only by margin — Michigan is at 1,799 and its fire-station sibling is at 2,838, already over</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">NO OFFICEHOLDER, AND NONE IS MISSING: a post office is a federal facility, not an elected district. The card answers where the nearest ones are, not who runs them.</td>
+                <td data-label="Where it applies">Michigan — plus the border strip its envelope necessarily includes. Of the 1,799 points, 900 are in Michigan and the rest are in Wisconsin (535), Illinois (334) and a handful in Iowa, Ohio, Indiana and Minnesota. THAT IS DELIBERATE, NOT SPILL: nearest-3 is a proximity fact rather than a jurisdictional claim, so for a reader in Menominee the nearest post office really is across the river in Wisconsin, and the card's intro says these are straight-line distances.</td>
               </tr>
             </tbody>
           </table>
