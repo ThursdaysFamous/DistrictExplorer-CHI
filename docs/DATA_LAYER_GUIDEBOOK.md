@@ -7436,8 +7436,21 @@ because "the names differ" turned out to be wrong ten times in one sweep.
 > so a no-2 test would strip the ordinal off a genuinely numbered precinct. The
 > implemented guard reads ANY other ordinal on the stem, roman or arabic.
 >
+> **AND A SIXTH CAUSE, measured rather than assumed:** a spelled-out unit word one
+> publisher carries and the other does not — Adams writes `BEVERLY PCT 1` against the
+> census's `BEVERLY`, McDonough's `MACOMB TOWNSHIP` is the census's `MACOMB TWP`. It is a
+> SMALL tail, five counties statewide, and it is implemented anyway on the same principle
+> this update is about: a cause left out of the tool is a cause the next pass re-derives.
+>
+> **EVERY RULE IS ALSO REFUSED IF IT WOULD COLLAPSE TWO NAMES INTO ONE.** That guard was
+> missing from the first draft and is not hypothetical — each cause maps two spellings
+> onto one, so a county holding `WARD 01` beside `WARD 1` would have lost a real precinct,
+> and the loss would have made the counts agree, **which is exactly the evidence this
+> comparison reports as "the fabric did not move".** A rule that helps and loses something
+> is not adopted.
+>
 > **RE-MEASURED over all 100 counties reporting in the 2026 General Primary** (not the 32
-> above, so the numbers are not comparable): naive 29, reconciled **41**, a further **15
+> above, so the numbers are not comparable): naive 29, reconciled **42**, a further **14
 > differing only on a SPELLING** — which is what `apply_aliases` is for — and **44 on the
 > COUNT**, which is a fabric that really moved. That split is now printed per county,
 > because "add an alias" and "the fabric moved" are different work.

@@ -337,12 +337,24 @@ def compare(older, newer, only=None):
 #     four, and this repo already knew about it — title_case has carried
 #     _ROMAN_ORDINAL since Scott shipped.
 #
+#   * AND A SIXTH: a spelled-out unit word one publisher carries and the other
+#     does not (see _canon_unit_word). Adams writes BEVERLY PCT 1 against the
+#     census's BEVERLY. Measured as a small tail — five counties statewide —
+#     and implemented anyway, because a cause left out of the tool is a cause
+#     the next pass re-derives, which is this file's whole reason for existing.
+#
 #   And one guard is STRICTER than the guidebook's: it says strip a vestigial 1
 #   when the stem has "no 2 sibling", and CLAY's HARTER runs 1, 3, 4, 5, 6, 7
 #   with no 2 at all — so the test reads ANY other ordinal on the stem.
 #
+# EVERY CANONICALISER IS ALSO REFUSED IF IT WOULD COLLAPSE TWO NAMES INTO ONE.
+# That guard was missing from the first draft and is not hypothetical: each rule
+# maps two spellings onto one, so a county holding WARD 01 beside WARD 1 would
+# have lost a real precinct — and the loss would have made the counts agree,
+# which is precisely the evidence this tool reports as "the fabric did not move".
+#
 # MEASURED over all 100 counties that reported in the 2026 General Primary:
-# naive 29, reconciled 41, 15 more differing only on a SPELLING (which is what
+# naive 29, reconciled 42, 14 more differing only on a SPELLING (which is what
 # apply_aliases is for) and 44 on the COUNT, which is a fabric that really moved.
 #
 # THE VALIDATION THAT MATTERS is the 33 counties whose precinct layers this app
@@ -512,9 +524,29 @@ def _canon_vestigial_one(name, protected):
 # Canonicalisers run on BOTH name sets; truncation is pairwise and runs last,
 # once the cheap normalisations have removed the noise it would otherwise have
 # to pair through.
+_UNIT_WORD = re.compile(r"\s+(?:PCT|PRECINCT|TWP|TOWNSHIP)\b", re.I)
+
+
+def _canon_unit_word(name):
+    """Cause 6 — a spelled-out unit word one publisher includes and the other
+    does not: Adams writes BEVERLY PCT 1 against the census's BEVERLY, and
+    CAMP POINT PCT 1 against CAMP POINT 1; McDonough's MACOMB TOWNSHIP is the
+    census's MACOMB TWP.
+
+    MEASURED 2026-09-04 rather than assumed, and it is a SMALL tail: five
+    counties statewide (Adams and Will on PCT, Brown and McDonough on
+    TOWNSHIP, Fulton and McDonough on TWP, Monroe on PRECINCT). Recorded and
+    implemented anyway, because a cause left out of the tool is a cause the
+    next pass re-derives — which is the whole reason this file exists. Dropping
+    the token is safe on its face (no Illinois precinct is NAMED Pct or Twp),
+    and the collapse guard above catches the case where it would not be."""
+    return _UNIT_WORD.sub("", name).strip()
+
+
 JASPER_CANONICAL = (
     ("roman ordinal -> arabic", _canon_roman),
     ("zero-padding", _canon_padding),
+    ("unit word (PCT/TWP/TOWNSHIP)", _canon_unit_word),
 )
 
 
@@ -530,17 +562,29 @@ def jasper(county_names, census_names):
     def diff(x, y):
         return len({_norm(n) for n in x} ^ {_norm(n) for n in y})
 
+    def keep(trial_a, trial_b):
+        """A canonicaliser may only be adopted if it HELPS and LOSES NOTHING.
+
+        The second half was missing until 2026-09-04 and is not hypothetical:
+        every rule here maps two spellings onto one, so a county holding both
+        forms — WARD 01 beside WARD 1, HARTER I beside HARTER 1, CAVE 1 beside
+        CAVE — would have had two real precincts silently collapsed into one,
+        and the collapse would have made the counts agree, which is exactly the
+        evidence this tool reports as "the fabric did not move"."""
+        return (diff(trial_a, trial_b) < diff(county, census)
+                and len(trial_a) == len(county) and len(trial_b) == len(census))
+
     for label, canon in JASPER_CANONICAL:
         trial_a = {canon(n) for n in county}
         trial_b = {canon(n) for n in census}
-        if diff(trial_a, trial_b) < diff(county, census):
+        if keep(trial_a, trial_b):
             county, census = trial_a, trial_b
             applied.append((label, None))
 
     protected = _stems_with_other_ordinals(county | census)
     trial_a = {_canon_vestigial_one(n, protected) for n in county}
     trial_b = {_canon_vestigial_one(n, protected) for n in census}
-    if diff(trial_a, trial_b) < diff(county, census):
+    if keep(trial_a, trial_b):
         county, census = trial_a, trial_b
         applied.append(("vestigial trailing 1/I", None))
 
@@ -600,7 +644,7 @@ def run_jasper(election_id, only=None):
     fabric = sum(1 for r in rows if not r[4] and r[1] != r[2])
     print("\nisbe-precinct-fabric --jasper: %d county(ies) compared\n"
           "  naive name comparison        %d match\n"
-          "  after the five causes        %d match\n"
+          "  after the six causes         %d match\n"
           "  still differing              %d on a SPELLING (an alias closes it)\n"
           "                               %d on the COUNT (the fabric moved)"
           % (looked, naive_ok, reconciled_ok, alias_only, fabric))
@@ -711,7 +755,28 @@ def selftest():
        _canon_vestigial_one("HARTER I", _stems_with_other_ordinals(
            {"HARTER I", "HARTER III"})), "HARTER I")
 
-    # 4. Already applied upstream by precinct_key; asserted here so all five
+    # 6. The unit word, and the guard that keeps it from eating a real name.
+    ok("unit word: BEVERLY PCT 1 -> BEVERLY 1",
+       _canon_unit_word("BEVERLY PCT 1"), "BEVERLY 1")
+    ok("unit word: MACOMB TOWNSHIP -> MACOMB", _canon_unit_word("MACOMB TOWNSHIP"),
+       "MACOMB")
+    ok("unit word: leaves a name with no unit token alone",
+       _canon_unit_word("SPRING POINT"), "SPRING POINT")
+
+    # THE COLLAPSE GUARD. Every canonicaliser maps two spellings onto one, so a
+    # county holding BOTH forms would lose a real precinct — and the loss would
+    # make the counts agree, which is the very evidence this tool reports as
+    # "the fabric did not move". A rule that would collapse is refused.
+    matched, applied, county_only, census_only = jasper(
+        {"WARD 1", "WARD 01"}, {"WARD 1", "WARD 2"})
+    ok("collapse guard: refuses zero-padding that would merge WARD 01 into WARD 1",
+       (matched, len(applied), county_only, census_only),
+       (False, 0, ["WARD 01"], ["WARD 2"]))
+    matched, _, _, _ = jasper({"CAVE", "CAVE 1"}, {"CAVE", "CAVE 1"})
+    ok("collapse guard: an already-matching pair is left exactly alone",
+       matched, True)
+
+    # 4. Already applied upstream by precinct_key; asserted here so all six
     #    causes are testable in one place.
     ok("reporting id: SPRING POINT-7 -> SPRING POINT",
        precinct_key("SPRING POINT-7"), "SPRING POINT")

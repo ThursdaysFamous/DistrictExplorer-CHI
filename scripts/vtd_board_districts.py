@@ -164,10 +164,11 @@ def check_fabric(vtds, county_precincts, county_pop, fail):
     on 2026-08-20, ten counties in one sweep were rejected by this comparison
     for reasons that are not a moved fabric at all — census truncation at 17
     characters, zero-padding, a vestigial trailing 1/I, ISBE reporting-unit
-    suffixes, and (added 2026-09-04) roman ordinals written arabic. Each runs
-    in EITHER direction. Before recording a county as re-precincted, run
+    suffixes, and (added 2026-09-04) roman ordinals written arabic plus a
+    spelled-out PCT/TWP unit word. Each runs in EITHER direction. Before
+    recording a county as re-precincted, run
     `python3 scripts/isbe_precinct_fabric.py --jasper <election> --county <name>`,
-    which applies all five with their guards and prints which one it ruled out;
+    which applies all six with their guards and prints which one it ruled out;
     what survives is either a real fabric change or a spelling, and the two need
     different work — a spelling is what `apply_aliases` above is for."""
     want = {norm(p) for p in county_precincts}
