@@ -6523,17 +6523,44 @@ links 18-23. So a county that re-precincts for an April municipal election surfa
 at the next November. `--list` says so before a comparison rather than failing part-way
 through one.
 
-**THE FIRST RUN'S ACTIONABLE OUTPUT (2024 General to 2026 Primary): 41 authorities moved, 15
-of them counties whose precincts this app ships.** Four of the fifteen GAINED precincts the
-shipped layer does not have, which is the shape that matters most — Cass 21 to 23, Greene 22
-to 25, Johnson 16 to 17, Scott 10 to 11. Jackson (67 to 63), Warren (30 to 29) and Perry
-(27 to 28) also moved on count. Four more are the reporting-unit shape rather than the fabric
-(Cumberland, Menard, Richland, McDonough), and four are pure renaming at an unchanged count —
-Hancock and Jefferson simply gained a full stop (`ST ALBANS` to `ST. ALBANS`, `MT VERNON` to
-`MT. VERNON`), Schuyler and White renumbered their suffixes. **None of the fifteen is
-rebuilt here**: each needs its own county's source and its own verification, and a tripwire
-that also rebuilt what it found would be doing the one thing this project asks a human to
-sign off on.
+**CORRECTED 2026-09-04, AND THE CORRECTION IS THE MORE USEFUL RECORD.** The first run of
+this check reported "41 authorities moved, 15 of them counties this app ships", of which four
+were said to have GAINED precincts the shipped layer lacks — Cass 21 to 23, Greene 22 to 25,
+Johnson 16 to 17, Scott 10 to 11. **Not one of those four had gained a precinct.** The claim
+shipped, and it was wrong.
+
+THE TRAILING `-<digits>` IS A REPORTING ID, NOT PART OF THE PRECINCT'S NAME. Its tell is that
+it repeats across different precincts and changes between elections: Cass's 2026 primary
+carries `-002` on six different precincts — Ashland 20, Ashland 21, Chandlerville 18,
+Newmansville 19, Panther Creek 17 and Philadelphia 16 — which is a polling place serving six
+precincts. And Chandlerville appears twice, as `CHANDLERVILLE 18-002` and
+`CHANDLERVILLE 18-012`: ONE precinct reported at two ids, counted as two, giving the phantom
+21-to-23. A precinct's own number is SPACE-separated and survives the strip
+(`BEARDSTOWN 5-004` to `BEARDSTOWN 5`), so a genuinely new precinct still shows.
+
+The strip was measured before it was adopted, against the 33 counties whose precincts this app
+ships: exact name-set agreement goes from **12/33 raw to 21/33 stripped**, and NOT ONE county
+that agreed raw stops agreeing. It also leaves Calhoun untouched — neither its 2022 nor its
+2024 names carry a trailing id — so the 7-to-5 merge this script is validated against still
+reads exactly as before, and still classifies FABRIC.
+
+**THE CORRECTED OUTPUT (2024 General to 2026 Primary): 26 authorities changed — 18 fabric, 8
+cosmetic — and of the four that are counties this app ships, ALL FOUR ARE COSMETIC. No shipped
+Illinois precinct layer is stale.** Hancock and Jefferson gained a full stop (`ST ALBANS` to
+`ST. ALBANS`, `MT VERNON` to `MT. VERNON`), Menard put spaces around a hyphen
+(`NORTH ATHENS-CITY` to `NORTH ATHENS - CITY`), and Warren collapsed a double space
+(`MONMOUTH  1` to `MONMOUTH 1`). Every count is unchanged.
+
+**COSMETIC IS LABELLED, NEVER FILTERED**, and that is deliberate: several builders in this
+repo join a county's precincts to census geography BY NAME — the Jasper test — and every one
+of those joins breaks on a full stop. So the distinction a reader needs is not "change or no
+change" but "rebuild the geometry, or fix an alias", and the report now says which in one
+word per county.
+
+The wider lesson is the one this project keeps relearning: a derived id that looks like part
+of a name is the reliable way to manufacture a change that never happened, and the only
+defence is to check a new signal against something already known — here, the shipped layers,
+which said 12/33 and should have said more.
 
 
 ### ISBE's county-board STRUCTURE table — every county's board shape, at an unknown date (found 2026-08-21)
