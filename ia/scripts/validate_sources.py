@@ -371,6 +371,84 @@ PROVENANCE = [
             "weekly by update-ia-city-contact-roster.yml."
         ),
     },
+    # FIVE ROWS FOR ONE FILE, ONE PER CITY, BECAUSE FIVE PUBLISHERS CAN BREAK
+    # INDEPENDENTLY. These are the five Iowa cities whose own council pages a
+    # machine can read: measured 2026-09-04 by sweeping all 532 cities that
+    # publish a website, of which 16 yielded a roster and 5 cleared every
+    # check, against 407 cities publishing no site at all. That is 1.7% of
+    # Iowa's 939, which is why ia-municipal-officeholders stays open beside
+    # these rows and why nothing here may be described as a statewide roster.
+    # All five elect AT LARGE, so they are roster rows on the City card and
+    # not a layer -- there is no geometry in this group at all.
+    {
+        "layer": "municipality",
+        "app_file": "ia-city-officials.json",
+        "source_url": "https://moraviaiowa.com/city-services/council-mayor/",
+        "note": (
+            "Moravia's mayor and five council members. THIS IS THE CITY THAT SETTLES THE "
+            "ADDRESS QUESTION for the whole group: five of its six officials are published "
+            "at consumer webmail, an internet-provider account or a business one of them "
+            "runs, and that is not sloppiness — it is what a town of a few hundred people "
+            "has, published by the city as the way to reach them. Every address in this "
+            "file therefore passes the SAME test build_ia_county_officers.py applies: the "
+            "officeholder's own name in the local part, or an office-mailbox form. "
+            "Re-tested against the name actually SHIPPED on every build, so a name "
+            "correction cannot leave an address witnessed against somebody else. Built by "
+            "ia/scripts/ia_city_officials_scraper.py + build_ia_city_officials.py; "
+            "refreshed weekly by update-ia-city-officials-roster.yml."
+        ),
+    },
+    {
+        "layer": "municipality",
+        "app_file": "ia-city-officials.json",
+        "source_url": "https://www.norwalk.iowa.gov/government/mayor___city_council.php",
+        "note": (
+            "Norwalk's mayor and five council members. NORWALK IS THE CONTROL FOR THE "
+            "CLAIM THAT A PLATFORM DOES NOT PREDICT A PARSER: it runs the same content "
+            "system as Des Moines and Waterloo, whose two pages already need two entirely "
+            "different scrapers, and needs a third. That is why each city carries its "
+            "naming convention explicitly in the scraper's CITIES table rather than having "
+            "it guessed from the host."
+        ),
+    },
+    {
+        "layer": "municipality",
+        "app_file": "ia-city-officials.json",
+        "source_url": "https://cityofpalo.com/council",
+        "note": (
+            "Palo's mayor and five council members. PALO PUBLISHES NO TELEPHONE NUMBER "
+            "FOR ANY OF THEM, which is the whole of the reason this file's phone floor is "
+            "18 of 30 rather than 30: the floor measures what the sources publish, not "
+            "what would be convenient. Its markup is also what the first sweep MISSED — "
+            "the splitter did not break on </span>, so Palo returned nothing and the "
+            "statewide yield read 1% instead of 3%."
+        ),
+    },
+    {
+        "layer": "municipality",
+        "app_file": "ia-city-officials.json",
+        "source_url": "https://riversideiowa.gov/government/mayor_and_council/",
+        "note": (
+            "Riverside's mayor and five council members. ITS OFFICIAL MAIL SITS ON A "
+            "DOMAIN THAT IS NOT ITS WEBSITE'S, which is the measured reason the "
+            "city-domain heuristic is NOT what decides an address here: comparing a "
+            "published address against the host it was found on misclassified Riverside's "
+            "own municipal addresses as third-party, in both this city's case and "
+            "Waterloo's. The name test is what decides; the domain is not consulted."
+        ),
+    },
+    {
+        "layer": "municipality",
+        "app_file": "ia-city-officials.json",
+        "source_url": "https://www.tiffin-iowa.org/city_government/city_council.php",
+        "note": (
+            "Tiffin's mayor and five council members. TIFFIN IS THE ONE CITY OF THE FIVE "
+            "THAT WRITES 'Role: Name' where the other four write 'Name, Role', and it is "
+            "the reason the scraper carries two conventions: the first sweep tested only "
+            "the forward one and scored Tiffin as unparseable, which is a measurement of "
+            "the sweep and not of the city."
+        ),
+    },
     {
         "layer": "iowa-aea",
         "app_file": "ia-aeas.json",

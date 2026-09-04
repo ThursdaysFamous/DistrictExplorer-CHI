@@ -440,9 +440,19 @@ city and school elections to voters) nor its **Research & Data** page links a cl
 or any document of that kind. The Iowa League of Cities publishes every city's phone and
 website and names no person. No county publishes its cities' officials as map data.
 
-*Practical note for sending:* the Secretary of State's contact page publishes a form and three
-phone numbers rather than an e-mail address, so this may need to go through the form or through
-the Elections Division directly.
+*Practical note for sending — CORRECTED 2026-09-04, and the correction is the useful part.*
+This section previously read that the contact page "publishes a form and three phone numbers rather
+than an e-mail address, so this may need to go through the form." **It publishes an address, and the
+Elections Division has its own:** `elections@sos.iowa.gov`, alongside `sos@sos.iowa.gov` and
+`business.services@sos.iowa.gov`. They were missed because they are **Cloudflare-obfuscated** —
+rendered as `[email protected]` with the real value in a `data-cfemail` attribute — which is the same
+trick `ia/scripts/ia_county_auditor_scraper.py` already decodes for the county auditors' addresses.
+A plain read of the page finds no address; a decode finds three. The site had also been rebuilt since
+the ask was written: the recorded `/about/contact.html` and `/elections/index.html` paths now answer
+404, and the live page is `/contact-us`.
+
+**DRAFTED IN THE OPERATOR'S MAILBOX 2026-09-04**, addressed to `elections@sos.iowa.gov`. Not sent —
+rule 1 stands, and the ledger stays `NOT YET ASKED — DRAFTED` until the day it goes.
 
 > **Subject:** Is there a statewide list of Iowa city clerks?
 >
@@ -455,8 +465,10 @@ the Elections Division directly.
 > own published services, and all six elected county offices in all 99 counties.
 >
 > The one level it cannot answer for is the city. It knows all 939 of Iowa's incorporated
-> places and, outside Des Moines, cannot name a single mayor, council member or clerk,
-> because I can find no statewide source. Is there a list of Iowa's city clerks — names and
+> places and carries an office phone and website for each, from the Iowa League of Cities'
+> own directory — but outside Des Moines and Waterloo, which publish their council members
+> themselves, it cannot name a single mayor, council member or clerk, because I can find no
+> statewide source. Is there a list of Iowa's city clerks — names and
 > office contact details — held anywhere in your office or by the county commissioners of
 > elections, in any form you would be willing to share? A spreadsheet or a PDF is perfectly
 > usable; it does not need to be a published dataset.
@@ -476,7 +488,8 @@ the Elections Division directly.
   Wisconsin's does, and the `ia-municipal-officeholders` gap record closes.
 * **"We do not hold that"** — a clean, citable no. The gap record's blocker gains a fourth
   measured route and the remaining ones are the per-city ladder and the per-city GIS route
-  (Des Moines and Waterloo both already publish their council members in band).
+  (Des Moines and Waterloo both already publish their council members in band), plus the
+  sixteen cities of 939 whose own pages a sweep found machine-readable on 2026-09-04.
 * **"The county auditors would have it"** — that is a pointer, and a good one: it turns 99
   asks into a route this project already has the addresses for, since all 99 auditors ship in
   `ia/data/app/ia-county-auditors.json` with an e-mail apiece.

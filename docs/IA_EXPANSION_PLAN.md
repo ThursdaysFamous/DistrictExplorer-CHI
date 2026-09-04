@@ -1062,6 +1062,34 @@ seam is thin**: Waterloo's largest uncovered tiling fragment is 7,909 m² agains
 3,482, which an area-only ceiling copied across would read as a regression — it is 36 m by
 3,156 m at Polsby-Popper 0.0025, and not one of its 156 fragments scores above 0.30, so its
 builder gates on SHAPE as well as size.
+**THE FIVE-CITY OFFICIALS TIER SHIPPED THE SAME DAY, AND THE MEASUREMENT BEHIND IT IS WHY IT IS
+FIVE** (`ia-city-officials.json`, `ia/scripts/ia_city_officials_scraper.py` +
+`build_ia_city_officials.py`, weekly Fri 16:30). All 532 Iowa cities that publish a website were
+swept for a council roster — the ceiling, because 407 of the 939 publish none — and 16 yielded
+one a machine could read, of which five cleared every check: **Moravia, Norwalk, Palo, Riverside
+and Tiffin**, a mayor and five council members apiece, 30 people with an e-mail and 18 with a
+phone. **All five elect AT LARGE, so nothing here is a layer**: the at-large rule sends a body
+elected by the whole unit to that unit's identity card, so these are roster rows on `municipality`
+with no dispatch entry, no coverage function and nothing in `LAYER_AREA_RANK`, and `city-ward`
+stays the two ward-electing cities. Sixteen of 939 is 1.7%, so **per-city scraping is now a
+MEASURED poor statewide route rather than an untried one** — the five ship because a reader in one
+of them is better served than by a card naming nobody, not because the route scales, and the
+statewide ask is still what would close the gap.
+Three things the sweep settled are gates in the scraper rather than notes. **A seat-count gate
+alone does not validate a parse**: Waterloo's own page yields eight council members, an entirely
+plausible council, and only the duplicate-name check demotes it — so ranking candidates on
+plausibility would have promoted the one city already known to be a trap. **The platform does not
+predict the markup**: Des Moines, Waterloo and Norwalk run the same content system and need three
+different parsers, so each city's naming convention is declared in the scraper's `CITIES` table
+instead of being guessed from the host. And **the address's domain decides nothing**: six of the
+30 published addresses sit on consumer, provider or business domains — Moravia lists webmail, an
+ISP account and the contracting business one of its councilmen runs, which is what a town of a few
+hundred people has and what the city publishes as the way to reach them — so the test is
+`build_ia_county_officers.py`'s, applied unchanged (the officeholder's own name in the local part,
+or an office-mailbox form; 27 and 3 of the 30). Consulting the domain instead was tried and errs
+in BOTH directions: it read Riverside's and Waterloo's own municipal mail as third-party. Every
+address is re-tested each build against the name actually SHIPPED, so a name correction cannot
+leave one witnessed against somebody the card is no longer naming.
 **THE CITY CARD GAINED CONTACT ON 2026-09-04, AND IT IS NOT A ROSTER** (`ia-city-contact.json`,
 `ia/scripts/build_ia_city_contact.py`, weekly Fri 15:30). The League of Cities' own ungated city
 table gives all 939 cities their office phone (927) and website (532), plus 2 office mailboxes;
@@ -1071,8 +1099,9 @@ non-joining League rows asserted by shape, so a city renamed or dissolved fails 
 of quietly losing its contact. Iowa's join is simpler than Wisconsin's because `LSADC` is
 uniformly 25: one place class, so the city name alone is a unique key. **The
 `ia-municipal-officeholders` gap is unchanged by it** — a reader can now reach their city hall and
-still cannot be told who runs it, which is what the card's own row says, pointing at Des Moines as
-the one city whose published council districts do name them. Two things fell out of the build
+still cannot be told who runs it, which is what the card's own row says — it pointed at Des Moines
+as the one city whose published council districts named them, and by the end of the same day it
+named seven cities instead of one. Two things fell out of the build
 worth carrying: six League cities are absent from TIGERweb and the cause is NOT established (the
 absence is, against a working control — run the control, because a query returning zero for
 everything looks identical); and the worksheet's `workflows[]` list had gone two short since phase
