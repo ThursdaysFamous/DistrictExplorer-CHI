@@ -286,6 +286,324 @@ def compare(older, newer, only=None):
     return moved, shared, sorted(set(a) ^ set(b))
 
 
+# ---------------------------------------------------------------------------
+# THE JASPER TEST, run against the CENSUS rather than against another election.
+#
+# The comparison above is election-to-election, which is the right shape for a
+# tripwire on a SHIPPED layer. The research question that comes first is a
+# different one: is a county's fabric still the Census 2020 fabric at all, so
+# that a dissolve of census geometry can answer for it? That is the Jasper test,
+# and the guidebook MEASURED its error rate on 2026-08-20 across all 33 frontier
+# counties: a naive name comparison matched 9 of 32, and normalising four
+# mechanical causes took it to 19 of 32. TEN COUNTIES — 31% — were rejected for
+# reasons that are not a moved fabric, and "a builder following the recipe as
+# written would have recorded each of them as re-precincted and stopped."
+#
+# That measurement then sat in the guidebook and nowhere else, which is this
+# repo's own named failure mode. This is it made re-runnable.
+#
+# EACH CAUSE IS SAFE BY CONSTRUCTION, not by judgement, and each is REPORTED:
+# the rule is that a name mismatch is a HYPOTHESIS, never a verdict, and the
+# reader is owed which cause was ruled out. Nothing here decides a county is
+# buildable; it decides which differences are still worth reading.
+#
+#   1. Census truncates BASENAME at 17 characters. COMPROMISE GIFFOR is the
+#      county's COMPROMISE GIFFORD. Applied only when the census name is
+#      EXACTLY 17 characters, prefixes the county name, and exactly one
+#      unmatched county name qualifies — so it can never merge two precincts.
+#   2. Zero-padding. CUNNINGHAM 01 against CUNNINGHAM 1, throughout Champaign.
+#      Applied only when depadding produces a name the county actually has.
+#   3. A vestigial trailing 1 or I on single-precinct townships. The census
+#      writes CAVE 1, UNION 1, LARKINSBURG I where the county writes CAVE,
+#      UNION, LARKINSBURG. Applied ONLY when no `2`/`II` sibling exists on
+#      EITHER side — the condition that makes it safe rather than plausible.
+#   4. ISBE reporting-unit suffixes, already stripped by precinct_key above.
+#      Reported here rather than re-applied, because it CUTS BOTH WAYS: it is
+#      also the tell that a county subdivides precincts for reporting, which is
+#      what a county does when district lines cut through them.
+#
+# RUNNING IT CORRECTED THE RECORD IN TWO WAYS, 2026-09-04.
+#
+#   * THE CAUSES ARE NOT ONE-DIRECTIONAL. The guidebook describes each as a
+#     census habit — "the census writes CAVE 1 where the county writes CAVE",
+#     "CUNNINGHAM 01 vs CUNNINGHAM 1" — and both run the other way too:
+#     CHAMPAIGN's county writes the padded 01 against the census's 1, and
+#     WARREN's county writes BERWICK 1 against the census's BERWICK. Every
+#     canonicaliser here therefore runs on BOTH sides. Tried one-way first,
+#     which left Champaign and Warren unreconciled and looking re-precincted.
+#
+#   * THERE IS A FIFTH CAUSE: roman ordinals (see _canon_roman). Clay's census
+#     reads HARTER III where the county reads HARTER 3. It was never in the
+#     four, and this repo already knew about it — title_case has carried
+#     _ROMAN_ORDINAL since Scott shipped.
+#
+#   * AND A SIXTH: a spelled-out unit word one publisher carries and the other
+#     does not (see _canon_unit_word). Adams writes BEVERLY PCT 1 against the
+#     census's BEVERLY. Measured as a small tail — five counties statewide —
+#     and implemented anyway, because a cause left out of the tool is a cause
+#     the next pass re-derives, which is this file's whole reason for existing.
+#
+#   And one guard is STRICTER than the guidebook's: it says strip a vestigial 1
+#   when the stem has "no 2 sibling", and CLAY's HARTER runs 1, 3, 4, 5, 6, 7
+#   with no 2 at all — so the test reads ANY other ordinal on the stem.
+#
+# EVERY CANONICALISER IS ALSO REFUSED IF IT WOULD COLLAPSE TWO NAMES INTO ONE.
+# That guard was missing from the first draft and is not hypothetical: each rule
+# maps two spellings onto one, so a county holding WARD 01 beside WARD 1 would
+# have lost a real precinct — and the loss would have made the counts agree,
+# which is precisely the evidence this tool reports as "the fabric did not move".
+#
+# MEASURED over all 100 counties that reported in the 2026 General Primary:
+# naive 29, reconciled 42, 14 more differing only on a SPELLING (which is what
+# apply_aliases is for) and 44 on the COUNT, which is a fabric that really moved.
+#
+# THE VALIDATION THAT MATTERS is the 33 counties whose precinct layers this app
+# already ships from census geometry, whose fabric is therefore independently
+# known current: 22 reconcile, and every one of the other 11 is accounted for —
+# Calhoun is the COMPOSED shape (5 precincts over 7 voting districts, which
+# check_fabric_composed exists for), six are aliases their builders already
+# carry, and three (McDonough, Ogle, Stephenson) are real consolidations, with
+# McDonough being the county CI caught drifting in August. Nothing in that set
+# is unexplained, which is the evidence the five causes are neither too loose
+# nor too tight.
+# ---------------------------------------------------------------------------
+
+CENSUS2020 = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
+              "tigerWMS_Census2020/MapServer")
+CENSUS_TRUNCATION_LEN = 17
+
+
+def _norm(name):
+    """Mirrors vtd_board_districts.norm DELIBERATELY rather than importing it.
+
+    That module imports requests and build_metro_outline at module scope, and
+    this script is stdlib-only on purpose — it is a research tool that should
+    run anywhere. --selftest asserts the two agree, so a divergence fails
+    rather than going unnoticed."""
+    return re.sub(r"[^A-Z0-9]", "", (name or "").upper())
+
+
+def _census_json(layer, params):
+    query = dict(params)
+    query.update({"f": "json", "returnGeometry": "false"})
+    url = "%s/%d/query?%s" % (CENSUS2020, layer, urllib.parse.urlencode(query))
+    return json.loads(_get(url).decode("utf-8", "replace"))
+
+
+def census_county_fips():
+    """{COUNTY NAME: fips} for all 102 Illinois counties, from TIGERweb.
+
+    Fetched rather than tabled: a name-to-FIPS table in this file would be one
+    more hand-kept claim about the world, and the same host already answers."""
+    data = _census_json(82, {"where": "STATE='17'", "outFields": "BASENAME,COUNTY"})
+    out = {}
+    for feature in data.get("features") or []:
+        attrs = feature.get("attributes") or {}
+        name = " ".join(str(attrs.get("BASENAME") or "").upper().split())
+        if name:
+            out[name] = str(attrs.get("COUNTY"))
+    if len(out) < 102:
+        fail("the census county layer returned %d Illinois counties, expected 102"
+             % len(out))
+    return out
+
+
+def census_vtd_names(fips):
+    """The county's Census 2020 voting-district BASENAMEs, verbatim."""
+    data = _census_json(58, {"where": "STATE='17' AND COUNTY='%s'" % fips,
+                             "outFields": "BASENAME"})
+    return {" ".join(str((f.get("attributes") or {}).get("BASENAME") or "")
+                     .upper().split())
+            for f in (data.get("features") or [])} - {""}
+
+
+def _cause_truncation(a, b):
+    """Cause 1 — {name in a: name in b} for 17-character census truncations.
+
+    Pairwise by nature: a truncated name cannot be canonicalised, only paired.
+    Guarded three ways so it can never merge two precincts — the short name is
+    EXACTLY 17 characters, it prefixes the long one, and exactly one unmatched
+    candidate qualifies."""
+    a_norms, b_norms = {_norm(x) for x in a}, {_norm(x) for x in b}
+    out = {}
+    for x in sorted(a):
+        if len(x) != CENSUS_TRUNCATION_LEN or _norm(x) in b_norms:
+            continue
+        hits = [c for c in sorted(b)
+                if _norm(c).startswith(_norm(x)) and _norm(c) not in a_norms]
+        if len(hits) == 1:
+            out[x] = hits[0]
+    return out
+
+
+# The same alphabet and length limit vtd_board_districts._ROMAN_ORDINAL uses,
+# and for the same measured reason: widening it mangles real place names, since
+# DIX is a village in Jefferson County and a valid 509, and MI is a valid 1001.
+_ROMAN_ORDINAL = re.compile(r"^(X{0,3})(IX|IV|V?I{0,3})$")
+_ROMAN_VALUE = {"I": 1, "V": 5, "X": 10}
+
+
+def _roman_to_int(token):
+    """The token's value, or None if it is not a plausible precinct ordinal."""
+    token = token.upper()
+    if not token or len(token) > 4 or not _ROMAN_ORDINAL.match(token):
+        return None
+    total = prev = 0
+    for ch in reversed(token):
+        value = _ROMAN_VALUE[ch]
+        total += -value if value < prev else value
+        prev = max(prev, value)
+    return total or None
+
+
+def _canon_roman(name):
+    """Cause 5 — a trailing roman ordinal written as arabic.
+
+    NOT IN THE GUIDEBOOK'S FOUR, and measured into existence on 2026-09-04:
+    Clay's census reads HARTER III where the county reads HARTER 3, and
+    Hancock's CARTHAGE II against CARTHAGE 2. The conversion is one this repo
+    already knew about — title_case has carried _ROMAN_ORDINAL since Scott
+    shipped — it had simply never been part of the fabric comparison."""
+    parts = name.split()
+    if len(parts) < 2:
+        return name
+    value = _roman_to_int(parts[-1])
+    return " ".join(parts[:-1] + [str(value)]) if value else name
+
+
+_PADDED = re.compile(r"\b0+(\d)")
+
+
+def _canon_padding(name):
+    """Cause 2 — zero-padding. CUNNINGHAM 01 and CUNNINGHAM 1 are one precinct.
+
+    Applied to BOTH sides, which is the correction of 2026-09-04: the guidebook
+    records this as a census habit, and Champaign runs it the other way — the
+    COUNTY writes 01 and the census writes 1. A cause that is only ever tried
+    in one direction misses half of its own instances."""
+    return _PADDED.sub(r"\1", name)
+
+
+_TRAILING_ONE = re.compile(r"\s+(?:1|I)$")
+_ORDINAL_TAIL = re.compile(r"\s+([0-9]{1,3}|[IVX]{1,4})$")
+
+
+def _stems_with_other_ordinals(names):
+    """Stems that carry an ordinal OTHER than 1 — the condition that makes
+    dropping a vestigial 1 safe.
+
+    STRICTER THAN THE GUIDEBOOK'S "no 2 sibling", and Clay is why: its HARTER
+    runs 1, 3, 4, 5, 6, 7 with no 2 at all, so a no-2 test would have stripped
+    a genuinely numbered precinct's ordinal. Any other ordinal on the stem
+    means the 1 is doing work."""
+    out = set()
+    for name in names:
+        match = _ORDINAL_TAIL.search(name)
+        if not match:
+            continue
+        tail = match.group(1)
+        value = int(tail) if tail.isdigit() else _roman_to_int(tail)
+        if value and value != 1:
+            out.add(_norm(_ORDINAL_TAIL.sub("", name)))
+    return out
+
+
+def _canon_vestigial_one(name, protected):
+    """Cause 3 — a vestigial trailing 1 or I on a single-precinct township.
+
+    The census writes CAVE 1, UNION 1, LARKINSBURG I where Franklin and Union
+    write CAVE, UNION, LARKINSBURG — and Warren runs it the OTHER WAY, its
+    county writing BERWICK 1 against the census's BERWICK, which is the second
+    half of the same 2026-09-04 direction correction."""
+    if not _TRAILING_ONE.search(name):
+        return name
+    stem = _TRAILING_ONE.sub("", name)
+    return name if _norm(stem) in protected else stem
+
+
+# Canonicalisers run on BOTH name sets; truncation is pairwise and runs last,
+# once the cheap normalisations have removed the noise it would otherwise have
+# to pair through.
+_UNIT_WORD = re.compile(r"\s+(?:PCT|PRECINCT|TWP|TOWNSHIP)\b", re.I)
+
+
+def _canon_unit_word(name):
+    """Cause 6 — a spelled-out unit word one publisher includes and the other
+    does not: Adams writes BEVERLY PCT 1 against the census's BEVERLY, and
+    CAMP POINT PCT 1 against CAMP POINT 1; McDonough's MACOMB TOWNSHIP is the
+    census's MACOMB TWP.
+
+    MEASURED 2026-09-04 rather than assumed, and it is a SMALL tail: five
+    counties statewide (Adams and Will on PCT, Brown and McDonough on
+    TOWNSHIP, Fulton and McDonough on TWP, Monroe on PRECINCT). Recorded and
+    implemented anyway, because a cause left out of the tool is a cause the
+    next pass re-derives — which is the whole reason this file exists. Dropping
+    the token is safe on its face (no Illinois precinct is NAMED Pct or Twp),
+    and the collapse guard above catches the case where it would not be."""
+    return _UNIT_WORD.sub("", name).strip()
+
+
+JASPER_CANONICAL = (
+    ("roman ordinal -> arabic", _canon_roman),
+    ("zero-padding", _canon_padding),
+    ("unit word (PCT/TWP/TOWNSHIP)", _canon_unit_word),
+)
+
+
+def jasper(county_names, census_names):
+    """(matched, applied, county_only, census_only) for one county.
+
+    Every cause is applied to BOTH sides and kept only if it STRICTLY reduces
+    the disagreement, so a rule that fires without helping is discarded rather
+    than recorded as a reconciliation that did nothing."""
+    county, census = set(county_names), set(census_names)
+    applied = []
+
+    def diff(x, y):
+        return len({_norm(n) for n in x} ^ {_norm(n) for n in y})
+
+    def keep(trial_a, trial_b):
+        """A canonicaliser may only be adopted if it HELPS and LOSES NOTHING.
+
+        The second half was missing until 2026-09-04 and is not hypothetical:
+        every rule here maps two spellings onto one, so a county holding both
+        forms — WARD 01 beside WARD 1, HARTER I beside HARTER 1, CAVE 1 beside
+        CAVE — would have had two real precincts silently collapsed into one,
+        and the collapse would have made the counts agree, which is exactly the
+        evidence this tool reports as "the fabric did not move"."""
+        return (diff(trial_a, trial_b) < diff(county, census)
+                and len(trial_a) == len(county) and len(trial_b) == len(census))
+
+    for label, canon in JASPER_CANONICAL:
+        trial_a = {canon(n) for n in county}
+        trial_b = {canon(n) for n in census}
+        if keep(trial_a, trial_b):
+            county, census = trial_a, trial_b
+            applied.append((label, None))
+
+    protected = _stems_with_other_ordinals(county | census)
+    trial_a = {_canon_vestigial_one(n, protected) for n in county}
+    trial_b = {_canon_vestigial_one(n, protected) for n in census}
+    if keep(trial_a, trial_b):
+        county, census = trial_a, trial_b
+        applied.append(("vestigial trailing 1/I", None))
+
+    pairs = _cause_truncation(census, county) or _cause_truncation(county, census)
+    if pairs:
+        for side in (census, county):
+            hit = set(pairs) & side
+            if hit:
+                side -= hit
+                side |= {pairs[h] for h in hit}
+        applied.append(("census 17-char truncation", pairs))
+
+    cn = {_norm(c): c for c in county}
+    xn = {_norm(c): c for c in census}
+    county_only = sorted(cn[k] for k in set(cn) - set(xn))
+    census_only = sorted(xn[k] for k in set(xn) - set(cn))
+    return (not county_only and not census_only), applied, county_only, census_only
+
+
 def shipped_counties():
     """{NORMALISEDNAME: path} for every county whose precincts this app ships."""
     out = {}
@@ -296,6 +614,204 @@ def shipped_counties():
     return out
 
 
+def run_jasper(election_id, only=None):
+    """Per county: is its CURRENT precinct fabric still the Census 2020 fabric?"""
+    by_authority, office = precincts_for(election_id)
+    fips = census_county_fips()
+    print("  read election %s via %s (%d authorities); census county layer "
+          "answered for %d counties" % (election_id, office, len(by_authority),
+                                        len(fips)), file=sys.stderr)
+    names = sorted(n for n in fips if not only or only.upper() in n)
+    naive_ok = reconciled_ok = looked = 0
+    rows = []
+    for name in names:
+        county = by_authority.get(name)
+        if not county:
+            continue          # a county whose ballot this election did not carry,
+            # or one whose returns are filed by a city election commission under
+            # its own JurisName — either way there is nothing to compare here.
+        census = census_vtd_names(fips[name])
+        if not census:
+            continue
+        looked += 1
+        naive = {_norm(c) for c in county} == {_norm(c) for c in census}
+        ok, applied, county_only, census_only = jasper(county, census)
+        naive_ok += bool(naive)
+        reconciled_ok += bool(ok)
+        rows.append((name, len(county), len(census), naive, ok, applied,
+                     county_only, census_only))
+    alias_only = sum(1 for r in rows if not r[4] and r[1] == r[2])
+    fabric = sum(1 for r in rows if not r[4] and r[1] != r[2])
+    print("\nisbe-precinct-fabric --jasper: %d county(ies) compared\n"
+          "  naive name comparison        %d match\n"
+          "  after the six causes         %d match\n"
+          "  still differing              %d on a SPELLING (an alias closes it)\n"
+          "                               %d on the COUNT (the fabric moved)"
+          % (looked, naive_ok, reconciled_ok, alias_only, fabric))
+    for name, nc, nx, naive, ok, applied, county_only, census_only in rows:
+        if naive:
+            continue          # matched before any rule ran; nothing to report
+        # THE SPLIT A READER ACTUALLY NEEDS, and it is derivable rather than
+        # judged: when the two sides still differ but COUNT THE SAME, the fabric
+        # did not move and what is left is a spelling — the case apply_aliases
+        # exists for. When the count itself moved, precincts were consolidated
+        # or split and no alias can fix it. Measured across the 33 counties
+        # whose precincts this app ships, every same-count residual is an alias
+        # its builder already carries (Hancock's MONTIBELLO, White's GREY,
+        # Schuyler's FREDRICK, Jefferson's MOUNT vs MT.), and every
+        # count-moved one is a real consolidation — McDonough, Ogle and
+        # Stephenson, McDonough being the county CI caught drifting in August.
+        if ok:
+            verdict = "RECONCILED"
+        elif nc == nx:
+            verdict = "DIFFERS: same count — a spelling, so an ALIAS"
+        else:
+            verdict = "DIFFERS: count moved %d -> %d — a FABRIC change" % (nx, nc)
+        print("\n  %s [%s] — %d county precinct(s), %d census voting district(s)"
+              % (name, verdict, nc, nx))
+        for label, pairs in applied:
+            if pairs:                      # the pairwise cause names its pairs
+                sample = ", ".join("%s -> %s" % (a, b)
+                                   for a, b in sorted(pairs.items())[:3])
+                print("      ruled out: %s (%d) — %s" % (label, len(pairs), sample))
+            else:                          # a canonicaliser ran on both sides
+                print("      ruled out: %s" % label)
+        if county_only:
+            print("      county-only: %s%s" % (", ".join(county_only[:8]),
+                                               " …" if len(county_only) > 8 else ""))
+        if census_only:
+            print("      census-only: %s%s" % (", ".join(census_only[:8]),
+                                               " …" if len(census_only) > 8 else ""))
+    return 0
+
+
+def selftest():
+    """The guidebook's own worked examples, run as assertions. No network."""
+    checks = []
+
+    def ok(label, got, want):
+        checks.append((label, got == want, got, want))
+
+    # norm must not drift from the module that owns the real one.
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        from vtd_board_districts import norm as shared_norm  # noqa: PLC0415
+        ok("norm matches vtd_board_districts.norm",
+           [_norm(s) for s in ("Clay City I", "ROBINSON  1", "St. Albans")],
+           [shared_norm(s) for s in ("Clay City I", "ROBINSON  1", "St. Albans")])
+    except Exception as exc:  # noqa: BLE001 - the tool must run stdlib-only
+        checks.append(("norm cross-check skipped (%s)" % type(exc).__name__,
+                       True, None, None))
+
+    # 1. Champaign's truncations, and names that must NOT be touched.
+    ok("truncation: COMPROMISE GIFFOR -> COMPROMISE GIFFORD",
+       _cause_truncation({"COMPROMISE GIFFOR", "COMPROMISE PENFIE"},
+                         {"COMPROMISE GIFFORD", "COMPROMISE PENFIELD"}),
+       {"COMPROMISE GIFFOR": "COMPROMISE GIFFORD",
+        "COMPROMISE PENFIE": "COMPROMISE PENFIELD"})
+    ok("truncation: refuses when two candidates share the prefix",
+       _cause_truncation({"COMPROMISE GIFFOR"},
+                         {"COMPROMISE GIFFORD", "COMPROMISE GIFFORDX"}), {})
+    ok("truncation: refuses a name that is not exactly 17 characters",
+       _cause_truncation({"CAVE"}, {"CAVE TOWNSHIP"}), {})
+
+    # 2. Zero-padding, canonical on both sides.
+    ok("zero-padding: CUNNINGHAM 01 -> CUNNINGHAM 1",
+       _canon_padding("CUNNINGHAM 01"), "CUNNINGHAM 1")
+    ok("zero-padding: leaves a real 10 alone", _canon_padding("WARD 10"), "WARD 10")
+
+    # 5. Roman ordinals — the cause the guidebook's four never named.
+    ok("roman: HARTER III -> HARTER 3", _canon_roman("HARTER III"), "HARTER 3")
+    ok("roman: CARTHAGE II -> CARTHAGE 2", _canon_roman("CARTHAGE II"), "CARTHAGE 2")
+    # These two exercise the ALPHABET, which is the guard that matters. An
+    # earlier version asserted _canon_roman("DIX") == "DIX" and passed with the
+    # alphabet widened to LCDM — because a one-token name returns early and the
+    # alphabet was never consulted. Green for the wrong reason; the names below
+    # carry a second token so the tail really is tested.
+    ok("roman: leaves a DIX tail alone (a village, and a valid 509)",
+       _canon_roman("SOUTH DIX"), "SOUTH DIX")
+    ok("roman: leaves an MI tail alone (a valid 1001)",
+       _canon_roman("WARD MI"), "WARD MI")
+    ok("roman: leaves DIX alone as a whole name too",
+       _canon_roman("DIX"), "DIX")
+    ok("roman: leaves a name whose tail is not an ordinal alone",
+       _canon_roman("SPRING POINT"), "SPRING POINT")
+
+    # 3. The vestigial 1/I, and the sibling condition that makes it safe.
+    free = _stems_with_other_ordinals({"CAVE 1", "AVENA 1", "LARKINSBURG I"})
+    ok("vestigial 1: CAVE 1 -> CAVE when the stem has no other ordinal",
+       [_canon_vestigial_one(n, free)
+        for n in ("CAVE 1", "AVENA 1", "LARKINSBURG I")],
+       ["CAVE", "AVENA", "LARKINSBURG"])
+    held = _stems_with_other_ordinals({"CAVE 1", "CAVE 2"})
+    ok("vestigial 1: refuses when a 2 sibling exists (real numbering)",
+       _canon_vestigial_one("CAVE 1", held), "CAVE 1")
+    # Clay's HARTER runs 1, 3, 4, 5, 6, 7 with NO 2 — the case a "no 2 sibling"
+    # rule would have got wrong, which is why the guard reads any other ordinal.
+    clay = _stems_with_other_ordinals({"HARTER 1", "HARTER 3", "HARTER 7"})
+    ok("vestigial 1: refuses HARTER 1 on a stem numbered 3..7 with no 2",
+       _canon_vestigial_one("HARTER 1", clay), "HARTER 1")
+    ok("vestigial 1: the guard sees ROMAN siblings too",
+       _canon_vestigial_one("HARTER I", _stems_with_other_ordinals(
+           {"HARTER I", "HARTER III"})), "HARTER I")
+
+    # 6. The unit word, and the guard that keeps it from eating a real name.
+    ok("unit word: BEVERLY PCT 1 -> BEVERLY 1",
+       _canon_unit_word("BEVERLY PCT 1"), "BEVERLY 1")
+    ok("unit word: MACOMB TOWNSHIP -> MACOMB", _canon_unit_word("MACOMB TOWNSHIP"),
+       "MACOMB")
+    ok("unit word: leaves a name with no unit token alone",
+       _canon_unit_word("SPRING POINT"), "SPRING POINT")
+
+    # THE COLLAPSE GUARD. Every canonicaliser maps two spellings onto one, so a
+    # county holding BOTH forms would lose a real precinct — and the loss would
+    # make the counts agree, which is the very evidence this tool reports as
+    # "the fabric did not move". A rule that would collapse is refused.
+    matched, applied, county_only, census_only = jasper(
+        {"WARD 1", "WARD 01"}, {"WARD 1", "WARD 2"})
+    ok("collapse guard: refuses zero-padding that would merge WARD 01 into WARD 1",
+       (matched, len(applied), county_only, census_only),
+       (False, 0, ["WARD 01"], ["WARD 2"]))
+    matched, _, _, _ = jasper({"CAVE", "CAVE 1"}, {"CAVE", "CAVE 1"})
+    ok("collapse guard: an already-matching pair is left exactly alone",
+       matched, True)
+
+    # 4. Already applied upstream by precinct_key; asserted here so all six
+    #    causes are testable in one place.
+    ok("reporting id: SPRING POINT-7 -> SPRING POINT",
+       precinct_key("SPRING POINT-7"), "SPRING POINT")
+    ok("reporting id: leaves Calhoun's merged names alone",
+       [precinct_key(n) for n in ("HARDIN-GILEAD", "BELLEVIEW-HAMBURG")],
+       ["HARDIN-GILEAD", "BELLEVIEW-HAMBURG"])
+
+    # The whole reconciliation, end to end, in BOTH directions.
+    matched, applied, county_only, census_only = jasper(
+        {"CAVE", "CUNNINGHAM 1", "COMPROMISE GIFFORD"},
+        {"CAVE 1", "CUNNINGHAM 01", "COMPROMISE GIFFOR"})
+    ok("end to end: census-side causes reconcile a county exactly",
+       (matched, county_only, census_only), (True, [], []))
+    matched, _, county_only, census_only = jasper(
+        {"BERWICK 1", "CUNNINGHAM 01"}, {"BERWICK", "CUNNINGHAM 1"})
+    ok("end to end: the SAME causes running county-side (Warren, Champaign)",
+       (matched, county_only, census_only), (True, [], []))
+    matched, _, county_only, _ = jasper({"HURRICANE"},
+                                        {"NORTH HURRICANE", "SOUTH HURRICANE"})
+    ok("end to end: a REAL split still differs (Fayette's HURRICANE)",
+       (matched, county_only), (False, ["HURRICANE"]))
+
+    bad = [c for c in checks if not c[1]]
+    for label, good, got, want in checks:
+        print("  %s %s" % ("ok " if good else "FAIL", label))
+        if not good:
+            print("       got  %r\n       want %r" % (got, want))
+    if bad:
+        print("isbe-precinct-fabric --selftest: FAIL — %d of %d check(s)"
+              % (len(bad), len(checks)), file=sys.stderr)
+        return 1
+    print("isbe-precinct-fabric --selftest: OK — %d check(s)" % len(checks))
+    return 0
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[1])
     ap.add_argument("--list", action="store_true", help="list election ids")
@@ -304,7 +820,18 @@ def main():
     ap.add_argument("--county", help="limit the comparison to one authority")
     ap.add_argument("--shipped", action="store_true",
                     help="report only counties whose precincts this app ships")
+    ap.add_argument("--jasper", metavar="ELECTION",
+                    help="run THE JASPER TEST for every county: this election's "
+                         "ISBE precinct names against Census 2020 voting districts")
+    ap.add_argument("--selftest", action="store_true",
+                    help="check the four reconciliation causes on the guidebook's "
+                         "own worked examples (no network)")
     args = ap.parse_args()
+
+    if args.selftest:
+        return selftest()
+    if args.jasper:
+        return run_jasper(args.jasper, args.county)
 
     if args.list:
         print("  id   election                       results CSVs")

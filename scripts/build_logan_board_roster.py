@@ -24,6 +24,21 @@ SOURCE_URL = ("https://www.logancountyil.gov/index.php?option=com_content"
               "&view=article&id=176&Itemid=541&lang=en")
 
 EXPECT_DISTRICTS = ("1", "2", "3", "4", "5", "6")
+
+# THE BOARD'S OWN OFFICE, and it is the board's rather than a member's because
+# the county says so in those words: the page heads this block "Logan County
+# Board Office" and then lists twelve members each with a DIFFERENT address.
+# That distinction is the whole reason this ships and Franklin's and Warren's
+# do not — a board page's only street address is very often a member's HOME,
+# which this fleet never publishes (the Madison/Peoria rule). The county gives
+# a PO Box (39) beside the street address; the street one ships, because the
+# card's label is where a reader can go.
+BOARD = {
+    "address": "Logan County Board Office, 601 Broadway St., Lincoln, IL 62656",
+    "phone": "(217) 732-6400",
+    "email": "logancountyboard@logancountyil.gov",
+    "sourceUrl": SOURCE_URL,
+}
 EXPECT_MEMBERS_PER_DISTRICT = 2
 MIN_PHONES = 10
 MIN_EMAILS = 10
@@ -75,11 +90,18 @@ def main():
     if emails < MIN_EMAILS:
         fail("only %d/12 members carry an e-mail (floor %d)" % (emails, MIN_EMAILS))
 
+    # Added AFTER every district check above, all of which read roster's keys
+    # as districts (sorted(roster) == EXPECT_DISTRICTS) or index members on
+    # each value. A board block written earlier would fail the first and
+    # KeyError the second.
+    roster["board"] = dict(BOARD)
+
     out_path = os.path.join(out_dir, "logan-county-board-members.json")
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(roster, f, indent=2, ensure_ascii=False, sort_keys=True)
         f.write("\n")
-    print("logan-board-roster: wrote %s — 6 districts x 2 members (%d phones, %d e-mails; %s)"
+    print("logan-board-roster: wrote %s — 6 districts x 2 members + the board "
+          "office block (%d phones, %d e-mails; %s)"
           % (os.path.relpath(out_path, REPO_ROOT), phones, emails,
              ", ".join("%s %s" % (r, n) for r, n in sorted(chairs))))
 

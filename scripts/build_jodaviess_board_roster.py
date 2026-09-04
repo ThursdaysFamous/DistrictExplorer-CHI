@@ -53,6 +53,19 @@ from build_jodaviess_board_districts import EXPECTED_DISTRICTS  # noqa: E402
 
 SOURCE_URL = "https://www.jodaviesscountyil.gov/1199/County-Board"
 
+# WHERE THE BOARD MEETS, not an office — and the card's label says so, because
+# the county's words are "County Board room, Third Floor / Jo Daviess County
+# Courthouse in Galena, 330 N. Bench St." A meeting room is not an office and
+# is not published as one here. This county is exactly why that care is owed:
+# its per-member directory pages DO print home addresses, which the scraper has
+# never parsed (the Madison/Peoria rule, recorded in validate_index.py), so the
+# courthouse is the only address about this board that is anybody's business.
+BOARD = {
+    "address": ("Jo Daviess County Courthouse, board room (third floor), "
+                "330 N. Bench St., Galena, IL 61036"),
+    "sourceUrl": SOURCE_URL,
+}
+
 MIN_TERMS = 15
 MIN_EMAILS = 14
 MIN_PHONES = 14
@@ -160,13 +173,19 @@ def main():
               file=sys.stderr)
         sys.exit(1)
 
+    # District count is taken BEFORE the board block joins the mapping, so the
+    # log line keeps reporting districts rather than districts-plus-one; every
+    # guard above likewise reads roster's values as districts.
+    district_count = len(roster)
+    roster["board"] = dict(BOARD)
+
     out_dir = sys.argv[2] if len(sys.argv) > 2 else DEFAULT_OUT_DIR
     out_path = os.path.join(out_dir, "jo-daviess-county-board-members.json")
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(roster, f, ensure_ascii=False, sort_keys=True)
     print("build-jodaviess-board: wrote %s — %d districts, %d members + %d "
           "vacant seat(s), %d terms, %d phones, %d e-mails, chair %s"
-          % (out_path, len(roster), members, vacancies, terms, phones, emails,
+          % (out_path, district_count, members, vacancies, terms, phones, emails,
              chairs[0]["name"] if chairs else "unresolved"))
 
 

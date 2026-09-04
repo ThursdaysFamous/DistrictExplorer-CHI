@@ -35,6 +35,21 @@ from build_municipal_officials_roster import uninvert_name  # noqa: E402  (share
 
 SOURCE_URL = "https://jeffersoncounty.illinois.gov/county_board/index.php"
 
+# THE BOARD'S OWN OFFICE, attributed by the county in its own words: the page
+# heads this block "Office/Mailing Address: / Jefferson County Board / County
+# Courthouse", above a staffed line ("County Board Executive Assistant") and a
+# board mailbox. It is not a member's address — the thirteen member rows carry
+# thirteen different phones and a per-district role e-mail and no address at
+# all, which is why this one is safe to publish and a board page's lone street
+# address usually is not (the Madison/Peoria rule).
+BOARD = {
+    "address": ("Jefferson County Board, County Courthouse, "
+                "100 South 10th Street, Mt. Vernon, IL 62864"),
+    "phone": "(618) 244-8000, option 2",
+    "email": "jeffcoboard@jeffersoncounty.illinois.gov",
+    "sourceUrl": SOURCE_URL,
+}
+
 # Thirteen single-member districts. The floor is the full board rather than one
 # under: on a single-member district losing a member leaves a card with no name
 # at all and no count anywhere would look wrong, so a genuine vacancy is meant
@@ -132,6 +147,13 @@ def main():
               "with a partial scrape: %s" % "; ".join(problems), file=sys.stderr)
         sys.exit(1)
 
+    # District count is taken BEFORE the board block joins the mapping, so the
+    # log line keeps reporting districts rather than districts-plus-one. Added
+    # after every guard above too: each one reads roster's values as districts
+    # and indexes ["members"], so a board block written earlier would KeyError.
+    district_count = len(roster)
+    roster["board"] = dict(BOARD)
+
     out_dir = sys.argv[2] if len(sys.argv) > 2 else DEFAULT_OUT_DIR
     out_path = os.path.join(out_dir, "jefferson-county-board-members.json")
     with open(out_path, "w", encoding="utf-8") as f:
@@ -140,7 +162,7 @@ def main():
         print("  name: %s" % note)
     print("build-jefferson-board: wrote %s — %d districts, %d members, %d phones, "
           "%d e-mails, chair %s, vice chair %s"
-          % (out_path, len(roster), members, phones, emails,
+          % (out_path, district_count, members, phones, emails,
              chairs[0]["name"] if chairs else "unresolved",
              vices[0]["name"] if vices else "unresolved"))
 
