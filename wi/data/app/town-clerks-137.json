@@ -1,0 +1,125 @@
+{
+  "5513703925": {
+    "clerk": "Ann Mosling",
+    "deputyClerk": "Melissa Zamzow",
+    "municipality": "Aurora",
+    "phone": "920-229-5583",
+    "recordUpdated": "2024-01-04",
+    "url": "https://townaurora.com/"
+  },
+  "5513708300": {
+    "clerk": "Amy L Smith",
+    "municipality": "Bloomfield",
+    "phone": "920-843-1416",
+    "recordUpdated": "2024-02-23"
+  },
+  "5513716400": {
+    "clerk": "Terri Jackson",
+    "municipality": "Coloma",
+    "phone": "715-228-2056",
+    "recordUpdated": "2025-11-14"
+  },
+  "5513718475": {
+    "clerk": "Melanie R Stake",
+    "municipality": "Dakota",
+    "phone": "920-787-4875",
+    "recordUpdated": "2023-12-18",
+    "url": "https://www.townofdakota.org/"
+  },
+  "5513719300": {
+    "clerk": "Cheryl A Pionke",
+    "municipality": "Deerfield",
+    "phone": "715-249-5659",
+    "recordUpdated": "2026-01-05",
+    "url": "http://www.deerfieldwaushara.com/"
+  },
+  "5513732475": {
+    "clerk": "Myra Zwetz",
+    "municipality": "Hancock",
+    "phone": "715-249-5511",
+    "recordUpdated": "2023-12-11"
+  },
+  "5513743500": {
+    "clerk": "Lois Jewell",
+    "municipality": "Leon",
+    "phone": "920-765-2422",
+    "recordUpdated": "2023-12-28"
+  },
+  "5513749425": {
+    "clerk": "Tonya Nigh",
+    "municipality": "Marion",
+    "recordUpdated": "2025-10-23",
+    "url": "https://townofmarionwausharawi.gov/"
+  },
+  "5513754825": {
+    "clerk": "Alan Anderson",
+    "municipality": "Mount Morris",
+    "phone": "920-787-2580",
+    "recordUpdated": "2024-02-05",
+    "url": "https://www.townshipofmtmorris.com/"
+  },
+  "5513759225": {
+    "clerk": "Dawn Miles",
+    "municipality": "Oasis",
+    "phone": "715-335-6077",
+    "recordUpdated": "2026-05-18"
+  },
+  "5513763175": {
+    "clerk": "Linda Carlson",
+    "municipality": "Plainfield",
+    "phone": "715-335-4312",
+    "recordUpdated": "2023-12-18"
+  },
+  "5513764975": {
+    "clerk": "Jalaine Nitzke",
+    "municipality": "Poy Sippi",
+    "phone": "920-379-1561",
+    "recordUpdated": "2025-04-24"
+  },
+  "5513767550": {
+    "clerk": "Ryan Heil",
+    "municipality": "Richford",
+    "phone": "920-647-0625",
+    "recordUpdated": "2026-06-30",
+    "url": "https://townofrichfordwi.gov/"
+  },
+  "5513769425": {
+    "clerk": "Kathy Vandecastle",
+    "municipality": "Rose",
+    "phone": "920-407-0616",
+    "recordUpdated": "2023-12-22"
+  },
+  "5513771825": {
+    "clerk": "Angie Lund",
+    "municipality": "Saxeville",
+    "phone": "920-240-9856",
+    "recordUpdated": "2025-05-14",
+    "url": "https://townofsaxeville.com/"
+  },
+  "5513776400": {
+    "clerk": "Carolann Yeska",
+    "deputyClerk": "Angel Jannusch",
+    "municipality": "Springwater",
+    "phone": "920-622-3808",
+    "recordUpdated": "2025-05-05",
+    "url": "https://townofspringwater.com/"
+  },
+  "5513783425": {
+    "clerk": "Tom Monacelli",
+    "municipality": "Warren",
+    "phone": "920-566-4109",
+    "recordUpdated": "2023-12-11"
+  },
+  "5513784650": {
+    "clerk": "Patty Nett",
+    "municipality": "Wautoma",
+    "phone": "920-787-4249",
+    "recordUpdated": "2026-02-03",
+    "url": "https://townofwautomawi.gov/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

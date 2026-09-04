@@ -35,9 +35,59 @@ FLOORS = {
 }
 
 
+# How many cities may be CARRIED from the last shipped file in one run before
+# this refuses. One unreadable site is a bad afternoon on somebody else's
+# server; three at once is this end breaking, and shipping six-week-old rows
+# under a current date is exactly what the fleet's dating discipline forbids.
+MAX_CARRIED = 2
+
+
+def carry_forward(cities, failures):
+    """A city the scraper could not read keeps the rows it shipped last time.
+
+    Dropping it instead would take real, correct alderpersons off the card
+    because a webserver timed out — and the floors below, which are per city,
+    would not even notice: they only measure the cities present. The carried
+    rows are at most a week old and unchanged since the last human-reviewed PR,
+    which is a far smaller claim than an empty card.
+
+    Loud on purpose: every carry prints, and the weekly PR shows no diff for
+    that city, which is the honest record of "nothing could be read".
+    """
+    missing = sorted(set(FLOORS) - set(cities))
+    if not missing:
+        return cities
+    if not os.path.exists(OUT):
+        raise SystemExit("%s missed %s and there is no shipped file to carry "
+                         "them from" % (RAW, missing))
+    with open(OUT) as f:
+        shipped = json.load(f)
+    carried = []
+    for code in missing:
+        previous = shipped.get(code)
+        reason = (failures.get(code) or {}).get("reason", "no reason recorded")
+        if not previous or not previous.get("members"):
+            raise SystemExit("%s (%s) could not be read (%s) and has no shipped "
+                             "rows to carry — a city cannot enter this file by "
+                             "failing" % (FLOORS[code][0], code, reason))
+        cities[code] = previous
+        carried.append(FLOORS[code][0])
+        print("  CARRIED %-12s %d members kept from the last shipped file — %s"
+              % (FLOORS[code][0], len(previous["members"]), reason))
+    if len(carried) > MAX_CARRIED:
+        raise SystemExit("%d of %d cities were unreadable (%s) — that is this "
+                         "end failing, not their servers; read the scraper log "
+                         "before raising MAX_CARRIED (%d)"
+                         % (len(carried), len(FLOORS), ", ".join(carried),
+                            MAX_CARRIED))
+    return cities
+
+
 def main():
     with open(RAW) as f:
-        cities = json.load(f)["cities"]
+        raw = json.load(f)
+    cities = raw["cities"]
+    cities = carry_forward(cities, raw.get("failures") or {})
     with open(GEOMETRY) as f:
         geo = json.load(f)["features"]
     geo_keys = {}

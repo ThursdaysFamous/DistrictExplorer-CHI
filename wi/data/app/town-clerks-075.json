@@ -1,0 +1,138 @@
+{
+  "5507501675": {
+    "clerk": "Patty Ducat",
+    "municipality": "Amberg",
+    "phone": "715-759-5095",
+    "recordUpdated": "2024-01-02",
+    "url": "https://ambergtownship.com/"
+  },
+  "5507503525": {
+    "clerk": "Tina M Barnes",
+    "municipality": "Athelstane",
+    "phone": "715-856-5335",
+    "recordUpdated": "2025-08-26",
+    "url": "https://www.athelstanewi.com/"
+  },
+  "5507505800": {
+    "clerk": "Barb Patz",
+    "municipality": "Beaver",
+    "phone": "920-897-4378",
+    "recordUpdated": "2023-12-28"
+  },
+  "5507506000": {
+    "clerk": "Cindy Butterfield",
+    "municipality": "Beecher",
+    "phone": "715-324-5535",
+    "recordUpdated": "2023-11-02",
+    "url": "http://www.townofbeecher.com/"
+  },
+  "5507521000": {
+    "clerk": "Sue Ann Rohde-Perry",
+    "deputyClerk": "Jayne F Collins",
+    "municipality": "Dunbar",
+    "phone": "715-324-6132",
+    "recordUpdated": "2026-02-26",
+    "url": "http://www.townofdunbar.com/"
+  },
+  "5507529775": {
+    "clerk": "Tim Strohkirch",
+    "municipality": "Goodman",
+    "phone": "715-336-2107",
+    "recordUpdated": "2025-04-21",
+    "url": "https://townofgoodman.com/"
+  },
+  "5507531725": {
+    "clerk": "Lisa Witak",
+    "municipality": "Grover",
+    "phone": "715-938-4099",
+    "recordUpdated": "2023-03-29",
+    "url": "https://www.townofgroverwi.com/"
+  },
+  "5507541075": {
+    "clerk": "Stacey Wilson",
+    "deputyClerk": "Debra Doubek",
+    "municipality": "Lake",
+    "phone": "715-854-2995",
+    "recordUpdated": "2025-11-13",
+    "url": "http://townoflakewi.com/"
+  },
+  "5507551537": {
+    "clerk": "Patricia Schutte",
+    "municipality": "Middle Inlet",
+    "phone": "715-854-3106",
+    "recordUpdated": "2023-12-13",
+    "url": "http://middleinlet.org/"
+  },
+  "5507557350": {
+    "clerk": "Tami Lema-Mielcarek",
+    "municipality": "Niagara",
+    "phone": "715-251-1545",
+    "recordUpdated": "2025-06-16",
+    "url": "https://www.townofniagarawi.com/"
+  },
+  "5507561775": {
+    "clerk": "Suzanne Allen",
+    "municipality": "Pembine",
+    "phone": "715-324-6314",
+    "recordUpdated": "2023-11-02"
+  },
+  "5507562200": {
+    "clerk": "Kayla Okins",
+    "deputyClerk": "Kathy Brandt",
+    "municipality": "Peshtigo",
+    "phone": "715-582-4332",
+    "recordUpdated": "2026-01-27",
+    "url": "https://townofpeshtigo.wi.gov/"
+  },
+  "5507564275": {
+    "clerk": "Dawn Johnson",
+    "deputyClerk": "Amy Linstad",
+    "municipality": "Porterfield",
+    "phone": "715-789-2391",
+    "recordUpdated": "2025-09-03",
+    "url": "https://www.townofporterfield.com/"
+  },
+  "5507564775": {
+    "clerk": "Jessica Olson",
+    "deputyClerk": "Dorothy L Kaminski",
+    "municipality": "Pound",
+    "phone": "920-897-4211",
+    "recordUpdated": "2023-12-28",
+    "url": "https://townofpoundwi.com/"
+  },
+  "5507573975": {
+    "clerk": "Margaret Lewis",
+    "deputyClerk": "Lisa Weinrich",
+    "municipality": "Silver Cliff",
+    "phone": "715-850-1122",
+    "recordUpdated": "2026-04-01",
+    "url": "https://www.silvercliffwi.com/"
+  },
+  "5507577000": {
+    "clerk": "Elaine Olson",
+    "deputyClerk": "Jennifer Olson",
+    "municipality": "Stephenson",
+    "phone": "715-854-2942",
+    "recordUpdated": "2023-12-26",
+    "url": "http://stephensonwisc.com/"
+  },
+  "5507583050": {
+    "clerk": "Margo Renikow",
+    "municipality": "Wagner",
+    "phone": "715-927-5125",
+    "recordUpdated": "2023-07-09",
+    "url": "https://www.townofwagnerwi.org/"
+  },
+  "5507584550": {
+    "clerk": "Cheryl Stumbris",
+    "municipality": "Wausaukee",
+    "phone": "715-856-5281",
+    "recordUpdated": "2024-01-02",
+    "url": "http://townofwausaukee.com/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

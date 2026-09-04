@@ -1,0 +1,163 @@
+{
+  "5501301900": {
+    "clerk": "Annette Bethke",
+    "municipality": "Anderson",
+    "phone": "715-488-2911",
+    "recordUpdated": "2023-11-21",
+    "url": "https://townofanderson.org/"
+  },
+  "5501308025": {
+    "clerk": "Ryan W Brennan",
+    "municipality": "Blaine",
+    "phone": "715-718-6213",
+    "recordUpdated": "2026-01-05",
+    "url": "https://www.townofblainewi.com/"
+  },
+  "5501318750": {
+    "clerk": "Liz Simonsen",
+    "municipality": "Daniels",
+    "phone": "715-349-2291",
+    "recordUpdated": "2025-04-09",
+    "url": "https://townofdaniels.com/"
+  },
+  "5501319925": {
+    "clerk": "David L Coon",
+    "municipality": "Dewey",
+    "phone": "262-202-9201",
+    "recordUpdated": "2024-01-03",
+    "url": "http://www.townofdewey.com/"
+  },
+  "5501330475": {
+    "clerk": "Terri Knode",
+    "deputyClerk": "Toni Carter",
+    "municipality": "Grantsburg",
+    "phone": "715-463-5600",
+    "recordUpdated": "2024-02-21",
+    "url": "https://townofgrantsburgwi.gov/"
+  },
+  "5501337650": {
+    "clerk": "Colleen Laya",
+    "municipality": "Jackson",
+    "phone": "715-349-8404",
+    "recordUpdated": "2026-02-18",
+    "url": "https://www.townofjacksonwi.com/"
+  },
+  "5501340975": {
+    "clerk": "Sandra Hinkley",
+    "municipality": "La Follette",
+    "phone": "612-865-1534",
+    "recordUpdated": "2025-04-09",
+    "url": "https://townoflafollette.com/"
+  },
+  "5501344325": {
+    "clerk": "Jenelle Lindquist",
+    "deputyClerk": "Linda Isaacson",
+    "municipality": "Lincoln",
+    "phone": "715-566-0467",
+    "recordUpdated": "2025-04-10",
+    "url": "http://townoflincolnbc.com/"
+  },
+  "5501350650": {
+    "clerk": "Suzanna Eytcheson",
+    "municipality": "Meenon",
+    "phone": "715-791-4837",
+    "recordUpdated": "2025-11-07",
+    "url": "https://townofmeenon.com/"
+  },
+  "5501359075": {
+    "clerk": "Maggie Olson",
+    "deputyClerk": "William Pardun",
+    "municipality": "Oakland",
+    "phone": "715-520-0735",
+    "recordUpdated": "2025-04-16",
+    "url": "https://townofoaklandwi.com/"
+  },
+  "5501369325": {
+    "clerk": "Rebecca Odden",
+    "deputyClerk": "Patricia Miner",
+    "municipality": "Roosevelt",
+    "phone": "715-520-0153",
+    "recordUpdated": "2025-04-14",
+    "url": "http://townofroosevelt.com/"
+  },
+  "5501370225": {
+    "clerk": "Bonnie Harder",
+    "municipality": "Rusk",
+    "phone": "715-520-0560",
+    "recordUpdated": "2022-01-12",
+    "url": "https://rusktownship.com/"
+  },
+  "5501371450": {
+    "clerk": "Maggie Olson",
+    "deputyClerk": "Peggy Tolbert",
+    "municipality": "Sand Lake",
+    "phone": "715-520-0735",
+    "recordUpdated": "2024-01-02",
+    "url": "https://townofsandlake.org/"
+  },
+  "5501372225": {
+    "clerk": "Wendy Flach-Meagher",
+    "municipality": "Scott",
+    "phone": "715-624-4440",
+    "recordUpdated": "2026-07-08",
+    "url": "https://townofscottwi.org/"
+  },
+  "5501374200": {
+    "clerk": "Chris Tewalt",
+    "deputyClerk": "Alicia Cederberg",
+    "municipality": "Siren",
+    "phone": "715-566-0937",
+    "recordUpdated": "2024-01-14",
+    "url": "http://tn.siren.wi.gov/"
+  },
+  "5501378775": {
+    "clerk": "Tanya Fornengo",
+    "deputyClerk": "Susan Martyn",
+    "municipality": "Swiss",
+    "phone": "715-656-3030",
+    "recordUpdated": "2026-04-01",
+    "url": "https://townofswiss.com/"
+  },
+  "5501380375": {
+    "clerk": "Marjorie Gravelle",
+    "deputyClerk": "Bonnie Wicklund",
+    "municipality": "Trade Lake",
+    "phone": "715-488-2227",
+    "recordUpdated": "2025-04-22",
+    "url": "https://tradelakewi.com/"
+  },
+  "5501381500": {
+    "clerk": "Kim S Johnson",
+    "deputyClerk": "Jacqueline Savage",
+    "municipality": "Union",
+    "phone": "715-566-3286",
+    "recordUpdated": "2025-09-24",
+    "url": "https://townofunionbc.com/"
+  },
+  "5501384975": {
+    "clerk": "Lisa Webster",
+    "deputyClerk": "Laurel Cooper",
+    "municipality": "Webb Lake",
+    "phone": "715-259-7139",
+    "recordUpdated": "2023-06-12",
+    "url": "https://townofwebblake.com/"
+  },
+  "5501385850": {
+    "clerk": "Kerri Harter",
+    "municipality": "West Marshland",
+    "phone": "715-463-2461",
+    "recordUpdated": "2024-05-03"
+  },
+  "5501388900": {
+    "clerk": "Marjean Legler",
+    "municipality": "Wood River",
+    "phone": "715-689-3199",
+    "recordUpdated": "2023-12-11",
+    "url": "https://www.townofwoodriver.com/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

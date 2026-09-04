@@ -1,0 +1,63 @@
+{
+ "members": {
+  "1": {
+   "email": "theresa.villar@rusd.org",
+   "name": "Ms. Theresa F. Villar",
+   "phone": "(414) 667-2358",
+   "termExpires": "April 2028"
+  },
+  "2": {
+   "vacant": true
+  },
+  "3": {
+   "email": "sarah.walkercleaveland@rusd.org",
+   "name": "Mrs. Sarah Walker Cleaveland",
+   "phone": "(262) 456-2676",
+   "role": "Board Treasurer",
+   "termExpires": "April 2029"
+  },
+  "4": {
+   "email": "grace.allen@rusd.org",
+   "name": "Mrs. Grace Allen",
+   "phone": "(262) 286-0996",
+   "termExpires": "April 2027"
+  },
+  "5": {
+   "email": "allyson.docksey@rusd.org",
+   "name": "Mrs. Ally Docksey",
+   "phone": "(262) 732-2602",
+   "role": "Board Vice President",
+   "termExpires": "April 2027"
+  },
+  "6": {
+   "email": "april.harris@rusd.org",
+   "name": "Ms. April Harris",
+   "phone": "(414) 293-3103",
+   "termExpires": "April 2027"
+  },
+  "7": {
+   "email": "ethan.clements@rusd.org",
+   "name": "Mr. Ethan Clements",
+   "phone": "(262) 320-7094",
+   "termExpires": "April 2029"
+  },
+  "8": {
+   "email": "michael.bellagio@rusd.org",
+   "name": "Mr. Michael Bellagio",
+   "phone": "(262) 237-8065",
+   "role": "Board Clerk",
+   "termExpires": "April 2028"
+  },
+  "9": {
+   "email": "jane.barbian@rusd.org",
+   "name": "Mrs. Jane B. Barbian",
+   "phone": "(262) 732-4063",
+   "role": "Board President",
+   "termExpires": "April 2028"
+  }
+ },
+ "office": {
+  "boardUrl": "https://www.rusd.org/o/rusd/page/board-of-education"
+ },
+ "sourceUrl": "https://www.rusd.org/o/rusd/page/board-of-education"
+}

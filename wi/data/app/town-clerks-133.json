@@ -1,0 +1,69 @@
+{
+  "5513310050": {
+    "clerk": "Emily Howells",
+    "municipality": "Brookfield",
+    "phone": "262-796-3788",
+    "recordUpdated": "2025-12-22",
+    "url": "http://www.townofbrookfield.com/"
+  },
+  "5513319425": {
+    "clerk": "Michelle Luedtke",
+    "deputyClerk": "Karen Nipko",
+    "municipality": "Delafield",
+    "phone": "262-646-2398",
+    "recordUpdated": "2024-12-09",
+    "url": "http://townofdelafield.org/"
+  },
+  "5513321450": {
+    "clerk": "Mercia Christian",
+    "municipality": "Eagle",
+    "phone": "262-594-5800",
+    "recordUpdated": "2025-05-02",
+    "url": "https://townofeaglewi.gov/"
+  },
+  "5513328487": {
+    "clerk": "Meri Majeskie",
+    "deputyClerk": "Jaleesa Jolly",
+    "municipality": "Genesee",
+    "phone": "262-968-3656",
+    "recordUpdated": "2023-09-25",
+    "url": "https://www.towngenesee.org/"
+  },
+  "5513351400": {
+    "clerk": "Donna Hann",
+    "deputyClerk": "Holly Claas",
+    "municipality": "Merton",
+    "phone": "262-966-2651",
+    "recordUpdated": "2026-06-25",
+    "url": "http://www.townofmerton.com"
+  },
+  "5513355075": {
+    "clerk": "Kathy Karalewitz",
+    "deputyClerk": "Kelly Mueller",
+    "municipality": "Mukwonago",
+    "phone": "262-363-4555",
+    "recordUpdated": "2025-10-02",
+    "url": "http://townofmukwonago.us/"
+  },
+  "5513359275": {
+    "clerk": "Lori Opitz",
+    "deputyClerk": "Danielle Wraasltad",
+    "municipality": "Oconomowoc",
+    "phone": "920-474-4449",
+    "recordUpdated": "2023-12-29",
+    "url": "http://www.townoconomowoc.com"
+  },
+  "5513360700": {
+    "clerk": "Lori Geyman",
+    "deputyClerk": "Jacquelyn Jansen",
+    "municipality": "Ottawa",
+    "phone": "262-965-3228",
+    "recordUpdated": "2023-12-22",
+    "url": "http://www.tn.ottawa.wi.gov/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

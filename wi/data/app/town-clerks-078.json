@@ -1,0 +1,15 @@
+{
+  "5507850975": {
+    "clerk": "Misty Wayka",
+    "deputyClerk": "Robin Verbruggen",
+    "municipality": "Menominee",
+    "phone": "715-799-3311",
+    "recordUpdated": "2025-03-04",
+    "url": "https://www.townofmenomonie.com/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

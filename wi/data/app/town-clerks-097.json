@@ -1,0 +1,129 @@
+{
+  "5509700725": {
+    "clerk": "Tracy Glodowski",
+    "municipality": "Alban",
+    "phone": "715-570-5175",
+    "recordUpdated": "2023-11-02",
+    "url": "https://townofalban.wi.gov/"
+  },
+  "5509701425": {
+    "clerk": "Nancy Seaman",
+    "municipality": "Almond",
+    "phone": "715-366-7513",
+    "recordUpdated": "2025-12-17"
+  },
+  "5509701775": {
+    "clerk": "Shawn Lea",
+    "municipality": "Amherst",
+    "phone": "715-824-3476",
+    "recordUpdated": "2024-05-20",
+    "url": "http://townofamherst.org"
+  },
+  "5509706475": {
+    "clerk": "Michelle Talley",
+    "municipality": "Belmont",
+    "phone": "715-630-5329",
+    "recordUpdated": "2026-03-25",
+    "url": "http://users.uniontel.net/~belmont/"
+  },
+  "5509710925": {
+    "clerk": "Germaine Stuczynski",
+    "municipality": "Buena Vista",
+    "phone": "715-824-5419",
+    "recordUpdated": "2023-12-18"
+  },
+  "5509712725": {
+    "clerk": "Annette M. Stashek",
+    "municipality": "Carson",
+    "phone": "715-457-2170",
+    "recordUpdated": "2024-01-02",
+    "url": "http://townofcarson.com/"
+  },
+  "5509719975": {
+    "clerk": "Angela Lochinger",
+    "municipality": "Dewey",
+    "phone": "715-344-2343",
+    "recordUpdated": "2024-09-05",
+    "url": "https://townofdewey.wi.gov"
+  },
+  "5509722450": {
+    "clerk": "Stacy Martin",
+    "deputyClerk": "Susan Skrzeczkoski",
+    "municipality": "Eau Pleine",
+    "phone": "715-457-4672",
+    "recordUpdated": "2025-04-22",
+    "url": "https://www.townofeaupleine.com/"
+  },
+  "5509730350": {
+    "clerk": "Stefanie Schlapa",
+    "deputyClerk": "Vicky Zimmerman",
+    "municipality": "Grant",
+    "phone": "715-213-7370",
+    "recordUpdated": "2024-01-02",
+    "url": "https://townofgrant-portage.wi.gov/"
+  },
+  "5509736350": {
+    "clerk": "Desiree Redditt",
+    "municipality": "Hull",
+    "phone": "715-344-8280",
+    "recordUpdated": "2023-09-25",
+    "url": "https://www.townofhull.us/"
+  },
+  "5509742225": {
+    "clerk": "Kimberly Beaudoin",
+    "deputyClerk": "Cheryl Leatherman",
+    "municipality": "Lanark",
+    "phone": "715-256-9801",
+    "recordUpdated": "2024-01-23",
+    "url": "https://tn.lanark.wi.gov/"
+  },
+  "5509744800": {
+    "clerk": "Denise Hulce",
+    "deputyClerk": "Elaine Jazdzewski",
+    "municipality": "Linwood",
+    "phone": "715-345-9516",
+    "recordUpdated": "2023-12-28",
+    "url": "https://www.townoflinwood.com/"
+  },
+  "5509756850": {
+    "clerk": "Pat Zellmer",
+    "municipality": "New Hope",
+    "phone": "715-677-4784",
+    "recordUpdated": "2025-03-03",
+    "url": "https://tn.newhope.wi.gov/"
+  },
+  "5509762825": {
+    "clerk": "Nikki Hunt",
+    "municipality": "Pine Grove",
+    "phone": "715-355-4011",
+    "recordUpdated": "2026-06-16"
+  },
+  "5509763550": {
+    "clerk": "Patricia Weller",
+    "municipality": "Plover",
+    "phone": "715-344-7684",
+    "recordUpdated": "2024-01-02",
+    "url": "https://townofplover.com/"
+  },
+  "5509772850": {
+    "clerk": "Pam Filtz",
+    "deputyClerk": "Tracy Glodowski",
+    "municipality": "Sharon",
+    "phone": "715-592-6600",
+    "recordUpdated": "2023-11-02",
+    "url": "https://townsharon.com/"
+  },
+  "5509777537": {
+    "clerk": "Jennifer Zurawski",
+    "deputyClerk": "Maria Davis",
+    "municipality": "Stockton",
+    "phone": "715-592-4712",
+    "recordUpdated": "2023-12-22",
+    "url": "https://townofstockton.wi.gov/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

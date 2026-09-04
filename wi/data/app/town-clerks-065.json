@@ -1,0 +1,118 @@
+{
+  "5506502675": {
+    "clerk": "Tami Isely",
+    "municipality": "Argyle",
+    "phone": "608-558-7140",
+    "recordUpdated": "2024-05-01"
+  },
+  "5506506450": {
+    "clerk": "Juli McGuire",
+    "municipality": "Belmont",
+    "phone": "608-762-5372",
+    "recordUpdated": "2023-07-09",
+    "url": "https://www.townofbelmont.wi.gov/"
+  },
+  "5506506850": {
+    "clerk": "Gina Xander",
+    "municipality": "Benton",
+    "phone": "608-732-4653",
+    "recordUpdated": "2024-01-11"
+  },
+  "5506508100": {
+    "clerk": "Lisa Sikora",
+    "municipality": "Blanchard",
+    "phone": "608-523-4071",
+    "recordUpdated": "2023-11-02"
+  },
+  "5506518900": {
+    "clerk": "Thomas Jean",
+    "municipality": "Darlington",
+    "phone": "608-574-4055",
+    "recordUpdated": "2022-01-18"
+  },
+  "5506523262": {
+    "clerk": "Jennifer Jacobson",
+    "municipality": "Elk Grove",
+    "phone": "608-778-5336",
+    "recordUpdated": "2024-01-17"
+  },
+  "5506525475": {
+    "clerk": "Stuart Soper",
+    "municipality": "Fayette",
+    "phone": "608-482-0244",
+    "recordUpdated": "2026-01-14"
+  },
+  "5506530600": {
+    "clerk": "Phillip C. Carroll",
+    "municipality": "Gratiot",
+    "phone": "608-574-7363",
+    "recordUpdated": "2025-09-02"
+  },
+  "5506539125": {
+    "clerk": "Lisa Caya",
+    "municipality": "Kendall",
+    "phone": "608-279-2651",
+    "recordUpdated": "2024-06-17"
+  },
+  "5506542175": {
+    "clerk": "Lori J Douglas",
+    "municipality": "Lamont",
+    "phone": "608-482-1918",
+    "recordUpdated": "2021-12-14"
+  },
+  "5506554025": {
+    "clerk": "Theresa Burgess",
+    "municipality": "Monticello",
+    "phone": "608-482-0506",
+    "recordUpdated": "2024-01-10"
+  },
+  "5506556625": {
+    "clerk": "Ronda Pedley",
+    "municipality": "New Diggings",
+    "phone": "608-732-5249",
+    "recordUpdated": "2023-04-18",
+    "url": "https://townofnewdiggings.com"
+  },
+  "5506572700": {
+    "clerk": "Bill Eaton",
+    "municipality": "Seymour",
+    "phone": "608-482-2208",
+    "recordUpdated": "2023-11-28"
+  },
+  "5506573850": {
+    "clerk": "Elaine A Wiegel",
+    "municipality": "Shullsburg",
+    "phone": "608-965-3273",
+    "recordUpdated": "2019-03-18"
+  },
+  "5506584850": {
+    "clerk": "Diana Krebs",
+    "municipality": "Wayne",
+    "phone": "608-439-3794",
+    "recordUpdated": "2022-01-18"
+  },
+  "5506586800": {
+    "clerk": "Becky Upmann",
+    "municipality": "White Oak Springs",
+    "phone": "608-482-3920",
+    "recordUpdated": "2022-01-06"
+  },
+  "5506587275": {
+    "clerk": "Luann Donahoe",
+    "municipality": "Willow Springs",
+    "phone": "608-482-2550",
+    "recordUpdated": "2025-04-22",
+    "url": "https://www.lafayettecountywi.org/community/page/town-willow-springs"
+  },
+  "5506588050": {
+    "clerk": "Donna Paige",
+    "municipality": "Wiota",
+    "phone": "815-291-4266",
+    "recordUpdated": "2025-04-25"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

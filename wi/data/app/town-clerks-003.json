@@ -1,0 +1,93 @@
+{
+  "5500300550": {
+    "clerk": "Molly Madorin",
+    "municipality": "Agenda",
+    "phone": "715-769-3334",
+    "recordUpdated": "2023-11-29",
+    "url": "https://www.townofagenda.com/"
+  },
+  "5500303250": {
+    "clerk": "Leeann Hermanson",
+    "municipality": "Ashland",
+    "phone": "507-254-0875",
+    "recordUpdated": "2025-06-24"
+  },
+  "5500314550": {
+    "clerk": "Cindy Pritzl",
+    "municipality": "Chippewa",
+    "phone": "715-769-3126",
+    "recordUpdated": "2024-01-10",
+    "url": "http://www.townofchippewawi.com/"
+  },
+  "5500329250": {
+    "clerk": "Laura A Martinsen",
+    "deputyClerk": "Kathleen Colgrove",
+    "municipality": "Gingles",
+    "phone": "715-685-8452",
+    "recordUpdated": "2024-01-02"
+  },
+  "5500329875": {
+    "clerk": "Vickie Stencil",
+    "municipality": "Gordon",
+    "phone": "715-264-2460",
+    "recordUpdated": "2024-01-02"
+  },
+  "5500337775": {
+    "clerk": "Kari Schmidt",
+    "municipality": "Jacobs",
+    "phone": "715-264-4851",
+    "recordUpdated": "2025-11-04"
+  },
+  "5500342562": {
+    "clerk": "Alex Smith",
+    "deputyClerk": "Dorgene Goetsch",
+    "municipality": "La Pointe",
+    "phone": "715-747-6913",
+    "recordUpdated": "2024-09-06",
+    "url": "https://www.townoflapointewi.gov/"
+  },
+  "5500349200": {
+    "clerk": "Kimberly Padjen",
+    "deputyClerk": "Shirley Long",
+    "municipality": "Marengo",
+    "phone": "715-864-5689",
+    "recordUpdated": "2023-11-01",
+    "url": "https://marengo-township.com/"
+  },
+  "5500354400": {
+    "clerk": "Theresa Koosmann",
+    "municipality": "Morse",
+    "phone": "715-274-2126",
+    "recordUpdated": "2021-12-10"
+  },
+  "5500361600": {
+    "clerk": "Patricia Cebery",
+    "municipality": "Peeksville",
+    "phone": "715-264-2418",
+    "recordUpdated": "2023-12-28"
+  },
+  "5500371350": {
+    "clerk": "Jamie Weaver",
+    "municipality": "Sanborn",
+    "phone": "715-292-3581",
+    "recordUpdated": "2023-12-25",
+    "url": "http://www.townofsanborn.com/"
+  },
+  "5500372825": {
+    "clerk": "Cynthia Eder",
+    "municipality": "Shanagolden",
+    "phone": "715-264-5899",
+    "recordUpdated": "2023-12-20"
+  },
+  "5500386850": {
+    "clerk": "Valerie Jolma",
+    "municipality": "White River",
+    "phone": "715-413-8090",
+    "recordUpdated": "2026-07-20"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

@@ -195,15 +195,18 @@ thing this project resolves rather than assumes.
 
 ## Ask 6 — Jo Daviess County, Illinois: display permission under the site's new domain
 
-> **SENT 2026-08-29.** Replied on the original thread (*"County board district boundaries —
-> public release, or a digital data order?"*) to **jkratcha@**, cc **dlascala@**, **gis@**
-> and **akaiser@** — the operator kept the County Administrator on, so the "and the
-> county" half went with it. Awaiting a reply.
+> **SENT 2026-08-29 — ANSWERED YES 2026-08-31. THIS ASK IS CLOSED.** Replied on the
+> original thread (*"County board district boundaries — public release, or a digital data
+> order?"*) to **jkratcha@**, cc **dlascala@**, **gis@** and **akaiser@** — the operator
+> kept the County Administrator on, so the "and the county" half went with it.
 >
-> **Follow up 2026-09-19**, and again **2026-10-03**, before recording the route unresponsive —
-> which would be a claim about this ask, never about the permission. The existing
-> authorization was given for this site and has not been withdrawn, so the display
-> continues meanwhile.
+> The IT/GIS Director answered two days later: *"I confirm you are authorized to use the
+> Jo Daviess County Board district shapefiles provided under GIS Digital Data License
+> Agreement #008328 on the new districtry.com website as noted below in your email."*
+> The permission now names the domain the site actually uses. It is quoted in full, with
+> the #008328/#008382 digit transposition explained rather than tidied away, in
+> `LICENSE-DATA.md` §3 — **that file, not this one, is the record.** No follow-up is due;
+> the 2026-09-19 and 2026-10-03 dates this block used to carry are retired.
 
 **This is the only ask in this file that is not about getting data.** The data is already
 here, lawfully: `il/data/app/jo-daviess-county-board-districts.json` is built from the
@@ -327,6 +330,19 @@ A directory that does not list someone has not said they left.
 ---
 
 ## Ask 7 — Wisconsin Legislative Reference Bureau: the Blue Book's reuse terms
+
+> **SENT 2026-09-03.** Sent by the operator from his own mailbox to
+> **lrb-reference-services@legis.wisconsin.gov**, the Bureau's published reference desk.
+>
+> **Follow up 2026-09-24**, and again **2026-10-08**, before recording the route
+> unresponsive — which would be a claim about this ask, never about the terms. Silence is
+> not permission any more than it is a refusal.
+>
+> **WHAT IT GATES IS NARROW.** Only the two builds already shipping off the Blue Book
+> (`wi-county-officers.json`, `wi-county-clerks.json`) and whether section 190's
+> county-seat and incorporation-year tables can be added. Nothing else in Wisconsin waits
+> on it, and the existing use continues meanwhile — the ask exists because no reasoning
+> for it was ever recorded, not because a problem was found.
 
 **This ask is about a source already in production, which is why it is worth sending.**
 `wi-county-officers.json` — 72 counties x 7 offices — and `wi-county-clerks.json` are

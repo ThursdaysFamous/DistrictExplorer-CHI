@@ -1,8 +1,30 @@
 #!/usr/bin/env python3
 """
-Build data/app/wi-municipal-clerks.json — the clerk, deputy clerk, phone,
-website and per-record currency date for EVERY ONE of Wisconsin's 608 cities
-and villages, from the Elections Commission's own statewide directory.
+Build the clerk, deputy clerk, phone, website and per-record currency date for
+EVERY ONE of Wisconsin's 1,847 municipalities, from the Elections Commission's
+own statewide directory. TWO OUTPUTS, because the app has two cards:
+
+  data/app/wi-municipal-clerks.json   608 cities and villages, keyed by
+                                      7-digit Census PLACE GEOID, read by the
+                                      City or Village card.
+  data/app/town-clerks-<CCC>.json     1,239 towns, keyed by 10-digit COUNTY
+                                      SUBDIVISION GEOID, one file per county,
+                                      read by the County Subdivision card.
+
+ONE SCRIPT AND NOT TWO, because the expensive half is shared: the 395-page
+parse, the label traps, the name casing and the two address labels this build
+refuses all apply identically to a town. Splitting them would give two copies
+of `field_of` to keep in step, and one `--check` covers both halves.
+
+THE TWO HALVES KEY DIFFERENTLY AND THAT IS THE WHOLE REASON THEY ARE SEPARATE
+FILES. A city or village is a Census PLACE; a town is a Census COUNTY
+SUBDIVISION; the two numbering systems are unrelated, and each card can only
+look up the key its own layer hands it. Cities and villages also appear in the
+subdivision fabric (671 records for 608 municipalities, since 58 cross a county
+line), but they are NOT written to the town files: the County Subdivision card
+already tells a city or village reader that their municipality "also answers on
+the City or Village card", so the clerk belongs on that one and repeating it
+here would put the same row on two cards at one point.
 
 WHY THIS EXISTS. The City or Village card has named an officeholder in exactly
 nineteen municipalities since 2026-09-03 — Milwaukee County's mayors and
@@ -93,6 +115,16 @@ WHAT DELIBERATELY DOES NOT SHIP, both measured rather than assumed:
     village, which is this card. Extracting the field and dropping it later
     would leave a leak one edit away; `field_of` refuses the label instead.
 
+THE TOWN JOIN NEEDS THE COUNTY AND THE CITY JOIN DOES NOT, which is measured
+rather than a matter of taste: Wisconsin has a Town of Unity in Clark AND a
+Town of Unity in Trempealeau, and they are different towns with different
+clerks. A name-only join would put one's clerk on the other's card. The county
+comes from the app's own `state-counties.json`, and TIGER's 1,242 town records
+give 1,242 distinct (county, name) keys, so the pair is a key and the name
+alone is not. No town crosses a county line — 0 of 1,239 are filed under
+MULTIPLE COUNTIES, against 58 cities and villages — so a town is exactly one
+subdivision record.
+
 Usage:
     python3 wi/scripts/build_wi_municipal_clerks.py
     python3 wi/scripts/build_wi_municipal_clerks.py --check    # operator gate
@@ -138,6 +170,74 @@ MIN_PHONES = 570             # measured 608 — a floor against the column empty
 MIN_WEBSITES = 490           # measured 545, likewise (the Barron rule: a floor
                              # is a measurement of what a source publishes,
                              # never a target for it)
+
+# The TOWN half. TIGER's county-subdivision layer is the fabric the County
+# Subdivision card reads, and it carries 1,242 town records against the
+# directory's 1,239 towns.
+COUSUB_LAYER = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
+                "Places_CouSub_ConCity_SubMCD/MapServer/1/query")
+EXPECT_COUSUB = 1925         # the whole subdivision fabric, the card's own figure
+EXPECT_TOWN_RECORDS = 1242   # of which towns
+EXPECT_WEC_TOWNS = 1239      # the directory's towns
+MIN_TOWN_PHONES = 1150       # measured 1,238 of 1,239 (the Town of Marion,
+                             # Waushara, is the one with none)
+MIN_TOWN_WEBSITES = 750      # measured 830
+
+# SEVENTY-ONE COUNTY FILES, NOT SEVENTY-TWO. Milwaukee County contains no
+# towns at all — every one of its 19 municipalities is a city or a village,
+# which is also why it is the one county whose executives the county itself
+# publishes (build_wi_municipal_executives.py). A 72nd file means Wisconsin
+# created a town; a 70th means one was absorbed. Either is a human's business.
+EXPECT_TOWN_COUNTIES = 71
+
+# NO TOWN CROSSES A COUNTY LINE, and that is measured rather than assumed from
+# the statute: 0 of the directory's 1,239 towns is filed under MULTIPLE
+# COUNTIES (58 cities and villages are), and TIGER's 1,242 town records give
+# 1,242 DISTINCT (county, name) keys. Both halves matter — Wisconsin has a Town
+# of Unity in Clark AND in Trempealeau, and a name-only join would put one
+# town's clerk on the other's card, which is the trap
+# build_wi_polling_places.py records for the same pair of publishers.
+EXPECT_TOWN_MULTI_COUNTY = 0
+
+# THE THREE TOWNS TIGER CARRIES AND THE DIRECTORY DOES NOT, each named so a
+# FOURTH fails this build instead of quietly shipping a card with no clerk.
+# All three are the same phenomenon — a town/village boundary the two
+# publishers draw differently — and none is a parse defect:
+#
+#   Harrison town (Calumet)     the Village of Harrison incorporated out of it
+#                               and WEC files only the village (MULTIPLE
+#                               COUNTIES: Calumet + Outagamie). What is left is
+#                               24,739 m2 — six acres — and the Commission's
+#                               polling file has no reporting unit for it
+#                               either, which is one of the 30 unpaired wards.
+#   Bloomfield town (Walworth)  the same shape: WEC files the Village of
+#                               Bloomfield in Walworth and no town. (The Town
+#                               of Bloomfield in WAUSHARA is a different town
+#                               and does match.)
+#   Campbell town (La Crosse)   this is the Village of French Island under the
+#                               Census's own older name — gap
+#                               `french-island-census-lag`. Its clerk is NOT
+#                               attached here: doing so would assert an
+#                               identity the Census does not, which is exactly
+#                               what that gap record refuses to do.
+#
+# All three are FUNCSTAT 'A', so the Census considers them current; this is a
+# disagreement between publishers, not a stale row.
+TOWNS_WITHOUT_A_CLERK = {
+    ("015", "HARRISON"): "the Village of Harrison incorporated out of it; WEC files only the village",
+    ("127", "BLOOMFIELD"): "the Village of Bloomfield incorporated out of it; WEC files only the village",
+    ("063", "CAMPBELL"): "the Census's own older name for the Village of French Island (gap french-island-census-lag)",
+}
+
+# Trap 3 again, on the town half. Both are the SAME municipalities the polling
+# builder's own table names, and St. Lawrence is character-for-character its
+# entry — a fourth publisher, the same two names.
+TOWN_ALIASES = {
+    ("125", "LAND O LAKES"): ("125", "LAND OLAKES"),   # WEC "LAND O- LAKES"; the
+                                                       # hyphen strips to a SPACE,
+                                                       # which `norm` keeps
+    ("135", "SAINT LAWRENCE"): ("135", "ST LAWRENCE"),
+}
 
 # Trap 3. WEC's spelling -> the Census BASENAME, both normalized. Deliberately
 # not imported from build_wi_polling_places.MUNI_ALIASES: that table maps the
@@ -326,6 +426,160 @@ def tiger_places():
     return places
 
 
+def town_path(fips):
+    """data/app/town-clerks-<county FIPS>.json — the name the card builds out of
+    the GEOID it already holds (`55` + county + subdivision), so there is no
+    name-to-slug table here or in the app to drift."""
+    return os.path.join(APP_DATA_DIR, "town-clerks-%s.json" % fips)
+
+
+def county_fips_map():
+    """County NAME -> 3-digit FIPS, from the app's OWN shipped county file.
+
+    Not a compiled table and not another TIGERweb call: state-counties.json is
+    what the county card draws, so a county this build cannot place is a county
+    the app cannot draw either. The directory writes "ADAMS COUNTY" and that
+    file's NAME is "Adams County", so `norm` matches them with no suffix
+    stripping — an early draft stripped " COUNTY" from one side only and
+    matched zero of 1,239.
+    """
+    path = os.path.join(APP_DATA_DIR, "state-counties.json")
+    if not os.path.exists(path):
+        fail("no %s — the town join keys on the app's own county fabric" % path)
+    with open(path, encoding="utf-8") as f:
+        payload = json.load(f)
+    feats = payload["features"] if isinstance(payload, dict) else payload
+    out = {}
+    for feat in feats:
+        props = feat.get("properties") or {}
+        geoid = str(props.get("GEOID") or props.get("geoid") or "")
+        name = props.get("NAME") or props.get("name") or props.get("BASENAME")
+        if geoid and name:
+            out[norm(name)] = geoid[-3:]
+    if len(out) != 72:
+        fail("state-counties.json gave %d counties, expected Wisconsin's 72"
+             % len(out))
+    return out
+
+
+def cousub_towns():
+    """(county FIPS, normalized name) -> TIGER town record, for all 1,242."""
+    query = urllib.parse.urlencode({
+        "where": "STATE='55'", "outFields": "GEOID,NAME,BASENAME,COUNTY,LSADC",
+        "returnGeometry": "false", "f": "json", "resultRecordCount": "4000",
+    })
+    try:
+        with urllib.request.urlopen(COUSUB_LAYER + "?" + query, timeout=120) as r:
+            payload = json.load(r)
+    except Exception as e:                       # noqa: BLE001 - reported, not raised
+        fail("TIGERweb's county-subdivision layer did not answer (%s)" % e)
+    if payload.get("exceededTransferLimit"):
+        fail("TIGERweb paged the subdivision fabric; this build assumes one page")
+    feats = [f["attributes"] for f in (payload.get("features") or [])]
+    if len(feats) != EXPECT_COUSUB:
+        fail("TIGERweb returned %d Wisconsin county subdivisions, expected %d — "
+             "the fabric the County Subdivision card draws has changed"
+             % (len(feats), EXPECT_COUSUB))
+    towns = {}
+    for a in feats:
+        name, base = a.get("NAME") or "", a.get("BASENAME") or ""
+        # the card derives the type the same way, from NAME beyond BASENAME,
+        # so the two can never disagree about what a town is
+        if not (name.startswith(base) and
+                name[len(base):].strip().lower() == "town"):
+            continue
+        key = (a["COUNTY"], norm(base))
+        if key in towns:
+            fail("two town records share the key %r — the county+name join this "
+                 "build relies on is no longer unique" % (key,))
+        towns[key] = a
+    if len(towns) != EXPECT_TOWN_RECORDS:
+        fail("the subdivision fabric holds %d towns, expected %d"
+             % (len(towns), EXPECT_TOWN_RECORDS))
+    return towns
+
+
+def build_towns(parsed, counties):
+    """{county FIPS: {cousub GEOID: entry}} for the County Subdivision card.
+
+    PER COUNTY because the whole set is ~582 KB and this is a network-first
+    roster fetched on a click; per county it is ~4 KB, and the card can build
+    the filename out of the GEOID it already holds (`55` + county + subdivision)
+    with no name-to-slug table to drift. Same reasoning as the polling files,
+    which split for the same reason.
+    """
+    towns = cousub_towns()
+    by_county, matched, multi = {}, set(), 0
+    stats = {"phones": 0, "sites": 0, "deputies": 0, "clerks": 0}
+    for code, kind, name, county, cols in parsed:
+        if kind != "TOWN":
+            continue
+        if county == "MULTIPLE COUNTIES":
+            multi += 1
+            continue
+        fips = counties.get(norm(county))
+        if not fips:
+            fail("the directory files a town under %r, which is not one of "
+                 "Wisconsin's 72 counties" % county)
+        key = (fips, norm(name))
+        key = TOWN_ALIASES.get(key, key)
+        town = towns.get(key)
+        if town is None:
+            fail("Town of %s (%s) has no county-subdivision record. Either the "
+                 "Census has renamed it or it needs an alias beside the two in "
+                 "TOWN_ALIASES." % (name.title(), county.title()))
+        matched.add(key)
+        lines = cols["cell"]
+        entry = {"municipality": town["BASENAME"]}
+        for field, label in (("clerk", "CLERK"), ("deputyClerk", "DEPUTY CLERK"),
+                             ("phone", "Phone 1")):
+            value = field_of(lines, label)
+            if value:
+                entry[field] = person_case(value) if field != "phone" else value
+        web = "".join(cols["web"]).strip() or None
+        if web:
+            entry["url"] = web            # published, not authored — see above
+        asof = iso_date("".join(cols["updated"]))
+        if asof:
+            entry["recordUpdated"] = asof
+        stats["clerks"] += 1 if entry.get("clerk") else 0
+        stats["deputies"] += 1 if entry.get("deputyClerk") else 0
+        stats["phones"] += 1 if entry.get("phone") else 0
+        stats["sites"] += 1 if entry.get("url") else 0
+        by_county.setdefault(fips, {})[town["GEOID"]] = entry
+
+    if multi != EXPECT_TOWN_MULTI_COUNTY:
+        fail("%d towns are filed under MULTIPLE COUNTIES, expected %d — a town "
+             "that crosses a county line breaks the one-record-per-town join"
+             % (multi, EXPECT_TOWN_MULTI_COUNTY))
+    shipped = sum(len(v) for v in by_county.values())
+    if shipped != EXPECT_WEC_TOWNS:
+        fail("%d towns shipped, expected %d" % (shipped, EXPECT_WEC_TOWNS))
+    if len(by_county) != EXPECT_TOWN_COUNTIES:
+        fail("%d counties have towns, expected %d — see EXPECT_TOWN_COUNTIES"
+             % (len(by_county), EXPECT_TOWN_COUNTIES))
+
+    # THE UNMATCHED SET IS NAMED, NOT COUNTED: a fourth town losing its clerk
+    # is a publisher change worth a human, and a count-only check would absorb
+    # it silently the moment one of these three gained one.
+    left = {k for k in towns if k not in matched}
+    expected = set(TOWNS_WITHOUT_A_CLERK)
+    if left != expected:
+        extra = sorted(left - expected)
+        gone = sorted(expected - left)
+        fail("the towns with no clerk record are no longer the three recorded "
+             "ones.%s%s Read TOWNS_WITHOUT_A_CLERK before changing it."
+             % ("" if not extra else " NEWLY without a clerk: %s." % (extra,),
+                "" if not gone else " Now HAS one (retire its entry): %s." % (gone,)))
+    if stats["phones"] < MIN_TOWN_PHONES:
+        fail("only %d of %d towns carry a phone (floor %d)"
+             % (stats["phones"], shipped, MIN_TOWN_PHONES))
+    if stats["sites"] < MIN_TOWN_WEBSITES:
+        fail("only %d of %d towns carry a website (floor %d)"
+             % (stats["sites"], shipped, MIN_TOWN_WEBSITES))
+    return by_county, stats
+
+
 def build(pdf_path):
     records = read_pdf(pdf_path)
     if len(records) != EXPECT_RECORDS:
@@ -350,6 +604,7 @@ def build(pdf_path):
         fail("%d municipalities are filed under MULTIPLE COUNTIES, expected %d"
              % (multi, EXPECT_MULTI_COUNTY))
 
+    counties = county_fips_map()
     places = tiger_places()
     if len(places) != EXPECT_PLACES:
         fail("TIGERweb returned %d Wisconsin cities and villages, expected %d. "
@@ -424,9 +679,13 @@ def build(pdf_path):
     if sites < MIN_WEBSITES:
         fail("only %d of %d records carry a website (floor %d)"
              % (sites, len(roster), MIN_WEBSITES))
-    return roster, {"records": len(records), "unmatched": unmatched,
-                    "phones": phones, "sites": sites,
-                    "deputies": sum(1 for e in roster.values() if e.get("deputyClerk"))}
+    towns, town_stats = build_towns(parsed, counties)
+    return roster, towns, {
+        "records": len(records), "unmatched": unmatched,
+        "phones": phones, "sites": sites,
+        "deputies": sum(1 for e in roster.values() if e.get("deputyClerk")),
+        "towns": town_stats,
+    }
 
 
 def main():
@@ -439,22 +698,43 @@ def main():
 
     if not os.path.exists(args.pdf):
         fail("no directory at %s" % args.pdf)
-    roster, stats = build(args.pdf)
-    body = json.dumps(roster, indent=2, ensure_ascii=False, sort_keys=True) + "\n"
+    roster, towns, stats = build(args.pdf)
+
+    # One source block per county file rather than per record: the three source
+    # strings are constant and repeating them 1,239 times is most of the weight.
+    # The polling files carry `_source` the same way, and validate_index.py's
+    # floor counts it as one more top-level key.
+    outputs = [(OUT_PATH, json.dumps(roster, indent=2, ensure_ascii=False,
+                                     sort_keys=True) + "\n")]
+    for fips in sorted(towns):
+        payload = dict(towns[fips])
+        payload["_source"] = {"publisher": SOURCE_NAME, "sourceUrl": SOURCE_URL,
+                              "sourceFile": SOURCE_FILE}
+        outputs.append((town_path(fips),
+                        json.dumps(payload, indent=2, ensure_ascii=False,
+                                   sort_keys=True) + "\n"))
 
     if args.check:
-        if not os.path.exists(OUT_PATH):
-            fail("%s is missing" % os.path.relpath(OUT_PATH, os.getcwd()))
-        with open(OUT_PATH, encoding="utf-8") as f:
-            have = f.read()
-        if have != body:
-            fail("%s differs from a rebuild of the Commission's directory — "
-                 "re-run this script without --check"
-                 % os.path.relpath(OUT_PATH, os.getcwd()))
+        for path, body in outputs:
+            rel = os.path.relpath(path, os.getcwd())
+            if not os.path.exists(path):
+                fail("%s is missing" % rel)
+            with open(path, encoding="utf-8") as f:
+                if f.read() != body:
+                    fail("%s differs from a rebuild of the Commission's "
+                         "directory — re-run this script without --check" % rel)
+        stale = [f for f in os.listdir(APP_DATA_DIR)
+                 if f.startswith("town-clerks-") and
+                 os.path.join(APP_DATA_DIR, f) not in {p for p, _ in outputs}]
+        if stale:
+            fail("%d town file(s) in data/app that this build does not produce "
+                 "(%s) — a county left behind after a rename ships stale clerks"
+                 % (len(stale), ", ".join(sorted(stale)[:4])))
     else:
         os.makedirs(APP_DATA_DIR, exist_ok=True)
-        with open(OUT_PATH, "w", encoding="utf-8") as f:
-            f.write(body)
+        for path, body in outputs:
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(body)
 
     dates = sorted(e["recordUpdated"] for e in roster.values() if e.get("recordUpdated"))
     print("build-wi-municipal-clerks: OK — %d municipalities in the directory, "
@@ -475,6 +755,14 @@ def main():
               "Village of French Island — since this build was written; an "
               "empty list means TIGERweb has caught up and the "
               "`french-island-census-lag` gap can be retired.")
+    t = stats["towns"]
+    print("  towns: %d shipped across %d county file(s) — clerk %d, deputy %d, "
+          "phone %d, website %d" % (sum(len(v) for v in towns.values()), len(towns),
+                                    t["clerks"], t["deputies"], t["phones"], t["sites"]))
+    print("  3 of TIGER's %d town records have no clerk, all recorded: %s"
+          % (EXPECT_TOWN_RECORDS,
+             "; ".join("%s (%s)" % (k[1].title(), v.split(";")[0])
+                       for k, v in sorted(TOWNS_WITHOUT_A_CLERK.items()))))
     print("  NOT IN THIS FILE, BY MEASUREMENT: no e-mail (the clerks asked the "
           "Commission to withhold them) and no address (the file cannot tell a "
           "village hall from a clerk's house). See the module docstring.")

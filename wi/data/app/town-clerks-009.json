@@ -1,0 +1,103 @@
+{
+  "5500922225": {
+    "clerk": "Dawn Konop",
+    "municipality": "Eaton",
+    "phone": "920-863-2852",
+    "recordUpdated": "2023-12-18",
+    "url": "http://www.townofeaton-wi.org/"
+  },
+  "5500929550": {
+    "clerk": "Dawn Matzke",
+    "municipality": "Glenmore",
+    "phone": "920-562-4010",
+    "recordUpdated": "2025-05-08",
+    "url": "https://www.glenmorewisconsin.gov/"
+  },
+  "5500931025": {
+    "clerk": "Debbie Mercier",
+    "municipality": "Green Bay",
+    "phone": "920-676-9391",
+    "recordUpdated": "2024-09-17",
+    "url": "https://www.townofgreenbay.com/"
+  },
+  "5500935325": {
+    "clerk": "Gloria Kennedy",
+    "municipality": "Holland",
+    "phone": "920-246-7783",
+    "recordUpdated": "2025-01-17",
+    "url": "https://hollandbrowncountywi.gov/"
+  },
+  "5500936425": {
+    "clerk": "Judy Baierl",
+    "municipality": "Humboldt",
+    "phone": "920-863-3370",
+    "recordUpdated": "2023-11-19",
+    "url": "https://humboldt-wi.gov/"
+  },
+  "5500942900": {
+    "clerk": "Cindy Kocken",
+    "deputyClerk": "Melissa Hongisto",
+    "municipality": "Lawrence",
+    "phone": "920-347-3719",
+    "recordUpdated": "2023-11-19",
+    "url": "https://www.lawrencewi.gov/"
+  },
+  "5500943090": {
+    "clerk": "Naomi Miller",
+    "deputyClerk": "Jennifer L Broich",
+    "municipality": "Ledgeview",
+    "phone": "920-336-3360 EXT 105",
+    "recordUpdated": "2026-06-18",
+    "url": "https://www.ledgeview.wi.gov/"
+  },
+  "5500954300": {
+    "clerk": "Colleen Magley",
+    "municipality": "Morrison",
+    "phone": "920-864-2388",
+    "recordUpdated": "2023-12-28",
+    "url": "https://www.townofmorrison.org"
+  },
+  "5500956575": {
+    "clerk": "Michelle K Wallerius",
+    "municipality": "New Denmark",
+    "phone": "920-863-5523",
+    "recordUpdated": "2023-11-21",
+    "url": "http://www.townofnewdenmark.com"
+  },
+  "5500963075": {
+    "clerk": "Debbie Diederich",
+    "deputyClerk": "Janet Bodart",
+    "municipality": "Pittsfield",
+    "phone": "920-676-1517",
+    "recordUpdated": "2023-12-26",
+    "url": "http://townofpittsfield.org"
+  },
+  "5500968875": {
+    "clerk": "Julie Koenig",
+    "deputyClerk": "Randy Hansen",
+    "municipality": "Rockland",
+    "phone": "920-336-2814",
+    "recordUpdated": "2024-01-16",
+    "url": "http://www.townofrockland.org/"
+  },
+  "5500972200": {
+    "clerk": "Jaime Fuge",
+    "deputyClerk": "Julia Vandenlangenberg",
+    "municipality": "Scott",
+    "phone": "920-406-9380",
+    "recordUpdated": "2025-02-03",
+    "url": "https://www.townofscott.com/"
+  },
+  "5500989175": {
+    "clerk": "Donna Martzahl",
+    "municipality": "Wrightstown",
+    "phone": "920-609-7927",
+    "recordUpdated": "2023-11-19",
+    "url": "https://townofwrightstown.org/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

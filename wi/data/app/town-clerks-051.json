@@ -1,0 +1,71 @@
+{
+  "5505101925": {
+    "clerk": "Anna Lardinois",
+    "municipality": "Anderson",
+    "phone": "715-862-2096",
+    "recordUpdated": "2024-03-26"
+  },
+  "5505112525": {
+    "clerk": "Courtney Maslanka",
+    "municipality": "Carey",
+    "phone": "715-360-3692",
+    "recordUpdated": "2023-04-26"
+  },
+  "5505131875": {
+    "clerk": "Christina Ofstad",
+    "municipality": "Gurney",
+    "phone": "715-209-1027",
+    "recordUpdated": "2024-10-24"
+  },
+  "5505139625": {
+    "clerk": "Irene Salzmann",
+    "municipality": "Kimball",
+    "phone": "715-893-2469",
+    "recordUpdated": "2023-12-18"
+  },
+  "5505140075": {
+    "clerk": "Jody Walbridge",
+    "municipality": "Knight",
+    "phone": "612-720-5223",
+    "recordUpdated": "2026-01-23",
+    "url": "https://townofknightwi.org/"
+  },
+  "5505151200": {
+    "clerk": "Debbie Hohner",
+    "municipality": "Mercer",
+    "phone": "715-476-2403",
+    "recordUpdated": "2025-10-02",
+    "url": "http://townofmercer.com/"
+  },
+  "5505159850": {
+    "clerk": "Alexandra Mabie",
+    "municipality": "Oma",
+    "phone": "715-600-8077",
+    "recordUpdated": "2023-11-28"
+  },
+  "5505161825": {
+    "clerk": "Lori Genisot",
+    "municipality": "Pence",
+    "phone": "715-862-0833",
+    "recordUpdated": "2023-12-18"
+  },
+  "5505171875": {
+    "clerk": "Kathryn Brauer",
+    "municipality": "Saxon",
+    "phone": "715-893-2226",
+    "recordUpdated": "2024-01-02"
+  },
+  "5505173400": {
+    "clerk": "Elizabeth Godfrey",
+    "deputyClerk": "Tracy Murrin",
+    "municipality": "Sherman",
+    "phone": "715-583-4422",
+    "recordUpdated": "2025-11-03",
+    "url": "https://shermanironcowi.gov/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

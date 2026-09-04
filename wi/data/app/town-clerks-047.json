@@ -1,0 +1,72 @@
+{
+  "5504706950": {
+    "clerk": "Brenda Murkley",
+    "municipality": "Berlin",
+    "phone": "920-361-4717",
+    "recordUpdated": "2023-08-29"
+  },
+  "5504710125": {
+    "clerk": "Amy Wesenberg",
+    "deputyClerk": "Katie Mehn",
+    "municipality": "Brooklyn",
+    "phone": "920-294-6600",
+    "recordUpdated": "2024-08-19",
+    "url": "https://tn.brooklyn.wi.gov/"
+  },
+  "5504731350": {
+    "clerk": "Katie Mehn",
+    "municipality": "Green Lake",
+    "phone": "920-463-0938",
+    "recordUpdated": "2023-12-11",
+    "url": "https://www.townofgreenlake.gov/"
+  },
+  "5504739775": {
+    "clerk": "Traci Campnell",
+    "municipality": "Kingston",
+    "phone": "920-394-2208",
+    "recordUpdated": "2023-04-18"
+  },
+  "5504746875": {
+    "clerk": "Andrea Dillie",
+    "municipality": "Mackford",
+    "phone": "608-297-0107",
+    "recordUpdated": "2025-01-21"
+  },
+  "5504748400": {
+    "clerk": "Vicky Sievert",
+    "municipality": "Manchester",
+    "phone": "920-767-1695",
+    "recordUpdated": "2023-12-28"
+  },
+  "5504749525": {
+    "clerk": "Brittney Lyn Frederick",
+    "deputyClerk": "Sue Giese",
+    "municipality": "Marquette",
+    "phone": "920-394-2227",
+    "recordUpdated": "2022-01-04"
+  },
+  "5504765625": {
+    "clerk": "Jill Bartol",
+    "municipality": "Princeton",
+    "phone": "920-295-2067",
+    "recordUpdated": "2023-12-11",
+    "url": "https://www.cityofprincetonwi.com/"
+  },
+  "5504770925": {
+    "clerk": "Joan Beck",
+    "municipality": "St. Marie",
+    "phone": "920-294-6493",
+    "recordUpdated": "2023-12-28"
+  },
+  "5504772525": {
+    "clerk": "Rose Wick",
+    "municipality": "Seneca",
+    "phone": "920-229-0124",
+    "recordUpdated": "2023-11-02"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

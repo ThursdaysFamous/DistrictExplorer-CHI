@@ -1,0 +1,155 @@
+{
+  "5510904425": {
+    "clerk": "Jim Harer",
+    "municipality": "Baldwin",
+    "phone": "715-684-3581",
+    "recordUpdated": "2023-12-22",
+    "url": "https://www.townofbaldwinstcroix.com/"
+  },
+  "5510911775": {
+    "clerk": "Shelly Ninneman",
+    "municipality": "Cady",
+    "phone": "715-772-3474",
+    "recordUpdated": "2025-10-06",
+    "url": "https://townofcady.com/"
+  },
+  "5510918300": {
+    "clerk": "Jack Barker",
+    "municipality": "Cylon",
+    "phone": "715-554-0275",
+    "recordUpdated": "2026-03-17"
+  },
+  "5510922400": {
+    "clerk": "Stephanie Supri",
+    "deputyClerk": "William Peavey",
+    "municipality": "Eau Galle",
+    "phone": "715-684-3015",
+    "recordUpdated": "2023-12-06",
+    "url": "https://townofeaugallewi.gov/"
+  },
+  "5510923925": {
+    "clerk": "Lorelei Wink",
+    "municipality": "Emerald",
+    "phone": "715-684-9236",
+    "recordUpdated": "2023-12-11",
+    "url": "https://townofemeraldwi.com/"
+  },
+  "5510924275": {
+    "clerk": "Krista Johnson",
+    "municipality": "Erin Prairie",
+    "phone": "715-781-5547",
+    "recordUpdated": "2025-07-09",
+    "url": "https://townoferinprairie.com/"
+  },
+  "5510926525": {
+    "clerk": "Nikki Sunday",
+    "municipality": "Forest",
+    "phone": "715-554-2890",
+    "recordUpdated": "2024-09-20",
+    "url": "https://townofforest.org/"
+  },
+  "5510929600": {
+    "clerk": "Lori Obermueller",
+    "municipality": "Glenwood",
+    "phone": "715-265-7456",
+    "recordUpdated": "2023-03-29",
+    "url": "https://www.townofglenwoodstcroix.com/"
+  },
+  "5510932350": {
+    "clerk": "Linda Hawkins",
+    "municipality": "Hammond",
+    "phone": "715-796-2165",
+    "recordUpdated": "2025-11-24",
+    "url": "https://www.townofhammond.com/"
+  },
+  "5510936275": {
+    "clerk": "Amanda Duncanson",
+    "deputyClerk": "Nicholas Handlos",
+    "municipality": "Hudson",
+    "phone": "715-386-4263",
+    "recordUpdated": "2026-04-30",
+    "url": "https://townofhudsonwi.com/"
+  },
+  "5510939825": {
+    "clerk": "Nicky Thompson",
+    "municipality": "Kinnickinnic",
+    "phone": "715-425-8082",
+    "recordUpdated": "2025-11-12",
+    "url": "https://www.kinnickinnictwp.org/"
+  },
+  "5510963425": {
+    "clerk": "Mara Deboe",
+    "municipality": "Pleasant Valley",
+    "phone": "651-308-4350",
+    "recordUpdated": "2025-04-17"
+  },
+  "5510967650": {
+    "clerk": "Patrick Earley",
+    "municipality": "Richmond",
+    "phone": "715-808-1795",
+    "recordUpdated": "2023-11-19",
+    "url": "https://townofrichmondwi.gov/"
+  },
+  "5510970200": {
+    "clerk": "Sandi Hazer",
+    "municipality": "Rush River",
+    "phone": "612-759-1030",
+    "recordUpdated": "2023-12-22"
+  },
+  "5510970825": {
+    "clerk": "Teri Kelly",
+    "deputyClerk": "Carolyn Gertschen",
+    "municipality": "St. Joseph",
+    "phone": "715-549-6235",
+    "recordUpdated": "2023-12-06",
+    "url": "http://www.townofstjoseph.com/"
+  },
+  "5510974700": {
+    "clerk": "Jeri Koester",
+    "municipality": "Somerset",
+    "phone": "715-247-3470",
+    "recordUpdated": "2023-12-22",
+    "url": "http://www.townofsomersetwi.com"
+  },
+  "5510975950": {
+    "clerk": "Rachael Hawkins",
+    "municipality": "Springfield",
+    "phone": "715-641-0849",
+    "recordUpdated": "2026-01-27",
+    "url": "https://townofspringfield.com/"
+  },
+  "5510976675": {
+    "clerk": "Ashley O'Flanagan",
+    "municipality": "Stanton",
+    "phone": "715-248-4550",
+    "recordUpdated": "2023-01-10",
+    "url": "https://www.townofstantonwi.com/"
+  },
+  "5510976850": {
+    "clerk": "Andrea Neumann",
+    "municipality": "Star Prairie",
+    "phone": "715-246-9878",
+    "recordUpdated": "2025-06-30",
+    "url": "https://townofstarprairiewi.gov/"
+  },
+  "5510980800": {
+    "clerk": "April Fredrick",
+    "deputyClerk": "Sue Rowen",
+    "municipality": "Troy",
+    "phone": "715-425-2665 EXT 102",
+    "recordUpdated": "2026-07-24",
+    "url": "https://townoftroy.org/"
+  },
+  "5510983400": {
+    "clerk": "Deina Shirmer",
+    "municipality": "Warren",
+    "phone": "715-749-9013",
+    "recordUpdated": "2026-03-17",
+    "url": "https://townofwarrensccwi.gov/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

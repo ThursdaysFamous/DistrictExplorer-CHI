@@ -1,0 +1,145 @@
+{
+  "5508707750": {
+    "clerk": "Scott Johnson",
+    "municipality": "Black Creek",
+    "phone": "920-850-4864",
+    "recordUpdated": "2025-12-22",
+    "url": "https://blackcreekwi.org/"
+  },
+  "5508708975": {
+    "clerk": "Charles Pluger",
+    "deputyClerk": "Aaron Pluger",
+    "municipality": "Bovina",
+    "phone": "920-986-3289",
+    "recordUpdated": "2023-12-06",
+    "url": "https://townofbovina.com/"
+  },
+  "5508710750": {
+    "clerk": "Cynthia Sieracki",
+    "deputyClerk": "Tina Weidman",
+    "municipality": "Buchanan",
+    "phone": "920-734-8599",
+    "recordUpdated": "2023-07-26",
+    "url": "https://www.townofbuchanan.org/"
+  },
+  "5508713600": {
+    "clerk": "Amy L Olson",
+    "municipality": "Center",
+    "phone": "920-731-7229",
+    "recordUpdated": "2026-01-27",
+    "url": "https://centerwi.gov/"
+  },
+  "5508714750": {
+    "clerk": "Lori A Klevesahl",
+    "municipality": "Cicero",
+    "phone": "920-833-9735",
+    "recordUpdated": "2023-12-22",
+    "url": "https://townofcicerowi.com/"
+  },
+  "5508718525": {
+    "clerk": "Jenny Hunt",
+    "municipality": "Dale",
+    "phone": "920-779-4609",
+    "recordUpdated": "2025-01-09",
+    "url": "http://townofdale.org/"
+  },
+  "5508719200": {
+    "clerk": "Craig Sorenson",
+    "municipality": "Deer Creek",
+    "phone": "715-250-1094",
+    "recordUpdated": "2024-02-05",
+    "url": "https://www.townofdeercreek.com/"
+  },
+  "5508723425": {
+    "clerk": "Rachael Yogerst",
+    "municipality": "Ellington",
+    "phone": "920-757-5333",
+    "recordUpdated": "2026-02-27",
+    "url": "https://townofellington.org/"
+  },
+  "5508727650": {
+    "clerk": "Dana McHugh",
+    "deputyClerk": "Rachel Kolocheski",
+    "municipality": "Freedom",
+    "phone": "920-788-4548",
+    "recordUpdated": "2025-12-01",
+    "url": "http://www.townoffreedom.org/"
+  },
+  "5508730075": {
+    "clerk": "Kayla Raatz",
+    "deputyClerk": "Michelle Mills",
+    "municipality": "Grand Chute",
+    "phone": "920-832-5644",
+    "recordUpdated": "2026-04-29",
+    "url": "https://www.grandchute.net/"
+  },
+  "5508735825": {
+    "clerk": "Lyn M. Neuenfeldt",
+    "municipality": "Hortonia",
+    "phone": "920-216-0932",
+    "recordUpdated": "2024-01-15",
+    "url": "https://www.townofhortonia.org/"
+  },
+  "5508738825": {
+    "clerk": "Kerri Roy",
+    "municipality": "Kaukauna",
+    "phone": "920-419-5539",
+    "recordUpdated": "2026-07-02",
+    "url": "https://townofkaukauna.com/"
+  },
+  "5508743875": {
+    "clerk": "Julia Degroot",
+    "municipality": "Liberty",
+    "phone": "920-427-0071",
+    "recordUpdated": "2023-12-28",
+    "url": "https://townoflibertyocwi.gov/"
+  },
+  "5508748250": {
+    "clerk": "Lori Ann Klevesahl",
+    "municipality": "Maine",
+    "phone": "920-525-1150",
+    "recordUpdated": "2023-12-22",
+    "url": "https://townofmaineoutagamie.com/"
+  },
+  "5508748775": {
+    "clerk": "Lynette Gitter",
+    "municipality": "Maple Creek",
+    "phone": "920-982-5258",
+    "recordUpdated": "2025-04-21",
+    "url": "http://www.townofmaplecreek.com/"
+  },
+  "5508760000": {
+    "clerk": "Kelly Hill",
+    "municipality": "Oneida",
+    "phone": "920-833-2211",
+    "recordUpdated": "2023-09-25",
+    "url": "https://www.townofoneida.org/"
+  },
+  "5508760400": {
+    "clerk": "Darlene Schultz",
+    "municipality": "Osborn",
+    "phone": "920-833-2942",
+    "recordUpdated": "2023-12-25",
+    "url": "https://townofosborn.com/"
+  },
+  "5508772750": {
+    "clerk": "Darlene Schultz",
+    "deputyClerk": "Dawn Leisgang",
+    "municipality": "Seymour",
+    "phone": "920-676-3787",
+    "recordUpdated": "2025-06-09",
+    "url": "https://townofseymour-outagamie.com/"
+  },
+  "5508782400": {
+    "clerk": "Cory Swedberg",
+    "municipality": "Vandenbroek",
+    "phone": "920-850-1848",
+    "recordUpdated": "2023-08-29",
+    "url": "http://vandenbroekwi.gov/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

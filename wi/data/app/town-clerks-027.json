@@ -1,0 +1,169 @@
+{
+  "5502703200": {
+    "clerk": "Michelle Liesener",
+    "municipality": "Ashippun",
+    "phone": "920-474-4781",
+    "recordUpdated": "2025-04-24",
+    "url": "https://townofashippun.org/"
+  },
+  "5502705925": {
+    "clerk": "Aimee Mallon",
+    "municipality": "Beaver Dam",
+    "phone": "920-887-0791 EXT 13",
+    "recordUpdated": "2023-11-02",
+    "url": "https://www.townofbeaverdam.org/"
+  },
+  "5502711275": {
+    "clerk": "Chris Merkes",
+    "deputyClerk": "Debra Waldvogel",
+    "municipality": "Burnett",
+    "phone": "920-210-7892",
+    "recordUpdated": "2025-04-24",
+    "url": "http://townofburnett.com"
+  },
+  "5502711850": {
+    "clerk": "Marjorie Beilke",
+    "municipality": "Calamus",
+    "phone": "920-626-1029",
+    "recordUpdated": "2025-04-24",
+    "url": "https://townofcalamus.com/"
+  },
+  "5502714300": {
+    "clerk": "Jane Figge",
+    "municipality": "Chester",
+    "phone": "920-318-9016",
+    "recordUpdated": "2023-07-26"
+  },
+  "5502715925": {
+    "clerk": "Sandra Thoma",
+    "municipality": "Clyman",
+    "phone": "920-296-8749",
+    "recordUpdated": "2025-04-24",
+    "url": "https://townofclymanwi.gov/"
+  },
+  "5502723000": {
+    "clerk": "Lori Koenig-Fry",
+    "municipality": "Elba",
+    "phone": "920-728-0269",
+    "recordUpdated": "2022-09-22",
+    "url": "https://townofelba.com/"
+  },
+  "5502724000": {
+    "clerk": "Melody Hoffmann",
+    "municipality": "Emmet",
+    "phone": "920-261-1611",
+    "recordUpdated": "2026-07-01",
+    "url": "https://emmettownship.com/"
+  },
+  "5502727025": {
+    "clerk": "Charlie Wojciechowski",
+    "deputyClerk": "Joy Pufahl",
+    "municipality": "Fox Lake",
+    "phone": "920-928-3573",
+    "recordUpdated": "2025-07-28",
+    "url": "https://townoffoxlake.org/"
+  },
+  "5502734000": {
+    "clerk": "Alison Pecha",
+    "municipality": "Herman",
+    "phone": "920-387-9322",
+    "recordUpdated": "2023-12-18",
+    "url": "https://townofherman-wi.gov/"
+  },
+  "5502736100": {
+    "clerk": "Carrie Neu",
+    "municipality": "Hubbard",
+    "phone": "920-349-3223",
+    "recordUpdated": "2025-04-24",
+    "url": "http://www.townofhubbard.com"
+  },
+  "5502736650": {
+    "clerk": "Agnes Schultz",
+    "municipality": "Hustisford",
+    "phone": "920-349-8425",
+    "recordUpdated": "2025-04-24",
+    "url": "https://townofhustisford.gov/"
+  },
+  "5502743050": {
+    "clerk": "Deborah Lynn Behl",
+    "deputyClerk": "Kim Budewitz",
+    "municipality": "Lebanon",
+    "phone": "920-988-8726",
+    "recordUpdated": "2025-04-24",
+    "url": "https://lebanondodgewi.gov/"
+  },
+  "5502743650": {
+    "clerk": "Sandra Porter",
+    "deputyClerk": "Brenda Wenzel",
+    "municipality": "Leroy",
+    "phone": "920-583-0201",
+    "recordUpdated": "2025-04-24",
+    "url": "https://townleroy.com/"
+  },
+  "5502745500": {
+    "clerk": "Sharon Belling",
+    "municipality": "Lomira",
+    "phone": "920-583-4011",
+    "recordUpdated": "2023-11-02",
+    "url": "https://www.townoflomira.com/"
+  },
+  "5502745975": {
+    "clerk": "Kim Mann",
+    "municipality": "Lowell",
+    "phone": "920-927-5787",
+    "recordUpdated": "2025-04-24",
+    "url": "https://townoflowell.com/"
+  },
+  "5502759000": {
+    "clerk": "Jen Butterbrodt",
+    "municipality": "Oak Grove",
+    "phone": "920-296-4756",
+    "recordUpdated": "2025-05-12"
+  },
+  "5502764375": {
+    "clerk": "Nancy Louise Thompson",
+    "municipality": "Portland",
+    "phone": "920-478-3724",
+    "recordUpdated": "2025-04-24"
+  },
+  "5502769962": {
+    "clerk": "Cindy Whitbeck",
+    "municipality": "Rubicon",
+    "phone": "262-673-3413",
+    "recordUpdated": "2025-04-24",
+    "url": "https://rubiconwi.gov/"
+  },
+  "5502773575": {
+    "clerk": "Julie Klusken",
+    "municipality": "Shields",
+    "phone": "920-261-7154",
+    "recordUpdated": "2026-07-21",
+    "url": "https://townofshieldsdcwi.gov/"
+  },
+  "5502779425": {
+    "clerk": "Christine Steger",
+    "municipality": "Theresa",
+    "phone": "920-583-9185",
+    "recordUpdated": "2025-04-24",
+    "url": "https://townoftheresawi.gov/"
+  },
+  "5502780525": {
+    "clerk": "Karla Zimmerman",
+    "municipality": "Trenton",
+    "phone": "920-763-4631",
+    "recordUpdated": "2025-04-24",
+    "url": "https://tn.trenton.wi.gov/"
+  },
+  "5502785650": {
+    "clerk": "Amy Burbach",
+    "municipality": "Westford",
+    "phone": "920-318-1636",
+    "recordUpdated": "2025-06-02",
+    "url": "https://townofwestfordwi.gov/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}
