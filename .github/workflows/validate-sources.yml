@@ -86,6 +86,18 @@ jobs:
         continue-on-error: true
         run: python3 scripts/build_lasalle_board_districts.py --check
 
+      # Belvidere's corporate limits gate Boone's fire card: inside the city
+      # the card says the city runs its own fire department instead of naming a
+      # county district it does not belong to (`boone-fire-belvidere-city`). The
+      # failure mode is an ANNEXATION — the Census redraws the place and the
+      # shipped ring stops matching, so a newly annexed street keeps a card it
+      # should not have. It lives here rather than in the per-PR battery because
+      # it fetches TIGERweb, and this repo keeps network checks on the monthly
+      # cadence; the build's own anchors and area gate run on every rebuild.
+      - name: Belvidere city limits still match TIGERweb
+        continue-on-error: true
+        run: python3 scripts/build_place_outline.py --check
+
       - name: Validate layer sources
         id: validate
         # continue-on-error: a FAIL exit (1) must not red the job — per the

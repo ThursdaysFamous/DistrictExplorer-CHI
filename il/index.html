@@ -10103,6 +10103,29 @@ function initChiExplorer() {
   var loadBooneCountyOutline = makeCached(function () {
     return fetchJSONWithRetry("data/app/boone-county-outline.json", {}, 2);
   });
+  // Belvidere's corporate limits, for the one place a county-wide tiling is
+  // wrong (see the fire-district entry below and the
+  // `boone-fire-belvidere-city` gap). Built offline by
+  // scripts/build_place_outline.py from the same TIGERweb places layer the
+  // municipality layer reads, rather than queried live: that service answers a
+  // single point directly, and a point query is exactly what the privacy page
+  // counts as sending a reader's coordinates to a government server. Doing that
+  // in order to HIDE a card is a poor trade.
+  //
+  // TWENTY-TWO OF ITS TWENTY-FOUR RINGS ARE HOLES — unincorporated pockets the
+  // city has annexed around — and they matter: a resident of one is NOT in the
+  // city, so they ARE in the county's fire district and must keep their card.
+  // findFeatureContaining evaluates even-odd, so a point in a hole crosses two
+  // rings and reads as outside, which is the answer those pockets need.
+  var loadBelvidereCityOutline = makeCached(function () {
+    return fetchJSONWithRetry("data/app/belvidere-city-outline.json", {}, 2);
+  });
+  function inBelvidereCity(point) {
+    return loadBelvidereCityOutline().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+
   function booneCountyCoverage(point) {
     return loadBooneCountyOutline().then(function (geojson) {
       return !!findFeatureContaining(geojson, point);
@@ -17625,18 +17648,46 @@ function initChiExplorer() {
         var v = findPropCI(feature.properties || {}, primaryField.keys);
         return (v == null || v === "") ? null : String(v);
       } : undefined),
+      // opts.excluded = { where(point) -> Promise<bool>, title, note } carves a
+      // hole in a county source that covers ground it does not actually speak
+      // for. Boone's fire tiling is the case it was written for: five polygons
+      // cover every acre of the county, and the City of Belvidere sits in no
+      // fire protection district at all because it runs its own department, so
+      // the card asserted a membership the county's own levy contradicts. The
+      // reader gets the REASON rather than a vanished card — hiding the layer
+      // would leave them to guess, and "your city runs its own department" is
+      // the useful half of the answer.
+      //
+      // It FAILS OPEN: a test that throws behaves exactly as before this option
+      // existed, because a broken exclusion must not silently delete a card
+      // that is correct for the rest of the county.
       query: function (point, seq) {
-        return opts.loader().then(function (geojson) {
-          var hit = findFeatureContainingOrNear(geojson, point, opts.snapFeet);
-          if (!hit) return null;
-          var props = hit.feature.properties || {};
-          var result = { seq: seq };
-          keyedFields.forEach(function (f) { result[f.name] = findPropCI(props, f.keys); });
-          if (hit.snappedFt != null) result.snappedFt = hit.snappedFt;
-          return result;
+        var gate = opts.excluded
+          ? Promise.resolve().then(function () { return opts.excluded.where(point); })
+              .then(null, function () { return false; })
+          : Promise.resolve(false);
+        return gate.then(function (isExcluded) {
+          if (isExcluded) return { seq: seq, excluded: true };
+          return opts.loader().then(function (geojson) {
+            var hit = findFeatureContainingOrNear(geojson, point, opts.snapFeet);
+            if (!hit) return null;
+            var props = hit.feature.properties || {};
+            var result = { seq: seq };
+            keyedFields.forEach(function (f) { result[f.name] = findPropCI(props, f.keys); });
+            if (hit.snappedFt != null) result.snappedFt = hit.snappedFt;
+            return result;
+          });
         });
       },
       render: function (result) {
+        if (result.excluded) {
+          var outWrap = cardEl("div", "card-flush");
+          outWrap.appendChild(renderBodyIntro({
+            title: opts.excluded.title,
+            note: opts.excluded.note
+          }));
+          return outWrap;
+        }
         var rows = [];
         opts.fields.forEach(function (f) {
           // `hidden` captures a source column for primaryLink()/when() without
@@ -17661,6 +17712,11 @@ function initChiExplorer() {
         return renderFieldStack(rows);
       },
       cardIdentifier: (opts.pill === true && primaryField) ? function (result) {
+        // An excluded point has no district to name, and the pill's fallback
+        // ("Fire District Unknown") would sit above a card explaining that
+        // there is no district here — two answers contradicting each other in
+        // one card. The exclusion's own title carries the header instead.
+        if (result.excluded) return null;
         var v = result[primaryField.name];
         return (primaryField.label ? primaryField.label + " " : "") + (v ? String(v) : "Unknown");
       } : undefined,
@@ -22741,11 +22797,29 @@ function initChiExplorer() {
       // Boone — 5 districts the county identifies by NUMBER, not by name (see
       // loadBooneFire). The pill reads "Fire District 3" and a note says why,
       // rather than the card implying a name exists and is missing.
+      // BELVIDERE IS A HOLE IN THIS MAP AND THE MAP DOES NOT SAY SO. The
+      // county's Fire_Districts layer is five polygons tiling every acre of
+      // Boone, so a point at Belvidere City Hall returns district 2 — while the
+      // Clerk's own district-rates report gives 18 of its 55 tax codes NO
+      // fire-protection line at all, and those 18 are the City of Belvidere's.
+      // The city is served by a MUNICIPAL fire department, a department of the
+      // city rather than a district a resident lives inside, which the city
+      // publishes itself (belvidereil.gov's own Fire Department pages,
+      // re-confirmed 2026-09-04 along with the district-2 answer). A tiling
+      // that covers every acre implies every acre is in a district, and in
+      // Illinois a municipality with its own department is exactly where that
+      // is false. Recorded as `boone-fire-belvidere-city`; worth checking
+      // wherever a county fire tiling is shipped.
       polygonCountyEntry({
         key: "boone",
         coverage: booneCountyCoverage,
         loader: loadBooneFire,
         pill: true,
+        excluded: {
+          where: inBelvidereCity,
+          title: "No fire protection district",
+          note: "The City of Belvidere runs its own fire department, so addresses inside the city are not in a fire protection district. Boone County's fire map covers the city anyway; the County Clerk's tax rates do not."
+        },
         hoverName: function (feature) {
           var v = findPropCI(feature.properties || {}, ["district"]);
           return (v == null || String(v) === "") ? null : "Fire District " + String(v);
