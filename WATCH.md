@@ -26,7 +26,36 @@ layer" section. Until it runs, you're watching by hand, which is the failure mod
 
 | When | What | Runbook steps | Last done |
 |---|---|---|---|
-| Late summer, when the new `SYxxyy` CPS attendance datasets post | Execute the response procedure against the rotated school-zone datasets as a live rehearsal | Steps 2–6, 10–11 | _(never)_ |
+| Late summer, when the new `SYxxyy` CPS attendance datasets post | Execute the response procedure against the rotated school-zone datasets as a live rehearsal | Steps 2–6, 10–11 | **2026-09-03 — detection half only; see below** |
+
+**2026-09-03 — the first time this row was ever exercised, and it half-ran, which
+is worth stating plainly.** The DETECTION half ran end to end against the live
+portal: all three pinned attendance-boundary datasets resolve and are current at
+**SY2526** (`x72b-38qv` elementary, `xg7c-d8rm` high, `fyff-53xy` middle), and a
+catalog sweep found **zero SY2627 datasets anywhere on data.cityofchicago.org**.
+So the monthly scan's silence on 2026-09-01 was a real negative, not a missed
+rotation — which is the thing this drill exists to confirm.
+
+The RESPONSE half (runbook steps 2–6, 10–11) could not be rehearsed, because
+nothing has rotated. Recording that rather than stamping the row done: a drill
+that never swapped an id has not exercised the machinery it is for.
+
+**The window is open now.** CPS has published this layer every year since
+SY0607, between late August and early October:
+
+| Edition | Elementary dataset | Published |
+|---|---|---|
+| SY2526 | `x72b-38qv` | 2025-09-02 |
+| SY2425 | `im2a-is7h` | 2024-09-20 |
+| SY2324 | `njaf-gekg` | 2023-08-24 |
+| SY2223 | `w9ky-kbav` | 2022-10-03 |
+
+SY2526 posted a year and a day before this check, so SY2627 is due imminently.
+Until it lands the app is serving SY2526 — CPS's own current edition, so the
+cards are right — but the moment SY2627 appears the shipped ids are last year's
+boundaries, silently, because a retired Socrata id keeps answering. Re-run this
+row when the monthly `validate-sources` issue reports a newer edition, and take
+the drill the rest of the way then.
 
 This is the only time the machinery gets exercised before it matters. If the drill is
 painful, fix the runbook **that year**, not during the 2031 census scramble. A repo that has

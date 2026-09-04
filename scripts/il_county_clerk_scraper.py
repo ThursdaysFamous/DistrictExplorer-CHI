@@ -131,7 +131,28 @@ def rung_playwright():
         try:
             context = browser.new_context(user_agent=HEADERS["User-Agent"])
             page = context.new_page()
-            page.goto(URL, wait_until="domcontentloaded", timeout=90000)
+            resp = page.goto(URL, wait_until="domcontentloaded", timeout=90000)
+            # SAY WHAT ACTUALLY HAPPENED. A 403 body is still a page: goto()
+            # succeeds, domcontentloaded fires on the edge's error document, and
+            # the next line then waits thirty seconds for a <select> that is not
+            # in it — reporting "Timeout ... waiting for locator
+            # #ContentPlaceHolder1_ddlCounty", which reads exactly like ISBE
+            # having redesigned the form. It had not. On 2026-08-29 both rungs
+            # were refused by the same network-keyed edge block, and the run's
+            # last line named a selector instead of the 403 above it; the
+            # refresh was then read as a site change and left red for eleven
+            # days, over which Fayette County swore in a new clerk that the
+            # shipped card went on not naming.
+            if resp is not None and resp.status != 200:
+                raise RuntimeError(
+                    "the browser rung was refused too: HTTP %d from %s. Both rungs "
+                    "leave from the same runner, and this edge blocks by NETWORK "
+                    "rather than by client fingerprint (PR #212), so a browser is "
+                    "no answer to it. Measured intermittent — 3 of the first 7 "
+                    "scheduled runs — and it has always cleared on a later run "
+                    "from a different runner address. Re-run before treating it "
+                    "as a source change."
+                    % (resp.status, URL))
             page.select_option("#" + COUNTY_SELECT_ID, ALL_AUTHORITIES)
             # The postback replaces the table; waiting for it is the real
             # completion signal, so this neither races the round-trip nor

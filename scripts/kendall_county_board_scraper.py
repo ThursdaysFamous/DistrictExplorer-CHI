@@ -43,7 +43,25 @@ roster keeps its last hand-verified state, and automation resumes
 untouched the moment any rung unblocks. Manual refresh: re-verify against
 the county's directory and rebuild via
 build_kendall_county_board_roster.py on a hand-assembled raw file (see the
-seeded initial roster's commit for the shape). No evasion anywhere on the ladder: the content is
+seeded initial roster's commit for the shape).
+
+RESOLVED 2026-09-03 — the "every rung fails" state above lasted from
+2026-07-23 to today and is over. The block was never total: the county's
+Akamai edge refuses the `requests` stack and serves the STDLIB stack sending
+a real Chromium's Sec-CH-UA client hints, and it needs BOTH — neither the
+stack nor the hints alone moves it (the leave-one-out matrix is in
+scraper_common beside UA_HINTS_CHROME_126). That second opinion is the one
+validate_card_links has taken on a 403 since 2026-08-29; this ladder simply
+never had it. It is now the rung between `requests` and `playwright`, and
+`--engine auto` reaches it without a browser or the Archive.
+
+The scrape reproduces the hand-verified roster EXACTLY — same members, same
+districts, same contact details, the shipped file content-identical — which
+is the check that matters: a rung that returns a page is not the same as a
+rung that returns the right data. Read the two paragraphs above as history,
+not as current state.
+
+No evasion anywhere on the ladder: the content is
 always the county's own page, fetched either directly or through a public
 archive, and records fetched via the archive carry `archived_at` for
 provenance.
@@ -74,7 +92,7 @@ from urllib.parse import urljoin
 
 import requests
 from bs4 import BeautifulSoup
-from scraper_common import UA_CHROME_WIN_126_FULL  # noqa: E402  (shared machinery — do not fork)
+from scraper_common import UA_CHROME_WIN_126_FULL, fetch_stdlib  # noqa: E402  (shared machinery — do not fork)
 
 BASE = "https://www.kendallcountyil.gov"
 LISTING_PATH = "/county-board/board-members"
@@ -135,6 +153,39 @@ class RequestsFetcher:
 
     def close(self):
         self.session.close()
+
+
+class StdlibFetcher:
+    """Fetch through the STDLIB stack with a real Chromium's client hints.
+
+    Added 2026-09-03, when the block this county has been carried by hand
+    since July was re-measured and found to answer. The county's Akamai bot
+    manager needs BOTH a non-urllib3 TLS stack and the Sec-CH-UA hints; the
+    leave-one-out matrix and the reasoning are in scraper_common beside the
+    constants. That is the same second opinion validate_card_links has taken
+    on a 403 since 2026-08-29 — this scraper's ladder simply never had it.
+
+    No evasion: the content is the county's own page, fetched with headers a
+    browser sends, and a managed challenge (which this is not) stays unanswered.
+    """
+
+    engine = "stdlib"
+
+    def fetch(self, url, retries=3, timeout=30):
+        last_err = None
+        for attempt in range(retries):
+            try:
+                html = fetch_stdlib(url, timeout=timeout)
+                if not _looks_blocked(html):
+                    return html
+                last_err = "bot-management interstitial"
+            except Exception as e:  # noqa: BLE001 — every rung failure escalates
+                last_err = str(e)
+            time.sleep(1.5 * (attempt + 1))
+        raise RuntimeError("Failed to fetch %s: %s" % (url, last_err))
+
+    def close(self):
+        pass
 
 
 class PlaywrightFetcher:
@@ -328,6 +379,8 @@ class WaybackFetcher:
 def make_fetcher(engine):
     if engine == "requests":
         return RequestsFetcher()
+    if engine == "stdlib":
+        return StdlibFetcher()
     if engine == "playwright":
         return PlaywrightFetcher()
     if engine == "wayback":
@@ -513,7 +566,7 @@ def scrape(engine, delay=0.75):
             fetcher.close()
 
     last_err = None
-    for name in ("requests", "playwright", "wayback"):
+    for name in ("requests", "stdlib", "playwright", "wayback"):
         try:
             fetcher = make_fetcher(name)
         except Exception as e:  # e.g. playwright/Chromium not installed
@@ -539,7 +592,7 @@ def main():
     ap.add_argument("out", nargs="?", default=None, help="output JSON path (default: stdout)")
     ap.add_argument(
         "--engine",
-        choices=["auto", "requests", "playwright", "wayback"],
+        choices=["auto", "requests", "stdlib", "playwright", "wayback"],
         default="auto",
         help="Fetch engine: auto (the requests -> playwright -> wayback ladder), "
         "requests (browserless), playwright (real Chromium), or wayback "

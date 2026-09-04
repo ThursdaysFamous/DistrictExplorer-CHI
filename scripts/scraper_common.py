@@ -52,6 +52,60 @@ UA_CIVIC_BOT = ("Mozilla/5.0 (compatible; chidistricts.com civic data bot; "
                 "+https://chidistricts.com/)")
 
 
+# --- The stdlib rung: a DIFFERENT HTTP STACK, plus the client hints a real
+# Chromium sends beside its UA. Not a disguise — the same claim the fleet's UA
+# strings already make, sent completely rather than half.
+#
+# MEASURED 2026-09-03 across the five Illinois sources recorded as blocked,
+# leave-one-out, every cell a live fetch:
+#
+#     county         requests+bare  requests+hints  stdlib+bare  stdlib+hints
+#     Kendall            403            403            403         200 (117 KB)
+#     McHenry            403            403            403         200 (200 KB)
+#     Adams              403            403            403         200 (164 KB)
+#     Chicago BOE        403            403         200 (62 KB)    200 (62 KB)
+#     Lake County        403            403         200 (114 KB)   200 (114 KB)
+#
+# Two signatures. Kendall, McHenry and Adams sit behind Akamai and need BOTH
+# the stack and the hints — neither alone moves them. Chicago's and Lake's
+# Cloudflare edges need only the stack. And `requests` never succeeds, with or
+# without the hints, which is validate_card_links.py's 2026-08-29 Sheboygan
+# finding holding for a sixth site: urllib3's TLS ClientHello differs from the
+# stdlib ssl module's and these managers fingerprint it, so no header tweak on
+# the requests stack reproduces anything.
+#
+# THIS IS A RUNG, NOT AN ANSWER TO A CHALLENGE. A Cloudflare managed challenge
+# (CPD's, measured 403 to both stacks on the same day) is a question the site
+# is entitled to ask, and nothing here tries to solve one.
+UA_HINTS_CHROME_126 = {
+    "User-Agent": UA_CHROME_WIN_126,
+    "Accept": "text/html,application/xhtml+xml,application/pdf,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+    # identity, not gzip: the stdlib client does not decode for us, and a
+    # compressed body measured as-is is how validate_card_links called a real
+    # 1,705-byte page an 805-byte hollow one.
+    "Accept-Encoding": "identity",
+    "sec-ch-ua": '"Chromium";v="126", "Not;A=Brand";v="24"',
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": '"Windows"',
+}
+
+
+def fetch_stdlib(url, headers=None, timeout=30):
+    """GET through the stdlib stack, returning decoded text, or raising.
+
+    Deliberately NOT a retry loop: this is the second opinion a caller reaches
+    for after its own rung was refused, and a refusal here is an answer rather
+    than a hiccup. Callers that want pacing already have fetch() above.
+    """
+    import urllib.request  # function-local, mirroring fetch()'s requests import
+
+    req = urllib.request.Request(url, headers=dict(headers or UA_HINTS_CHROME_126))
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        body = resp.read()
+    return body.decode("utf-8", "replace")
+
+
 def make_fail(label):
     """The fleet's one failure voice: '<label>: FAIL — <msg>' to stderr, exit 1.
 

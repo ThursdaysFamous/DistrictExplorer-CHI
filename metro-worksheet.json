@@ -37,7 +37,9 @@
     { "id": "wisconsin", "label": "Wisconsin", "url": "https://districtry.com/wi/", "emoji": "🧀", "explorer_name": "districtry Wisconsin",
       "bbox": { "minLng": -92.89, "minLat": 42.49, "maxLng": -86.25, "maxLat": 47.31 } },
     { "id": "iowa", "label": "Iowa", "url": "https://districtry.com/ia/", "emoji": "🌽", "explorer_name": "districtry Iowa",
-      "bbox": { "minLng": -96.64, "minLat": 40.37, "maxLng": -90.14, "maxLat": 43.5 } }
+      "bbox": { "minLng": -96.64, "minLat": 40.37, "maxLng": -90.14, "maxLat": 43.5 } },
+    { "id": "michigan", "label": "Michigan", "url": "https://districtry.com/mi/", "emoji": "🚗", "explorer_name": "districtry Michigan",
+      "bbox": { "minLng": -87.6, "minLat": 41.7, "maxLng": -82.11, "maxLat": 48.01 } }
   ],
   "hover_number_keys": [
     [
@@ -2347,7 +2349,7 @@
       {
         "file": "grundy-county-board-members.json",
         "min_keys": 3,
-        "note": "Grundy County Board members keyed by district (3 six-member districts, 18/18 with party, the page's 'Board Member Since' year, committee assignments verbatim, phone and e-mail; the Board Chairman tag rides Drew Muffler's row as the page states it) — scraped weekly from the county's own board page."
+        "note": "Grundy County Board members keyed by district (three districts, six seats each — each district ships its `seats`, so a seat the county stops listing renders as 'N of 6 seats not listed in the county's directory' rather than silently shortening the card; the builder floors the board at 16 of 18 named, because three missing is a parser that stopped finding rows rather than a departure. The note says 'not listed', never 'vacant' — the page carries no vacancy marker, it simply stops listing a person, so we can see that a seat is unaccounted for and cannot see why). Named seats carry party, the page's 'Board Member Since' year, committee assignments verbatim, phone and e-mail; the Board Chairman tag rides the chair's own row as the page states it — scraped weekly from the county's own board page."
       },
       {
         "file": "henry-county-board-members.json",
@@ -2527,7 +2529,7 @@
     ]
   },
   "sw": {
-    "cache_name": "districtry-il-shell-v5",
+    "cache_name": "districtry-il-shell-v6",
     "shell_urls": [
       "./",
       "./sources.html",

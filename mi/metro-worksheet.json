@@ -336,8 +336,13 @@
   },
   "history_page": {
     "file": "history.html",
-    "intro": "districtry Michigan arrives with the national tier — the districts every U.S. state can serve from national publishers — and is built toward the county commissioner districts Michigan's own Bureau of Elections publishes for all 83 counties.",
+    "intro": "districtry Michigan answers for all 83 counties: the county commissioner districts Michigan's own Bureau of Elections compiles from every county's apportionment filing, plus the national tier every U.S. state can serve from national publishers. It was built dark across three changes in one day — the national tier, the commissioner flagship, then publication — rather than going live on arrival.",
     "entries": [
+      {
+        "date": "2026-09-03",
+        "title": "Published",
+        "body": "Michigan went live at districtry.com/mi/, the fleet's sixth instance. Publishing an instance that had been built in the dark turned up four defects the whole test battery had been green on, and three were the same shape — a claim nothing compared against the thing it claimed. This app's font files had never been copied into its own folder, so all eighteen of them would have 404'd and the page would have quietly rendered in whatever typeface your device chose; its preview image, named in three places, did not exist either. Its sources page still carried Iowa's identity in every tag a search engine reads, because it was cloned from Iowa and only the generated parts were ever regenerated. An unused helper left over from that clone made the fleet's privacy page state that one Michigan layer sends your exact selected point to a government server, which no Michigan layer does. And Michigan's own map bounds, which run out into Lake Michigan because the state's counties do, reached far enough west to claim Chicago. All four are fixed, and two new checks now watch for their kind: every file a page asks for must exist, and every page must say which page it is."
+      },
       {
         "date": "2026-09-03",
         "title": "County commissioner districts",
@@ -351,83 +356,17 @@
     ]
   },
   "metro_explorers": [
-    {
-      "id": "chicago",
-      "label": "Illinois",
-      "url": "https://districtry.com/il/",
-      "emoji": "🌭",
-      "explorer_name": "districtry Illinois",
-      "bbox": {
-        "minLng": -91.52,
-        "minLat": 36.96,
-        "maxLng": -87.01,
-        "maxLat": 42.51
-      }
-    },
-    {
-      "id": "nyc",
-      "label": "New York City",
-      "url": "https://districtry.com/ny/",
-      "emoji": "🗽",
-      "explorer_name": "districtry New York City",
-      "bbox": {
-        "minLng": -74.3,
-        "minLat": 40.45,
-        "maxLng": -73.6,
-        "maxLat": 41.0
-      }
-    },
-    {
-      "id": "sf",
-      "label": "San Francisco",
-      "url": "https://districtry.com/ca/",
-      "emoji": "🌉",
-      "explorer_name": "districtry San Francisco",
-      "bbox": {
-        "minLng": -122.6,
-        "minLat": 37.6,
-        "maxLng": -122.3,
-        "maxLat": 37.95
-      }
-    },
-    {
-      "id": "wisconsin",
-      "label": "Wisconsin",
-      "url": "https://districtry.com/wi/",
-      "emoji": "🧀",
-      "explorer_name": "districtry Wisconsin",
-      "bbox": {
-        "minLng": -92.89,
-        "minLat": 42.49,
-        "maxLng": -86.25,
-        "maxLat": 47.31
-      }
-    },
-    {
-      "id": "iowa",
-      "label": "Iowa",
-      "url": "https://districtry.com/ia/",
-      "emoji": "🌽",
-      "explorer_name": "districtry Iowa",
-      "bbox": {
-        "minLng": -96.64,
-        "minLat": 40.37,
-        "maxLng": -90.14,
-        "maxLat": 43.5
-      }
-    },
-    {
-      "id": "michigan",
-      "label": "Michigan",
-      "url": "https://districtry.com/mi/",
-      "emoji": "🚗",
-      "explorer_name": "districtry Michigan",
-      "bbox": {
-        "minLng": -90.42,
-        "minLat": 41.69,
-        "maxLng": -82.12,
-        "maxLat": 48.31
-      }
-    }
+    { "id": "chicago", "label": "Illinois", "url": "https://districtry.com/il/", "emoji": "🌭", "explorer_name": "districtry Illinois",
+      "bbox": { "minLng": -91.52, "minLat": 36.96, "maxLng": -87.01, "maxLat": 42.51 } },
+    { "id": "nyc", "label": "New York City", "url": "https://districtry.com/ny/", "emoji": "🗽", "explorer_name": "districtry New York City",
+      "bbox": { "minLng": -74.3, "minLat": 40.45, "maxLng": -73.6, "maxLat": 41.0 } },
+    { "id": "sf", "label": "San Francisco", "url": "https://districtry.com/ca/", "emoji": "🌉", "explorer_name": "districtry San Francisco",
+      "bbox": { "minLng": -122.6, "minLat": 37.6, "maxLng": -122.3, "maxLat": 37.95 } },
+    { "id": "wisconsin", "label": "Wisconsin", "url": "https://districtry.com/wi/", "emoji": "🧀", "explorer_name": "districtry Wisconsin",
+      "bbox": { "minLng": -92.89, "minLat": 42.49, "maxLng": -86.25, "maxLat": 47.31 } },
+    { "id": "iowa", "label": "Iowa", "url": "https://districtry.com/ia/", "emoji": "🌽", "explorer_name": "districtry Iowa",
+      "bbox": { "minLng": -96.64, "minLat": 40.37, "maxLng": -90.14, "maxLat": 43.5 } },
+    { "id": "michigan", "label": "Michigan", "url": "https://districtry.com/mi/", "emoji": "🚗", "explorer_name": "districtry Michigan",
+      "bbox": { "minLng": -87.6, "minLat": 41.7, "maxLng": -82.11, "maxLat": 48.01 } }
   ]
 }

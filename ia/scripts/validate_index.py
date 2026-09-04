@@ -88,15 +88,15 @@ CAPABILITIES = [
 # ==== GENERATED:BEGIN validator-config ====
 # Floor, not a moving target: new layers only raise this; a drop means
 # modules were lost.
-MIN_REGISTER_LAYER = 13
+MIN_REGISTER_LAYER = 14
 
 # Every layer id that must be registered in index.html. Most modules register
 # through the factories, so deleting one would NOT lower the raw registerLayer(
 # count above — this per-id list is the direct module-loss guard. Emitted in
 # LAYER_AREA_RANK order; check 5 keeps the two naming the same set.
 EXPECT_LAYER_IDS = [
-    "us-house", "ia-judicial-district", "ia-senate", "county", "ia-house",
-    "county-supervisor", "school-district-unified",
+    "us-house", "ia-judicial-district", "iowa-aea", "ia-senate", "county",
+    "ia-house", "county-supervisor", "school-district-unified",
     "school-director-district", "community-college", "cc-director-district",
     "county-subdivision", "municipality", "dsm-ward", "zip-code", "precinct",
     "police-station", "fire-station", "school-site", "post-office",
@@ -119,6 +119,7 @@ GEOMETRY_FILES = {
     "ia-judicial-districts.json": (8, 8),  # 8 judicial election districts, whole-county unions dissolved from state-counties.json by ia/scripts/build_ia_judicial_district.py, per Iowa Code SS602.6107/602.6109 and double-witnessed at build time against the LSAFiscal organization's own published district polygons.
     "ia-community-colleges.json": (15, 15),  # 15 community college merged areas, shipped as published (no dissolve) from the Iowa Legislature's own ArcGIS org by ia/scripts/build_ia_community_colleges.py, witnessed against a second LSA layer on name set, 2020 census population (3,190,369) and director-district count (124).
     "dsm-wards.json": (4, 4),  # The City of Des Moines's four council wards, shipped as published (no dissolve) from the city's own Wards feature service by ia/scripts/build_dsm_wards.py. Gated twice: the wards must still tile the city's own City Boundary layer (0.0070% uncovered in 753 perimeter fragments, largest 3,482 m² — a hole is one large compact part, so the largest fragment is capped as well as the total), and simplification must add no overlap to the source's own 14 m sliver along the ward 1/2 edge. Carries verbatim the City of Des Moines disclaimer its terms of use require, which the card renders.
+    "ia-aeas.json": (9, 9),  # Iowa's nine Area Education Agencies (Iowa Code ch. 273), built by ia/scripts/build_ia_aea.py as a DISSOLVE of the shipped school-district fabric by the Department of Education's own in-band AEA_NUM — not from the Department's published AEA polygon, which is stamped for the 2019-2020 school year. Three gates: the NCES join must stay 324/324 with no leftovers either way, the dissolve must not self-overlap, and every one of the 324 districts must still read as its own agency in the published FY20 polygon — the test that asks whether a district has CHANGED agency, which is the only way an AEA line moves.
 }
 
 # file -> minimum key count (officeholder rosters).

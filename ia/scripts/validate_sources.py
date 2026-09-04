@@ -340,6 +340,32 @@ PROVENANCE = [
         "note": "123 community college director districts (Iowa Code 260C.11) inside the 15 merged areas, effective 2023-08-01. THE SERVICE'S NAME IS NOT ITS SLUG: the URL says CC_DD2023, the service calls itself CC_DirectorDistricts_FINAL, and an ArcGIS item search on the slug returns unrelated global items — search the NAME (item b89cf40cef40497e80ae8eb0a6e6d22f, owner education_iowa). Its licence is EMPTY, i.e. terms UNSTATED, which is NOT the CC0 the school-director layer's item carries; the two were checked the same way and differ. Joined to the parent on the numeric key with one asserted Southeastern 8->16 remap. Registered BESPOKE rather than through the polygon factory: the children encode the 2023 merged-area plan and the parent layer the 2026 update, so in ~0.2% of ground the two name different colleges and the card must resolve both and decline rather than contradict its own parent. Built by ia/scripts/build_ia_cc_director_districts.py; operator-rebuilt, no weekly workflow (geometry, not a roster).",
     },
     {
+        "layer": "iowa-aea",
+        "app_file": "ia-aeas.json",
+        "source_url": "https://services.arcgis.com/vPD5PVLI6sfkZ5E4/arcgis/rest/services/CurrentIowaSchoolDistricts/FeatureServer/0",
+        "note": (
+            "Iowa's nine Area Education Agencies (Iowa Code ch. 273). THE SOURCE URL "
+            "HERE IS THE SCHOOL-DISTRICT LAYER ON PURPOSE, and that is the whole build: "
+            "the Department of Education DOES publish an AEA polygon, and it is stamped "
+            "'for the 2019-2020 school year - updated 3/9/2020', so it supplies the "
+            "build's WITNESS and never its geometry. What draws the line is the "
+            "Department's own CURRENT district layer, which carries AEA_NUM in band on "
+            "all 324 districts; ia/scripts/build_ia_aea.py dissolves the districts this "
+            "app already ships by that attribute, joined on DistrictNCESCode = Census "
+            "GEOID (324/324, both directions, no alias table). TWO NAMING TRAPS, THE SAME "
+            "ONE TWICE: the AEA item is titled IowaAEAs and its layer calls itself "
+            "IdoeAeaFY20, and this district service calls itself IdoeSD -- pin the URL "
+            "and the item id (AEA witness: 1cfa541b8ebe4bdcbc2f52cdd0977a2b; a second "
+            "copy of the same FY20 layer sits on a University of Northern Iowa personal "
+            "account). Each agency's name, phone and website come from the AEA system's "
+            "own Find My AEA directory, keyed on the same two-digit code the geometry "
+            "carries. Identity-only: Iowa Code 273.8 gives a voter no say in any of the "
+            "nine directors. Operator-rebuilt, no weekly workflow (geometry, not a "
+            "roster) -- but re-run it whenever ia-school-districts.json is rebuilt, "
+            "because the two are joined."
+        ),
+    },
+    {
         "layer": "school-site",
         "app_file": "ia-school-sites.json",
         "source_url": "https://services.arcgis.com/vPD5PVLI6sfkZ5E4/arcgis/rest/services/IowaSchoolBldgs/FeatureServer/0",

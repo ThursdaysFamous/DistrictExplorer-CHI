@@ -1,9 +1,41 @@
 # districtry Michigan — Phase 1: arrival
 
+> **SHIPPED 2026-09-03 — phases 1, 2 and go-live, in three PRs on one day.** Michigan is live at
+> districtry.com/mi/ with 5 layers. The roadmap below is unchanged and phases 3-4 are still open;
+> what go-live actually cost is recorded here because it was almost entirely NOT on any checklist.
+> **Four defects had survived the full 38-gate battery twice, and three were the same shape — a
+> claim nothing compared against the thing it claimed.** (1) `mi/fonts/` did not exist while
+> `mi/index.html` declared 18 `@font-face` rules against it, and `mi/og-image.png` did not exist
+> while three tags named it: the app would have served in system fonts forever and every social
+> share would have been broken, with no error anywhere. `scripts/validate_instance_assets.py` is
+> the new gate, and it had to be fixed mid-write — its first draft scanned `src`/`href` only,
+> caught the fonts, and sailed straight past the og-image, which lives in a `content=` attribute.
+> (2) `mi/sources.html` served **Iowa's entire identity block** — canonical, `og:url`,
+> `og:site_name`, title and the whole ld+json graph — because the page was cloned from Iowa and
+> only its GENERATED regions were ever regenerated; a canonical pointing at a sibling asks Google
+> to drop this page in favour of that one. `page_consistency_test.mjs` passed it, because its check
+> was `!!document.querySelector("link[rel=canonical]")` — whether the tag was THERE, never what it
+> SAID. (3) A dead `tigerStatewideLoader`, inherited from Iowa and never called, made
+> `build_privacy_page.py` publish that a Michigan layer sends your exact selected point to a
+> government server, when none does. (4) **The fleet bbox is the portal hand-off box, not
+> `metro_bbox`**: Michigan's water-inclusive fabric put Chicago's and Wisconsin's own centres inside
+> Michigan's box and hard-failed `validate_index.py` on both — found only because the per-instance
+> `validate_index` block had been skipped in favour of a remembered subset of the battery. **Run the
+> workflow's own command list.** The six western-UP counties that fall outside the narrowed box are
+> recorded in `mi/WATCH.md`, with the tie-break fix that would actually solve them.
+>
+> Two things go-live did NOT need, contrary to the guide: no sibling `CACHE_NAME` bump (the sibling
+> change is confined to the network-first shell), and this file does not move to `docs/archive/` —
+> neither Iowa's nor Wisconsin's plan did.
+
 > Planning document, researched and verified 2026-09-03. `docs/IA_EXPANSION_PLAN.md` is the
-> precedent for a committed phase plan; like it, this file moves to `docs/archive/` when phase 1
-> ships and the shipped instance (`mi/metro-worksheet.json`, `mi/CLAUDE.md`, the guidebook's
-> Michigan column) supersedes it. Sources marked **VERIFIED** were fetched or queried on
+> precedent for a committed phase plan; like it, this file STAYS IN `docs/` and is APPENDED TO
+> when a phase ships (the header used to say it moves to `docs/archive/`; git says otherwise —
+> Iowa's go-live commit 258022d appended 43 lines to `docs/IA_EXPANSION_PLAN.md` and renamed
+> nothing, and the only archived plan, `docs/archive/WI_PHASE2_PLAN.md`, closed a PHASE rather
+> than a go-live). The shipped instance (`mi/metro-worksheet.json`, `mi/CLAUDE.md`, the
+> guidebook's Michigan column) supersedes it as the record of what IS; this stays the record of
+> what was decided and why. Sources marked **VERIFIED** were fetched or queried on
 > 2026-09-03 — endpoint, count, licence and failure mode recorded from the response, not from a
 > catalog page. Facts marked **ASSERTED** are Michigan civic-structure claims carried from the
 > research pass without a second independent fetch; each must be pinned to a primary citation in
@@ -11,7 +43,7 @@
 
 ## Why Michigan, and why now
 
-The fleet is five instances as of 2026-09-03: Illinois (91 counties, the reference
+The fleet was five instances when this was written on 2026-09-03 (Michigan made it six the same day): Illinois (91 counties, the reference
 implementation), NYC, SF, Wisconsin (all 72 counties) and Iowa (all 99). Michigan was chosen as
 the sixth from a five-state recon pass across the states bordering the existing
 Illinois/Wisconsin/Iowa footprint, scored on one question: **does a single statewide publisher

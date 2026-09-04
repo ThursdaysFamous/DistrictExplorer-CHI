@@ -66,6 +66,7 @@
         "since": 2021
       }
     ],
+    "seats": 6,
     "sourceUrl": "https://www.grundycountyil.gov/government/county_board.php"
   },
   "2": {
@@ -93,18 +94,6 @@
         "party": "Republican",
         "phone": "(815) 530-6580",
         "since": 2010
-      },
-      {
-        "committees": [
-          "Animal Control, Highway, & Transit – Vice Chair",
-          "Elections, Tax, Tech, & GIS – Chair",
-          "Finance"
-        ],
-        "email": "gridenour@grundycountyil.gov",
-        "name": "Greg Ridenour",
-        "party": "Republican",
-        "phone": "(815) 954-1628",
-        "since": 2018
       },
       {
         "committees": [
@@ -140,6 +129,7 @@
         "since": 2025
       }
     ],
+    "seats": 6,
     "sourceUrl": "https://www.grundycountyil.gov/government/county_board.php"
   },
   "3": {
@@ -213,6 +203,7 @@
         "since": 2012
       }
     ],
+    "seats": 6,
     "sourceUrl": "https://www.grundycountyil.gov/government/county_board.php"
   }
 }

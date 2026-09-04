@@ -3959,7 +3959,9 @@ function initChiExplorer() {
     { id: "wisconsin", label: "Wisconsin", url: "https://districtry.com/wi/", emoji: "🧀", explorerName: "districtry Wisconsin",
       bbox: { minLng: -92.89, minLat: 42.49, maxLng: -86.25, maxLat: 47.31 } },
     { id: "iowa", label: "Iowa", url: "https://districtry.com/ia/", emoji: "🌽", explorerName: "districtry Iowa",
-      bbox: { minLng: -96.64, minLat: 40.37, maxLng: -90.14, maxLat: 43.5 } }
+      bbox: { minLng: -96.64, minLat: 40.37, maxLng: -90.14, maxLat: 43.5 } },
+    { id: "michigan", label: "Michigan", url: "https://districtry.com/mi/", emoji: "🚗", explorerName: "districtry Michigan",
+      bbox: { minLng: -87.6, minLat: 41.7, maxLng: -82.11, maxLat: 48.01 } }
   ];
   // FALLBACK district-number key list, fed through extractDistrictNumber
   // (which adds a name-field regex fallback for the layers whose number only
@@ -20182,7 +20184,7 @@ function initChiExplorer() {
         primaryLink: function () {
           return {
             label: "Knox County Board (official)",
-            url: "https://www.knoxcountyil.gov/departments/county_board/"
+            url: "https://www.knoxcountyil.gov/county_board/county_board_members.php"
           };
         },
         hoverOfficial: {
@@ -26497,7 +26499,7 @@ function initChiExplorer() {
         primaryLink: function () {
           return {
             label: "Calhoun County Clerk — elections",
-            url: "https://www.calhouncountyil.gov/government/county-clerk/elections/"
+            url: "https://www.calhouncountyil.gov/departments/county-clerk-and-recorder/elections/"
           };
         }
       },

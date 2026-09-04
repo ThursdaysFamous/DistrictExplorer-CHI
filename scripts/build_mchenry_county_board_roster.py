@@ -58,9 +58,18 @@ def member_obj(rec):
     # street addresses are deliberately NOT carried: term-end isn't card
     # material, and the addresses are residences, not offices.
     member = {"name": rec["name"]}
-    for k in ("role", "phone", "email", "url"):
+    for k in ("role", "phone", "email"):
         if rec.get(k):
             member[k] = rec[k]
+    # `url` under either name. The hand-verified seed carried it as `url`; the
+    # scraper — which could not run at all while the county's edge refused every
+    # rung — emits `source_url`, as Kendall's does and as its builder already
+    # reads. The mismatch was invisible for as long as nothing scraped: the
+    # first live run since July would have shipped nineteen members with no
+    # Profile link, and check_roster_retention caught exactly that.
+    profile = rec.get("url") or rec.get("source_url")
+    if profile:
+        member["url"] = profile
     return member
 
 

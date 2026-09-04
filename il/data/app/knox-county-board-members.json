@@ -2,102 +2,102 @@
   "1": {
     "members": [
       {
-        "districtSource": "roll call, June 2026 minutes",
+        "districtSource": "roll call, July 2026 minutes",
         "name": "Anthony Weiss"
       },
       {
-        "districtSource": "roll call, June 2026 minutes",
+        "districtSource": "roll call, July 2026 minutes",
         "name": "Cheryl Nache"
       },
       {
-        "districtSource": "roll call, June 2026 minutes",
+        "districtSource": "roll call, July 2026 minutes",
         "name": "Tracy Robertson"
       }
     ],
     "seats": 3,
-    "sourceUrl": "https://cms2.revize.com/revize/knoxcounty/Board%20Minutes%20June%202026.pdf"
+    "sourceUrl": "https://cms2.revize.com/revize/knoxcounty/Board%20Minutes%20July%202026.pdf"
   },
   "2": {
     "members": [
       {
-        "districtSource": "roll call, June 2026 minutes",
+        "districtSource": "roll call, July 2026 minutes",
         "name": "Erin Pugh"
       },
       {
-        "districtSource": "roll call, June 2026 minutes",
+        "districtSource": "roll call, July 2026 minutes",
         "name": "Jennifer Fredrick"
       },
       {
-        "districtSource": "roll call, June 2026 minutes",
+        "districtSource": "roll call, July 2026 minutes",
         "name": "Robert Bondi"
       }
     ],
     "seats": 3,
-    "sourceUrl": "https://cms2.revize.com/revize/knoxcounty/Board%20Minutes%20June%202026.pdf"
+    "sourceUrl": "https://cms2.revize.com/revize/knoxcounty/Board%20Minutes%20July%202026.pdf"
   },
   "3": {
     "members": [
       {
-        "districtSource": "roll call, June 2026 minutes",
+        "districtSource": "roll call, July 2026 minutes",
         "name": "Kimberly Thierry"
       },
       {
-        "districtSource": "roll call, June 2026 minutes",
+        "districtSource": "roll call, July 2026 minutes",
         "name": "Pamela Davidson"
       },
       {
-        "districtSource": "roll call, June 2026 minutes",
+        "districtSource": "roll call, July 2026 minutes",
         "name": "Samuel Cohen"
       }
     ],
     "seats": 3,
-    "sourceUrl": "https://cms2.revize.com/revize/knoxcounty/Board%20Minutes%20June%202026.pdf"
+    "sourceUrl": "https://cms2.revize.com/revize/knoxcounty/Board%20Minutes%20July%202026.pdf"
   },
   "4": {
     "members": [
       {
-        "districtSource": "roll call, June 2026 minutes",
+        "districtSource": "roll call, July 2026 minutes",
         "name": "Jared Hawkinson",
         "role": "Chair"
       },
       {
-        "districtSource": "roll call, June 2026 minutes",
+        "districtSource": "roll call, July 2026 minutes",
         "name": "Joshua Kramer"
       },
       {
-        "districtSource": "roll call, June 2026 minutes",
+        "districtSource": "roll call, July 2026 minutes",
         "name": "Todd Olinger"
       }
     ],
     "seats": 3,
-    "sourceUrl": "https://cms2.revize.com/revize/knoxcounty/Board%20Minutes%20June%202026.pdf"
+    "sourceUrl": "https://cms2.revize.com/revize/knoxcounty/Board%20Minutes%20July%202026.pdf"
   },
   "5": {
     "members": [
       {
-        "districtSource": "roll call, June 2026 minutes",
+        "districtSource": "roll call, July 2026 minutes",
         "name": "Brian Friedrich"
       },
       {
-        "districtSource": "roll call, June 2026 minutes",
+        "districtSource": "roll call, July 2026 minutes",
         "name": "Patty Boone"
       },
       {
-        "districtSource": "roll call, June 2026 minutes",
+        "districtSource": "roll call, July 2026 minutes",
         "name": "Ricardo “Rick” Sandoval"
       }
     ],
     "seats": 3,
-    "sourceUrl": "https://cms2.revize.com/revize/knoxcounty/Board%20Minutes%20June%202026.pdf"
+    "sourceUrl": "https://cms2.revize.com/revize/knoxcounty/Board%20Minutes%20July%202026.pdf"
   },
   "board": {
     "address": "Knox County Courthouse, 200 South Cherry Street, Galesburg, IL 61401",
-    "document": "Board Minutes June 2026.pdf",
-    "documentUrl": "https://cms2.revize.com/revize/knoxcounty/Board%20Minutes%20June%202026.pdf",
-    "meeting": "June 2026",
+    "document": "Board Minutes July 2026.pdf",
+    "documentUrl": "https://cms2.revize.com/revize/knoxcounty/Board%20Minutes%20July%202026.pdf",
+    "meeting": "July 2026",
     "note": "Members and districts come from the roll call of Knox County's own board minutes; the county's member page cannot be read by an automated client, so no per-member phone or e-mail is published here.",
     "phone": "(309) 345-3815",
     "phoneLabel": "County Clerk",
-    "sourceUrl": "https://www.knoxcountyil.gov/departments/county_board/"
+    "sourceUrl": "https://www.knoxcountyil.gov/county_board/county_board_members.php"
   }
 }

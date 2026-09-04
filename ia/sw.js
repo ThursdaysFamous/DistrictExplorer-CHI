@@ -27,7 +27,7 @@
 // template starts at -v1: the app shell, icons, and the starter data
 // files bootstrap_state.py builds.)
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "districtry-ia-shell-v4";
+const CACHE_NAME = "districtry-ia-shell-v5";
 
 const SHELL_URLS = [
   "./",
@@ -61,6 +61,7 @@ const GEOMETRY_URLS = [
   "./data/app/ia-judicial-districts.json",
   "./data/app/ia-community-colleges.json",
   "./data/app/dsm-wards.json",
+  "./data/app/ia-aeas.json",
 ];
 
 // Roster/officeholder data (also in data/app/) is refreshed by the weekly CI

@@ -48,7 +48,20 @@ import requests
 
 CMS_ROOT = "https://cms2.revize.com/revize/knoxcounty/"
 MINUTES_TEMPLATE = "Board Minutes {month} {year}.pdf"
-BOARD_PAGE = "https://www.knoxcountyil.gov/departments/county_board/"
+# The card's citation, never fetched here — this scraper reads the minutes
+# PDFs on CMS_ROOT. It was pinned at /departments/county_board/ until
+# 2026-09-03, which had become a 404: Knox keeps its board pages at the
+# site ROOT, not under /departments/. Nothing noticed because nothing
+# fetches this, and the weekly run stayed green while the card sent every
+# reader who clicked it to a missing page.
+#
+# It is also worth what it says about the host. This county is recorded as
+# refusing every request, and it does refuse a `requests` session — but a
+# stdlib client is served normally, the Kendall/McHenry shape. That page
+# names all fifteen members under their five district headings, so the
+# roster route this scraper takes through the minutes may not be the only
+# one available. Measuring that is its own change, not this one.
+BOARD_PAGE = "https://www.knoxcountyil.gov/county_board/county_board_members.php"
 
 MONTHS = ["January", "February", "March", "April", "May", "June", "July",
           "August", "September", "October", "November", "December"]

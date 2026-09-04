@@ -49,7 +49,7 @@ from datetime import datetime, timezone
 
 import requests
 from bs4 import BeautifulSoup
-from scraper_common import UA_CHROME_WIN_126_FULL  # noqa: E402  (shared machinery — do not fork)
+from scraper_common import fetch_stdlib, UA_CHROME_WIN_126_FULL  # noqa: E402  (shared machinery — do not fork)
 
 DIRECTORY_URL = "https://www.lakecountyil.gov/2336/Board-Members"
 HEADERS = {
@@ -91,6 +91,28 @@ def fetch_direct(retries=3, timeout=30):
             last_err = str(e)
         time.sleep(2 * (attempt + 1))
     raise RuntimeError("direct fetch failed: %s" % last_err)
+
+
+def fetch_stdlib_rung(retries=3, timeout=30):
+    """The stdlib stack with a real Chromium's client hints.
+
+    Measured 2026-09-03: this county's Cloudflare edge answers `requests` 403
+    and this stack 200 with the full 114 KB directory — the stack alone is
+    enough here, unlike the Akamai counties that also need the hints. Sits
+    between the direct rung and the Archive so a live page beats an archived
+    one, which is the whole point of an enrichment that names who chairs what.
+    """
+    last_err = None
+    for attempt in range(retries):
+        try:
+            html = fetch_stdlib(DIRECTORY_URL, timeout=timeout)
+            if not _looks_blocked(html):
+                return html, None
+            last_err = "bot-management interstitial"
+        except Exception as e:  # noqa: BLE001 — every rung failure escalates
+            last_err = str(e)
+        time.sleep(2 * (attempt + 1))
+    raise RuntimeError("stdlib fetch failed: %s" % last_err)
 
 
 def fetch_wayback():
@@ -139,21 +161,28 @@ def parse_members(html):
 def main():
     ap = argparse.ArgumentParser(description="Scrape Lake County Board leadership roles.")
     ap.add_argument("out", nargs="?", default=None, help="output JSON path (default: stdout)")
-    ap.add_argument("--engine", choices=["auto", "requests", "wayback"], default="auto")
+    ap.add_argument("--engine", choices=["auto", "requests", "stdlib", "wayback"], default="auto")
     args = ap.parse_args()
 
     archived_at = None
     if args.engine == "requests":
         html, archived_at = fetch_direct()
+    elif args.engine == "stdlib":
+        html, archived_at = fetch_stdlib_rung()
     elif args.engine == "wayback":
         html, archived_at = fetch_wayback()
     else:
         try:
             html, archived_at = fetch_direct()
         except Exception as e:
-            print("requests engine blocked (%s); falling back to the Internet Archive" % e,
+            print("requests engine blocked (%s); trying the stdlib rung" % e,
                   file=sys.stderr)
-            html, archived_at = fetch_wayback()
+            try:
+                html, archived_at = fetch_stdlib_rung()
+            except Exception as e2:
+                print("stdlib rung blocked (%s); falling back to the Internet Archive" % e2,
+                      file=sys.stderr)
+                html, archived_at = fetch_wayback()
 
     records = parse_members(html)
     payload = {
