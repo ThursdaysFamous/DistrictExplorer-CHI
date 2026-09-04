@@ -54,8 +54,8 @@ in the researched-but-unbuilt backlog.
   "chicago": ["il-supreme-court", "congress", "il-senate", "il-house", "county", "mwrd", "school-district-secondary", "school-district-unified", "school-district-elementary", "township", "municipality", "judicial-subcircuit", "county-board", "ccbr", "fire-district", "dupage-county-special-police", "park-district", "library-district", "school-board", "cps-hs-network", "cps-network", "ward-precinct", "ward", "police-beat", "police-district", "ccpsa-district-council", "community-area", "zip-code", "cps-high", "cps-middle", "county-precinct", "tif-district", "cps-elementary", "school-site", "police-station", "fire-station", "post-office", "library", "early-voting"],
   "nyc": ["borough", "judicial-district", "borough-president", "district-attorney", "congress", "municipal-court", "state-senate", "school-district", "cec", "fire-battalion", "council", "community-district", "election-district", "state-assembly", "police-sector", "police-precinct", "zip-code", "neighborhood", "hs-zone", "ms-zone", "es-zone", "school-site", "police-station", "fire-station", "post-office", "library", "early-voting"],
   "sf": ["congress", "ca-senate", "ca-assembly", "bart-director", "election-precinct", "supervisor-district", "police-district", "zip-code", "neighborhood", "elementary-attendance-area", "police-station", "fire-station", "school-site", "post-office", "library", "early-voting"],
-  "wisconsin": ["us-house", "wi-senate", "wi-assembly", "wi-circuit-court", "wi-court-of-appeals", "county", "school-district-secondary", "school-district-unified", "school-district-elementary", "county-board", "mps-school-board", "aldermanic-district", "county-subdivision", "ward", "municipality", "mpd-district", "mpd-squad-area", "milwaukee-neighborhoods", "tid-district", "fire-service", "law-service", "ems-service", "psap-area", "zip-code", "school-site", "library", "police-station", "fire-station", "post-office"],
-  "iowa": ["us-house", "ia-senate", "county", "ia-house", "county-supervisor", "school-district-unified", "school-director-district", "cc-director-district", "county-subdivision", "municipality", "zip-code", "post-office", "police-station", "fire-station", "school-site", "precinct", "ia-judicial-district", "community-college"],
+  "wisconsin": ["madison-neighborhood-assoc", "wtcs-district", "us-house", "wi-senate", "wi-assembly", "wi-circuit-court", "wi-court-of-appeals", "county", "school-district-secondary", "school-district-unified", "school-district-elementary", "county-board", "mps-school-board", "aldermanic-district", "county-subdivision", "ward", "municipality", "mpd-district", "mpd-squad-area", "milwaukee-neighborhoods", "tid-district", "fire-service", "law-service", "ems-service", "psap-area", "zip-code", "school-site", "library", "police-station", "fire-station", "post-office"],
+  "iowa": ["iowa-aea", "dsm-ward", "us-house", "ia-senate", "county", "ia-house", "county-supervisor", "school-district-unified", "school-director-district", "cc-director-district", "county-subdivision", "municipality", "zip-code", "post-office", "police-station", "fire-station", "school-site", "precinct", "ia-judicial-district", "community-college"],
   "michigan": ["us-house", "mi-senate", "county", "mi-house", "county-commissioner"]
 }
 ```
@@ -2106,7 +2106,7 @@ v1.0.6) · **CountyDispatch** `registerCountyLayer` (CHI fork-level dispatcher: 
 concept layer holding a per-county entry table — see
 `docs/EXPANSION_GUIDE.md` Part 2; adding a county is a table entry, not a layer).
 
-Fleet totals: **Chicago 39 · NYC 27 · SF 16 · Wisconsin 31 · Iowa 19** layers.
+Fleet totals: **Chicago 39 · NYC 27 · SF 16 · Wisconsin 31 · Iowa 20 · Michigan 5** layers.
 
 ---
 

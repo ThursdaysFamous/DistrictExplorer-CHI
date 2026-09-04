@@ -3834,7 +3834,7 @@ function initMichiganExplorer() {
     { id: "iowa", label: "Iowa", url: "https://districtry.com/ia/", emoji: "🌽", explorerName: "districtry Iowa",
       bbox: { minLng: -96.64, minLat: 40.37, maxLng: -90.14, maxLat: 43.5 } },
     { id: "michigan", label: "Michigan", url: "https://districtry.com/mi/", emoji: "🚗", explorerName: "districtry Michigan",
-      bbox: { minLng: -90.42, minLat: 41.69, maxLng: -82.12, maxLat: 48.31 } }
+      bbox: { minLng: -87.6, minLat: 41.7, maxLng: -82.11, maxLat: 48.01 } }
   ];
   // FALLBACK district-number key list, fed through extractDistrictNumber
   // (which adds a name-field regex fallback for the layers whose number only
@@ -8366,19 +8366,20 @@ function initMichiganExplorer() {
       });
   }
 
-  // Statewide loader with the point-first hook (queryFeatureAt): TIGERweb
-  // answers "which feature holds this point" in one small spatial query, so a
-  // first click never waits on a multi-MB statewide download.
-  function tigerStatewideLoader(servicePath, layerIndex, outFields, label) {
-    var load = makeCached(function () {
-      return loadTigerLayer(servicePath, layerIndex, outFields, label);
-    });
-    load.atPoint = function (point) {
-      return loadArcGISPointGeoJSON(servicePath + "/" + layerIndex, point, outFields,
-        "STATE='" + STATE_FIPS + "'");
-    };
-    return load;
-  }
+  // NO POINT-FIRST STATEWIDE LOADER HERE, DELIBERATELY. Iowa carries a
+  // `tigerStatewideLoader` wrapping the engine's loadArcGISPointGeoJSON, so a
+  // first click on a multi-MB statewide layer resolves from one small remote
+  // spatial query instead of the whole download. Michigan was cloned from Iowa
+  // and inherited that helper — and never called it, because all five of its
+  // layers ship as pre-built same-origin files. Carrying it cost more than dead
+  // bytes: build_privacy_page.py MEASURES point-query layers by counting
+  // loadArcGISPointGeoJSON call sites minus its definition (it subtracts the
+  // definition precisely so an unused engine loader reads as zero), and the
+  // unused wrapper put a second call site in the file — so the published
+  // privacy page stated that one Michigan layer sends your exact selected point
+  // to a government server, when none does. Re-add the helper in the same
+  // change as the first live statewide layer that needs it (phase 3's precinct
+  // / township / school tier), never before: then the page's "1 layer" is true.
 
   /* ---------- 1. County — the instance's offline anchor ----------
    * Geometry is pre-built (TIGERweb State_County layer 1, STATE-filtered,

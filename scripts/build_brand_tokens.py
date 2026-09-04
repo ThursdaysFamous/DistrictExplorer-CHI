@@ -112,14 +112,25 @@ APP_SKIN_CHECKED = {
 # the token file's --faint on the assumption that this is the same colour.
 APP_SKIN_DIRECT = [("--faint", "faint")]
 
-# The fallback face, by its canonical text. Four surfaces carry a copy — the
-# shared shell, the three apps, and (via build_landing_page.FALLBACK_FACE) the
-# two root pages — and the overrides are computed numbers, so a copy that drifts
-# is a copy that stops holding the metrics without looking wrong.
+# The fallback face, by its canonical text. Nine surfaces carry a copy — the
+# shared shell, all six apps, and (via build_landing_page.FALLBACK_FACE) the two
+# root pages — and the overrides are computed numbers, so a copy that drifts is
+# a copy that stops holding the metrics without looking wrong.
+#
+# THIS LIST NAMED THREE APPS OUT OF SIX UNTIL MICHIGAN'S GO-LIVE, and the
+# .claude/skills/new-state-instance skill has named it a day-one registration
+# step the whole time — Wisconsin, Iowa and Michigan each skipped it, so
+# following the last port's precedent perpetuated the hole rather than closing
+# it. The omission was not harmless-because-redundant: the @font-face block
+# sits in UNFENCED authored CSS in each app (nearest preceding marker is
+# `GENERATED:END head-theme`), so compose_app.py's byte-parity never covered
+# it. All nine carry an identical block today, measured, so adding the three
+# was free. Note what the OK line counts is FILES, not instances.
 FACE_RE = re.compile(
     r"@font-face\s*\{[^}]*font-family:\s*'Barlow Fallback'[^}]*\}", re.S)
 FACE_CARRIERS = ["engine/shared/styles-subpage.txt",
                  "il/index.html", "ny/index.html", "ca/index.html",
+                 "wi/index.html", "ia/index.html", "mi/index.html",
                  "index.html", "privacy.html"]
 
 WORKSHEET_PALETTE = [("accent", "brand"), ("accent_deep", "brand-700"),

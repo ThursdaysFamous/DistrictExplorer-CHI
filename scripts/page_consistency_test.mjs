@@ -164,7 +164,23 @@ try {
           return { date: seen(document.getElementById("verified-date")),
                    feedback: seen(document.getElementById("feedback-btn")) };
         })(),
-        canonical: !!document.querySelector("link[rel=canonical]"),
+        // The VALUES, not merely the presence. Michigan's go-live found
+        // mi/sources.html serving Iowa's entire identity block — canonical,
+        // og:url, og:site_name, title and the whole ld+json graph still said
+        // districtry.com/ia/sources.html, because the page was cloned from
+        // Iowa and only its generated regions were ever regenerated. This gate
+        // PASSED it: `!!document.querySelector("link[rel=canonical]")` asks
+        // whether the tag is there and never what it says, and a canonical
+        // pointing at another instance's page is not a cosmetic slip — it asks
+        // Google to drop this page in favour of that one.
+        canonical: (document.querySelector("link[rel=canonical]") || {}).href || null,
+        ogUrl: (document.querySelector('meta[property="og:url"]') || {}).content || null,
+        // Every url on this fleet's own origin anywhere in the ld+json graph:
+        // @id, url, isPartOf, breadcrumb items. Read as text rather than by
+        // key name, so a graph that grows a key is covered without an edit.
+        jsonLdSelfUrls: [...document.querySelectorAll('script[type="application/ld+json"]')]
+          .flatMap((s) => (s.textContent || "")
+            .match(/https?:\/\/(?:www\.)?districtry\.com\/[^"\s]*/g) || []),
         ogTitle: !!document.querySelector('meta[property="og:title"]'),
         links: [...document.querySelectorAll("a[href]")].map((a) => a.getAttribute("href") || ""),
       }));
@@ -199,8 +215,35 @@ try {
         check(path, `${bar.role} text is readable on its own bar (${scheme})`,
               c >= 4.5, `${c.toFixed(2)}:1 — ${bar.fg} on ${bar.bg}`);
       }
-      check(path, "canonical", info.canonical);
+      check(path, "canonical", !!info.canonical);
       check(path, "og:title", info.ogTitle);
+
+      // --- the page's identity is its OWN ------------------------------------
+      // All 31 sitemap pages self-canonicalise exactly, measured 2026-09-03, so
+      // this is an equality rather than a prefix rule: a page that canonicalises
+      // anywhere but itself is either lying about which page it is, or is a
+      // deliberate change that should say so here.
+      const ownPath = (u) => { try { return new URL(u).pathname; } catch { return null; } };
+      if (info.canonical) {
+        check(path, `canonical names this page (${scheme})`,
+              ownPath(info.canonical) === path, info.canonical);
+      }
+      if (info.ogUrl) {
+        check(path, `og:url names this page (${scheme})`,
+              ownPath(info.ogUrl) === path, info.ogUrl);
+      }
+      // The ld+json graph legitimately points UP (isPartOf the instance's own
+      // site, a breadcrumb to its map) but never SIDEWAYS into a sibling
+      // instance. Checked as a prefix for that reason, where canonical is an
+      // equality. Root pages have no tag and are skipped rather than guessed at.
+      if (tag) {
+        const foreign = info.jsonLdSelfUrls.filter((u) => {
+          const pn = ownPath(u);
+          return pn && pn !== "/" && !pn.startsWith(`/${tag}/`);
+        });
+        check(path, `ld+json stays inside /${tag}/ (${scheme})`,
+              foreign.length === 0, foreign.slice(0, 3).join(" "));
+      }
 
       // GoatCounter cannot be reached from a sandbox and its failure is not a
       // page defect — it reproduces identically on every page including ones

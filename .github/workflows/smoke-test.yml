@@ -272,6 +272,24 @@ jobs:
       - name: Every instance is registered everywhere
         run: python3 scripts/validate_instance_registration.py
 
+      # EVERY SAME-ORIGIN FILE A PAGE ASKS FOR MUST BE IN THE TREE. Michigan's
+      # go-live found two of these by hand, minutes apart, in an instance that
+      # had already passed this whole battery twice: mi/index.html declared 18
+      # @font-face rules reading `url(fonts/*.woff2)` against an mi/fonts/ that
+      # did not exist, and named an og-image.png that did not exist. The first
+      # would have served the app in system fonts forever with no error and no
+      # red gate; the second would have broken every social preview. Nothing
+      # was going to catch either — validate_card_links.py probes ABSOLUTE urls
+      # over the network monthly (a relative href "is not its subject at all",
+      # in landing_test.mjs's own words) and an absolute url on our own
+      # not-yet-published path is indistinguishable from a site that is down;
+      # landing_test.mjs boots browsers only for the ROOT's pages; and a 404 on
+      # a font throws no console error, so no smoke test fails either. Surface
+      # is DISCOVERED from the tree, so a new instance is covered the day its
+      # folder exists. Stdlib only.
+      - name: Every same-origin asset a page names is in the tree
+        run: python3 scripts/validate_instance_assets.py
+
       # THE COVERAGE WASH IS A CLAIM, AND ITS GATE WAS IN NO WORKFLOW. Each
       # statewide instance ships a dissolved outline of its served counties;
       # --check validates that shipped ring against the instance's hand-listed
