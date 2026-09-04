@@ -1,0 +1,145 @@
+name: Update IA city officials roster
+
+# Weekly refresh of the elected officials of the FIVE Iowa cities whose own
+# pages a machine can read (ia/data/app/ia-city-officials.json, read by
+# ia/index.html's City card).
+#
+# FIVE OF 939, AND THAT RATIO IS THE POINT. On 2026-09-04 all 532 Iowa cities
+# that publish a website were swept for a council roster: 16 yielded one and
+# five cleared every check, against 407 cities publishing no website at all.
+# So this file is not the beginning of a statewide roster and must never be
+# described as one — `ia-municipal-officeholders` stays open for the other 932
+# (939 less these five and the two ward-electing cities, Des Moines and
+# Waterloo), and the City card says so on every one of their cards. The whole
+# measurement is in that gap record's blocker.
+#
+# ALL FIVE ELECT AT LARGE, so there is no geometry here and nothing to gate on:
+# a mayor and five council members apiece, riding the unit's identity card by
+# the fleet's at-large rule. Des Moines and Waterloo are Iowa's two cities that
+# elect by ward, and they are the separate `city-ward` layer with their own
+# weekly workflows.
+#
+# WHAT THIS RUN IS REALLY WATCHING is whether five small cities' hand-built
+# pages still parse. Three checks in the scraper decide it, and each is there
+# because a plausible-looking answer would otherwise ship:
+#
+#   * THE SEAT COUNT is what each city's own page publishes, counted at first
+#     build. A different number is either the page changing shape or the city
+#     changing its council, and both need a person.
+#   * NO NAME MAY APPEAR TWICE. This is the Waterloo lesson, earned on a city
+#     that is NOT in this list: its page repeats every member in a bio-link
+#     anchor, two of those anchors disagree with the member's own line, and one
+#     is a misspelling unique enough to survive a dedupe. A seat-count gate
+#     alone does NOT catch it — Waterloo parses to eight council members, an
+#     entirely ordinary council. Only the duplicate check demotes it.
+#   * EVERY OFFICIAL CARRIES AN E-MAIL. All 30 did at first build, so a
+#     shortfall is the page changing rather than a person declining to publish.
+#
+# AND THE BUILDER RE-TESTS EVERY ADDRESS against the name actually shipped, by
+# the same rule build_ia_county_officers.py applies: the officeholder's own
+# name in the local part, or an office mailbox. Six of the 30 sit on consumer,
+# provider or business domains — what a town of a few hundred people actually
+# has — so the test is what keeps an address that names somebody else off a
+# card, and re-running it against the SHIPPED name is what stops a name
+# correction leaving an address witnessed against the wrong person.
+
+on:
+  schedule:
+    - cron: "30 16 * * 5" # Friday 16:30 UTC (an hour after the city-contact join)
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-roster:
+    runs-on: ubuntu-latest
+    steps:
+      # Pushed and PR-opened as BOT_PR_TOKEN so the resulting PR actually runs
+      # CI. A PR opened with the default GITHUB_TOKEN fires no workflows
+      # (GitHub suppresses recursive triggers), which left every roster PR with
+      # zero checks. Falls back to github.token when the secret is absent, so
+      # the refresh still runs — it just goes back to opening unchecked PRs.
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.BOT_PR_TOKEN || github.token }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: pip install -c ia/scripts/requirements.txt requests
+
+      - name: Scrape the five cities' own council pages
+        run: python3 ia/scripts/ia_city_officials_scraper.py
+
+      - name: Rebuild the roster (every address re-witnessed against its name)
+        run: python3 ia/scripts/build_ia_city_officials.py
+
+      # Gate the regenerated data before it can reach a PR: the app must still
+      # parse and carry every layer, and every data/app file must be present,
+      # well formed and cached in exactly one service-worker list. node is
+      # preinstalled on ubuntu-latest.
+      - name: Validate app + data files
+        run: python3 ia/scripts/validate_index.py ia/index.html
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet -- ia/data/app/ia-city-officials.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open or update pull request
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.BOT_PR_TOKEN || github.token }}
+          # THE PR BODY IS AN env: BLOCK SCALAR, NOT A SHELL STRING, AND THAT IS
+          # LOAD-BEARING. A multi-line double-quoted string inside `run: |` puts
+          # its continuation lines at column 0, which ENDS the block scalar --
+          # GitHub then rejects the whole file as an invalid workflow and every
+          # run instant-fails with zero jobs. Two Iowa refreshes shipped that
+          # way and never executed a step; scripts/validate_workflow_deps.py
+          # now refuses it. A block scalar keeps every line indented and YAML
+          # strips the common indent back off, so the markdown arrives clean.
+          PR_BODY: |
+            Automated weekly refresh of the City card's officials block for the five Iowa cities that publish a readable council page — Moravia, Norwalk, Palo, Riverside and Tiffin — generated by `ia/scripts/build_ia_city_officials.py` from `ia_city_officials_scraper.py`.
+
+            Please review the diff before merging — this changes data about real officeholders.
+
+            **Two things worth reading closely here.** A name changing spelling matters more than usual: the shipped e-mail addresses are witnessed against the name they are attached to, so a scrape that slips a name will also silently re-witness an address. And six of the 30 published addresses sit on consumer, provider or business domains rather than a city one — that is what these small cities actually publish as official contact, not a parse error, and the builder's address test is what decides each of them.
+
+            This is **five cities out of 939** and must not be described as a statewide roster; `ia-municipal-officeholders` stays open for the other 932.
+        run: |
+          # Fixed branch (not per-run): an unmerged roster PR is refreshed in
+          # place by the force-push below instead of spawning a duplicate PR
+          # every week.
+          branch="bot/ia-city-officials-roster-update"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          # Cut the branch from main's CURRENT tip, not from the checkout this
+          # run started with. actions/checkout is shallow, and if main gains a
+          # .github/workflows/ change meanwhile, the branch ends up differing
+          # from main THERE too — which GitHub reads as the push updating a
+          # workflow and refuses for a token without `workflow` scope. Measured
+          # 2026-09-02 on update-municipal-officials.
+          git fetch --depth=1 origin main
+          git checkout -B "$branch" FETCH_HEAD
+          git add ia/data/app/ia-city-officials.json
+          git commit -m "Update the five-city Iowa city officials roster from the cities' own pages"
+          git push -u origin "$branch" --force
+          # Only open a PR if one isn't already open for this branch; if it is,
+          # the force-push above already updated it.
+          if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then
+            gh pr create \
+              --title "Update the five-city Iowa city officials roster from the cities' own pages" \
+              --body "$PR_BODY" \
+              --base main \
+              --head "$branch"
+          else
+            echo "PR already open for $branch; force-push refreshed it."
+          fi

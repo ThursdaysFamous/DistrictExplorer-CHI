@@ -1,0 +1,200 @@
+{
+ "1953985": {
+  "city": "Moravia",
+  "members": [
+   {
+    "email": "roy_miller37@yahoo.com",
+    "name": "Roy Miller",
+    "phone": "641-895-1695",
+    "role": "Mayor"
+   },
+   {
+    "email": "john.batyelectric@gmail.com",
+    "name": "John Baty",
+    "phone": "641-724-9501",
+    "role": "Councilman"
+   },
+   {
+    "email": "kcmartin@iowatelecom.net",
+    "name": "Ken Martin",
+    "phone": "641-895-2735",
+    "role": "Councilman"
+   },
+   {
+    "email": "skirby447@gmail.com",
+    "name": "Sheila Kirby",
+    "phone": "641-724-9002",
+    "role": "Councilwoman"
+   },
+   {
+    "email": "wilsoncontractingllc@icloud.com",
+    "name": "Eric Wilson",
+    "phone": "515-346-4663",
+    "role": "Councilman"
+   },
+   {
+    "email": "tkramka@gmail.com",
+    "name": "Thomas Kramka",
+    "phone": "641-436-1164",
+    "role": "Councilman"
+   }
+  ],
+  "sourceUrl": "https://moraviaiowa.com/city-services/council-mayor/"
+ },
+ "1957675": {
+  "city": "Norwalk",
+  "members": [
+   {
+    "email": "mayor@norwalk.iowa.gov",
+    "name": "Tom Phillips",
+    "phone": "515-202-3710",
+    "role": "Mayor"
+   },
+   {
+    "email": "GMeinecke@norwalk.iowa.gov",
+    "name": "George Meinecke",
+    "role": "Mayor Pro Tem"
+   },
+   {
+    "email": "ekuhl@norwalk.iowa.gov",
+    "name": "Ed Kuhl",
+    "phone": "515-724-4557",
+    "role": "Council Member"
+   },
+   {
+    "email": "jbrown@norwalk.iowa.gov",
+    "name": "Jason Brown",
+    "role": "Council Member"
+   },
+   {
+    "email": "Kporter@norwalk.iowa.gov",
+    "name": "Kelsey Porter",
+    "phone": "618-670-1024",
+    "role": "Council Member"
+   },
+   {
+    "email": "Aboerjan@norwalk.iowa.gov",
+    "name": "Andy Boerjan",
+    "phone": "515-229-0454",
+    "role": "Council Member"
+   }
+  ],
+  "sourceUrl": "https://www.norwalk.iowa.gov/government/mayor___city_council.php"
+ },
+ "1961230": {
+  "city": "Palo",
+  "members": [
+   {
+    "email": "mayor@cityofpalo.com",
+    "name": "Bryan Busch",
+    "role": "Mayor"
+   },
+   {
+    "email": "taylorb@cityofpalo.com",
+    "name": "Taylor Burgin",
+    "role": "Council Member"
+   },
+   {
+    "email": "darrens@cityofpalo.com",
+    "name": "Darren Stoltenberg",
+    "role": "Council Member"
+   },
+   {
+    "email": "dough@cityofpalo.com",
+    "name": "Doug Hanover",
+    "role": "Council Member"
+   },
+   {
+    "email": "jenw@cityofpalo.com",
+    "name": "Jen Welton",
+    "role": "Council Member"
+   },
+   {
+    "email": "ericv@cityofpalo.com",
+    "name": "Eric Van Kerckhove",
+    "role": "Council Member"
+   }
+  ],
+  "sourceUrl": "https://cityofpalo.com/council"
+ },
+ "1967440": {
+  "city": "Riverside",
+  "members": [
+   {
+    "email": "mayor@riversideiowa.gov",
+    "name": "Allen Schneider",
+    "phone": "(319) 330-2102",
+    "role": "Mayor"
+   },
+   {
+    "email": "tsexton@riversideiowa.gov",
+    "name": "Tom Sexton",
+    "role": "Council Person"
+   },
+   {
+    "email": "kkiene@riversideiowa.gov",
+    "name": "Kevin Kiene",
+    "role": "Council Person"
+   },
+   {
+    "email": "emcguire@riversideiowa.gov",
+    "name": "Edgar McGuire",
+    "role": "Council Person"
+   },
+   {
+    "email": "rrogerson@riversideiowa.gov",
+    "name": "Ryan Rogerson",
+    "role": "Council Person"
+   },
+   {
+    "email": "lschneider@riversideiowa.gov",
+    "name": "Lois Schneider",
+    "phone": "(319) 648-3501",
+    "role": "Council Person"
+   }
+  ],
+  "sourceUrl": "https://riversideiowa.gov/government/mayor_and_council/"
+ },
+ "1978060": {
+  "city": "Tiffin",
+  "members": [
+   {
+    "email": "tkasparek@tiffin-iowa.org",
+    "name": "Tim Kasparek",
+    "phone": "319.359.0820",
+    "role": "Mayor"
+   },
+   {
+    "email": "eschnedler@tiffin-iowa.org",
+    "name": "Eric Schnedler",
+    "phone": "563.299.8250",
+    "role": "Council Member At Large"
+   },
+   {
+    "email": "torris@tiffin-iowa.org",
+    "name": "Tim Orris",
+    "phone": "319.461.1660",
+    "role": "Mayor Pro-Tem"
+   },
+   {
+    "email": "colney@tiffin-iowa.org",
+    "name": "Chris Olney",
+    "phone": "319.330.8600",
+    "role": "Council Member At Large"
+   },
+   {
+    "email": "tjohnson@tiffin-iowa.org",
+    "name": "Tony Johnson",
+    "phone": "319.331.3180",
+    "role": "Council Member At Large"
+   },
+   {
+    "email": "slimkemann@tiffin-iowa.org",
+    "name": "Skylar Limkemann",
+    "phone": "319.333.8594",
+    "role": "Council Member At Large"
+   }
+  ],
+  "sourceUrl": "https://www.tiffin-iowa.org/city_government/city_council.php"
+ }
+}
