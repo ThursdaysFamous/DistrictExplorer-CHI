@@ -5983,7 +5983,11 @@ function initMichiganExplorer() {
     "mi-senate",         // 38 Senate districts — larger on average than a county, smaller than a congressional district
     "county",            // 83 counties, pre-built from TIGERweb; the instance's offline anchor layer
     "mi-house",          // 110 House districts — the finest political tiling this instance ships today
-    "county-commissioner" // 619 districts across all 83 counties — the finest tiling this instance ships, smaller than a state House district
+    "school-district-unified", // 514 unified (K-12) districts covering all but 27 pockets of the state, live from TIGERweb (no data/app file) — 469 km2 mean feature area, the largest of the four fabric layers this phase adds
+    "school-district-elementary", // 27 districts that operate no high school of their own, live from TIGERweb (no data/app file) — 350 km2 mean feature area, though the mean is pulled well above the 45 km2 median by Bois Blanc Pines, whose district takes in a large area of Lake Huron
+    "county-commissioner", // 619 districts across all 83 counties — the finest tiling this instance ships, smaller than a state House district
+    "county-subdivision", // 1,581 records tiling the state, live from TIGERweb (no data/app file) — 1,122 general-law townships, 118 charter townships, 301 city placeholder records for 281 distinct cities (18 of which cross a county line), and 40 'not defined' records that are pure Great Lakes water
+    "municipality"       // 533 incorporated places, live from TIGERweb (no data/app file) — 281 cities and 252 villages, small dense pockets inside the township fabric, so the smallest layer this instance ships at a 12 km2 mean
   ];
   /* ==== GENERATED:END layer-area-rank ==== */
   /* ==== ENGINE:BEGIN layer-registry ==== */
@@ -8332,10 +8336,10 @@ function initMichiganExplorer() {
 
   /* ---------- Census TIGERweb loaders ----------
    * Generic — takes a full service path + layer index so one helper can
-   * serve any TIGERweb service. Not used by this instance's four pre-built
-   * layers (they all ship as static data/app/ files instead), but kept for
-   * the live-fetched layers a later phase adds (county-subdivision,
-   * municipality, zip-code — the WI/IA/IL pattern). ---------- */
+   * serve any TIGERweb service. The five launch layers all ship as static
+   * data/app/ files and never touch this; phase 3's four fabric layers
+   * (county-subdivision, municipality and the two school tilings) are live
+   * TIGERweb through tigerStatewideLoader below, the WI/IA/IL pattern. ---------- */
   var TIGERWEB_SERVICES = "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/";
 
   function loadTigerLayer(servicePath, layerIndex, outFields, label) {
@@ -8366,20 +8370,33 @@ function initMichiganExplorer() {
       });
   }
 
-  // NO POINT-FIRST STATEWIDE LOADER HERE, DELIBERATELY. Iowa carries a
-  // `tigerStatewideLoader` wrapping the engine's loadArcGISPointGeoJSON, so a
-  // first click on a multi-MB statewide layer resolves from one small remote
-  // spatial query instead of the whole download. Michigan was cloned from Iowa
-  // and inherited that helper — and never called it, because all five of its
-  // layers ship as pre-built same-origin files. Carrying it cost more than dead
-  // bytes: build_privacy_page.py MEASURES point-query layers by counting
-  // loadArcGISPointGeoJSON call sites minus its definition (it subtracts the
-  // definition precisely so an unused engine loader reads as zero), and the
-  // unused wrapper put a second call site in the file — so the published
-  // privacy page stated that one Michigan layer sends your exact selected point
-  // to a government server, when none does. Re-add the helper in the same
-  // change as the first live statewide layer that needs it (phase 3's precinct
-  // / township / school tier), never before: then the page's "1 layer" is true.
+  // Statewide loader with the point-first hook (queryFeatureAt): TIGERweb
+  // answers "which feature holds this point" in one small spatial query, so a
+  // first click never waits on a multi-MB statewide download. The full set
+  // still downloads for the map overlay, on toggle.
+  //
+  // THIS HELPER WAS DELETED AT GO-LIVE AND IS BACK ON PURPOSE. Michigan was
+  // cloned from Iowa and inherited it unused, because all five launch layers
+  // shipped as pre-built same-origin files — and carrying it cost more than
+  // dead bytes: build_privacy_page.py MEASURES point-query layers by counting
+  // loadArcGISPointGeoJSON call sites minus its definition, so the unused
+  // wrapper made the published privacy page say a Michigan layer sent your
+  // exact selected point to a government server when none did. The note left
+  // in its place said to re-add it "in the same change as the first live
+  // statewide layer that needs it, never before". This is that change: the
+  // four layers below are live TIGERweb, the point query is real, and the
+  // privacy page's count is true again for the opposite reason. Re-run
+  // scripts/build_privacy_page.py with any change to this block.
+  function tigerStatewideLoader(servicePath, layerIndex, outFields, label) {
+    var load = makeCached(function () {
+      return loadTigerLayer(servicePath, layerIndex, outFields, label);
+    });
+    load.atPoint = function (point) {
+      return loadArcGISPointGeoJSON(servicePath + "/" + layerIndex, point, outFields,
+        "STATE='" + STATE_FIPS + "'");
+    };
+    return load;
+  }
 
   /* ---------- 1. County — the instance's offline anchor ----------
    * Geometry is pre-built (TIGERweb State_County layer 1, STATE-filtered,
@@ -8576,6 +8593,309 @@ function initMichiganExplorer() {
                "commissioners who have since died, resigned or been replaced — so this app " +
                "does not repeat it. Your county's own board page is the current source." }
     ]
+  });
+
+
+  /* ---------- 6. County Subdivision — live TIGERweb ----------
+   * The WI/IA module with Michigan's own civil-division vocabulary. Live
+   * TIGERweb fetch (no builder script, no committed data/app file), so a
+   * TIGER vintage roll reaches this layer on its own.
+   *
+   * MICHIGAN IS THE STATE WHERE THIS LAYER AND THE MUNICIPALITY LAYER
+   * ANSWER DIFFERENT QUESTIONS, and the cards say so rather than leaving a
+   * reader to work it out. Measured 2026-09-04 across all 1,581 records:
+   *   1,122  LSADC 44, FUNCSTAT A — general-law townships
+   *     118  LSADC 49, FUNCSTAT A — CHARTER townships (a real legal class
+   *          under the Charter Township Act, 1947 PA 359, not a label)
+   *     301  LSADC 25, FUNCSTAT F — the Census placeholder record for a
+   *          city, which in Michigan is INDEPENDENT of any township. 281
+   *          distinct cities; the other 20 records are the 18 cities that
+   *          cross a county line and get one record per county
+   *      40  LSADC 00, FUNCSTAT F — "County subdivisions not defined", the
+   *          Great Lakes water in the 40 lakeshore counties. Measured to
+   *          0 m2 of land and 91,090 km2 of water, so a mid-lake click gets
+   *          a name and no type row rather than a guess
+   *
+   * A VILLAGE IS NOT HERE, AND THAT IS THE POINT. All 252 Michigan villages
+   * were tested against this layer at their TIGER interior points: every one
+   * lands inside a township (235 general-law, 17 charter), zero exceptions.
+   * So a village resident is governed by BOTH — the village on the City or
+   * Village card, the township on this one — where a city resident is
+   * governed by the city alone. Each card names the other.
+   *
+   * The TYPE row is read from what TIGER's own NAME carries beyond BASENAME
+   * ("Sugar Island" + " township", "Ypsilanti" + " charter township") rather
+   * than from LSADC, so the card can never disagree with the name printed
+   * above it — and the charter/general-law distinction comes free, with no
+   * second source to go stale. Measured: the four LSADC values yield exactly
+   * four suffixes, 1,581 of 1,581.
+   *
+   * NO OFFICEHOLDER. Michigan townships elect a supervisor, clerk, treasurer
+   * and trustees (MCL 41.61, 42.3 for charter townships), and no statewide
+   * roster of them was found — the card names the office and says plainly
+   * that this app does not know who holds it, which is the honesty floor.
+   * Recorded as gap mi-township-officers. ---------- */
+  var loadCountySubdivisions = tigerStatewideLoader(
+    TIGERWEB_SERVICES + "Places_CouSub_ConCity_SubMCD/MapServer", 1,
+    "GEOID,NAME,BASENAME,STATE,COUNTY,LSADC", "county subdivisions");
+
+  registerLayer({
+    id: "county-subdivision",
+    group: "geography",
+    label: "Township or City",
+    // Every subdivision belongs to exactly one county BY CONSTRUCTION, not by
+    // assumption: TIGER's own GEOID is state + county + subdivision
+    // ("2603377020" is Sugar Island township, county 033), so the containment
+    // is in the key. Both layers sit in `geography`, so the cross-group
+    // nesting ban (docs/EXPANSION_GUIDE.md Part 4) does not bite. The cost is
+    // stated rather than discovered: subOf hides a child whenever any ancestor
+    // is off, so turning County off takes this card with it.
+    subOf: "county",
+    // long-dash brown — reads apart from Municipality's tight magenta dots
+    overlay: {
+      load: loadCountySubdivisions,
+      style: { color: "#7A5C3E", weight: 1.5, fillColor: "#A98B6C", fillOpacity: 0.05, dashArray: "7 3" }
+    },
+    hoverName: function (feature) {
+      var name = findPropCI(feature.properties || {}, ["name"]);
+      return name != null ? String(name) : null;
+    },
+    query: function (point, seq) {
+      // point-first (queryFeatureAt): one subdivision polygon instead of the
+      // statewide download gating the first click
+      return queryFeatureAt(loadCountySubdivisions, point).then(function (feature) {
+        if (!feature) return null;
+        var props = feature.properties || {};
+        var name = findPropCI(props, ["name"]);
+        var base = findPropCI(props, ["basename"]);
+        return {
+          seq: seq,
+          name: name,
+          // the civil-division type, taken from what TIGER's own NAME carries
+          // beyond its BASENAME, so the card can never disagree with the name
+          // printed above it
+          kind: (name != null && base != null &&
+                 String(name).indexOf(String(base)) === 0)
+            ? String(name).slice(String(base).length).trim().toLowerCase()
+            : null,
+          geoid: findPropCI(props, ["geoid"])
+        };
+      });
+    },
+    render: function (result) {
+      var wrap = cardEl("div", "card-flush");
+      wrap.appendChild(renderBodyIntro({
+        title: result.name != null ? String(result.name) : "Unknown subdivision",
+        note: result.geoid != null ? "GEOID " + String(result.geoid) : null
+      }));
+      var KIND_NOTE = {
+        "township": "General-law township — an active local government, " +
+          "electing a supervisor, clerk, treasurer and trustees (MCL 41.61). " +
+          "A village inside it is a separate government on top, not instead: " +
+          "if this point is in one, the City or Village card names it.",
+        "charter township": "Charter township — an active local government " +
+          "incorporated under the Charter Township Act (1947 PA 359), which " +
+          "gives it broader powers and stronger protection from annexation " +
+          "than a general-law township, and the same elected board. A village " +
+          "inside it is a separate government on top, not instead.",
+        "city": "This is the Census Bureau's placeholder subdivision record " +
+          "for a city. A Michigan city is independent of any township, so " +
+          "there is no township government under this point — the city on the " +
+          "City or Village card is the local government here."
+      };
+      // no row rather than a guessed one: the 40 "County subdivisions not
+      // defined" records are the Great Lakes water and are none of the three
+      if (result.kind && KIND_NOTE[result.kind]) {
+        wrap.appendChild(renderFieldStack([
+          { label: "Type", value: KIND_NOTE[result.kind] }
+        ]));
+      }
+      // WHO HOLDS THE OFFICE, said as the open question it is. Only a township
+      // has an officer this card would name; a city's people belong on the
+      // city's own card, and the water records have no government at all.
+      if (result.kind === "township" || result.kind === "charter township") {
+        wrap.appendChild(renderFieldStack([{
+          label: "Your township board",
+          value: "Not named here. No statewide roster of Michigan's township " +
+            "supervisors, clerks, treasurers and trustees was found, and this " +
+            "app does not guess one — your township's own website is the " +
+            "current source."
+        }]));
+      }
+      return wrap;
+    }
+  });
+
+  /* ---------- 7. City or Village — live TIGERweb, incorporated places ----------
+   * Michigan incorporates BOTH cities and villages and they are not the same
+   * kind of thing, which is why this card carries a type row where Iowa's
+   * (cities only) does not. Measured 2026-09-04 across all 533 records:
+   *   280  LSADC 25, PLACECC C5 — cities, independent of any township
+   *     1  LSADC 25, PLACECC C6 — St. Louis city (Gratiot County), which the
+   *        Census classes as coextensive with its subdivision rather than
+   *        independent of it; the card treats it as the city it is
+   *   252  LSADC 47, PLACECC C1 — villages, which REMAIN part of their
+   *        township. C1 is the Census's own code for "does not serve as a
+   *        county subdivision equivalent", so the two publishers' class codes
+   *        and Michigan's own law say the same thing.
+   *
+   * The empty state reads as a fact about the place rather than a failed
+   * lookup: most of Michigan's land is unincorporated township, which IS an
+   * answer, and the Township or City card is the one that names it.
+   *
+   * NO OFFICEHOLDER. No statewide source names Michigan's mayors, village
+   * presidents, council members or clerks — the Michigan Municipal League's
+   * directory is membership-facing and the state publishes no aggregate — so
+   * the card names no one rather than guessing. Recorded as gap
+   * mi-municipal-officeholders; per-city rosters are later phase work, the
+   * route every other instance took. ---------- */
+  var loadPlaces = tigerStatewideLoader(
+    TIGERWEB_SERVICES + "Places_CouSub_ConCity_SubMCD/MapServer", 4,
+    "GEOID,NAME,BASENAME,STATE,LSADC", "incorporated places");
+
+  registerLayer({
+    id: "municipality",
+    group: "geography",
+    label: "City or Village",
+    // the honest words for "outside every incorporated place in Michigan",
+    // which is a fact about the place and not a failed lookup
+    emptyNote: "This point is not in a city or village. Most of Michigan's " +
+      "land is unincorporated township, so a point there sits in no " +
+      "municipality of this kind — the Township or City card names the " +
+      "township it is in.",
+    overlay: {
+      load: loadPlaces,
+      // tight magenta dots; an empty card here honestly means "unincorporated"
+      style: { color: "#B0316E", weight: 1.5, fillColor: "#D06A9C", fillOpacity: 0.05, dashArray: "2 3" }
+    },
+    hoverName: function (feature) {
+      var name = findPropCI(feature.properties || {}, ["name"]);
+      return name != null ? String(name) : null;
+    },
+    query: function (point, seq) {
+      // point-first (queryFeatureAt): one place polygon instead of the
+      // statewide incorporated-places download
+      return queryFeatureAt(loadPlaces, point).then(function (feature) {
+        if (!feature) return null; // unincorporated — the engine renders emptyNote
+        var props = feature.properties || {};
+        var name = findPropCI(props, ["name"]);
+        var base = findPropCI(props, ["basename"]);
+        return {
+          seq: seq,
+          name: name,
+          // same NAME-minus-BASENAME technique as the subdivision card, for
+          // the same reason: the type can never contradict the name above it
+          kind: (name != null && base != null &&
+                 String(name).indexOf(String(base)) === 0)
+            ? String(name).slice(String(base).length).trim().toLowerCase()
+            : null,
+          geoid: findPropCI(props, ["geoid"])
+        };
+      });
+    },
+    render: function (result) {
+      var wrap = cardEl("div", "card-flush");
+      wrap.appendChild(renderBodyIntro({
+        title: result.name != null ? String(result.name) : "Unknown place",
+        note: result.geoid != null ? "FIPS " + String(result.geoid) : null
+      }));
+      var KIND_NOTE = {
+        city: "City — independent of any township, so this city is the only " +
+          "general-purpose local government over this point. The Township or " +
+          "City card shows the Census placeholder record for the same city, " +
+          "not a second government.",
+        village: "Village — an incorporated municipality that REMAINS part of " +
+          "its township. So this point has two general-purpose local " +
+          "governments over it, and the Township or City card names the other."
+      };
+      if (result.kind && KIND_NOTE[result.kind]) {
+        wrap.appendChild(renderFieldStack([
+          { label: "Type", value: KIND_NOTE[result.kind] }
+        ]));
+      }
+      wrap.appendChild(renderFieldStack([{
+        label: "Your mayor or council",
+        value: "Not named here. No statewide source names Michigan's mayors, " +
+          "village presidents, council members or clerks, and this app does " +
+          "not guess — this municipality's own website is the current source."
+      }]));
+      return wrap;
+    }
+  });
+
+  /* ---------- 8-9. School District (Unified / Elementary) ----------
+   * TIGER's three school tilings are mutually exclusive, and Michigan runs
+   * only two of them. Measured 2026-09-04 against TIGERweb School/MapServer
+   * for STATE='26': layer 0 (unified) 514 districts, layer 2 (elementary) 27,
+   * layer 1 (SECONDARY) ZERO — recorded as a drop in
+   * docs/DATA_LAYER_GUIDEBOOK.md rather than shipped as an empty toggle,
+   * because Michigan has no union-high tier for one to pair with.
+   *
+   * THE 27 ARE NOT OPTIONAL AND THE MEASUREMENT SAYS WHY. They are gap-fills,
+   * not overlays: at all 27 interior points the unified layer returns nothing,
+   * and at every unified district's interior point the elementary layer
+   * returns nothing. Shipping the unified layer alone would answer "no school
+   * district" to everyone living in one of the 27 — Bois Blanc Pines, Moran
+   * Township, Big Jackson and the rest — which is a wrong answer, not a
+   * missing one.
+   *
+   * That test has one trap worth recording: run against TIGER's CENTLAT/
+   * CENTLON (the mathematical centroid, which for a non-convex polygon can
+   * fall outside its own shape) it reports one false overlap, Oneida Township
+   * School District 3 reading as inside Grand Ledge Public Schools. Against
+   * INTPTLAT/INTPTLON, the interior point TIGER guarantees is inside, it is
+   * 27 of 27 clean. USE INTPT*, NEVER CENT*, for any "is this point inside"
+   * probe of a TIGER layer.
+   *
+   * Michigan school boards ARE elected (MCL 380.11a et seq.), and no
+   * statewide roster of the ~540 boards' members was found; both cards name
+   * the district only. Recorded as gap mi-school-board-members. ---------- */
+  var loadSchoolDistrictsUnified = tigerStatewideLoader(
+    TIGERWEB_SERVICES + "School/MapServer", 0,
+    "GEOID,NAME,STATE,LOGRADE,HIGRADE", "unified school districts");
+  var loadSchoolDistrictsElementary = tigerStatewideLoader(
+    TIGERWEB_SERVICES + "School/MapServer", 2,
+    "GEOID,NAME,STATE,LOGRADE,HIGRADE", "elementary school districts");
+
+  registerPolygonLayer({
+    id: "school-district-unified",
+    group: "schools",
+    label: "School District (Unified)",
+    loader: loadSchoolDistrictsUnified,
+    // The counterpart of the elementary layer's note, and it is needed for the
+    // same reason in the other direction: without it a reader in one of the 27
+    // saw the engine's generic "isn't inside any district in this layer", which
+    // reads like a lookup that failed rather than the answer it is. Caught by
+    // rendering both cards at Bois Blanc against the real TIGERweb responses —
+    // no gate covers this, because both layers are live-fetched and the smoke
+    // test only classifies pre-built anchors.
+    emptyNote: "This point is not in a unified (K-12) school district. It is " +
+      "in one of Michigan's 27 elementary school districts instead — the " +
+      "School District (Elementary) card names it.",
+    style: { color: "#2F6B3A", weight: 1.5, fillColor: "#4C8F59", fillOpacity: 0.05, dashArray: "8 3" },
+    fields: [
+      { name: "name", label: "District", keys: ["name"], primary: true },
+      { name: "geoid", label: "GEOID", keys: ["geoid"] }
+    ],
+    compact: true, compactMetaField: "geoid" // 4b name-only card
+  });
+
+  registerPolygonLayer({
+    id: "school-district-elementary",
+    group: "schools",
+    label: "School District (Elementary)",
+    loader: loadSchoolDistrictsElementary,
+    // the honest words for the 96% of Michigan this layer does not cover: the
+    // point is in a unified district, which the card above it names
+    emptyNote: "This point is not in one of Michigan's 27 elementary school " +
+      "districts. Almost all of the state is covered by a unified (K-12) " +
+      "district instead — the School District (Unified) card names it.",
+    style: { color: "#B26A00", weight: 1.5, fillColor: "#D19133", fillOpacity: 0.05, dashArray: "3 3" },
+    fields: [
+      { name: "name", label: "District", keys: ["name"], primary: true },
+      { name: "geoid", label: "GEOID", keys: ["geoid"] }
+    ],
+    compact: true, compactMetaField: "geoid" // 4b name-only card
   });
 
   /* ==== ENGINE:BEGIN hover-explorer ==== */
@@ -9137,7 +9457,9 @@ function initMichiganExplorer() {
   // standard"): representation first, then services, then geography broad ->
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
-  var LAYER_SIDEBAR_RANK = ["us-house", "mi-senate", "mi-house", "county-commissioner", "county"];
+  var LAYER_SIDEBAR_RANK = ["us-house", "mi-senate", "mi-house", "county-commissioner",
+    "school-district-unified", "school-district-elementary",
+    "county", "county-subdivision", "municipality"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -9235,8 +9557,10 @@ function initMichiganExplorer() {
      when a layer colour moves and its dark counterpart does not. */
   /* ==== GENERATED:BEGIN dark-map-palette ==== */
   var DST_DARK_MAP_COLORS = { "#14181C": "#696F76", "#1B7A3D": "#58CD7A", "#2E9E6B": "#5BEAA5",
-    "#41B6E6": "#C6EBFE", "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD", "#6B7280": "#B1BBCE",
-    "#8C2E4A": "#F47294"};
+    "#2F6B3A": "#6FBE7B", "#41B6E6": "#C6EBFE", "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD",
+    "#4C8F59": "#83DC93", "#6B7280": "#B1BBCE", "#7A5C3E": "#CFA57D", "#8C2E4A": "#F47294",
+    "#A98B6C": "#F3CBA1", "#B0316E": "#FD88B8", "#B26A00": "#FFB15F", "#D06A9C": "#FFBDDA",
+    "#D19133": "#FED7A7"};
   /* ==== GENERATED:END dark-map-palette ==== */
   /* ==== ENGINE:BEGIN districtry-theme ==== */
   /* The theme controller and the wordmark fleet switch, shared for the same

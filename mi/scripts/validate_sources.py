@@ -152,11 +152,34 @@ PROVENANCE = [
 ]
 
 ENDPOINTS = [
-    # This instance's layers all ship as pre-built data/app/ files, so there is
-    # no live runtime endpoint to watch here yet. The commissioner layer's
-    # source is watched through PROVENANCE above (it is a built file), and its
-    # real staleness signal is the AGO ITEM's `modified` timestamp rather than
-    # anything on the state's REST endpoint — see that entry's note.
+    # Phase 3's four fabric layers are LIVE TIGERweb — no builder, no committed
+    # data/app file — so a vintage roll reaches them on its own and there is
+    # nothing here to rebuild. What this list watches is the endpoint still
+    # ANSWERING FOR MICHIGAN: each of these is a returnCountOnly query on
+    # STATE='26', so a service moved, renamed or silently emptied for this state
+    # surfaces as a WARN instead of as four cards that quietly stop resolving.
+    #
+    # The counts below are measured 2026-09-04 and are recorded, not asserted:
+    # this validator reports, it never edits the app. MCD 1,581 · places 533 ·
+    # unified school districts 514 · elementary school districts 27. School
+    # layer 1 (SECONDARY) answers ZERO for Michigan and is a recorded drop, so
+    # it is deliberately not watched here — there is no layer for it to break.
+    {
+        "layer": "county-subdivision",
+        "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Places_CouSub_ConCity_SubMCD/MapServer/1/query?where=STATE%3D%2726%27&returnCountOnly=true&f=json",
+    },
+    {
+        "layer": "municipality",
+        "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Places_CouSub_ConCity_SubMCD/MapServer/4/query?where=STATE%3D%2726%27&returnCountOnly=true&f=json",
+    },
+    {
+        "layer": "school-district-unified",
+        "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/School/MapServer/0/query?where=STATE%3D%2726%27&returnCountOnly=true&f=json",
+    },
+    {
+        "layer": "school-district-elementary",
+        "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/School/MapServer/2/query?where=STATE%3D%2726%27&returnCountOnly=true&f=json",
+    },
 ]
 FAIL, WARN, OK = "FAIL", "WARN", "OK"
 

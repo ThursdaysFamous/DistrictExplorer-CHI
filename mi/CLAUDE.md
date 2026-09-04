@@ -8,13 +8,38 @@ districtry Michigan: a single-file, dependency-light web app. Click a point in M
 search an address) and it reports every civic district containing that point and who
 represents you there. It serves at **districtry.com/mi/** as a folder of the consolidated
 districtry repo — following the Wisconsin/Iowa shape (`docs/EXPANSION_GUIDE.md` Part 2), not
-the Illinois root-scripts shape. It ships FIVE layers. Four are the national tier every U.S.
-state can serve from national publishers: **County** (83, from Census TIGERweb, identity-only),
-**U.S. House** (13 districts, TIGERweb geometry joined to the public-domain
-unitedstates/congress-legislators roster, refreshed weekly), and **Michigan Senate** /
-**Michigan House** (38 and 110 districts, TIGERweb geometry joined to Open States' current-people
-export). The fifth is **County Commissioner** (619 districts across all 83 counties), the layer
+the Illinois root-scripts shape. It ships NINE layers, in three tiers.
+
+**The national tier** — four layers every U.S. state can serve from national publishers:
+**County** (83, from Census TIGERweb, identity-only), **U.S. House** (13 districts, TIGERweb
+geometry joined to the public-domain unitedstates/congress-legislators roster, refreshed
+weekly), and **Michigan Senate** / **Michigan House** (38 and 110 districts, TIGERweb geometry
+joined to Open States' current-people export).
+
+**The flagship** — **County Commissioner** (619 districts across all 83 counties), the layer
 Michigan was chosen for.
+
+**The fabric** (phase 3, 2026-09-04) — four LIVE TIGERweb layers, no builder and no committed
+`data/app` file between them, so a vintage roll reaches all four on its own: **Township or
+City** (`county-subdivision`, 1,581), **City or Village** (`municipality`, 533), **School
+District (Unified)** (514) and **School District (Elementary)** (27). Two things about that
+tier are Michigan-specific and are the reason its cards read differently from Iowa's or
+Wisconsin's. First, **a Michigan CITY is independent of any township while a VILLAGE remains
+part of one** — measured across all 252 villages at their TIGER interior points, every one
+lands inside a township (235 general-law, 17 charter), zero exceptions — so a village resident
+has two general-purpose local governments and each card names the other. Second, **the
+charter/general-law township split costs no second source**: it is read from what TIGER's own
+NAME carries beyond BASENAME, the same technique the type row already used, so it can never
+disagree with the name printed above it (1,122 general-law, 118 charter). School layer 1
+(SECONDARY) measures ZERO for Michigan and is a recorded drop rather than an empty toggle; the
+27 elementary districts are GAP-FILLS the unified layer does not cover, so shipping unified
+alone would have answered "no school district" to everyone living in one of them.
+
+**NONE OF THE FABRIC NAMES A PERSON, AND EVERY CARD SAYS SO.** Three gaps are recorded —
+`mi-township-officers`, `mi-municipal-officeholders`, `mi-school-board-members` — because no
+statewide roster of township boards, municipal officials or school boards was found, and
+unlike the commissioner layer there is not even a stale name to reject: the Census fabric
+carries geography and no officeholder field at all.
 
 **THE FLAGSHIP LAYER IS `county-commissioner`, AND IT SHIPPED 2026-09-03**; it is the reason
 Michigan was chosen as the fleet's sixth state ahead of four other candidates. The
@@ -71,8 +96,8 @@ every other instance via `scripts/compose_app.py`.
 
 - Metro: Michigan (`michigan`) — https://districtry.com/mi/
 - Geocoders: address Photon (Michigan-bounded type-ahead); unbounded Photon (whole-coverage, sibling-metro lookup); POI Nominatim (office-address pin lookup, Michigan-bounded, serial >=1s queue)
-- Ground truth: 42.73370,-84.55530 (the Michigan State Capitol, downtown Lansing (Ingham County)) → county Ingham County; us-house 7; mi-senate 21; mi-house 77; county-commissioner 9. Negative point 41.65280,-83.53790 (downtown Toledo, Ohio — south of the Michigan line and inside permalink_gate's minLat (41.55), so the point is still selectable; measured to miss all five layers).
-- Layers: 5 registered (political 4, geography 1); `registerLayer(` floor 4. Debug namespace `window.MichiganExplorer`.
+- Ground truth: 42.73370,-84.55530 (the Michigan State Capitol, downtown Lansing (Ingham County)) → county Ingham County; us-house 7; mi-senate 21; mi-house 77; county-commissioner 9. Negative point 41.65280,-83.53790 (downtown Toledo, Ohio — south of the Michigan line and inside permalink_gate's minLat (41.55), so the point is still selectable; measured to miss all five ANCHOR layers (phase 3's four live TIGERweb fabric layers are deliberately not anchors — anchors are pre-built and election-stable)).
+- Layers: 9 registered (political 4, schools 2, geography 3); `registerLayer(` floor 6. Debug namespace `window.MichiganExplorer`.
 - Scheduled workflows: `update-mi-congress-roster.yml` (Mon 15:30 UTC); `update-mi-legislature-roster.yml` (Tue 15:30 UTC); `mi-validate-sources.yml` (1st of month 16:00 UTC).
 - Source registry: `mi/scripts/validate_sources.py` (machine-checked monthly)
 <!-- ==== GENERATED:END metro-facts ==== -->

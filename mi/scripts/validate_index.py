@@ -79,23 +79,26 @@ CAPABILITIES = [
 
 # The constants below are GENERATED from metro-worksheet.json (Conversion 2 —
 # edit the worksheet, run scripts/generate_metro_files.py). Fork history worth
-# keeping by hand: this fork's registerLayer floor arithmetic is 1 function
-# definition + 11 direct registerLayer() calls + 5 factory bodies; it was
-# lowered 16 -> 15 when police-station/fire-station moved onto the
-# registerNearestPointLayer factory (-2 direct calls, +1 body), and raised
-# 15 -> 17 when the municipality (2026-07) and township (2026-08-19)
-# identity layers became bespoke roster-joined blocks (+1 direct call each).
+# keeping by hand: this instance's registerLayer floor arithmetic is 1 function
+# definition + 5 factory bodies + 3 direct registerLayer() calls (county, and
+# phase 3's county-subdivision and municipality) = 9 today, against a floor of
+# 6. THE PARAGRAPH THAT USED TO SIT HERE WAS ILLINOIS'S, inherited verbatim
+# when this validator was cloned: it described 11 direct calls, a
+# police-station/fire-station move and a township layer, none of which this
+# instance has ever had. The same stale paragraph is still in ia/ and wi/.
 # ==== GENERATED:BEGIN validator-config ====
 # Floor, not a moving target: new layers only raise this; a drop means
 # modules were lost.
-MIN_REGISTER_LAYER = 4
+MIN_REGISTER_LAYER = 6
 
 # Every layer id that must be registered in index.html. Most modules register
 # through the factories, so deleting one would NOT lower the raw registerLayer(
 # count above — this per-id list is the direct module-loss guard. Emitted in
 # LAYER_AREA_RANK order; check 5 keeps the two naming the same set.
 EXPECT_LAYER_IDS = [
-    "us-house", "mi-senate", "county", "mi-house", "county-commissioner",
+    "us-house", "mi-senate", "county", "mi-house", "school-district-unified",
+    "school-district-elementary", "county-commissioner", "county-subdivision",
+    "municipality",
 ]
 
 # file -> (min features, max features) for the boundary layers fetched by the app.
