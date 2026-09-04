@@ -580,7 +580,7 @@ official's name wrong is the cheapest possible way to lose a reader.
 > Dear Clerk Lee,
 >
 > Thank you again for your reply in August. Knowing the board is elected by districts let
-> me build Clark County's twelve districts from your office's own certified canvasses, and
+> me build Clark County's seven districts from your office's own certified canvasses, and
 > the county has been live on districtry (https://districtry.com/il/) since then —
 > a resident can click their address and see their board district, their member and their
 > precinct.
@@ -670,7 +670,7 @@ Jennifer Harper, Piatt County Clerk — `countyclerk@piatt.gov`
 |---|---|---|---|---|
 | Ford | Kelsie Vaughn, `clerk@fordcounty.illinois.gov` | 3 Aug | 16 Aug | 2nd follow-up |
 | Christian | Jodie Badman, `elections@christiancountyil.com` | 5 Aug (+ the Taylorville 9 question 21 Aug) | 16 Aug | 2nd follow-up |
-| Piatt | Jennifer Harper, `countyclerk@piatt.gov` | 3 Aug | 16 Aug | 2nd follow-up |
+| Piatt | Jennifer Harper, `countyclerk@piatt.gov` | 3 Aug | 16 Aug | 2nd follow-up — **NARROWED 2026-09-04**, see below |
 | Knox | Scott G. Erickson, `serickson@knoxcountyil.gov` | 5 Aug | 16 and 24 Aug | already two — record UNRESPONSIVE if this one is silent |
 
 Each follow-up restates the ONE question and offers a no. The Ford one, as the shape:
@@ -702,3 +702,63 @@ point at which `knox-precinct-geometry` records the ROUTE as unresponsive — a 
 this ask, never about the county. Note also that Knox's own board-members page turned out
 to be readable after all (2026-09-03), so the county is less dark than its record implied;
 the precinct question is the part still genuinely open.
+
+---
+
+## Ask 13 — Adams County: an answered question, and the roster that is still open
+
+> **NOT YET ASKED — DRAFTED 2026-09-04**, as a reply on the clerk's own thread. This one is
+> a REPLY OWED rather than a new ask: Clerk Ryan Niekamp answered on **2026-08-17** and
+> nobody wrote back for eighteen days. His reply contained a correction — "Adams County has
+> only 74 precincts" — and acting on it found a defect in this project rather than in his
+> county (see the `adams-county-board-roster` blocker: 92 was the FEATURE count of the
+> county's precinct layer, which stores 74 precincts multipart).
+>
+> **So the precinct half of the ask was deleted before sending.** The first draft asked him
+> whether his 92-shape layer was superseded; by the time it was written, the answer was
+> already known and the question would have implied his GIS was stale when it is fine.
+> That is this file's rule 1 — an ask is the residue of a probe — catching a draft in
+> flight. What remains is the roster, which is genuinely open.
+
+**To:** Ryan Niekamp, County Clerk, Adams County — `countyclerk@adamscountyil.gov`
+**Cc:** `elections@adamscountyil.gov`
+**Subject:** Re: Request: county board members by district (and a question about Quincy's aldermen)
+
+The draft opens by conceding the correction and saying what it turned up, then asks for one
+of two things: the current board membership by district in any form, or the certified 2022
+general canvass. Seven of the county's twenty-one seats ship today, each from the certified
+November 2024 canvass; the other fourteen were seated in November 2022, and that canvass is
+published nowhere this project can read.
+
+**The tone matters here more than usual.** He has now twice said the members are on the
+website, and he is right — the block is at this end, and the draft says so in those words
+rather than implying the county publishes nothing. A "no" leaves the card exactly as it is,
+naming which seats it knows and which it does not.
+
+---
+
+## Where these drafts actually are (2026-09-04)
+
+All eight Illinois drafts below are queued **in Gmail, as replies on their existing
+threads**, so the correspondence history travels with each one. None has been sent, and
+none carries a send date. On send, change `NOT YET ASKED — DRAFTED` to `ASKED <date>` in
+each county's gap-record `blocker` — Illinois has no `WATCH.md`, so that blocker is the
+whole ledger.
+
+| Ask | County / office | Thread it replies on |
+|---|---|---|
+| 9 | Bureau — Christine Anderson, cc Assessor + Clerk | the 2021-redistricting-plan thread |
+| 10 | Clark — Clerk Lee | "How is the Clark County Board elected" |
+| 11 | CCGISC, cc Champaign + Piatt clerks | "Permission request: showing CCGISC district boundaries" |
+| 12 | Ford — Clerk Vaughn | "Two questions about Ford County's board districts" |
+| 12 | Christian — Clerk Badman | "One question about Taylorville #9" |
+| 12 | Piatt — Clerk Harper | "Request: county board district and precinct boundaries (GIS)" |
+| 12 | Knox — Clerk Erickson | "Knox County Board Districts 4 and 5" |
+| 13 | Adams — Clerk Niekamp, cc Elections | "Request: county board members by district" |
+
+**Two sequencing notes for whoever sends them.** Piatt's clerk is cc'd on Ask 11 AND is the
+recipient of one of Ask 12's follow-ups; sending both the same day puts two requests about
+overlapping data in front of her, so Ask 11 should go first and Piatt's follow-up after, or
+the follow-up should be held. And Ask 11's recipient address is inherited from the existing
+thread (`ccgisc@co.champaign.il.us`) — confirm it against ccgisc.org before sending, which
+this file has asked for since the ask was written.
