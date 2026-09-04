@@ -237,9 +237,16 @@ def parse_page(slug, kind, expect_n, text):
         mp = PHONE_RE.search(blob)
         if mp:
             rec["phone"] = mp.group(0).strip()
-            # the city labels one member's number "(cell)"; keep the fact
-            if re.search(re.escape(rec["phone"]) + r"\s*\(cell\)", blob, re.I):
-                rec["phoneNote"] = "cell"
+            # THE CITY'S "(cell)" LABEL ON DISTRICT 4'S NUMBER IS NOT CARRIED,
+            # and that is a decision rather than an oversight. This scraper once
+            # recorded it as `phoneNote`, which NOTHING consumed: the card's
+            # person row takes {name, badge, note, phone, email}, its `note` is
+            # already the term-expiry line, and `cardContactLine` has no slot
+            # for a phone label -- all of it inside the shared ENGINE fence
+            # `card-helpers`, so shipping the label would mean an engine change
+            # ported to all six instances for one member of one city.
+            # A field no consumer reads is a claim that rots, so it is gone.
+            # The number itself ships exactly as the city publishes it.
         me = EMAIL_RE.search(blob)
         if me:
             rec["email"] = me.group(0).strip()

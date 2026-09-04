@@ -14,8 +14,10 @@ city, and the fleet's at-large rule puts a citywide officer on the unit's
 identity card rather than on a district card. The scraper reads her anyway --
 see its docstring -- so that this exclusion is a decision this pipeline can
 demonstrate rather than a gap it cannot see, and the drop is printed on every
-run. She is named in prose in the card's Council row instead, so a reader is
-not left thinking the council is the whole of the city's elected government.
+run. The card's Council row SAYS SO WITHOUT NAMING HER -- "plus a mayor who is
+elected citywide and is not named on this card" -- so a reader is not left
+thinking the council is the whole of the city's elected government, and is not
+told a name this card does not carry.
 
 THE WITNESS HERE IS WEAKER THAN WATERLOO'S, AND IS RECORDED AS WEAKER
 ----------------------------------------------------------------------
@@ -158,9 +160,9 @@ def main():
           "no roster in band)" % (sorted(by_district), len(drawn)), file=sys.stderr)
 
     print("  MAYOR NOT SHIPPED: %s is elected citywide, so by the fleet's at-large "
-          "rule she belongs on the City card and not on a district card. She is "
-          "named in the card's Council row in prose." % mayor["name"],
-          file=sys.stderr)
+          "rule she belongs on the City card and not on a district card. The "
+          "card's Council row states the office WITHOUT naming her."
+          % mayor["name"], file=sys.stderr)
 
     districts = {str(n): person(by_district[n], "District %d" % n)
                  for n in EXPECT_DISTRICTS}

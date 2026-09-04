@@ -550,6 +550,38 @@ ENDPOINTS = [
         "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/PUMA_TAD_TAZ_UGA_ZCTA/MapServer/11?f=json",
     },
     {
+        # THE ONE ENDPOINT WHOSE ENVELOPE SHAPE IS PART OF THE TEST.
+        #
+        # The ZCTA layer has no STATE field (ZCTAs cross state lines), so this
+        # is the only layer the app fetches by a bounding ENVELOPE rather than
+        # an attribute filter -- and an envelope is a JSON object with KEY
+        # NAMES. Iowa's loader was ported carrying METRO_BBOX's
+        # {minLng,minLat,maxLng,maxLat} where Esri wants
+        # {xmin,ymin,xmax,ymax}, so for weeks the overlay never drew and the
+        # full load rejected on every toggle (fixed 2026-09-04).
+        #
+        # NOTHING CAUGHT IT, AND THE ROW ABOVE COULD NOT HAVE: it asks the
+        # LAYER for its metadata, which answers happily whatever shape the app
+        # then sends. This row sends the envelope the app builds, in the app's
+        # own key names, and `min_count` is what makes it a gate rather than a
+        # second reachability probe -- because a wrong-shaped envelope does not
+        # fail. Measured 2026-09-04: the wrong keys return HTTP **200** with
+        # {"error":{"code":400}} and no `count` at all, while the right ones
+        # return {"count":1443}. A checker that only reads the status code
+        # calls both of those reachable.
+        "layer": "zip-code",
+        "url": ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
+                "PUMA_TAD_TAZ_UGA_ZCTA/MapServer/11/query?where=1%3D1"
+                "&geometry=%7B%22xmin%22%3A-96.69%2C%22ymin%22%3A40.32%2C"
+                "%22xmax%22%3A-90.09%2C%22ymax%22%3A43.55%7D"
+                "&geometryType=esriGeometryEnvelope&inSR=4326"
+                "&spatialRel=esriSpatialRelIntersects&returnCountOnly=true&f=json"),
+        # Well under the 1,443 measured, because a ZCTA count legitimately
+        # drifts with each vintage; this is a floor on "the query still
+        # answers with features", not a pin on the number.
+        "min_count": 1200,
+    },
+    {
         "layer": "post-office",
         "url": "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/38?f=json",
     },
@@ -741,13 +773,38 @@ def check_endpoints(findings, offline):
     if offline:
         return
     for e in ENDPOINTS:
-        ok, res = http_get(e["url"], want_json=False)
-        if ok:
-            findings.add(OK, e["layer"], "endpoint reachable")
-        else:
+        floor = e.get("min_count")
+        # An entry carrying `min_count` is checked on its CONTENT, not just its
+        # status. ArcGIS answers a malformed query with HTTP 200 and an error
+        # body, so a status-only check reports the broken query as reachable --
+        # which is exactly how a wrong-shaped envelope stayed invisible. See the
+        # zip-code entry above.
+        ok, res = http_get(e["url"], want_json=floor is not None)
+        if not ok:
             findings.add(WARN, e["layer"],
                          "endpoint not reachable (%s): %s — the service may have been "
                          "renamed or retired" % (res, e["url"]))
+            continue
+        if floor is None:
+            findings.add(OK, e["layer"], "endpoint reachable")
+            continue
+        if not isinstance(res, dict) or "count" not in res:
+            findings.add(FAIL, e["layer"],
+                         "endpoint answered HTTP 200 with no `count` (%s): %s. An "
+                         "ArcGIS error body is served as 200, so this is a MALFORMED "
+                         "QUERY rather than an outage — check the envelope's key "
+                         "names against the app's loader before anything else."
+                         % (str(res)[:160], e["url"]))
+            continue
+        count = res["count"]
+        if not isinstance(count, int) or count < floor:
+            findings.add(FAIL, e["layer"],
+                         "endpoint returned count=%r, floor %d: %s. The query still "
+                         "parses, so this is the layer's own coverage moving rather "
+                         "than a broken request." % (count, floor, e["url"]))
+            continue
+        findings.add(OK, e["layer"], "endpoint reachable, count %d (floor %d)"
+                     % (count, floor))
 
 
 def render(findings):
