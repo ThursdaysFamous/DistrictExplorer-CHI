@@ -62,7 +62,10 @@
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "Gary A Mertig",
+   "name": "Gary A. Mertig",
+   "source": "county-board-page",
+   "sourceUrl": "https://ashlandcountywi.gov/bos",
+   "asOf": "the county's own page, captured 2026-09-02",
    "seats": 21
   },
   "executive": {
@@ -118,6 +121,8 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "Louie Okey",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.co.barron.wi.us/board.cfm",
    "seats": 29
   },
   "executive": {
@@ -423,7 +428,9 @@
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "Chuck Hull",
+   "name": "Jason Bergeron",
+   "source": "county-board-page",
+   "sourceUrl": "https://chippewacountywi.gov/162/County-Board-Supervisors",
    "seats": 21
   },
   "executive": {
@@ -478,7 +485,9 @@
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "Tom Wilcox",
+   "name": "Kenneth Gerhardt",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.clarkcountywi.gov/",
    "seats": 29
   },
   "executive": null,
@@ -903,6 +912,8 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "Chad Hedmark",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.florencecountywi.com/government/boards_and_committees/",
    "seats": 12
   },
   "executive": {
@@ -998,7 +1009,9 @@
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "Ronald Skallerud",
+   "name": "Sam Augustin",
+   "source": "county-board-page",
+   "sourceUrl": "https://co.forest.wi.gov/county-board-supervisors",
    "seats": 21
   },
   "executive": {
@@ -1252,6 +1265,8 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "Larry Youngs",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.co.iron.wi.gov/190/County-Board",
    "seats": 15
   },
   "executive": {
@@ -1632,7 +1647,9 @@
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "Ben Pierce",
+   "name": "Steve Maier",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.co.langlade.wi.us/government/board_and_committees/",
    "seats": 21
   },
   "executive": {
@@ -1939,7 +1956,9 @@
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "Ben Warrington"
+   "name": "Ben Warrington",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.co.menominee.wi.us/county-board/"
   },
   "executive": {
    "name": "Catherine Walter",
@@ -2311,6 +2330,8 @@
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
    "name": "Jon Aubart",
+   "source": "county-board-page",
+   "sourceUrl": "https://www.co.pierce.wi.us/",
    "seats": 17
   },
   "executive": {
@@ -2668,7 +2689,9 @@
   "asOf": "Wisconsin Blue Book 2025–26 (April 2025)",
   "sourceUrl": "https://docs.legis.wisconsin.gov/misc/lrb/blue_book/2025_2026/210_officials_and_employees.pdf",
   "chair": {
-   "name": "Bob Long",
+   "name": "Bob Feidler",
+   "source": "county-board-page",
+   "sourceUrl": "https://sccwi.gov/483/Districts-Supervisors",
    "seats": 19
   },
   "executive": {

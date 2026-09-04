@@ -1,0 +1,117 @@
+{
+  "5511305200": {
+    "clerk": "Tammy Brown",
+    "deputyClerk": "Cheryl Crabtree",
+    "municipality": "Bass Lake",
+    "phone": "715-634-8469",
+    "recordUpdated": "2023-04-18",
+    "url": "https://basslakewi.gov/"
+  },
+  "5511317250": {
+    "clerk": "Charles A. Warner",
+    "municipality": "Couderay",
+    "phone": "715-945-2902",
+    "recordUpdated": "2025-03-13",
+    "url": "http://www.couderaywisconsin.com/"
+  },
+  "5511320825": {
+    "clerk": "Desiree Velazquez",
+    "municipality": "Draper",
+    "phone": "715-266-2110",
+    "recordUpdated": "2026-06-01",
+    "url": "https://townofdraperwi.gov/"
+  },
+  "5511322625": {
+    "clerk": "Natalie Clemens",
+    "municipality": "Edgewater",
+    "phone": "715-354-7747",
+    "recordUpdated": "2026-06-25",
+    "url": "http://www.townofedgewater.com/"
+  },
+  "5511333475": {
+    "clerk": "Bryn Hand",
+    "municipality": "Hayward",
+    "phone": "715-634-4123 EXT 1",
+    "recordUpdated": "2024-01-08",
+    "url": "https://townofhayward.com/"
+  },
+  "5511336450": {
+    "clerk": "Patricia Swaffield",
+    "municipality": "Hunter",
+    "phone": "715-462-3957",
+    "recordUpdated": "2023-04-18",
+    "url": "http://townofhunterwi.net"
+  },
+  "5511343400": {
+    "clerk": "Robert Ubbelohde",
+    "municipality": "Lenroot",
+    "phone": "715-634-5673",
+    "recordUpdated": "2025-04-17",
+    "url": "https://www.townoflenroot.net/"
+  },
+  "5511350300": {
+    "clerk": "Jennie M Pasanen",
+    "municipality": "Meadowbrook",
+    "phone": "715-266-2951",
+    "recordUpdated": "2025-03-13"
+  },
+  "5511351425": {
+    "clerk": "Debra K Hansen",
+    "deputyClerk": "Kelly White",
+    "municipality": "Meteor",
+    "phone": "715-305-5675",
+    "recordUpdated": "2026-02-18",
+    "url": "https://www.townofmeteor.com/"
+  },
+  "5511359600": {
+    "clerk": "Jill Petit",
+    "municipality": "Ojibwa",
+    "phone": "715-266-2112",
+    "recordUpdated": "2025-03-13"
+  },
+  "5511366075": {
+    "clerk": "Nicole Winariczyk",
+    "municipality": "Radisson",
+    "phone": "715-945-3040",
+    "recordUpdated": "2026-05-11"
+  },
+  "5511369750": {
+    "clerk": "Frank Leuschen III",
+    "deputyClerk": "Victoria Palya",
+    "municipality": "Round Lake",
+    "phone": "715-462-9271",
+    "recordUpdated": "2025-04-17",
+    "url": "http://townofroundlakewi.org"
+  },
+  "5511371500": {
+    "clerk": "Elaine Nyberg",
+    "municipality": "Sand Lake",
+    "phone": "715-865-2006",
+    "recordUpdated": "2023-12-20"
+  },
+  "5511375450": {
+    "clerk": "Bianca Cleary",
+    "municipality": "Spider Lake",
+    "phone": "715-462-3977",
+    "recordUpdated": "2025-03-13",
+    "url": "https://www.townofspiderlake.com/"
+  },
+  "5511385100": {
+    "clerk": "Michele Meyers",
+    "municipality": "Weirgor",
+    "phone": "715-415-2946",
+    "recordUpdated": "2025-03-13"
+  },
+  "5511388000": {
+    "clerk": "Jenna M Petit",
+    "municipality": "Winter",
+    "phone": "715-266-3131",
+    "recordUpdated": "2024-05-21",
+    "url": "http://www.townofwinter.com/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

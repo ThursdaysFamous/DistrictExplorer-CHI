@@ -1,0 +1,46 @@
+{
+  "5505909635": {
+    "clerk": "Carolyn Debell",
+    "deputyClerk": "Angela Axton",
+    "municipality": "Brighton",
+    "phone": "262-878-2218",
+    "recordUpdated": "2026-03-03",
+    "url": "http://brightonwi.org/"
+  },
+  "5505961175": {
+    "clerk": "Emilie Gastaldi",
+    "deputyClerk": "Judy Schantek",
+    "municipality": "Paris",
+    "phone": "262-859-3006",
+    "recordUpdated": "2024-12-27",
+    "url": "https://townofparis.org/"
+  },
+  "5505966125": {
+    "clerk": "Roxanne Johnson",
+    "deputyClerk": "Veronica Woodall",
+    "municipality": "Randall",
+    "phone": "262-877-2165",
+    "recordUpdated": "2026-07-21",
+    "url": "https://townofrandall.gov/"
+  },
+  "5505974650": {
+    "clerk": "Wendy Burnette",
+    "municipality": "Somers",
+    "phone": "262-859-2822",
+    "recordUpdated": "2025-08-19",
+    "url": "https://www.somers.org/"
+  },
+  "5505986500": {
+    "clerk": "Katie L Sweatman",
+    "deputyClerk": "Shannon Herda",
+    "municipality": "Wheatland",
+    "phone": "262-537-4340",
+    "recordUpdated": "2026-01-27",
+    "url": "http://www.townwheatland.com/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

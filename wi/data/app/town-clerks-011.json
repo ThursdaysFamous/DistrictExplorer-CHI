@@ -1,0 +1,119 @@
+{
+  "5501101250": {
+    "clerk": "Mary Lisowski",
+    "municipality": "Alma",
+    "phone": "608-685-3843",
+    "recordUpdated": "2026-03-27",
+    "url": "http://www.almawisconsin.com"
+  },
+  "5501106675": {
+    "clerk": "Deborah M. Ruff",
+    "municipality": "Belvidere",
+    "phone": "507-450-1207",
+    "recordUpdated": "2025-12-02",
+    "url": "https://townofbelvidere.com/"
+  },
+  "5501111025": {
+    "clerk": "Deidre Overton",
+    "municipality": "Buffalo",
+    "phone": "507-429-0155",
+    "recordUpdated": "2026-03-02",
+    "url": "https://townofbuffalowi.com/"
+  },
+  "5501112500": {
+    "clerk": "Mindy Fichtenbauer",
+    "municipality": "Canton",
+    "phone": "715-672-8846",
+    "recordUpdated": "2026-03-27"
+  },
+  "5501117737": {
+    "clerk": "Carrie Venner-Adams",
+    "municipality": "Cross",
+    "phone": "608-687-3228",
+    "recordUpdated": "2026-07-20",
+    "url": "https://townofcross.com/"
+  },
+  "5501120575": {
+    "clerk": "Jennifer Severson",
+    "municipality": "Dover",
+    "phone": "715-946-3506",
+    "recordUpdated": "2024-01-11"
+  },
+  "5501129225": {
+    "clerk": "Jessica Lisowski",
+    "municipality": "Gilmanton",
+    "phone": "715-279-1309",
+    "recordUpdated": "2024-10-04"
+  },
+  "5501129375": {
+    "clerk": "Anne Cornish",
+    "municipality": "Glencoe",
+    "phone": "608-323-7405",
+    "recordUpdated": "2023-10-31"
+  },
+  "5501144300": {
+    "clerk": "Lori Dahl",
+    "municipality": "Lincoln",
+    "phone": "608-685-4394",
+    "recordUpdated": "2023-12-18",
+    "url": "https://www.bc-lincoln.com/"
+  },
+  "5501150075": {
+    "clerk": "Calli Heike",
+    "deputyClerk": "Barb Traun",
+    "municipality": "Maxville",
+    "phone": "952-200-3544",
+    "recordUpdated": "2026-01-05",
+    "url": "https://townshipofmaxville.weebly.com/"
+  },
+  "5501152175": {
+    "clerk": "Kalene Engel",
+    "municipality": "Milton",
+    "phone": "507-458-9924",
+    "recordUpdated": "2023-07-09",
+    "url": "https://townofmiltonwi.gov/"
+  },
+  "5501153450": {
+    "clerk": "Kasondra Serum",
+    "municipality": "Modena",
+    "phone": "715-495-2765",
+    "recordUpdated": "2025-05-28"
+  },
+  "5501153625": {
+    "clerk": "Miranda Schultz",
+    "municipality": "Mondovi",
+    "phone": "715-684-9534",
+    "recordUpdated": "2024-03-08"
+  },
+  "5501153850": {
+    "clerk": "Leeanne Bulman",
+    "municipality": "Montana",
+    "phone": "608-323-1115",
+    "recordUpdated": "2024-06-10",
+    "url": "https://montanawi.gov/"
+  },
+  "5501155450": {
+    "clerk": "Jackie Dregney",
+    "municipality": "Naples",
+    "phone": "715-495-0751",
+    "recordUpdated": "2023-12-28",
+    "url": "https://www.naplestownshipwi.com/"
+  },
+  "5501155975": {
+    "clerk": "Connie Brunner",
+    "municipality": "Nelson",
+    "phone": "715-673-4977",
+    "recordUpdated": "2024-07-17"
+  },
+  "5501184325": {
+    "clerk": "Michelle Earney",
+    "municipality": "Waumandee",
+    "phone": "608-248-3350",
+    "recordUpdated": "2024-01-16"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

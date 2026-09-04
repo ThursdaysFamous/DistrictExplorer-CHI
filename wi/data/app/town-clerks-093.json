@@ -1,0 +1,119 @@
+{
+  "5509315575": {
+    "clerk": "Kris Johnson",
+    "municipality": "Clifton",
+    "phone": "715-577-6328",
+    "recordUpdated": "2025-05-21"
+  },
+  "5509320150": {
+    "clerk": "Todd Mehrkens",
+    "municipality": "Diamond Bluff",
+    "phone": "612-987-1059",
+    "recordUpdated": "2025-05-21",
+    "url": "https://www.diamondbluffwi.gov/"
+  },
+  "5509323550": {
+    "clerk": "Russell Korpela",
+    "municipality": "Ellsworth",
+    "phone": "715-821-1021",
+    "recordUpdated": "2025-05-21",
+    "url": "https://www.co.pierce.wi.us/government/municipal_government/town/ellsworth/index.php"
+  },
+  "5509323775": {
+    "clerk": "Sherri Heise",
+    "municipality": "El Paso",
+    "phone": "715-273-4811",
+    "recordUpdated": "2025-05-21",
+    "url": "https://www.co.pierce.wi.us/municipalgovernment/el_paso_township/el_paso_main_index.htm"
+  },
+  "5509329150": {
+    "clerk": "Becky Manley",
+    "municipality": "Gilman",
+    "phone": "715-778-4425",
+    "recordUpdated": "2025-05-21",
+    "url": "https://www.co.pierce.wi.us/government/municipal_government/town/gilman/index.php"
+  },
+  "5509333050": {
+    "clerk": "Polly Remick",
+    "municipality": "Hartland",
+    "phone": "715-598-8656",
+    "recordUpdated": "2025-05-21"
+  },
+  "5509337350": {
+    "clerk": "Julie Erickson",
+    "municipality": "Isabelle",
+    "phone": "715-792-2008",
+    "recordUpdated": "2025-05-21"
+  },
+  "5509348200": {
+    "clerk": "Carla Schuster",
+    "municipality": "Maiden Rock",
+    "phone": "651-380-5631",
+    "recordUpdated": "2025-05-21"
+  },
+  "5509349775": {
+    "clerk": "Robin Boles",
+    "deputyClerk": "Dale R Olson",
+    "municipality": "Martell",
+    "phone": "715-317-1395",
+    "recordUpdated": "2025-10-31",
+    "url": "https://www.townofmartell.com/"
+  },
+  "5509359025": {
+    "clerk": "Andria Hayday",
+    "municipality": "Oak Grove",
+    "phone": "715-262-4005",
+    "recordUpdated": "2025-05-21",
+    "url": "https://www.co.pierce.wi.us/government/municipal_government/town/oak_grove/index.php"
+  },
+  "5509368300": {
+    "clerk": "Sarah Meyer",
+    "municipality": "River Falls",
+    "phone": "715-629-8240",
+    "recordUpdated": "2025-05-21",
+    "url": "https://riverfallstown.com/"
+  },
+  "5509368775": {
+    "clerk": "Dawn Churchill",
+    "municipality": "Rock Elm",
+    "phone": "715-307-2975",
+    "recordUpdated": "2026-02-19",
+    "url": "https://www.townofrockelm.com/"
+  },
+  "5509371150": {
+    "clerk": "Ann Larson-Graham",
+    "municipality": "Salem",
+    "phone": "715-308-4065",
+    "recordUpdated": "2025-05-21",
+    "url": "http://www.co.pierce.wi.us/municipal%20government/salem_township/salem_main_index.htm"
+  },
+  "5509376100": {
+    "clerk": "Amber J Weber",
+    "municipality": "Spring Lake",
+    "phone": "715-772-4238",
+    "recordUpdated": "2026-01-27"
+  },
+  "5509380550": {
+    "clerk": "Steve Thoms",
+    "municipality": "Trenton",
+    "phone": "715-792-5218",
+    "recordUpdated": "2025-05-21"
+  },
+  "5509380700": {
+    "clerk": "Mary Jane Kees",
+    "municipality": "Trimbelle",
+    "phone": "715-273-5860",
+    "recordUpdated": "2025-05-21"
+  },
+  "5509381600": {
+    "clerk": "Jennifer Hines",
+    "municipality": "Union",
+    "phone": "715-308-8203",
+    "recordUpdated": "2025-05-21"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

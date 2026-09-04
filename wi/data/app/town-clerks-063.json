@@ -1,0 +1,85 @@
+{
+  "5506304575": {
+    "clerk": "Louisa Peterson",
+    "municipality": "Bangor",
+    "phone": "608-461-0554",
+    "recordUpdated": "2024-01-24",
+    "url": "https://townofbangor.com/"
+  },
+  "5506304825": {
+    "clerk": "Kristin Radde",
+    "municipality": "Barre",
+    "phone": "608-786-4788",
+    "recordUpdated": "2025-04-22",
+    "url": "https://www.townofbarre.org/"
+  },
+  "5506311300": {
+    "clerk": "Melissa S Hart-Pollack",
+    "municipality": "Burns",
+    "phone": "608-385-5436",
+    "recordUpdated": "2026-01-05",
+    "url": "https://www.townofburnswi.com/"
+  },
+  "5506325325": {
+    "clerk": "Crystal Sbraggia",
+    "municipality": "Farmington",
+    "phone": "608-780-4778",
+    "recordUpdated": "2023-05-31",
+    "url": "http://www.townoffarmingtonlax.org/"
+  },
+  "5506331150": {
+    "clerk": "Jill Murphy",
+    "municipality": "Greenfield",
+    "phone": "608-452-4700",
+    "recordUpdated": "2023-12-11",
+    "url": "http://www.townofgreenfieldwi.org/"
+  },
+  "5506332275": {
+    "clerk": "Katie Reding",
+    "municipality": "Hamilton",
+    "phone": "608-786-0989",
+    "recordUpdated": "2024-08-12",
+    "url": "https://www.townofhamiltonwi.org/"
+  },
+  "5506335350": {
+    "clerk": "Marilyn Pedretti",
+    "deputyClerk": "Andrea Stupi",
+    "municipality": "Holland",
+    "phone": "608-526-3354",
+    "recordUpdated": "2023-12-18",
+    "url": "https://www.townofhollandwi.gov/"
+  },
+  "5506350400": {
+    "clerk": "Diane Elsen",
+    "municipality": "Medary",
+    "phone": "608-781-2275",
+    "recordUpdated": "2026-04-28",
+    "url": "https://townofmedary.wi.gov"
+  },
+  "5506359950": {
+    "clerk": "Mary Rinehart",
+    "municipality": "Onalaska",
+    "phone": "608-783-4958",
+    "recordUpdated": "2024-01-16",
+    "url": "https://townofonalaska.org/"
+  },
+  "5506373125": {
+    "clerk": "Fortune M Berg",
+    "municipality": "Shelby",
+    "phone": "608-788-1032",
+    "recordUpdated": "2023-11-19",
+    "url": "https://townofshelbywi.gov/"
+  },
+  "5506383650": {
+    "clerk": "Barb Muenzenberger",
+    "municipality": "Washington",
+    "phone": "608-780-8760",
+    "recordUpdated": "2023-12-18",
+    "url": "http://www.townofwashingtonwi.com/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

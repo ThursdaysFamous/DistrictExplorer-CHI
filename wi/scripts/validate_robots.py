@@ -143,8 +143,19 @@ def fetched_urls():
         if spec.get("live"):
             out.append((spec["source_url"],
                         "%s carried roster, live re-try each run" % spec["name"]))
+    # THE MODULE LIST IS STILL A LIST, AND THAT IS THIS GATE'S REMAINING HOLE.
+    # Discovery is total WITHIN a module and hand-kept ACROSS modules, so a
+    # scraper written after this file is outside the sweep entirely — which is
+    # the same shape as the 2026-09-02 miss recorded below, one level up. The
+    # RUSD board scraper was added 2026-09-03 and is named here; the MPS,
+    # alderperson, municipal-executive, circuit-court, court-of-appeals and
+    # county-clerk scrapers are NOT, and that is an open gap rather than a
+    # statement that their hosts permit anything. Widening it needs its own
+    # pass, because it will surface hosts nobody has read a policy for.
+    import rusd_school_board_scraper as rusd
     for module, label in ((board, "county board roster (weekly)"),
-                          (officers, "county officer contact (twice weekly)")):
+                          (officers, "county officer contact (twice weekly)"),
+                          (rusd, "RUSD school board roster (weekly)")):
         for nm in dir(module):
             if not nm.isupper() or nm in NOT_FETCHED:
                 continue

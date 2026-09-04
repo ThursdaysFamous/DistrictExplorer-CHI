@@ -1,0 +1,145 @@
+{
+  "5511903900": {
+    "clerk": "Teresa Madlon",
+    "municipality": "Aurora",
+    "phone": "715-447-8626",
+    "recordUpdated": "2021-12-22"
+  },
+  "5511910400": {
+    "clerk": "Sharon Noland",
+    "municipality": "Browning",
+    "phone": "715-748-3653",
+    "recordUpdated": "2026-03-17"
+  },
+  "5511914200": {
+    "clerk": "Gail Marie Mildbrand",
+    "municipality": "Chelsea",
+    "phone": "715-748-3988",
+    "recordUpdated": "2023-12-28"
+  },
+  "5511915450": {
+    "clerk": "Joseph Liegl",
+    "municipality": "Cleveland",
+    "phone": "715-965-7655",
+    "recordUpdated": "2023-12-28"
+  },
+  "5511919225": {
+    "clerk": "Jeneane Metz",
+    "municipality": "Deer Creek",
+    "phone": "715-678-2403",
+    "recordUpdated": "2024-01-17"
+  },
+  "5511926425": {
+    "clerk": "Deanna Boggess",
+    "municipality": "Ford",
+    "phone": "715-239-5480",
+    "recordUpdated": "2024-03-13"
+  },
+  "5511929837": {
+    "clerk": "Ashley Dahl",
+    "municipality": "Goodrich",
+    "phone": "715-748-2651",
+    "recordUpdated": "2021-12-27"
+  },
+  "5511931600": {
+    "clerk": "Jill Scheithauer",
+    "municipality": "Greenwood",
+    "phone": "715-748-2292",
+    "recordUpdated": "2023-11-19"
+  },
+  "5511931750": {
+    "clerk": "Amber Larson",
+    "municipality": "Grover",
+    "phone": "715-678-2089",
+    "recordUpdated": "2024-10-10",
+    "url": "http://townofgrover.com/"
+  },
+  "5511932300": {
+    "clerk": "Renee Zenner",
+    "deputyClerk": "Joelle Zuelsdorff",
+    "municipality": "Hammel",
+    "phone": "715-748-9608",
+    "recordUpdated": "2026-02-23",
+    "url": "https://www.townofhammel.com/"
+  },
+  "5511935525": {
+    "clerk": "Amber Larson",
+    "municipality": "Holway",
+    "phone": "715-678-2089",
+    "recordUpdated": "2024-10-10"
+  },
+  "5511938627": {
+    "clerk": "Denise Webster",
+    "municipality": "Jump River",
+    "phone": "715-688-5363",
+    "recordUpdated": "2026-03-20"
+  },
+  "5511944900": {
+    "clerk": "Joann Smith",
+    "municipality": "Little Black",
+    "phone": "715-748-2506",
+    "recordUpdated": "2026-06-08"
+  },
+  "5511946925": {
+    "clerk": "Jason Malisheski",
+    "municipality": "McKinley",
+    "phone": "715-220-8033",
+    "recordUpdated": "2024-03-13"
+  },
+  "5511948925": {
+    "clerk": "Amber Larson",
+    "municipality": "Maplehurst",
+    "phone": "715-678-2089",
+    "recordUpdated": "2024-01-11"
+  },
+  "5511950450": {
+    "clerk": "Jennifer Strama",
+    "municipality": "Medford",
+    "phone": "715-748-3605",
+    "recordUpdated": "2026-07-30",
+    "url": "https://www.townofmedfordwi.com/"
+  },
+  "5511953550": {
+    "clerk": "Amber Larson",
+    "municipality": "Molitor",
+    "phone": "715-965-6303",
+    "recordUpdated": "2024-10-10"
+  },
+  "5511962100": {
+    "clerk": "Allison Jiskra",
+    "municipality": "Pershing",
+    "phone": "920-544-7147",
+    "recordUpdated": "2024-11-21",
+    "url": "https://townofpershingwi.com/"
+  },
+  "5511967300": {
+    "clerk": "Karen Schneider",
+    "municipality": "Rib Lake",
+    "phone": "715-427-3635",
+    "recordUpdated": "2024-12-17"
+  },
+  "5511969400": {
+    "clerk": "Monica Knusta",
+    "municipality": "Roosevelt",
+    "phone": "715-669-3574",
+    "recordUpdated": "2024-01-02"
+  },
+  "5511978950": {
+    "clerk": "Lori Czubakawski",
+    "municipality": "Taft",
+    "phone": "715-644-0933",
+    "recordUpdated": "2019-03-08"
+  },
+  "5511985450": {
+    "clerk": "Joyce D Peterson",
+    "municipality": "Westboro",
+    "phone": "715-427-3566",
+    "recordUpdated": "2023-11-02",
+    "url": "http://townofwestboro.com"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

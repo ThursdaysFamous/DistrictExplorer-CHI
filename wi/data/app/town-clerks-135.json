@@ -1,0 +1,162 @@
+{
+  "5513505625": {
+    "clerk": "Theresa Huss",
+    "municipality": "Bear Creek",
+    "phone": "715-701-4992",
+    "recordUpdated": "2025-10-28",
+    "url": "https://townofbearcreek.org/"
+  },
+  "5513512000": {
+    "clerk": "Natalie Snyder",
+    "municipality": "Caledonia",
+    "phone": "920-667-4773",
+    "recordUpdated": "2023-12-22",
+    "url": "https://townofcaledonia.com/"
+  },
+  "5513519025": {
+    "clerk": "Wanda Hiltgen",
+    "deputyClerk": "Judith A Suhs",
+    "municipality": "Dayton",
+    "phone": "715-258-0930",
+    "recordUpdated": "2026-05-27",
+    "url": "https://town-dayton.com/"
+  },
+  "5513521200": {
+    "clerk": "April Krueger",
+    "municipality": "Dupont",
+    "phone": "715-853-9092",
+    "recordUpdated": "2024-01-08",
+    "url": "https://townofdupont.org/"
+  },
+  "5513525400": {
+    "clerk": "Anjela Hamm",
+    "municipality": "Farmington",
+    "phone": "715-258-2779",
+    "recordUpdated": "2024-12-12",
+    "url": "https://farmingtonwaup.gov/"
+  },
+  "5513527850": {
+    "clerk": "Pat Grunwald",
+    "municipality": "Fremont",
+    "phone": "920-446-2777",
+    "recordUpdated": "2024-05-01",
+    "url": "https://townfremontwi.gov/"
+  },
+  "5513532925": {
+    "clerk": "Carrie Powell",
+    "municipality": "Harrison",
+    "phone": "715-677-6902",
+    "recordUpdated": "2026-01-28"
+  },
+  "5513533850": {
+    "clerk": "Kotti Hintz",
+    "deputyClerk": "Teresa Balinski",
+    "municipality": "Helvetia",
+    "phone": "920-216-2842",
+    "recordUpdated": "2026-06-02",
+    "url": "http://www.townofhelvetia.com/"
+  },
+  "5513537050": {
+    "clerk": "Justin Moen",
+    "municipality": "Iola",
+    "phone": "715-281-5089",
+    "recordUpdated": "2026-01-12",
+    "url": "https://townofiola.com/"
+  },
+  "5513542650": {
+    "clerk": "Sharon Pingel",
+    "municipality": "Larrabee",
+    "phone": "715-304-8929",
+    "recordUpdated": "2022-05-09"
+  },
+  "5513543075": {
+    "clerk": "Mary Schoenrock",
+    "municipality": "Lebanon",
+    "phone": "920-982-1571 EXT 3",
+    "recordUpdated": "2024-04-18",
+    "url": "https://townoflebanon.wi.gov/"
+  },
+  "5513544575": {
+    "clerk": "Colleen Dayton",
+    "deputyClerk": "Kristy Mechelke",
+    "municipality": "Lind",
+    "phone": "715-252-2705",
+    "recordUpdated": "2026-04-29",
+    "url": "http://townoflind.org/"
+  },
+  "5513545300": {
+    "clerk": "Jackie Beyer",
+    "municipality": "Little Wolf",
+    "phone": "920-596-2080",
+    "recordUpdated": "2024-05-22",
+    "url": "http://town-littlewolf.com/"
+  },
+  "5513549975": {
+    "clerk": "Michael Mehlberg",
+    "municipality": "Matteson",
+    "phone": "715-460-2345",
+    "recordUpdated": "2024-05-02",
+    "url": "https://www.townofmatteson.com/"
+  },
+  "5513555025": {
+    "clerk": "Jeannette Zielinski",
+    "municipality": "Mukwa",
+    "phone": "920-982-9890",
+    "recordUpdated": "2024-09-10",
+    "url": "http://www.mukwa.us/"
+  },
+  "5513569900": {
+    "clerk": "Judith Doud",
+    "municipality": "Royalton",
+    "phone": "920-340-0085",
+    "recordUpdated": "2024-01-08",
+    "url": "https://royaltontownship-waupaca-co.com/"
+  },
+  "5513570900": {
+    "clerk": "Heidi Orenhren",
+    "deputyClerk": "Alicia Stiebs",
+    "municipality": "St. Lawrence",
+    "phone": "920-244-7431",
+    "recordUpdated": "2025-11-11",
+    "url": "http://townofstlawrence.net/"
+  },
+  "5513572000": {
+    "clerk": "Brenda Mazemke",
+    "municipality": "Scandinavia",
+    "phone": "715-445-4024",
+    "recordUpdated": "2025-01-21"
+  },
+  "5513581700": {
+    "clerk": "Kelly Norton",
+    "municipality": "Union",
+    "phone": "920-538-1944",
+    "recordUpdated": "2023-12-28",
+    "url": "https://townofunionwaupacacounty.com/"
+  },
+  "5513584400": {
+    "clerk": "Mary Colden",
+    "municipality": "Waupaca",
+    "phone": "715-256-1450",
+    "recordUpdated": "2026-04-06",
+    "url": "https://tn.waupaca.wi.gov/page/home"
+  },
+  "5513586425": {
+    "clerk": "Sonialynn Thede-Kramer",
+    "municipality": "Weyauwega",
+    "phone": "920-572-0318",
+    "recordUpdated": "2023-11-19"
+  },
+  "5513589375": {
+    "clerk": "Brittany Jashinsky",
+    "deputyClerk": "Brenda Jashinsky",
+    "municipality": "Wyoming",
+    "phone": "715-754-5375",
+    "recordUpdated": "2024-10-09",
+    "url": "http://townwyoming.com/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

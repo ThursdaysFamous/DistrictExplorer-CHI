@@ -1,0 +1,165 @@
+{
+  "5501702175": {
+    "clerk": "Jennifer Jensen",
+    "municipality": "Anson",
+    "phone": "715-579-1648",
+    "recordUpdated": "2023-11-02"
+  },
+  "5501703075": {
+    "clerk": "Donna Shifflett",
+    "municipality": "Arthur",
+    "phone": "715-289-3313",
+    "recordUpdated": "2026-01-27",
+    "url": "http://www.townofarthur.com/"
+  },
+  "5501703725": {
+    "clerk": "Sandi Frion",
+    "deputyClerk": "Judy Misner",
+    "municipality": "Auburn",
+    "phone": "715-456-7094",
+    "recordUpdated": "2023-06-15",
+    "url": "https://townofauburn.net/"
+  },
+  "5501707525": {
+    "clerk": "Robin Stender",
+    "municipality": "Birch Creek",
+    "phone": "715-595-4996",
+    "recordUpdated": "2022-09-22"
+  },
+  "5501708250": {
+    "clerk": "Roxanne Geurkink",
+    "municipality": "Bloomer",
+    "phone": "715-568-4409",
+    "recordUpdated": "2024-02-12",
+    "url": "https://townofbloomer.com/"
+  },
+  "5501715350": {
+    "clerk": "Linda Laird",
+    "deputyClerk": "Suzanne Laird",
+    "municipality": "Cleveland",
+    "phone": "715-239-3922",
+    "recordUpdated": "2024-01-02"
+  },
+  "5501716125": {
+    "clerk": "Kiel Morello",
+    "municipality": "Colburn",
+    "phone": "715-703-0525",
+    "recordUpdated": "2025-09-12",
+    "url": "https://www.townofcolburnwi.com/"
+  },
+  "5501716800": {
+    "clerk": "Nicholle Richter",
+    "deputyClerk": "Erica Ullom",
+    "municipality": "Cooks Valley",
+    "phone": "715-828-2395",
+    "recordUpdated": "2026-05-28",
+    "url": "http://cv1927.bloomertel.net/"
+  },
+  "5501719625": {
+    "clerk": "Julie Krcma-Peterson",
+    "municipality": "Delmar",
+    "phone": "608-609-7115",
+    "recordUpdated": "2024-02-12"
+  },
+  "5501721600": {
+    "clerk": "Laurie Hebert",
+    "municipality": "Eagle Point",
+    "phone": "715-288-6770",
+    "recordUpdated": "2024-01-10",
+    "url": "https://www.townofeaglepointchippewa.com"
+  },
+  "5501722750": {
+    "clerk": "Marie Wilbur",
+    "municipality": "Edson",
+    "phone": "715-644-2597",
+    "recordUpdated": "2023-08-09"
+  },
+  "5501724375": {
+    "clerk": "Kayla Capek",
+    "deputyClerk": "Billy Jo Anderson",
+    "municipality": "Estella",
+    "phone": "715-827-0456",
+    "recordUpdated": "2025-12-12"
+  },
+  "5501729700": {
+    "clerk": "Pete Danielson",
+    "municipality": "Goetz",
+    "phone": "715-864-1672",
+    "recordUpdated": "2023-11-19"
+  },
+  "5501732125": {
+    "clerk": "Sue Cance",
+    "deputyClerk": "John R Andersen",
+    "municipality": "Hallie",
+    "phone": "715-577-4022",
+    "recordUpdated": "2025-04-24",
+    "url": "https://www.townofhalliewi.com/"
+  },
+  "5501736000": {
+    "clerk": "Susan Haake",
+    "municipality": "Howard",
+    "phone": "715-874-5259",
+    "recordUpdated": "2023-11-02",
+    "url": "https://howardchippewawi.gov/"
+  },
+  "5501740900": {
+    "clerk": "Jami Carter",
+    "deputyClerk": "Kathie Kurshinsky",
+    "municipality": "Lafayette",
+    "phone": "715-723-7692",
+    "recordUpdated": "2026-01-26",
+    "url": "https://lafayettetownship.org/"
+  },
+  "5501741550": {
+    "clerk": "Jennifer Wright",
+    "municipality": "Lake Holcombe",
+    "phone": "608-498-3342",
+    "recordUpdated": "2025-10-03",
+    "url": "https://www.townoflakeholcombe.com/"
+  },
+  "5501769975": {
+    "clerk": "Briana Seng",
+    "municipality": "Ruby",
+    "phone": "715-312-0719",
+    "recordUpdated": "2026-05-28"
+  },
+  "5501771275": {
+    "clerk": "Louise Cody",
+    "municipality": "Sampson",
+    "phone": "715-933-2331",
+    "recordUpdated": "2024-01-24",
+    "url": "https://tn.sampson.wi.gov/"
+  },
+  "5501773875": {
+    "clerk": "Deborah Yeager",
+    "municipality": "Sigel",
+    "phone": "715-271-0409",
+    "recordUpdated": "2024-01-02"
+  },
+  "5501779875": {
+    "clerk": "Nicole Ruf",
+    "deputyClerk": "Julie Geissler",
+    "municipality": "Tilden",
+    "phone": "715-288-6453",
+    "recordUpdated": "2025-11-03",
+    "url": "https://townoftilden.com/"
+  },
+  "5501786537": {
+    "clerk": "Scott Deutscher",
+    "municipality": "Wheaton",
+    "phone": "715-874-5982",
+    "recordUpdated": "2023-11-02",
+    "url": "http://www.townofwheaton.com/"
+  },
+  "5501788875": {
+    "clerk": "Vanessa Lameer",
+    "municipality": "Woodmohr",
+    "phone": "715-450-2549",
+    "recordUpdated": "2022-01-12"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

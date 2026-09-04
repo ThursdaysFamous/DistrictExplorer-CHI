@@ -1,0 +1,62 @@
+{
+  "5501509750": {
+    "clerk": "Karen Jannette",
+    "municipality": "Brillion",
+    "phone": "920-756-5363",
+    "recordUpdated": "2023-12-29",
+    "url": "https://townofbrillionwi.gov/"
+  },
+  "5501510350": {
+    "clerk": "Leanne Karls",
+    "municipality": "Brothertown",
+    "phone": "920-418-0949",
+    "recordUpdated": "2023-12-28"
+  },
+  "5501514000": {
+    "clerk": "Kim Mueller",
+    "municipality": "Charlestown",
+    "phone": "920-585-8791",
+    "recordUpdated": "2023-08-09"
+  },
+  "5501514500": {
+    "clerk": "Sheila Koehler-Oakley",
+    "municipality": "Chilton",
+    "phone": "920-849-4720",
+    "recordUpdated": "2023-05-31",
+    "url": "https://www.townofchilton.com/"
+  },
+  "5501556825": {
+    "clerk": "Samantha Muellenbach",
+    "municipality": "New Holstein",
+    "phone": "920-850-8365",
+    "recordUpdated": "2024-07-11",
+    "url": "http://www.townofnewholstein.com/"
+  },
+  "5501566275": {
+    "clerk": "Ashley Mink",
+    "municipality": "Rantoul",
+    "phone": "920-588-7013",
+    "recordUpdated": "2024-01-02",
+    "url": "https://townofrantoul.com/"
+  },
+  "5501577425": {
+    "clerk": "Steven Phipps",
+    "municipality": "Stockbridge",
+    "phone": "920-418-5709",
+    "recordUpdated": "2023-12-11",
+    "url": "http://www.townofstockbridge.org"
+  },
+  "5501589000": {
+    "clerk": "Leslie Skelley",
+    "deputyClerk": "Ellen Pattermann",
+    "municipality": "Woodville",
+    "phone": "920-507-0274",
+    "recordUpdated": "2026-01-05",
+    "url": "https://townofwoodvillewi.gov/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

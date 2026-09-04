@@ -5619,10 +5619,33 @@ def scrape_official_directory_county(spec):
             continue
         who, role = clean(r.group(1))[0], r.group(2).title()
         hits = [d for d, row in out.items() if row["name"] == who]
+        # THE TWO SECTIONS OF ONE DOCUMENT SPELL ONE MAN TWO WAYS, and the 2026
+        # edition is where it first bit: the board page calls the chair "Ken
+        # Gerhardt" and the district list eleven pages later prints "Kenneth
+        # Gerhardt" (District 25), so the exact-name join matched 0 seats and
+        # the county — all 29 seats of it, correctly parsed — refused to ship.
+        # This is the Clay County (IL) trap arriving in Wisconsin: there a board
+        # page's "Barbara McGrew" is a members page's "Barb Mcgrew", and the
+        # answer there is the answer here — JOIN ON THE SURNAME, REQUIRE IT
+        # UNIQUE, AND PRINT THE JOIN so a reader of the weekly log sees which
+        # two strings were treated as one person.
+        #
+        # Uniqueness is load-bearing rather than ceremonial: Clark seats TWO
+        # Ashbecks (districts 20 and 26), so a surname that is not unique still
+        # falls through to the same refusal below. A chair who has genuinely
+        # left the board matches no surname either, and also still refuses.
+        if not hits:
+            hits = [d for d, row in out.items()
+                    if _surname(row["name"]) == _surname(who)]
+            if len(hits) == 1:
+                print("  role    %-12s the board page's %r is the district list's "
+                      "%r — joined on a unique surname"
+                      % (county, who, out[hits[0]]["name"]), file=sys.stderr)
         if len(hits) != 1:
             raise RuntimeError("%s: the directory's board page calls %r the %s "
-                               "and the district list matches %d seats — a role "
-                               "cannot be filed without one" % (county, who, role, len(hits)))
+                               "and the district list matches %d seats, by full "
+                               "name or by surname — a role cannot be filed "
+                               "without one" % (county, who, role, len(hits)))
         out[hits[0]]["role"] = role
         print("  role    %-12s %s -> District %s" % (county, role, hits[0]), file=sys.stderr)
 

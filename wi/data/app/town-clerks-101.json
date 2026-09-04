@@ -1,0 +1,39 @@
+{
+  "5510111225": {
+    "clerk": "Jeanne Rennie",
+    "deputyClerk": "Rachel Naber",
+    "municipality": "Burlington",
+    "phone": "262-763-3070",
+    "recordUpdated": "2025-05-12",
+    "url": "https://townofburlingtonwi.gov/"
+  },
+  "5510120625": {
+    "clerk": "Camille Gerou",
+    "deputyClerk": "Kimberly Springer",
+    "municipality": "Dover",
+    "phone": "262-878-2200",
+    "recordUpdated": "2024-12-26",
+    "url": "https://townofdoverwi.com/"
+  },
+  "5510158600": {
+    "clerk": "Michelle Adamek",
+    "deputyClerk": "Beth Weber",
+    "municipality": "Norway",
+    "phone": "262-895-6335",
+    "recordUpdated": "2025-05-23",
+    "url": "https://townofnorwaywi.gov/"
+  },
+  "5510183850": {
+    "clerk": "Tina Mayer",
+    "deputyClerk": "Rayana Kaul",
+    "municipality": "Waterford",
+    "phone": "262-534-1871",
+    "recordUpdated": "2025-08-26",
+    "url": "https://www.tn.waterford.wi.gov/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

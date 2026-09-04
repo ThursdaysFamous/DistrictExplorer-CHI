@@ -1,0 +1,102 @@
+{
+  "5504101625": {
+    "clerk": "Paula Bossenberger",
+    "municipality": "Alvin",
+    "phone": "941-896-0456",
+    "recordUpdated": "2025-11-25"
+  },
+  "5504102625": {
+    "clerk": "Amy Collins",
+    "municipality": "Argonne",
+    "phone": "715-649-3550",
+    "recordUpdated": "2025-12-10"
+  },
+  "5504102950": {
+    "clerk": "Tamaney Augustin",
+    "municipality": "Armstrong Creek",
+    "phone": "920-627-0436",
+    "recordUpdated": "2023-08-09",
+    "url": "https://armstrongcreek.org/"
+  },
+  "5504107950": {
+    "clerk": "Jenny Henkel",
+    "municipality": "Blackwell",
+    "phone": "715-674-6467",
+    "recordUpdated": "2026-04-06"
+  },
+  "5504113125": {
+    "clerk": "Tamaney Augustin",
+    "municipality": "Caswell",
+    "phone": "715-784-0827",
+    "recordUpdated": "2026-02-25",
+    "url": "https://www.townofcaswellwi.com/"
+  },
+  "5504117450": {
+    "clerk": "Agnes Keller",
+    "municipality": "Crandon",
+    "phone": "715-478-7296",
+    "recordUpdated": "2026-02-12"
+  },
+  "5504127600": {
+    "clerk": "Amanda Wondrash",
+    "municipality": "Freedom",
+    "phone": "715-473-3412",
+    "recordUpdated": "2024-12-02"
+  },
+  "5504134650": {
+    "clerk": "Ej Kutchie",
+    "deputyClerk": "Margaret McCarthy",
+    "municipality": "Hiles",
+    "phone": "715-649-3680",
+    "recordUpdated": "2025-10-15",
+    "url": "http://www.townofhiles.org/"
+  },
+  "5504142500": {
+    "clerk": "Michelle Belland",
+    "municipality": "Laona",
+    "phone": "715-674-4071",
+    "recordUpdated": "2024-01-17",
+    "url": "https://www.townoflaona.org/"
+  },
+  "5504144375": {
+    "clerk": "Laura Black",
+    "deputyClerk": "Diane Dubey",
+    "municipality": "Lincoln",
+    "phone": "715-478-2985",
+    "recordUpdated": "2026-07-20",
+    "url": "https://townoflincolnforestwi.gov/"
+  },
+  "5504155575": {
+    "clerk": "Sandy Frank",
+    "deputyClerk": "Shirely R Ginter",
+    "municipality": "Nashville",
+    "phone": "715-478-2524",
+    "recordUpdated": "2024-01-29",
+    "url": "https://nashtownwi.com/"
+  },
+  "5504164050": {
+    "clerk": "Katherine A Haen",
+    "municipality": "Popple River",
+    "phone": "920-716-3980",
+    "recordUpdated": "2024-01-02",
+    "url": "https://www.townofpoppleriver.com/"
+  },
+  "5504169625": {
+    "clerk": "Heidi Piton",
+    "municipality": "Ross",
+    "phone": "715-902-1162",
+    "recordUpdated": "2025-12-09"
+  },
+  "5504183025": {
+    "clerk": "Raletta Shampo-Ashbeck",
+    "municipality": "Wabeno",
+    "phone": "715-850-1127",
+    "recordUpdated": "2024-06-18",
+    "url": "https://wabeno.org/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

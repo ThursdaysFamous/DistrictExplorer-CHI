@@ -1,0 +1,150 @@
+{
+  "5508513025": {
+    "clerk": "Stacey Plamann",
+    "municipality": "Cassian",
+    "phone": "715-499-0132",
+    "recordUpdated": "2024-06-18",
+    "url": "http://www.townofcassian.org/"
+  },
+  "5508517625": {
+    "clerk": "Tracy L Hartman",
+    "municipality": "Crescent",
+    "phone": "715-499-0500",
+    "recordUpdated": "2023-12-25",
+    "url": "http://www.townofcrescent.com/"
+  },
+  "5508524125": {
+    "clerk": "Jonathan Sommer",
+    "municipality": "Enterprise",
+    "phone": "715-360-0336",
+    "recordUpdated": "2018-02-05"
+  },
+  "5508533575": {
+    "clerk": "Christy Myshchyshyn",
+    "municipality": "Hazelhurst",
+    "phone": "715-356-5800",
+    "recordUpdated": "2025-09-23",
+    "url": "http://www.hazelwi.net/"
+  },
+  "5508541887": {
+    "clerk": "Sharon Trimberger Lintereur",
+    "deputyClerk": "Catherine Parker",
+    "municipality": "Lake Tomahawk",
+    "phone": "715-277-2257",
+    "recordUpdated": "2024-01-02",
+    "url": "http://laketomahawkwi.org/"
+  },
+  "5508545150": {
+    "clerk": "Christine Sully",
+    "municipality": "Little Rice",
+    "phone": "715-224-2591",
+    "recordUpdated": "2023-11-24",
+    "url": "https://www.townoflittlerice.com/"
+  },
+  "5508546650": {
+    "clerk": "Molly Lehman",
+    "municipality": "Lynne",
+    "phone": "715-564-2650",
+    "recordUpdated": "2024-01-02",
+    "url": "https://townoflynneoneidactywi.gov/"
+  },
+  "5508553225": {
+    "clerk": "Roben Haggart",
+    "deputyClerk": "Lynn Wildes",
+    "municipality": "Minocqua",
+    "phone": "715-356-5296",
+    "recordUpdated": "2024-01-12",
+    "url": "https://www.townofminocqua.org/"
+  },
+  "5508553662": {
+    "clerk": "Barbara M. Henderson",
+    "municipality": "Monico",
+    "phone": "715-499-4981",
+    "recordUpdated": "2024-01-11"
+  },
+  "5508556425": {
+    "clerk": "Kim Gauthier",
+    "municipality": "Newbold",
+    "phone": "715-369-0855",
+    "recordUpdated": "2025-03-03",
+    "url": "https://www.newboldwi.gov/"
+  },
+  "5508557450": {
+    "clerk": "Wendy Smith",
+    "municipality": "Nokomis",
+    "phone": "715-453-4801",
+    "recordUpdated": "2024-03-06",
+    "url": "https://www.nokomiswi.gov/"
+  },
+  "5508561625": {
+    "clerk": "Mike Ring",
+    "deputyClerk": "Sidney Ring",
+    "municipality": "Pelican",
+    "phone": "715-550-3373",
+    "recordUpdated": "2026-01-12",
+    "url": "https://townofpelican.com/"
+  },
+  "5508562600": {
+    "clerk": "Kristianna Wright",
+    "municipality": "Piehl",
+    "phone": "715-420-0113",
+    "recordUpdated": "2026-05-05"
+  },
+  "5508562925": {
+    "clerk": "Cindy Skinner",
+    "deputyClerk": "Erin Skinner",
+    "municipality": "Pine Lake",
+    "phone": "715-362-6071",
+    "recordUpdated": "2023-11-19",
+    "url": "http://www.townofpinelake.com/"
+  },
+  "5508572125": {
+    "clerk": "Julie Taylor",
+    "municipality": "Schoepke",
+    "phone": "715-487-6155",
+    "recordUpdated": "2025-01-02"
+  },
+  "5508576975": {
+    "clerk": "Stacy Schickert",
+    "municipality": "Stella",
+    "phone": "715-369-2292",
+    "recordUpdated": "2024-01-02",
+    "url": "https://www.townofstella.com/"
+  },
+  "5508578075": {
+    "clerk": "Lauren Sowinski",
+    "deputyClerk": "Josh Kral",
+    "municipality": "Sugar Camp",
+    "phone": "715-272-1525",
+    "recordUpdated": "2024-01-02",
+    "url": "http://sugarcamp.org/"
+  },
+  "5508579700": {
+    "clerk": "Susan L Harris",
+    "deputyClerk": "Lanae Kowalski",
+    "municipality": "Three Lakes",
+    "phone": "715-546-3316",
+    "recordUpdated": "2023-11-19",
+    "url": "https://www.townofthreelakes.com/"
+  },
+  "5508588625": {
+    "clerk": "Judith May",
+    "municipality": "Woodboro",
+    "phone": "715-282-5607",
+    "recordUpdated": "2023-05-31",
+    "url": "https://www.townofwoodboro.com/"
+  },
+  "5508588950": {
+    "clerk": "Julie Huotari",
+    "deputyClerk": "Jackie Kortenhof",
+    "municipality": "Woodruff",
+    "phone": "715-356-9421",
+    "recordUpdated": "2023-09-18",
+    "url": "https://townofwoodruffwi.gov/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

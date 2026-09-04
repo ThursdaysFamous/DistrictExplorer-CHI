@@ -1,0 +1,150 @@
+{
+  "5502102825": {
+    "clerk": "Becky Struck",
+    "municipality": "Arlington",
+    "phone": "608-635-4808",
+    "recordUpdated": "2023-12-11"
+  },
+  "5502111900": {
+    "clerk": "Barb Davis",
+    "deputyClerk": "Sandi Dexter",
+    "municipality": "Caledonia",
+    "phone": "608-742-4801",
+    "recordUpdated": "2025-02-14",
+    "url": "https://townofcaledonia.org/"
+  },
+  "5502116475": {
+    "clerk": "Gabrielle Loeffler",
+    "municipality": "Columbus",
+    "phone": "608-444-9578",
+    "recordUpdated": "2025-05-20"
+  },
+  "5502117325": {
+    "clerk": "Linda Henning",
+    "deputyClerk": "Becky Gutzman",
+    "municipality": "Courtland",
+    "phone": "608-225-4666",
+    "recordUpdated": "2026-07-20",
+    "url": "https://www.courtlandtownship.com/"
+  },
+  "5502119375": {
+    "clerk": "Holly J Priske",
+    "municipality": "Dekorra",
+    "phone": "608-635-2014",
+    "recordUpdated": "2023-03-10",
+    "url": "http://www.dekorra-wi.gov"
+  },
+  "5502126725": {
+    "clerk": "Mark Considine",
+    "municipality": "Fort Winnebago",
+    "phone": "608-683-5713",
+    "recordUpdated": "2023-12-28",
+    "url": "https://www.fortwinn.com/"
+  },
+  "5502126875": {
+    "clerk": "Linda Henning",
+    "municipality": "Fountain Prairie",
+    "phone": "920-484-3396",
+    "recordUpdated": "2026-05-11",
+    "url": "https://tn.fountainprairie.wi.gov/"
+  },
+  "5502132375": {
+    "clerk": "Nanette Hensen",
+    "municipality": "Hampden",
+    "phone": "608-333-9110",
+    "recordUpdated": "2024-12-18"
+  },
+  "5502143125": {
+    "clerk": "Joan Olson",
+    "municipality": "Leeds",
+    "phone": "608-635-8878",
+    "recordUpdated": "2023-12-18",
+    "url": "https://townofleeds.org/"
+  },
+  "5502143775": {
+    "clerk": "Thomas E Klappstein",
+    "municipality": "Lewiston",
+    "phone": "608-697-3089",
+    "recordUpdated": "2026-03-03",
+    "url": "https://lewistontownshipwi.org/"
+  },
+  "5502145375": {
+    "clerk": "Shellie Benish",
+    "deputyClerk": "Jina Decot",
+    "municipality": "Lodi",
+    "phone": "608-592-4868 EXT 1",
+    "recordUpdated": "2026-07-21",
+    "url": "https://www.tn.lodi.wi.gov/home"
+  },
+  "5502146050": {
+    "clerk": "Tammy Gorman",
+    "municipality": "Lowville",
+    "phone": "608-617-8040",
+    "recordUpdated": "2024-01-04",
+    "url": "https://lowville.wi.gov/"
+  },
+  "5502149150": {
+    "clerk": "Randell Fox",
+    "municipality": "Marcellon",
+    "phone": "608-742-1041",
+    "recordUpdated": "2026-05-06",
+    "url": "https://townofmarcellon.com/"
+  },
+  "5502157025": {
+    "clerk": "Christine Graap",
+    "municipality": "Newport",
+    "phone": "608-340-2129",
+    "recordUpdated": "2024-06-11"
+  },
+  "5502160687": {
+    "clerk": "Kathy M Olson",
+    "municipality": "Otsego",
+    "phone": "920-992-1043",
+    "recordUpdated": "2026-07-24"
+  },
+  "5502160925": {
+    "clerk": "Marlo Gustafson",
+    "deputyClerk": "A A",
+    "municipality": "Pacific",
+    "phone": "608-742-8763",
+    "recordUpdated": "2023-09-25",
+    "url": "www.tn.pacific.wi.gov"
+  },
+  "5502166175": {
+    "clerk": "Maxine Deyoung",
+    "municipality": "Randolph",
+    "phone": "920-210-3001",
+    "recordUpdated": "2023-11-19"
+  },
+  "5502172250": {
+    "clerk": "Renee Wendt",
+    "municipality": "Scott",
+    "phone": "920-348-5110",
+    "recordUpdated": "2023-12-29",
+    "url": "http://scottwi.com/"
+  },
+  "5502176225": {
+    "clerk": "Becky Gutzman",
+    "municipality": "Springvale",
+    "phone": "920-382-4511",
+    "recordUpdated": "2024-02-26"
+  },
+  "5502186100": {
+    "clerk": "Taffy Buchanan",
+    "municipality": "West Point",
+    "phone": "608-592-7059",
+    "recordUpdated": "2023-12-22",
+    "url": "https://www.townofwestpoint.us/"
+  },
+  "5502189325": {
+    "clerk": "Michelle Goldade",
+    "municipality": "Wyocena",
+    "phone": "920-992-6119",
+    "recordUpdated": "2025-01-27"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

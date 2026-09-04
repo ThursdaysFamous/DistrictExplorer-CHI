@@ -1,0 +1,117 @@
+{
+  "5511731100": {
+    "clerk": "Jon J Miller",
+    "municipality": "Greenbush",
+    "phone": "920-526-3115",
+    "recordUpdated": "2024-01-03",
+    "url": "http://www.townofgreenbushwi.com/"
+  },
+  "5511734050": {
+    "clerk": "Jessica Wolfert",
+    "municipality": "Herman",
+    "phone": "920-565-2450",
+    "recordUpdated": "2023-11-02",
+    "url": "http://www.townherman.com/"
+  },
+  "5511735375": {
+    "clerk": "Janelle Kaiser",
+    "deputyClerk": "Penny Jesse",
+    "municipality": "Holland",
+    "phone": "920-668-6625",
+    "recordUpdated": "2024-09-10",
+    "url": "http://townofholland.com/"
+  },
+  "5511744150": {
+    "clerk": "Karen Pohl",
+    "municipality": "Lima",
+    "phone": "920-467-6037",
+    "recordUpdated": "2023-11-24",
+    "url": "http://www.townlima.com"
+  },
+  "5511746575": {
+    "clerk": "Rhonda Klatt",
+    "deputyClerk": "Christine Henkel",
+    "municipality": "Lyndon",
+    "phone": "920-528-7255",
+    "recordUpdated": "2025-01-14",
+    "url": "https://lyndonshebcowi.gov/"
+  },
+  "5511753375": {
+    "clerk": "Kristin Beckford",
+    "municipality": "Mitchell",
+    "phone": "920-528-7776",
+    "recordUpdated": "2024-01-02",
+    "url": "http://townofmitchell.com"
+  },
+  "5511754475": {
+    "clerk": "Traci Hermann",
+    "deputyClerk": "Todd Grunwald",
+    "municipality": "Mosel",
+    "phone": "920-565-3700",
+    "recordUpdated": "2026-03-26",
+    "url": "https://moselwi.gov/"
+  },
+  "5511763725": {
+    "clerk": "Debra Schwind",
+    "municipality": "Plymouth",
+    "phone": "920-893-5713",
+    "recordUpdated": "2023-12-18",
+    "url": "https://townofplymouth.wi.gov/"
+  },
+  "5511767150": {
+    "clerk": "Amy S. Weber",
+    "municipality": "Rhine",
+    "phone": "920-876-3413",
+    "recordUpdated": "2024-06-21",
+    "url": "https://townrhine.com/"
+  },
+  "5511770350": {
+    "clerk": "Lynette Mierzejewski",
+    "municipality": "Russell",
+    "phone": "920-254-8738",
+    "recordUpdated": "2026-01-27",
+    "url": "https://townrussell.com/"
+  },
+  "5511772350": {
+    "clerk": "Luanne Rady",
+    "municipality": "Scott",
+    "phone": "920-994-4470",
+    "recordUpdated": "2025-11-10"
+  },
+  "5511773000": {
+    "clerk": "Peggy Fischer",
+    "deputyClerk": "Chris Steeb",
+    "municipality": "Sheboygan",
+    "phone": "920-451-2320",
+    "recordUpdated": "2025-06-17",
+    "url": "http://www.townofsheboygan.org/"
+  },
+  "5511773050": {
+    "clerk": "Jenny Meyer",
+    "municipality": "Sheboygan Falls",
+    "phone": "920-467-1922",
+    "recordUpdated": "2023-11-19",
+    "url": "http://www.townofsheboyganfalls.com/"
+  },
+  "5511773425": {
+    "clerk": "Janelle Kaiser",
+    "deputyClerk": "Penny Jesse",
+    "municipality": "Sherman",
+    "phone": "920-994-9421",
+    "recordUpdated": "2026-04-22",
+    "url": "https://shermanshebcowi.gov/"
+  },
+  "5511787500": {
+    "clerk": "Shawna Hall",
+    "deputyClerk": "Karen Bollwahn",
+    "municipality": "Wilson",
+    "phone": "920-208-2390",
+    "recordUpdated": "2025-02-25",
+    "url": "https://townwilson.com/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "5509100800": {
+    "clerk": "Julie Heck",
+    "municipality": "Albany",
+    "phone": "715-926-3410",
+    "recordUpdated": "2023-12-28"
+  },
+  "5509121250": {
+    "clerk": "Brittany Myers",
+    "municipality": "Durand",
+    "phone": "715-563-5728",
+    "recordUpdated": "2024-01-02"
+  },
+  "5509127175": {
+    "clerk": "Debra Fisher",
+    "deputyClerk": "Maureen Manore",
+    "municipality": "Frankfort",
+    "phone": "715-442-2295",
+    "recordUpdated": "2025-04-14",
+    "url": "https://townoffrankfort.yolasite.com/"
+  },
+  "5509144075": {
+    "clerk": "Kylene Weiss",
+    "municipality": "Lima",
+    "phone": "715-797-2474",
+    "recordUpdated": "2024-01-19"
+  },
+  "5509161950": {
+    "clerk": "Deborah Seifert",
+    "municipality": "Pepin",
+    "phone": "715-505-4332",
+    "recordUpdated": "2024-04-18",
+    "url": "https://www.townofpepin.org/"
+  },
+  "5509177500": {
+    "clerk": "Martha Black",
+    "municipality": "Stockholm",
+    "phone": "715-448-0496",
+    "recordUpdated": "2023-12-26",
+    "url": "https://www.townofstockholm.org/"
+  },
+  "5509184025": {
+    "clerk": "Diane Hoyt",
+    "municipality": "Waterville",
+    "phone": "715-285-5050",
+    "recordUpdated": "2023-12-26"
+  },
+  "5509184100": {
+    "clerk": "Melissa Weber",
+    "municipality": "Waubeek",
+    "phone": "715-672-8890",
+    "recordUpdated": "2026-02-03",
+    "url": "https://www.waubeektownship.com/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "5507711050": {
+    "clerk": "Laurie Beahm",
+    "municipality": "Buffalo",
+    "phone": "920-394-3962",
+    "recordUpdated": "2023-12-11",
+    "url": "tn.buffalo.wi.gov"
+  },
+  "5507717900": {
+    "clerk": "Lisa Fenner",
+    "municipality": "Crystal Lake",
+    "phone": "920-229-7512",
+    "recordUpdated": "2023-12-18",
+    "url": "https://town.crystallake.wi.gov/"
+  },
+  "5507720525": {
+    "clerk": "Rita Ziehr",
+    "municipality": "Douglas",
+    "phone": "719-322-5646",
+    "recordUpdated": "2025-05-09"
+  },
+  "5507732775": {
+    "clerk": "Darlene Wulf",
+    "municipality": "Harris",
+    "phone": "608-296-4711",
+    "recordUpdated": "2023-12-18"
+  },
+  "5507750350": {
+    "clerk": "Caroline Gemoll",
+    "municipality": "Mecan",
+    "phone": "920-295-6724",
+    "recordUpdated": "2024-09-20",
+    "url": "https://townofmecanwi.gov/"
+  },
+  "5507753900": {
+    "clerk": "Eileen Napralla",
+    "municipality": "Montello",
+    "phone": "608-297-7469",
+    "recordUpdated": "2023-11-02"
+  },
+  "5507754600": {
+    "clerk": "Joanne Dalton",
+    "municipality": "Moundville",
+    "phone": "608-575-9502",
+    "recordUpdated": "2026-01-12",
+    "url": "https://moundvillewi.gov/"
+  },
+  "5507756150": {
+    "clerk": "Cheryl Milbrandt",
+    "municipality": "Neshkoro",
+    "phone": "920-291-6029",
+    "recordUpdated": "2024-10-11"
+  },
+  "5507757225": {
+    "clerk": "Dawn Weishaar",
+    "municipality": "Newton",
+    "phone": "608-369-0046",
+    "recordUpdated": "2025-12-09"
+  },
+  "5507760900": {
+    "clerk": "Mary P Walters",
+    "municipality": "Oxford",
+    "phone": "608-586-4366",
+    "recordUpdated": "2023-03-15",
+    "url": "https://townofoxfordwi.com/"
+  },
+  "5507760962": {
+    "clerk": "Tara Schuh",
+    "municipality": "Packwaukee",
+    "phone": "608-369-3165",
+    "recordUpdated": "2024-06-17",
+    "url": "https://www.townofpackwaukee.org/"
+  },
+  "5507773600": {
+    "clerk": "Lois M Zellmer",
+    "municipality": "Shields",
+    "phone": "920-379-2660",
+    "recordUpdated": "2023-12-11",
+    "url": "http://www.townofshields-wi.gov/"
+  },
+  "5507775925": {
+    "clerk": "Megan Hockerman",
+    "municipality": "Springfield",
+    "phone": "608-296-1982",
+    "recordUpdated": "2023-12-18"
+  },
+  "5507785600": {
+    "clerk": "Carilee Russ",
+    "municipality": "Westfield",
+    "phone": "608-369-1873",
+    "recordUpdated": "2026-02-19",
+    "url": "https://townofwestfieldwisconsin.com/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

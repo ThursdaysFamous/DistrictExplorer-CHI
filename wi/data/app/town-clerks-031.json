@@ -1,0 +1,121 @@
+{
+  "5503101825": {
+    "clerk": "Gary M Kane",
+    "municipality": "Amnicon",
+    "phone": "715-364-2316",
+    "recordUpdated": "2026-06-25",
+    "url": "https://townofamnicon.wi.gov/"
+  },
+  "5503106775": {
+    "clerk": "Morgan Fowler",
+    "municipality": "Bennett",
+    "phone": "715-817-5994",
+    "recordUpdated": "2025-01-17",
+    "url": "https://townofbennett.wi.gov/"
+  },
+  "5503110575": {
+    "clerk": "Diane R Nelson",
+    "municipality": "Brule",
+    "phone": "218-591-0693",
+    "recordUpdated": "2023-12-28",
+    "url": "https://brulewi.gov/"
+  },
+  "5503115825": {
+    "clerk": "Melissa Tonn",
+    "deputyClerk": "Lexi Klasen",
+    "municipality": "Cloverland",
+    "phone": "262-384-1117",
+    "recordUpdated": "2026-01-14"
+  },
+  "5503118425": {
+    "clerk": "Tammy Baer",
+    "municipality": "Dairyland",
+    "phone": "715-244-3000",
+    "recordUpdated": "2024-06-27",
+    "url": "http://townofdairyland.com"
+  },
+  "5503129925": {
+    "clerk": "Denise Wohlbier",
+    "municipality": "Gordon",
+    "phone": "715-376-2693",
+    "recordUpdated": "2023-12-18",
+    "url": "http://www.gordonwi.us.com/"
+  },
+  "5503133350": {
+    "clerk": "Debra Wermter",
+    "deputyClerk": "Jessica Dupree",
+    "municipality": "Hawthorne",
+    "phone": "715-374-3641",
+    "recordUpdated": "2026-07-22",
+    "url": "https://townofhawthorne.wi.gov/"
+  },
+  "5503134425": {
+    "clerk": "Nora Anne Moss",
+    "municipality": "Highland",
+    "phone": "715-374-2046",
+    "recordUpdated": "2025-11-21",
+    "url": "https://townofhighland.net/"
+  },
+  "5503141800": {
+    "clerk": "Jon Winter",
+    "municipality": "Lakeside",
+    "phone": "715-364-2359",
+    "recordUpdated": "2025-02-26",
+    "url": "https://www.townoflakeside.us/"
+  },
+  "5503148725": {
+    "clerk": "Shereen Johnston",
+    "deputyClerk": "Rachel Lintula",
+    "municipality": "Maple",
+    "phone": "715-919-0865",
+    "recordUpdated": "2026-01-20",
+    "url": "https://townofmaple.com/"
+  },
+  "5503159100": {
+    "clerk": "Lydia Schroeder",
+    "deputyClerk": "Wendy Polson",
+    "municipality": "Oakland",
+    "phone": "715-399-0206",
+    "recordUpdated": "2026-03-24",
+    "url": "https://www.townofoakland.net/"
+  },
+  "5503161250": {
+    "clerk": "Suzy St Marie",
+    "municipality": "Parkland",
+    "phone": "218-428-6475",
+    "recordUpdated": "2024-01-02"
+  },
+  "5503174600": {
+    "clerk": "Mick Salmen",
+    "municipality": "Solon Springs",
+    "phone": "715-378-2295",
+    "recordUpdated": "2024-01-11",
+    "url": "https://townofsolonsprings.com/"
+  },
+  "5503178275": {
+    "clerk": "Daniel D Corbin",
+    "municipality": "Summit",
+    "phone": "715-319-4982",
+    "recordUpdated": "2026-07-08"
+  },
+  "5503178675": {
+    "clerk": "Carolyn Jones",
+    "municipality": "Superior",
+    "phone": "715-399-8385",
+    "recordUpdated": "2023-12-28",
+    "url": "http://www.townofsuperior.net"
+  },
+  "5503183512": {
+    "clerk": "Jeannette Atkinson",
+    "deputyClerk": "Michelle Manor",
+    "municipality": "Wascott",
+    "phone": "715-466-4252",
+    "recordUpdated": "2024-09-19",
+    "url": "https://www.townofwascott.org/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "5506100600": {
+    "clerk": "Phillip M Steffen",
+    "municipality": "Ahnapee",
+    "phone": "920-676-6509",
+    "recordUpdated": "2023-12-18",
+    "url": "http://townofahnapee.org/"
+  },
+  "5506112575": {
+    "clerk": "Linda Sinkula",
+    "municipality": "Carlton",
+    "phone": "920-388-3251",
+    "recordUpdated": "2023-11-02",
+    "url": "http://www.townofcarltonwi.com"
+  },
+  "5506112875": {
+    "clerk": "Terrie Gabriel",
+    "deputyClerk": "Edith Lauscher",
+    "municipality": "Casco",
+    "phone": "920-837-2899",
+    "recordUpdated": "2023-11-02"
+  },
+  "5506127250": {
+    "clerk": "Suzi Sevcik",
+    "municipality": "Franklin",
+    "phone": "920-362-8299",
+    "recordUpdated": "2026-03-17",
+    "url": "https://townoffranklin.org/"
+  },
+  "5506144425": {
+    "clerk": "Mary Ann Salmon",
+    "municipality": "Lincoln",
+    "phone": "920-366-3640",
+    "recordUpdated": "2026-05-18",
+    "url": "https://lincolnkewauneewi.com/"
+  },
+  "5506146425": {
+    "clerk": "Kim Bosman",
+    "deputyClerk": "Glenda Daul",
+    "municipality": "Luxemburg",
+    "phone": "920-371-0710",
+    "recordUpdated": "2025-04-21",
+    "url": "https://www.townofluxemburgwi.com/"
+  },
+  "5506154050": {
+    "clerk": "Shaefer Oshefsky",
+    "municipality": "Montpelier",
+    "phone": "920-309-1036",
+    "recordUpdated": "2023-11-02"
+  },
+  "5506162625": {
+    "clerk": "Bonnie Selner",
+    "municipality": "Pierce",
+    "phone": "920-255-1507",
+    "recordUpdated": "2023-11-19"
+  },
+  "5506166700": {
+    "clerk": "Sarah Monfils",
+    "deputyClerk": "Duckart Char",
+    "municipality": "Red River",
+    "phone": "920-609-7720",
+    "recordUpdated": "2026-03-13",
+    "url": "https://townofredriverwis.gov/"
+  },
+  "5506185775": {
+    "clerk": "Kristen Richard",
+    "municipality": "West Kewaunee",
+    "phone": "920-255-1147",
+    "recordUpdated": "2023-12-22"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

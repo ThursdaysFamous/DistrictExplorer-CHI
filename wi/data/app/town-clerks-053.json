@@ -1,0 +1,148 @@
+{
+  "5505300350": {
+    "clerk": "Dale Ann Bohac",
+    "municipality": "Adams",
+    "phone": "715-896-1735",
+    "recordUpdated": "2025-05-06",
+    "url": "https://townofadamsjacksoncowi.gov/"
+  },
+  "5505300900": {
+    "clerk": "Joan Hanson",
+    "municipality": "Albion",
+    "phone": "715-284-2365",
+    "recordUpdated": "2025-10-23",
+    "url": "https://townofalbionjacksoncounty.com/"
+  },
+  "5505301275": {
+    "clerk": "Donald Forsting",
+    "municipality": "Alma",
+    "phone": "715-896-4898",
+    "recordUpdated": "2024-10-24"
+  },
+  "5505305550": {
+    "clerk": "Susan Eickelkamp",
+    "municipality": "Bear Bluff",
+    "phone": "608-219-1741",
+    "recordUpdated": "2025-01-21",
+    "url": "https://townofbearbluff.com/"
+  },
+  "5505309900": {
+    "clerk": "Julie Borek",
+    "municipality": "Brockway",
+    "phone": "715-284-5234",
+    "recordUpdated": "2025-12-05",
+    "url": "https://townofbrockway.com/"
+  },
+  "5505314800": {
+    "clerk": "Amy Bartlett",
+    "municipality": "City Point",
+    "phone": "715-896-7595",
+    "recordUpdated": "2025-05-15"
+  },
+  "5505315375": {
+    "clerk": "Kayla Lindgren",
+    "municipality": "Cleveland",
+    "phone": "715-456-4757",
+    "recordUpdated": "2026-04-09",
+    "url": "https://www.townofcleveland.org/"
+  },
+  "5505318075": {
+    "clerk": "Jim Gathje",
+    "municipality": "Curran",
+    "phone": "715-299-5253",
+    "recordUpdated": "2025-07-09"
+  },
+  "5505327225": {
+    "clerk": "Ashley Stezer",
+    "municipality": "Franklin",
+    "phone": "608-797-6734",
+    "recordUpdated": "2025-05-01",
+    "url": "https://www.townoffranklin.wi.gov/"
+  },
+  "5505328250": {
+    "clerk": "Ann Klieforth",
+    "municipality": "Garden Valley",
+    "phone": "715-964-6410",
+    "recordUpdated": "2023-12-18",
+    "url": "https://townofgardenvalleywi.gov/"
+  },
+  "5505328325": {
+    "clerk": "Michel Berner",
+    "deputyClerk": "Adrian G Swanson",
+    "municipality": "Garfield",
+    "phone": "715-563-1459",
+    "recordUpdated": "2023-12-18",
+    "url": "https://www.townofgarfieldwi.com/"
+  },
+  "5505335100": {
+    "clerk": "Melissa Windsor",
+    "deputyClerk": "Ruth Casper",
+    "municipality": "Hixton",
+    "phone": "715-533-4243",
+    "recordUpdated": "2023-12-18"
+  },
+  "5505337275": {
+    "clerk": "Paula Proft",
+    "municipality": "Irving",
+    "phone": "715-299-2388",
+    "recordUpdated": "2023-12-28"
+  },
+  "5505340000": {
+    "clerk": "Dawn Linder",
+    "municipality": "Knapp",
+    "phone": "608-343-3233",
+    "recordUpdated": "2024-01-02"
+  },
+  "5505340325": {
+    "clerk": "Alina Limberg",
+    "municipality": "Komensky",
+    "phone": "715-299-4501",
+    "recordUpdated": "2024-01-16"
+  },
+  "5505348425": {
+    "clerk": "Clare McNamara",
+    "municipality": "Manchester",
+    "phone": "952-215-6772",
+    "recordUpdated": "2025-02-03",
+    "url": "https://manchesterwi.com/"
+  },
+  "5505350775": {
+    "clerk": "Kimberly K Torres",
+    "deputyClerk": "Mary Johnson",
+    "municipality": "Melrose",
+    "phone": "608-387-2008",
+    "recordUpdated": "2023-12-11",
+    "url": "www.townofmelrose.com"
+  },
+  "5505352050": {
+    "clerk": "Dawn M Wojtyla",
+    "municipality": "Millston",
+    "phone": "715-299-6368",
+    "recordUpdated": "2025-08-26",
+    "url": "https://millstonwi.gov/"
+  },
+  "5505357775": {
+    "clerk": "Tina Flick",
+    "municipality": "North Bend",
+    "phone": "608-790-7760",
+    "recordUpdated": "2026-06-01",
+    "url": "https://northbendwi.com/"
+  },
+  "5505357975": {
+    "clerk": "Jessica M Lind",
+    "municipality": "Northfield",
+    "phone": "301-752-0774",
+    "recordUpdated": "2025-01-10"
+  },
+  "5505375900": {
+    "clerk": "Susan Waldera",
+    "municipality": "Springfield",
+    "phone": "715-662-2661",
+    "recordUpdated": "2023-12-28"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

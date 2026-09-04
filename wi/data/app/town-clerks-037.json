@@ -1,0 +1,61 @@
+{
+  "5503703875": {
+    "clerk": "Stacy Hedmark",
+    "municipality": "Aurora",
+    "phone": "715-589-2282",
+    "recordUpdated": "2022-01-12"
+  },
+  "5503716550": {
+    "clerk": "Dorothy Vayda",
+    "municipality": "Commonwealth",
+    "phone": "715-528-3068",
+    "recordUpdated": "2023-06-06"
+  },
+  "5503725575": {
+    "clerk": "Theresa Smith",
+    "municipality": "Fence",
+    "phone": "715-336-2407",
+    "recordUpdated": "2025-06-06",
+    "url": "https://www.townoffencewi.com/"
+  },
+  "5503725675": {
+    "clerk": "Pamela Batte",
+    "deputyClerk": "Patti De Clark",
+    "municipality": "Fern",
+    "phone": "715-336-2284",
+    "recordUpdated": "2026-07-15",
+    "url": "https://www.fernwisconsin.com/"
+  },
+  "5503726200": {
+    "clerk": "Jessica Klumpp",
+    "deputyClerk": "Jennifer Penegor",
+    "municipality": "Florence",
+    "phone": "715-528-3595 EXT 202",
+    "recordUpdated": "2025-10-29",
+    "url": "http://www.townofflorencewisconsin.com/"
+  },
+  "5503735600": {
+    "clerk": "Linda McLain",
+    "municipality": "Homestead",
+    "phone": "715-589-2619",
+    "recordUpdated": "2021-12-28"
+  },
+  "5503745625": {
+    "clerk": "Brandy Zegar",
+    "municipality": "Long Lake",
+    "phone": "715-674-2439",
+    "recordUpdated": "2026-03-05",
+    "url": "https://townoflonglake-wi.com/"
+  },
+  "5503779975": {
+    "clerk": "Amanda Harvat",
+    "municipality": "Tipler",
+    "phone": "715-674-2320",
+    "recordUpdated": "2025-01-06"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

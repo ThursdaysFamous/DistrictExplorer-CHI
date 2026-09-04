@@ -1,0 +1,114 @@
+{
+  "5512502450": {
+    "clerk": "Emily Biertzer",
+    "deputyClerk": "Holly Kizewski",
+    "municipality": "Arbor Vitae",
+    "phone": "715-356-3120",
+    "recordUpdated": "2023-11-21",
+    "url": "https://townofarborvitae.org/"
+  },
+  "5512508950": {
+    "clerk": "Daniel Driscoll",
+    "municipality": "Boulder Junction",
+    "phone": "715-385-2220",
+    "recordUpdated": "2024-01-16",
+    "url": "https://www.townofboulderjunction.org/"
+  },
+  "5512515850": {
+    "clerk": "Tracy Schilling",
+    "deputyClerk": "Danielle Steffens",
+    "municipality": "Cloverland",
+    "phone": "715-479-3434",
+    "recordUpdated": "2025-09-03",
+    "url": "https://www.townofcloverland.wi.gov/"
+  },
+  "5512516750": {
+    "clerk": "Kendra Lederer",
+    "deputyClerk": "Jennifer Steiner",
+    "municipality": "Conover",
+    "phone": "715-479-8688",
+    "recordUpdated": "2024-02-14",
+    "url": "https://townofconover.com/"
+  },
+  "5512540687": {
+    "clerk": "Susan Schoonover",
+    "deputyClerk": "Colette Welch",
+    "municipality": "Lac du Flambeau",
+    "phone": "715-588-3358",
+    "recordUpdated": "2025-07-31",
+    "url": "http://www.tn.lacduflambeau.wi.gov/"
+  },
+  "5512542325": {
+    "clerk": "Lynn Jolin",
+    "deputyClerk": "Sheila Bernier",
+    "municipality": "Land O'Lakes",
+    "phone": "715-547-3255",
+    "recordUpdated": "2023-11-28",
+    "url": "https://landolakeswi.gov/"
+  },
+  "5512544525": {
+    "clerk": "Shelly Sauvola",
+    "deputyClerk": "Sherry Schmidt",
+    "municipality": "Lincoln",
+    "phone": "715-479-7000",
+    "recordUpdated": "2024-01-02",
+    "url": "http://www.townoflincolnvilas.com/"
+  },
+  "5512548462": {
+    "clerk": "Heather Suffron",
+    "deputyClerk": "Annemarie Wenten",
+    "municipality": "Manitowish Waters",
+    "phone": "715-543-8400",
+    "recordUpdated": "2025-06-16",
+    "url": "https://mwtown.gov/"
+  },
+  "5512562425": {
+    "clerk": "Sheryl J Ward",
+    "deputyClerk": "Kathleen R Ray",
+    "municipality": "Phelps",
+    "phone": "715-545-2270",
+    "recordUpdated": "2025-08-04",
+    "url": "https://townofphelps.com/"
+  },
+  "5512563625": {
+    "clerk": "Teresa Arnold",
+    "municipality": "Plum Lake",
+    "phone": "715-542-4531",
+    "recordUpdated": "2025-05-09",
+    "url": "https://www.plumlakewi.gov/"
+  },
+  "5512565425": {
+    "clerk": "Lori Thomas",
+    "municipality": "Presque Isle",
+    "phone": "715-686-2473",
+    "recordUpdated": "2026-02-02",
+    "url": "https://presqueislewi.gov/"
+  },
+  "5512570725": {
+    "clerk": "Felicia Szott",
+    "municipality": "St. Germain",
+    "phone": "715-542-8024",
+    "recordUpdated": "2026-03-02",
+    "url": "http://www.townofstgermain.org/"
+  },
+  "5512583750": {
+    "clerk": "Nancy Sobralski",
+    "municipality": "Washington",
+    "phone": "715-479-8886",
+    "recordUpdated": "2023-11-24",
+    "url": "https://town-of-washington.org/"
+  },
+  "5512587600": {
+    "clerk": "Luke Huybrect",
+    "deputyClerk": "Adeline Huybrecht",
+    "municipality": "Winchester",
+    "phone": "715-686-2123",
+    "recordUpdated": "2026-05-14",
+    "url": "https://winchesterwi.com/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

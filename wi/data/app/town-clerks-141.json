@@ -1,0 +1,161 @@
+{
+  "5514103050": {
+    "clerk": "Shelly Marie Grimm",
+    "municipality": "Arpin",
+    "phone": "715-305-1118",
+    "recordUpdated": "2024-01-11"
+  },
+  "5514103800": {
+    "clerk": "Bill Bruening",
+    "municipality": "Auburndale",
+    "phone": "715-551-1446",
+    "recordUpdated": "2026-07-22",
+    "url": "https://www.townofauburndale.com/"
+  },
+  "5514112275": {
+    "clerk": "Danielle Hall",
+    "municipality": "Cameron",
+    "phone": "715-573-6876",
+    "recordUpdated": "2023-12-28"
+  },
+  "5514112775": {
+    "clerk": "Jean Gansch",
+    "municipality": "Cary",
+    "phone": "715-884-2962",
+    "recordUpdated": "2024-01-04",
+    "url": "https://www.townofcarywis.org/"
+  },
+  "5514117525": {
+    "clerk": "Trent Miner",
+    "deputyClerk": "Trent Miner",
+    "municipality": "Cranmoor",
+    "phone": "715-421-8460",
+    "recordUpdated": "2026-07-09"
+  },
+  "5514120075": {
+    "clerk": "Diana Schooley",
+    "municipality": "Dexter",
+    "phone": "715-884-1280",
+    "recordUpdated": "2026-06-25",
+    "url": "https://townofdexterwi.gov/"
+  },
+  "5514130125": {
+    "clerk": "Lisa Dotter",
+    "municipality": "Grand Rapids",
+    "phone": "715-424-1821",
+    "recordUpdated": "2024-01-10",
+    "url": "http://www.townofgrandrapids.org"
+  },
+  "5514132575": {
+    "clerk": "Diane Kohls",
+    "municipality": "Hansen",
+    "phone": "715-569-4750",
+    "recordUpdated": "2026-06-08",
+    "url": "https://townofhansen.gov/"
+  },
+  "5514134675": {
+    "clerk": "Cassandra Pio-Stoflet",
+    "deputyClerk": "Kimm Wojtalewicz",
+    "municipality": "Hiles",
+    "phone": "715-459-8989",
+    "recordUpdated": "2025-10-06",
+    "url": "https://townofhiles.com/"
+  },
+  "5514144550": {
+    "clerk": "Kathleen Altmann-Drinka",
+    "municipality": "Lincoln",
+    "phone": "715-897-4416",
+    "recordUpdated": "2024-08-10",
+    "url": "https://tn.lincoln-wood.wi.gov/"
+  },
+  "5514149700": {
+    "clerk": "Janet A Meyer",
+    "municipality": "Marshfield",
+    "phone": "715-384-5638",
+    "recordUpdated": "2023-11-02"
+  },
+  "5514151900": {
+    "clerk": "Leslianne Ruesch",
+    "municipality": "Milladore",
+    "phone": "505-600-9393",
+    "recordUpdated": "2024-09-19",
+    "url": "http://townofmilladore.com/"
+  },
+  "5514164200": {
+    "clerk": "Tracey Draper",
+    "municipality": "Port Edwards",
+    "phone": "715-451-1767",
+    "recordUpdated": "2025-06-24",
+    "url": "https://www.townofportedwardswi.org/"
+  },
+  "5514167000": {
+    "clerk": "Brenda J Haasl",
+    "municipality": "Remington",
+    "phone": "715-323-2603",
+    "recordUpdated": "2024-01-16",
+    "url": "https://townofremingtonwi.com/"
+  },
+  "5514167500": {
+    "clerk": "Paula Rustad",
+    "deputyClerk": "Bonnie Sabo",
+    "municipality": "Richfield",
+    "phone": "715-650-3611",
+    "recordUpdated": "2024-01-12",
+    "url": "http://www.townshipofrichfield.com/"
+  },
+  "5514168625": {
+    "clerk": "Jill Wrensch",
+    "municipality": "Rock",
+    "phone": "715-676-2428",
+    "recordUpdated": "2023-03-10"
+  },
+  "5514170025": {
+    "clerk": "Amy Arnold",
+    "municipality": "Rudolph",
+    "phone": "715-570-7736",
+    "recordUpdated": "2024-11-25",
+    "url": "https://townofrudolphwi.gov/"
+  },
+  "5514171600": {
+    "clerk": "Paulette Weinfurter",
+    "deputyClerk": "Mary Hasenohrl",
+    "municipality": "Saratoga",
+    "phone": "715-325-5204",
+    "recordUpdated": "2023-11-02",
+    "url": "https://dev.saratogawisconsin.org/"
+  },
+  "5514172575": {
+    "clerk": "Jackie Kitowski",
+    "deputyClerk": "Janet Hohl",
+    "municipality": "Seneca",
+    "phone": "715-451-0247",
+    "recordUpdated": "2024-06-25",
+    "url": "https://townofsenecawoodcowi.gov/"
+  },
+  "5514173475": {
+    "clerk": "Tena Linse",
+    "municipality": "Sherry",
+    "phone": "715-486-6642",
+    "recordUpdated": "2025-04-24",
+    "url": "https://townofsherry.com/"
+  },
+  "5514173900": {
+    "clerk": "Sandra Nieman",
+    "municipality": "Sigel",
+    "phone": "715-435-3757",
+    "recordUpdated": "2023-11-02",
+    "url": "https://townofsigelwoodwi.gov/"
+  },
+  "5514188575": {
+    "clerk": "Cathy Tritz",
+    "municipality": "Wood",
+    "phone": "715-884-2135",
+    "recordUpdated": "2025-06-16",
+    "url": "https://townofwoodwi.com/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

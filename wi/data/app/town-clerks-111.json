@@ -1,0 +1,161 @@
+{
+  "5511104650": {
+    "clerk": "Jennifer Roloff",
+    "deputyClerk": "Barbara Terry",
+    "municipality": "Baraboo",
+    "phone": "608-356-5170",
+    "recordUpdated": "2026-06-03",
+    "url": "https://tn.baraboo.wi.gov/"
+  },
+  "5511105600": {
+    "clerk": "Sheila A Carver",
+    "municipality": "Bear Creek",
+    "phone": "608-588-5554",
+    "recordUpdated": "2023-12-18",
+    "url": "https://bearcreektown.wixsite.com/sauk"
+  },
+  "5511119550": {
+    "clerk": "Lynn Eberl",
+    "deputyClerk": "Stephanie Darnell",
+    "municipality": "Dellona",
+    "phone": "608-524-0800",
+    "recordUpdated": "2023-11-28",
+    "url": "https://townofdellona.com/"
+  },
+  "5511119675": {
+    "clerk": "Deborah L. Kowalke",
+    "municipality": "Delton",
+    "phone": "608-253-4621",
+    "recordUpdated": "2025-01-15",
+    "url": "https://townofdeltonwi.gov/"
+  },
+  "5511124675": {
+    "clerk": "Sandra Meyer Swanson",
+    "municipality": "Excelsior",
+    "phone": "608-522-5115",
+    "recordUpdated": "2024-01-19",
+    "url": "https://townofexcelsiorwi.gov/"
+  },
+  "5511124900": {
+    "clerk": "Brandie Grob",
+    "municipality": "Fairfield",
+    "phone": "608-355-0406",
+    "recordUpdated": "2024-01-02",
+    "url": "https://www.townoffairfieldwi.com"
+  },
+  "5511127350": {
+    "clerk": "Christine Elliott",
+    "municipality": "Franklin",
+    "phone": "608-415-8516",
+    "recordUpdated": "2023-11-19"
+  },
+  "5511127675": {
+    "clerk": "Jennifer Roloff",
+    "municipality": "Freedom",
+    "phone": "608-963-8082",
+    "recordUpdated": "2026-07-28",
+    "url": "https://www.freedomwi.com"
+  },
+  "5511131250": {
+    "clerk": "Mary Friesen",
+    "municipality": "Greenfield",
+    "phone": "608-356-0054",
+    "recordUpdated": "2024-01-02"
+  },
+  "5511135625": {
+    "clerk": "Jennifer Evert",
+    "municipality": "Honey Creek",
+    "phone": "608-393-7454",
+    "recordUpdated": "2025-07-10"
+  },
+  "5511137250": {
+    "clerk": "Diane Reinfeldt",
+    "municipality": "Ironton",
+    "phone": "608-415-0657",
+    "recordUpdated": "2025-05-29"
+  },
+  "5511142850": {
+    "clerk": "Jean Judd",
+    "municipality": "La Valle",
+    "phone": "608-985-7695",
+    "recordUpdated": "2023-11-19",
+    "url": "http://townoflavalle.us/"
+  },
+  "5511151350": {
+    "clerk": "Stephanie Brensike",
+    "deputyClerk": "Sandi Dexter",
+    "municipality": "Merrimac",
+    "phone": "608-493-2588",
+    "recordUpdated": "2026-07-06",
+    "url": "https://www.townofmerrimac.net/"
+  },
+  "5511165125": {
+    "clerk": "Courtney Beuthin",
+    "deputyClerk": "Richard Nolden",
+    "municipality": "Prairie du Sac",
+    "phone": "608-643-3656",
+    "recordUpdated": "2026-02-05",
+    "url": "https://townofprairiedusac.org/"
+  },
+  "5511166825": {
+    "clerk": "Rebecca Lynn Meyer",
+    "municipality": "Reedsburg",
+    "phone": "608-524-3999",
+    "recordUpdated": "2025-11-13"
+  },
+  "5511176050": {
+    "clerk": "Sarah White-Dilley",
+    "deputyClerk": "Scott James",
+    "municipality": "Spring Green",
+    "phone": "608-588-3235",
+    "recordUpdated": "2026-07-20",
+    "url": "https://tn.springgreen.wi.gov/"
+  },
+  "5511178525": {
+    "clerk": "Rita Seaver",
+    "municipality": "Sumpter",
+    "phone": "608-963-6564",
+    "recordUpdated": "2025-08-26",
+    "url": "https://twnofsumpter.gov/"
+  },
+  "5511180825": {
+    "clerk": "Mary Zins",
+    "municipality": "Troy",
+    "phone": "608-544-3549",
+    "recordUpdated": "2023-11-02"
+  },
+  "5511183700": {
+    "clerk": "Sheila Carver",
+    "deputyClerk": "Joyce Huebsch",
+    "municipality": "Washington",
+    "phone": "608-588-5554",
+    "recordUpdated": "2026-07-20",
+    "url": "https://sites.google.com/view/townofwashington-saukcounty/home"
+  },
+  "5511185625": {
+    "clerk": "Julie Strutz",
+    "municipality": "Westfield",
+    "phone": "608-963-2663",
+    "recordUpdated": "2023-09-25",
+    "url": "https://townofwestfieldsaukwi.gov/"
+  },
+  "5511187775": {
+    "clerk": "Teresa Bass",
+    "municipality": "Winfield",
+    "phone": "608-524-6654",
+    "recordUpdated": "2025-04-29",
+    "url": "https://townofwinfieldwi.gov/"
+  },
+  "5511188775": {
+    "clerk": "Nancy J Dieck",
+    "municipality": "Woodland",
+    "phone": "608-464-3290",
+    "recordUpdated": "2023-12-22",
+    "url": "https://www.townofwoodland.com/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

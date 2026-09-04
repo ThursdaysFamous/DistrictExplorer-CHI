@@ -73,12 +73,31 @@ UA = {
 PARTY = {"D": "Democrat", "R": "Republican", "I": "Independent", "A": "Appointed"}
 
 
-def fetch(url, binary=False):
-    ctx = ssl.create_default_context()
-    req = urllib.request.Request(url, headers=UA)
-    with urllib.request.urlopen(req, timeout=60, context=ctx) as r:
-        data = r.read()
-    return data if binary else data.decode("utf-8", "replace")
+def fetch(url, binary=False, tries=3, timeout=60):
+    """The Blue Book PDF or a clerks'-association page, with a retry ladder.
+
+    THE RETRY IS WHY THIS EXISTS. Until 2026-09-03 this was a single
+    urlopen with no ladder, and the weekly job had NEVER ONCE been green:
+    both scheduled runs (its only run, 2026-08-28) died in about a minute on one
+    `urlopen error timed out`, which is one attempt and no second chance.
+    Ten of this instance's thirteen scrapers already retry; this was one of
+    the three that did not, and the two never-green jobs were both among
+    them. Measured 2026-09-03: every URL here answers in under a second from
+    a developer machine, so what failed was a moment on somebody else's
+    server, which is exactly what a ladder is for.
+    """
+    last = None
+    for i in range(tries):
+        try:
+            req = urllib.request.Request(url, headers=UA)
+            with urllib.request.urlopen(req, timeout=timeout,
+                                        context=ssl.create_default_context()) as r:
+                data = r.read()
+            return data if binary else data.decode("utf-8", "replace")
+        except Exception as e:  # noqa: BLE001 — retried, then re-raised
+            last = e
+            time.sleep(2 * (i + 1))
+    raise last
 
 
 def county_names():

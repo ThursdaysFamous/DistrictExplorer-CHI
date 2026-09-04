@@ -1,0 +1,134 @@
+{
+  "5505702850": {
+    "clerk": "Jennifer Wiersma",
+    "municipality": "Armenia",
+    "phone": "608-565-7491",
+    "recordUpdated": "2023-01-17"
+  },
+  "5505715225": {
+    "clerk": "Cindy Suzda",
+    "municipality": "Clearfield",
+    "phone": "608-547-3543",
+    "recordUpdated": "2023-12-28",
+    "url": "https://townofclearfieldwi.gov/"
+  },
+  "5505718225": {
+    "clerk": "Bobbie K Georgeson",
+    "municipality": "Cutler",
+    "phone": "608-427-6539",
+    "recordUpdated": "2025-02-03",
+    "url": "https://www.townshipofcutler.com/"
+  },
+  "5505725850": {
+    "clerk": "Dale Steadman",
+    "municipality": "Finley",
+    "phone": "608-897-2929",
+    "recordUpdated": "2025-11-21",
+    "url": "https://www.finleytownship.wi.gov"
+  },
+  "5505726825": {
+    "clerk": "Lori Lowe",
+    "municipality": "Fountain",
+    "phone": "608-547-5335",
+    "recordUpdated": "2025-02-03",
+    "url": "https://www.townoffountain.org/"
+  },
+  "5505728850": {
+    "clerk": "Susan Ganther",
+    "deputyClerk": "Michaele Korbein",
+    "municipality": "Germantown",
+    "phone": "608-562-5751",
+    "recordUpdated": "2023-12-26",
+    "url": "https://townofgermantown.com/"
+  },
+  "5505739575": {
+    "clerk": "Jennifer Masch",
+    "municipality": "Kildare",
+    "phone": "608-666-2227",
+    "recordUpdated": "2026-01-13",
+    "url": "https://kildaretownship.com/"
+  },
+  "5505739800": {
+    "clerk": "Kacy Nuehring",
+    "municipality": "Kingston",
+    "phone": "608-387-5856",
+    "recordUpdated": "2026-01-16"
+  },
+  "5505743300": {
+    "clerk": "Carin Leach",
+    "municipality": "Lemonweir",
+    "phone": "608-847-4786",
+    "recordUpdated": "2023-11-19",
+    "url": "https://www.townoflemonweirwi.gov/"
+  },
+  "5505744675": {
+    "clerk": "Alecia M Kast",
+    "municipality": "Lindina",
+    "phone": "608-548-4295",
+    "recordUpdated": "2025-04-08",
+    "url": "https://townoflindina.com/"
+  },
+  "5505744825": {
+    "clerk": "Andrea L Hawkins",
+    "municipality": "Lisbon",
+    "phone": "608-847-5432",
+    "recordUpdated": "2024-06-05",
+    "url": "https://www.townoflisbonwi.gov/"
+  },
+  "5505746525": {
+    "clerk": "Denise Giebel",
+    "municipality": "Lyndon",
+    "phone": "608-548-2546",
+    "recordUpdated": "2023-12-22"
+  },
+  "5505749375": {
+    "clerk": "Nicole Clark",
+    "municipality": "Marion",
+    "phone": "608-547-6734",
+    "recordUpdated": "2023-12-22"
+  },
+  "5505755725": {
+    "clerk": "Susan Kosinski",
+    "municipality": "Necedah",
+    "phone": "608-565-3140",
+    "recordUpdated": "2023-08-29"
+  },
+  "5505760150": {
+    "clerk": "Lana Wagenson",
+    "municipality": "Orange",
+    "phone": "608-344-8453",
+    "recordUpdated": "2024-03-14",
+    "url": "https://www.townorange.com/"
+  },
+  "5505763650": {
+    "clerk": "Betty Manson",
+    "municipality": "Plymouth",
+    "phone": "608-462-5034",
+    "recordUpdated": "2023-12-22",
+    "url": "https://www.townofplymouthjc.com/"
+  },
+  "5505772625": {
+    "clerk": "Betsy Taylor-Hart",
+    "municipality": "Seven Mile Creek",
+    "phone": "715-937-4376",
+    "recordUpdated": "2024-01-02"
+  },
+  "5505778300": {
+    "clerk": "Tammy Miller",
+    "municipality": "Summit",
+    "phone": "608-985-7106",
+    "recordUpdated": "2023-12-29",
+    "url": "http://townofsummit.com"
+  },
+  "5505788525": {
+    "clerk": "Kathy Retzlaff",
+    "municipality": "Wonewoc",
+    "phone": "608-462-8523",
+    "recordUpdated": "2024-01-02"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

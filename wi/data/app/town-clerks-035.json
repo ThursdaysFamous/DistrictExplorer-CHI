@@ -1,0 +1,98 @@
+{
+  "5503509500": {
+    "clerk": "Elizabeth Pettis",
+    "municipality": "Bridge Creek",
+    "phone": "715-429-0845",
+    "recordUpdated": "2026-02-20",
+    "url": "https://bridgecreek.wi.gov/"
+  },
+  "5503510625": {
+    "clerk": "Debra Grinde",
+    "deputyClerk": "Tim Davis",
+    "municipality": "Brunswick",
+    "phone": "715-852-7600 EXT 2",
+    "recordUpdated": "2024-11-27",
+    "url": "https://townofbrunswickwi.gov/"
+  },
+  "5503515200": {
+    "clerk": "Carmen Dunham",
+    "municipality": "Clear Creek",
+    "phone": "715-523-2173",
+    "recordUpdated": "2026-07-28"
+  },
+  "5503520800": {
+    "clerk": "Nicholas Lutes",
+    "municipality": "Drammen",
+    "phone": "715-926-3870",
+    "recordUpdated": "2026-04-01",
+    "url": "https://townofdrammen-wi.gov"
+  },
+  "5503524850": {
+    "clerk": "Rozanne M Traczek",
+    "municipality": "Fairchild",
+    "phone": "715-334-5797",
+    "recordUpdated": "2024-01-02"
+  },
+  "5503544350": {
+    "clerk": "Sherri McCormick",
+    "municipality": "Lincoln",
+    "phone": "715-577-8607",
+    "recordUpdated": "2023-12-22",
+    "url": "https://lincolntownshipwi.com/"
+  },
+  "5503546275": {
+    "clerk": "Colleen Hawkins",
+    "municipality": "Ludington",
+    "phone": "715-563-5472",
+    "recordUpdated": "2023-02-21"
+  },
+  "5503560750": {
+    "clerk": "Kelly Schwoch",
+    "municipality": "Otter Creek",
+    "phone": "715-864-1753",
+    "recordUpdated": "2023-12-28"
+  },
+  "5503563400": {
+    "clerk": "Jen Meyer",
+    "deputyClerk": "Kelsey Ebert",
+    "municipality": "Pleasant Valley",
+    "phone": "715-878-4645",
+    "recordUpdated": "2023-11-21",
+    "url": "https://pleasantvalleywi.gov/"
+  },
+  "5503572675": {
+    "clerk": "Jean Eisold",
+    "deputyClerk": "Sarah Smith",
+    "municipality": "Seymour",
+    "phone": "715-834-4999",
+    "recordUpdated": "2024-03-07",
+    "url": "https://townofseymour.org/"
+  },
+  "5503581550": {
+    "clerk": "Beverly Christopherson",
+    "municipality": "Union",
+    "phone": "715-874-6123",
+    "recordUpdated": "2023-12-28",
+    "url": "https://www.townofunionec.com/"
+  },
+  "5503583612": {
+    "clerk": "Jackie Vold",
+    "deputyClerk": "Malek Leesa",
+    "municipality": "Washington",
+    "phone": "715-834-3257",
+    "recordUpdated": "2025-11-25",
+    "url": "https://townofwashington.wi.gov/"
+  },
+  "5503587400": {
+    "clerk": "Danielle Barka",
+    "municipality": "Wilson",
+    "phone": "715-667-3003",
+    "recordUpdated": "2023-12-20",
+    "url": "https://www.townofwilsonwi.com/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

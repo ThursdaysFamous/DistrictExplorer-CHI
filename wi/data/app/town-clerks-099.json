@@ -1,0 +1,120 @@
+{
+  "5509913200": {
+    "clerk": "Marissa Raab",
+    "municipality": "Catawba",
+    "phone": "715-490-0822",
+    "recordUpdated": "2025-10-09"
+  },
+  "5509922950": {
+    "clerk": "Elizabeth Palecek",
+    "municipality": "Eisenstein",
+    "phone": "715-762-4812",
+    "recordUpdated": "2025-10-21"
+  },
+  "5509923200": {
+    "clerk": "Regina Damjanovic",
+    "municipality": "Elk",
+    "phone": "715-339-2877",
+    "recordUpdated": "2025-07-07"
+  },
+  "5509923975": {
+    "clerk": "Judy J Freeman",
+    "deputyClerk": "Regina Distin",
+    "municipality": "Emery",
+    "phone": "715-339-3395",
+    "recordUpdated": "2025-09-29"
+  },
+  "5509925775": {
+    "clerk": "Angie Richardson",
+    "deputyClerk": "Judy Reas",
+    "municipality": "Fifield",
+    "phone": "715-762-2500",
+    "recordUpdated": "2024-10-14",
+    "url": "http://www.tn.fifield.wi.gov/"
+  },
+  "5509926050": {
+    "clerk": "Marlene Campy",
+    "municipality": "Flambeau",
+    "phone": "715-820-0140",
+    "recordUpdated": "2024-12-06",
+    "url": "https://flambeauwi.com/"
+  },
+  "5509928750": {
+    "clerk": "Kathleen Lundborg",
+    "municipality": "Georgetown",
+    "phone": "715-428-2372",
+    "recordUpdated": "2023-12-07"
+  },
+  "5509931925": {
+    "clerk": "Wendy Orysen",
+    "municipality": "Hackett",
+    "phone": "715-428-2004",
+    "recordUpdated": "2023-03-27"
+  },
+  "5509932675": {
+    "clerk": "Sheila Hook",
+    "municipality": "Harmony",
+    "phone": "715-820-1344",
+    "recordUpdated": "2024-01-02",
+    "url": "http://www.co.price.wi.us/municipalities/harmony/"
+  },
+  "5509934725": {
+    "clerk": "Kristin Torgler",
+    "municipality": "Hill",
+    "phone": "715-767-5150",
+    "recordUpdated": "2026-04-13"
+  },
+  "5509939200": {
+    "clerk": "Lynn Redfall",
+    "municipality": "Kennan",
+    "phone": "715-567-0061",
+    "recordUpdated": "2024-01-18",
+    "url": "https://www.co.price.wi.us/333/town-of-kennan"
+  },
+  "5509940175": {
+    "clerk": "Jason Kivela",
+    "municipality": "Knox",
+    "phone": "608-239-2671",
+    "recordUpdated": "2025-06-24",
+    "url": "https://www.townofknox.org/"
+  },
+  "5509941150": {
+    "clerk": "Angela Neeck",
+    "deputyClerk": "Judy Reas",
+    "municipality": "Lake",
+    "phone": "715-762-2151",
+    "recordUpdated": "2026-06-23",
+    "url": "https://townlakewi.com/"
+  },
+  "5509959525": {
+    "clerk": "Jolene Marie Berger",
+    "municipality": "Ogema",
+    "phone": "715-767-5652",
+    "recordUpdated": "2021-12-16"
+  },
+  "5509965350": {
+    "clerk": "Amy Esterholm",
+    "municipality": "Prentice",
+    "phone": "715-428-2793",
+    "recordUpdated": "2022-09-12"
+  },
+  "5509975525": {
+    "clerk": "Janelle Nelson",
+    "municipality": "Spirit",
+    "phone": "715-564-3266",
+    "recordUpdated": "2025-06-03"
+  },
+  "5509989100": {
+    "clerk": "Regina Damjanovic",
+    "deputyClerk": "Alli Mathys",
+    "municipality": "Worcester",
+    "phone": "715-339-3430",
+    "recordUpdated": "2026-04-06",
+    "url": "https://www.townofworcester.com/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

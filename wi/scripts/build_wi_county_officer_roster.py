@@ -258,9 +258,39 @@ def main():
     # county whose scrape disagrees with the shipped geometry's seat count,
     # so a county present here is a COMPLETE roster — which is what makes
     # absence from it evidence rather than a scrape artifact.
-    board_by_geoid = {}
+    #
+    # NOT EVERY ROW IS A DISTRICT. Menominee's two AT-LARGE supervisors ride
+    # one county-keyed `55078-at-large` row, whose first five characters are
+    # the county's GEOID exactly like a district key's — so a `key[:5]`
+    # grouping sweeps it in and the seat count below reads 6 against the
+    # geometry's 5. That is not a roster fault and no amount of re-reading
+    # Menominee's page fixes it; the row is a different KIND of record.
+    #
+    # So the two uses are separated. The seat count compares DISTRICTS to
+    # districts. The chair checks take at-large members too, because an
+    # at-large supervisor genuinely sits on the board and can hold its
+    # chair — Menominee's own at-large row marks Eva Johnson Vice-Chair —
+    # and dropping them would withhold a chair the county does name.
+    # A district record is identified by carrying a `district`, which is the
+    # record's own shape rather than a pattern in its key.
+    board_by_geoid, at_large_by_geoid = {}, {}
     for key, rec in json.load(open(MEMBERS)).items():
-        board_by_geoid.setdefault(key[:5], []).append(rec)
+        if "district" in rec:
+            board_by_geoid.setdefault(key[:5], []).append(rec)
+            continue
+        members = rec.get("atLarge")
+        if not members:
+            raise SystemExit(
+                "county-board-members %r is neither a district row nor an "
+                "at-large row — this reconciliation does not know what it is"
+                % key)
+        # Flatten to chair-check rows carrying the parent row's provenance.
+        for m in members:
+            row = dict(m)
+            for k in ("sourceUrl", "roleSourceUrl", "asOf"):
+                if k in rec and k not in row:
+                    row[k] = rec[k]
+            at_large_by_geoid.setdefault(key[:5], []).append(row)
 
     out_counties = {}
     mismatches = {}
@@ -279,16 +309,20 @@ def main():
         if roster:
             if len(roster) != dir_seats:
                 raise SystemExit(
-                    "%s: board roster carries %d seats against the directory's %d "
-                    "— the board builder's own gate should have caught this"
-                    % (base, len(roster), dir_seats))
-            marked = [r for r in roster
+                    "%s: board roster carries %d district seats against the "
+                    "directory's %d — the board builder's own gate should have "
+                    "caught this" % (base, len(roster), dir_seats))
+            # At-large members are board members: they can hold the chair and
+            # they confirm one. They are NOT districts, so they were kept out
+            # of the count above.
+            on_the_board = roster + at_large_by_geoid.get(str(geoid), [])
+            marked = [r for r in on_the_board
                       if r.get("name") and marks_chair(r.get("role"))]
             if len(marked) > 1:
                 raise SystemExit("%s: board page marks %d chairs: %s" %
                                  (base, len(marked),
                                   [r["name"] for r in marked]))
-            sitting = [r["name"] for r in roster if r.get("name")]
+            sitting = [r["name"] for r in on_the_board if r.get("name")]
             if marked:
                 page = marked[0]
                 superseded.append("%s: %s -> %s" % (base, chair.get("name"),
