@@ -193,11 +193,6 @@ ENDPOINTS = [
         "layer": "school-district-elementary",
         "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/School/MapServer/2/query?where=STATE%3D%2726%27&returnCountOnly=true&f=json",
     },
-    # ZCTAs carry NO STATE field, so this one is counted by ENVELOPE, in Esri's
-    # own {xmin,...} comma form -- the {minLng,...} shape makes TIGERweb answer
-    # HTTP 200 with a JSON error envelope (measured 2026-09-04). min_count is
-    # what makes this a real check rather than a reachability ping: without it
-    # the error envelope reads as a healthy 200. 2,000 in Michigan's full box.
     # USGS structures layer 38. Counted rather than fetched, because the count
     # is the thing at risk: the service caps a response at 2,000 records and
     # says so with HTTP 200 + exceededTransferLimit rather than an error. The
@@ -213,6 +208,22 @@ ENDPOINTS = [
                 "&returnCountOnly=true&f=json"),
         "min_count": 1600,  # 1,799 measured 2026-09-04; floor set below it, not at it
     },
+    # Layer 53. Under the 2,000 cap today (1,290 measured 2026-09-04) and
+    # fetched by the paging path regardless; min_count is what turns this from
+    # a reachability ping into a check that can see an error envelope.
+    {
+        "layer": "police-station",
+        "url": ("https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/53/query"
+                "?geometry=-90.42%2C41.69%2C-82.12%2C48.31&geometryType=esriGeometryEnvelope"
+                "&inSR=4326&spatialRel=esriSpatialRelIntersects&where=1%3D1"
+                "&returnCountOnly=true&f=json"),
+        "min_count": 1150,  # 1,290 measured 2026-09-04; floor set below it, not at it
+    },
+    # ZCTAs carry NO STATE field, so this one is counted by ENVELOPE, in Esri's
+    # own {xmin,...} comma form -- the {minLng,...} shape makes TIGERweb answer
+    # HTTP 200 with a JSON error envelope (measured 2026-09-04). min_count is
+    # what makes this a real check rather than a reachability ping: without it
+    # the error envelope reads as a healthy 200. 2,000 in Michigan's full box.
     {
         "layer": "zip-code",
         "url": ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
