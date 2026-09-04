@@ -198,16 +198,28 @@ PROVENANCE = [
         "note": "Which supervisor holds each district, for PLAN 3 counties only (Iowa Code 331.206 — plan 1 has no districts and plan 2 elects countywide). There is no statewide source: the Legislature's own layer names DISTRICTS not people, the ISAC portal attaches a district to nobody, the Secretary of State's statewide canvass carries ZERO supervisor contests (counties canvass their own county offices), and electionresults.iowa.gov exposes no data API. So each county's own board page supplies the district NUMBER by proximity to names the shipped roster already carries. Probed here at one representative county (Polk); the run reads 40 and keys the ones that pass its gates. Built by ia/scripts/ia_supervisor_district_scraper.py + build_ia_supervisor_roster.py; refreshed weekly by update-ia-supervisor-roster.yml.",
     },
     {
-        "layer": "dsm-ward",
+        "layer": "city-ward",
         "app_file": "dsm-wards.json",
         "source_url": "https://services.arcgis.com/HT7H9QGiZQoRJDpJ/arcgis/rest/services/Wards_view/FeatureServer/0",
         "note": "The City of Des Moines's own four council wards, pre-built by ia/scripts/build_dsm_wards.py. THE ITEM'S licenseInfo OPENS \"All rights reserved\" AND IS NOT A REFUSAL: the city's own Terms and Conditions of Use (data.dsm.city/pages/terms) permit applications using portal data on condition they carry that exact disclaimer, so the string is the required NOTICE, and the app ships it verbatim on the card. The same terms carry a Right to Discontinue Feeds clause, which is the reason this row exists — a city may withdraw the service, and the shipped file would then be the only copy.",
     },
     {
-        "layer": "dsm-ward",
+        "layer": "city-ward",
         "app_file": "dsm-council-members.json",
         "source_url": "https://www.dsm.city/government/city_council/index.php",
         "note": "All seven seats Des Moines elects (Iowa Code 372.4(1)(b): a mayor, two at-large members, one from each of four wards). The page renders Appointed Staff and Department Directors in IDENTICAL card markup to the elected members, so the scrape is scoped by <h2> heading and refuses if a name appears under both; the four ward members are cross-witnessed against the Wards layer's own in-band names and e-mails. Built by ia/scripts/dsm_council_scraper.py + build_dsm_council.py; refreshed weekly by update-ia-dsm-council-roster.yml.",
+    },
+    {
+        "layer": "city-ward",
+        "app_file": "waterloo-wards.json",
+        "source_url": "https://services1.arcgis.com/QOAXA4I2iTKKdBuy/ArcGIS/rest/services/Wards_view/FeatureServer/0",
+        "note": "The City of Waterloo's own five council wards, pre-built by ia/scripts/build_waterloo_wards.py. THE SERVICE STATES NO TERMS AT ALL: queried unauthenticated 2026-09-04 it returns capabilities Query,Extract with BOTH serviceDescription AND copyrightText EMPTY, and the city's robots.txt is empty too. That is recorded rather than read as permission or as refusal, and it is the plain difference from Des Moines, whose terms REQUIRE a verbatim disclaimer -- so Waterloo's card carries no data notice, and this row is where a reader learns that absence was looked for. This row also exists because a city may simply stop publishing: the shipped file would then be the only copy.",
+    },
+    {
+        "layer": "city-ward",
+        "app_file": "waterloo-council-members.json",
+        "source_url": "https://www.cityofwaterlooiowa.com/government/city_council/index.php",
+        "note": "The seven seats Waterloo elects to its council (five wards + two at-large; the mayor is elected citywide and is deliberately not in this file). The page is hand-pasted WYSIWYG HTML with NO per-member container -- one member sits inside an <h2> and the other six are loose <span> runs in <p> blocks -- so the scrape keys on each member's own 'NAME, SEAT Through MM/DD/YYYY' line. The bio-link anchors that repeat every name WITHOUT a term are kept as the control, and TWO of them disagree with the authoritative spelling ('Steve Simons' for Steve Simon), which is why an anchor-keyed parse would ship a misspelt councilman. All five wards and both at-large members are cross-witnessed against the Wards layer's own in-band names. Built by ia/scripts/waterloo_council_scraper.py + build_waterloo_council.py; refreshed weekly by update-ia-waterloo-council-roster.yml.",
     },
     {
         "layer": "county",

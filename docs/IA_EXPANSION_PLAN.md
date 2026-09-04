@@ -1041,8 +1041,27 @@ publishes no clerk directory on either its Schools & Cities or its Research & Da
 WEC-shaped ask was drafted rather than skipped; and an ArcGIS catalog sweep found no Iowa
 analogue of Milwaukee County's `Municipal_Executives` layer but did find **Waterloo** publishing
 5 wards that name their own councilperson, both at-large members and a council-page link in band
-— a second city tier on the `dsm-ward` pattern, subject to the same Coles rule (the in-band
+— a second city tier on the Des Moines pattern, subject to the same Coles rule (the in-band
 names are the witness, the city's own page is the authority).
+**WATERLOO SHIPPED ON 2026-09-04, AND IT RETIRED THE `dsm-ward` LAYER** (`waterloo-wards.json`,
+`waterloo-council-members.json`, weekly Thu 18:30). The second city made this a DISPATCHED
+concept rather than a second layer, which is `docs/EXPANSION_GUIDE.md` §3.0 stated plainly and
+this plan's own earlier note had got wrong by calling Waterloo "a new layer with its own
+geometry, gates, `area_rank` renumber and workflow". It is none of those: **one `city-ward`
+toggle, two municipality-keyed entries, `area_rank` unchanged at 14, and the layer count still
+20** — plus an alias shim, which this instance did not have, so every `#layers=dsm-ward` link
+already shared keeps working. Iowa needed the dispatcher itself: `registerCountyLayer` lived
+ONLY in Illinois as fork-level code and was ported (its `polygonCountyEntry` companion was
+deliberately left behind — both city entries render bespoke person rows, and it needs two
+helpers Iowa lacks). Promoting the dispatcher to `engine/` for all six instances is the real
+debt and is recorded in `ia/WATCH.md`, not done in a PR about Iowa's cities.
+Two measurements worth carrying forward. **The mayor is not on the ward card**: he is elected
+citywide, so the at-large rule puts him on the unit's identity card, and the card names him in
+prose instead of implying the council is the whole city government. And **a hole is COMPACT, a
+seam is thin**: Waterloo's largest uncovered tiling fragment is 7,909 m² against Des Moines's
+3,482, which an area-only ceiling copied across would read as a regression — it is 36 m by
+3,156 m at Polsby-Popper 0.0025, and not one of its 156 fragments scores above 0.30, so its
+builder gates on SHAPE as well as size.
 **THE CITY CARD GAINED CONTACT ON 2026-09-04, AND IT IS NOT A ROSTER** (`ia-city-contact.json`,
 `ia/scripts/build_ia_city_contact.py`, weekly Fri 15:30). The League of Cities' own ungated city
 table gives all 939 cities their office phone (927) and website (532), plus 2 office mailboxes;

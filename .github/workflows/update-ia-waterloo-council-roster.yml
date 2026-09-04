@@ -1,0 +1,118 @@
+name: Update IA Waterloo council roster
+
+# Weekly refresh of the seven seats the City of Waterloo elects to its council
+# (ia/data/app/waterloo-council-members.json, read by the Waterloo entry of
+# ia/index.html's City Council Ward card): five ward members plus both at-large
+# members, who represent every ward and would be invisible to any boundary.
+#
+# THE MAYOR IS DELIBERATELY NOT IN THAT FILE. He is elected by the whole city,
+# so the fleet's at-large rule puts a citywide officer on the unit's identity
+# card rather than on a district card. The ward card names him in prose instead,
+# so the council does not read as the whole of the city's elected government.
+#
+# TWO THINGS THIS RUN RE-VERIFIES BESIDES THE ROSTER, both inside
+# build_waterloo_wards.py --check, which never writes:
+#
+#   * THE TILING GATE, and its SHAPE test. The five wards must still cover the
+#     city's own City Limits layer, and no uncovered fragment may be COMPACT.
+#     A long thin fragment is two outlines digitised apart; a compact one is a
+#     hole, where a Waterloo reader would be told nothing at all rather than
+#     which ward they are in, and no roster check would notice.
+#   * THAT THE SERVICE IS STILL THERE AND STILL OPEN. The city publishes it
+#     with an empty copyrightText and no stated terms, which is not a promise
+#     to keep publishing it; this weekly fetch is how a withdrawn service gets
+#     noticed rather than discovered months later.
+#
+# THE CROSS-WITNESS RUNS IN THE BUILDER, not here: build_waterloo_council.py
+# refuses to write unless all five ward members and both at-large members agree
+# with the Wards layer's own in-band names. Only the roster scrape below can
+# produce a diff for this workflow to PR.
+
+on:
+  schedule:
+    - cron: "30 18 * * 4" # Thursday 18:30 UTC (an hour after Des Moines's)
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-roster:
+    runs-on: ubuntu-latest
+    steps:
+      # Pushed and PR-opened as BOT_PR_TOKEN so the resulting PR actually runs
+      # CI. A PR opened with the default GITHUB_TOKEN fires no workflows
+      # (GitHub suppresses recursive triggers), which left every roster PR with
+      # zero checks. Falls back to github.token when the secret is absent, so
+      # the workflow still runs — it just goes back to opening unchecked PRs.
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.BOT_PR_TOKEN || github.token }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: pip install -c ia/scripts/requirements.txt requests
+
+      - name: Re-verify the ward geometry and its tiling of the city
+        run: python3 ia/scripts/build_waterloo_wards.py --check
+
+      - name: Scrape the city's own council page
+        run: python3 ia/scripts/waterloo_council_scraper.py
+
+      - name: Rebuild the council roster (cross-witnessed against the Wards layer)
+        run: python3 ia/scripts/build_waterloo_council.py
+
+      # Gate the regenerated data before it can reach a PR: the app must still
+      # parse and carry every layer, and every data/app file must be present
+      # and well formed. node is preinstalled on ubuntu-latest.
+      - name: Validate app + data files
+        run: python3 ia/scripts/validate_index.py ia/index.html
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet -- ia/data/app/waterloo-council-members.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open or update pull request
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.BOT_PR_TOKEN || github.token }}
+        run: |
+          # Fixed branch (not per-run): an unmerged roster PR is refreshed in
+          # place by the force-push below instead of spawning a duplicate PR
+          # every week.
+          branch="bot/ia-waterloo-council-roster-update"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          # Cut the branch from main's CURRENT tip, not from the checkout this
+          # run started with. actions/checkout is shallow, and if main gains a
+          # .github/workflows/ change meanwhile, the branch ends up differing
+          # from main THERE too — which GitHub reads as the push updating a
+          # workflow and refuses for a token without `workflow` scope. Measured
+          # 2026-09-02 on update-municipal-officials.
+          git fetch --depth=1 origin main
+          git checkout -B "$branch" FETCH_HEAD
+          git add ia/data/app/waterloo-council-members.json
+          git commit -m "Update Waterloo city council roster from cityofwaterlooiowa.com"
+          git push -u origin "$branch" --force
+          # Only open a PR if one isn't already open for this branch; if it is,
+          # the force-push above already updated it.
+          if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then
+            gh pr create \
+              --title "Update Waterloo city council roster from cityofwaterlooiowa.com" \
+              --body "Automated weekly refresh of the Waterloo half of the City Council Ward card's roster, generated by \`ia/scripts/build_waterloo_council.py\` from the city's own council page (\`waterloo_council_scraper.py\`) and cross-witnessed against the city's Wards feature service.
+
+Please review the diff before merging — this changes data about real officeholders. **A name changing spelling is worth reading closely**: the council page repeats every member in a bio-link anchor, and two of those anchors disagree with the member's own line, so the scraper keys on the term-expiry line instead. If a name here starts matching one of those anchors, the parse has slipped." \
+              --base main \
+              --head "$branch"
+          else
+            echo "PR already open for $branch; force-push refreshed it."
+          fi

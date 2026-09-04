@@ -1,0 +1,56 @@
+{
+ "citywide": [
+  {
+   "email": "Kelly.Martin@waterloo-ia.org",
+   "name": "Kelly Martin",
+   "phone": "(319) 324-0593",
+   "seat": "At-Large",
+   "termExpires": "12/31/2029"
+  },
+  {
+   "email": "Steve.Simon@waterloo-ia.org",
+   "name": "Steve Simon",
+   "phone": "(319) 231-1007",
+   "seat": "At-Large",
+   "termExpires": "12/31/2027"
+  }
+ ],
+ "sourceUrl": "https://www.cityofwaterlooiowa.com/government/city_council/index.php",
+ "wards": {
+  "1": {
+   "email": "Steve.Schmitt@waterloo-ia.org",
+   "name": "Steve Schmitt",
+   "phone": "(319) 610-1938",
+   "seat": "Ward 1",
+   "termExpires": "12/31/2029"
+  },
+  "2": {
+   "email": "Dave.Morrow@waterloo-ia.org",
+   "name": "Dave Morrow",
+   "phone": "(319)-988-1960",
+   "seat": "Ward 2",
+   "termExpires": "12/31/2027"
+  },
+  "3": {
+   "email": "Deb.Berry@waterloo-ia.org",
+   "name": "Deb Berry",
+   "phone": "(319) 504-0227",
+   "seat": "Ward 3",
+   "termExpires": "12/31/2029"
+  },
+  "4": {
+   "email": "Belinda.Creighton-Smith@waterloo-ia.org",
+   "name": "Dr. Belinda Creighton-Smith",
+   "phone": "(319) 214-9974",
+   "seat": "Ward 4",
+   "termExpires": "12/31/2027"
+  },
+  "5": {
+   "email": "Hector.Arroyo@waterloo-ia.org",
+   "name": "Hector A. Salamanca-Arroyo",
+   "phone": "(515)-447-1186",
+   "seat": "Ward 5",
+   "termExpires": "12/31/2029"
+  }
+ }
+}

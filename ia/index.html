@@ -5992,7 +5992,7 @@ function initIowaExplorer() {
     "cc-director-district", // 123 director districts inside the 15 community college merged areas — the sub-fabric a college's board of trustees is elected from (Iowa Code 260C.11)
     "county-subdivision", // 1,663 records tiling the state, live from TIGERweb (no data/app file) — 1,600 civil townships, 62 incorporated cities that double as their own subdivision record, and one federal reservoir carried as unorganized territory
     "municipality",      // 939 incorporated cities, live from TIGERweb (no data/app file) — small dense pockets within the county-subdivision fabric, so smaller on average than a civil township despite fewer records
-    "dsm-ward",          // The instance's first CITY tier: 4 wards averaging 22.7 sq mi inside one 90.66 sq mi city, so strictly smaller than the City that contains them and larger than a precinct
+    "city-ward",         // The instance's CITY tier: 9 wards across two cities — Des Moines's 4 averaging 22.7 sq mi inside one 90.66 sq mi city, Waterloo's 5 averaging 12.6 sq mi inside one 62.98 sq mi city — so strictly smaller than the City that contains them and larger than a precinct
     "zip-code",          // Census ZCTAs by Iowa envelope (no data/app file) — 1,443 features measured in-envelope, smaller on average than an incorporated city
     "precinct",          // 1,660 election precincts, pre-built (mapshaper-simplified from the Legislature's own ArcGIS layer) — identity-only, no roster; ranked with the other fine-grained political boundaries
     "police-station",    // Nearest-3 point layer (449 stations in the state envelope) — not a containment boundary; ranked with the amenity points
@@ -9218,6 +9218,245 @@ function initIowaExplorer() {
       return { label: (result.name ? String(result.name) : "This city") + " — official website", url: url };
     }
   });
+  /* ---------- The city/county dispatcher ----------------------------------
+   * One toggle holding a table of per-UNIT entries: coverage is the OR of
+   * theirs, the overlay is the union of their boundaries, and query/render/
+   * card extras dispatch to whichever entry's geometry actually contains the
+   * point. Ported verbatim in behaviour from il/index.html, where it has
+   * carried Illinois's cross-county concepts since 2026-07.
+   *
+   * WHY IOWA HAS ONE AT ALL. docs/EXPANSION_GUIDE.md §3.0: "A concept that
+   * appears in a second city becomes a dispatched concept, exactly as a
+   * county concept does", and §3.1: "The key doesn't have to be a county —
+   * the dispatch only ever required disjoint footprints." Waterloo is Iowa's
+   * second city publishing council wards, so `city-ward` is that concept and
+   * the two cities are two entries. The alternative — a second near-identical
+   * ward layer — is what the expansion invariant forbids: expanding coverage
+   * changes which dispatch entries exist, never which layers do.
+   *
+   * WHAT IS DELIBERATELY NOT PORTED. Illinois also has `polygonCountyEntry`,
+   * a convenience that builds a field-driven entry for simple polygon cards.
+   * Both city entries here render bespoke person rows, and that helper needs
+   * `findFeatureContainingOrNear` and `rowSnapNoteText`, neither of which this
+   * instance has. Porting it would mean importing two helpers to support a
+   * shape nothing here uses.
+   *
+   * THIS IS A SECOND COPY OF SHARED CODE, and that is a real debt rather than
+   * a decision this file is happy with: the honest home is `engine/`, spliced
+   * into every instance by compose_app.py. It is not done here because doing
+   * it means refactoring Illinois's 18 dispatched concepts in a PR about
+   * Iowa's cities. Recorded in ia/WATCH.md. ------------------------------- */
+  function registerCountyLayer(opts) {
+    // opts.entries is the general form; opts.counties is the original name.
+    // The dispatch was never county-specific — it needs disjoint footprints,
+    // nothing more — so this instance keys its table by CITY.
+    var entries = opts.entries || opts.counties;
+    var byKey = {};
+    entries.forEach(function (entry) {
+      // A DUPLICATE KEY IS A SILENT DISASTER, so it throws at boot instead.
+      // byKey is last-wins, and render/cardIdentifier/primaryLink all dispatch
+      // through it — so a second entry under an existing key does not merely
+      // add a redundant lookup, it silently re-points the FIRST entry's cards
+      // at the second entry's renderer. That shipped in Illinois: a precinct
+      // entry was pasted into the county-board table under key "stephenson"
+      // (2026-08-03), and from then until 2026-08-04 a Stephenson board result
+      // rendered through the precinct card. Nothing failed — every gate
+      // passed, because the layer still registered and still had a working
+      // query walk.
+      if (byKey[entry.key]) {
+        throw new Error(opts.id + ": duplicate entry key '" + entry.key +
+          "' — byKey is last-wins, so this would re-point the earlier entry's card");
+      }
+      byKey[entry.key] = entry;
+    });
+
+    // Union overlay, drawn INCREMENTALLY: one attempt per entry, each feature
+    // WRAPPED (never mutating the per-entry caches — other cards spatial-join
+    // against them) and stamped dxCounty so hover dispatches per feature. The
+    // load resolves as soon as the FIRST entry's geometry is in, so one slow
+    // host cannot keep every other unit's boundaries off the map; later
+    // arrivals are appended to the same live FeatureCollection (=== rt.geojson)
+    // and drawn by drawAppendedCountyFeatures below. An entry whose source is
+    // DOWN drops out of the drawing while the others render; only if every one
+    // fails does the load reject (overlay error + Retry). Deliberately not
+    // makeCached, so the total-failure path stays retryable.
+    function loadUnion() {
+      var fc = { type: "FeatureCollection", features: [] };
+      return new Promise(function (resolve, reject) {
+        var resolved = false, pending = entries.length, anySuccess = false;
+        if (!pending) { reject(new Error(opts.label + ": no source responded")); return; }
+        entries.forEach(function (entry) {
+          entry.loadGeometry().then(function (geojson) {
+            var wrapped = (geojson.features || []).map(function (f) {
+              return { type: "Feature", geometry: f.geometry, properties: f.properties, dxCounty: entry.key };
+            });
+            anySuccess = true;
+            Array.prototype.push.apply(fc.features, wrapped);
+            if (!resolved) { resolved = true; resolve(fc); }
+            else drawAppendedCountyFeatures(wrapped);
+          }, function () { /* down source: absent from the drawing (tradeoff above) */ })
+            .catch(function () { /* a drawing hiccup in one entry must not skew the settle count */ })
+            .then(function () {
+              pending--;
+              if (!pending && !anySuccess) reject(new Error(opts.label + ": no source responded"));
+            });
+        });
+      });
+    }
+
+    // Draw one late-arriving entry onto the already-built union overlay. Its
+    // features are already in the resolved FeatureCollection (=== rt.geojson,
+    // which highlight/hover/outline consumers re-read on every event), so this
+    // only has to teach the LEAFLET layer about them: addData creates their
+    // paths, then they're restyled to the current stack state — the flat style
+    // captured at L.geoJSON build time goes stale, because fill-opacity scaling
+    // tracks the active-layer count and an active selection highlight keeps
+    // every non-matched path faded.
+    function drawAppendedCountyFeatures(features) {
+      var rt = layerRuntime[spec.id];
+      // No live Leaflet layer (toggled off, relevance-hidden, or the engine's
+      // load handler hasn't built it yet): nothing to draw — the engine
+      // (re)builds from rt.geojson when the overlay next attaches, and these
+      // features are already in it.
+      if (!rt || !rt.overlayLayer || !features.length) return;
+      rt.overlayLayer.addData({ type: "FeatureCollection", features: features });
+      var style = rt.highlightApplied ? fadedStyle(baseStyleFor(spec)) : baseStyleFor(spec);
+      if (style) {
+        rt.overlayLayer.eachLayer(function (subLayer) {
+          if (subLayer.setStyle && features.indexOf(subLayer.feature) !== -1) subLayer.setStyle(style);
+        });
+      }
+      reorderActiveLayers(); // fresh paths must not sit above smaller layers' boundaries
+      // Disjoint footprints mean an active highlight never belongs to an
+      // appended entry — but the selected point CAN (the previously-no-match
+      // case). Run the full highlight pass so the user's own district lights up
+      // the moment its city lands, instead of waiting for the next point move.
+      if (state.selectedPoint && state.layersOn[spec.id] &&
+          findFeatureContaining({ type: "FeatureCollection", features: features }, state.selectedPoint)) {
+        updateLayerHighlight(spec);
+      }
+    }
+
+    var anyHoverOfficial = entries.some(function (entry) { return !!entry.hoverOfficial; });
+
+    /* Which entries' COVERAGE contains the point, evaluated in PARALLEL.
+     *
+     * Coverage is the cheap question: every entry gates on a same-origin
+     * outline of a couple of KB, cached after first use. Asking all of them at
+     * once costs one round of small local fetches and names the ONE unit worth
+     * querying — so an expensive remote call happens once instead of once per
+     * entry. Errors are collected, not thrown, so a single unit's coverage
+     * outage cannot decide the answer for the others; both callers below
+     * re-raise the first error only when nothing matched. */
+    function coverageMatches(point) {
+      var firstErr = null;
+      return Promise.all(entries.map(function (entry) {
+        return Promise.resolve().then(function () { return entry.coverage(point); })
+          .then(function (inside) { return inside ? entry : null; },
+                function (err) { if (!firstErr) firstErr = err; return null; });
+      })).then(function (hits) {
+        return { matches: hits.filter(Boolean), firstErr: firstErr };
+      });
+    }
+
+    // Held in a var (rather than passed as a literal) so
+    // drawAppendedCountyFeatures above can hand the registered module to the
+    // engine's style/highlight helpers — registerLayer stores this same object.
+    var spec = {
+      id: opts.id,
+      group: opts.group,
+      label: opts.label,
+      // OR of the per-entry coverage tests, asked in parallel. A throwing test
+      // cannot decide the answer for the others; if none matched and one threw,
+      // the error propagates so the engine's fail-open applies — a coverage
+      // outage never hides the layer.
+      coverage: function (point) {
+        return coverageMatches(point).then(function (r) {
+          if (r.matches.length) return true;
+          if (r.firstErr) throw r.firstErr;
+          return false;
+        });
+      },
+      hoverName: function (feature) {
+        var entry = byKey[feature.dxCounty];
+        return entry && entry.hoverName ? entry.hoverName(feature) : null;
+      },
+      overlay: { load: loadUnion, style: opts.style },
+      // Dispatch by CONTAINMENT, not coverage: the footprints are disjoint, so
+      // at most one entry's query returns a hit. A downed unit is skipped while
+      // the others still resolve; if nothing matched and one errored, that error
+      // propagates — a point in the downed city gets the honest error card +
+      // Retry, never a lying "No result for this point."
+      query: function (point, seq) {
+        // COVERAGE NARROWS, CONTAINMENT DECIDES. If coverage names nobody, fall
+        // back to the full table, so an entry whose coverage test is missing or
+        // wrong still resolves rather than silently going blank.
+        return coverageMatches(point).then(function (r) {
+          var list = r.matches.length ? r.matches : entries;
+          var i = 0, firstErr = r.matches.length ? null : r.firstErr;
+          function next() {
+            if (i >= list.length) {
+              if (firstErr) throw firstErr;
+              return null;
+            }
+            var entry = list[i++];
+            return entry.query(point, seq).then(function (result) {
+              if (result) { result.dxCounty = entry.key; return result; }
+              return next();
+            }, function (err) { if (!firstErr) firstErr = err; return next(); });
+          }
+          return next();
+        });
+      },
+      render: function (result) {
+        return byKey[result.dxCounty].render(result);
+      },
+      // per-entry pill + footer link, dispatched like render — an entry that
+      // declares neither renders extras-free
+      cardIdentifier: function (result) {
+        var entry = byKey[result.dxCounty];
+        return entry && entry.cardIdentifier ? entry.cardIdentifier(result) : null;
+      },
+      primaryLink: function (result) {
+        var entry = byKey[result.dxCounty];
+        return entry && entry.primaryLink ? entry.primaryLink(result) : null;
+      },
+      pointOfInterest: function (result) {
+        var entry = byKey[result.dxCounty];
+        return entry && entry.pointOfInterest ? entry.pointOfInterest(result) : null;
+      },
+      // concept-level (not per-entry) nesting + toggle hook, passed through
+      subOf: opts.subOf,
+      onToggle: opts.onToggle,
+      hoverOfficial: anyHoverOfficial ? {
+        // composite prefetch: every entry's officeholder data, keyed for the
+        // per-feature dispatch in name(). All-or-retry ON PURPOSE: the engine
+        // caches a resolved roster for the session (rt.roster — the prefetch
+        // never refetches a truthy value), so resolving with a failed entry's
+        // slot null would pin that gap until reload. Rejecting instead leaves
+        // rt.roster unset — the engine swallows the rejection and the next
+        // toggle-on retries, with the already-succeeded loaders resolving
+        // instantly. Hover simply omits names until every entry's data is in;
+        // the click cards fetch per query and are unaffected either way.
+        load: function () {
+          return Promise.all(entries.map(function (entry) {
+            return entry.hoverOfficial ? entry.hoverOfficial.load() : Promise.resolve(null);
+          })).then(function (results) {
+            var byUnit = {};
+            entries.forEach(function (entry, idx) { byUnit[entry.key] = results[idx]; });
+            return byUnit;
+          });
+        },
+        name: function (feature, byUnit) {
+          var entry = byKey[feature.dxCounty];
+          if (!entry || !entry.hoverOfficial || !byUnit || !byUnit[entry.key]) return null;
+          return entry.hoverOfficial.name(feature, byUnit[entry.key]);
+        }
+      } : undefined
+    };
+    registerLayer(spec);
+  }
+
   /* ---------- 12. Des Moines City Council Ward — the instance's first city tier ----------
    * Iowa Code 372.4(1)(b): a city governed on 1 July 1975 by the mayor-council
    * form with "two council members elected at large and one council member
@@ -9255,21 +9494,11 @@ function initIowaExplorer() {
    * here. Its licenseInfo opens "All rights reserved" — which is the text OF
    * that required notice, not a refusal of use, and reading it as a refusal is
    * what nearly kept this layer from shipping at all. ---------- */
-  var loadDsmWards = makeCached(function () {
-    return fetchJSONWithRetry("data/app/dsm-wards.json", {}, 2);
-  });
-  var loadDsmCouncil = makeCached(function () {
-    return fetchJSONWithRetry("data/app/dsm-council-members.json", {}, 2);
-  });
-  function desMoinesCoverage(point) {
-    // the four wards ARE the city for this layer's purposes; a load failure
-    // rejects through to the engine's fail-open, so an outage never hides the
-    // toggle for a Des Moines reader
-    return loadDsmWards().then(function (geojson) {
-      return !!findFeatureContaining(geojson, point);
-    });
-  }
-  function dsmPersonRow(rec, fallbackBadge) {
+  // One entry per city. Both cities elect a council the same way — a ward
+  // member plus members elected by the whole city — so both entries build the
+  // same card from the same helper, and the only per-city code is which files
+  // to read and what the card's own City row says.
+  function cityCouncilPersonRow(rec, fallbackBadge) {
     var row = { name: String(rec.name) };
     if (rec.seat) row.badge = String(rec.seat);
     else if (fallbackBadge) row.badge = fallbackBadge;
@@ -9279,87 +9508,148 @@ function initIowaExplorer() {
     return row;
   }
 
-  registerLayer({
-    id: "dsm-ward",
+  /* Build one city's dispatch entry.
+   *
+   * opts: { key, city, wardsUrl, councilUrl, councilLabel, councilNote }
+   *
+   * The card is: the ward's own member, then the seats no ward can carry
+   * under their own heading, then a field stack naming the city, the ward's
+   * area and how the council is composed — and, ONLY where the city's own
+   * terms require one, the verbatim data notice its boundary file carries.
+   * That notice is entry-scoped rather than global for a measured reason:
+   * Des Moines requires it and Waterloo publishes no such condition, so a
+   * global row would print an empty "Data notice" on every Waterloo card. */
+  function cityWardEntry(opts) {
+    // FULL LITERAL PATHS, never "data/app/" + a name. validate_index.py
+    // checks that every shipped data/app file is REFERENCED by index.html, and
+    // a concatenated path is invisible to it — the gate that exists to catch a
+    // missing data file would have gone quiet the moment these were assembled.
+    var loadWards = makeCached(function () {
+      return fetchJSONWithRetry(opts.wardsUrl, {}, 2);
+    });
+    var loadCouncil = makeCached(function () {
+      return fetchJSONWithRetry(opts.councilUrl, {}, 2);
+    });
+    return {
+      key: opts.key,
+      // The wards ARE the city for this layer's purposes; a load failure
+      // rejects through to the engine's fail-open, so an outage never hides
+      // the toggle for a reader in that city.
+      coverage: function (point) {
+        return loadWards().then(function (geojson) {
+          return !!findFeatureContaining(geojson, point);
+        });
+      },
+      loadGeometry: loadWards,
+      hoverName: function (feature) {
+        var label = findPropCI(feature.properties || {}, ["label"]);
+        return label != null ? opts.city + " " + String(label) : null;
+      },
+      query: function (point, seq) {
+        // the roster is a small same-origin file and its failure is not this
+        // layer's failure: the ward still answers, identity-only
+        return Promise.all([
+          queryFeatureAt(loadWards, point),
+          loadCouncil().catch(function () { return null; }),
+          loadWards().catch(function () { return null; })
+        ]).then(function (parts) {
+          var feature = parts[0];
+          if (!feature) return null;
+          var props = feature.properties || {};
+          var ward = findPropCI(props, ["ward"]);
+          var roster = parts[1];
+          var member = (roster && roster.wards && ward != null)
+            ? roster.wards[String(ward)] : null;
+          return {
+            seq: seq,
+            ward: ward,
+            label: findPropCI(props, ["label"]),
+            sqmiles: findPropCI(props, ["sqmiles"]),
+            member: member || null,
+            citywide: (roster && roster.citywide) || null,
+            rosterUrl: roster ? roster.sourceUrl : null,
+            disclaimer: parts[2] ? parts[2].disclaimer : null
+          };
+        });
+      },
+      cardIdentifier: function (result) {
+        return result.label != null ? String(result.label) : "Unknown ward";
+      },
+      render: function (result) {
+        var wrap = cardEl("div", "card-flush");
+        if (result.member && result.member.name) {
+          wrap.appendChild(renderPersonRows([cityCouncilPersonRow(result.member, "Council member")]));
+        }
+        // The seats no ward can carry. Every reader in this city elects these
+        // people too, so leaving them off would make a partial answer look
+        // like the whole one.
+        if (result.citywide && result.citywide.length) {
+          wrap.appendChild(renderSectionLabel("ELECTED BY THE WHOLE CITY"));
+          wrap.appendChild(renderPersonRows(result.citywide.map(function (rec) {
+            return cityCouncilPersonRow(rec, "Citywide");
+          }), { tinted: true }));
+        }
+        var rows = [{ label: "City", value: opts.city, primary: true }];
+        if (result.sqmiles != null) {
+          rows.push({ label: "Area", value: Number(result.sqmiles).toFixed(2) + " sq mi" });
+        }
+        rows.push({ label: "Council", value: opts.councilNote });
+        if (result.disclaimer) {
+          // required verbatim by the city's own terms of use for its data
+          // portal — see that city's ward builder. Absent for a city that
+          // states no such condition, and the row then does not render.
+          rows.push({ label: "Data notice", value: String(result.disclaimer) });
+        }
+        wrap.appendChild(renderFieldStack(rows));
+        return wrap;
+      },
+      primaryLink: function (result) {
+        var url = safeHttpUrl(result.rosterUrl);
+        if (!url) return null;
+        return { label: opts.councilLabel, url: url };
+      }
+    };
+  }
+
+  registerCountyLayer({
+    id: "city-ward",
     group: "political",
-    label: "Des Moines City Council Ward",
-    coverage: desMoinesCoverage,
-    overlay: {
-      load: loadDsmWards,
-      // deep teal — a municipal hue that reads apart from county-supervisor's
-      // green above it and the magenta City dots it sits inside
-      style: { color: "#125E63", weight: 1.6, fillColor: "#1B8A91", fillOpacity: 0.07 }
-    },
-    hoverName: function (feature) {
-      var label = findPropCI(feature.properties || {}, ["label"]);
-      return label != null ? "Des Moines " + String(label) : null;
-    },
-    query: function (point, seq) {
-      // the roster is a small same-origin file and its failure is not this
-      // layer's failure: the ward still answers, identity-only
-      return Promise.all([
-        queryFeatureAt(loadDsmWards, point),
-        loadDsmCouncil().catch(function () { return null; }),
-        loadDsmWards().catch(function () { return null; })
-      ]).then(function (parts) {
-        var feature = parts[0];
-        if (!feature) return null;
-        var props = feature.properties || {};
-        var ward = findPropCI(props, ["ward"]);
-        var roster = parts[1];
-        var member = (roster && roster.wards && ward != null)
-          ? roster.wards[String(ward)] : null;
-        return {
-          seq: seq,
-          ward: ward,
-          label: findPropCI(props, ["label"]),
-          sqmiles: findPropCI(props, ["sqmiles"]),
-          member: member || null,
-          citywide: (roster && roster.citywide) || null,
-          rosterUrl: roster ? roster.sourceUrl : null,
-          disclaimer: parts[2] ? parts[2].disclaimer : null
-        };
-      });
-    },
-    cardIdentifier: function (result) {
-      return result.label != null ? String(result.label) : "Unknown ward";
-    },
-    render: function (result) {
-      var wrap = cardEl("div", "card-flush");
-      if (result.member && result.member.name) {
-        wrap.appendChild(renderPersonRows([dsmPersonRow(result.member, "Council member")]));
-      }
-      // The three seats no ward can carry. Every Des Moines reader elects
-      // these people too, so leaving them off would make a four-of-seven
-      // answer look like the whole one.
-      if (result.citywide && result.citywide.length) {
-        wrap.appendChild(renderSectionLabel("ELECTED BY THE WHOLE CITY"));
-        wrap.appendChild(renderPersonRows(result.citywide.map(function (rec) {
-          return dsmPersonRow(rec, "Citywide");
-        }), { tinted: true }));
-      }
-      var rows = [{ label: "City", value: "Des Moines", primary: true }];
-      if (result.sqmiles != null) {
-        rows.push({ label: "Area", value: Number(result.sqmiles).toFixed(2) + " sq mi" });
-      }
-      rows.push({
-        label: "Council",
-        value: "A mayor, two at-large members and one member from each of four wards " +
+    // A GENERIC toggle label, per docs/EXPANSION_GUIDE.md §3.1: "One style +
+    // a generic toggle label per concept", with the unit's identity moving
+    // into the card — which is the City row every entry renders first.
+    label: "City Council Ward",
+    // deep teal — a municipal hue that reads apart from county-supervisor's
+    // green above it and the magenta City dots it sits inside
+    style: { color: "#125E63", weight: 1.6, fillColor: "#1B8A91", fillOpacity: 0.07 },
+    // DES MOINES FIRST, deliberately: §3.1 says to "order the table so the
+    // cheapest already-cached coverage test sits first and short-circuits the
+    // OR". Des Moines is the larger city and the one most traffic selects, so
+    // its ward file is the one most likely already in cache.
+    entries: [
+      cityWardEntry({
+        key: "des-moines",
+        city: "Des Moines",
+        wardsUrl: "data/app/dsm-wards.json",
+        councilUrl: "data/app/dsm-council-members.json",
+        councilLabel: "Des Moines City Council",
+        councilNote: "A mayor, two at-large members and one member from each of four wards " +
           "(Iowa Code §372.4(1)(b)). The mayor is not a member of the council."
-      });
-      if (result.disclaimer) {
-        // required verbatim by the City of Des Moines' own terms of use for
-        // its data portal — see build_dsm_wards.py
-        rows.push({ label: "Data notice", value: String(result.disclaimer) });
-      }
-      wrap.appendChild(renderFieldStack(rows));
-      return wrap;
-    },
-    primaryLink: function (result) {
-      var url = safeHttpUrl(result.rosterUrl);
-      if (!url) return null;
-      return { label: "Des Moines City Council", url: url };
-    }
+      }),
+      cityWardEntry({
+        key: "waterloo",
+        city: "Waterloo",
+        wardsUrl: "data/app/waterloo-wards.json",
+        councilUrl: "data/app/waterloo-council-members.json",
+        councilLabel: "Waterloo City Council",
+        // The mayor is deliberately absent from Waterloo's roster file: he is
+        // elected by the whole city, and the fleet's at-large rule puts a
+        // citywide officer on the unit's identity card rather than a district
+        // card. He is named here in prose so the card does not imply the
+        // council is the whole of the city's elected government.
+        councilNote: "Two at-large members and one member from each of five wards, " +
+          "plus a mayor who is elected citywide and is not named on this card."
+      })
+    ]
   });
 
 
@@ -10564,7 +10854,7 @@ function initIowaExplorer() {
   // standard"): representation first, then services, then geography broad ->
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
-  var LAYER_SIDEBAR_RANK = ["us-house", "ia-judicial-district", "ia-senate", "ia-house", "county", "county-subdivision", "municipality", "dsm-ward", "county-supervisor", "school-district-unified", "school-director-district", "community-college", "cc-director-district", "iowa-aea", "zip-code", "precinct", "police-station", "fire-station", "school-site", "post-office"];
+  var LAYER_SIDEBAR_RANK = ["us-house", "ia-judicial-district", "ia-senate", "ia-house", "county", "county-subdivision", "municipality", "city-ward", "county-supervisor", "school-district-unified", "school-director-district", "community-college", "cc-director-district", "iowa-aea", "zip-code", "precinct", "police-station", "fire-station", "school-site", "post-office"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -10575,6 +10865,40 @@ function initIowaExplorer() {
       var pb = pos[b.id] != null ? pos[b.id] : 999;
       return pa - pb;
     });
+  })();
+
+  // Permalink compatibility for consolidated layers: pre-consolidation ids in
+  // a shared #layers= list are rewritten to the consolidated id BEFORE the
+  // boot-time applyStateFromHash parse reads the hash. Unknown ids there are
+  // dropped SILENTLY, so without this an old link would simply lose the layer
+  // — the page would still load, still look right, and quietly not show the
+  // thing the link was shared to show. Every future consolidation appends its
+  // retired ids here.
+  var CONSOLIDATED_LAYER_ALIASES = {
+    // 2026-09-04: Waterloo became Iowa's second city publishing council wards,
+    // so the concept was consolidated onto one dispatched `city-ward` toggle
+    // (docs/EXPANSION_GUIDE.md §3.0). Links shared while it was `dsm-ward`
+    // are still out there and cannot be recalled.
+    "dsm-ward": "city-ward"
+  };
+  (function rewriteAliasedPermalink() {
+    var raw = location.hash.replace(/^#/, "");
+    var m = /(^|&)layers=([^&]*)/.exec(raw);
+    if (!m) return;
+    var seen = {};
+    var ids = m[2].split(",").map(function (id) {
+      return CONSOLIDATED_LAYER_ALIASES[id] || id;
+    }).filter(function (id) { // aliasing can duplicate the target — keep one
+      if (seen[id]) return false;
+      seen[id] = true;
+      return true;
+    });
+    var rewritten = raw.slice(0, m.index) +
+      (m[1] || "") + "layers=" + ids.join(",") +
+      raw.slice(m.index + m[0].length);
+    if (rewritten !== raw) {
+      history.replaceState(null, "", location.pathname + location.search + "#" + rewritten);
+    }
   })();
 
   buildGroupsUI();

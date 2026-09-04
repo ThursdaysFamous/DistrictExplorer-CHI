@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Build data/app/dsm-council-members.json — the seven people Des Moines elects,
-read by ia/index.html's `dsm-ward` card.
+read by the Des Moines entry of ia/index.html's `city-ward` card.
 
 Iowa Code 372.4(1)(b): a mayor, two at-large council members, and one council
 member from each of four wards. FOUR OF THE SEVEN SEATS HAVE A WARD; the other
