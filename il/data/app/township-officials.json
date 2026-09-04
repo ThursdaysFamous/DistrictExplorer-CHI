@@ -1198,7 +1198,8 @@
     ],
     "county": "Cook",
     "head": {
-      "name": "John E. Becvar",
+      "appointed": true,
+      "name": "Vanessa Druckman",
       "nextElection": "2029",
       "role": "Supervisor"
     },
@@ -1210,7 +1211,8 @@
     },
     "officers": [
       {
-        "name": "Pamela J. Kende",
+        "appointed": true,
+        "name": "Kathy Elliott",
         "nextElection": "2029",
         "role": "Assessor"
       },
