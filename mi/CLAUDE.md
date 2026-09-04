@@ -8,15 +8,16 @@ districtry Michigan: a single-file, dependency-light web app. Click a point in M
 search an address) and it reports every civic district containing that point and who
 represents you there. It serves at **districtry.com/mi/** as a folder of the consolidated
 districtry repo — following the Wisconsin/Iowa shape (`docs/EXPANSION_GUIDE.md` Part 2), not
-the Illinois root-scripts shape. It ships four layers, the national tier every U.S. state can
-serve from national publishers: **County** (83, from Census TIGERweb, identity-only),
+the Illinois root-scripts shape. It ships FIVE layers. Four are the national tier every U.S.
+state can serve from national publishers: **County** (83, from Census TIGERweb, identity-only),
 **U.S. House** (13 districts, TIGERweb geometry joined to the public-domain
 unitedstates/congress-legislators roster, refreshed weekly), and **Michigan Senate** /
 **Michigan House** (38 and 110 districts, TIGERweb geometry joined to Open States' current-people
-export).
+export). The fifth is **County Commissioner** (619 districts across all 83 counties), the layer
+Michigan was chosen for.
 
-**THE FLAGSHIP LAYER THIS INSTANCE IS BUILT TOWARD IS `county-commissioner`**, and it is the
-reason Michigan was chosen as the fleet's sixth state ahead of four other candidates. The
+**THE FLAGSHIP LAYER IS `county-commissioner`, AND IT SHIPPED 2026-09-03**; it is the reason
+Michigan was chosen as the fleet's sixth state ahead of four other candidates. The
 Michigan Department of State's Bureau of Elections publishes **one statewide layer carrying
 every county's commissioner districts** — `2021 County Commissioner Districts v25`, all 83
 counties in a single query at
@@ -26,16 +27,29 @@ Wisconsin's LTSB shape (a statutory filing mandate producing one current statewi
 rather than Illinois's county-by-county grind, and unusually **the same records carry the
 commissioner's own name and party**, derived from the canvassed November 2024 election. Its AGO
 item states its licence outright: "this dataset is a public record and…there are no
-restrictions on the use, reproduction, or distribution of this dataset". None of that ships
-yet — a roster attached to a boundary is refreshed when the boundary is, so the names get
-their own verification rather than riding in on the geometry's coat-tails.
+restrictions on the use, reproduction, or distribution of this dataset".
+
+**THE GEOMETRY SHIPS AND THE NAMES DO NOT, AND THAT WAS A MEASUREMENT RATHER THAN CAUTION.**
+Those `Commissioner`/`Party` columns are the certified **November 2024 election winners**, not a
+maintained roster — the item's own description says so, and that single fact explains its 100%
+fill rate: a winners list is complete by construction, because every district always has a
+winner and none can ever be blank, so the ABSENCE of vacancies is evidence against upkeep rather
+than for it. Read district-by-district against twelve counties' own board pages (123 districts):
+115 right, 93.5% — and every one of the eight misses runs the SAME direction, the layer naming
+the 2024 winner where the county names their replacement. Wayne District 5 still names a
+commissioner who died on 10 June 2025. So the builder strips both columns at the fetch and
+**refuses to write if they ever reach `data/app/`** — a code-level guard rather than a comment,
+because "why not keep the extra fields" would otherwise be a one-line change with a
+fifteen-month-old factual error as its consequence. The card says plainly that it does not name
+your commissioner. Recorded as gap `mi-commissioner-roster`; the honest route is county-by-county
+against each board's own page, and ten of the twelve sampled publish a readable one.
 
 **TWO MEASUREMENTS FROM THE ARRIVAL BUILD ARE WORTH CARRYING FORWARD.** First, **TIGERweb's
 congressional layer has rolled to the 120th Congress**: the district field is `CD120`, and a
 query naming the retired `CD119` is not merely empty but REJECTED — HTTP 400, "Failed to
-execute query". Michigan's builder names `CD120`; **the sibling instances' builders still name
-`CD119` and would fail the same way on a rebuild**, which is a live finding rather than a
-hypothetical (their shipped files are fine; only a re-run breaks). Second, **Michigan's county
+execute query". Michigan's builder names `CD120`, and the five sibling instances' builders were
+swept onto it the same day — the finding was live rather than hypothetical, since their shipped
+files were fine and only the next rebuild would have broken. Second, **Michigan's county
 fabric is WATER-INCLUSIVE**: every Great Lakes county's polygon runs out to the state water
 boundary — Keweenaw County alone spans 2.57° of longitude, out past Isle Royale — so the two
 peninsulas and every island dissolve into ONE ring, and a mid-lake click lands INSIDE coverage,
@@ -57,7 +71,7 @@ every other instance via `scripts/compose_app.py`.
 
 - Metro: Michigan (`michigan`) — https://districtry.com/mi/
 - Geocoders: address Photon (Michigan-bounded type-ahead); unbounded Photon (whole-coverage, sibling-metro lookup); POI Nominatim (office-address pin lookup, Michigan-bounded, serial >=1s queue)
-- Ground truth: 42.73370,-84.55530 (the Michigan State Capitol, downtown Lansing (Ingham County)) → county Ingham County; us-house 7; mi-senate 21; mi-house 77; county-commissioner 9. Negative point 41.65280,-83.53790 (downtown Toledo, Ohio — south of the Michigan line and inside permalink_gate's minLat (41.55), so the point is still selectable; measured to miss all four layers).
+- Ground truth: 42.73370,-84.55530 (the Michigan State Capitol, downtown Lansing (Ingham County)) → county Ingham County; us-house 7; mi-senate 21; mi-house 77; county-commissioner 9. Negative point 41.65280,-83.53790 (downtown Toledo, Ohio — south of the Michigan line and inside permalink_gate's minLat (41.55), so the point is still selectable; measured to miss all five layers).
 - Layers: 5 registered (political 4, geography 1); `registerLayer(` floor 4. Debug namespace `window.MichiganExplorer`.
 - Scheduled workflows: `update-mi-congress-roster.yml` (Mon 15:30 UTC); `update-mi-legislature-roster.yml` (Tue 15:30 UTC); `mi-validate-sources.yml` (1st of month 16:00 UTC).
 - Source registry: `mi/scripts/validate_sources.py` (machine-checked monthly)
@@ -117,8 +131,9 @@ never breaks the others).
 **Honesty rules (non-negotiable):** officeholder data is never guessed — where no verifiable
 roster source exists, cards link to the official body instead of inventing a name. Both chamber
 cards degrade to the district number + the chamber's own directory on a roster miss; the county
-card carries no roster at all and **says so on the card**, because Michigan's commissioner
-districts ship as their own change rather than half-joined here. External strings always render
+card carries no roster at all and **says so on the card**; and the commissioner card names the
+district, its county and the population it was apportioned on, and states that it does not name
+the commissioner — see the flagship section above for what that column actually is. External strings always render
 through `sanitize()`/`textContent`. Roster refreshes always land as PRs for human review —
 never as direct commits to main.
 
@@ -132,7 +147,11 @@ centroid verified interior against that county's own rings), `state-counties.jso
 `mi-senate-districts.json`, `mi-house-districts.json`
 (`mi/scripts/build_legislative_boundaries.py` — statewide TIGERweb, mapshaper-simplified,
 refused unless the 2,000-random-point agreement gate passes; all three built at 100.00%
-agreement with 0 overlaps). Rosters: `congress-roster.json`
+agreement with 0 overlaps), and `mi-commissioner-districts.json`
+(`mi/scripts/build_mi_commissioner_districts.py` — the Bureau of Elections' statewide layer,
+which additionally STRIPS the `Commissioner`/`Party` columns at the fetch and refuses to write
+if either reaches `data/app/`, and gates on exact 619/83 counts, per-county 1..N numbering and
+MCL 46.401(1)'s 5..21 board-size range). Rosters: `congress-roster.json`
 (`mi/scripts/build_congress_roster.py`, from unitedstates/congress-legislators) and
 `mi-{senate,house}-members.json` (`mi/scripts/build_mi_legislature_roster.py`, from Open States
 `mi.csv`, with the Senate enriched by `mi/scripts/mi_senate_scraper.py`) — all count-guarded,

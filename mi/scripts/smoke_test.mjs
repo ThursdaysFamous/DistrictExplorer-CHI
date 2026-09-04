@@ -51,7 +51,7 @@ const BASE = process.env.BASE_URL || "http://localhost:8000/";
 const POINT = "42.73370,-84.55530"; // the Michigan State Capitol, downtown Lansing (Ingham County)
 const OFFLINE = ["county", "us-house", "mi-senate", "mi-house", "county-commissioner"];
 const EXPECT_DISTRICT = { "county": "Ingham County", "us-house": "7", "mi-senate": "21", "mi-house": "77", "county-commissioner": "9" };
-const NEGATIVE_POINT = "41.65280,-83.53790"; // downtown Toledo, Ohio — south of the Michigan line and inside permalink_gate's minLat (41.55), so the point is still selectable; measured to miss all four layers
+const NEGATIVE_POINT = "41.65280,-83.53790"; // downtown Toledo, Ohio — south of the Michigan line and inside permalink_gate's minLat (41.55), so the point is still selectable; measured to miss all five layers
 const APP_NAME = "districtry Michigan";
 const EXPECT_LAYERS = 5;
 // ==== GENERATED:END smoke-config ====
