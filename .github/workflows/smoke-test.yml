@@ -325,6 +325,18 @@ jobs:
       - name: Press list matches its data
         run: python3 scripts/build_press_list.py --check
 
+      # "N layers" is the fleet's most-repeated number and, until this gate,
+      # its least watched: 32 claims across 77 documents and nothing compared
+      # one against a worksheet. The adjacent gates miss it by construction —
+      # build_landing_page.py generates the root page's six aria-labels from
+      # len(worksheet["layers"]), and fleet_status.py diffs layer IDS against
+      # the guidebook matrix weekly and WARN-only, which says nothing about a
+      # number typed into a sentence. Four were wrong on introduction, two of
+      # them in docs/press-list.json — the outbound press list, i.e. the number
+      # a journalist would have been handed. Stdlib only.
+      - name: Layer counts in prose match the worksheets
+        run: python3 scripts/validate_doc_counts.py
+
       # A roster's count guard proves it still has twelve members; it proves
       # nothing about whether those twelve still carry an e-mail. On 2026-08-08
       # Cloudflare's e-mail obfuscation quietly emptied all seven of Brown
