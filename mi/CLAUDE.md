@@ -97,7 +97,7 @@ every other instance via `scripts/compose_app.py`.
 - Metro: Michigan (`michigan`) — https://districtry.com/mi/
 - Geocoders: address Photon (Michigan-bounded type-ahead); unbounded Photon (whole-coverage, sibling-metro lookup); POI Nominatim (office-address pin lookup, Michigan-bounded, serial >=1s queue)
 - Ground truth: 42.73370,-84.55530 (the Michigan State Capitol, downtown Lansing (Ingham County)) → county Ingham County; us-house 7; mi-senate 21; mi-house 77; county-commissioner 9. Negative point 41.65280,-83.53790 (downtown Toledo, Ohio — south of the Michigan line and inside permalink_gate's minLat (41.55), so the point is still selectable; measured to miss all five ANCHOR layers (phase 3's four live TIGERweb fabric layers are deliberately not anchors — anchors are pre-built and election-stable)).
-- Layers: 11 registered (political 5, schools 2, geography 4); `registerLayer(` floor 6. Debug namespace `window.MichiganExplorer`.
+- Layers: 12 registered (political 5, schools 2, geography 5); `registerLayer(` floor 6. Debug namespace `window.MichiganExplorer`.
 - Scheduled workflows: `update-mi-congress-roster.yml` (Mon 15:30 UTC); `update-mi-legislature-roster.yml` (Tue 15:30 UTC); `mi-validate-sources.yml` (1st of month 16:00 UTC).
 - Source registry: `mi/scripts/validate_sources.py` (machine-checked monthly)
 <!-- ==== GENERATED:END metro-facts ==== -->
