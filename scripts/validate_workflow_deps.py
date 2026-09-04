@@ -222,17 +222,77 @@ def closure(entry, scripts_dir):
     return seen, third_party
 
 
+# Column-0 lines a real workflow legitimately has. Everything else at column 0
+# is a block scalar that ended where its author did not think it did.
+TOP_LEVEL_RE = re.compile(r"^([A-Za-z_][A-Za-z0-9_.-]*):(\s|$)")
+
+
+def check_parseable(fname, text):
+    """Refuse a workflow file GitHub will reject before it runs a single step.
+
+    THE FAILURE THIS CATCHES, measured 2026-09-04. A `run: |` block is a YAML
+    LITERAL BLOCK SCALAR, and it ends at the first non-blank line indented less
+    than the block. A multi-line `gh pr create --body "..."` argument written
+    the obvious way puts its second paragraph at column 0 — so the shell script
+    is silently truncated mid-string, and the remaining lines are parsed as
+    top-level document keys. GitHub then rejects the whole file: every run
+    instant-fails, `created_at == updated_at`, ZERO jobs, and the Actions tab
+    shows a red X with no steps to open.
+
+    Two Iowa roster refreshes shipped exactly that way and never executed a
+    single step — eleven runs between them, all failures, none of them the
+    workflow's own code. Nothing here caught it because THIS FILE READS
+    WORKFLOWS AS TEXT: the regexes above found the pip line and the entry point
+    in a file no YAML parser will accept, and reported OK. That is the same
+    shape as the failure in this module's own docstring — a workflow that never
+    runs — one level further out, so it belongs here rather than in a gate of
+    its own.
+
+    The check is deliberately structural rather than a YAML parse: PyYAML is
+    not stdlib, and this gate runs in smoke-test.yml before any dependency is
+    installed. It does not need one. A valid Actions workflow has column-0
+    content only where a top-level key, a comment or a document marker sits;
+    anything else at column 0 is inside a block scalar that has ended early.
+
+    The fix is always the same and is written into the message, because the
+    obvious repair — indenting the body's continuation lines — silently turns
+    the markdown into a code block. Put the body in a step-level `env:` block
+    scalar and pass "$PR_BODY" to gh.
+    """
+    for n, line in enumerate(text.split("\n"), 1):
+        if not line or line[0] in " \t#":
+            continue
+        if line in ("---", "..."):
+            continue
+        if TOP_LEVEL_RE.match(line):
+            continue
+        fail("%s line %d begins at column 0 and is not a top-level key: %r. "
+             "That ENDS whatever block scalar it sits in, and GitHub rejects "
+             "the file as an invalid workflow — every run instant-fails with "
+             "zero jobs, which looks nothing like a YAML problem in the "
+             "Actions tab. It is almost always a multi-line string inside "
+             "`run: |` (a gh pr create --body). Do not fix it by indenting "
+             "the continuation lines; that makes the markdown a code block. "
+             "Move the text into a step-level `env:` block scalar and pass "
+             "\"$PR_BODY\" to gh."
+             % (fname, n, line[:60]))
+
+
 def main():
     if not os.path.isdir(WORKFLOW_DIR):
         print("validate-workflow-deps: no .github/workflows — nothing to check")
         return 0
 
-    checked = 0
+    checked = parsed = 0
     for fname in sorted(os.listdir(WORKFLOW_DIR)):
         if not fname.endswith((".yml", ".yaml")):
             continue
         with open(os.path.join(WORKFLOW_DIR, fname), encoding="utf-8") as f:
             text = f.read()
+        # EVERY workflow, not just the ones running a script of ours: a file
+        # GitHub will not parse is dead regardless of what it would have run.
+        check_parseable(fname, text)
+        parsed += 1
         entries = sorted(set(RUN_RE.findall(text)))
         if not entries:
             continue
@@ -263,8 +323,9 @@ def main():
         for msg in failures:
             print("  - %s" % msg)
         return 1
-    print("validate-workflow-deps: OK — %d workflow entry point(s) import "
-          "cleanly under their own declared dependencies" % checked)
+    print("validate-workflow-deps: OK — %d workflow file(s) parse as YAML, "
+          "%d entry point(s) import cleanly under their own declared "
+          "dependencies" % (parsed, checked))
     return 0
 
 
