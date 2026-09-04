@@ -2140,11 +2140,7 @@
   },
   "treasurer": {
    "name": "Tara Ostermann",
-   "party": "Republican",
-   "url": "https://www.oneidacountywi.gov/departments/tr/",
-   "phone": "715-369-6137",
-   "email": "octreas@oneidacountywi.gov",
-   "checked": true
+   "party": "Republican"
   },
   "clerkOfCircuitCourt": {
    "name": "Brenda Behrle",
@@ -2152,29 +2148,17 @@
   },
   "registerOfDeeds": {
    "name": "Kyle Franson",
-   "party": "Republican",
-   "url": "https://www.oneidacountywi.gov/departments/rd/",
-   "phone": "715-369-6150",
-   "checked": true
+   "party": "Republican"
   },
   "districtAttorney": {
    "name": "Jillian Pfeifer",
-   "party": "Democrat",
-   "url": "https://www.oneidacountywi.gov/departments/da/",
-   "phone": "715-369-6133",
-   "checked": true
+   "party": "Democrat"
   },
   "sheriff": {
    "name": "Grady Hartman",
-   "party": "Republican",
-   "url": "https://www.oneidacountywi.gov/departments/sd/",
-   "phone": "715-361-5100",
-   "email": "ghartman@oneidacountywi.gov",
-   "checked": true
+   "party": "Republican"
   },
-  "coroner": null,
-  "contactChecked": 4,
-  "contactCheckedWeekly": 4
+  "coroner": null
  },
  "55087": {
   "county": "Outagamie",
@@ -3289,7 +3273,6 @@
    "name": "Martin Schulteis",
    "party": "Republican",
    "url": "https://www.washcowisco.gov/elected_officials/sheriff_s_office",
-   "phone": "262-335-4378",
    "checked": true
   },
   "coroner": {
