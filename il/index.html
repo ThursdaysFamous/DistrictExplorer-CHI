@@ -18611,7 +18611,12 @@ function initChiExplorer() {
             if (!feature) return null;
             var district = findPropCI(feature.properties || {}, ["district"]);
             var entry = district != null ? results[1][String(district)] : null;
-            return { seq: seq, district: district, entry: entry };
+            return {
+              seq: seq,
+              district: district,
+              entry: entry,
+              board: results[1] && results[1].board
+            };
           });
         },
         render: function (result) {
@@ -18626,6 +18631,25 @@ function initChiExplorer() {
               return boardMemberPerson(m);
             })));
           }
+          // The county heads this block "Logan County Board Office" and gives
+          // it its own phone and mailbox, so it belongs to the board and not
+          // to any member — which matters, because the same page prints a
+          // DIFFERENT home address beside each of the twelve members and none
+          // of those is parsed or shown (the Madison/Peoria rule).
+          var fields = [];
+          if (result.board && result.board.address) {
+            fields.push({ label: "Board office",
+                          value: String(result.board.address) });
+          }
+          if (result.board && result.board.phone) {
+            fields.push({ label: "Board office phone",
+                          value: String(result.board.phone) });
+          }
+          if (result.board && result.board.email) {
+            fields.push({ label: "Board e-mail",
+                          value: String(result.board.email) });
+          }
+          if (fields.length) wrap.appendChild(renderFieldStack(fields));
           return wrap;
         },
         cardIdentifier: function (result) {
@@ -19519,6 +19543,7 @@ function initChiExplorer() {
               seq: seq,
               district: district,
               entry: entry,
+              board: results[1] && results[1].board,
               boundaryNote: findPropCI(props, ["boundarynote"])
             };
           });
@@ -19543,6 +19568,25 @@ function initChiExplorer() {
               { label: "Boundary note", value: String(result.boundaryNote) }
             ]));
           }
+          // Board-level contact, published by the county under the heading
+          // "Office/Mailing Address: Jefferson County Board" beside a staffed
+          // line ("County Board Executive Assistant") and a board mailbox — so
+          // it is the board's, not a member's. The thirteen member rows carry
+          // a phone and a per-district role e-mail and no address at all.
+          var fields = [];
+          if (result.board && result.board.address) {
+            fields.push({ label: "Board office",
+                          value: String(result.board.address) });
+          }
+          if (result.board && result.board.phone) {
+            fields.push({ label: "Board office phone",
+                          value: String(result.board.phone) });
+          }
+          if (result.board && result.board.email) {
+            fields.push({ label: "Board e-mail",
+                          value: String(result.board.email) });
+          }
+          if (fields.length) wrap.appendChild(renderFieldStack(fields));
           return wrap;
         },
         cardIdentifier: function (result) {
@@ -19974,7 +20018,12 @@ function initChiExplorer() {
             if (!feature) return null;
             var district = findPropCI(feature.properties || {}, ["district"]);
             var entry = district != null ? results[1][String(district)] : null;
-            return { seq: seq, district: district, entry: entry };
+            return {
+              seq: seq,
+              district: district,
+              entry: entry,
+              board: results[1] && results[1].board
+            };
           });
         },
         render: function (result) {
@@ -20004,10 +20053,28 @@ function initChiExplorer() {
           // the boundary credit renders on every card rather than living
           // only in the data file (licence #008382; display authorized in
           // writing by the county's IT/GIS Director, 2026-08-17).
-          wrap.appendChild(renderFieldStack([
-            { label: "Boundary source",
-              value: "Jo Daviess County GIS (licensed county data, displayed with permission)" }
-          ]));
+          var fields = [];
+          // "meets at", not "office": the county publishes this as its County
+          // Board ROOM on the courthouse's third floor, and a meeting room is
+          // not an office. The distinction is worth the extra label here
+          // because this is the county whose per-member directory pages print
+          // HOME addresses — which the scraper never parses (Madison/Peoria) —
+          // so the one address on this card has to be unambiguous about what
+          // it is. Coles's block says "Board office" because Coles publishes
+          // an office.
+          if (result.board && result.board.address) {
+            fields.push({ label: "Board meets at",
+                          value: String(result.board.address) });
+          }
+          // The licence's Credits clause requires indicating the source, so
+          // the boundary credit renders on every card rather than living
+          // only in the data file (licence #008382; display authorized in
+          // writing by the county's IT/GIS Director, 2026-08-17).
+          fields.push({
+            label: "Boundary source",
+            value: "Jo Daviess County GIS (licensed county data, displayed with permission)"
+          });
+          wrap.appendChild(renderFieldStack(fields));
           return wrap;
         },
         cardIdentifier: function (result) {

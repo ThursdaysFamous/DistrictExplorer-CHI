@@ -23,7 +23,7 @@
 
 | County | FIPS | Served through | Board | County-keyed dispatch entries | Open gaps |
 |---|---|---|---|---|---|
-| Adams | 17001 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district` | 3 — `adams-county-board-roster` (no-source); `county-board-office-addresses` (no-source); `quincy-ward-officeholders` (no-source) |
+| Adams | 17001 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district` | 2 — `adams-county-board-roster` (no-source); `quincy-ward-officeholders` (no-source) |
 | Alexander | 17003 | County card | at-large — County card | — | none |
 | Bond | 17005 | judicial circuit | no board layer — see gaps | — | 1 — `bond-county-board-districts` (no-source) |
 | Boone | 17007 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 4 — `boone-fire-belvidere-city` (data-quality); `boone-fire-names` (data-quality); `boone-park-library-districts` (no-source); `county-board-office-addresses` (no-source) |
@@ -56,9 +56,9 @@
 | Henry | 17073 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `pass9-ward-seats-without-maps` (no-source) |
 | Iroquois | 17075 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 1 — `county-board-office-addresses` (no-source) |
 | Jackson | 17077 | dispatch | districted | `county-board`, `county-precinct` | none |
-| Jefferson | 17081 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
+| Jefferson | 17081 | dispatch | districted | `county-board`, `county-precinct` | none |
 | Jersey | 17083 | judicial circuit | no board layer — see gaps | — | 2 — `jersey-county-board-districts` (no-source); `jodaviess-jersey-precinct-geometry` (no-source) |
-| Jo Daviess | 17085 | dispatch | districted | `county-board` | 2 — `county-board-office-addresses` (no-source); `jodaviess-jersey-precinct-geometry` (no-source) |
+| Jo Daviess | 17085 | dispatch | districted | `county-board` | 1 — `jodaviess-jersey-precinct-geometry` (no-source) |
 | Johnson | 17087 | dispatch | no board layer — see gaps | `county-precinct` | 1 — `johnson-county-board` (no-source) |
 | Kane | 17089 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 2 — `aurora-council-contact` (blocked); `county-board-office-addresses` (no-source) |
 | Kankakee | 17091 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 5 — `county-board-office-addresses` (no-source); `kankakee-city-wards` (no-source); `kankakee-municipal-officials` (no-source); `kankakee-special-districts` (data-quality); `momence-ward-geometry` (no-source) |
@@ -68,7 +68,7 @@
 | Lake | 17097 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 2 — `lake-municipal-names` (no-source); `park-city-wards` (no-source) |
 | Lee | 17103 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 3 — `county-board-office-addresses` (no-source); `lee-municipal-officials` (no-source); `lee-park-library-districts` (no-source) |
 | Livingston | 17105 | dispatch | districted | `county-board` | 3 — `county-board-office-addresses` (no-source); `livingston-precincts` (no-source); `livingston-special-districts` (no-source) |
-| Logan | 17107 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `logan-fire-districts` (no-source) |
+| Logan | 17107 | dispatch | districted | `county-board`, `county-precinct` | 1 — `logan-fire-districts` (no-source) |
 | Macon | 17115 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 3 — `county-board-office-addresses` (no-source); `macon-board-phone-area-code` (data-quality); `macon-district-name-formatting` (data-quality) |
 | Macoupin | 17117 | dispatch | no board layer — see gaps | `county-precinct` | 3 — `macoupin-county-board-districts` (no-source); `macoupin-special-districts` (no-source); `macoupin-ward-geometry` (no-source) |
 | Madison | 17119 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 2 — `county-board-office-addresses` (no-source); `madison-ward-officials` (no-source) |

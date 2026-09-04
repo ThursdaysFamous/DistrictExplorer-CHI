@@ -370,7 +370,6 @@ detail into `blocker`.
       "concept": "County board office location",
       "area": "Most Illinois county boards",
       "counties": [
-        "adams",
         "boone",
         "carroll",
         "cass",
@@ -386,15 +385,12 @@ detail into `blocker`.
         "grundy",
         "henry",
         "iroquois",
-        "jefferson",
-        "jo-daviess",
         "kane",
         "kankakee",
         "kendall",
         "lasalle",
         "lee",
         "livingston",
-        "logan",
         "macon",
         "madison",
         "marshall",
@@ -423,9 +419,9 @@ detail into `blocker`.
       ],
       "kind": "no-source",
       "layer": "county-board",
-      "summary": "Most county board cards give you no address to visit — 47 of the 52 districted boards name no office at all.",
-      "why": "Only five counties publish an address for their board. Where a county publishes members' home addresses instead, those are never shown here.",
-      "blocker": "Corrected twice, and the second correction is the larger one. THE 31 JUL 2026 REVIEW fixed the original claim that no board card named an office: Cook does publish a district office for each commissioner (17 of 17, pinned on the map), and Lake's card shows the shared county-building office at 18 N County St, Waukegan, live from its own boundary GIS. RE-MEASURED 2026-08-20 across all 52 districted-board counties the app now serves, by reading every board-address render site in index.html and every shipped board roster rather than by sampling: FIVE counties name an address, 47 name none. Three present it as an OFFICE — Cook's per-commissioner district offices, Lake's shared county building, and Coles's 651 Jackson Ave, Room 326 with a board phone beside it. Clark and White label theirs \"Board mail\" instead, and that wording is the point rather than a shortcut: a courthouse mail line and a PO box are places to write, not places a resident can turn up at, and the card says which it is. THE SCOPE WAS THE REAL DEFECT. This record named 21 counties while 47 qualify, so 26 — Adams, Boone, Cass, Crawford, De Witt, Edgar, Effingham, Fulton, Grundy, Henry, Iroquois, Jefferson, Jo Daviess, Macon, Marshall, Mason, McDonough, Menard, Mercer, Montgomery, Peoria, Shelby, Stark, Tazewell, Washington and Woodford — carried exactly the same absence with nothing recording it, and therefore read as COMPLETE in the generated county-status table, whose own instructions say a served county with no open gap is finished. An absence recorded for 21 counties and silently tolerated in 26 more is the one claim this project's rules forbid; all 47 are listed here now, which is why this record's county count jumped rather than its substance changing. Madison publishes members' HOME addresses, which were removed rather than presented as somewhere a resident could go (the Madison/Peoria rule). The at-large counties were checked in the same pass and are a different surface: their commissioners ride the County card, where 7 of 13 publish an office (Edwards, Greene, Hamilton, Monroe, Morgan, Putnam and Schuyler), so what is recorded here is specifically the districted board card's absence.",
+      "summary": "Most county board cards give you no address to visit — 46 county board cards name no office at all.",
+      "why": "Nine counties publish an address for their board; the rest publish none. Where a county prints members' HOME addresses instead — and several do — those are never shown here.",
+      "blocker": "Corrected twice, and the second correction is the larger one. THE 31 JUL 2026 REVIEW fixed the original claim that no board card named an office: Cook does publish a district office for each commissioner (17 of 17, pinned on the map), and Lake's card shows the shared county-building office at 18 N County St, Waukegan, live from its own boundary GIS. RE-MEASURED 2026-08-20 across all 52 districted-board counties the app now serves, by reading every board-address render site in index.html and every shipped board roster rather than by sampling: FIVE counties name an address, 47 name none. Three present it as an OFFICE — Cook's per-commissioner district offices, Lake's shared county building, and Coles's 651 Jackson Ave, Room 326 with a board phone beside it. Clark and White label theirs \"Board mail\" instead, and that wording is the point rather than a shortcut: a courthouse mail line and a PO box are places to write, not places a resident can turn up at, and the card says which it is. THE SCOPE WAS THE REAL DEFECT. This record named 21 counties while 47 qualify, so 26 — Adams, Boone, Cass, Crawford, De Witt, Edgar, Effingham, Fulton, Grundy, Henry, Iroquois, Jefferson, Jo Daviess, Macon, Marshall, Mason, McDonough, Menard, Mercer, Montgomery, Peoria, Shelby, Stark, Tazewell, Washington and Woodford — carried exactly the same absence with nothing recording it, and therefore read as COMPLETE in the generated county-status table, whose own instructions say a served county with no open gap is finished. An absence recorded for 21 counties and silently tolerated in 26 more is the one claim this project's rules forbid; all 47 are listed here now, which is why this record's county count jumped rather than its substance changing. Madison publishes members' HOME addresses, which were removed rather than presented as somewhere a resident could go (the Madison/Peoria rule). The at-large counties were checked in the same pass and are a different surface: their commissioners ride the County card, where 7 of 13 publish an office (Edwards, Greene, Hamilton, Monroe, Morgan, Putnam and Schuyler), so what is recorded here is specifically the districted board card's absence. SWEPT 2026-09-04, and the sweep's value is mostly its NEGATIVE. Every one of the 43 listed counties with a board roster and a source URL was fetched with the same client its own scraper uses, and 37 publish NO street address anywhere in the board content — so this is an outreach problem and not an extraction one, which is what the no-source kind was already claiming and nothing had yet measured. THE SIX HITS CONTAIN THE TRAP. Franklin's board page yields two addresses in Christopher (population ~2,500; the county seat is Benton) and Warren's one on a numbered rural road in Berwick (county seat Monmouth) — MEMBERS' HOME ADDRESSES, and Logan's page carries twelve more beside its board office. A naive extract-the-address pass would therefore have published at least eight private residences, which is the Madison/Peoria rule earning its keep on a third of the counties that answered at all. SIX FURTHER COUNTIES publish an address only in SITE CHROME — Grundy, McHenry, Fulton, Boone, Livingston and Stephenson, the last of those inside a copyright line. That was settled by a cheap discriminator worth reusing: fetch the county's HOME page and look for the same string. If it is there too, the block is the county's template and says nothing about where the board sits. All six failed it. Kendall passes that test and still does not ship, because its board page and its site footer give TWO DIFFERENT addresses and label neither as the board's. THREE SHIPPED, on one rule: publish an address the county ATTRIBUTES to the board IN WORDS. Logan heads the block \"Logan County Board Office\" and gives it a direct line and its own mailbox; Jefferson heads it \"Office/Mailing Address: Jefferson County Board / County Courthouse\" beside a staffed line and a board mailbox; Jo Daviess names the \"County Board room, Third Floor\" of its courthouse — a MEETING ROOM, so its card says \"Board meets at\" and not \"Board office\", the distinction being the whole reason this is safe to publish for a county whose per-member pages print homes. Proximity on a board page is not attribution and a county's own address in site chrome is not the board's. ADAMS CAME OFF THIS LIST in the same pass without any new source: it has shipped \"Adams County Courthouse, 507 Vermont Street\" for some time and this record had not caught up, so it was overstating the gap by a county. Vermilion is answered but stores it nine times — the same office string repeated on each of its nine district entries as officeAddress rather than once on a board block; it renders correctly, so this is a tidiness debt and not a reader-facing one.",
       "wanted": "A board office address per county, or the building where members hold office hours — one shared address per county is usually the honest answer."
     },
     {
@@ -8183,6 +8179,9 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
     names + full 10-digit phones by district) is verified and also retires the old
     area-code half of `lasalle-board-phones`. *A branch-1 county needs its GIS edit date
     checked at every enrichment pass, not just at ship time.*
+    **RESOLVED 2026-08-01** — the entry was rebuilt on derived geometry with a weekly
+    directory scrape; both `lasalle-board-roster-stale` and `lasalle-board-phones` are
+    retired. Marked 2026-09-04, same pass as Lake's above.
   - *Lake's board office address is fetched into view and never rendered.* The card
     contains the render path for a District Office group and the county GIS populates
     ADDR on 19/19 features ('18 N County St, Waukegan' — the county building), but
@@ -8190,6 +8189,11 @@ matrix; when one is rejected, move the rationale into a NO HONEST ANALOG footnot
     group and the newsletter link are dead code. One line lights both up — and it
     falsified the `county-board-office-addresses` entry's claim that *no* card names an
     office (Cook's District Office group ships today, measured 17/17 live).
+    **RESOLVED 2026-08-01** — `ADDR,CITY,ZIP,URL2` are in the outFields and the loader
+    carries the fix in a comment (ADDR 19/19, URL2 19/19 re-verified live); the
+    `lake-board-office` gap record is retired. Marked here on 2026-09-04 because the
+    bullet still read as open five weeks later, which is what sent a board-address
+    sweep looking for a one-line fix that had already landed.
 
   **Recorded blockers that did not survive re-testing** (the dekalb-county-gis lesson,
   now at scale — six in one pass):
