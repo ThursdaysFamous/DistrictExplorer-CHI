@@ -5987,6 +5987,7 @@ function initMichiganExplorer() {
     "school-district-elementary", // 27 districts that operate no high school of their own, live from TIGERweb (no data/app file) — 350 km2 mean feature area, though the mean is pulled well above the 45 km2 median by Bois Blanc Pines, whose district takes in a large area of Lake Huron
     "county-commissioner", // 619 districts across all 83 counties — the finest tiling this instance ships, smaller than a state House district
     "county-subdivision", // 1,581 records tiling the state, live from TIGERweb (no data/app file) — 1,122 general-law townships, 118 charter townships, 301 city placeholder records for 281 distinct cities (18 of which cross a county line), and 40 'not defined' records that are pure Great Lakes water
+    "precinct",          // 3,895 voting precincts across all 83 counties, pre-built from the state's own 2026-cycle layer — 38.8 km2 mean feature area against a 6.4 km2 median, a six-fold skew because a rural township precinct and a city precinct are barely the same kind of object; the finest tiling this instance ships
     "municipality"       // 533 incorporated places, live from TIGERweb (no data/app file) — 281 cities and 252 villages, small dense pockets inside the township fabric, so the smallest layer this instance ships at a 12 km2 mean
   ];
   /* ==== GENERATED:END layer-area-rank ==== */
@@ -8898,6 +8899,62 @@ function initMichiganExplorer() {
     compact: true, compactMetaField: "geoid" // 4b name-only card
   });
 
+
+  /* ---------- 10. Precinct — the state's own 2024-cycle voting precincts ----------
+   * Pre-built from the Michigan Bureau of Elections' own "2026 Voting
+   * Precincts" (mi/scripts/build_mi_precincts.py): 3,895 precincts across all
+   * 83 counties.
+   *
+   * THE NEWEST MAP IS NOT WHERE THE OTHERS ARE. The state's OpenData
+   * MapServer — the one carrying the commissioner flagship — publishes a
+   * precinct layer per cycle and stops at 2024; the 2026 map lives on the
+   * state's ArcGIS Online org, on a different host. Michigan consolidated
+   * 4,340 precincts into 3,895 between the cycles, so reading only that
+   * MapServer gives a complete-looking answer that is 445 precincts wrong.
+   * The builder's docstring carries the whole near-miss.
+   *
+   * THE CARD DATES ITSELF AND CARRIES THE STATE'S OWN CAVEAT, because the
+   * publisher's confidence is part of the answer: the Bureau says validation
+   * was "done by most, but not all jurisdictions" and that the data "is only
+   * as good as the information received from the local election official". A
+   * precinct card implying more certainty than its own publisher claims would
+   * break this project's honesty rule by omission rather than by invention.
+   *
+   * IDENTITY ONLY, AND NO POLLING PLACE — not by choice but by construction:
+   * the layer carries none, which is the strongest form of the fleet's
+   * polling-data discipline (Iowa's builder has to DECLINE polling fields
+   * that exist; here there are none to decline). Registered voters ship
+   * because the state publishes them per precinct and the card names the
+   * cycle they belong to; the voting-equipment column is dropped, since it
+   * moves on a different clock from the boundary.
+   *
+   * Deliberately absent from anchors[]: anchors are pre-built AND
+   * election-stable, and a precinct layer is pre-built and explicitly
+   * cycle-scoped. ---------- */
+  var loadMiPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/mi-precincts.json", {}, 2);
+  });
+
+  registerPolygonLayer({
+    id: "precinct",
+    group: "political",
+    label: "Precinct",
+    loader: loadMiPrecincts,
+    style: { color: "#5C4B8C", weight: 1, fillColor: "#8F7BC4", fillOpacity: 0.04, dashArray: "2 2" },
+    fields: [
+      { name: "name", label: "Precinct", keys: ["name"], primary: true },
+      { name: "county", label: "County", keys: ["county"] },
+      { name: "voters", label: "Registered voters (2026 cycle)", keys: ["voters"] },
+      { label: "About this boundary",
+        value: "Michigan publishes voting precincts one election cycle at a " +
+               "time; this is the 2026 set, the newest the state has released. " +
+               "The Bureau of Elections collects it from local election " +
+               "officials and says validation was done by most, but not all, " +
+               "jurisdictions — so your clerk is the authority on where you " +
+               "vote, and this app makes no claim about your polling place." }
+    ]
+  });
+
   /* ==== ENGINE:BEGIN hover-explorer ==== */
   /* =========================================================================
    * HOVER EXPLORER — a live popup (on by default, toggled bottom-left) that
@@ -9459,7 +9516,7 @@ function initMichiganExplorer() {
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
   var LAYER_SIDEBAR_RANK = ["us-house", "mi-senate", "mi-house", "county-commissioner",
     "school-district-unified", "school-district-elementary",
-    "county", "county-subdivision", "municipality"];
+    "county", "county-subdivision", "municipality", "precinct"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -9558,9 +9615,9 @@ function initMichiganExplorer() {
   /* ==== GENERATED:BEGIN dark-map-palette ==== */
   var DST_DARK_MAP_COLORS = { "#14181C": "#696F76", "#1B7A3D": "#58CD7A", "#2E9E6B": "#5BEAA5",
     "#2F6B3A": "#6FBE7B", "#41B6E6": "#C6EBFE", "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD",
-    "#4C8F59": "#83DC93", "#6B7280": "#B1BBCE", "#7A5C3E": "#CFA57D", "#8C2E4A": "#F47294",
-    "#A98B6C": "#F3CBA1", "#B0316E": "#FD88B8", "#B26A00": "#FFB15F", "#D06A9C": "#FFBDDA",
-    "#D19133": "#FED7A7"};
+    "#4C8F59": "#83DC93", "#5C4B8C": "#AB95EF", "#6B7280": "#B1BBCE", "#7A5C3E": "#CFA57D",
+    "#8C2E4A": "#F47294", "#8F7BC4": "#D1C2FF", "#A98B6C": "#F3CBA1", "#B0316E": "#FD88B8",
+    "#B26A00": "#FFB15F", "#D06A9C": "#FFBDDA", "#D19133": "#FED7A7"};
   /* ==== GENERATED:END dark-map-palette ==== */
   /* ==== ENGINE:BEGIN districtry-theme ==== */
   /* The theme controller and the wordmark fleet switch, shared for the same

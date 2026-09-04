@@ -213,10 +213,28 @@
       }
     },
     {
+      "id": "precinct",
+      "label": "Precinct",
+      "group": "political",
+      "area_rank": 9,
+      "rank_note": "3,895 voting precincts across all 83 counties, pre-built from the state's own 2026-cycle layer — 38.8 km2 mean feature area against a 6.4 km2 median, a six-fold skew because a rural township precinct and a city precinct are barely the same kind of object; the finest tiling this instance ships",
+      "source": {
+        "answers": "The voting precinct covering the point, its county, and how many voters were registered in it for the 2026 cycle.",
+        "boundary": [
+          {
+            "label": "Michigan Dept. of State, Bureau of Elections — \"2026 Voting Precincts\" (ArcGIS Online item c349bc2bb6c2468594d341a09f520ea8, the CURATED item: it carries the title, the licence, the validation caveat and the full field names). 3,895 features, pre-built by mi/scripts/build_mi_precincts.py (paged, Visvalingam-simplified, 2,000-point agreement gate). THE NEWEST MAP IS NOT ON THE MAPSERVER THAT CARRIES THE COMMISSIONER LAYER: that service publishes a precinct layer per cycle and stops at 2024, while the 2026 map lives on the state's ArcGIS Online org on a different host — and Michigan consolidated 4,340 precincts into 3,895 between the cycles, so building from the MapServer would have shipped a map 445 precincts wrong",
+            "url": "https://services3.arcgis.com/dxRQUfTDNtfqZ301/arcgis/rest/services/2026_Voting_Precincts/FeatureServer/0"
+          }
+        ],
+        "people": "NO OFFICEHOLDER — a precinct elects nobody; it is the unit a ballot is counted in. AND NO POLLING PLACE, which here is a fact about the source rather than a decision: the layer carries no polling field at all, so unlike Iowa's precinct builder there is nothing to decline. The card names the state's own caveat instead — the Bureau collects this from local election officials and says validation was \"done by most, but not all\" jurisdictions — and points a reader at their clerk.",
+        "applies": "Michigan — statewide, all 3,895 precincts across all 83 counties, as drawn for the 2026 election cycle. Every precinct's county-subdivision key resolves against the Census MCD fabric this instance ships (1,530 of 1,530 distinct keys, measured 2026-09-04 — the same 1,530 on the 2024 map, because the consolidation happened WITHIN municipalities rather than between them), so the precinct and the Township or City card agree on which local government a point sits in. The state's voting-equipment column is deliberately not fetched: it changes on a different clock from the boundary."
+      }
+    },
+    {
       "id": "municipality",
       "label": "City or Village",
       "group": "geography",
-      "area_rank": 9,
+      "area_rank": 10,
       "rank_note": "533 incorporated places, live from TIGERweb (no data/app file) — 281 cities and 252 villages, small dense pockets inside the township fabric, so the smallest layer this instance ships at a 12 km2 mean",
       "source": {
         "answers": "The incorporated city or village covering the point, if any — and which of the two it is, because in Michigan that changes what else governs the point.",
@@ -304,6 +322,12 @@
         "min_features": 619,
         "max_features": 619,
         "note": "All 619 county commissioner districts across all 83 counties, pre-built by mi/scripts/build_mi_commissioner_districts.py from the Bureau of Elections' statewide compilation (2,000-point agreement gate at 100.00%, per-county 1..N numbering check, MCL 46.401(1) 5..21 board-size check, and a guard that REFUSES the file if the source's Commissioner/Party columns ever reach data/app/). 611 of 619 carry an apportionment population; Baraga District 1 and all seven Cheboygan districts do not, and the card omits the row rather than showing a blank."
+      },
+      {
+        "file": "mi-precincts.json",
+        "min_features": 3895,
+        "max_features": 3895,
+        "note": "2026-cycle voting precincts, mi/scripts/build_mi_precincts.py. Exact band, not a floor: the builder refuses to write any count but 3,895, because on a cycle-scoped layer a count change is real information (Michigan went 4,340 -> 3,895 between the 2024 and 2026 maps) rather than drift."
       }
     ],
     "rosters": [
@@ -330,7 +354,7 @@
     ]
   },
   "sw": {
-    "cache_name": "districtry-mi-shell-v2",
+    "cache_name": "districtry-mi-shell-v3",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",

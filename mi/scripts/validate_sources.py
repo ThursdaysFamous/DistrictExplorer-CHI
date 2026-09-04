@@ -144,6 +144,19 @@ PROVENANCE = [
         ),
     },
     {
+        "layer": "precinct",
+        "app_file": "mi-precincts.json",
+        "source_url": "https://services3.arcgis.com/dxRQUfTDNtfqZ301/arcgis/rest/services/2026_Voting_Precincts/FeatureServer/0",
+        "note": (
+            "3,895 precincts for the 2026 cycle, pre-built by mi/scripts/build_mi_precincts.py. "
+            "WATCH THE ORG, NOT THIS URL: a new cycle appears as a NEW SERVICE, and the "
+            "OpenData/boundaries MapServer carrying the commissioner layer still stops at 2024 -- "
+            "so a check that only reads a MapServer's layer list returns a complete-looking wrong "
+            "answer (Michigan went 4,340 -> 3,895 precincts between the cycles). The one query that "
+            "settles it is arcgis.com/sharing/rest/search?q=owner:michigan_admin AND precinct."
+        ),
+    },
+    {
         "layer": "county",
         "app_file": "state-counties.json",
         "source_url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer/1",

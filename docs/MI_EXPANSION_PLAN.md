@@ -1,7 +1,7 @@
 # districtry Michigan — the expansion plan and its running record
 
 > **SHIPPED 2026-09-03 — phases 1, 2 and go-live, in three PRs on one day.** Michigan is live at
-> districtry.com/mi/ with 9 layers. **The running status is the Status table near the foot of this
+> districtry.com/mi/ with 10 layers. **The running status is the Status table near the foot of this
 > file; what is left is under Still open.** What go-live actually cost is recorded here because it
 > was almost entirely NOT on any checklist.
 > **Four defects had survived the full 38-gate battery twice, and three were the same shape — a
@@ -195,9 +195,21 @@ record of what was true then, not a status board; this table is the status board
 
 Each opens its own refreshed plan PR with its own measured ledger when it begins.
 
-- **Phase 3 — the fabric.** Precincts, school districts, and Michigan's civil-township / city /
-  village tier (Michigan runs charter townships as well as general-law ones — still ASSERTED,
-  and the card must state which, since the two are different governments).
+- ~~**Phase 3 — the fabric.**~~ **DONE, in two PRs (2026-09-04).** PR 1 shipped the four live
+  TIGERweb layers — `county-subdivision`, `municipality` and the two school tilings — and PR 2 the
+  precinct layer. Three things it settled that this entry got wrong or left open:
+  - **The charter-township claim needed no citation.** It is readable straight off TIGER's own
+    `NAME` suffix, 1,581 records of 1,581 (1,122 general-law, 118 charter), so the card's type row
+    can never disagree with the name printed above it.
+  - **The city/village distinction is the one that mattered, and this entry did not name it.** A
+    Michigan city is independent of any township; a VILLAGE remains part of one — measured across
+    all 252 villages at their interior points, zero exceptions — so a village resident has two
+    general-purpose local governments and each card names the other.
+  - **The precinct layer nearly shipped the wrong vintage.** The MapServer carrying the
+    commissioner flagship stops at 2024; the 2026 map is on the state's AGO org, on another host,
+    and Michigan consolidated 4,340 precincts into 3,895 between the cycles. What caught it was
+    this repo's own guidebook cell, which had recorded the 2026 layer weeks earlier and never been
+    acted on.
 - **Phase 4 — the city tiers.** Detroit and Grand Rapids council districts, with the per-city
   roster work that implies.
 - **The 619 commissioners** — gap `mi-commissioner-roster`. The honest route is county-by-county

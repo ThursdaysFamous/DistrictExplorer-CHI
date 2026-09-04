@@ -98,7 +98,7 @@ MIN_REGISTER_LAYER = 6
 EXPECT_LAYER_IDS = [
     "us-house", "mi-senate", "county", "mi-house", "school-district-unified",
     "school-district-elementary", "county-commissioner", "county-subdivision",
-    "municipality",
+    "precinct", "municipality",
 ]
 
 # file -> (min features, max features) for the boundary layers fetched by the app.
@@ -109,6 +109,7 @@ GEOMETRY_FILES = {
     "mi-senate-districts.json": (38, 38),  # Michigan Senate districts, pre-built by mi/scripts/build_legislative_boundaries.py (2,000-point agreement gate).
     "mi-house-districts.json": (110, 110),  # Michigan House districts, pre-built by mi/scripts/build_legislative_boundaries.py (2,000-point agreement gate).
     "mi-commissioner-districts.json": (619, 619),  # All 619 county commissioner districts across all 83 counties, pre-built by mi/scripts/build_mi_commissioner_districts.py from the Bureau of Elections' statewide compilation (2,000-point agreement gate at 100.00%, per-county 1..N numbering check, MCL 46.401(1) 5..21 board-size check, and a guard that REFUSES the file if the source's Commissioner/Party columns ever reach data/app/). 611 of 619 carry an apportionment population; Baraga District 1 and all seven Cheboygan districts do not, and the card omits the row rather than showing a blank.
+    "mi-precincts.json": (3895, 3895),  # 2026-cycle voting precincts, mi/scripts/build_mi_precincts.py. Exact band, not a floor: the builder refuses to write any count but 3,895, because on a cycle-scoped layer a count change is real information (Michigan went 4,340 -> 3,895 between the 2024 and 2026 maps) rather than drift.
 }
 
 # file -> minimum key count (officeholder rosters).
