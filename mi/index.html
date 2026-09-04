@@ -5990,6 +5990,7 @@ function initMichiganExplorer() {
     "zip-code",          // 1,010 ZIP Code Tabulation Areas covering Michigan, live from TIGERweb (no data/app file) — 139.7 km2 mean feature area, between a township and a precinct
     "precinct",          // 3,895 voting precincts across all 83 counties, pre-built from the state's own 2026-cycle layer — 38.8 km2 mean feature area against a 6.4 km2 median, a six-fold skew because a rural township precinct and a city precinct are barely the same kind of object; the finest tiling this instance ships
     "municipality",      // 533 incorporated places, live from TIGERweb (no data/app file) — 281 cities and 252 villages, small dense pockets inside the township fabric, so the smallest layer this instance ships at a 12 km2 mean
+    "police-station",    // 1,290 police-station points in Michigan's envelope, live from the USGS National Map (no data/app file) — a nearest-3 proximity layer, ranked with the other point layers rather than by feature area
     "post-office"        // 1,799 post-office points in Michigan's envelope, live from the USGS National Map (no data/app file) — a nearest-3 proximity layer, so it is ranked last with the other point layers rather than by feature area
   ];
   /* ==== GENERATED:END layer-area-rank ==== */
@@ -9118,6 +9119,40 @@ function initMichiganExplorer() {
     line: usgsStructureLine("Post office")
   });
 
+
+  /* ---------- 13. Police Stations (nearest 3) — USGS National Map ----------
+   * structures layer 53, through the same paged envelope loader the
+   * post-office layer introduced. 1,290 points in Michigan's envelope with
+   * name, address, city, state and ZIP populated on every one, measured
+   * 2026-09-04 — under the service's 2,000-record cap today, and fetched by
+   * the paging path anyway so that stops being a fact anyone has to re-check.
+   *
+   * THIS IS A BUILDING, NOT A JURISDICTION, and the card must not be read as
+   * one. Which agency answers a 911 call at a given point is a service-area
+   * question — a separate concept, and one Michigan has not been researched
+   * for — so this layer says where the nearest stations ARE and never who
+   * polices you. Wisconsin's own police-station module carries the same
+   * caveat for the same reason.
+   *
+   * The envelope's out-of-state points are deliberate, as with post offices:
+   * 608 of the 1,290 are in Michigan, the rest Wisconsin (396), Illinois
+   * (265) and a handful in Indiana, Ohio, Iowa and Minnesota. Nearest is a
+   * proximity fact. ---------- */
+  var USGS_POLICE_LAYER = "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/53";
+  var loadPoliceStations = usgsStructuresLoader(USGS_POLICE_LAYER, "USGS police stations");
+
+  registerNearestPointLayer({
+    id: "police-station",
+    group: "safety",
+    color: "#1B4F8C",
+    fill: "#7FA8D9",
+    label: "Police Station",
+    loader: loadPoliceStations,
+    intro: "Nearest police stations (USGS National Map structures data), straight-line distance. " +
+      "These are station buildings, not service areas — they do not say which agency answers a call here:",
+    line: usgsStructureLine("Police station")
+  });
+
   /* ==== ENGINE:BEGIN hover-explorer ==== */
   /* =========================================================================
    * HOVER EXPLORER — a live popup (on by default, toggled bottom-left) that
@@ -9679,7 +9714,7 @@ function initMichiganExplorer() {
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
   var LAYER_SIDEBAR_RANK = ["us-house", "mi-senate", "mi-house", "county-commissioner",
     "school-district-unified", "school-district-elementary",
-    "county", "county-subdivision", "municipality", "zip-code", "precinct", "post-office"];
+    "county", "county-subdivision", "municipality", "zip-code", "precinct", "police-station", "post-office"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -9776,12 +9811,12 @@ function initMichiganExplorer() {
      carries the method and the measurements behind it, and its --check fails
      when a layer colour moves and its dark counterpart does not. */
   /* ==== GENERATED:BEGIN dark-map-palette ==== */
-  var DST_DARK_MAP_COLORS = { "#0B5394": "#4FA4FE", "#14181C": "#696F76", "#1B7A3D": "#58CD7A",
-    "#2E9E6B": "#5BEAA5", "#2F6B3A": "#6FBE7B", "#41B6E6": "#C6EBFE", "#444B54": "#929BA8",
-    "#4A2E8C": "#9B7CFD", "#4B2E83": "#9E7BF1", "#4C8F59": "#83DC93", "#5C4B8C": "#AB95EF",
-    "#6B7280": "#B1BBCE", "#7A5C3E": "#CFA57D", "#8C2E4A": "#F47294", "#8F7BC4": "#D1C2FF",
-    "#A98B6C": "#F3CBA1", "#B0316E": "#FD88B8", "#B26A00": "#FFB15F", "#D06A9C": "#FFBDDA",
-    "#D19133": "#FED7A7"};
+  var DST_DARK_MAP_COLORS = { "#0B5394": "#4FA4FE", "#14181C": "#696F76", "#1B4F8C": "#5CA0F5",
+    "#1B7A3D": "#58CD7A", "#2E9E6B": "#5BEAA5", "#2F6B3A": "#6FBE7B", "#41B6E6": "#C6EBFE",
+    "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD", "#4B2E83": "#9E7BF1", "#4C8F59": "#83DC93",
+    "#5C4B8C": "#AB95EF", "#6B7280": "#B1BBCE", "#7A5C3E": "#CFA57D", "#8C2E4A": "#F47294",
+    "#8F7BC4": "#D1C2FF", "#A98B6C": "#F3CBA1", "#B0316E": "#FD88B8", "#B26A00": "#FFB15F",
+    "#D06A9C": "#FFBDDA", "#D19133": "#FED7A7"};
   /* ==== GENERATED:END dark-map-palette ==== */
   /* ==== ENGINE:BEGIN districtry-theme ==== */
   /* The theme controller and the wordmark fleet switch, shared for the same
