@@ -1,7 +1,7 @@
 # districtry Michigan — the expansion plan and its running record
 
 > **SHIPPED 2026-09-03 — phases 1, 2 and go-live, in three PRs on one day.** Michigan is live at
-> districtry.com/mi/ with 10 layers. **The running status is the Status table near the foot of this
+> districtry.com/mi/ with 11 layers. **The running status is the Status table near the foot of this
 > file; what is left is under Still open.** What go-live actually cost is recorded here because it
 > was almost entirely NOT on any checklist.
 > **Four defects had survived the full 38-gate battery twice, and three were the same shape — a
@@ -210,6 +210,10 @@ Each opens its own refreshed plan PR with its own measured ledger when it begins
     and Michigan consolidated 4,340 precincts into 3,895 between the cycles. What caught it was
     this repo's own guidebook cell, which had recorded the 2026 layer weeks earlier and never been
     acted on.
+- **The amenity tier.** `zip-code` shipped 2026-09-04 as the 11th layer. Next are the USGS
+  National Map point layers, all three verified present in Michigan's envelope that day — post
+  offices 1,799 (structures layer 38), police 1,290 (layer 53), fire/EMS 2,838 (layer 51) — the
+  same national source every sibling instance already uses.
 - **Phase 4 — the city tiers.** Detroit and Grand Rapids council districts, with the per-city
   roster work that implies.
 - **The 619 commissioners** — gap `mi-commissioner-roster`. The honest route is county-by-county

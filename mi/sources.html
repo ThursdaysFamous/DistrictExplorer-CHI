@@ -839,7 +839,7 @@ table.matrix code {
   <section class="matrix-section">
     <h2>The layer matrix</h2>
     <!-- ==== GENERATED:BEGIN layer-matrix ==== -->
-      <p class="matrix-lede">10 layers — 5 political and legislative, 2 schools, 3 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
+      <p class="matrix-lede">11 layers — 5 political and legislative, 2 schools, 4 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
       <nav class="matrix-nav" aria-label="Jump to a layer group">
         <a href="#political">Political &amp; legislative</a>
         <a href="#schools">Schools</a>
@@ -952,7 +952,7 @@ table.matrix code {
       </section>
 
       <section class="matrix-group" id="geography">
-        <h2>Geography &amp; amenities <span class="matrix-count">3 layers</span></h2>
+        <h2>Geography &amp; amenities <span class="matrix-count">4 layers</span></h2>
         <p class="matrix-blurb">The boundaries that place an address without electing anyone, plus the nearest public services.</p>
         <div class="matrix-wrap">
           <table class="matrix">
@@ -981,6 +981,17 @@ table.matrix code {
                 </td>
                 <td data-label="Who it names">NO OFFICEHOLDER, AND THE CARD SAYS SO. Michigan townships elect a supervisor, clerk, treasurer and trustees (MCL 41.61; MCL 42.3 for charter townships), and no statewide roster of them was found in the research pass — recorded as gap mi-township-officers. The card names the office and states plainly that this app does not know who holds it. The 301 city records and the 40 water records are Census bookkeeping constructs, not governments, so no roster claim applies to them at all.</td>
                 <td data-label="Where it applies">Michigan — statewide, all 1,581 records. The charter/general-law distinction is read from TIGER's own NAME suffix rather than a second source, so it cannot go stale against the name printed above it: measured 2026-09-04, the four LSADC values yield exactly four suffixes across 1,581 of 1,581 records.</td>
+              </tr>
+              <tr id="layer-zip-code">
+                <th scope="row"><span class="layer-name">ZIP Code</span><code>zip-code</code></th>
+                <td data-label="What it answers">The ZIP Code Tabulation Area covering the point — the Census Bureau's areal approximation of the USPS delivery routes sharing a ZIP code, not a postal boundary.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/PUMA_TAD_TAZ_UGA_ZCTA/MapServer/11" target="_blank" rel="noopener">U.S. Census TIGERweb — ZIP Code Tabulation Areas, layer 11 of the PUMA/TAD/TAZ/UGA/ZCTA service, queried live at runtime (no builder script, no committed data/app file). ZCTAs carry NO STATE FIELD because they cross state lines, so this is the one TIGERweb layer here fetched by a bounding ENVELOPE rather than STATE='26' — and the envelope must be Esri's own {xmin,ymin,xmax,ymax} shape, since passing this instance's {minLng,...} METRO_BBOX makes TIGERweb answer HTTP 200 with a JSON error envelope and zero features (measured 2026-09-04)</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">NO OFFICEHOLDER, AND NONE IS MISSING: a ZIP code is a mail-routing convenience, not a unit of government, so nobody is elected from one. The card says what the boundary actually is rather than leaving a reader to assume it means more than it does.</td>
+                <td data-label="Where it applies">Michigan — statewide. 1,010 ZCTAs sit east of longitude -87.60; the fetch envelope returns 2,000 because Michigan's bounding box runs west across Lake Michigan to the far end of the Upper Peninsula, and even a clipped box still catches Chicago's 60628 since its south-west corner is in Illinois. NO RECTANGLE ISOLATES MICHIGAN — the same interlocking-states fact metros.json records about the fleet hand-off box — so neighbouring states' ZIPs appear in the map overlay, exactly as they do in Iowa's and Wisconsin's. The CARD is unaffected: it answers from a point query, so a reader always gets the ZCTA they are standing in.</td>
               </tr>
               <tr id="layer-municipality">
                 <th scope="row"><span class="layer-name">City or Village</span><code>municipality</code></th>
