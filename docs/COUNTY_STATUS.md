@@ -32,7 +32,7 @@
 | Carroll | 17015 | dispatch | districted | `county-board`, `county-precinct` | 3 — `carroll-special-districts` (no-source); `carroll-ward-geometry` (no-source); `county-board-office-addresses` (no-source) |
 | Cass | 17017 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `pass9-ward-seats-without-maps` (no-source) |
 | Clark | 17023 | dispatch | districted | `county-board`, `county-precinct` | 2 — `clark-board-contact` (data-quality); `clark-precinct-polling` (data-quality) |
-| Clay | 17025 | dispatch | districted | `county-board` | none |
+| Clay | 17025 | dispatch | districted | `county-board` | 1 — `county-board-office-addresses` (no-source) |
 | Clinton | 17027 | dispatch | districted | `county-board` | 2 — `clinton-precinct-geometry` (no-source); `county-board-office-addresses` (no-source) |
 | Coles | 17029 | dispatch | districted | `county-board`, `county-precinct` | none |
 | Cook | 17031 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | none |
@@ -40,7 +40,7 @@
 | Cumberland | 17035 | dispatch | no board layer — see gaps | `county-precinct` | 1 — `cumberland-county-board` (no-source) |
 | De Witt | 17039 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `dewitt-township-officials` (data-quality) |
 | DeKalb | 17037 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 2 — `blocked-crawlers` (blocked); `county-board-office-addresses` (no-source) |
-| Douglas | 17041 | dispatch | districted | `county-board`, `county-precinct` | none |
+| Douglas | 17041 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | DuPage | 17043 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 4 — `aurora-council-contact` (blocked); `county-board-office-addresses` (no-source); `dupage-municipal-phones` (data-quality); `dupage-ward-cities` (no-source) |
 | Edgar | 17045 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | Edwards | 17047 | County card | at-large — County card | — | 1 — `edwards-county-precincts` (no-source) |
@@ -51,11 +51,11 @@
 | Greene | 17061 | dispatch | at-large — County card | `county-precinct` | none |
 | Grundy | 17063 | dispatch | districted | `county-board`, `county-precinct` | 4 — `county-board-office-addresses` (no-source); `grundy-special-districts` (no-source); `morris-ward-geometry` (no-source); `municipal-website-dead-ends` (data-quality) |
 | Hamilton | 17065 | dispatch | at-large — County card | `county-precinct`, `fire-district` | 1 — `hamilton-municipal-officials` (no-source) |
-| Hancock | 17067 | dispatch | districted | `county-board`, `county-precinct` | none |
+| Hancock | 17067 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | Hardin | 17069 | dispatch | no board layer — see gaps | `county-precinct` | 1 — `hardin-county-board` (no-source) |
 | Henry | 17073 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `pass9-ward-seats-without-maps` (no-source) |
 | Iroquois | 17075 | dispatch | districted | `county-board`, `county-precinct`, `fire-district` | 1 — `county-board-office-addresses` (no-source) |
-| Jackson | 17077 | dispatch | districted | `county-board`, `county-precinct` | none |
+| Jackson | 17077 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | Jefferson | 17081 | dispatch | districted | `county-board`, `county-precinct` | none |
 | Jersey | 17083 | judicial circuit | no board layer — see gaps | — | 2 — `jersey-county-board-districts` (no-source); `jodaviess-jersey-precinct-geometry` (no-source) |
 | Jo Daviess | 17085 | dispatch | districted | `county-board` | 1 — `jodaviess-jersey-precinct-geometry` (no-source) |
@@ -91,7 +91,7 @@
 | Pulaski | 17153 | dispatch | at-large — County card | `county-precinct` | none |
 | Putnam | 17155 | County card | at-large — County card | — | 1 — `putnam-precinct-geometry` (no-source) |
 | Randolph | 17157 | dispatch | at-large — County card | `county-precinct` | 2 — `randolph-fire-park-library` (no-source); `randolph-precinct-polling` (data-quality) |
-| Richland | 17159 | dispatch | districted | `county-board`, `county-precinct` | none |
+| Richland | 17159 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | Rock Island | 17161 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 2 — `county-board-office-addresses` (no-source); `rock-island-andalusia-township-library` (no-source) |
 | Saline | 17165 | County card | at-large — County card | — | 1 — `saline-precinct-geometry` (no-source) |
 | Sangamon | 17167 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit` | 3 — `county-board-office-addresses` (no-source); `municipal-website-dead-ends` (data-quality); `sangamon-park-library-districts` (no-source) |
@@ -107,7 +107,7 @@
 | Wabash | 17185 | County card | at-large — County card | — | 1 — `wabash-precinct-geometry` (no-source) |
 | Warren | 17187 | dispatch | districted | `county-board`, `county-precinct` | 2 — `county-board-office-addresses` (no-source); `pass10-frontier-unasked` (no-source) |
 | Washington | 17189 | dispatch | districted | `county-board` | 2 — `county-board-office-addresses` (no-source); `washington-precinct-geometry` (no-source) |
-| Wayne | 17191 | dispatch | districted | `county-board`, `county-precinct` | none |
+| Wayne | 17191 | dispatch | districted | `county-board`, `county-precinct` | 1 — `county-board-office-addresses` (no-source) |
 | White | 17193 | dispatch | districted | `county-board`, `county-precinct` | 1 — `white-special-districts` (no-source) |
 | Whiteside | 17195 | dispatch | districted | `county-board`, `county-precinct` | 4 — `county-board-office-addresses` (no-source); `whiteside-municipal-officials` (no-source); `whiteside-precinct-polling` (data-quality); `whiteside-special-districts` (no-source) |
 | Will | 17197 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 4 — `aurora-council-contact` (blocked); `county-board-office-addresses` (no-source); `crete-municipal-clerk` (no-source); `joliet-municipal-contact` (blocked) |
