@@ -252,10 +252,36 @@ def measure(rel, name, url, tag):
     # downloading the layer and testing in the browser. Definitions are
     # subtracted so carrying the engine loader unused reads as zero, which is
     # the difference between NYC/SF and Illinois.
+    #
+    # COUNTING CALL SITES UNDERSTATES THE MOMENT A WRAPPER IS SHARED, and that
+    # is not hypothetical: `tigerStatewideLoader` attaches `.atPoint` once and
+    # hands the result to every statewide TIGERweb layer, so six Illinois layers
+    # and four Michigan ones rode a single `loadArcGISPointGeoJSON(` call site.
+    # Measured 2026-09-04, the published figure was wrong for three of the four
+    # mapped instances that use it — il 5 against a true 10, wi 3 against 6, mi 1
+    # against 4 (ia's 2 was right by coincidence, and is 3 once zip-code is
+    # counted). So the wrapper's own call site is subtracted and its CALL SITES
+    # are added instead: one per layer, which is what the wrapper is for.
     calls = len(re.findall(r"loadArcGISPointGeoJSON\s*\(", src))
     defs = len(re.findall(
         r"function\s+loadArcGISPointGeoJSON|loadArcGISPointGeoJSON\s*=\s*function", src))
-    app["point_query_layers"] = calls - defs
+    wrapper_defs = len(re.findall(r"function\s+tigerStatewideLoader", src))
+    wrapped = len(re.findall(r"tigerStatewideLoader\s*\(", src)) - wrapper_defs
+    app["point_query_layers"] = (calls - defs - wrapper_defs) + wrapped
+
+    # KNOWN UNDERCOUNT, MEASURED AND NOT YET FIXED (2026-09-04). The figure above
+    # counts the ArcGIS path only. The engine's `makeCachedLoader` ALSO attaches
+    # an `.atPoint`, backed by `loadSocrataPointGeoJSON` — so every Socrata-backed
+    # polygon layer sends the selected point to an open-data portal on click, and
+    # this page's own prose covers those ("municipal open-data portals"). NYC and
+    # SF therefore render "None." while their school-zone, council, precinct and
+    # police layers do send the point. It is recorded rather than guessed at
+    # because two independent static recounts of it disagreed (11/6/4/6/5/7 and
+    # 16/8/5/6/5/7): one source occurrence of `loadZones` inside a registration
+    # factory serves as many layers as that factory is CALLED, and the runtime
+    # namespace does not expose the layer list, so the honest count needs a
+    # behavioural probe rather than a regex. Fixing it changes what two apps
+    # publish about themselves and belongs in its own reviewed change.
 
     app["events"] = sorted({mm.group(1) for mm in
                             re.finditer(r"trackEvent\(\s*[\"']([^\"']+)[\"']", src)})
