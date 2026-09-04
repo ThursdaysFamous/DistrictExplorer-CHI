@@ -78,6 +78,7 @@ const ROSTER_URLS = [
   "./data/app/ia-judicial-judges.json",
   "./data/app/coverage-gaps.json",
   "./data/app/dsm-council-members.json",
+  "./data/app/ia-city-contact.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
 /* ==== METRO:END sw-config ==== */

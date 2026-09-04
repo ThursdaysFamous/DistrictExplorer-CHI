@@ -1034,7 +1034,7 @@ which no statewide publisher names, and keying supervisors to their own district
 in phase 3 lands a current per-election edition — `IowaPollingPlaces` joined to `precinct` by `PPID`
 under the full Wisconsin display contract (election named, provisional wording while pre-certification,
 pull dated, retired once the election passes) — the August 2024 item never ships labeled "current."
-**The municipal probe ran on 2026-09-03 and its yield was three findings and no build** (the full
+**The municipal probe ran on 2026-09-03 and its yield was three findings, one of which SHIPPED the next day** (the full
 measurement is the `ia-municipal-officeholders` gap record): the League of Cities is NOT gated
 and publishes a phone for 935 of 948 cities while naming nobody; the Secretary of State
 publishes no clerk directory on either its Schools & Cities or its Research & Data page, so the
@@ -1043,6 +1043,22 @@ analogue of Milwaukee County's `Municipal_Executives` layer but did find **Water
 5 wards that name their own councilperson, both at-large members and a council-page link in band
 — a second city tier on the `dsm-ward` pattern, subject to the same Coles rule (the in-band
 names are the witness, the city's own page is the authority).
+**THE CITY CARD GAINED CONTACT ON 2026-09-04, AND IT IS NOT A ROSTER** (`ia-city-contact.json`,
+`ia/scripts/build_ia_city_contact.py`, weekly Fri 15:30). The League of Cities' own ungated city
+table gives all 939 cities their office phone (927) and website (532), plus 2 office mailboxes;
+11 carry none of the three and render exactly as they did before. **The join is total and that is
+the gate** — 939 of 939 TIGER places, one alias (`Jewell` -> `Jewell Junction`), and the nine
+non-joining League rows asserted by shape, so a city renamed or dissolved fails the build instead
+of quietly losing its contact. Iowa's join is simpler than Wisconsin's because `LSADC` is
+uniformly 25: one place class, so the city name alone is a unique key. **The
+`ia-municipal-officeholders` gap is unchanged by it** — a reader can now reach their city hall and
+still cannot be told who runs it, which is what the card's own row says, pointing at Des Moines as
+the one city whose published council districts do name them. Two things fell out of the build
+worth carrying: six League cities are absent from TIGERweb and the cause is NOT established (the
+absence is, against a working control — run the control, because a query returning zero for
+everything looks identical); and the worksheet's `workflows[]` list had gone two short since phase
+3, so the history page's job tile read 6 against 8 on disk, which nothing gates.
+
 **Cedar Rapids tier** from Linn County's own `ElectionsCityCouncilDistrict` layer (VERIFIED exists,
 modified within the research pass's own week) plus its roster from `cedar-rapids.org`. NG911 tier ships
 here if HSEMD answered in phase 3. ~~Area Education Agency geometry resolved one way or the
