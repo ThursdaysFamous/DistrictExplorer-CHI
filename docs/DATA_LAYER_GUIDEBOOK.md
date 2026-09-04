@@ -1298,7 +1298,7 @@ detail into `blocker`.
       "layer": "library-district",
       "summary": "Andalusia Township shows no library at all, though the township elects a library board.",
       "why": "The county's library map draws nine library districts, and the township's library is a different kind of body that the layer leaves out.",
-      "blocker": "Measured 16 Aug 2026 against the county's own certified record: the Clerk's April 2023 consolidated-election candidate list names TEN library bodies electing trustees, and the county GIS library layer (TaxDistricts layer 5, edited 2022-01-14) draws only nine. The missing tenth is the Andalusia Township Library — a TOWNSHIP library under a different statute than the nine library districts, which is almost certainly why a layer named Library Districts omits it. Its service area is presumably the township itself, but presumably is not a boundary this app will draw: shipping the township line as the library's would assert a taxing boundary no county source states.",
+      "blocker": "Measured 16 Aug 2026 against the county's own certified record: the Clerk's April 2023 consolidated-election candidate list names TEN library bodies electing trustees, and the county GIS library layer (TaxDistricts layer 5, edited 2022-01-14) draws only nine. The missing tenth is the Andalusia Township Library — a TOWNSHIP library under a different statute than the nine library districts, which is almost certainly why a layer named Library Districts omits it. Its service area is presumably the township itself, but presumably is not a boundary this app will draw: shipping the township line as the library's would assert a taxing boundary no county source states. RE-MEASURED 2026-09-04, AND A SOURCE NOW STATES IT \u2014 though not a county one. The statewide Library Districts layer this guidebook records as a backlog find (Illinois Broadband Office / Connected Nation, 642 polygons) carries `Andalusia Township Library` and types it `Township`, which is the same distinction this record reasons from: a township library under a different statute than the nine districts. That cuts BOTH ways and is recorded rather than acted on. It is corroboration that the body and a drawn boundary for it exist, and it is the single best evidence found so far that the statewide layer is compiled carefully \u2014 it is right where Rock Island's own GIS is incomplete. It is still not the county speaking, so the reason this record refuses has narrowed rather than disappeared: what is missing is no longer any boundary at all, it is a boundary from a publisher who levies or administers the tax. Whether that is enough is the same operator decision the statewide layer's own backlog entry sets out, and this record moves with it.",
       "wanted": "The Andalusia Township Library's service boundary as map data, or a county statement that the township line is that boundary."
     },
     {
@@ -6547,6 +6547,54 @@ project's rules that is a judgement call, not a default: a card carrying it woul
 say whose boundary it is, and the alternative — leaving seven counties' library cards
 name-only — is also a cost. Worth deciding deliberately, and the same service's other ten
 layers (village boundaries, township/precinct, school districts) deserve the same look.
+
+**MEASURED 2026-09-04, and the measurement moves the provenance question rather
+than settling it by opinion.** Three things were checked that this record had
+not tried.
+
+*It carries a governance taxonomy, not just a name.* Every polygon has a
+`LibraryType`, and the values are the real Illinois vocabulary rather than
+anything a broadband planner would need: **District 347, City 153, Village 85,
+Township 37, District (contracting) 14, Village (contracting) 2, Town 3, and one
+untyped row (Sandoval Public Library).** That distinction is exactly the one
+this project cares about — 347 of the 642 are library DISTRICTS, which are
+taxing bodies, and 241 are MUNICIPAL libraries whose boundary is the
+municipality and which levy nothing of their own. A layer that only wanted
+service areas for broadband maths would not need to separate them, and a card
+built on this would have to say which kind it is showing.
+
+*It contains a body a county's own GIS omits, correctly typed.* The strongest
+check available needs no clerk document at all, because this repo already
+records the answer: `rock-island-andalusia-township-library` says the Clerk's
+April 2023 consolidated-election candidate list names TEN library bodies while
+the county's own library layer draws NINE, and that the missing tenth is the
+**Andalusia Township Library** — "a TOWNSHIP library under a different statute
+than the nine library districts, which is almost certainly why a layer named
+Library Districts omits it". The statewide layer carries
+`Andalusia Township Library`, typed `Township`, and its centroid (41.43907,
+-90.71909) falls inside Rock Island County's own shipped outline — checked because
+this catalogue has already produced one same-name trap, the "Voting Wards" layer
+for STAUNTON, VIRGINIA named in the Macoupin record. It gets right, and for the
+stated reason, what the county's own publication gets wrong.
+
+*Carroll re-verified.* All seven of the Clerk's library tax lines are present
+and typed sensibly — Savanna, Mount Carroll, Chadwick and Pearl City as
+`District`, Milledgeville as `District`, York Township as `Township`, Lanark as
+`City`.
+
+**What that does and does not license.** It does not make the Illinois Broadband
+Office the districts' publisher, and `copyrightText` and the item description
+are still empty. It does mean the "compiled loosely for broadband planning"
+reading is now contradicted by the file itself: the taxonomy is
+library-governance, and it is right where a county's own layer is not. THE
+DECISION IS STILL THE OPERATOR'S and nothing here ships it. What shipping would
+look like, so the decision can be a sentence: a `library-district` dispatch
+entry per gapped county reading this one service, cards naming the publisher
+explicitly ("boundary compiled by the Illinois Broadband Office / Connected
+Nation"), and the `District`/`City`/`Township` type rendered rather than hidden,
+since a municipal library is not a district a resident lives inside. The
+alternative it is measured against is unchanged: seven counties' library cards
+staying name-only, which is also a cost.
 
 ### ISBE's precinct-level results archive — a statewide superset of the vendor route (found 2026-08-20)
 
