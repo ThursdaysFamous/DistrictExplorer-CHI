@@ -1707,7 +1707,7 @@
         "file": "municipal-ward-coverage.json",
         "min_features": 50,
         "max_features": 76,
-        "note": "Ward-electing municipalities' outlines, tagged by dispatch entry — the cheap same-origin coverage test for every non-Chicago entry of the ward layer, metro or not (build_municipal_ward_coverage.py; Rockford is the first outside the metro, Moline and Silvis the first on the Mississippi, Mendota the first whose seats were already in the roster before its geometry was). 56 municipalities across twenty-one entries after the pass-6 ward tranche (2026-08-02) added thirteen sources / twenty-two cities."
+        "note": "Ward-electing municipalities' outlines, tagged by dispatch entry — the cheap same-origin coverage test for every non-Chicago entry of the ward layer, metro or not (build_municipal_ward_coverage.py; Rockford is the first outside the metro, Moline and Silvis the first on the Mississippi, Mendota the first whose seats were already in the roster before its geometry was). 71 municipalities across twenty-five entries as of 2026-09-04, when Madison's six ward cities joined on one county layer; the pass-6 ward tranche (2026-08-02) had taken it to 56 across twenty-one. THE COUNT MOVES WITHOUT A SOURCE BEING ADDED: build_municipal_ward_coverage.py queries TIGERweb's place service UNPINNED, so any rebuild adopts that day's vintage for every municipality already here \u2014 Madison's six re-drew 22 unrelated outlines \u2014 which is why the builder now names what it redrew and why this bound has room above the current count."
       },
       {
         "file": "ogle-county-board-districts.json",
