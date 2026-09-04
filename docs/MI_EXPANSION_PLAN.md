@@ -1,8 +1,9 @@
-# districtry Michigan — Phase 1: arrival
+# districtry Michigan — the expansion plan and its running record
 
 > **SHIPPED 2026-09-03 — phases 1, 2 and go-live, in three PRs on one day.** Michigan is live at
-> districtry.com/mi/ with 5 layers. The roadmap below is unchanged and phases 3-4 are still open;
-> what go-live actually cost is recorded here because it was almost entirely NOT on any checklist.
+> districtry.com/mi/ with 5 layers. **The running status is the Status table near the foot of this
+> file; what is left is under Still open.** What go-live actually cost is recorded here because it
+> was almost entirely NOT on any checklist.
 > **Four defects had survived the full 38-gate battery twice, and three were the same shape — a
 > claim nothing compared against the thing it claimed.** (1) `mi/fonts/` did not exist while
 > `mi/index.html` declared 18 `@font-face` rules against it, and `mi/og-image.png` did not exist
@@ -21,8 +22,12 @@
 > `metro_bbox`**: Michigan's water-inclusive fabric put Chicago's and Wisconsin's own centres inside
 > Michigan's box and hard-failed `validate_index.py` on both — found only because the per-instance
 > `validate_index` block had been skipped in favour of a remembered subset of the battery. **Run the
-> workflow's own command list.** The six western-UP counties that fall outside the narrowed box are
-> recorded in `mi/WATCH.md`, with the tie-break fix that would actually solve them.
+> workflow's own command list.** The western-UP counties that fall outside the narrowed box are
+> recorded in `mi/WATCH.md`. **That record named a fix and the fix was wrong**: a smallest-bbox-AREA
+> tie-break measures no better than the nearest-CENTRE rule it would replace (7 wrong of 37 either
+> way, just at different places). #698 routed the front door against each instance's real coverage
+> ring instead — 7 misroutes of 28 down to 4 — and four counties remain, for a reason that is not a
+> tie-break at all.
 >
 > Two things go-live did NOT need, contrary to the guide: no sibling `CACHE_NAME` bump (the sibling
 > change is confined to the network-first shell), and this file does not move to `docs/archive/` —
@@ -174,19 +179,39 @@ it checked before: it now catches the 404 case as well as the invisible-instance
 in both directions (a dark `mi` passes; `mi` added to `metros.json` while still excluded fails
 with the reason).
 
-## Roadmap (phases 2-4, at roadmap altitude)
+## Status
 
-Each phase opens its own refreshed plan PR with its own measured ledger when it begins.
+| | Shipped | What it cost, measured |
+|---|---|---|
+| **Phase 1 — the national tier** | 2026-09-03 (#685) | 4 layers: `county` 83, `us-house` 13, `mi-senate` 38, `mi-house` 110. All three boundary builds at 100.00% agreement, 0 overlaps. Found the CD119→**CD120** roll, which had broken nothing yet and would have broken the next rebuild in all five sibling instances |
+| **Phase 2 — the flagship** | 2026-09-03 (#691) | `county-commissioner`, 619 districts across all 83 counties, GEOMETRY ONLY. The layer's own `Commissioner`/`Party` columns were measured against twelve counties' board pages (123 districts) and **dropped**: 93.5% right, every miss the same direction, and Wayne D5 still naming a commissioner who died in June 2025. A winners list is complete by construction, so its 100% fill rate is evidence AGAINST maintenance |
+| **Go-live** | 2026-09-03 (#694) | Michigan published at districtry.com/mi/. Four defects surfaced that the full battery had been green on — missing fonts and OG image, Iowa's identity block on the sources page, a dead helper that made the privacy page overstate what the app sends, and a fleet bbox containing two siblings' centres. Two new gates (`validate_instance_assets.py`, and identity checks in `page_consistency_test.mjs`) |
+| **Routing follow-up** | 2026-09-04 (#698) | Front-door routing moved off bbox tie-breaks onto each instance's own coverage ring: 7 misroutes of 28 real places down to 4. Also corrected three records that had named smallest-bbox-AREA as the fix — measured, it is no better than the rule it would replace |
 
-- **Phase 2 — the flagship.** `county-commissioner` from the Bureau of Elections layer: geometry
-  first, then its in-band `Commissioner`/`Party` reconciled against the certified canvass before
-  a single name ships. The layer's vintage and the November 2024 derivation are the first things
-  a build has to re-measure.
-- **Phase 3 — the fabric.** Precincts, school districts, and Michigan's civil-township /
-  city / village tier (Michigan runs charter townships as well as general-law ones — ASSERTED,
+**Phase 1's own "what shipped" section above is left exactly as written on the day.** It is the
+record of what was true then, not a status board; this table is the status board.
+
+## Still open
+
+Each opens its own refreshed plan PR with its own measured ledger when it begins.
+
+- **Phase 3 — the fabric.** Precincts, school districts, and Michigan's civil-township / city /
+  village tier (Michigan runs charter townships as well as general-law ones — still ASSERTED,
   and the card must state which, since the two are different governments).
 - **Phase 4 — the city tiers.** Detroit and Grand Rapids council districts, with the per-city
   roster work that implies.
+- **The 619 commissioners** — gap `mi-commissioner-roster`. The honest route is county-by-county
+  against each board's own page, weekly and count-guarded; ten of the twelve counties sampled
+  publish a readable one. Oakland answers only through its CMS origin and Ottawa sits behind a
+  captcha, which this project does not route around.
+- **Michigan's full fleet bbox**, and with it the last four misroutes (Ironwood, Houghton, Iron
+  Mountain, Menominee). Needs `validate_index`'s "a bbox must not contain a sibling's centre"
+  rule relaxed AND the in-app `metro-portal` moved onto the same ring test — its `siblingMetroAt`
+  runs on `moveend`, so it needs the same pre-filter discipline and must never let a fetch block
+  a pan. `mi/WATCH.md` carries the measurement; the ceiling is 0 misroutes.
+- **One CI-side probe of `house.mi.gov`**, to settle whether its TLS failure is the site's own
+  incomplete chain or an artifact of the build sandbox. Until then the House card ships without
+  the Capitol contact block the Senate card has, rather than claiming one it cannot source.
 
 ## Conventions binding every PR
 
