@@ -775,3 +775,84 @@ overlapping data in front of her, so Ask 11 should go first and Piatt's follow-u
 the follow-up should be held. And Ask 11's recipient address is inherited from the existing
 thread (`ccgisc@co.champaign.il.us`) — confirm it against ccgisc.org before sending, which
 this file has asked for since the ask was written.
+
+---
+
+## Ask 14 — Jones County, Iowa: the GIS file behind a map the county already publishes
+
+**This is the narrowest ask in this file, and the only one whose answer is a file the office
+already has.** Jones County is the ONE Iowa county carrying no supervisor-district card at all:
+the Iowa Legislature's own `CountySupervisorDistricts` layer — this app's only statewide source
+— holds 266 rows across 98 counties, and Jones has zero, measured by name and by its own FIPS
+(105), re-confirmed 2026-09-04. Every other Iowa county's reader is told which of five districts
+they live in; a Jones reader is told nothing.
+
+Measured first, so the ask is not for something already published or derivable:
+
+* The county DOES publish its adopted plan — `bos_districts_final_23073.pdf`, linked from its
+  own Board of Supervisors page — and that PDF names all five districts, their 2020 populations
+  and their composition in a text layer. It is a map, not data.
+* **The extraction route this project would normally take is closed, and was measured rather
+  than assumed.** The PDF has 554 vector curves of which **zero are filled**; its map body is 22
+  stacked raster image strips; the largest vector path on the page is an 18×14 pt road shield.
+  Reading district shapes out of it would mean sampling raster pixels, which this project does
+  not do — it produces a clean, confident, wrong answer.
+* **No boundary fabric this app already ships can compose them.** All five districts take PART
+  of at least one township, so townships are out; and the state's precinct layer gives Jones a
+  single `Castle Grove/Lovell/Wayne` precinct while the county's own map puts Castle Grove in
+  District 1, part of Lovell in District 2 and all of Wayne in District 3 — one precinct across
+  three districts.
+
+So the only thing that closes this is the file the county drew the map from.
+
+### Recipient
+
+Whitney Hein, Jones County Auditor — `auditor@jonescountyiowa.gov` (an office mailbox, published
+by the county; the Auditor is Iowa's commissioner of elections under Iowa Code §47.2 and the
+office whose page publishes the district map).
+
+### Draft
+
+> **Subject: Jones County supervisor district boundaries — GIS file request**
+>
+> Dear Ms Hein,
+>
+> I run districtry, a free, non-commercial civic site that shows people which districts they
+> live in. Iowa is at districtry.com/ia/. For Jones County it already names your office and the
+> other county officers, the county's precincts, school districts and legislative districts.
+>
+> The one thing it cannot show is the Board of Supervisors district. The Iowa Legislature
+> publishes a statewide supervisor-district map layer that covers 98 of the 99 counties, and
+> Jones is the county that is absent from it — so a Jones resident is the only one in the state
+> whose card cannot say which of the five districts they are in.
+>
+> Your office does publish the adopted plan, as the Board of Supervisors district map PDF, and I
+> can read the five districts' populations and their township and city composition from it. What
+> I cannot do is turn a PDF map into boundaries accurately enough to tell a specific address
+> which district it falls in — and I would rather show nothing than show a line I traced.
+>
+> If the map was drawn in GIS software, would you be able to share the underlying file — a
+> shapefile, a geodatabase, a KML, or whatever form it exists in? If it is easier, a link to a
+> published service would be just as good.
+>
+> If the answer is that no such file exists, or that it is not something the county shares, that
+> is a genuinely useful answer and I will record it as the reason the district is not shown,
+> rather than keep asking. A one-line reply either way is all I need.
+>
+> With thanks for your time,
+>
+> `<YOUR NAME>`
+> `<YOUR E-MAIL>`
+> districtry.com
+
+### What each answer means
+
+* **A file, or a link to one** → build it, gate it against the county's own five published
+  populations (4,128 / 4,120 / 4,137 / 4,132 / 4,129, summing to the county's 2020 total), close
+  `jones-county-supervisor`, and credit the county in `docs/SOURCE_CREDITS.md`.
+* **"There is no GIS file — the map was drawn by hand"** → `ANSWERED <date>`, the record narrows
+  to the state aggregate as the only remaining route, and the question is closed for good.
+* **"Not something we share"** → `ANSWERED <date>` with the substance. A clean no is a good
+  outcome; it retires a route rather than leaving it open forever.
+* **No reply** → follow up once at ~3 weeks and once at ~2 more, then `UNRESPONSIVE` — which is a
+  claim about the ask, never about the county.
