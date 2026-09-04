@@ -158,7 +158,19 @@ def apply_aliases(vtds, aliases, fail):
 
 def check_fabric(vtds, county_precincts, county_pop, fail):
     """THE JASPER TEST. `county_precincts` is the county's own current precinct
-    list, as its election authority publishes it."""
+    list, as its election authority publishes it.
+
+    A FAILURE HERE IS A HYPOTHESIS, NOT A VERDICT. Measured across the frontier
+    on 2026-08-20, ten counties in one sweep were rejected by this comparison
+    for reasons that are not a moved fabric at all — census truncation at 17
+    characters, zero-padding, a vestigial trailing 1/I, ISBE reporting-unit
+    suffixes, and (added 2026-09-04) roman ordinals written arabic plus a
+    spelled-out PCT/TWP unit word. Each runs in EITHER direction. Before
+    recording a county as re-precincted, run
+    `python3 scripts/isbe_precinct_fabric.py --jasper <election> --county <name>`,
+    which applies all six with their guards and prints which one it ruled out;
+    what survives is either a real fabric change or a spelling, and the two need
+    different work — a spelling is what `apply_aliases` above is for."""
     want = {norm(p) for p in county_precincts}
     have = set(vtds)
     if want != have:

@@ -7406,6 +7406,67 @@ members page groups Districts 1-3.
 county as re-precincted, check it against these four causes — and record which one you ruled out,
 because "the names differ" turned out to be wrong ten times in one sweep.
 
+> **UPDATED 2026-09-04 — THIS IS NOW RE-RUNNABLE, AND RUNNING IT CORRECTED THE RECORD
+> ABOVE IN TWO PLACES.** The measurement had been made once, by hand, and then lived
+> only here — this repo's own named failure, and it cost real time: the reporting-unit
+> cause (4) was independently re-derived a fortnight later while building
+> `scripts/isbe_precinct_fabric.py`, and got the direction wrong first.
+> `python3 scripts/isbe_precinct_fabric.py --jasper <election>` now runs the whole
+> comparison for every county, applying each cause only where it STRICTLY reduces the
+> disagreement and printing which one it ruled out; `--selftest` exercises the guards
+> against these worked examples with no network and runs in CI.
+>
+> **THE CAUSES ARE NOT ONE-DIRECTIONAL.** Every one above is written as a census habit
+> — "the census writes `CAVE 1` where the county writes `CAVE`", "`CUNNINGHAM 01` vs
+> `CUNNINGHAM 1`" — and two of them run the other way in the very counties named:
+> **Champaign's COUNTY writes the padded `01`** against the census's `1`, and
+> **Warren's county writes `BERWICK 1`** against the census's `BERWICK`. Applied one
+> way only, both counties stay unreconciled and read as re-precincted, which is
+> precisely the false rejection this section exists to prevent.
+>
+> **THERE IS A FIFTH CAUSE, and this repo already knew it.** The census writes ROMAN
+> ordinals where several counties write arabic — Clay's `HARTER III` against `HARTER 3`,
+> Hancock's `CARTHAGE II` against `CARTHAGE 2`. `vtd_board_districts.title_case` has
+> carried `_ROMAN_ORDINAL` since Scott shipped, with its alphabet restricted to I/V/X so
+> that DIX (a village, and a valid 509) and MI survive; the fabric comparison simply
+> never used it.
+>
+> **AND ONE GUARD HERE IS TOO LOOSE.** "Strip the trailing `1` ONLY when the stem has no
+> `2` sibling" gets **Clay** wrong: its HARTER runs 1, 3, 4, 5, 6, 7 **with no 2 at all**,
+> so a no-2 test would strip the ordinal off a genuinely numbered precinct. The
+> implemented guard reads ANY other ordinal on the stem, roman or arabic.
+>
+> **AND A SIXTH CAUSE, measured rather than assumed:** a spelled-out unit word one
+> publisher carries and the other does not — Adams writes `BEVERLY PCT 1` against the
+> census's `BEVERLY`, McDonough's `MACOMB TOWNSHIP` is the census's `MACOMB TWP`. It is a
+> SMALL tail, five counties statewide, and it is implemented anyway on the same principle
+> this update is about: a cause left out of the tool is a cause the next pass re-derives.
+>
+> **EVERY RULE IS ALSO REFUSED IF IT WOULD COLLAPSE TWO NAMES INTO ONE.** That guard was
+> missing from the first draft and is not hypothetical — each cause maps two spellings
+> onto one, so a county holding `WARD 01` beside `WARD 1` would have lost a real precinct,
+> and the loss would have made the counts agree, **which is exactly the evidence this
+> comparison reports as "the fabric did not move".** A rule that helps and loses something
+> is not adopted.
+>
+> **RE-MEASURED over all 100 counties reporting in the 2026 General Primary** (not the 32
+> above, so the numbers are not comparable): naive 29, reconciled **42**, a further **14
+> differing only on a SPELLING** — which is what `apply_aliases` is for — and **44 on the
+> COUNT**, which is a fabric that really moved. That split is now printed per county,
+> because "add an alias" and "the fabric moved" are different work.
+>
+> **THE VALIDATION IS THE 33 SHIPPED COUNTIES**, whose fabric is independently known
+> current because their precinct layers are built from census geometry today. Twenty-two
+> reconcile and **every one of the other eleven is accounted for**: Calhoun is the
+> COMPOSED shape (5 precincts over 7 voting districts, which `check_fabric_composed`
+> exists for), six are aliases their own builders already carry (Hancock's `MONTIBELLO`,
+> White's `GREY`/`HAROLDS PRAIRIE`, Schuyler's `FREDRICK`, Jefferson's `MOUNT VERNON` for
+> `MT. VERNON`, Montgomery's `FILLMORE CONS`, Greene's `WRIGHTS 2`, Warren's
+> `SPRING GROVE-GERLAW 2`), and three are real consolidations — **McDonough, Ogle and
+> Stephenson** — McDonough being the county whose drift CI caught in August. Nothing in
+> that set is unexplained, which is the evidence the five causes are neither too loose nor
+> too tight.
+
 ### The app ships 1,602 e-mail addresses and no gate checks one of them (found 2026-08-20)
 
 Found while re-measuring Henderson, whose published web address turns out to be a PARKED DOMAIN —
