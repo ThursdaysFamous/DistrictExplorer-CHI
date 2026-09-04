@@ -932,6 +932,12 @@
         "dynamic_reference": true
       },
       {
+        "file": "belvidere-city-outline.json",
+        "min_features": 1,
+        "max_features": 1,
+        "note": "City of Belvidere corporate limits (scripts/build_place_outline.py) \u2014 the ONLY municipal outline this instance ships, and it exists to carve one hole in a county source rather than to draw a city. Boone's Fire_Districts layer tiles every acre of the county, so a Belvidere address returned Fire District 2 while the Clerk's own district-rates report gives 18 of 55 tax codes no fire line at all \u2014 those 18 being the city's, which runs a MUNICIPAL fire department. TWENTY-TWO of its twenty-four rings are HOLES, unincorporated pockets the city annexed around, and they are load-bearing: a resident of one is not in the city, so they ARE in the fire district and keep their card. The even-odd test both the builder and pointInGeometry use gets that right, and the builder gates its own area against the Census's published AREALAND so a hole counted as solid (43.05 km\u00b2 against a real 35.19) fails the build."
+      },
+      {
         "file": "bond-county-outline.json",
         "min_features": 1,
         "max_features": 1,
@@ -2529,7 +2535,7 @@
     ]
   },
   "sw": {
-    "cache_name": "districtry-il-shell-v7",
+    "cache_name": "districtry-il-shell-v8",
     "shell_urls": [
       "./",
       "./sources.html",

@@ -43,7 +43,7 @@
 // refreshed per election.)
 /* ==== TEMPLATE:END sw-version-history ==== */
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "districtry-il-shell-v7";
+const CACHE_NAME = "districtry-il-shell-v8";
 
 const SHELL_URLS = [
   "./",
@@ -70,6 +70,7 @@ const SHELL_URLS = [
 const GEOMETRY_URLS = [
   "./data/app/adams-county-outline.json",
   "./data/app/alexander-county-outline.json",
+  "./data/app/belvidere-city-outline.json",
   "./data/app/bond-county-outline.json",
   "./data/app/boone-county-outline.json",
   "./data/app/brown-county-outline.json",
