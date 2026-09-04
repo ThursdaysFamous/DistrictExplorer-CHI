@@ -224,6 +224,24 @@ def norm_census(placename):
 # its Census place record.
 # Rockford straddles the Winnebago/Ogle line, so it appears under both counties
 # in the place-by-county reference; Winnebago is where the city sits.
+# Points that must land inside a named entry's coverage, checked on the polygons
+# this run is about to write. The file is a COVERAGE TEST — its whole job is to
+# answer "is this point in an entry's ward cities" before the layer fetches any
+# ward geometry — so a wrong or missing outline shows up as a card that never
+# appears, which no other gate here would notice.
+#
+# They exist because Madison's entry was verified by an ad-hoc script that lived
+# only in a PR body ("both probe points fall inside"). A check nobody can re-run
+# is a claim, not a test. Each point is a real ward centroid taken from the
+# county's own ward layer, so it also pins the municipality NAME the roster join
+# depends on.
+COVERAGE_PROBES = [
+    (42.25670, -88.83936, "belvidere", "Belvidere"),        # Belvidere City Hall
+    (38.90913, -90.19487, "madison-cities", "Alton"),       # Alton ward 1
+    (38.69008, -90.12943, "madison-cities", "Granite City"),  # Granite City ward 1
+    (38.68852, -90.14947, "madison-cities", "Madison"),     # the four that name nobody
+]
+
 ENTRY_COUNTY_FIPS = {"cook-suburban": "031", "evanston": "031",
                      "will": "197", "aurora": "089", "rockford": "201",
                      "berwyn": "031", "lake-cities": "097", "belvidere": "007",
@@ -300,6 +318,32 @@ def discover_cook_municipalities():
               file=sys.stderr)
         sys.exit(1)
     return sorted(names)
+
+
+def point_in_feature(lng, lat, geom):
+    """Even-odd, matching the app's own pointInGeometry over a MultiPolygon."""
+    def ring_hit(ring):
+        hit = False
+        for i in range(len(ring) - 1):
+            x1, y1 = ring[i][0], ring[i][1]
+            x2, y2 = ring[i + 1][0], ring[i + 1][1]
+            if (y1 > lat) != (y2 > lat):
+                if lng < (x2 - x1) * (lat - y1) / ((y2 - y1) or 1e-12) + x1:
+                    hit = not hit
+        return hit
+
+    def in_polygon(rings):
+        inside = False
+        for ring in rings:
+            if ring_hit(ring):
+                inside = not inside
+        return inside
+
+    if not geom:
+        return False
+    if geom["type"] == "Polygon":
+        return in_polygon(geom["coordinates"])
+    return any(in_polygon(poly) for poly in geom["coordinates"])
 
 
 def main():
@@ -381,10 +425,68 @@ def main():
         sys.exit(1)
 
     out.sort(key=lambda f: f["properties"]["geoid"])
+
+    # Read the file we are about to replace, so the run can report any outline
+    # it changes that nobody asked it to change (see the NOTE below).
+    previous = {}
+    if os.path.exists(OUT_PATH):
+        try:
+            with open(OUT_PATH, encoding="utf-8") as fh:
+                for feature in (json.load(fh).get("features") or []):
+                    props = feature.get("properties") or {}
+                    previous[(props.get("entry"), props.get("geoid"))] = \
+                        json.dumps(feature.get("geometry"), sort_keys=True)
+        except (OSError, ValueError):
+            previous = {}      # unreadable: report nothing rather than guess
+    redrawn = set()
+    for feature in out:
+        props = feature["properties"]
+        was = previous.get((props["entry"], props["geoid"]))
+        if was is not None and was != json.dumps(feature["geometry"], sort_keys=True):
+            redrawn.add(props["name"])
+
     with open(OUT_PATH, "w") as f:
         json.dump({"type": "FeatureCollection", "features": out}, f,
                   ensure_ascii=False, separators=(",", ":"))
         f.write("\n")
+
+    problems = []
+    for lat, lng, entry, name in COVERAGE_PROBES:
+        hit = None
+        for feature in out:
+            props = feature["properties"]
+            if props["entry"] != entry:
+                continue
+            if point_in_feature(lng, lat, feature["geometry"]):
+                hit = props["name"]
+                break
+        if hit != name:
+            problems.append("%.5f,%.5f should be %s in entry %s; got %s"
+                            % (lat, lng, name, entry, hit or "no coverage"))
+    if problems:
+        for line in problems:
+            print("  FAIL: %s" % line, file=sys.stderr)
+        print("FATAL: refusing to write a coverage file that misplaces its probes",
+              file=sys.stderr)
+        sys.exit(1)
+
+    if redrawn:
+        # NOT a warning to silence. TIGER_PLACES is UNPINNED, so a rebuild run
+        # for one reason (adding an entry) silently adopts whatever vintage the
+        # Census is serving that day for EVERY municipality already in the file.
+        # That happened on 2026-09-04: adding Madison's six re-drew 22 unrelated
+        # outlines — Aurora, Belvidere, three in Cook, three in DeKalb, three in
+        # Kane, three in Will among them — and the PR that did it described only
+        # the six. Harmless in itself: these polygons are a coverage TEST rather
+        # than a drawn boundary, and the file is cache-first, so a redraw reaches
+        # a returning visitor only behind a CACHE_NAME bump. But an undisclosed
+        # change is how a harmful one hides, and a reviewer should not be the
+        # first to notice. Printing it puts the fact in the run's own output.
+        print("NOTE: %d municipality outline(s) already in this file were REDRAWN "
+              "by this run (%s) — TIGERweb's place vintage moved under an unpinned "
+              "query. Say so in the PR, and bump CACHE_NAME: this file is "
+              "cache-first."
+              % (len(redrawn), ", ".join(sorted(redrawn))), file=sys.stderr)
 
     counts = {}
     for feature in out:
