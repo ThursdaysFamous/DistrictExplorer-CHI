@@ -11609,8 +11609,20 @@ function initChiExplorer() {
    * than hiding it, because a reader deciding who covers their property should
    * see the county's own caveat. */
   // ---- Adams County (pass 8). The county's OWN GIS org publishes the full
-  // election fabric: 7 board districts, 92 precincts that carry both their
-  // polling place AND their own board-district assignment, and Quincy's wards.
+  // election fabric: 7 board districts, 74 PRECINCTS DRAWN AS 92 SHAPES that
+  // carry both their polling place AND their own board-district assignment,
+  // and Quincy's wards.
+  //
+  // 74 AND 92 ARE BOTH RIGHT, and this repo said 92 for a month. The layer's
+  // 92 features carry only 74 DISTINCT Precinct values — RIV 2 is drawn in
+  // thirteen separate pieces, RIV 3 in five, Q 1 in three — so the county runs
+  // 74 precincts and its GIS stores several of them multipart. Counting
+  // features counted pieces. Nothing a reader sees was wrong (a click returns
+  // the one shape it lands in, correctly named), but every stated count was.
+  // Corrected 2026-09-04 after Clerk Niekamp wrote "Adams County has only 74
+  // precincts" — a correction that sat unanswered for eighteen days, and which
+  // ISBE's certified 2026 primary (74 names) and the Census 2020 voting
+  // districts (74, matching one for one) both confirm.
   // The 7 districts were verified to TILE the county before shipping — 99.997%
   // of the TIGER outline covered, largest pairwise overlap 5e-7 deg^2, and
   // Quincy / Camp Point / Mendon each resolving to exactly one district.
@@ -24918,10 +24930,14 @@ function initChiExplorer() {
       // Iroquois — 37 precincts with the polling place joined on pollingid
       // against 32 published voting locations. Board district via spatial join
       // against the same boundary the board card reads.
-      // Adams — 92 precincts. Unusually, the county's own precinct layer carries
-      // BOTH the polling place (92/92) and the precinct's board district, so
-      // neither is a spatial join nor a name match: both are the county's own
-      // assignment, read off the feature the reader is standing in.
+      // Adams — 74 precincts drawn as 92 shapes (see the loader's note: RIV 2
+      // alone is thirteen pieces, and counting features counted pieces).
+      // Unusually, the county's own precinct layer carries BOTH the polling
+      // place (92/92 shapes) and the precinct's board district, so neither is a
+      // spatial join nor a name match: both are the county's own assignment,
+      // read off the feature the reader is standing in. The multipart storage
+      // costs the card nothing, because a point lands in exactly one shape and
+      // that shape carries the precinct's own name.
       {
         key: "adams",
         coverage: adamsCountyCoverage,
