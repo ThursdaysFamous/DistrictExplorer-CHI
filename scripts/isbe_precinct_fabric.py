@@ -105,6 +105,41 @@ def is_ballot_class(name):
     """True for a reporting unit that is a ballot type rather than a place."""
     return bool(FEDERAL_ONLY.search(name) or BALLOT_CLASS.search(name))
 
+
+# THE TRAILING `-<digits>` IS A REPORTING ID, NOT PART OF THE PRECINCT'S NAME,
+# and reading it as one is what made the first version of this check report four
+# counties as having gained precincts when none had.
+#
+# The tell is that the id REPEATS across different precincts and CHANGES between
+# elections. Cass's 2026 primary carries `-002` on six different precincts —
+# Ashland 20, Ashland 21, Chandlerville 18, Newmansville 19, Panther Creek 17 and
+# Philadelphia 16 — which is a polling place shared by six precincts, not a
+# precinct number. And Chandlerville appears twice, as `CHANDLERVILLE 18-002` and
+# `CHANDLERVILLE 18-012`: one precinct reported at two ids, which the raw
+# comparison counted as two precincts and called Cass 21 -> 23.
+#
+# A PRECINCT'S OWN NUMBER IS SPACE-SEPARATED and survives: `BEARDSTOWN 5-004`
+# strips to `BEARDSTOWN 5`, `GOREVILLE 1-1` to `GOREVILLE 1`, `WINCHESTER III-9`
+# to `WINCHESTER III`. So a county that genuinely adds a precinct still shows a
+# new name here; only the id collapses.
+#
+# MEASURED against the 33 counties whose precincts this app ships, 2026 primary:
+# exact name-set agreement goes from 12/33 raw to 21/33 stripped, and NOT ONE
+# county that agreed raw stops agreeing — the rule strictly improves
+# reconciliation rather than trading one error for another. All four counties the
+# first run wrongly flagged (Cass, Greene, Johnson, Scott) reconcile on count,
+# three of them on names exactly.
+#
+# It leaves Calhoun alone, which is the check that matters most: neither its 2022
+# nor its 2024 names carry a trailing `-<digits>`, so the 7-to-5 merge this script
+# is validated against still reads exactly as it did.
+REPORTING_ID = re.compile(r"-\d+$")
+
+
+def precinct_key(name):
+    """The precinct's own name, with any trailing reporting id removed."""
+    return REPORTING_ID.sub("", name).strip()
+
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 fail = make_fail("isbe-precinct-fabric")
@@ -204,11 +239,34 @@ def precincts_for(election_id):
         name = (row.get("PrecinctName") or "").strip()
         if not name or is_ballot_class(name):
             continue
-        out[(row.get("JurisName") or "").strip().upper()].add(name.upper())
+        out[(row.get("JurisName") or "").strip().upper()].add(
+            precinct_key(name.upper()))
     if not out:
         fail("election %s's CSV parsed to zero precincts — the columns changed "
              "(expected JurisName + PrecinctName)" % election_id)
     return out, office
+
+
+# A change that survives the id strip can still be COSMETIC — the county
+# restyling its labels rather than moving a line. Measured on the 2024-to-2026
+# pair, all four remaining shipped-county findings are exactly this: Hancock and
+# Jefferson gained a full stop (ST ALBANS -> ST. ALBANS, MT VERNON -> MT. VERNON),
+# Menard put spaces around a hyphen (NORTH ATHENS-CITY -> NORTH ATHENS - CITY),
+# and Warren collapsed a double space (MONMOUTH  1 -> MONMOUTH 1).
+#
+# These are NOT filtered out, because a renamed precinct is a real event for this
+# repo: several builders join a county's precincts to census geography BY NAME
+# (the Jasper test), and every one of those joins breaks on a full stop. They are
+# LABELLED instead, so a reader can tell in one line whether to rebuild geometry
+# or to fix an alias.
+def _loose(name):
+    return re.sub(r"[^A-Z0-9]", "", name.upper())
+
+
+def classify(gone, added):
+    """'cosmetic' when the two sides differ only in punctuation or spacing."""
+    return ("cosmetic" if {_loose(x) for x in gone} == {_loose(x) for x in added}
+            else "fabric")
 
 
 def compare(older, newer, only=None):
@@ -223,7 +281,8 @@ def compare(older, newer, only=None):
     for juris in shared:
         gone, added = sorted(a[juris] - b[juris]), sorted(b[juris] - a[juris])
         if gone or added:
-            moved.append((juris, len(a[juris]), len(b[juris]), gone, added))
+            moved.append((juris, len(a[juris]), len(b[juris]), gone, added,
+                          classify(gone, added)))
     return moved, shared, sorted(set(a) ^ set(b))
 
 
@@ -279,8 +338,13 @@ def main():
              if args.shipped else ""))
     if only_one:
         print("  (in one election only, not compared: %s)" % ", ".join(only_one[:6]))
-    for juris, na, nb, gone, added in moved:
-        print("\n  %s — %d -> %d precinct(s)" % (juris, na, nb))
+    kinds = collections.Counter(m[5] for m in moved)
+    if moved:
+        print("  %d fabric change(s), %d cosmetic (punctuation or spacing only — "
+              "no line moved, but a name join breaks on one)"
+              % (kinds.get("fabric", 0), kinds.get("cosmetic", 0)))
+    for juris, na, nb, gone, added, kind in moved:
+        print("\n  %s [%s] — %d -> %d precinct(s)" % (juris, kind.upper(), na, nb))
         if gone:
             print("      gone : %s%s" % (", ".join(gone[:8]), " …" if len(gone) > 8 else ""))
         if added:
