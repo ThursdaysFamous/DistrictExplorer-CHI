@@ -94,6 +94,14 @@ STATIC_ENTRY_MUNICIPALITIES = {
     "kane-cities": ["St. Charles", "Geneva", "Batavia"],
     "dupage-cities": ["West Chicago"],
     "mchenry-city": ["McHenry"],
+    # Madison County's six ward-electing cities on ONE county layer
+    # (MadCo_Wards, 31 polygons). Five join the roster ward-for-ward; the CITY
+    # OF MADISON's four wards name nobody, because the regional directory lists
+    # its eight council members with no ward against any of them, and it is
+    # listed here anyway so its wards still DRAW — a ward a resident lives in is
+    # a fact whether or not its holder is published.
+    "madison-cities": ["Alton", "Edwardsville", "Granite City", "Madison",
+                       "Troy", "Venice"],
     "kendall-cities": ["Yorkville", "Plano"],
     "pontiac": ["Pontiac"],
     "mclean-cities": ["Bloomington", "Le Roy", "Lexington"],
@@ -221,6 +229,7 @@ ENTRY_COUNTY_FIPS = {"cook-suburban": "031", "evanston": "031",
                      "berwyn": "031", "lake-cities": "097", "belvidere": "007",
                      "kane-cities": "089", "dupage-cities": "043",
                      "mchenry-city": "111", "kendall-cities": "093",
+                     "madison-cities": "119",
                      "pontiac": "105", "mclean-cities": "113", "lincoln": "107",
                      "springfield": "167", "freeport": "177",
                      "st-clair-cities": "163", "rock-island": "161",
