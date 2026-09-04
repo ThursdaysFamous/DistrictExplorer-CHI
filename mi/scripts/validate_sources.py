@@ -193,6 +193,18 @@ ENDPOINTS = [
         "layer": "school-district-elementary",
         "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/School/MapServer/2/query?where=STATE%3D%2726%27&returnCountOnly=true&f=json",
     },
+    # ZCTAs carry NO STATE field, so this one is counted by ENVELOPE. The
+    # envelope is Esri's own {xmin,ymin,xmax,ymax} in comma form for the same
+    # reason the app's loader uses that shape: the {minLng,...} shape makes
+    # TIGERweb answer HTTP 200 with a JSON error envelope (measured 2026-09-04).
+    # 2,000 in Michigan's full box, 1,010 east of -87.60 -- see the layer's note.
+    {
+        "layer": "zip-code",
+        "url": ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
+                "PUMA_TAD_TAZ_UGA_ZCTA/MapServer/11/query?where=1%3D1"
+                "&geometry=-90.42%2C41.69%2C-82.12%2C48.31&geometryType=esriGeometryEnvelope"
+                "&inSR=4326&spatialRel=esriSpatialRelIntersects&returnCountOnly=true&f=json"),
+    },
 ]
 FAIL, WARN, OK = "FAIL", "WARN", "OK"
 
