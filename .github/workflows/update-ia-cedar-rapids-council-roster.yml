@@ -1,0 +1,140 @@
+name: Update IA Cedar Rapids council roster
+
+# Weekly refresh of the eight seats a district can carry out of the nine the
+# City of Cedar Rapids elects (ia/data/app/cedar-rapids-council-members.json,
+# read by the Cedar Rapids entry of ia/index.html's City Council District
+# card): five district members plus all three at-large members, who represent
+# every district and would be invisible to any boundary.
+#
+# THE MAYOR IS SCRAPED AND DELIBERATELY NOT IN THAT FILE. She is elected by the
+# whole city, so the fleet's at-large rule puts a citywide officer on the unit's
+# identity card rather than on a district card, and the card names her in prose.
+# Unlike Des Moines's and Waterloo's, hers IS read every run — the scraper
+# demands all nine seats — so the exclusion stays a decision this pipeline can
+# demonstrate rather than a gap it cannot see, and a reshaped mayor page fails
+# the run instead of quietly shipping eight.
+#
+# WHAT THIS RUN RE-VERIFIES BESIDES THE ROSTER, inside
+# build_cedar_rapids_wards.py --check, which never writes:
+#
+#   * THE IDENTITY OF THE TOWNSHIP CODE, IN BOTH DIRECTIONS. The boundary is
+#     not the city's — Cedar Rapids publishes none. It is LINN COUNTY's, one
+#     service holding two cities' districts (Cedar Rapids's five and Marion's
+#     four) separated only by POLITICAL_TWP, a bare code with no name field
+#     anywhere in the service. So the check asserts BOTH that '27' still tiles
+#     Cedar Rapids AND that Marion's '21' still fails to. The second half is
+#     the point: if the county ever reassigns the codes, a build that only
+#     checked the first would ship Marion's districts to Cedar Rapids readers
+#     under Cedar Rapids labels, and nothing else in this repo would notice.
+#   * THE TILING GATE AND ITS SHAPE TEST. No uncovered fragment big enough to
+#     hold somebody may be COMPACT — a long thin fragment is two publishers'
+#     outlines digitised apart, a compact one is a hole where a reader would be
+#     told nothing at all rather than which district they are in.
+#   * THAT THE SERVICE IS STILL THERE AND STILL OPEN. Linn publishes it with an
+#     empty copyrightText and no stated terms, which is not a promise to keep
+#     publishing it; this weekly fetch is how a withdrawal gets noticed.
+#
+# THERE IS NO IN-BAND ROSTER CROSS-WITNESS HERE, unlike Des Moines's and
+# Waterloo's workflows, because Linn's layer carries no names at all. The
+# builder witnesses the NUMBERING against the shipped boundary instead, which
+# catches a district drawn with no member and a member keyed to no district,
+# and will NOT catch a stale name. That is weaker and is recorded as weaker.
+
+on:
+  schedule:
+    - cron: "30 19 * * 4" # Thursday 19:30 UTC (an hour after Waterloo's)
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-roster:
+    runs-on: ubuntu-latest
+    steps:
+      # Pushed and PR-opened as BOT_PR_TOKEN so the resulting PR actually runs
+      # CI. A PR opened with the default GITHUB_TOKEN fires no workflows
+      # (GitHub suppresses recursive triggers), which left every roster PR with
+      # zero checks. Falls back to github.token when the secret is absent, so
+      # the workflow still runs — it just goes back to opening unchecked PRs.
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.BOT_PR_TOKEN || github.token }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: pip install -c ia/scripts/requirements.txt requests
+
+      - name: Re-verify the district geometry, its tiling, and the township cross-control
+        run: python3 ia/scripts/build_cedar_rapids_wards.py --check
+
+      - name: Scrape the city's own seat pages
+        run: python3 ia/scripts/cedar_rapids_council_scraper.py
+
+      - name: Rebuild the council roster (numbering witnessed against the shipped boundary)
+        run: python3 ia/scripts/build_cedar_rapids_council.py
+
+      # Gate the regenerated data before it can reach a PR: the app must still
+      # parse and carry every layer, and every data/app file must be present
+      # and well formed. node is preinstalled on ubuntu-latest.
+      - name: Validate app + data files
+        run: python3 ia/scripts/validate_index.py ia/index.html
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet -- ia/data/app/cedar-rapids-council-members.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open or update pull request
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.BOT_PR_TOKEN || github.token }}
+          # THE PR BODY IS AN env: BLOCK SCALAR, NOT A SHELL STRING, AND THAT IS
+          # LOAD-BEARING. A multi-line double-quoted string inside `run: |` puts
+          # its continuation lines at column 0, which ENDS the block scalar --
+          # GitHub then rejects the whole file as an invalid workflow and every
+          # run instant-fails with zero jobs. Two Iowa roster workflows shipped
+          # that way and never executed a step; scripts/validate_workflow_deps.py
+          # now refuses it. A block scalar keeps every line indented and YAML
+          # strips the common indent back off, so the markdown arrives clean.
+          PR_BODY: |
+            Automated weekly refresh of the Cedar Rapids half of the City Council District card's roster, generated by `ia/scripts/build_cedar_rapids_council.py` from the city's own seven seat pages (`cedar_rapids_council_scraper.py`).
+
+            Please review the diff before merging — this changes data about real officeholders. **Two things are worth reading closely.** The council seats TWO OLSONS (Tyler at-large, Scott in District 4), so a name appearing twice is a parse fault rather than a coincidence, and surname is never a key here. And District 4's contact is published by the city on his own firm's domain rather than a city one; it ships because the officeholder's own name vouches for the address, which is the same test the county officer roster uses.
+        run: |
+          # Fixed branch (not per-run): an unmerged roster PR is refreshed in
+          # place by the force-push below instead of spawning a duplicate PR
+          # every week.
+          branch="bot/ia-cedar-rapids-council-roster-update"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          # Cut the branch from main's CURRENT tip, not from the checkout this
+          # run started with. actions/checkout is shallow, and if main gains a
+          # .github/workflows/ change meanwhile, the branch ends up differing
+          # from main THERE too — which GitHub reads as the push updating a
+          # workflow and refuses for a token without `workflow` scope. Measured
+          # 2026-09-02 on update-municipal-officials.
+          git fetch --depth=1 origin main
+          git checkout -B "$branch" FETCH_HEAD
+          git add ia/data/app/cedar-rapids-council-members.json
+          git commit -m "Update Cedar Rapids city council roster from cedar-rapids.org"
+          git push -u origin "$branch" --force
+          # Only open a PR if one isn't already open for this branch; if it is,
+          # the force-push above already updated it.
+          if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then
+            gh pr create \
+              --title "Update Cedar Rapids city council roster from cedar-rapids.org" \
+              --body "$PR_BODY" \
+              --base main \
+              --head "$branch"
+          else
+            echo "PR already open for $branch; force-push refreshed it."
+          fi

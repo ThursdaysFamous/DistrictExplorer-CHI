@@ -1107,8 +1107,24 @@ absence is, against a working control — run the control, because a query retur
 everything looks identical); and the worksheet's `workflows[]` list had gone two short since phase
 3, so the history page's job tile read 6 against 8 on disk, which nothing gates.
 
-**Cedar Rapids tier** from Linn County's own `ElectionsCityCouncilDistrict` layer (VERIFIED exists,
-modified within the research pass's own week) plus its roster from `cedar-rapids.org`. NG911 tier ships
+~~**Cedar Rapids tier** from Linn County's own `ElectionsCityCouncilDistrict` layer (VERIFIED exists,
+modified within the research pass's own week) plus its roster from `cedar-rapids.org`.~~ — **DONE
+2026-09-04**, as a third entry on the consolidated `city-ward` dispatcher rather than a layer, and the
+plan's one-line description hid the thing that actually needed solving. That layer is **not Cedar
+Rapids's** — the city publishes no boundary at all — and it is not Cedar Rapids's *alone*: it is a
+COUNTY service carrying **two** cities' districts, Cedar Rapids's five and Marion's four, separated
+only by a `POLITICAL_TWP` code ('27', '21') with no name field, no domain and no description anywhere
+in the service. **Nothing published says which code is which**, so the build proves it by TILING and
+re-proves it weekly IN BOTH DIRECTIONS — 27 must cover Cedar Rapids (ratio 1.00323) and Marion's 21
+must fail to (99.996% left uncovered). A single downtown point test returns 27 today and would return
+21 just as confidently after a swap, which is exactly why the control is the gate. Two independent
+publishers corroborate the pairing without being used to derive it: Linn's own page is titled *Cedar
+Rapids Council Districts & Marion Ward Maps*, and the city's own *Find Your District* page links to
+it. The roster is eight of the nine seats from the city's seven seat pages; the mayor is scraped and
+excluded under the at-large rule. **The toggle is renamed City Council District** — Cedar Rapids has
+never used the word ward, and a generic label must be one no city is contradicted by. **Marion is
+measured, passes the same tiling test, and is NOT shipped**: a boundary without a roster is half a
+card, so it is `ia/WATCH.md`'s next city. NG911 tier ships
 here if HSEMD answered in phase 3. ~~Area Education Agency geometry resolved one way or the
 other~~ — **DONE in phase 3 PR 6** (above), and it resolved as a SHIP rather than a recorded no:
 the identity-only card this section anticipated, with the §273.8 sourcing confirmed exactly as
