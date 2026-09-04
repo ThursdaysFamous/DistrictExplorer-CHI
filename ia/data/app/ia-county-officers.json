@@ -929,7 +929,7 @@
    "phone": "(712) 262-1081"
   },
   "sheriff": {
-   "email": "craveling@claycounty.iowa.govclaycountysheriffsoffice.com",
+   "email": "craveling@claycounty.iowa.gov",
    "name": "Chris Raveling",
    "party": "Republican",
    "phone": "(712) 262-3221"
@@ -1069,7 +1069,7 @@
    "phone": "(712) 263-3643"
   },
   "sheriff": {
-   "email": "jsteinkuehler@crawfordso.netOfficeAdmin",
+   "email": "jsteinkuehler@crawfordso.net",
    "name": "James Steinkuehler",
    "party": "Republican",
    "phone": "(712) 263-2146"
@@ -1245,7 +1245,7 @@
    "phone": "(563) 927-4665"
   },
   "sheriff": {
-   "email": "themesath@delawarecountyia.us1225W.HowardSt",
+   "email": "themesath@delawarecountyia.us",
    "name": "Travis Hemesath",
    "party": "Republican",
    "phone": "(563) 927-3135"
@@ -2311,7 +2311,7 @@
    "phone": "(319) 462-2477"
   },
   "sheriff": {
-   "email": "greg.graver@jonescountyiowa.govStateIDNo",
+   "email": "greg.graver@jonescountyiowa.gov",
    "name": "Greg Graver",
    "party": "Republican",
    "phone": "(319) 462-4371"
@@ -3007,7 +3007,6 @@
    }
   ],
   "treasurer": {
-   "email": "fpowless@monroecounty.iowa",
    "name": "Faith Powless",
    "party": "Republican",
    "phone": "(641) 932-5011"

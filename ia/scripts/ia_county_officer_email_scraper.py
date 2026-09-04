@@ -93,6 +93,18 @@ HEADERS = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
                          "(KHTML, like Gecko) Chrome/126 Safari/537.36"}
 TREASHOME = "https://www.iowatreasurers.org/index.php?module=treashome&idCounty=%d"
 
+# AN href AND ITS OWN LINK TEXT CAN NAME DIFFERENT PEOPLE, and this is why the
+# addresses here are read out of the whole page rather than out of hrefs.
+# Measured 2026-09-04 on iowatreasurers.org's Monroe page, which publishes
+#
+#     <a href="mailto:cchambers@monroecounty.iowa.gov">fpowless@...gov</a>
+#
+# under a photo captioned Faith Powless. An href-first parser ships Chambers's
+# address for Powless's office and every count guard stays green. classify()
+# settles it the right way round for the right reason -- the local part carries
+# the OFFICEHOLDER's name, so fpowless@ is "witnessed" and the other four
+# addresses on that page are rejected -- and that is a property to preserve if
+# this ever moves to parsing links.
 EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 CFEMAIL_RE = re.compile(r'data-cfemail="([0-9a-fA-F]+)"')
 OFFICE_WORD = {

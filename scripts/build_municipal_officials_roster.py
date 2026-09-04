@@ -41,6 +41,9 @@ import re
 import sys
 from collections import defaultdict
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import undeliverable  # noqa: E402  (the fleet's withhold list)
+
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "il", "data", "app")
 PLACES_FILE = os.path.join(REPO_ROOT, "il", "data", "source", "st17_il_place_by_county2020.txt")
@@ -1143,6 +1146,31 @@ def main():
 
     for warning in warnings:
         print("WARNING: %s" % warning, file=sys.stderr)
+
+    # THE WITHHOLD SWEEP RUNS ONCE, OVER THE ASSEMBLED ROSTER. An address
+    # reaches this file by three different routes — a village hall's `office`
+    # block, an `officers` row and a `board` row — and all three carry an
+    # `email` key, so a walk of the finished structure covers every shape and
+    # cannot be out of step with a fourth route added later. Nine of these
+    # municipalities publish an address on a domain that does not resolve at
+    # all; each is dropped with its reason printed, and the name, office, phone
+    # and page URL beside it are untouched.
+    def _drop_undeliverable(node, where):
+        if isinstance(node, dict):
+            for key, value in list(node.items()):
+                if key == "email" and isinstance(value, str):
+                    kept, _why = undeliverable.withhold(value, where)
+                    if kept is None:
+                        del node[key]
+                else:
+                    _drop_undeliverable(value, where)
+        elif isinstance(node, list):
+            for item in node:
+                _drop_undeliverable(item, where)
+
+    for geoid, entry in roster.items():
+        _drop_undeliverable(entry, "%s %s" % (geoid, entry.get("name") or ""))
+    undeliverable.report_unmatched("municipal-officials.json")
 
     out_path = os.path.join(args.out_dir, "municipal-officials.json")
     with open(out_path, "w") as f:

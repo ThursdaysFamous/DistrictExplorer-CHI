@@ -363,7 +363,6 @@
     },
     "officers": [
       {
-        "email": "lwilson@cityofalton.il.gov",
         "name": "Lauren C. Wilson",
         "role": "Clerk"
       },
@@ -11007,7 +11006,6 @@
         "termExpires": "2027"
       },
       {
-        "email": "jsisti@villageofgrandvew.gov",
         "name": "Jade Sisti",
         "phone": "217-801-3941",
         "role": "Trustee",
@@ -11037,7 +11035,6 @@
     },
     "officers": [
       {
-        "email": "grandview@villaegofgrandview.gov",
         "name": "Heather Becker",
         "phone": "217-638-0725",
         "role": "Clerk"
@@ -11582,7 +11579,6 @@
         "role": "Trustee"
       },
       {
-        "email": "eeeten@gmail.org",
         "name": "Erin Eeten",
         "phone": "217-642-5328",
         "role": "Trustee"
@@ -13200,7 +13196,6 @@
         "role": "Trustee"
       },
       {
-        "email": "etajenhorst@hormIL.XOM",
         "name": "Steve Tajenhorst",
         "phone": "618-581-6602",
         "role": "Trustee"
@@ -13299,7 +13294,6 @@
         "termExpires": "2029"
       },
       {
-        "email": "trusteechristofilakos@vilageofjerome.com",
         "name": "Katrina Christofilakos",
         "role": "Trustee",
         "termExpires": "2029"
@@ -20241,7 +20235,6 @@
     },
     "officers": [
       {
-        "email": "mmcdonald@offallon.org",
         "name": "Misty McDonald",
         "role": "Clerk"
       },
@@ -25573,7 +25566,6 @@
   "1770759": {
     "board": [
       {
-        "email": "brichbark@southerview.us",
         "name": "Betsy Richbark",
         "role": "Trustee",
         "termExpires": "2027"
@@ -26583,7 +26575,6 @@
     "name": "Village of Sugar Grove",
     "office": {
       "address": "160 S. Municipal Dr., Sugar Grove IL 60554",
-      "email": "sstillwell@sugargroveil.org",
       "phone": "630-391-7200"
     },
     "officers": [

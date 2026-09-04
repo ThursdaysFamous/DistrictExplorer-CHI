@@ -67,6 +67,11 @@ import os
 import sys
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# The withhold list is FLEET-WIDE and lives at the repo root: the same MX sweep
+# that found Clark's `yahoo.ocm` found eleven more across Illinois, and one list
+# with one measurement behind it beats three drifting copies.
+sys.path.insert(0, os.path.join(os.path.dirname(REPO_ROOT), "scripts"))
+import undeliverable  # noqa: E402
 APP_DATA_DIR = os.path.join(REPO_ROOT, "data", "app")
 GEOMETRY = os.path.join(APP_DATA_DIR, "county-supervisory-districts.json")
 RAW = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache", "wi_county_boards_raw.json")
@@ -198,8 +203,11 @@ def main():
                 # supervisor has of their own. A supervisor's ADDRESS is never
                 # among these even where the county prints one — it is their
                 # home, not an office (the scraper's MEMBER_PAGES comment).
-                if member.get("email"):
-                    row["email"] = member["email"]
+                addr, _why = undeliverable.withhold(
+                    member.get("email"), "%s, district %s"
+                    % (member.get("name") or "?", row.get("district") or "?"))
+                if addr:
+                    row["email"] = addr
                 if member.get("phone"):
                     row["phone"] = member["phone"]
                 if member.get("url"):
@@ -264,6 +272,9 @@ def main():
             print("  %s: read from the Internet Archive capture of %s"
                   % (entry["county"], read_from.split(":", 1)[1][:8]), file=sys.stderr)
 
+    # An entry whose address the source stopped publishing is a fact
+    # about the past sitting in a live list; this says so every run.
+    undeliverable.report_unmatched("county-board-members.json")
     payload = json.dumps(roster, indent=1, sort_keys=True) + "\n"
     dated = sorted({r["county"] for r in roster.values() if r.get("asOf")})
     print("county-board-members: %d counties, %d seats (%d named, %d vacant%s)%s"

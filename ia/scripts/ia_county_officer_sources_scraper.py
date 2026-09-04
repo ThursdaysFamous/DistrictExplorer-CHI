@@ -324,16 +324,54 @@ def scrape_sheriffs(lut):
 
 def _issda_email(block):
     """Trap 3: join wrapped continuation lines, stopping at the next label,
-    then delete ALL whitespace (Wright's block is letter-spaced)."""
+    then delete ALL whitespace (Wright's block is letter-spaced).
+
+    THE JOIN STOPS THE MOMENT IT HAS A WHOLE ADDRESS, and that is the half this
+    lacked until 2026-09-04. Trap 3 above predicted the failure exactly —
+    "the join MUST stop at the next field label, or `Dhepperly@` +
+    `cerrogordo.gov` + `Station ID No. S171` glues into one string that still
+    matches an e-mail regex and is wrong" — and ISSDA_STOP was the guard
+    written for it. A LABEL LIST CANNOT BE THE GUARD, because the line after
+    the domain is often not a label at all. Four addresses shipped glued:
+
+        Clay      'Email:' / 'craveling@claycounty.iowa.gov'
+                            / 'claycountysheriffsoffice.com'   <- a WEBSITE
+        Crawford  'Email: jsteinkuehler@' / 'crawfordso.net'
+                            / 'Office Admin. & Assist.'
+        Delaware  'Email: themesath@' / 'delawarecountyia.us'
+                            / '1225 W. Howard St, Manchester IA 52057'
+        Jones     'Email: greg.graver@' / 'jonescountyiowa.gov'
+                            / 'State ID No. S531 ORI# IA0530000'
+
+    None of those third lines starts with a word any label list would carry,
+    and the greedy `[A-Za-z0-9.-]+` domain swallows all four — producing
+    addresses that look alive, pass every count guard, and cannot receive mail.
+    Completeness is the real test and it is self-maintaining: append a line,
+    and return as soon as what you have IS an address. Clay's website and
+    Jones's state id are never reached.
+
+    It also declines correctly where the SOURCE is at fault. Monroe publishes
+    `Email: @` with no local part at all, so nothing here forms an address and
+    the county ships without one, which is the honest outcome.
+
+    The trailing search() is kept for the shape this cannot see — a
+    continuation line carrying the domain AND trailing junk, where no prefix is
+    ever a whole address. It is now only reached in that case.
+    """
     for j, line in enumerate(block):
         flat = re.sub(r"\s+", "", line)
         if not flat.lower().startswith("email"):
             continue
         parts = [flat.split(":", 1)[1] if ":" in flat else ""]
+        if EMAIL_RE.fullmatch(parts[0]):
+            return parts[0]                      # whole address on the label line
         for nxt in block[j + 1:j + 3]:
             if ISSDA_STOP.match(nxt):
                 break
             parts.append(re.sub(r"\s+", "", nxt))
+            joined = "".join(parts)
+            if EMAIL_RE.fullmatch(joined):
+                return joined                    # stop here: it is already whole
         m = EMAIL_RE.search("".join(parts))
         if m:
             return m.group(0)

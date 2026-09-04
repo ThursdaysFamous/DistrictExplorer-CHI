@@ -512,6 +512,51 @@ CARRIED_WHY = ("The county asks automated readers not to crawl its site, so "
 TAG_STRIP = re.compile(r"<script[\s\S]*?</script>|<style[\s\S]*?</style>|<[^>]+>")
 PHONE_RE = re.compile(r"\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}")
 EMAIL_RE = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+")
+
+# SITE CHROME IS NOT AN OFFICER'S CONTACT. Every path below takes the FIRST
+# address inside a window that witnesses the officeholder's own name, which is
+# the right shape and is not sufficient: a county whose page publishes no
+# address for the officer still has a footer, and the footer is inside the
+# window. Grant County shipped `webmaster@co.grant.wi` as its SHERIFF's e-mail
+# — the only address anywhere on that page — so the card told a reader to write
+# to the webmaster to reach the Sheriff.
+#
+# wi_county_board_scraper.py already carries this warning in its own comments
+# ("a page-wide search would happily ship a footer's webmaster address as ...");
+# it was never applied here.
+#
+# THE LIST IS DELIBERATELY SHORT. An office mailbox is a legitimate contact —
+# `sheriff@`, `clerk@`, `treas@` all ship as published, and several counties
+# publish nothing else — so only local parts that can never be a person or an
+# office are rejected. `info@` is NOT here: for a small county that is often the
+# real front door.
+#
+# (Grant's address is also mistyped by the county itself, which is how it turned
+# up: the page prints `webmaster@co.grant.wi,gov`, a comma for the dot, so the
+# match stops at a domain that does not exist. That is a second defect and not
+# this one's business — the address would be wrong for the Sheriff either way.)
+SITE_CHROME_LOCALS = {"webmaster", "postmaster", "noreply", "no-reply",
+                      "donotreply", "do-not-reply", "mailer-daemon", "abuse"}
+
+
+def officer_email(text, county=None, office=None):
+    """The first address in `text` that could belong to a person or an office.
+
+    Site-chrome addresses are skipped rather than stopping the search, so a
+    page whose footer precedes the officer's own address still ships the right
+    one. Every skip prints, because a silent drop and a silent wrong address
+    are equally hard to notice later.
+    """
+    for m in EMAIL_RE.finditer(text or ""):
+        addr = m.group(0)
+        if addr.split("@", 1)[0].lower() in SITE_CHROME_LOCALS:
+            print("%s/%s: skipped site-chrome address %r — not an officer's "
+                  "contact" % (county or "?", office or "?", addr),
+                  file=sys.stderr)
+            continue
+        return addr
+    return None
+
 SUFFIXES = {"jr", "sr", "ii", "iii", "iv", "dr"}
 # The backstop for a directory office that is the LAST one witnessed on its
 # page and so has no next-name bound. Sheboygan's longest real block (name to
@@ -601,9 +646,9 @@ def scrape_directory(county, cfg, book):
         phone = PHONE_RE.search(window)
         if phone:
             entry["phone"] = phone.group(0).strip()
-        email = EMAIL_RE.search(window)
+        email = officer_email(window, county, office)
         if email:
-            entry["email"] = email.group(0)
+            entry["email"] = email
         out[office] = entry
     return out
 
@@ -631,9 +676,9 @@ def scrape_pages(county, cfg, book):
         phone = PHONE_RE.search(window)
         if phone:
             entry["phone"] = phone.group(0).strip()
-        email = EMAIL_RE.search(window)
+        email = officer_email(window, county, office)
         if email:
-            entry["email"] = email.group(0)
+            entry["email"] = email
         out[office] = entry
     return out
 
@@ -725,9 +770,9 @@ def scrape_indexroll(county, cfg, book):
             phone = PHONE_RE.search(text)
             if phone:
                 entry["phone"] = phone.group(0).strip()
-            email = EMAIL_RE.search(text)
+            email = officer_email(text, county, name)
             if email:
-                entry["email"] = email.group(0)
+                entry["email"] = email
         for seg in _block_text(sub.group(1)).split(","):
             seg = re.sub(r"^%s County " % re.escape(county), "", seg.strip())
             for office, allowed in TITLE_SETS.items():
