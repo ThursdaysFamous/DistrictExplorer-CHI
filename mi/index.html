@@ -5987,6 +5987,7 @@ function initMichiganExplorer() {
     "school-district-elementary", // 27 districts that operate no high school of their own, live from TIGERweb (no data/app file) — 350 km2 mean feature area, though the mean is pulled well above the 45 km2 median by Bois Blanc Pines, whose district takes in a large area of Lake Huron
     "county-commissioner", // 619 districts across all 83 counties — the finest tiling this instance ships, smaller than a state House district
     "county-subdivision", // 1,581 records tiling the state, live from TIGERweb (no data/app file) — 1,122 general-law townships, 118 charter townships, 301 city placeholder records for 281 distinct cities (18 of which cross a county line), and 40 'not defined' records that are pure Great Lakes water
+    "zip-code",          // 1,010 ZIP Code Tabulation Areas covering Michigan, live from TIGERweb (no data/app file) — 139.7 km2 mean feature area, between a township and a precinct
     "precinct",          // 3,895 voting precincts across all 83 counties, pre-built from the state's own 2026-cycle layer — 38.8 km2 mean feature area against a 6.4 km2 median, a six-fold skew because a rural township precinct and a city precinct are barely the same kind of object; the finest tiling this instance ships
     "municipality"       // 533 incorporated places, live from TIGERweb (no data/app file) — 281 cities and 252 villages, small dense pockets inside the township fabric, so the smallest layer this instance ships at a 12 km2 mean
   ];
@@ -8955,6 +8956,77 @@ function initMichiganExplorer() {
     ]
   });
 
+
+  /* ---------- 11. ZIP Code — live TIGERweb ZCTAs ----------
+   * ZCTAs carry no STATE field (they cross state lines), so unlike every
+   * other TIGERweb layer here this one cannot use the STATE='26' filter and
+   * is fetched by a bounding ENVELOPE instead, server-generalized with
+   * maxAllowableOffset (~55 m).
+   *
+   * THE ENVELOPE IS ITS OWN ESRI OBJECT AND THAT IS NOT A STYLE CHOICE.
+   * Esri wants {xmin,ymin,xmax,ymax}; this instance's METRO_BBOX is
+   * {minLng,minLat,maxLng,maxLat}, and passing that shape makes TIGERweb
+   * answer HTTP 200 with a JSON error envelope carrying zero features —
+   * the exact trap loadTigerLayer's own guard exists for. Measured
+   * 2026-09-04, and not hypothetically: ia/ ships that bug today, which is
+   * why this change also fixes it there.
+   *
+   * NEIGHBOURING STATES' ZIPS ARE IN THE OVERLAY, AND NO RECTANGLE CAN FIX
+   * THAT. Michigan's envelope returns 2,000 ZCTAs of which only 1,010 sit
+   * east of -87.60, because the bbox runs west across Lake Michigan to the
+   * far end of the UP — and even that clipped box still catches Chicago's
+   * 60628, since its south-west corner is in Illinois. The card is
+   * unaffected: it answers from a point query, so a reader always gets the
+   * ZCTA they are actually standing in. This is the same interlocking-states
+   * fact metros.json records about the fleet hand-off box, and the same
+   * behaviour ia/ and wi/ ship.
+   *
+   * A ZCTA IS NOT A ZIP CODE, which the label cannot say and the concept
+   * requires: ZIP Code Tabulation Areas are the Census Bureau's areal
+   * approximation of USPS delivery routes, not the postal boundaries
+   * themselves. Every ZCTA-based tool carries that caveat and so does this
+   * card. ---------- */
+  // Esri envelope shape ({xmin,...}), deliberately NOT METRO_BBOX — see above.
+  var MI_BBOX_ENVELOPE = { xmin: -90.42, ymin: 41.69, xmax: -82.12, ymax: 48.31 };
+  var loadZipCodes = makeCached(function () {
+    var url = TIGERWEB_SERVICES + "PUMA_TAD_TAZ_UGA_ZCTA/MapServer/11/query" +
+      "?where=" + encodeURIComponent("1=1") +
+      "&geometry=" + encodeURIComponent(JSON.stringify(MI_BBOX_ENVELOPE)) +
+      "&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects" +
+      "&outFields=ZCTA5&returnGeometry=true&outSR=4326&f=geojson" +
+      "&geometryPrecision=4&maxAllowableOffset=0.0005";
+    return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) throw new Error("TIGERweb ZCTA layer returned no usable geometry");
+        return geojson;
+      });
+  });
+  // point-first hook (queryFeatureAt): one ZCTA instead of the statewide
+  // envelope set. No STATE filter here for the same reason the full load
+  // cannot use one — and the point narrows harder than any envelope would.
+  loadZipCodes.atPoint = function (point) {
+    return loadArcGISPointGeoJSON(
+      TIGERWEB_SERVICES + "PUMA_TAD_TAZ_UGA_ZCTA/MapServer/11", point, "ZCTA5");
+  };
+
+  registerPolygonLayer({
+    id: "zip-code",
+    group: "geography",
+    label: "ZIP Code",
+    loader: loadZipCodes,
+    // dotted outline (a distinct pattern from Township or City's long dash) + its own hue
+    style: { color: "#0B5394", weight: 1.5, fillColor: "#41B6E6", fillOpacity: 0.05, dashArray: "1 4" },
+    fields: [
+      { name: "zip", label: "ZIP Code", keys: ["zcta5", "zip", "zip_code", "zipcode", "zcta5ce10"], primary: true },
+      { label: "About this boundary",
+        value: "This is a ZIP Code Tabulation Area — the Census Bureau's " +
+               "approximation of the USPS delivery routes that share a ZIP " +
+               "code, not a postal boundary the Postal Service publishes. It " +
+               "is the standard mappable stand-in, and it can differ from " +
+               "where mail actually goes." }
+    ]
+  });
+
   /* ==== ENGINE:BEGIN hover-explorer ==== */
   /* =========================================================================
    * HOVER EXPLORER — a live popup (on by default, toggled bottom-left) that
@@ -9516,7 +9588,7 @@ function initMichiganExplorer() {
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
   var LAYER_SIDEBAR_RANK = ["us-house", "mi-senate", "mi-house", "county-commissioner",
     "school-district-unified", "school-district-elementary",
-    "county", "county-subdivision", "municipality", "precinct"];
+    "county", "county-subdivision", "municipality", "zip-code", "precinct"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -9613,11 +9685,11 @@ function initMichiganExplorer() {
      carries the method and the measurements behind it, and its --check fails
      when a layer colour moves and its dark counterpart does not. */
   /* ==== GENERATED:BEGIN dark-map-palette ==== */
-  var DST_DARK_MAP_COLORS = { "#14181C": "#696F76", "#1B7A3D": "#58CD7A", "#2E9E6B": "#5BEAA5",
-    "#2F6B3A": "#6FBE7B", "#41B6E6": "#C6EBFE", "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD",
-    "#4C8F59": "#83DC93", "#5C4B8C": "#AB95EF", "#6B7280": "#B1BBCE", "#7A5C3E": "#CFA57D",
-    "#8C2E4A": "#F47294", "#8F7BC4": "#D1C2FF", "#A98B6C": "#F3CBA1", "#B0316E": "#FD88B8",
-    "#B26A00": "#FFB15F", "#D06A9C": "#FFBDDA", "#D19133": "#FED7A7"};
+  var DST_DARK_MAP_COLORS = { "#0B5394": "#4FA4FE", "#14181C": "#696F76", "#1B7A3D": "#58CD7A",
+    "#2E9E6B": "#5BEAA5", "#2F6B3A": "#6FBE7B", "#41B6E6": "#C6EBFE", "#444B54": "#929BA8",
+    "#4A2E8C": "#9B7CFD", "#4C8F59": "#83DC93", "#5C4B8C": "#AB95EF", "#6B7280": "#B1BBCE",
+    "#7A5C3E": "#CFA57D", "#8C2E4A": "#F47294", "#8F7BC4": "#D1C2FF", "#A98B6C": "#F3CBA1",
+    "#B0316E": "#FD88B8", "#B26A00": "#FFB15F", "#D06A9C": "#FFBDDA", "#D19133": "#FED7A7"};
   /* ==== GENERATED:END dark-map-palette ==== */
   /* ==== ENGINE:BEGIN districtry-theme ==== */
   /* The theme controller and the wordmark fleet switch, shared for the same

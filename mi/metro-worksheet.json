@@ -213,10 +213,28 @@
       }
     },
     {
+      "id": "zip-code",
+      "label": "ZIP Code",
+      "group": "geography",
+      "area_rank": 9,
+      "rank_note": "1,010 ZIP Code Tabulation Areas covering Michigan, live from TIGERweb (no data/app file) — 139.7 km2 mean feature area, between a township and a precinct",
+      "source": {
+        "answers": "The ZIP Code Tabulation Area covering the point — the Census Bureau's areal approximation of the USPS delivery routes sharing a ZIP code, not a postal boundary.",
+        "boundary": [
+          {
+            "label": "U.S. Census TIGERweb — ZIP Code Tabulation Areas, layer 11 of the PUMA/TAD/TAZ/UGA/ZCTA service, queried live at runtime (no builder script, no committed data/app file). ZCTAs carry NO STATE FIELD because they cross state lines, so this is the one TIGERweb layer here fetched by a bounding ENVELOPE rather than STATE='26' — and the envelope must be Esri's own {xmin,ymin,xmax,ymax} shape, since passing this instance's {minLng,...} METRO_BBOX makes TIGERweb answer HTTP 200 with a JSON error envelope and zero features (measured 2026-09-04)",
+            "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/PUMA_TAD_TAZ_UGA_ZCTA/MapServer/11"
+          }
+        ],
+        "people": "NO OFFICEHOLDER, AND NONE IS MISSING: a ZIP code is a mail-routing convenience, not a unit of government, so nobody is elected from one. The card says what the boundary actually is rather than leaving a reader to assume it means more than it does.",
+        "applies": "Michigan — statewide. 1,010 ZCTAs sit east of longitude -87.60; the fetch envelope returns 2,000 because Michigan's bounding box runs west across Lake Michigan to the far end of the Upper Peninsula, and even a clipped box still catches Chicago's 60628 since its south-west corner is in Illinois. NO RECTANGLE ISOLATES MICHIGAN — the same interlocking-states fact metros.json records about the fleet hand-off box — so neighbouring states' ZIPs appear in the map overlay, exactly as they do in Iowa's and Wisconsin's. The CARD is unaffected: it answers from a point query, so a reader always gets the ZCTA they are standing in."
+      }
+    },
+    {
       "id": "precinct",
       "label": "Precinct",
       "group": "political",
-      "area_rank": 9,
+      "area_rank": 10,
       "rank_note": "3,895 voting precincts across all 83 counties, pre-built from the state's own 2026-cycle layer — 38.8 km2 mean feature area against a 6.4 km2 median, a six-fold skew because a rural township precinct and a city precinct are barely the same kind of object; the finest tiling this instance ships",
       "source": {
         "answers": "The voting precinct covering the point, its county, and how many voters were registered in it for the 2026 cycle.",
@@ -234,7 +252,7 @@
       "id": "municipality",
       "label": "City or Village",
       "group": "geography",
-      "area_rank": 10,
+      "area_rank": 11,
       "rank_note": "533 incorporated places, live from TIGERweb (no data/app file) — 281 cities and 252 villages, small dense pockets inside the township fabric, so the smallest layer this instance ships at a 12 km2 mean",
       "source": {
         "answers": "The incorporated city or village covering the point, if any — and which of the two it is, because in Michigan that changes what else governs the point.",
