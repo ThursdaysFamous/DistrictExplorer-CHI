@@ -98,7 +98,7 @@ EXPECT_LAYER_IDS = [
     "us-house", "ia-judicial-district", "iowa-aea", "ia-senate", "county",
     "ia-house", "county-supervisor", "school-district-unified",
     "school-director-district", "community-college", "cc-director-district",
-    "county-subdivision", "municipality", "dsm-ward", "zip-code", "precinct",
+    "county-subdivision", "municipality", "city-ward", "zip-code", "precinct",
     "police-station", "fire-station", "school-site", "post-office",
 ]
 
@@ -120,6 +120,7 @@ GEOMETRY_FILES = {
     "ia-community-colleges.json": (15, 15),  # 15 community college merged areas, shipped as published (no dissolve) from the Iowa Legislature's own ArcGIS org by ia/scripts/build_ia_community_colleges.py, witnessed against a second LSA layer on name set, 2020 census population (3,190,369) and director-district count (124).
     "dsm-wards.json": (4, 4),  # The City of Des Moines's four council wards, shipped as published (no dissolve) from the city's own Wards feature service by ia/scripts/build_dsm_wards.py. Gated twice: the wards must still tile the city's own City Boundary layer (0.0070% uncovered in 753 perimeter fragments, largest 3,482 m² — a hole is one large compact part, so the largest fragment is capped as well as the total), and simplification must add no overlap to the source's own 14 m sliver along the ward 1/2 edge. Carries verbatim the City of Des Moines disclaimer its terms of use require, which the card renders.
     "ia-aeas.json": (9, 9),  # Iowa's nine Area Education Agencies (Iowa Code ch. 273), built by ia/scripts/build_ia_aea.py as a DISSOLVE of the shipped school-district fabric by the Department of Education's own in-band AEA_NUM — not from the Department's published AEA polygon, which is stamped for the 2019-2020 school year. Three gates: the NCES join must stay 324/324 with no leftovers either way, the dissolve must not self-overlap, and every one of the 324 districts must still read as its own agency in the published FY20 polygon — the test that asks whether a district has CHANGED agency, which is the only way an AEA line moves.
+    "waterloo-wards.json": (5, 5),  # The City of Waterloo's five council wards, shipped as published (no dissolve) from the city's own Wards feature service by ia/scripts/build_waterloo_wards.py. Gated three ways: the wards must still tile the city's own City Limits layer (0.0216% uncovered in 156 fragments), NO uncovered fragment may be COMPACT (Polsby-Popper above 0.30 — a long thin fragment is two outlines digitised apart, a compact one is a hole where the card would answer nothing), and simplification must add no overlap to the source's own zero. Carries no disclaimer: the city states no such condition, and the card's notice row renders only when the key is present.
 }
 
 # file -> minimum key count (officeholder rosters).
@@ -135,6 +136,7 @@ ROSTER_FILES = {
     "coverage-gaps.json": 0,  # The Data gaps panel's content; one recorded gap (Jones County, absent from the county-supervisor source layer).
     "dsm-council-members.json": 3,  # All seven seats Des Moines elects — the four ward members keyed by ward plus a citywide block of the mayor and both at-large members — from the city's own council page, refreshed weekly by update-ia-dsm-council-roster.yml. The scrape is scoped by <h2> heading because the page's Appointed Staff and Department Directors sections use IDENTICAL card markup, and it refuses to write if a name appears under both; the four ward members are cross-witnessed against the Wards layer's own in-band names and e-mails before anything is written.
     "ia-city-contact.json": 900,  # The city OFFICE's own phone and website for every one of Iowa's 939 incorporated cities, built by ia/scripts/build_ia_city_contact.py from the Iowa League of Cities' own city table joined to TIGERweb's places. NOT a roster of people — no column of that table names one, which is why the ia-municipal-officeholders gap stays open. The join must be TOTAL (939 of 939 places, one alias: the League's Jewell is TIGER's Jewell Junction) and the nine non-joining League rows must keep their measured shape, so a renamed or dropped city fails the build rather than quietly losing its contact.
+    "waterloo-council-members.json": 3,  # All seven seats Waterloo elects to its council — five ward members keyed by ward plus a citywide block of both at-large members — from the city's own council page, refreshed weekly by update-ia-waterloo-council-roster.yml. THE MAYOR IS NOT HERE: he is elected citywide and belongs on the City card by the at-large rule. The page is hand-pasted WYSIWYG HTML with no per-member container, so the scrape keys on each member's own "NAME, SEAT Through MM/DD/YYYY" line; the bio-link anchors that repeat every name WITHOUT a term are the control, and two of them disagree with the authoritative spelling. All five wards and both at-large members are cross-witnessed against the Wards layer's own in-band names before anything is written.
 }
 
 # Files the app references DYNAMICALLY — the URL is built from a slug at
@@ -533,7 +535,7 @@ def check_sw_lists(repo_root, app_dir):
 # are place names, so they are exempt from the county check below. Listed, not
 # inferred: a new municipality-keyed concept should have to say so here rather
 # than quietly opting itself out of the guard.
-MUNICIPALITY_KEYED_LAYERS = {"ward"}
+MUNICIPALITY_KEYED_LAYERS = {"ward", "city-ward"}
 
 
 # The distinctive word each county-dispatched layer's loader names carry. Used

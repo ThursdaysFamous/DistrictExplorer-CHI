@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Build data/app/dsm-wards.json — the four City of Des Moines council wards,
-read by ia/index.html's `dsm-ward` card.
+read by the Des Moines entry of ia/index.html's `city-ward` card.
 
 Iowa Code 372.4(1)(b): a city governed on 1 July 1975 by the mayor-council
 form with "two council members elected at large and one council member from
