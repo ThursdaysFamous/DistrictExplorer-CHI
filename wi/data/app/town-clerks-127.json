@@ -1,0 +1,118 @@
+{
+  "5512718850": {
+    "clerk": "Marilyn S Larson",
+    "municipality": "Darien",
+    "phone": "262-882-3393",
+    "recordUpdated": "2023-11-02",
+    "url": "https://darientownwi.gov/"
+  },
+  "5512719475": {
+    "clerk": "Michele Starin",
+    "deputyClerk": "Darlene Stark",
+    "municipality": "Delavan",
+    "phone": "262-728-3471",
+    "recordUpdated": "2023-12-11",
+    "url": "https://townofdelavan.com/"
+  },
+  "5512722125": {
+    "clerk": "Caitlin Owens",
+    "deputyClerk": "Jean Loth",
+    "municipality": "East Troy",
+    "phone": "262-642-5386",
+    "recordUpdated": "2026-07-21",
+    "url": "https://townofeasttroywi.gov/"
+  },
+  "5512728550": {
+    "clerk": "Michelle Baumeister",
+    "municipality": "Geneva",
+    "phone": "262-248-8497",
+    "recordUpdated": "2025-07-08",
+    "url": "https://townofgenevawi.com/"
+  },
+  "5512740950": {
+    "clerk": "Cairie Virrueta",
+    "deputyClerk": "Mariah Holden",
+    "municipality": "Lafayette",
+    "phone": "262-723-4321",
+    "recordUpdated": "2024-01-19",
+    "url": "https://lafayettewcwi.gov/"
+  },
+  "5512741050": {
+    "clerk": "Crystal Hoffmann",
+    "municipality": "La Grange",
+    "phone": "262-495-8200",
+    "recordUpdated": "2024-02-12",
+    "url": "https://www.townoflagrangewi.com/"
+  },
+  "5512744750": {
+    "clerk": "Alyson Morris",
+    "deputyClerk": "Molly Smith",
+    "municipality": "Linn",
+    "phone": "262-275-6300 EXT 10",
+    "recordUpdated": "2023-11-02",
+    "url": "https://townoflinn.wi.gov/"
+  },
+  "5512746725": {
+    "clerk": "Karla Hill",
+    "municipality": "Lyons",
+    "phone": "262-763-9936",
+    "recordUpdated": "2024-01-02",
+    "url": "http://townoflyonswi.com"
+  },
+  "5512767725": {
+    "clerk": "Abby Papcke",
+    "municipality": "Richmond",
+    "phone": "608-883-2269",
+    "recordUpdated": "2026-08-04",
+    "url": "https://townofrichmond-walworthwi.gov/"
+  },
+  "5512772900": {
+    "clerk": "Joellen Getka",
+    "municipality": "Sharon",
+    "phone": "262-736-4608",
+    "recordUpdated": "2026-01-05",
+    "url": "https://tnsharonwcwi.gov/"
+  },
+  "5512776175": {
+    "clerk": "Ashley Dewart",
+    "municipality": "Spring Prairie",
+    "phone": "262-642-7477",
+    "recordUpdated": "2026-03-18",
+    "url": "https://townofspringprairiewi.gov/"
+  },
+  "5512778100": {
+    "clerk": "Sara Morin",
+    "municipality": "Sugar Creek",
+    "phone": "262-742-3383",
+    "recordUpdated": "2024-03-25",
+    "url": "https://www.townofsugarcreekwi.com/"
+  },
+  "5512780875": {
+    "clerk": "Michael Ramps",
+    "deputyClerk": "Kristie Barber",
+    "municipality": "Troy",
+    "phone": "262-642-5292",
+    "recordUpdated": "2025-05-05",
+    "url": "https://troywalworthwi.gov/"
+  },
+  "5512783275": {
+    "clerk": "Marie Baker",
+    "municipality": "Walworth",
+    "phone": "262-275-9800",
+    "recordUpdated": "2023-11-02",
+    "url": "https://townofwalworthwi.gov/"
+  },
+  "5512786950": {
+    "clerk": "Jorja Boiley",
+    "deputyClerk": "Donna Sherman",
+    "municipality": "Whitewater",
+    "phone": "262-473-4639",
+    "recordUpdated": "2024-01-02",
+    "url": "https://townofwhitewaterwi.gov/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "5512100925": {
+    "clerk": "Sheree Nelson",
+    "municipality": "Albion",
+    "phone": "715-533-0773",
+    "recordUpdated": "2024-01-02"
+  },
+  "5512102525": {
+    "clerk": "Avis Thorson",
+    "municipality": "Arcadia",
+    "phone": "608-323-3470",
+    "recordUpdated": "2025-10-29",
+    "url": "https://townofarcadia.net/"
+  },
+  "5512111325": {
+    "clerk": "Melissa Kono",
+    "municipality": "Burnside",
+    "phone": "715-308-3008",
+    "recordUpdated": "2023-12-18"
+  },
+  "5512111975": {
+    "clerk": "Sarah Halderson",
+    "municipality": "Caledonia",
+    "phone": "608-317-8325",
+    "recordUpdated": "2025-10-23",
+    "url": "http://www.towncaledonia.org/"
+  },
+  "5512114525": {
+    "clerk": "Jacob Solfest",
+    "municipality": "Chimney Rock",
+    "phone": "715-797-2988",
+    "recordUpdated": "2023-12-22"
+  },
+  "5512120300": {
+    "clerk": "Kara Wener",
+    "municipality": "Dodge",
+    "phone": "608-539-2881",
+    "recordUpdated": "2023-12-22",
+    "url": "https://townofdodgewi.com/"
+  },
+  "5512124425": {
+    "clerk": "Timothy Rand",
+    "municipality": "Ettrick",
+    "phone": "608-525-4991",
+    "recordUpdated": "2025-11-18",
+    "url": "https://townofettrickwi.com/"
+  },
+  "5512128150": {
+    "clerk": "Sue Henderson",
+    "municipality": "Gale",
+    "phone": "608-582-4454",
+    "recordUpdated": "2023-12-22",
+    "url": "https://www.townofgalewi.gov/"
+  },
+  "5512132050": {
+    "clerk": "Donald A Halvorson",
+    "municipality": "Hale",
+    "phone": "715-694-2113",
+    "recordUpdated": "2023-12-28"
+  },
+  "5512144500": {
+    "clerk": "Sharon Sosalla",
+    "municipality": "Lincoln",
+    "phone": "715-985-3038",
+    "recordUpdated": "2023-06-09"
+  },
+  "5512162650": {
+    "clerk": "John Bautch",
+    "municipality": "Pigeon",
+    "phone": "715-983-5883",
+    "recordUpdated": "2026-06-11"
+  },
+  "5512165500": {
+    "clerk": "Cathy Nelson",
+    "municipality": "Preston",
+    "phone": "608-989-2133",
+    "recordUpdated": "2025-06-24",
+    "url": "https://www.townofprestontremplo.com/"
+  },
+  "5512178500": {
+    "clerk": "Kalynn M Dewitz",
+    "municipality": "Sumner",
+    "phone": "715-586-3333",
+    "recordUpdated": "2025-01-09",
+    "url": "https://www.townofsumnerwi.com/"
+  },
+  "5512180500": {
+    "clerk": "Shiloh Marthaler",
+    "deputyClerk": "Sonja A Byrne",
+    "municipality": "Trempealeau",
+    "phone": "608-539-2902",
+    "recordUpdated": "2023-11-19",
+    "url": "https://tn.trempealeau.wi.gov/"
+  },
+  "5512181875": {
+    "clerk": "Ann Hempel",
+    "municipality": "Unity",
+    "phone": "715-563-2453",
+    "recordUpdated": "2024-01-12"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

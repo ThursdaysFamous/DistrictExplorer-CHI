@@ -114,6 +114,30 @@ one, `Phone 1`, the municipality's own website, and the record's **own
 last-updated date** — which ranges from 2023 to 2026 and is per record, so the
 card dates each answer rather than implying the whole file is current.
 
+## THE TOWNS COME OUT OF THIS SAME FILE
+
+Of the 1,848 municipalities, 1,239 are TOWNS and they do not appear on the City
+or Village card at all — TIGER's Places layer carries none of them. They ride
+the **County Subdivision** card instead, keyed by 10-digit county-subdivision
+GEOID rather than by place GEOID, one file per county
+(`data/app/town-clerks-<county FIPS>.json`, 71 of them — Milwaukee County has
+no towns).
+
+The town join needs the COUNTY and the city join does not, which is measured:
+there is a Town of Unity in **Clark** and a Town of Unity in **Trempealeau**,
+different towns with different clerks, so a name-only join would put one's
+clerk on the other's card. No town crosses a county line — 0 of 1,239, against
+58 cities and villages — so a town is exactly one subdivision record.
+
+Three of TIGER's 1,242 town records have no clerk here, all the same
+phenomenon and all gated BY NAME so a fourth fails the build:
+
+| Town | Why |
+|---|---|
+| Harrison (Calumet) | the Village of Harrison incorporated out of it; six acres remain and WEC files only the village |
+| Bloomfield (Walworth) | the same shape (the Town of Bloomfield in *Waushara* is a different town and does match) |
+| Campbell (La Crosse) | the Census's own older name for the Village of French Island — its clerk is deliberately NOT attached, because that would assert an identity the Census does not make |
+
 ## Re-pull
 
 Same posture as the polling file, different trigger: this one has no election

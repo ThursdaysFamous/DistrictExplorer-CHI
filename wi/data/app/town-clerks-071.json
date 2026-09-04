@@ -1,0 +1,135 @@
+{
+  "5507113237": {
+    "clerk": "Shannon Resch",
+    "deputyClerk": "Mary Muench",
+    "municipality": "Cato",
+    "phone": "920-775-4741",
+    "recordUpdated": "2025-12-22",
+    "url": "https://townofcato.com/"
+  },
+  "5507113750": {
+    "clerk": "Paulette Vogt",
+    "municipality": "Centerville",
+    "phone": "920-973-2616",
+    "recordUpdated": "2026-01-27",
+    "url": "http://www.townofcenterville.us/"
+  },
+  "5507116950": {
+    "clerk": "Susan Kornely",
+    "municipality": "Cooperstown",
+    "phone": "920-660-8544",
+    "recordUpdated": "2024-11-05",
+    "url": "https://townofcooperstownwi.gov/"
+  },
+  "5507122275": {
+    "clerk": "Carleen Harel",
+    "municipality": "Eaton",
+    "phone": "920-418-2629",
+    "recordUpdated": "2025-07-17",
+    "url": "https://tn.eaton-manitowoc.wi.gov/"
+  },
+  "5507127275": {
+    "clerk": "Cary Nate",
+    "municipality": "Franklin",
+    "phone": "920-754-4171",
+    "recordUpdated": "2024-01-02"
+  },
+  "5507128975": {
+    "clerk": "Linda S Herman",
+    "municipality": "Gibson",
+    "phone": "920-973-2212",
+    "recordUpdated": "2023-11-02",
+    "url": "https://townofgibsonwi.gov/"
+  },
+  "5507140425": {
+    "clerk": "Dana Tesarik",
+    "municipality": "Kossuth",
+    "phone": "920-652-6729",
+    "recordUpdated": "2024-06-07",
+    "url": "https://townofkossuth.wi.gov/"
+  },
+  "5507143850": {
+    "clerk": "Pam Petersen",
+    "municipality": "Liberty",
+    "phone": "920-758-3707",
+    "recordUpdated": "2024-01-04",
+    "url": "https://townoflibertywi.com/"
+  },
+  "5507148525": {
+    "clerk": "Geraldine Gilbert",
+    "municipality": "Manitowoc",
+    "phone": "920-901-5072",
+    "recordUpdated": "2023-11-02",
+    "url": "http://www.townofmanitowoc.org/"
+  },
+  "5507148575": {
+    "clerk": "Jessica Backus",
+    "municipality": "Manitowoc Rapids",
+    "phone": "920-901-6559",
+    "recordUpdated": "2023-07-09",
+    "url": "https://www.townofmanitowocrapids.org/"
+  },
+  "5507148875": {
+    "clerk": "Mary Jo Krahn",
+    "municipality": "Maple Grove",
+    "phone": "920-905-3887",
+    "recordUpdated": "2023-12-29",
+    "url": "https://townofmaplegrovewi.com/"
+  },
+  "5507150625": {
+    "clerk": "Valerie Spindler",
+    "municipality": "Meeme",
+    "phone": "920-693-3441",
+    "recordUpdated": "2024-01-11",
+    "url": "https://www.townofmeemewi.com/"
+  },
+  "5507153350": {
+    "clerk": "Connie S Tesarik",
+    "municipality": "Mishicot",
+    "phone": "920-776-1597",
+    "recordUpdated": "2023-12-15",
+    "url": "http://townofmishicot.com/"
+  },
+  "5507157200": {
+    "clerk": "Alyssa Grotegut",
+    "municipality": "Newton",
+    "phone": "920-905-4906",
+    "recordUpdated": "2023-12-26",
+    "url": "http://www.townofnewton.org/"
+  },
+  "5507168925": {
+    "clerk": "Paula Winkel",
+    "deputyClerk": "Laurie Miller",
+    "municipality": "Rockland",
+    "phone": "920-772-4055",
+    "recordUpdated": "2023-12-22",
+    "url": "https://townofrockland-wi.com/"
+  },
+  "5507172075": {
+    "clerk": "Beth Pieper",
+    "deputyClerk": "Lindsay Meyer",
+    "municipality": "Schleswig",
+    "phone": "920-762-0483",
+    "recordUpdated": "2023-12-28",
+    "url": "https://townofschleswig.com/"
+  },
+  "5507181300": {
+    "clerk": "Jasmine Schwerma",
+    "municipality": "Two Creeks",
+    "phone": "920-323-1763",
+    "recordUpdated": "2023-12-22",
+    "url": "http://www.townoftwocreeks.com"
+  },
+  "5507181350": {
+    "clerk": "Bonnie L Timm",
+    "municipality": "Two Rivers",
+    "phone": "920-657-1213",
+    "recordUpdated": "2023-12-22",
+    "url": "https://townoftworivers.com/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

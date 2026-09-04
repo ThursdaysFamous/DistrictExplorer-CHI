@@ -1,0 +1,170 @@
+{
+  "5508100475": {
+    "clerk": "Kathy Schmitz",
+    "municipality": "Adrian",
+    "phone": "608-633-1868",
+    "recordUpdated": "2025-11-18"
+  },
+  "5508102025": {
+    "clerk": "Heather Pieper",
+    "deputyClerk": "Angela Bunker",
+    "municipality": "Angelo",
+    "phone": "608-386-8520",
+    "recordUpdated": "2026-07-30",
+    "url": "https://angelowi.gov/"
+  },
+  "5508111625": {
+    "clerk": "Bridget Leis",
+    "deputyClerk": "Ann Grygleski",
+    "municipality": "Byron",
+    "phone": "608-387-9222",
+    "recordUpdated": "2026-06-17"
+  },
+  "5508115550": {
+    "clerk": "Mary Cook",
+    "municipality": "Clifton",
+    "phone": "608-463-7379",
+    "recordUpdated": "2024-01-17"
+  },
+  "5508129450": {
+    "clerk": "Jamie Hyer",
+    "municipality": "Glendale",
+    "phone": "608-387-9383",
+    "recordUpdated": "2024-01-02"
+  },
+  "5508130325": {
+    "clerk": "Sandy Lea Wood",
+    "municipality": "Grant",
+    "phone": "608-378-4583",
+    "recordUpdated": "2023-12-29"
+  },
+  "5508131225": {
+    "clerk": "Debra Stott",
+    "municipality": "Greenfield",
+    "phone": "608-387-1214",
+    "recordUpdated": "2026-01-30",
+    "url": "https://townofgreenfield.wi.gov/"
+  },
+  "5508137950": {
+    "clerk": "Debra A Mashak-Hundt",
+    "municipality": "Jefferson",
+    "phone": "608-654-7855",
+    "recordUpdated": "2023-12-28"
+  },
+  "5508140925": {
+    "clerk": "Lynn Humphrey",
+    "municipality": "Lafayette",
+    "phone": "608-269-2738",
+    "recordUpdated": "2025-12-10"
+  },
+  "5508141000": {
+    "clerk": "Wendy Von Haden",
+    "deputyClerk": "Melissa Abben",
+    "municipality": "La Grange",
+    "phone": "608-372-3594",
+    "recordUpdated": "2024-05-02",
+    "url": "https://www.townoflagrangemcwi.gov/"
+  },
+  "5508143475": {
+    "clerk": "Carrie Nilssen",
+    "municipality": "Leon",
+    "phone": "608-269-5873",
+    "recordUpdated": "2025-04-16",
+    "url": "http://www.townofleon.com/"
+  },
+  "5508144450": {
+    "clerk": "Lynda Callaway",
+    "municipality": "Lincoln",
+    "phone": "608-343-7168",
+    "recordUpdated": "2022-09-22",
+    "url": "http://www.townoflincoln.net"
+  },
+  "5508144975": {
+    "clerk": "Cassandra Schober",
+    "municipality": "Little Falls",
+    "phone": "608-272-3175",
+    "recordUpdated": "2024-09-18"
+  },
+  "5508156950": {
+    "clerk": "Lisa M Green",
+    "municipality": "New Lyme",
+    "phone": "608-487-0051",
+    "recordUpdated": "2024-01-11"
+  },
+  "5508158875": {
+    "clerk": "Alex Wilson",
+    "deputyClerk": "Marian Belcher",
+    "municipality": "Oakdale",
+    "phone": "608-372-6475",
+    "recordUpdated": "2024-01-02",
+    "url": "http://www.townofoakdale.com"
+  },
+  "5508164425": {
+    "clerk": "Amy Brueggen",
+    "municipality": "Portland",
+    "phone": "608-633-2204",
+    "recordUpdated": "2024-01-30",
+    "url": "https://www.townofportlandmc.com/"
+  },
+  "5508167850": {
+    "clerk": "Rita M Williams",
+    "municipality": "Ridgeville",
+    "phone": "608-823-7459",
+    "recordUpdated": "2026-04-04",
+    "url": "http://ridgevilletown.com/"
+  },
+  "5508172325": {
+    "clerk": "James Van Wychen",
+    "deputyClerk": "Lorry Erickson",
+    "municipality": "Scott",
+    "phone": "608-378-4714",
+    "recordUpdated": "2025-05-09",
+    "url": "https://townofscottmonroe.com/"
+  },
+  "5508173150": {
+    "clerk": "Deborah Ferries",
+    "municipality": "Sheldon",
+    "phone": "608-315-2534",
+    "recordUpdated": "2026-02-17"
+  },
+  "5508175350": {
+    "clerk": "Lisa Brey",
+    "municipality": "Sparta",
+    "phone": "608-269-4830",
+    "recordUpdated": "2023-12-06",
+    "url": "https://townsparta.com/"
+  },
+  "5508180100": {
+    "clerk": "Jennifer Zeps",
+    "deputyClerk": "Breanne Zaremba",
+    "municipality": "Tomah",
+    "phone": "608-372-4611",
+    "recordUpdated": "2026-05-26",
+    "url": "https://townoftomah.wi.gov/"
+  },
+  "5508185125": {
+    "clerk": "Tammy Bekkum",
+    "municipality": "Wellington",
+    "phone": "608-343-1815",
+    "recordUpdated": "2026-07-21",
+    "url": "https://townshipofwellington.com/"
+  },
+  "5508185150": {
+    "clerk": "Diane Schwarz",
+    "municipality": "Wells",
+    "phone": "608-632-6662",
+    "recordUpdated": "2026-07-03",
+    "url": "https://www.townofwellswi.com/"
+  },
+  "5508187550": {
+    "clerk": "Dawn Pingel",
+    "municipality": "Wilton",
+    "phone": "608-343-7869",
+    "recordUpdated": "2024-01-02"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

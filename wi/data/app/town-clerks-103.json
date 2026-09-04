@@ -1,0 +1,117 @@
+{
+  "5510300675": {
+    "clerk": "Jessica Laeseke",
+    "municipality": "Akan",
+    "phone": "608-536-3432",
+    "recordUpdated": "2024-01-24",
+    "url": "https://townofakan.wixsite.com/akan"
+  },
+  "5510308175": {
+    "clerk": "Shelly Schweiger",
+    "municipality": "Bloom",
+    "phone": "608-963-7062",
+    "recordUpdated": "2026-06-30",
+    "url": "https://townofbloomwi.gov/"
+  },
+  "5510310950": {
+    "clerk": "Melissa Allen",
+    "municipality": "Buena Vista",
+    "phone": "608-604-3507",
+    "recordUpdated": "2025-06-18",
+    "url": "https://townofbuenavista.com/"
+  },
+  "5510319000": {
+    "clerk": "Corrina Mott",
+    "municipality": "Dayton",
+    "phone": "608-475-0850",
+    "recordUpdated": "2025-09-10",
+    "url": "https://daytonrcwi.gov/"
+  },
+  "5510321400": {
+    "clerk": "Bobbi Ann Goplin",
+    "municipality": "Eagle",
+    "phone": "608-604-5161",
+    "recordUpdated": "2023-06-06"
+  },
+  "5510326475": {
+    "clerk": "Lynette Owens",
+    "municipality": "Forest",
+    "phone": "608-627-1270",
+    "recordUpdated": "2023-03-15",
+    "url": "https://foresttownrcwi.gov/"
+  },
+  "5510333925": {
+    "clerk": "Julie King",
+    "municipality": "Henrietta",
+    "phone": "608-604-6802",
+    "recordUpdated": "2026-04-10"
+  },
+  "5510337500": {
+    "clerk": "Sheila Kitsembel",
+    "municipality": "Ithaca",
+    "phone": "608-604-5257",
+    "recordUpdated": "2024-08-12"
+  },
+  "5510349600": {
+    "clerk": "Katherine Berner",
+    "deputyClerk": "Brenda Cupp",
+    "municipality": "Marshall",
+    "phone": "608-383-9892",
+    "recordUpdated": "2024-01-02",
+    "url": "https://townofmarshallwi.org/"
+  },
+  "5510360350": {
+    "clerk": "Abigail Ewing",
+    "deputyClerk": "Janet Brown",
+    "municipality": "Orion",
+    "phone": "608-739-0515",
+    "recordUpdated": "2026-06-16",
+    "url": "https://orionwi.gov/"
+  },
+  "5510367575": {
+    "clerk": "Kayla Williams",
+    "municipality": "Richland",
+    "phone": "608-604-5048",
+    "recordUpdated": "2024-01-02",
+    "url": "https://townofrichlandwi.gov/"
+  },
+  "5510367775": {
+    "clerk": "Tara R Kent",
+    "deputyClerk": "Carol A Welsh",
+    "municipality": "Richwood",
+    "phone": "608-537-2907",
+    "recordUpdated": "2025-12-23"
+  },
+  "5510368675": {
+    "clerk": "Sharon Miller",
+    "municipality": "Rockbridge",
+    "phone": "608-647-4673",
+    "recordUpdated": "2025-10-27",
+    "url": "https://townofrockbridge.wi.gov/"
+  },
+  "5510378825": {
+    "clerk": "Judy L Murphy",
+    "municipality": "Sylvan",
+    "phone": "608-538-3885",
+    "recordUpdated": "2023-08-15"
+  },
+  "5510385675": {
+    "clerk": "Ursula Bauer",
+    "deputyClerk": "Ann Stiemke",
+    "municipality": "Westford",
+    "phone": "608-983-2700",
+    "recordUpdated": "2026-07-20",
+    "url": "https://westfordwi.gov/"
+  },
+  "5510387250": {
+    "clerk": "Lauren Moe",
+    "municipality": "Willow",
+    "phone": "608-986-3602",
+    "recordUpdated": "2025-10-28"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

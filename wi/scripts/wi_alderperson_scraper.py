@@ -104,15 +104,21 @@ WAUKESHA_INDEX = "https://www.waukesha-wi.gov/about_the_common_council/index.php
 # each pinned only after its story was read. The pin is self-retiring twice
 # over: it fails if the canvass stops naming this winner, and it fails the
 # day the GIS catches up (remove it then).
-KENOSHA_CANVASS_WINS = {
-    14: {"name": "Daniel L. Prozanski, Jr.",
-         "why": ("the GIS still names Kenny Harper, who won in April 2024 and did "
-                 "not seek re-election in 2026 (he moved out of the district — "
-                 "Ballotpedia/WGTD, read 2026-08-26); Prozanski won the certified "
-                 "April 2026 contest 913 votes to write-ins' 17. The layer's recent "
-                 "modified date is the VIEW definition's, not the data's — the "
-                 "vintage trap, Kenosha edition.")},
-}
+# RETIRED 2026-09-03, EXACTLY AS THIS BLOCK'S OWN COMMENT INSTRUCTS. District
+# 14's pin existed because the GIS still named Kenny Harper, who won in April
+# 2024 and did not seek re-election; Daniel Prozanski won the certified April
+# 2026 contest 913 votes to write-ins' 17. The city's layer now names Prozanski
+# itself, so there is no longer a disagreement to override and the card ships
+# the city's own current spelling with no override note — which is the whole
+# point of a self-retiring pin.
+#
+# IT DID NOT SELF-RETIRE, AND THAT WAS A REAL DEFECT rather than an oversight:
+# the loop below tested the GIS against the canvass FIRST and `continue`d on a
+# match, so the "the GIS now agrees — remove the pin" guard sat behind a branch
+# that could no longer be reached. The pin had become dead code announcing
+# nothing. The pin check now runs BEFORE that test, so the next one retires
+# itself loudly on the day it should.
+KENOSHA_CANVASS_WINS = {}
 
 CITIES = {  # COUSUBFP -> (name, seats)
     "53000": ("Milwaukee", 15),
@@ -413,16 +419,21 @@ def scrape_kenosha():
         # ("Brandi Rose Ferree" / "Ruth Delace Dyson", measured) — the same
         # person styled apart, where a different person shares no tokens
         a, b = fold_set(members[key]["name"]), fold_set(wins[n][0])
-        if a and b and (a <= b or b <= a):
-            continue
+        agrees = bool(a and b and (a <= b or b <= a))
+        # A PIN IS CONSULTED BEFORE THE AGREEMENT TEST, not after it. Reading
+        # them the other way round is what let District 14's override outlive
+        # its purpose in silence: once the GIS caught up, the agreement test
+        # `continue`d and the "remove the pin" guard below became unreachable.
         if n in KENOSHA_CANVASS_WINS:
             pin = KENOSHA_CANVASS_WINS[n]
             if fold_set(wins[n][0]) != fold_set(pin["name"]):
                 raise SystemExit("kenosha D%d: the pinned canvass override no longer "
                                  "matches the canvass (%r vs pin %r)" % (n, wins[n][0], pin["name"]))
-            if fold_set(members[key]["name"]) == fold_set(pin["name"]):
-                raise SystemExit("kenosha D%d: the GIS now agrees with the canvass — "
-                                 "the override has served its purpose; remove the pin" % n)
+            if agrees:
+                raise SystemExit("kenosha D%d: the GIS now names the certified winner "
+                                 "(%r) — the override has served its purpose; remove "
+                                 "its KENOSHA_CANVASS_WINS entry"
+                                 % (n, members[key]["name"]))
             stale = members[key]["name"]
             members[key] = {"name": pin["name"],
                             "note": "Elected April 2026 (certified by the Kenosha County "
@@ -430,6 +441,8 @@ def scrape_kenosha():
             print("kenosha D%d: certified April 2026 winner %r ships over the GIS's "
                   "stale %r — %s" % (n, pin["name"], stale, pin["why"]),
                   file=sys.stderr)
+            continue
+        if agrees:
             continue
         bad.append((n, members[key]["name"], wins[n][0]))
     if bad:
@@ -495,37 +508,69 @@ def scrape_waukesha():
     return members, WAUKESHA_INDEX
 
 
+# ONE CITY NEVER TAKES THE OTHER FIVE DOWN. Until 2026-09-03 the six scrapes
+# ran unguarded and any raise ended the run, so greenbaywi.gov timing out after
+# three 60-second tries cost Milwaukee, Madison, Kenosha, Racine and Waukesha
+# their weekly refresh as well — 82 alderpersons dropped because one city's
+# webserver was slow. That is the per-layer failure isolation the APP has
+# always had (a layer whose source is down shows a Retry inside its own card
+# and never touches the others), arriving in the pipeline that feeds it.
+#
+# A missed city is NOT a city with no alderpersons: it emits nothing here and
+# `build_wi_alderperson_roster.py` carries its last shipped rows forward, names
+# it in the log, and refuses if too many are carried at once. The reason
+# travels in `failures` so the weekly PR's reviewer can see which server was
+# unreadable rather than inferring it from an absence.
+def attempt(label, fn):
+    """(result, None) or (None, reason) — never raises."""
+    try:
+        return fn(), None
+    except Exception as e:                   # noqa: BLE001 - reported per city
+        reason = "%s: %s" % (type(e).__name__, str(e)[:150])
+        print("  MISS %-12s %s" % (label, reason), file=sys.stderr)
+        return None, reason
+
+
 def main():
     argv = sys.argv[1:]
     out_path = argv[argv.index("--out") + 1] if "--out" in argv else DEFAULT_OUT
 
-    mke, mke_src = scrape_milwaukee()
-    mad, mad_src, mad_vacant = scrape_madison()
-    gb, gb_src = scrape_green_bay()
-    ken, ken_src = scrape_kenosha()
-    rac, rac_src = scrape_racine()
-    wau, wau_src = scrape_waukesha()
+    got, failures = {}, {}
+    for code, name, seats, fn in (
+            ("53000", "Milwaukee", 15, scrape_milwaukee),
+            ("48000", "Madison", 20, scrape_madison),
+            ("31000", "Green Bay", 12, scrape_green_bay),
+            ("39225", "Kenosha", 17, scrape_kenosha),
+            ("66000", "Racine", 15, scrape_racine),
+            ("84250", "Waukesha", 15, scrape_waukesha)):
+        result, reason = attempt(name, fn)
+        if result is None:
+            failures[code] = {"municipality": name, "reason": reason}
+            continue
+        # Madison alone returns a third value: the districts it says are vacant
+        members, source = result[0], result[1]
+        entry = {"municipality": name, "seats": seats, "sourceUrl": source,
+                 "members": members}
+        if len(result) > 2:
+            entry["vacantDistricts"] = result[2]
+        got[code] = entry
 
-    cities = {
-        "53000": {"municipality": "Milwaukee", "seats": 15, "sourceUrl": mke_src,
-                  "members": mke},
-        "48000": {"municipality": "Madison", "seats": 20, "sourceUrl": mad_src,
-                  "members": mad, "vacantDistricts": mad_vacant},
-        "31000": {"municipality": "Green Bay", "seats": 12, "sourceUrl": gb_src,
-                  "members": gb},
-        "39225": {"municipality": "Kenosha", "seats": 17, "sourceUrl": ken_src,
-                  "members": ken},
-        "66000": {"municipality": "Racine", "seats": 15, "sourceUrl": rac_src,
-                  "members": rac},
-        "84250": {"municipality": "Waukesha", "seats": 15, "sourceUrl": wau_src,
-                  "members": wau},
-    }
+    if not got:
+        raise SystemExit("every city failed (%s) — that is a network or a code "
+                         "fault, not six simultaneous site changes"
+                         % "; ".join(f["reason"] for f in failures.values()))
+
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     with open(out_path, "w") as f:
-        json.dump({"cities": cities}, f, indent=2, ensure_ascii=False)
-    total = sum(len(c["members"]) for c in cities.values())
-    print("scraped %d alderpersons across %d cities (Madison vacant: %s) -> %s"
-          % (total, len(cities), mad_vacant or "none", out_path))
+        json.dump({"cities": got, "failures": failures}, f, indent=2,
+                  ensure_ascii=False)
+    total = sum(len(c["members"]) for c in got.values())
+    madison = got.get("48000", {}).get("vacantDistricts")
+    print("scraped %d alderpersons across %d of 6 cities (Madison vacant: %s)%s -> %s"
+          % (total, len(got), madison or "none",
+             "" if not failures else "; MISSED %s" % ", ".join(
+                 sorted(f["municipality"] for f in failures.values())),
+             out_path))
 
 
 if __name__ == "__main__":

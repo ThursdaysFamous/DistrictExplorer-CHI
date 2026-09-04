@@ -1,0 +1,55 @@
+{
+  "5508906175": {
+    "clerk": "Holly Winker",
+    "deputyClerk": "Ginger Murphy",
+    "municipality": "Belgium",
+    "phone": "262-285-3326",
+    "recordUpdated": "2026-01-07",
+    "url": "https://www.townofbelgiumwi.gov/"
+  },
+  "5508913400": {
+    "clerk": "Sara Jacoby",
+    "deputyClerk": "Julie Mett",
+    "municipality": "Cedarburg",
+    "phone": "262-377-4509 EXT 3",
+    "recordUpdated": "2025-01-29",
+    "url": "https://townofcedarburgwi.gov/"
+  },
+  "5508927575": {
+    "clerk": "Christophe Jenkins",
+    "deputyClerk": "Rose Paulus",
+    "municipality": "Fredonia",
+    "phone": "262-692-9673",
+    "recordUpdated": "2026-01-29",
+    "url": "https://www.fredoniawi.gov/town-fredonia-wi"
+  },
+  "5508930025": {
+    "clerk": "Brandy Loveland Seelow",
+    "deputyClerk": "Bonnie Bartel",
+    "municipality": "Grafton",
+    "phone": "262-377-8500",
+    "recordUpdated": "2026-02-05",
+    "url": "https://www.townofgraftonwi.gov/"
+  },
+  "5508964475": {
+    "clerk": "Heather Krueger",
+    "deputyClerk": "Doris Feider-Schlenvogt",
+    "municipality": "Port Washington",
+    "phone": "262-284-5235",
+    "recordUpdated": "2024-01-22",
+    "url": "http://www.town.port-washington.wi.us"
+  },
+  "5508971725": {
+    "clerk": "Raquel Engelke",
+    "deputyClerk": "Gloria Arredondo",
+    "municipality": "Saukville",
+    "phone": "262-675-9217",
+    "recordUpdated": "2026-01-05",
+    "url": "https://www.townsaukville.org/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

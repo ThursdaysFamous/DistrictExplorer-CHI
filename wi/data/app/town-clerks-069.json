@@ -1,0 +1,123 @@
+{
+  "5506907500": {
+    "clerk": "Megan Webb",
+    "municipality": "Birch",
+    "phone": "920-723-0673",
+    "recordUpdated": "2023-11-02"
+  },
+  "5506909225": {
+    "clerk": "Kari Kiser",
+    "municipality": "Bradley",
+    "phone": "715-453-3326",
+    "recordUpdated": "2026-03-10",
+    "url": "http://www.townofbradley.org"
+  },
+  "5506917125": {
+    "clerk": "Rick C Hass",
+    "deputyClerk": "Charlene Woller",
+    "municipality": "Corning",
+    "phone": "715-536-4959",
+    "recordUpdated": "2023-12-26",
+    "url": "https://townofcorningwi.com/"
+  },
+  "5506932650": {
+    "clerk": "Kristy Ament",
+    "municipality": "Harding",
+    "phone": "715-218-6094",
+    "recordUpdated": "2024-10-24",
+    "url": "https://www.townofharding.com/"
+  },
+  "5506932875": {
+    "clerk": "Kathy Voermans",
+    "deputyClerk": "Tammy Marion",
+    "municipality": "Harrison",
+    "phone": "715-453-3395",
+    "recordUpdated": "2026-01-08",
+    "url": "https://www.townofharrisonwisconsin.com/"
+  },
+  "5506939675": {
+    "clerk": "Lori L Weber",
+    "municipality": "King",
+    "phone": "715-908-0001",
+    "recordUpdated": "2025-07-01",
+    "url": "https://townofkingwi.gov/"
+  },
+  "5506951275": {
+    "clerk": "Miriam Flegner",
+    "deputyClerk": "Amanda Herdt",
+    "municipality": "Merrill",
+    "phone": "715-536-4383",
+    "recordUpdated": "2024-03-08",
+    "url": "https://townofmerrillwi.gov/"
+  },
+  "5506962950": {
+    "clerk": "Amanda Herdt",
+    "municipality": "Pine River",
+    "phone": "715-536-7687",
+    "recordUpdated": "2021-12-16",
+    "url": "http://www.townofpineriver.com/"
+  },
+  "5506968825": {
+    "clerk": "Diane Chambers",
+    "municipality": "Rock Falls",
+    "phone": "715-536-5039",
+    "recordUpdated": "2024-01-16",
+    "url": "https://townofrockfalls.com/"
+  },
+  "5506970325": {
+    "clerk": "Amy Brown",
+    "municipality": "Russell",
+    "phone": "715-873-4141",
+    "recordUpdated": "2025-06-30",
+    "url": "https://townofrussellwi.com/"
+  },
+  "5506972100": {
+    "clerk": "Becky J Dallman",
+    "deputyClerk": "Debra Robl",
+    "municipality": "Schley",
+    "phone": "715-571-1262",
+    "recordUpdated": "2023-11-19",
+    "url": "https://www.townofschley.com/"
+  },
+  "5506972300": {
+    "clerk": "Bonny Grapp",
+    "deputyClerk": "Ann Krueger",
+    "municipality": "Scott",
+    "phone": "715-218-5633",
+    "recordUpdated": "2025-08-07",
+    "url": "https://townofscott.net/"
+  },
+  "5506974250": {
+    "clerk": "Loyetta Gitter",
+    "municipality": "Skanawan",
+    "phone": "715-966-2605",
+    "recordUpdated": "2024-03-04",
+    "url": "http://www.townofskanawannewsletter.com"
+  },
+  "5506974725": {
+    "clerk": "Heather Marheine",
+    "municipality": "Somo",
+    "phone": "715-453-4662",
+    "recordUpdated": "2026-01-09",
+    "url": "https://www.townofsomo.com/"
+  },
+  "5506980150": {
+    "clerk": "Jesse J Hoffman",
+    "municipality": "Tomahawk",
+    "phone": "715-254-4651",
+    "recordUpdated": "2023-12-28"
+  },
+  "5506987425": {
+    "clerk": "Jane Kaczmarek",
+    "deputyClerk": "Barbara Burns",
+    "municipality": "Wilson",
+    "phone": "715-906-6090",
+    "recordUpdated": "2025-05-27",
+    "url": "https://wilson-lincoln-wi.gov/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

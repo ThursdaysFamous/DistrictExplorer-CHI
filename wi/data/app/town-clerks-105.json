@@ -1,0 +1,150 @@
+{
+  "5510504100": {
+    "clerk": "Stephanie Schwartzlow",
+    "municipality": "Avon",
+    "phone": "608-921-3656",
+    "recordUpdated": "2023-12-28"
+  },
+  "5510506525": {
+    "clerk": "Quinn Bennett",
+    "municipality": "Beloit",
+    "phone": "608-364-2990",
+    "recordUpdated": "2026-07-21",
+    "url": "https://www.townofbeloitwi.gov/"
+  },
+  "5510509175": {
+    "clerk": "Marlina Jackson",
+    "municipality": "Bradford",
+    "phone": "608-713-2631",
+    "recordUpdated": "2025-01-24",
+    "url": "https://www.townofbradfordwi.com/"
+  },
+  "5510513625": {
+    "clerk": "Jennifer Eisenbraun",
+    "municipality": "Center",
+    "phone": "608-905-0622",
+    "recordUpdated": "2026-03-02",
+    "url": "https://townofcenterrockcounty.com/"
+  },
+  "5510515650": {
+    "clerk": "Shannon Roehl-Wickingson",
+    "municipality": "Clinton",
+    "phone": "608-290-1812",
+    "recordUpdated": "2025-05-22",
+    "url": "http://www.clintontownship.us/"
+  },
+  "5510528075": {
+    "clerk": "Laura Siclovan",
+    "municipality": "Fulton",
+    "phone": "608-868-4103",
+    "recordUpdated": "2024-07-17",
+    "url": "https://townoffulton.wi.gov/"
+  },
+  "5510532700": {
+    "clerk": "Courtney Ross",
+    "municipality": "Harmony",
+    "phone": "608-563-4477",
+    "recordUpdated": "2025-01-16",
+    "url": "https://townofharmony.com/"
+  },
+  "5510537850": {
+    "clerk": "Donald Blakeney",
+    "deputyClerk": "Cathy Schneider",
+    "municipality": "Janesville",
+    "phone": "608-754-1468",
+    "recordUpdated": "2026-07-22",
+    "url": "https://townofjanesville.org/"
+  },
+  "5510538450": {
+    "clerk": "Kat Mawhinney",
+    "municipality": "Johnstown",
+    "phone": "608-974-6111",
+    "recordUpdated": "2026-04-10",
+    "url": "https://johnstownrockcowi.gov/"
+  },
+  "5510542575": {
+    "clerk": "Dawn Miller",
+    "municipality": "La Prairie",
+    "phone": "608-436-1349",
+    "recordUpdated": "2023-12-20",
+    "url": "https://laprairiewi.gov/"
+  },
+  "5510544125": {
+    "clerk": "Pam Hookstead",
+    "municipality": "Lima",
+    "phone": "262-473-8515",
+    "recordUpdated": "2026-02-27"
+  },
+  "5510548150": {
+    "clerk": "Graceann Toberman",
+    "municipality": "Magnolia",
+    "phone": "608-751-6743",
+    "recordUpdated": "2023-08-16",
+    "url": "https://magnoliawi.gov/"
+  },
+  "5510552225": {
+    "clerk": "Tiffany M Chinn Barsness",
+    "deputyClerk": "Brooke Osborne",
+    "municipality": "Milton",
+    "phone": "608-868-2465",
+    "recordUpdated": "2026-06-24",
+    "url": "https://townofmiltonrc.com/"
+  },
+  "5510556325": {
+    "clerk": "Kelly Fallon",
+    "municipality": "Newark",
+    "phone": "608-728-1010",
+    "recordUpdated": "2024-01-29",
+    "url": "https://newarkwi.gov/"
+  },
+  "5510563675": {
+    "clerk": "Ashley Colcord",
+    "municipality": "Plymouth",
+    "phone": "608-879-4012",
+    "recordUpdated": "2025-06-17",
+    "url": "https://plymouthrockwi.gov/"
+  },
+  "5510564225": {
+    "clerk": "Anne Remley-Haines",
+    "municipality": "Porter",
+    "phone": "608-201-1996",
+    "recordUpdated": "2025-11-21",
+    "url": "https://www.porterwi.com/"
+  },
+  "5510568600": {
+    "clerk": "Kristina Bennett",
+    "deputyClerk": "Ranay Zillmer",
+    "municipality": "Rock",
+    "phone": "608-752-4292",
+    "recordUpdated": "2023-11-02",
+    "url": "https://www.townofrockwi.gov/"
+  },
+  "5510576325": {
+    "clerk": "Dela Ends",
+    "deputyClerk": "Helen Melin",
+    "municipality": "Spring Valley",
+    "phone": "608-897-4288",
+    "recordUpdated": "2026-04-06",
+    "url": "https://www.townofspringvalley.com/"
+  },
+  "5510581050": {
+    "clerk": "Kristina Bennett",
+    "deputyClerk": "Ranay Zillmer",
+    "municipality": "Turtle",
+    "phone": "608-362-0655",
+    "recordUpdated": "2023-11-02",
+    "url": "https://www.townofturtlewi.gov/"
+  },
+  "5510581650": {
+    "clerk": "Regina Riedel",
+    "municipality": "Union",
+    "phone": "608-736-7070",
+    "recordUpdated": "2022-01-18",
+    "url": "http://www.tn.union.wi.gov/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

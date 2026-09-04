@@ -1,0 +1,118 @@
+{
+  "5513901025": {
+    "clerk": "Katherine Reinbold",
+    "deputyClerk": "Sara Enders",
+    "municipality": "Algoma",
+    "phone": "920-235-3789",
+    "recordUpdated": "2026-07-14",
+    "url": "https://www.townofalgomawi.gov/"
+  },
+  "5513908000": {
+    "clerk": "Alex Snyder",
+    "municipality": "Black Wolf",
+    "phone": "920-688-1404",
+    "recordUpdated": "2025-01-03",
+    "url": "https://townofblackwolf.com/"
+  },
+  "5513915150": {
+    "clerk": "Kelsey Faust-Kubale",
+    "municipality": "Clayton",
+    "phone": "920-836-2007",
+    "recordUpdated": "2024-01-30",
+    "url": "https://www.townofclayton.net/"
+  },
+  "5513955775": {
+    "clerk": "Ellen Skerke",
+    "deputyClerk": "Cynthia Pleshek",
+    "municipality": "Neenah",
+    "phone": "920-725-0916",
+    "recordUpdated": "2026-02-25",
+    "url": "https://townofneenah.com/"
+  },
+  "5513955850": {
+    "clerk": "Tom Pollack",
+    "municipality": "Nekimi",
+    "phone": "920-509-9883",
+    "recordUpdated": "2024-01-02",
+    "url": "https://www.townofnekimi.com/"
+  },
+  "5513956100": {
+    "clerk": "Rebecca Pinnow",
+    "municipality": "Nepeuskun",
+    "phone": "920-420-1157",
+    "recordUpdated": "2024-10-18",
+    "url": "https://townofnepeuskun.gov/"
+  },
+  "5513959900": {
+    "clerk": "Dana Woods",
+    "deputyClerk": "Brenda Pluchinsky",
+    "municipality": "Omro",
+    "phone": "920-685-2111",
+    "recordUpdated": "2024-01-03",
+    "url": "http://www.townofomro.us/"
+  },
+  "5513960525": {
+    "clerk": "Jeannette Merten",
+    "municipality": "Oshkosh",
+    "phone": "920-235-7771",
+    "recordUpdated": "2023-03-10",
+    "url": "https://townofoshkosh.com/"
+  },
+  "5513964875": {
+    "clerk": "Beth Jackson",
+    "deputyClerk": "Susan Schwartz",
+    "municipality": "Poygan",
+    "phone": "920-685-0552",
+    "recordUpdated": "2024-01-02",
+    "url": "https://www.townofpoygan.com/"
+  },
+  "5513970125": {
+    "clerk": "Peggy Hendricks",
+    "municipality": "Rushford",
+    "phone": "920-744-8092",
+    "recordUpdated": "2026-01-27",
+    "url": "https://www.townofrushford.org"
+  },
+  "5513982175": {
+    "clerk": "Jenny Sonnleitner",
+    "municipality": "Utica",
+    "phone": "920-410-0347",
+    "recordUpdated": "2024-11-25",
+    "url": "https://townofuticawi.gov/"
+  },
+  "5513982875": {
+    "clerk": "Karen Brazee",
+    "deputyClerk": "Maggie Starr",
+    "municipality": "Vinland",
+    "phone": "920-235-6953",
+    "recordUpdated": "2023-12-28",
+    "url": "https://townofvinlandwi.gov/"
+  },
+  "5513987650": {
+    "clerk": "Holly Stevens",
+    "municipality": "Winchester",
+    "phone": "920-836-2948",
+    "recordUpdated": "2024-01-02",
+    "url": "https://townofwinchesterwi.com/"
+  },
+  "5513987925": {
+    "clerk": "Yvonne Zobel",
+    "deputyClerk": "Elizabeth Knaack",
+    "municipality": "Winneconne",
+    "phone": "920-582-3260",
+    "recordUpdated": "2025-09-16",
+    "url": "http://www.tn.winneconne.wi.gov/"
+  },
+  "5513988475": {
+    "clerk": "Susan Gilbert",
+    "municipality": "Wolf River",
+    "phone": "920-446-3837",
+    "recordUpdated": "2024-01-21",
+    "url": "https://townofwolfriver.com/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

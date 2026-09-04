@@ -1,0 +1,115 @@
+{
+  "5506700225": {
+    "clerk": "Tammy Hitz",
+    "municipality": "Ackley",
+    "phone": "715-610-2229",
+    "recordUpdated": "2023-12-18"
+  },
+  "5506700625": {
+    "clerk": "Marg Van Rossum",
+    "municipality": "Ainsworth",
+    "phone": "715-219-1035",
+    "recordUpdated": "2026-01-08"
+  },
+  "5506702275": {
+    "clerk": "Rosemary Servi",
+    "municipality": "Antigo",
+    "phone": "715-627-2133",
+    "recordUpdated": "2023-12-11"
+  },
+  "5506723050": {
+    "clerk": "Lyn A Olenski",
+    "deputyClerk": "Greg Mejak",
+    "municipality": "Elcho",
+    "phone": "715-275-3309",
+    "recordUpdated": "2024-01-17",
+    "url": "http://www.townofelcho.com/"
+  },
+  "5506724575": {
+    "clerk": "Carol Blawat",
+    "municipality": "Evergreen",
+    "phone": "715-350-9988",
+    "recordUpdated": "2026-04-29",
+    "url": "https://townofevergreenwi.com/"
+  },
+  "5506742425": {
+    "clerk": "Cathy St. John",
+    "municipality": "Langlade",
+    "phone": "715-484-4317",
+    "recordUpdated": "2024-01-11"
+  },
+  "5506756200": {
+    "clerk": "Melissa Keller",
+    "municipality": "Neva",
+    "phone": "715-610-4101",
+    "recordUpdated": "2022-01-28"
+  },
+  "5506758700": {
+    "clerk": "Paula Resch",
+    "municipality": "Norwood",
+    "phone": "715-216-0492",
+    "recordUpdated": "2026-01-27",
+    "url": "https://www.townofnorwood.com/"
+  },
+  "5506761375": {
+    "clerk": "Hannah Samsa",
+    "municipality": "Parrish",
+    "phone": "715-921-9254",
+    "recordUpdated": "2023-12-22"
+  },
+  "5506761525": {
+    "clerk": "Teressa Budd",
+    "municipality": "Peck",
+    "phone": "715-216-2552",
+    "recordUpdated": "2026-02-04"
+  },
+  "5506763825": {
+    "clerk": "Jane Kolpack",
+    "municipality": "Polar",
+    "phone": "715-216-1715",
+    "recordUpdated": "2023-11-21"
+  },
+  "5506765550": {
+    "clerk": "Karen Braatz",
+    "municipality": "Price",
+    "phone": "608-769-9757",
+    "recordUpdated": "2024-06-21"
+  },
+  "5506769175": {
+    "clerk": "Connie Kakes",
+    "municipality": "Rolling",
+    "phone": "715-219-5302",
+    "recordUpdated": "2023-12-20"
+  },
+  "5506778325": {
+    "clerk": "Janet S Schueller",
+    "municipality": "Summit",
+    "phone": "920-979-2646",
+    "recordUpdated": "2023-11-02"
+  },
+  "5506781950": {
+    "clerk": "Leah Antoniewicz",
+    "deputyClerk": "Irene Buck",
+    "municipality": "Upham",
+    "phone": "715-216-1263",
+    "recordUpdated": "2024-06-21",
+    "url": "http://townofupham.org"
+  },
+  "5506782825": {
+    "clerk": "Brenda Ronk",
+    "municipality": "Vilas",
+    "phone": "262-707-4895",
+    "recordUpdated": "2025-05-13"
+  },
+  "5506788450": {
+    "clerk": "Heather Baker",
+    "municipality": "Wolf River",
+    "phone": "715-882-4492",
+    "recordUpdated": "2023-12-11"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "5512904950": {
+    "clerk": "Jennifer Arnes",
+    "municipality": "Barronett",
+    "phone": "715-468-4185",
+    "recordUpdated": "2023-11-28"
+  },
+  "5512905125": {
+    "clerk": "Stefanie Naessen",
+    "municipality": "Bashaw",
+    "phone": "715-468-4449",
+    "recordUpdated": "2025-04-29",
+    "url": "https://townofbashaw.org/"
+  },
+  "5512905225": {
+    "clerk": "Jan Ingbretson",
+    "municipality": "Bass Lake",
+    "phone": "715-492-8728",
+    "recordUpdated": "2025-04-29"
+  },
+  "5512905875": {
+    "clerk": "Nancy Erickson",
+    "municipality": "Beaver Brook",
+    "phone": "715-635-2726",
+    "recordUpdated": "2024-01-08"
+  },
+  "5512907575": {
+    "clerk": "Nicole Minnick",
+    "municipality": "Birchwood",
+    "phone": "715-354-7047",
+    "recordUpdated": "2023-12-11",
+    "url": "https://www.tn.birchwood.wi.gov/"
+  },
+  "5512910150": {
+    "clerk": "Christine Davis",
+    "municipality": "Brooklyn",
+    "phone": "715-520-7867",
+    "recordUpdated": "2024-01-02"
+  },
+  "5512912925": {
+    "clerk": "Lisa Stowe",
+    "municipality": "Casey",
+    "phone": "715-635-2022",
+    "recordUpdated": "2025-04-29",
+    "url": "https://townofcaseygov.net/"
+  },
+  "5512914425": {
+    "clerk": "Teresa Corrie",
+    "municipality": "Chicog",
+    "phone": "715-466-4129",
+    "recordUpdated": "2024-01-02",
+    "url": "http://townofchicog.com"
+  },
+  "5512917850": {
+    "clerk": "Abigail E Schmidt",
+    "municipality": "Crystal",
+    "phone": "715-635-3540",
+    "recordUpdated": "2021-12-30"
+  },
+  "5512924600": {
+    "clerk": "Shannon Anderson",
+    "municipality": "Evergreen",
+    "phone": "715-210-5358",
+    "recordUpdated": "2026-02-25",
+    "url": "https://townofevergreen.org/"
+  },
+  "5512928025": {
+    "clerk": "Jo A Denninger",
+    "municipality": "Frog Creek",
+    "phone": "715-466-2939",
+    "recordUpdated": "2023-11-19"
+  },
+  "5512931825": {
+    "clerk": "Lolita Olson",
+    "municipality": "Gull Lake",
+    "phone": "715-466-4665",
+    "recordUpdated": "2024-01-16",
+    "url": "https://townofgulllake.us/"
+  },
+  "5512945650": {
+    "clerk": "Debbie Bouma",
+    "municipality": "Long Lake",
+    "phone": "612-308-0706",
+    "recordUpdated": "2023-11-14",
+    "url": "https://townoflonglake.com/"
+  },
+  "5512947025": {
+    "clerk": "Michelle Jung",
+    "municipality": "Madge",
+    "phone": "715-210-6697",
+    "recordUpdated": "2025-10-13",
+    "url": "http://www.townofmadge.com/"
+  },
+  "5512953275": {
+    "clerk": "Susan Conaway",
+    "deputyClerk": "Rhonda Kellen",
+    "municipality": "Minong",
+    "phone": "715-466-5916",
+    "recordUpdated": "2023-12-28",
+    "url": "https://townofminong.us/"
+  },
+  "5512971637": {
+    "clerk": "Victoria G. Lombard",
+    "municipality": "Sarona",
+    "phone": "715-469-3645",
+    "recordUpdated": "2024-07-15"
+  },
+  "5512975650": {
+    "clerk": "Betsy Lambert",
+    "municipality": "Spooner",
+    "phone": "715-939-9861",
+    "recordUpdated": "2025-05-07",
+    "url": "https://www.townofspooner.com/"
+  },
+  "5512975800": {
+    "clerk": "Alece Stubbe",
+    "municipality": "Springbrook",
+    "phone": "715-371-0032",
+    "recordUpdated": "2024-01-11"
+  },
+  "5512977350": {
+    "clerk": "Jill Washkuhn",
+    "municipality": "Stinnett",
+    "phone": "715-634-5300",
+    "recordUpdated": "2025-04-29",
+    "url": "https://www.townofstinnett.com/"
+  },
+  "5512977650": {
+    "clerk": "Michelle Drabek",
+    "deputyClerk": "Jan Clark",
+    "municipality": "Stone Lake",
+    "phone": "715-865-6015",
+    "recordUpdated": "2023-11-19"
+  },
+  "5512980450": {
+    "clerk": "Patti Butterfield",
+    "municipality": "Trego",
+    "phone": "715-520-2020",
+    "recordUpdated": "2024-03-19",
+    "url": "https://townoftregowi.com/"
+  },
+  "_source": {
+    "publisher": "Wisconsin Elections Commission",
+    "sourceFile": "WI Municipal Clerks Updated 8-4-2026.pdf",
+    "sourceUrl": "https://elections.wi.gov/clerks/directory"
+  }
+}
