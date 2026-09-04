@@ -88,11 +88,43 @@ SIMPLIFY_FT = 10.0
 SLIVER_SQFT = 2000.0  # subtraction confetti — well under any annexed house lot
 FEET_PER_DEG_LAT = 364000.0  # the app's own constant (index.html snap block)
 MAX_RESIDUAL_VOIDS = 5       # sibling gaps left in the 15-150 ft band
+PAGE_SIZE = 1000             # every county service here caps at 1,000 per query
+MAX_FETCH_ROWS = 200000      # a runaway pager stops rather than looping forever
 
 RI = ("https://services9.arcgis.com/6FnscPPlUa9DXXOk/arcgis/rest/services/"
       "TaxDistricts/FeatureServer/")
 KENDALL = "https://maps.co.kendall.il.us/server/rest/services/Hosted/"
 MACON = "https://services1.arcgis.com/a3k0qIja5SolIRYR/arcgis/rest/services/"
+BOONE_PARCELS = ("https://maps.boonecountyil.org/arcgis/rest/services/"
+                 "Boone_Sales_Locator/Devnet_Parcels/MapServer/0")
+
+# Boone publishes NO park or library district layer — measured across its whole
+# ArcGIS server (12 folders, 99 services) and its AGOL org. What it does publish
+# is a parcel fabric carrying a tax_code, plus a County Clerk report saying which
+# districts each code pays into, so a district is the union of its own parcels.
+# Both halves are the county's own, which is what separates this from the
+# broadband-contractor statewide layer recorded in the guidebook's backlog.
+#
+# THE CODE SETS COME FROM THE CLERK'S "Taxcode Value within District Report"
+# (tax year 2025), NOT from her "District Rates by Taxcode Report". The rates
+# report lists the codes carrying a RATE LINE for a district, which is a
+# narrower thing: read as a membership list it omits twelve codes on 956
+# parcels, and the first attempt at this build read that omission as the county
+# contradicting itself and stopped.
+BELVIDERE_PARK = "BELVIDERE PARK DISTRICT"
+IDA_LIBRARY = "IDA PUBLIC LIBRARY DISTRICT"
+BOONE_PARK_CODES = {
+        "03008": BELVIDERE_PARK, "05001": BELVIDERE_PARK, "05002": BELVIDERE_PARK, "05005": BELVIDERE_PARK, "05007": BELVIDERE_PARK, "05008": BELVIDERE_PARK,
+        "05009": BELVIDERE_PARK, "05010": BELVIDERE_PARK, "05011": BELVIDERE_PARK, "05012": BELVIDERE_PARK, "05110": BELVIDERE_PARK, "05111": BELVIDERE_PARK,
+        "05901": BELVIDERE_PARK, "05903": BELVIDERE_PARK, "05904": BELVIDERE_PARK, "06004": BELVIDERE_PARK, "06005": BELVIDERE_PARK, "06012": BELVIDERE_PARK,
+        "06111": BELVIDERE_PARK, "07004": BELVIDERE_PARK, "07014": BELVIDERE_PARK, "07044": BELVIDERE_PARK, "08002": BELVIDERE_PARK, "08102": BELVIDERE_PARK,
+        "09700": BELVIDERE_PARK,
+}
+BOONE_LIBRARY_CODES = {
+        "05005": IDA_LIBRARY, "05012": IDA_LIBRARY, "05111": IDA_LIBRARY, "05901": IDA_LIBRARY, "05903": IDA_LIBRARY, "05904": IDA_LIBRARY,
+        "06004": IDA_LIBRARY, "06005": IDA_LIBRARY, "06012": IDA_LIBRARY, "06111": IDA_LIBRARY, "07002": IDA_LIBRARY, "07004": IDA_LIBRARY,
+        "07012": IDA_LIBRARY, "07014": IDA_LIBRARY, "07044": IDA_LIBRARY, "08002": IDA_LIBRARY, "08102": IDA_LIBRARY, "09700": IDA_LIBRARY,
+}
 
 # slug -> source config. name_prop is both the case-insensitive read key and
 # the property the shipped feature carries (upstream casing preserved).
@@ -115,6 +147,23 @@ SOURCES = [
     {"slug": "rock-island-park", "out": "rock-island-park-districts.json",
      "layer": RI + "8", "name_prop": "park_distr", "expect": 1,
      "edit_pin": 1642177768661, "probes": []},
+    # Boone's two, the first sources here whose upstream is a PARCEL FABRIC
+    # rather than a district tiling: 12,264 parcels for the park district and
+    # 8,351 for the library, paged 1,000 at a time. Each `expect` is 1 because
+    # each is a single district, so the guards that carry the weight are the
+    # raw-area retention every source gets and the probes below.
+    {"slug": "boone-park", "out": "boone-park-districts.json",
+     "layer": BOONE_PARCELS, "name_prop": "tax_code", "expect": 1,
+     "code_map": BOONE_PARK_CODES, "where": "tax_code IN ('03008', '05001', '05002', '05005', '05007', '05008', '05009', '05010', '05011', '05012', '05110', '05111', '05901', '05903', '05904', '06004', '06005', '06012', '06111', '07004', '07014', '07044', '08002', '08102', '09700')",
+     "probes": [(42.25670, -88.83936, BELVIDERE_PARK),   # Belvidere City Hall
+                (42.39942, -88.74059, None),             # Capron — outside it
+                (42.36835, -88.82205, None)]},           # Poplar Grove — outside
+    {"slug": "boone-library", "out": "boone-library-districts.json",
+     "layer": BOONE_PARCELS, "name_prop": "tax_code", "expect": 1,
+     "code_map": BOONE_LIBRARY_CODES, "where": "tax_code IN ('05005', '05012', '05111', '05901', '05903', '05904', '06004', '06005', '06012', '06111', '07002', '07004', '07012', '07014', '07044', '08002', '08102', '09700')",
+     "probes": [(42.25670, -88.83936, IDA_LIBRARY),      # Belvidere City Hall
+                (42.39942, -88.74059, None),             # Capron (N. Suburban)
+                (42.36835, -88.82205, None)]},           # Poplar Grove
     {"slug": "kendall-fire", "out": "kendall-fire-districts.json",
      "layer": KENDALL + "Fire_Protection_Districts/FeatureServer/0",
      "name_prop": "fire", "expect": 10,
@@ -241,9 +290,32 @@ def build_source(cfg):
         print("  (no edit stamp published — count+name pin is the guard; "
               "live stamp: %r)" % edit_ms)
 
-    geo = requests.get(cfg["layer"] + "/query", params={
-        "where": "1=1", "outFields": "*", "outSR": 4326, "f": "geojson",
-    }, timeout=180).json()
+    # WHERE + PAGINATION, because Boone's upstream is not a district tiling.
+    # Every other source here publishes one row per district (9 to 40 of them),
+    # so a single unpaginated query was right and its 1,000-row cap was never
+    # near. Boone publishes no district layer at all: its park and library
+    # footprints exist only as PARCELS carrying a tax_code, 12,264 and 8,351 of
+    # them, and the same one-shot query would have returned the first 1,000 and
+    # said nothing — a district drawn from 8% of its own ground, silently. So
+    # the fetch pages, and REFUSES rather than truncating if the server still
+    # reports more to give.
+    where = cfg.get("where", "1=1")
+    features, offset = [], 0
+    while True:
+        page = requests.get(cfg["layer"] + "/query", params={
+            "where": where, "outFields": "*", "outSR": 4326, "f": "geojson",
+            "resultOffset": offset, "resultRecordCount": PAGE_SIZE,
+        }, timeout=180).json()
+        got = page.get("features") or []
+        features += got
+        if not page.get("exceededTransferLimit") or not got:
+            break
+        offset += len(got)
+        if offset > MAX_FETCH_ROWS:
+            fail("%s: fetch passed %d rows without the server saying it was "
+                 "done — refusing to guess where the data ends"
+                 % (cfg["slug"], MAX_FETCH_ROWS))
+    geo = {"features": features}
 
     named, blanks = {}, 0
     excl = set(cfg.get("exclude_names", []))
@@ -253,6 +325,14 @@ def build_source(cfg):
         for k in props:
             if k.lower() == cfg["name_prop"].lower():
                 v = props[k]
+        # A code_map source names its district from a LOOKUP rather than from
+        # the row: Boone's parcels carry a tax_code, and which districts each
+        # code pays into is the County Clerk's own "Taxcode Value within
+        # District Report". A code the map does not carry is skipped, not
+        # guessed — the where clause should already have excluded it, and a row
+        # arriving anyway means the county changed something.
+        if cfg.get("code_map") is not None:
+            v = cfg["code_map"].get(" ".join(str(v or "").split()))
         name = " ".join(str(v or "").split())
         if not name:
             blanks += 1
