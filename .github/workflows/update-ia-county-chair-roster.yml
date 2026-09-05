@@ -33,8 +33,9 @@ name: Update IA county board chair roster
 #     chair word sits ONE character from a supervisor and belongs to the man in
 #     front of it. This is the Franklin trap, and the earlier attempt at this
 #     file walked straight into it and shipped Keokuk's vice-chairman.
-#   * PROXIMITY — at most 30 characters apart. Widest true pairing measured 25;
-#     tightest false one 84.
+#   * PROXIMITY — at most 30 characters apart. Widest true pairing measured 28
+#     (Muscatine, two under the cap); tightest false one 84, exactly three
+#     times that.
 #
 # AND ONE TEST THAT IS NOT STRUCTURAL AT ALL, which no structural test can
 # replace: the page has to be the BOARD's page. Des Moines County's
