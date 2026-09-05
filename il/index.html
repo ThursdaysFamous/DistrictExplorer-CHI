@@ -14611,16 +14611,50 @@ function initChiExplorer() {
    * police-district card still surfaces each district station's phone from
    * the CPD source (loadPoliceStations, which stays for that join). */
   var USGS_STRUCTURES = "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer";
+  /* THIS LOADER PAGES, AND THE REASON IS A MEASURED DEFECT RATHER THAN A
+   * PRECAUTION. It issued ONE request per layer until 2026-09-05. The service
+   * caps at maxRecordCount 2,000 and answers `exceededTransferLimit: true`
+   * when it truncates, and against Illinois's envelope the fire-station layer
+   * (L51) holds 2,820 — so the nearest-3 card was computed over 2,000 of them
+   * and could name the wrong nearest station for a reader beside one of the
+   * 820 never fetched. Nothing failed and nothing looked wrong: a truncated
+   * FeatureCollection is a valid FeatureCollection, and a nearest-N card
+   * always has an answer. Measured the same day, the other two are under the
+   * cap — post offices 1,946 and police stations 1,148 — but post offices
+   * clear it by 54, which is one year of the dataset growing, and a loader
+   * that is correct only while a national dataset stays small is not correct.
+   *
+   * Michigan's mi/index.html usgsStructuresLoader is the shape this follows.
+   * The continuation guard is loadArcGISPaged's and matters for the same
+   * reason it does there: advance by feats.length and continue while the
+   * server flags more AND the page was non-empty, so a service that caps
+   * BELOW the requested page size still terminates and never ships short.
+   * The engine's own loadArcGISPaged cannot be reused here — it queries
+   * `where=1=1` with no geometry, and every layer here is envelope-filtered. */
   function makeUsgsStructuresLoader(layerIndex, label) {
+    var PAGE = 2000;             // the service's own maxRecordCount
     return makeCached(function () {
-      var url = USGS_STRUCTURES + "/" + layerIndex + "/query?geometry=" +
+      var base = USGS_STRUCTURES + "/" + layerIndex + "/query?geometry=" +
         [METRO_BBOX.minLng, METRO_BBOX.minLat, METRO_BBOX.maxLng, METRO_BBOX.maxLat].join(",") +
         "&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects" +
         "&where=1%3D1&outFields=NAME,ADDRESS,CITY,STATE,ZIPCODE&outSR=4326&f=geojson&geometryPrecision=6";
-      return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2).then(function (gj) {
-        if (!hasUsableGeometry(gj)) throw new Error("no usable geometry from USGS structures layer " + layerIndex + " (" + label + ")");
-        return gj;
-      });
+      function page(offset, acc) {
+        var url = base + "&resultRecordCount=" + PAGE + "&resultOffset=" + offset;
+        return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2).then(function (gj) {
+          var feats = (gj && gj.features) || [];
+          acc = acc.concat(feats);
+          var more = gj && (gj.exceededTransferLimit ||
+                            (gj.properties && gj.properties.exceededTransferLimit));
+          if (more && feats.length > 0) return page(offset + feats.length, acc);
+          var out = { type: "FeatureCollection", features: acc };
+          // Same "200 but useless" guard the single-request form applied: an
+          // Esri error envelope 200s carrying no geometry, and makeCached would
+          // otherwise pin that empty response for the whole session.
+          if (!hasUsableGeometry(out)) throw new Error("no usable geometry from USGS structures layer " + layerIndex + " (" + label + ")");
+          return out;
+        });
+      }
+      return page(0, []);
     });
   }
   var loadUsgsPoliceStations = makeUsgsStructuresLoader(53, "police stations");
