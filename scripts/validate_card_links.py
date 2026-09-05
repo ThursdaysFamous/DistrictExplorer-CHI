@@ -350,9 +350,9 @@ EXPECTED_UNREACHABLE = {
     "fdlco.wi.gov":
         "Akamai \"Access Denied\" — the client-fingerprint block that makes the "
         "county's board roster ride the Internet Archive instead",
-    # DETROIT IS FOND DU LAC'S SHAPE, ONE TIER DOWN: the mi `detroit-council`
-    # card links the city's own council page, that page refuses this client,
-    # and the nine members behind it are refreshed weekly through the Internet
+    # DETROIT IS FOND DU LAC'S SHAPE, ONE TIER DOWN: the mi `city-ward` card's
+    # Detroit entry links the city's own council page, that page refuses this
+    # client, and the nine members behind it are refreshed weekly through the
     # Archive's copy of it (mi/scripts/mi_detroit_council_scraper.py). Measured
     # 2026-09-05 on the front door, the council page and robots.txt alike, on
     # the plain requests rung AND the stdlib client-hints rung that unblocked

@@ -279,7 +279,7 @@
       "label": "EMS Service Area",
       "group": "safety",
       "area_rank": 12,
-      "rank_note": "579 dissolved EMS dispatch areas statewide — regional ambulance services keep the average above the law layer's 639 and the county-board fabric",
+      "rank_note": "580 dissolved EMS dispatch areas statewide — regional ambulance services keep the average above the law layer's 639 and the county-board fabric",
       "source": {
         "answers": "The emergency medical service dispatched at the point, per the state's NG911 dataset — a response-area fact, never a taxing district or an elected body, so the card names no officeholder. Where a county 911 authority has not filed — four counties plus provisioning-less Langlade, recorded as gap ng911-ems-filings — the card says so instead of hiding.",
         "boundary": [
@@ -1352,25 +1352,25 @@
         "file": "fire-service-areas.json",
         "min_features": 1046,
         "max_features": 1046,
-        "note": "1,046 fire-department dispatch areas — the OEC's 3,009 effective NG911 FireBoundary polygons dissolved per agency by wi/scripts/build_wi_ng911_service_areas.py (expired rows dropped by date; filing-absence and 100.000% name-set agreement gates). An operator rebuild; the monthly source report watches the layer counts."
+        "note": "1,046 fire-department dispatch areas — the OEC's 3,009 effective NG911 FireBoundary polygons dissolved per agency by wi/scripts/build_wi_ng911_service_areas.py (expired rows dropped by date; filing-absence and 100.000% name-set agreement gates). An operator rebuild whose staleness the monthly source report now MEASURES against wi/data/source/ng911/built-rows.json, rather than merely fetching a count it discarded."
       },
       {
         "file": "law-service-areas.json",
         "min_features": 639,
         "max_features": 639,
-        "note": "639 law-enforcement dispatch areas — the OEC's 3,083 effective NG911 LawEnforcementBoundary polygons dissolved per agency; plain -dissolve, never -dissolve2, so the concurrent-jurisdiction overlaps the counties filed survive (measured). Same builder and gates as the fire file."
+        "note": "639 law-enforcement dispatch areas — the OEC's 3,077 effective NG911 LawEnforcementBoundary polygons (18 expired dropped, 3,095 rows total) dissolved per agency; plain -dissolve, never -dissolve2, so the concurrent-jurisdiction overlaps the counties filed survive (measured). Same builder and gates as the fire file, staleness included."
       },
       {
         "file": "psap-areas.json",
         "min_features": 95,
         "max_features": 95,
-        "note": "95 public safety answering points — the OEC's 205 effective NG911 PSAPBoundary polygons dissolved per agency (11 future-dated Expire rows KEPT, the case that proves the drop-by-date rule; 3 expired dropped). Same builder and gates as the fire/law files; an operator rebuild watched by the monthly source report."
+        "note": "95 public safety answering points — the OEC's 205 effective NG911 PSAPBoundary polygons dissolved per agency (11 future-dated Expire rows KEPT, the case that proves the drop-by-date rule; 3 expired dropped). Same builder and gates as the fire/law files, staleness included."
       },
       {
         "file": "ems-service-areas.json",
-        "min_features": 579,
-        "max_features": 579,
-        "note": "579 EMS dispatch areas — the OEC's 2,443 effective NG911 EmergencyMedicalServicesBoundary polygons dissolved per agency (34 expired rows dropped by date). Same builder and gates as the other three NG911 files; an operator rebuild watched by the monthly source report."
+        "min_features": 580,
+        "max_features": 580,
+        "note": "580 EMS dispatch areas — the OEC's 2,444 effective NG911 EmergencyMedicalServicesBoundary polygons dissolved per agency (34 expired rows dropped by date). Same builder and gates as the other three NG911 files. The 580th arrived 2026-09-05: Waushara filed the City of Berlin's own ambulance service over the city's Waushara half, where this app had been answering Poy Sippi. An operator rebuild whose staleness the monthly source report now MEASURES against wi/data/source/ng911/built-rows.json — before that it fetched a row count and read only whether the endpoint answered."
       },
       {
         "file": "mpd-squad-areas.json",
@@ -2361,7 +2361,7 @@
     ]
   },
   "sw": {
-    "cache_name": "districtry-wi-shell-v34",
+    "cache_name": "districtry-wi-shell-v35",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",

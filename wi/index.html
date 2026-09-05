@@ -5991,7 +5991,7 @@ function initWisconsinExplorer() {
     "school-district-secondary", // Union high school districts (TIGERweb School layer 1, live) — the 9-12 half of Wisconsin's paired territory; unified territory resolves on the Unified card instead
     "school-district-unified", // Unified (K-12) school districts; pre-built from TIGERweb at bootstrap
     "school-district-elementary", // Elementary (K-8) school districts (TIGERweb School layer 2, live) — the feeder half of the paired territory
-    "ems-service",       // 579 dissolved EMS dispatch areas statewide — regional ambulance services keep the average above the law layer's 639 and the county-board fabric
+    "ems-service",       // 580 dissolved EMS dispatch areas statewide — regional ambulance services keep the average above the law layer's 639 and the county-board fabric
     "law-service",       // 639 dissolved law-enforcement dispatch areas statewide — sheriffs' unincorporated territory keeps the average above the county-board fabric
     "fire-service",      // 1,046 dissolved fire-department response areas statewide — denser than the law layer (town departments), broader than the county-board fabric
     "county-board",      // County board supervisory districts — 1,590 across all 72 counties; smaller than a school district, larger than the average town
@@ -7677,6 +7677,12 @@ function initWisconsinExplorer() {
   /* ---------- case-insensitive property lookup — Socrata field-name casing/
    * naming varies dataset to dataset (see probeGeometryColumn's rationale) ---------- */
   function findPropCI(props, candidates) {
+    // CANDIDATES MUST BE LOWERCASE. This lowercases the property KEY and
+    // compares it against the candidate exactly as given, so "Ward" can never
+    // match anything. Measured 2026-09-05: a Grand Rapids entry passing
+    // ["Ward", "WARD"] rendered "Unknown ward" on a card whose feature plainly
+    // carried Ward, and Detroit's ["District", "district_number"] was working
+    // only through its second, already-lowercase candidate.
     if (!props) return null;
     var keys = Object.keys(props);
     for (var c = 0; c < candidates.length; c++) {
@@ -10703,8 +10709,8 @@ function initWisconsinExplorer() {
    * public feature service ("free and open for use by the public", updated
    * roughly weekly), and wi/scripts/build_wi_ng911_service_areas.py
    * pre-builds the per-agency dissolve — 3,009 fire polygons into 1,046
-   * department areas, 3,083 law polygons into 639 agency areas, 2,443 EMS
-   * polygons into 579 services, and 205 PSAP polygons into 95 answering
+   * department areas, 3,077 law polygons into 639 agency areas, 2,444 EMS
+   * polygons into 580 services, and 205 PSAP polygons into 95 answering
    * points at first build (PSAP is the tiling with FUTURE-dated Expire
    * rows, which is why the builder drops expired rows by date, never by
    * presence; EMS re-proves the pair key on regional ambulance services

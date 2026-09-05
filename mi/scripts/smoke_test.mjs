@@ -608,6 +608,103 @@ try {
       /Lansing, MI/.test(text), text.slice(0, 140));
     await context.close();
   }
+
+  // 7. The dispatched city-ward card, PER WARD — the one surface in this
+  //    instance that nothing else here reaches. The anchor point is in Lansing,
+  //    where `city-ward` is out of coverage and hides, so every check above
+  //    runs with this layer switched off and two cities' cards unexercised.
+  //
+  //    THE BUG THIS EXISTS FOR SHIPPED AND WAS CAUGHT BY A HUMAN READING THE
+  //    DIFF. Grand Rapids elects two commissioners per ward and publishes one
+  //    for Ward 1, so the card carries a row explaining the seat it cannot
+  //    name. That row was a ward-agnostic string literal naming the First
+  //    Ward's predecessor: it fired on ANY ward the city named short, so a
+  //    later vacancy in Ward 2 or 3 would have rendered his name on the wrong
+  //    card. It now renders from a per-ward `vacancies` entry in the roster.
+  //
+  //    Both points are same-origin (`data/app` geometry + roster), so this is
+  //    deterministic and needs no network. A FULL ward is checked as well as a
+  //    short one, because a row that never appears and a row that always
+  //    appears both pass a check that only ever looks at Ward 1.
+  {
+    const context = await browser.newContext({ serviceWorkers: "block" });
+    const WARD_POINTS = [
+      // Interior points of the shipped ward polygons.
+      { label: "Ward 1", pt: "42.96014,-85.69428", ward: "1", short: true },
+      { label: "Ward 2", pt: "42.99099,-85.63380", ward: "2", short: false },
+    ];
+    for (const w of WARD_POINTS) {
+      const page = await booted(context, `${BASE}#point=${w.pt}&layers=city-ward`);
+      const card = await cardText(page, "city-ward");
+      const got = await page.evaluate(() => {
+        const el = document.getElementById("card-city-ward");
+        if (!el) return null;
+        const row = el.querySelector(".card-linkrow");
+        return {
+          names: [...el.querySelectorAll(".card-person-name")].map((n) => n.textContent),
+          rowNote: row ? (row.querySelector(".card-linkrow-note") || {}).textContent || "" : null,
+          rowLinks: row ? [...row.querySelectorAll("a")].map((a) => a.href) : [],
+        };
+      });
+      const pill = await page.evaluate(() => {
+        const el = document.getElementById("card-city-ward");
+        const p = el && el.parentElement ? el.parentElement.querySelector(".card-id-pill") : null;
+        return p ? p.textContent.trim() : null;
+      });
+      check(`city-ward names ${w.label} at a point inside it`,
+        pill === `Ward ${w.ward}`, `pill=${JSON.stringify(pill)}`);
+      check(`city-ward names ${w.label}'s own commissioners`,
+        !!got && got.names.length > 0 && !/Unknown/.test(card.text || ""),
+        JSON.stringify(got && got.names));
+      if (w.short) {
+        check(`${w.label}'s unfilled seat is explained from the roster, not a literal`,
+          !!got && got.rowNote !== null && /former Commissioner/.test(got.rowNote),
+          (got && got.rowNote ? got.rowNote.slice(0, 120) : "(no row)"));
+        check(`${w.label}'s explanation LINKS the city's own announcement`,
+          !!got && got.rowLinks.some((h) => /grandrapidsmi\.gov\/city-news\/posts\//.test(h)),
+          JSON.stringify(got && got.rowLinks));
+      } else {
+        // The half that catches a ward-agnostic row: a ward the city names in
+        // full must carry no shortfall row and nobody else's predecessor.
+        check(`${w.label} carries no unfilled-seat row`,
+          !!got && got.rowNote === null, JSON.stringify(got && got.rowNote));
+        check(`${w.label} names no other ward's predecessor`,
+          !/former Commissioner/.test(card.text || ""), (card.text || "").slice(0, 120));
+      }
+      await page.close();
+    }
+
+    // THE SCENARIO THAT ACTUALLY CATCHES THE ORIGINAL BUG, and the two checks
+    // above do not. The ward-agnostic literal only misfired on a ward the city
+    // named SHORT, and Wards 2 and 3 are named in full — so under the broken
+    // code every check above still passes. The only way to exercise it is to
+    // make a full ward short, which means stubbing the roster: Ward 2 with one
+    // commissioner and a `vacancies` map that knows only about Ward 1. The old
+    // code renders Ward 1's predecessor on that card. The new code renders the
+    // neutral sentence, because there is no Ward 2 vacancy to state.
+    {
+      const stub = JSON.parse(readFileSync(join(INSTANCE_DIR, "data", "app",
+        "mi-grand-rapids-council-members.json"), "utf8"));
+      stub.wards["2"] = stub.wards["2"].slice(0, 1);
+      const page = await booted(context, `${BASE}#point=42.99099,-85.63380&layers=city-ward`,
+        (p2) => p2.route("**/data/app/mi-grand-rapids-council-members.json", (r) =>
+          r.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(stub) })));
+      const card = await cardText(page, "city-ward");
+      const note = await page.evaluate(() => {
+        const el = document.getElementById("card-city-ward");
+        const row = el && el.querySelector(".card-linkrow");
+        return row ? (row.querySelector(".card-linkrow-note") || {}).textContent || "" : null;
+      });
+      check("a ward short with no recorded vacancy says so and names NOBODY",
+        note !== null && /not listed there/.test(note) && !/former Commissioner/.test(note),
+        note === null ? "(no row at all)" : note.slice(0, 160));
+      check("a ward short with no recorded vacancy links no other ward's notice",
+        !/city-news\/posts\//.test(card.text || "") &&
+        !/Drew Robbins/.test(card.text || ""), (card.text || "").slice(0, 160));
+      await page.close();
+    }
+    await context.close();
+  }
 } finally {
   await browser.close();
 }
