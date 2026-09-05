@@ -26,7 +26,7 @@
 | Adams | 17001 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district` | 2 — `adams-county-board-roster` (no-source); `quincy-ward-officeholders` (no-source) |
 | Alexander | 17003 | County card | at-large — County card | — | none |
 | Bond | 17005 | judicial circuit | no board layer — see gaps | — | 1 — `bond-county-board-districts` (no-source) |
-| Boone | 17007 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 4 — `boone-fire-belvidere-city` (data-quality); `boone-fire-names` (data-quality); `boone-park-library-contact` (no-source); `county-board-office-addresses` (no-source) |
+| Boone | 17007 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 3 — `boone-fire-belvidere-city` (data-quality); `boone-fire-names` (data-quality); `county-board-office-addresses` (no-source) |
 | Brown | 17009 | County card | at-large — County card | — | 1 — `brown-precinct-geometry` (no-source) |
 | Calhoun | 17013 | dispatch | at-large — County card | `county-precinct` | none |
 | Carroll | 17015 | dispatch | districted | `county-board`, `county-precinct` | 3 — `carroll-special-districts` (no-source); `carroll-ward-geometry` (no-source); `county-board-office-addresses` (no-source) |
@@ -139,4 +139,4 @@ Counties outside the coverage ring that a research pass has already measured; ea
 
 ## Gap records not tagged to a county (1)
 
-City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 100 records in the Data gaps panel: `chicago-amenity-phones`.
+City- or app-scoped records with no `counties` tag, listed so the table reconciles with the 99 records in the Data gaps panel: `chicago-amenity-phones`.

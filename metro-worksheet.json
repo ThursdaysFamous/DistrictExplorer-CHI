@@ -28,18 +28,84 @@
   "repo_issues": "https://github.com/ThursdaysFamous/districtry/issues/new",
   "feedback_subject": "districtry Illinois feedback",
   "metro_explorers": [
-    { "id": "chicago", "label": "Illinois", "url": "https://districtry.com/il/", "emoji": "🌭", "explorer_name": "districtry Illinois",
-      "bbox": { "minLng": -91.52, "minLat": 36.96, "maxLng": -87.01, "maxLat": 42.51 } },
-    { "id": "nyc", "label": "New York City", "url": "https://districtry.com/ny/", "emoji": "🗽", "explorer_name": "districtry New York City",
-      "bbox": { "minLng": -74.3, "minLat": 40.45, "maxLng": -73.6, "maxLat": 41.0 } },
-    { "id": "sf", "label": "San Francisco", "url": "https://districtry.com/ca/", "emoji": "🌉", "explorer_name": "districtry San Francisco",
-      "bbox": { "minLng": -122.6, "minLat": 37.6, "maxLng": -122.3, "maxLat": 37.95 } },
-    { "id": "wisconsin", "label": "Wisconsin", "url": "https://districtry.com/wi/", "emoji": "🧀", "explorer_name": "districtry Wisconsin",
-      "bbox": { "minLng": -92.89, "minLat": 42.49, "maxLng": -86.25, "maxLat": 47.31 } },
-    { "id": "iowa", "label": "Iowa", "url": "https://districtry.com/ia/", "emoji": "🌽", "explorer_name": "districtry Iowa",
-      "bbox": { "minLng": -96.64, "minLat": 40.37, "maxLng": -90.14, "maxLat": 43.5 } },
-    { "id": "michigan", "label": "Michigan", "url": "https://districtry.com/mi/", "emoji": "🚗", "explorer_name": "districtry Michigan",
-      "bbox": { "minLng": -87.6, "minLat": 41.7, "maxLng": -82.11, "maxLat": 48.01 } }
+    {
+      "id": "chicago",
+      "label": "Illinois",
+      "url": "https://districtry.com/il/",
+      "emoji": "🌭",
+      "explorer_name": "districtry Illinois",
+      "bbox": {
+        "minLng": -91.52,
+        "minLat": 36.96,
+        "maxLng": -87.01,
+        "maxLat": 42.51
+      }
+    },
+    {
+      "id": "nyc",
+      "label": "New York City",
+      "url": "https://districtry.com/ny/",
+      "emoji": "🗽",
+      "explorer_name": "districtry New York City",
+      "bbox": {
+        "minLng": -74.3,
+        "minLat": 40.45,
+        "maxLng": -73.6,
+        "maxLat": 41.0
+      }
+    },
+    {
+      "id": "sf",
+      "label": "San Francisco",
+      "url": "https://districtry.com/ca/",
+      "emoji": "🌉",
+      "explorer_name": "districtry San Francisco",
+      "bbox": {
+        "minLng": -122.6,
+        "minLat": 37.6,
+        "maxLng": -122.3,
+        "maxLat": 37.95
+      }
+    },
+    {
+      "id": "wisconsin",
+      "label": "Wisconsin",
+      "url": "https://districtry.com/wi/",
+      "emoji": "🧀",
+      "explorer_name": "districtry Wisconsin",
+      "bbox": {
+        "minLng": -92.89,
+        "minLat": 42.49,
+        "maxLng": -86.25,
+        "maxLat": 47.31
+      }
+    },
+    {
+      "id": "iowa",
+      "label": "Iowa",
+      "url": "https://districtry.com/ia/",
+      "emoji": "🌽",
+      "explorer_name": "districtry Iowa",
+      "bbox": {
+        "minLng": -96.64,
+        "minLat": 40.37,
+        "maxLng": -90.14,
+        "maxLat": 43.5
+      }
+    },
+    {
+      "id": "michigan",
+      "label": "Michigan",
+      "url": "https://districtry.com/mi/",
+      "emoji": "🚗",
+      "explorer_name": "districtry Michigan",
+      "bbox": {
+        "minLng": -87.6,
+        "minLat": 41.7,
+        "maxLng": -82.11,
+        "maxLat": 48.01
+      }
+    }
   ],
   "hover_number_keys": [
     [
@@ -935,7 +1001,7 @@
         "file": "belvidere-city-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "City of Belvidere corporate limits (scripts/build_place_outline.py) \u2014 the ONLY municipal outline this instance ships, and it exists to carve one hole in a county source rather than to draw a city. Boone's Fire_Districts layer tiles every acre of the county, so a Belvidere address returned Fire District 2 while the Clerk's own district-rates report gives 18 of 55 tax codes no fire line at all \u2014 those 18 being the city's, which runs a MUNICIPAL fire department. TWENTY-TWO of its twenty-four rings are HOLES, unincorporated pockets the city annexed around, and they are load-bearing: a resident of one is not in the city, so they ARE in the fire district and keep their card. The even-odd test both the builder and pointInGeometry use gets that right, and the builder gates its own area against the Census's published AREALAND so a hole counted as solid (43.05 km\u00b2 against a real 35.19) fails the build."
+        "note": "City of Belvidere corporate limits (scripts/build_place_outline.py) — the ONLY municipal outline this instance ships, and it exists to carve one hole in a county source rather than to draw a city. Boone's Fire_Districts layer tiles every acre of the county, so a Belvidere address returned Fire District 2 while the Clerk's own district-rates report gives 18 of 55 tax codes no fire line at all — those 18 being the city's, which runs a MUNICIPAL fire department. TWENTY-TWO of its twenty-four rings are HOLES, unincorporated pockets the city annexed around, and they are load-bearing: a resident of one is not in the city, so they ARE in the fire district and keep their card. The even-odd test both the builder and pointInGeometry use gets that right, and the builder gates its own area against the Census's published AREALAND so a hole counted as solid (43.05 km² against a real 35.19) fails the build."
       },
       {
         "file": "bond-county-outline.json",
@@ -1725,7 +1791,7 @@
         "file": "municipal-ward-coverage.json",
         "min_features": 50,
         "max_features": 76,
-        "note": "Ward-electing municipalities' outlines, tagged by dispatch entry — the cheap same-origin coverage test for every non-Chicago entry of the ward layer, metro or not (build_municipal_ward_coverage.py; Rockford is the first outside the metro, Moline and Silvis the first on the Mississippi, Mendota the first whose seats were already in the roster before its geometry was). 71 municipalities across twenty-five entries as of 2026-09-04, when Madison's six ward cities joined on one county layer; the pass-6 ward tranche (2026-08-02) had taken it to 56 across twenty-one. THE COUNT MOVES WITHOUT A SOURCE BEING ADDED: build_municipal_ward_coverage.py queries TIGERweb's place service UNPINNED, so any rebuild adopts that day's vintage for every municipality already here \u2014 Madison's six re-drew 22 unrelated outlines \u2014 which is why the builder now names what it redrew and why this bound has room above the current count."
+        "note": "Ward-electing municipalities' outlines, tagged by dispatch entry — the cheap same-origin coverage test for every non-Chicago entry of the ward layer, metro or not (build_municipal_ward_coverage.py; Rockford is the first outside the metro, Moline and Silvis the first on the Mississippi, Mendota the first whose seats were already in the roster before its geometry was). 71 municipalities across twenty-five entries as of 2026-09-04, when Madison's six ward cities joined on one county layer; the pass-6 ward tranche (2026-08-02) had taken it to 56 across twenty-one. THE COUNT MOVES WITHOUT A SOURCE BEING ADDED: build_municipal_ward_coverage.py queries TIGERweb's place service UNPINNED, so any rebuild adopts that day's vintage for every municipality already here — Madison's six re-drew 22 unrelated outlines — which is why the builder now names what it redrew and why this bound has room above the current count."
       },
       {
         "file": "ogle-county-board-districts.json",
@@ -2549,6 +2615,11 @@
         "file": "st-clair-precinct-polling.json",
         "min_keys": 3,
         "note": "St. Clair's precinct -> polling place table — 149 precincts with a place and address, plus the county's one bare East St Louis feature carrying the Clerk's explanation that the city runs its own Board of Election Commissioners. THE SOURCE IS A CLERK-SENT DOCUMENT, NOT A PAGE: the county's published list groups precincts under combined human labels ('Belleville9,10, 12 & 16') that cannot be matched to single precincts without interpreting prose, which is what the st-clair-precinct-polling-places gap recorded since 31 Jul 2026. Asked for the same assignment one row per precinct, Sarah Hermsdorfer of the Clerk's Election Department sent 'St Clair County IL Polling Places.xlsx' on 2026-08-26; it is archived as a faithful CSV transcription under data/source/raw/ and joined by scripts/build_stclair_precinct_polling.py against the county's own precinct layer (prec_name2), so the shipped keys are exactly the strings the app looks up. THE SHEET'S HEADER IS A TRAP — its first column is titled POLLING PLACE and holds the PRECINCT name. One enumerated alias (the layer's 'Ofallon n' for the Clerk's 'O FALLON n'); the build fails on any other mismatch, any double-join, or any unmatched layer precinct besides East St Louis. FOUR ROWS CARRY THE CLERK'S ADVANCE NOTICE: Centreville 2, 5, 7 and 8 are set to move to the new Cahokia High School (805 Camp Jackson Rd) once the County Board votes on the change — the current assignment ships, the note rides those cards, and the file is stale for those four the day that vote passes. Operator step like Logan's and Carroll's: re-run when the Clerk sends an update."
+      },
+      {
+        "file": "boone-district-officials.json",
+        "min_keys": 4,
+        "note": "The office and board of Boone County's five park and library taxing bodies, keyed by the same district name the two parcel-dissolve boundary files carry — the card joins the two, and scripts/build_boone_district_officials.py REFUSES TO WRITE unless the roster's keys are exactly the districts drawn, because a name drifting apart would empty a contact block silently while the polygon still drew. THE CLERK'S YEARBOOK OWNS THE OFFICE AND DOES NOT OWN EVERY BOARD, which is the correction this build made to its own gap record. The booklet supplies the address, telephone, fax, website and agency head for all five, and the four commissioners of the Belvidere Park District, which publishes no board page of its own. It is SUPERSEDED for Ida Public Library: the library's own board page names a different board and states the mechanism — an annual officer election on 28 July 2026, three weeks after the 2026 edition's own 7 July date — so Ida's eight trustees and its ONE OPEN SEAT come from the library, and the disagreement is printed every run rather than reconciled away. A vacancy is the thing an annual snapshot can never show, which is why the snapshot's completeness is evidence against it (the mi-commissioner-roster reasoning). Rockford Park District's five commissioners, Cherry Valley's seven trustees and North Suburban's seven likewise come from those bodies' own publications, which the booklet does not carry at all. CHERRY VALLEY WAS NEARLY SHIPPED AS 'no board published' OFF ONE HTTP 502 — it publishes seven trustees with a term year and an individual address each, so the scraper now retries a 5xx before believing it. Four Belvidere Park staff (a park attorney and three superintendents) parse cleanly and are dropped on purpose: they are employees, not the governing body. Ida's director address ships as the library's own mindyl@ rather than the yearbook's mistyped mindlyl@, the one place a second publisher settles which spelling is right."
       }
     ]
   },
@@ -2911,6 +2982,11 @@
       "file": "update-clay-county-board-roster.yml",
       "purpose": "Clay County Board roster (14 members across 14 lettered districts, 14/14 with a phone) from the county's own members page + the redistricting tripwire: the same run re-reads the county-board page's Districts section letter by letter and fails if it stops matching the shipped composition (the village-limits line splitting Clay City between districts A and B came from the Clerk's e-mail, and no page re-read can trip a line the page never draws)",
       "schedule": "Sat 21:00 UTC"
+    },
+    {
+      "file": "update-boone-district-officials.yml",
+      "purpose": "Boone County's five park and library districts' office and board. The County Clerk's Year Book supplies the office — address, telephone, fax, website and agency head — for all five; every BOARD comes from that body's own published page, because the booklet is an annual snapshot and two of the five boards are a seat short (Belvidere Park District's own page calls it a 'five member Board of Commissioners' and names four; Ida Public Library's lists eight trustees and the word 'Open'). Where both name the same person the booklet's term-expiry year rides along. The builder refuses to write unless the roster's keys are exactly the districts the two boundary files draw",
+      "schedule": "Wed 22:00 UTC"
     }
   ],
   "geocoder": {
