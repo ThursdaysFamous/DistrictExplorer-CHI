@@ -707,7 +707,7 @@ Jennifer Harper, Piatt County Clerk — `countyclerk@piatt.gov`
 | Ford | Kelsie Vaughn, `clerk@fordcounty.illinois.gov` | 3 Aug | 16 Aug | 2nd follow-up |
 | Christian | Jodie Badman, `elections@christiancountyil.com` | 5 Aug (+ the Taylorville 9 question 21 Aug) | 16 Aug | 2nd follow-up |
 | Piatt | Jennifer Harper, `countyclerk@piatt.gov` | 3 Aug | 16 Aug | 2nd follow-up — **NARROWED 2026-09-04**, see below |
-| Knox | Scott G. Erickson, `serickson@knoxcountyil.gov` | 5 Aug | 16 and 24 Aug — **the 24th is UNCONFIRMED, see below** | already two — record UNRESPONSIVE if this one is silent |
+| Knox | Scott G. Erickson, `serickson@knoxcountyil.gov` | 5 Aug | 16 and 24 Aug | already two — record UNRESPONSIVE if this one is silent |
 
 Each follow-up restates the ONE question and offers a no. The Ford one, as the shape:
 
@@ -739,19 +739,23 @@ this ask, never about the county. Note also that Knox's own board-members page t
 to be readable after all (2026-09-03), so the county is less dark than its record implied;
 the precinct question is the part still genuinely open.
 
-**And the two ledgers disagreed about the 24 August note — FOR THE OPERATOR TO SETTLE.**
-The row above puts 24 Aug in the follow-up column, i.e. a note that WENT. Until 2026-09-05
-the `knox-precinct-geometry` blocker said the opposite in as many words: "a fourth note was
-drafted 24 Aug 2026 onto the same thread" and "its draft is unchanged". Both cannot be true,
-and the difference is not bookkeeping — it decides whether Clerk Erickson has been written
-to three times or twice, and therefore whether the ask above is his fourth note or his
-third. The gap record has been corrected to match THIS file, on the narrow ground that a
-dated entry in a follow-ups column is the stronger claim and "drafted" the weaker one. That
-is a tie-break, not a measurement: **only the sent mail can settle it, and this repo cannot
-read it.** If 24 Aug never went, correct the row here first and the blocker second — and
-the ask below then becomes the SECOND follow-up rather than the third, which by rule 3
-means Knox is not near unresponsive at all. What is not acceptable is leaving two files in
-one repository saying different things about whether a stranger has been written to.
+**The two ledgers disagreed about the 24 August note, and the operator settled it.**
+This row puts 24 Aug in the follow-up column, i.e. a note that WENT, while the
+`knox-precinct-geometry` blocker said the opposite in as many words until 2026-09-05: "a
+fourth note was drafted 24 Aug 2026 onto the same thread" and "its draft is unchanged".
+Both could not be true, and the difference was not bookkeeping — it decides whether Clerk
+Erickson has been written to three times or twice, and therefore whether the ask below is
+his fourth note or his third. The gap record was corrected to match THIS file on a
+tie-break (a dated entry in a follow-ups column is the stronger claim, "drafted" the
+weaker), and a tie-break is not a measurement, so it was flagged rather than settled.
+
+> **Operator confirmed 2026-09-05: the 24 Aug note was sent.**
+
+So Knox's state is ASKED 5 Aug 2026, FOLLOWED UP 16 Aug and 24 Aug 2026, silent since —
+two follow-ups spent, the third queued below as Ask 12 and NOT sent, and UNRESPONSIVE
+recorded only if that one is silent too. What was never acceptable, and is the reason this
+sat flagged for a day rather than being quietly reconciled, is two files in one repository
+saying different things about whether a stranger has been written to.
 
 ---
 

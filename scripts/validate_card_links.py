@@ -350,6 +350,21 @@ EXPECTED_UNREACHABLE = {
     "fdlco.wi.gov":
         "Akamai \"Access Denied\" — the client-fingerprint block that makes the "
         "county's board roster ride the Internet Archive instead",
+    # DETROIT IS FOND DU LAC'S SHAPE, ONE TIER DOWN: the mi `detroit-council`
+    # card links the city's own council page, that page refuses this client,
+    # and the nine members behind it are refreshed weekly through the Internet
+    # Archive's copy of it (mi/scripts/mi_detroit_council_scraper.py). Measured
+    # 2026-09-05 on the front door, the council page and robots.txt alike, on
+    # the plain requests rung AND the stdlib client-hints rung that unblocked
+    # Kendall: "Just a moment…" with cf_chl markers every time, so it is the
+    # SITE talking. The inversion earns its keep here — the day this answers is
+    # the day that scraper's direct rung serves and the archive hop can go.
+    # NOTE the sibling that is NOT listed: data.detroitmi.gov answers 200 with a
+    # readable robots.txt and never belonged in this class, which an earlier
+    # record got wrong.
+    "detroitmi.gov":
+        "Cloudflare managed challenge — the city refuses non-browser clients on every "
+        "path; the council roster rides the Internet Archive instead",
     "chicagoelections.gov":
         "Cloudflare managed challenge — the Board of Election Commissioners' site "
         "refuses non-browser clients; the early-voting file is hand-transcribed",
