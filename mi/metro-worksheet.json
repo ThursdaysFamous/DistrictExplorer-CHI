@@ -285,10 +285,28 @@
       }
     },
     {
+      "id": "fire-station",
+      "label": "Fire & EMS Station",
+      "group": "safety",
+      "area_rank": 13,
+      "rank_note": "2,838 fire and EMS station points in Michigan's envelope, live from the USGS National Map (no data/app file) — a nearest-3 proximity layer, ranked with the other point layers rather than by feature area",
+      "source": {
+        "answers": "The three nearest fire and EMS station BUILDINGS to the point, by straight-line distance, with each one's address.",
+        "boundary": [
+          {
+            "label": "USGS The National Map — structures layer 51 (Fire Stations/EMS Stations), queried live at runtime by a bounding envelope through the paged loader the post-office layer introduced. Public domain. THIS IS THE LAYER THAT PAGING EXISTS FOR: 2,838 points in Michigan's envelope against the service's 2,000-record cap, and the cap is NOT an error — a single request returns HTTP 200 with exactly 2,000 rows and exceededTransferLimit set, silently dropping 838 real stations. Measured 2026-09-04: paged it is two requests and 2,838, every one carrying name, address, city, state and ZIP. Fire and EMS are one layer because USGS publishes them as one, named 'Fire Stations/EMS Stations'",
+            "url": "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/51"
+          }
+        ],
+        "people": "NO OFFICEHOLDER, AND NONE IS MISSING: a fire station is a facility, not an elected district. Nobody is elected from one.",
+        "applies": "Michigan — plus the border strip its envelope necessarily includes (1,406 of the 2,838 are in Michigan; the rest Wisconsin 798, Illinois 578, and a handful in Indiana, Iowa, Ohio and Minnesota). A BUILDING, NOT A JURISDICTION: which department or ambulance service is dispatched to a point is a service-area question, a separate concept this instance has not been researched for, so the card says where the nearest stations are and never who responds. The intro says so in the reader's own sentence."
+      }
+    },
+    {
       "id": "post-office",
       "label": "Post Office",
       "group": "geography",
-      "area_rank": 13,
+      "area_rank": 14,
       "rank_note": "1,799 post-office points in Michigan's envelope, live from the USGS National Map (no data/app file) — a nearest-3 proximity layer, so it is ranked last with the other point layers rather than by feature area",
       "source": {
         "answers": "The three nearest post offices to the point, by straight-line distance, with each one's address.",
