@@ -47,6 +47,7 @@ Usage:
 """
 
 import argparse
+import datetime
 import json
 import os
 import re
@@ -888,8 +889,13 @@ PROVENANCE = [
             "field TID + NAME + create date), server-reprojected and "
             "pre-built by wi/scripts/build_milwaukee_city_layers.py — "
             "dissolved TIDs drop by date. TIDs are created and closed by "
-            "Common Council action, so the count here moves; a change is "
-            "the operator's rebuild trigger."
+            "Common Council action, so the count here moves. NOTHING HERE "
+            "COMPARES THAT COUNT: this row records the source, and the "
+            "monthly check reports only reachability for it, so a change is "
+            "a rebuild trigger only for a human who remembers last month's "
+            "number. The NG911 rows below show the shape that would close "
+            "it — a sidecar the build writes; doing the same for the "
+            "Milwaukee builder is recorded, not done."
         ),
     },
     {
@@ -937,7 +943,8 @@ PROVENANCE = [
             "DOR's certified annual Active-TID workbook (tid100wi-<year>; "
             "the builder tries the current year then the prior) — the "
             "authority on which Madison TIDs exist. A new annual edition "
-            "is the operator's rebuild trigger (WATCH.md)."
+            "is the operator's rebuild trigger — for a human reading this "
+            "note, since nothing here compares editions automatically."
         ),
     },
     {
@@ -983,7 +990,7 @@ PROVENANCE = [
         "source_url": "https://services3.arcgis.com/GoOAGCoqFEhZEh7f/arcgis/rest/services/WI_NG911_GIS_Service_Polygons_and_Road_Centerline_Data_v2/FeatureServer/4",
         "note": (
             "The same service's LawEnforcementBoundary layer, same builder "
-            "and gates — 3,083 effective polygons to 639 agency areas at "
+            "and gates — 3,077 effective polygons to 639 agency areas at "
             "first build. Plain -dissolve, never -dissolve2, so the "
             "concurrent sheriff/PD overlaps the counties filed survive; "
             "absences are gap ng911-law-filings."
@@ -1007,7 +1014,7 @@ PROVENANCE = [
         "source_url": "https://services3.arcgis.com/GoOAGCoqFEhZEh7f/arcgis/rest/services/WI_NG911_GIS_Service_Polygons_and_Road_Centerline_Data_v2/FeatureServer/2",
         "note": (
             "The same service's EmergencyMedicalServicesBoundary layer, same "
-            "builder and gates — 2,443 effective polygons to 579 services at "
+            "builder and gates — 2,444 effective polygons to 580 services at "
             "first build. Regional ambulance providers re-prove the "
             "DsplayName+Agency_ID pair key (some EMS Agency_IDs are not "
             "county domains); absences are gap ng911-ems-filings."
@@ -1054,10 +1061,15 @@ ENDPOINTS = [
         "count_layer": "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/38",
     },
     {
-        # The Madison pair is PRE-BUILT; a count change here is the
-        # operator's rebuild trigger (WATCH.md). The TIF layer's 25 counts
-        # BOTH concepts (districts + half-mile buffers), so read a move as
-        # "something changed", never as the district count itself.
+        # The Madison pair is PRE-BUILT, and THIS ROW FETCHES A COUNT IT
+        # DOES NOT READ — the same defect corrected for the NG911 rows below
+        # on 2026-09-05, left standing here rather than widened into this
+        # change: closing it needs the Madison/Milwaukee builders to write a
+        # sidecar of their own, which is a different builder and a different
+        # PR. Until then a count change is a trigger only for a human who
+        # holds last month's number. The TIF layer's 25 counts BOTH concepts
+        # (districts + half-mile buffers), so read a move as "something
+        # changed", never as the district count itself.
         "layer": "tid-district",
         "url": "https://maps.cityofmadison.com/arcgis/rest/services/Public/OPEN_DATA_PLANNING/MapServer/8/query?where=1%3D1&returnCountOnly=true&f=json",
     },
@@ -1095,21 +1107,25 @@ ENDPOINTS = [
         # finding is a WARN a human reads rather than a claim of freshness.
         "layer": "fire-service",
         "built_rows": "fire",
+        "built_rows_layer": "https://services3.arcgis.com/GoOAGCoqFEhZEh7f/arcgis/rest/services/WI_NG911_GIS_Service_Polygons_and_Road_Centerline_Data_v2/FeatureServer/3",
         "url": "https://services3.arcgis.com/GoOAGCoqFEhZEh7f/arcgis/rest/services/WI_NG911_GIS_Service_Polygons_and_Road_Centerline_Data_v2/FeatureServer/3/query?where=1%3D1&returnCountOnly=true&f=json",
     },
     {
         "layer": "law-service",
         "built_rows": "law",
+        "built_rows_layer": "https://services3.arcgis.com/GoOAGCoqFEhZEh7f/arcgis/rest/services/WI_NG911_GIS_Service_Polygons_and_Road_Centerline_Data_v2/FeatureServer/4",
         "url": "https://services3.arcgis.com/GoOAGCoqFEhZEh7f/arcgis/rest/services/WI_NG911_GIS_Service_Polygons_and_Road_Centerline_Data_v2/FeatureServer/4/query?where=1%3D1&returnCountOnly=true&f=json",
     },
     {
         "layer": "psap-area",
         "built_rows": "psap",
+        "built_rows_layer": "https://services3.arcgis.com/GoOAGCoqFEhZEh7f/arcgis/rest/services/WI_NG911_GIS_Service_Polygons_and_Road_Centerline_Data_v2/FeatureServer/6",
         "url": "https://services3.arcgis.com/GoOAGCoqFEhZEh7f/arcgis/rest/services/WI_NG911_GIS_Service_Polygons_and_Road_Centerline_Data_v2/FeatureServer/6/query?where=1%3D1&returnCountOnly=true&f=json",
     },
     {
         "layer": "ems-service",
         "built_rows": "ems",
+        "built_rows_layer": "https://services3.arcgis.com/GoOAGCoqFEhZEh7f/arcgis/rest/services/WI_NG911_GIS_Service_Polygons_and_Road_Centerline_Data_v2/FeatureServer/2",
         "url": "https://services3.arcgis.com/GoOAGCoqFEhZEh7f/arcgis/rest/services/WI_NG911_GIS_Service_Polygons_and_Road_Centerline_Data_v2/FeatureServer/2/query?where=1%3D1&returnCountOnly=true&f=json",
     },
     {
@@ -1309,11 +1325,37 @@ def _check_shipped_is_current(findings, spec):
                      "count endpoint answered without a count field: %r" % (res,))
         return
 
+    # A ROW COUNT CANNOT SEE A REDRAW, so read the layer's own edit timestamp
+    # too. Measured 2026-09-05: the OEC edited all four layers on 2026-08-31,
+    # moving boundaries in ~300 features, while three of the four row counts did
+    # not move at all — the blind spot this file first documented and then
+    # immediately hit.
+    was_edit = (pin.get("dataLastEdit") or {}).get(key)
+    live_edit = None
+    ok_meta, meta = http_get(spec["built_rows_layer"] + "?f=json")
+    if ok_meta and isinstance(meta, dict):
+        ms = (meta.get("editingInfo") or {}).get("dataLastEditDate")
+        if isinstance(ms, (int, float)):
+            live_edit = datetime.datetime.fromtimestamp(
+                ms / 1000.0, datetime.timezone.utc).date().isoformat()
+
+    if count == built and was_edit and live_edit and was_edit != live_edit:
+        findings.add(WARN, layer,
+                     "the row count is unchanged at %d, but the service was "
+                     "EDITED on %s against the %s these files were built from — a "
+                     "redraw does not move a row count. Re-run "
+                     "wi/scripts/build_wi_ng911_service_areas.py, bump cache_name "
+                     "in wi/metro-worksheet.json, and commit the rebuilt files."
+                     % (count, live_edit, was_edit))
+        return
     if count == built:
         findings.add(OK, layer,
-                     "%d rows, the same count these files were built from on %s "
-                     "(a redraw that keeps the row count would not show here)"
-                     % (count, built_on))
+                     "%d rows, the same count these files were built from on %s%s"
+                     % (count, built_on,
+                        ", and the service's own last edit is still %s" % was_edit
+                        if was_edit and live_edit == was_edit
+                        else " (the service's edit date could not be read, so a "
+                             "redraw at this row count would not show)"))
         return
     findings.add(WARN, layer,
                  "the source now has %d rows against the %d these files were "
