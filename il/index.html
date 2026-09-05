@@ -23923,14 +23923,18 @@ function initChiExplorer() {
       statewideLibraryEntry({ key: "stephenson", county: "Stephenson County",
                               coverage: stephensonCountyCoverage, loader: loadStephensonLibraries }),
       // Woodford — 6 library bodies dissolved from the county's parcel fabric.
-      // ONE OF THE SIX IS NOT A DISTRICT: Minonk City Library is municipal, its
-      // 1,230 parcels are the City of Minonk exactly and none lie outside it,
-      // so its feature carries a `note` the card renders and the other five
-      // carry none. The app's LIBRARY_GOVERNANCE wording for a city library is
-      // deliberately NOT reused — it says such a library "levies no district
-      // tax of its own", and the Clerk's own 2025 settlement sheet shows LYMI
-      // levying $99,987.82 under a Library fund, so the note states the
-      // territory that was measured and claims nothing about who votes it.
+      // ONE OF THE SIX IS NOT A DISTRICT: Minonk City Library is municipal, so
+      // its feature carries a `note` the card renders and the other five carry
+      // none. The note says its territory is the City of Minonk and stops
+      // short of "exactly", because the county's own two products disagree —
+      // the parcel table puts all 1,230 of its parcels in the city, while
+      // Corporate_Boundary leaves five of them on a tract 5.2 km south. The
+      // app's LIBRARY_GOVERNANCE wording for a city library is deliberately
+      // NOT reused either: it says such a library "levies no district tax of
+      // its own", and the county's own 2025 settlement sheet shows LYMI
+      // levying $51,791.31 on its `016 - Library` fund ($99,987.82 across both
+      // of its funds), so the note states the territory that was measured and
+      // claims nothing about who votes the levy.
       polygonCountyEntry({
         key: "woodford",
         coverage: woodfordCountyCoverage,

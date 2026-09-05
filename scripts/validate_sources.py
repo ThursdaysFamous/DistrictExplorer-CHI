@@ -318,15 +318,21 @@ PROVENANCE = [
      "app_file": "woodford-fire-districts.json",
      "source_url": SERVICE_WOODFORD_FIRE + "?f=json",
      "note": "17 districts dissolved from the 24,123 parcels whose Fire_Prote "
-             "column names one; corroborated by the Clerk's certified 2025 "
-             "settlement sheets, which levy for exactly these 17. The Village "
-             "of Metamora is a measured hole — it runs its own department."},
+             "column names one; corroborated by the county's own 2025 "
+             "settlement sheets, which levy for exactly these 17 (that "
+             "document names no office and does not say 'certified'). This "
+             "item's description dates the ORIGINAL shapes to 2007 IDOR data, "
+             "but a parcel's district follows its tax code and all 119 codes "
+             "map to one district per concept, so the attribution is current "
+             "with the 2025 levy. The Village of Metamora is a measured hole "
+             "— it runs its own department."},
     {"layer": "Woodford County library districts (pre-built from the parcel fabric)",
      "app_file": "woodford-library-districts.json",
      "source_url": SERVICE_WOODFORD_LIBRARY + "?f=json",
      "note": "6 library bodies from 22,551 parcels. One is municipal (Minonk "
-             "City Library, exactly the city) and its feature carries a note "
-             "the card renders."},
+             "City Library) and its feature carries a note the card renders: "
+             "the county's parcel table and its corporate-boundary layer "
+             "disagree about five of its 1,230 parcels."},
     {"layer": "Woodford County park districts (pre-built from the parcel fabric)",
      "app_file": "woodford-park-districts.json",
      "source_url": SERVICE_WOODFORD_PARK + "?f=json",
