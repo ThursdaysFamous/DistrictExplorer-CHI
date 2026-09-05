@@ -145,12 +145,15 @@ app's precinct fabric at **98.0%**, while the 2026 file dropped it and its `Pre_
 column, to the office that publishes the file, and the whole measurement is the
 `ia-polling-places` gap record's blocker.
 
-Recipient: the HSEMD GIS / 911 program, as the publisher of record for the item — not the
-Secretary of State, who does not publish it.
+Recipient: **both offices**. The Legislature's own CC0 polling item credits "Iowa Secretary of
+State, Iowa Legislative Services Agency" as its source, and HSEMD's layer is visibly geocoder
+output over a supplied spreadsheet — so the **Secretary of State supplies** and **HSEMD hosts**.
+An earlier version of this draft said the SoS "does not publish it" and re-addressed the ask to
+HSEMD alone, which would have asked the wrong office to change a column it does not originate.
 
 > **Subject:** Could the statewide polling-place layer carry the precinct name again?
 >
-> Dear HSEMD GIS team,
+> Dear Elections Division and HSEMD GIS team,
 >
 > I run districtry (https://districtry.com/ia/), a free, non-commercial site that shows
 > Iowans which civic districts cover any point in the state. It already carries Iowa's
