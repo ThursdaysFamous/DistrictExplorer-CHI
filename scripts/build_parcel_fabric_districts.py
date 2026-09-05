@@ -112,6 +112,23 @@ BOONE_PARCELS = ("https://maps.boonecountyil.org/arcgis/rest/services/"
 # parcels, and the first attempt at this build read that omission as the county
 # contradicting itself and stopped.
 #
+# THE 90 UNCODED PARCELS ARE MEASURED, AND THE OBVIOUS EXPLANATION IS WRONG.
+# This lived in the `boone-park-library-contact` gap record, which was retired
+# on 2026-09-05 when its subject shipped; a measurement about the BUILD belongs
+# with the build, not with a gap that closed. Ninety parcels carry no tax_code
+# at all, so they never enter the where clause and are holes by construction:
+# 23 of them, 104 acres, sit inside the Belvidere Park District's outline and
+# outside its shipped polygon. The natural guess is that they ARE the parks —
+# and the county's own layers refute it. Overlaid on every published
+# park-property polygon (BCCD Property, Belvidere Parks, Poplar Grove Parks,
+# Parks and Conservation Foundation Property) the 23 overlap by 0.0% of their
+# area, one merely touching, while the county's 15 `Belvidere Parks` polygons
+# (301 acres) fall 100% INSIDE the shipped district — a second, independent
+# corroboration of the boundary. WHAT THE 23 ARE IS UNKNOWN AND IS NOT GUESSED
+# AT: every one of the 90 carries a completely empty attribute row — no owner,
+# no address, no class, no assessment — so the layer says nothing about them
+# beyond their shape.
+#
 # THE MAPS BELOW ARE HAND-TRANSCRIBED FROM THOSE PDFs, so the documents are
 # pinned here and the tax year is stated: re-verifying means re-reading these
 # two, not searching the Clerk's page again. Both are linked from

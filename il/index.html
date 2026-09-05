@@ -13917,12 +13917,119 @@ function initChiExplorer() {
    * territory reaches across the line. Partial tilings, correctly: most of Boone
    * sits in no park or library district, and the card says so by finding
    * nothing. */
-  var loadBooneParkDistricts = makeCached(function () {
+  /* The boundary carries the district's NAME and nothing else — a parcel
+   * dissolve has no room for a trustee. The county's Clerk publishes the office
+   * in its annual Year Book and ALL FIVE bodies publish their own boards, so
+   * scripts/build_boone_district_officials.py assembles both into one roster
+   * keyed by the same name the polygons carry.
+   * It is stamped onto the features at load (the Grundy polling precedent) so
+   * the query stays a plain containment test and a ROSTER failure costs the
+   * contact block, never the district. */
+  var loadBooneDistrictOfficials = makeCached(function () {
+    return fetchJSONWithRetry("data/app/boone-district-officials.json", {}, 2);
+  });
+  function withBooneOfficials(loadGeometry) {
+    return makeCached(function () {
+      return Promise.all([
+        loadGeometry(),
+        loadBooneDistrictOfficials().catch(function () { return null; })
+      ]).then(function (results) {
+        var geojson = results[0], roster = results[1];
+        var byName = (roster && roster.districts) || {};
+        geojson.features.forEach(function (f) {
+          var name = findPropCI(f.properties || {}, ["district"]);
+          var hit = name != null ? byName[String(name)] : null;
+          if (hit) f.properties.dxOfficials = hit;
+        });
+        return geojson;
+      });
+    });
+  }
+  var loadBooneParkDistricts = withBooneOfficials(makeCached(function () {
     return fetchJSONWithRetry("data/app/boone-park-districts.json", {}, 2);
-  });
-  var loadBooneLibraryDistricts = makeCached(function () {
+  }));
+  var loadBooneLibraryDistricts = withBooneOfficials(makeCached(function () {
     return fetchJSONWithRetry("data/app/boone-library-districts.json", {}, 2);
-  });
+  }));
+
+  /* The officeholder block under a Boone park or library district's identity
+   * rows. Follows the fleet's card order — the people, then the office, then
+   * the contact — and renders nothing at all when the roster did not load, so
+   * a returning visitor on a stale cache sees the card they saw before rather
+   * than an empty "Board" heading.
+   *
+   * WHERE THE BOARD CAME FROM IS PRINTED, because every one is the body's OWN
+   * published board rather than the county's booklet, and a reader is entitled
+   * to know which document answered. It is also what settles the disagreements
+   * the builder finds — the booklet's Ida board predates that library's own 28
+   * July officer election, and its Belvidere Park board predates a
+   * commissioner the district itself lists. A source with a DATE prints it:
+   * North Suburban's trustees come from a PDF rather than a page, so the card
+   * says when that document was last changed. */
+  function booneDistrictPeople(result) {
+    var info = result && result.officials;
+    if (!info) return null;
+    var frag = document.createDocumentFragment();
+    var board = (info.board || []).filter(function (m) { return m && m.name; });
+    var heads = (info.heads || []).filter(function (m) { return m && m.name; });
+    function person(m) {
+      var out = { name: String(m.name) };
+      if (m.role) out.badge = String(m.role);
+      if (m.term) out.note = "Term ends " + String(m.term);
+      if (m.phone) out.phone = String(m.phone);
+      if (m.email) out.email = String(m.email);
+      return out;
+    }
+    if (board.length) {
+      frag.appendChild(renderSectionLabel(
+        info.kind === "park" ? "Board of Commissioners" : "Board of Trustees"));
+      frag.appendChild(renderPersonRows(board.map(person), { tinted: true }));
+      var notes = [];
+      // The body itself said a seat is open, which is the one thing an annual
+      // snapshot can never say — so it is reported rather than left as a short
+      // list a reader would read as the whole board.
+      if (info.vacancies) {
+        notes.push(info.vacancies + " of " +
+          (info.seats || (board.length + info.vacancies)) + " seats " +
+          (info.vacancies === 1 ? "is" : "are") + " vacant");
+      }
+      if (info.boardSource && info.boardSource.label) {
+        // A DOCUMENT source prints its date; a page does not need one, because
+        // it is re-read weekly and its own drift is visible. A PDF can sit
+        // unchanged through an election and still parse perfectly.
+        notes.push("Board from " + String(info.boardSource.label) +
+          (info.boardSource.modified
+            ? " (document last changed " + String(info.boardSource.modified) + ")"
+            : ""));
+      }
+      if (notes.length) {
+        frag.appendChild(renderBodyIntro({ note: notes.join(" · ") }));
+      }
+    } else if (info.boardNote) {
+      // Never an empty heading: a district whose board nobody readable
+      // publishes is told to the reader as that, not implied to have none.
+      // The sentence is MEASURED per district in the builder rather than
+      // written here — the first draft hardcoded "seated in Winnebago County",
+      // which is true of the one district that hits this today and would be a
+      // fabrication the day a Boone-seated body lost its own board page.
+      frag.appendChild(renderBodyIntro({ note: String(info.boardNote) }));
+    }
+    if (heads.length) {
+      frag.appendChild(renderSectionLabel("Administration"));
+      frag.appendChild(renderPersonRows(heads.map(person)));
+    }
+    var office = info.office || {};
+    if (office.address || office.phone || office.email) {
+      frag.appendChild(renderLinkRow({
+        title: "Office",
+        note: [office.address, office.city].filter(Boolean)
+          .map(function (part) { return String(part); }).join(", ") || null,
+        phone: office.phone ? String(office.phone) : null,
+        email: office.email ? String(office.email) : null
+      }));
+    }
+    return frag;
+  }
 
   /* Each of the five bodies' own website, from the SAME County Clerk yearbook
    * the names came from — so the card links the body rather than only naming
@@ -13946,8 +14053,18 @@ function initChiExplorer() {
   };
   function booneDistrictLink(result) {
     var name = result && result.name ? String(result.name) : "";
+    // TWO SOURCES, AND THE MEASURED ONE WINS. The map above is a literal so the
+    // monthly link gate can extract and probe it, and it is the fallback when
+    // the roster does not load. But boone-district-officials.json carries each
+    // body's website as the County Clerk's yearbook printed it THIS WEEK, and
+    // its builder fetches every one before shipping it — so a district that
+    // moves is followed by the roster and frozen by the map. Reading the roster
+    // first is what stops the two from quietly disagreeing on a reader's card.
+    var info = result && result.officials;
+    var live = info && info.office && info.office.website
+      ? safeHttpUrl(String(info.office.website)) : null;
     var site = BOONE_DISTRICT_SITES[name];
-    var safe = site ? safeHttpUrl(site.url) : null;
+    var safe = live || (site ? safeHttpUrl(site.url) : null);
     if (!safe) return null;
     // The card body prints the yearbook's own capitals; the link LABEL reads
     // as a sentence, so "BELVIDERE PARK DISTRICT" does not shout twice in one
@@ -17987,7 +18104,24 @@ function initChiExplorer() {
         if (result.snappedFt != null) {
           rows.push({ label: "Note", value: rowSnapNoteText(result.snappedFt) });
         }
-        return renderFieldStack(rows);
+        var stack = renderFieldStack(rows);
+        // opts.people(result) -> Node|null appends an officeholder block under
+        // the identity rows. Boone's park and library districts are the case it
+        // was written for: the geometry is a parcel dissolve carrying only a
+        // name, and the county's yearbook publishes the board and the office
+        // beside it, so the card can answer "who runs it" as well as "which".
+        //
+        // It FAILS OPEN for the same reason opts.excluded does — a roster that
+        // throws must cost its own rows, never the district card that is
+        // correct without them.
+        if (!opts.people) return stack;
+        var extra = null;
+        try { extra = opts.people(result); } catch (e) { extra = null; }
+        if (!extra) return stack;
+        var peopleWrap = cardEl("div", "card-flush");
+        peopleWrap.appendChild(stack);
+        peopleWrap.appendChild(extra);
+        return peopleWrap;
       },
       cardIdentifier: (opts.pill === true && primaryField) ? function (result) {
         // An excluded point has no district to name, and the pill's fallback
@@ -23354,8 +23488,10 @@ function initChiExplorer() {
         snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Park District", keys: ["district"], primary: true },
-          { label: "County", value: "Boone County" }
+          { label: "County", value: "Boone County" },
+          { name: "officials", keys: ["dxofficials"], hidden: true }
         ],
+        people: booneDistrictPeople,
         primaryLink: booneDistrictLink
       }),
       // Peoria's 4 — from the same taxing family as its fire and library
@@ -23763,8 +23899,10 @@ function initChiExplorer() {
         snapFeet: PARCEL_FABRIC_SNAP_FT,
         fields: [
           { name: "name", label: "Library District", keys: ["district"], primary: true },
-          { label: "County", value: "Boone County" }
+          { label: "County", value: "Boone County" },
+          { name: "officials", keys: ["dxofficials"], hidden: true }
         ],
+        people: booneDistrictPeople,
         primaryLink: booneDistrictLink
       }),
       // Peoria's 10 — the third of the county's taxing tilings, and like its
