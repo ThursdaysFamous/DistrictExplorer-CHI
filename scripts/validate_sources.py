@@ -296,7 +296,8 @@ PROVENANCE = [
      "source_url": SERVICE_GRUNDY_PARCELS + "?f=json",
      "note": "13 districts dissolved from the 27,141 parcels whose Districts "
              "cell names one; the set and the shipped names both come from the "
-             "Clerk's certified 2025 Tax Distribution List with EAV. MVK "
+             "county's own 2025 Tax Distribution List with EAV (which names "
+             "no office and does not say 'certified'). MVK "
              "RESCUE SQUAD is excluded although the Clerk codes it FDMV: its "
              "2,257 parcels are exactly the union of Mazon and Verona-Kinsman."},
     {"layer": "Grundy County library districts (pre-built from the parcel fabric)",

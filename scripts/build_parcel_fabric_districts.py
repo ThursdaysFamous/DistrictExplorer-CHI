@@ -208,19 +208,24 @@ GRUNDY_PARCELS = ("https://maps.grundyco.org/arcgis/rest/services/CountyWebsiteM
 GRUNDY_DISTRICTS_COL = ("GrundyParcels.dbo.GISParcelsJoinedDistrictCodes_"
                         "SingleField.Districts")
 
-# THE SECOND WITNESS IS THE CLERK'S CERTIFIED TAX DISTRIBUTION LIST, and it is
-# also where the NAMES come from — the Boone division of labour, where one
-# county document owns the lines and another owns the names. The parcel column
-# abbreviates ("CHANNAHON PARK DIST", "S. WILMINGTON FIRE"); the Clerk's list
-# gives each body a code and its fuller certified name. The county's "Rates &
-# Extensions" PDF would have been the obvious witness and is NOT usable: all
-# 102 pages are a scan with no text layer (101 characters extract from the
-# whole document).
+# THE SECOND WITNESS IS THE COUNTY'S OWN TAX DISTRIBUTION LIST, and it is also
+# where the NAMES come from — the Boone division of labour, where one county
+# document owns the lines and another owns the names. The parcel column
+# abbreviates ("CHANNAHON PARK DIST", "S. WILMINGTON FIRE"); this list gives
+# each body a code and its fuller name.
+#
+# CITE IT AS WHAT IT IS. An earlier draft called it "the Clerk's certified"
+# list and neither half is supported: the document names NO OFFICE and the
+# word "certified" does not appear in it. (Woodford's witness was miscited the
+# same way in the same week — check before writing an office onto a document.)
+# The county's "Rates & Extensions" PDF would have been the obvious witness and
+# is NOT usable: all 102 pages are a scan with no text layer, and 101
+# characters extract from the whole document.
 GRUNDY_TAX_YEAR = 2025
 GRUNDY_REPORT = ("https://www.grundycountyil.gov/Documents/Communities/Taxes/"
                  "Tax%20Distribution%20Listing%20with%20EAV%202025.pdf")
 
-# parcel-column name -> the Clerk's certified name. Both sides are pinned: the
+# parcel-column name -> the county's own fuller name. Both sides are pinned: the
 # build fails if a parcel lists a body this map does not carry (it would come
 # through as a blank and miss expect_blanks=0), and the district COUNT is an
 # equality, so a name that stops appearing fails too.

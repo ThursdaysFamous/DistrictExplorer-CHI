@@ -974,13 +974,13 @@
         "file": "grundy-fire-districts.json",
         "min_features": 13,
         "max_features": 13,
-        "note": "Grundy's 13 fire protection districts, pre-built by scripts/build_parcel_fabric_districts.py. The county's mapping has a FireDepartments folder with NOTHING in it; what it does publish is a 27,661-row PARCEL FABRIC whose one `Districts` column lists every taxing body a parcel pays into, comma-separated, so each district is the DISSOLVE of the parcels that name it. Road voids closed at 75 ft by the Rock Island rules. The set and the shipped NAMES both come from the Clerk's certified 2025 Tax Distribution List with EAV. Bounds are an EQUALITY. MVK RESCUE SQUAD is excluded although the Clerk codes it FDMV: all 2,257 of its parcels are also in Mazon (1,224) or Verona-Kinsman (1,033), exactly its own total, so it is an EMS levy over those two and not a fourteenth district."
+        "note": "Grundy's 13 fire protection districts, pre-built by scripts/build_parcel_fabric_districts.py. The county's mapping has a FireDepartments folder with NOTHING in it; what it does publish is a 27,661-row PARCEL FABRIC whose one `Districts` column lists every taxing body a parcel pays into, comma-separated, so each district is the DISSOLVE of the parcels that name it. Road voids closed at 75 ft by the Rock Island rules. The set and the shipped NAMES both come from the county's own 2025 Tax Distribution List with EAV, which names no office and does not say “certified”, so neither does this note. Bounds are an EQUALITY. MVK RESCUE SQUAD is excluded although the Clerk codes it FDMV: all 2,257 of its parcels are also in Mazon (1,224) or Verona-Kinsman (1,033), exactly its own total, so it is an EMS levy over those two and not a fourteenth district."
       },
       {
         "file": "grundy-library-districts.json",
         "min_features": 6,
         "max_features": 6,
-        "note": "Grundy's 6 library districts, pre-built by scripts/build_parcel_fabric_districts.py from the same 27,661-row parcel fabric and the same Clerk's list, with the same 75 ft closing and probe gates as its fire sibling. Bounds are an EQUALITY: 69.8% of the county is in a library district and the rest is honestly in none."
+        "note": "Grundy's 6 library districts, pre-built by scripts/build_parcel_fabric_districts.py from the same 27,661-row parcel fabric and the same county tax list, with the same 75 ft closing and probe gates as its fire sibling. Bounds are an EQUALITY: 69.8% of the county is in a library district and the rest is honestly in none."
       },
       {
         "file": "grundy-park-districts.json",
