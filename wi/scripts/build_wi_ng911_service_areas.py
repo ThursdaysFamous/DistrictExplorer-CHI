@@ -459,8 +459,8 @@ def layer_last_edit(url):
     A ROW COUNT CANNOT SEE A REDRAW. That was written into this file as a
     stated blind spot on 2026-09-05 and the very rebuild that stated it hit
     the case: the OEC edited all four layers on 2026-08-31, moving boundaries
-    in 397 features (138 fire, 161 law, 19 PSAP, 79 EMS), while three of the four
-row counts did not move at all.
+    in 397 features (138 fire, 161 law, 19 PSAP, 79 EMS), while three of
+    the four row counts did not move at all.
     The service publishes the edit timestamp, so the blind spot was avoidable
     rather than inherent, and the monthly check now reads both.
     """
