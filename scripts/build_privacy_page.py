@@ -257,29 +257,35 @@ def measure(rel, name, url, tag):
     #
     # THIS IS NOT COUNTED HERE, AND THAT IS THE FIX OF 2026-09-05. It used to be
     # `loadArcGISPointGeoJSON(` call sites, adjusted for the one wrapper that
-    # shares a call site across layers — and it was wrong for three of the six
-    # apps: Illinois published 10 against a true 20, and NEW YORK CITY AND SAN
-    # FRANCISCO PUBLISHED "None." AGAINST A TRUE 9 AND 3. Two apps told readers
-    # nothing about their click left the browser while nine layers and three
-    # layers sent it.
+    # shares a call site across layers, and it published 10 for Illinois against
+    # a true 19 and "None." for New York City against a true 4.
     #
-    # No regex can be right, for two measured reasons rather than one. A
-    # REGISTRATION FACTORY serves as many layers as it is CALLED from one source
-    # occurrence: `makeCachedLoader` appears 7, 8 and 5 times in il/ny/ca against
-    # true counts of 8, 9 and 3 — wrong in BOTH directions, since Illinois's CPS
-    # factories build one loader for three layers and for two, while San
-    # Francisco defines two factories it never calls for a registered layer. And
-    # `registerCountyLayer` CLOSES OVER its entries, so the spec it registers
+    # A REGEX CANNOT BE RIGHT, for two reasons that were measured rather than
+    # assumed. A REGISTRATION FACTORY serves as many layers as it is CALLED from
+    # one source occurrence, so counting occurrences is wrong in both directions.
+    # And `registerCountyLayer` CLOSES OVER its entries, so the spec it registers
     # never references them and not even a full walk of the live module graph
-    # reaches Illinois's `ward` or `county-board`. Both send the point.
+    # reaches Illinois's `ward` or `county-board` — both of which do send.
+    #
+    # AND NEITHER CAN A STRUCTURAL READ, which is the correction this comment
+    # carries. The first version of that browser probe counted layers whose
+    # loader CARRIED an `.atPoint` hook, and that overcounts: the hook is invoked
+    # in exactly ONE place in every instance, inside `queryFeatureAt`, and a
+    # layer whose query does not route through it never fires the hook it holds.
+    # `registerNearestPointLayer.query` calls `opts.loader()` directly, and
+    # several NYC and SF layers call their load function directly, so they carry
+    # the Socrata hook and send nothing. Counting carriage published il 20, ny 9
+    # and ca 3 against a true 19, 4 and 0 — and on this page an OVERCOUNT is a
+    # false statement exactly as an undercount is: it has an app confessing to a
+    # transmission it does not make. San Francisco's original "None." was right.
     #
     # So the number is MEASURED IN A BROWSER by
-    # `scripts/probe_point_transmission.mjs`, which boots each app, inspects
-    # every loader its layers hold for the `.atPoint` hook `queryFeatureAt`
-    # calls, and reconciles what it saw against every `.atPoint` site in the
-    # shipped source. This generator must stay stdlib-only — its CI step has no
-    # browser — so it READS that probe's artifact and re-derives a FINGERPRINT of
-    # each app to prove the artifact still describes it (see fingerprint() and
+    # `scripts/probe_point_transmission.mjs`, which boots each app, REPLACES
+    # every `.atPoint` with a recorder, switches on every layer, selects points
+    # inside the instance's own coverage and counts the hooks that FIRE. This
+    # generator must stay stdlib-only — its CI step has no browser — so it READS
+    # that probe's artifact and re-derives a FINGERPRINT of each app to prove the
+    # artifact still describes it (see fingerprint() and
     # gate_point_transmission()).
     app["fingerprint"] = fingerprint(src)
 
@@ -306,12 +312,15 @@ def fingerprint(src):
         renamed INCLUDING one registered through a factory whose call site never
         changes — which is the case a call-site count cannot see.
 
-    WHAT IT DOES NOT COVER, stated rather than implied: swapping an existing
-    layer's loader for another EXISTING loader that differs only in whether it
-    carries `.atPoint` moves the true count while leaving both halves of this
-    fingerprint identical. Nothing short of booting the app can see that, so the
-    browser probe's own `--check` (which does boot it, in CI) is the gate for it
-    and this is the tripwire for everything else.
+    WHAT IT DOES NOT COVER, stated rather than implied. Two things move the true
+    count while leaving both halves of this fingerprint identical: swapping an
+    existing layer's loader for another EXISTING loader that differs only in
+    whether it carries `.atPoint`, and REROUTING A LAYER'S QUERY into or out of
+    `queryFeatureAt`, which is the only place the hook is ever invoked — a layer
+    can hold a hook for years and start or stop firing it with no change to any
+    site name or layer id. Nothing short of booting the app can see either, so
+    the browser probe's own `--check` (which does boot it, in CI) is the gate for
+    both and this is the tripwire for everything else.
     """
     sites = sorted(m.group(1) for m in re.finditer(r"(\w+)\.atPoint\s*=\s*function", src))
     block = re.search(r"var LAYER_AREA_RANK = \[([\s\S]*?)\n\s*\];", src)

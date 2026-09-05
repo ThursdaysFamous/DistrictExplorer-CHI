@@ -8,17 +8,18 @@
   ],
   "apps": {
     "ca": {
-      "layers_sending_point": 3,
-      "layers": [
+      "layers_sending_point": 0,
+      "layers": [],
+      "layers_holding_hook_but_silent": [
         "election-precinct",
         "elementary-attendance-area",
         "police-station"
       ],
+      "layers_unexercised": [],
       "atpoint_sites": [
         "load"
       ],
-      "atpoint_hooks_reached": 1,
-      "atpoint_hooks_unreached": 0,
+      "atpoint_hooks_fired": 0,
       "layer_ids": [
         "bart-director",
         "ca-assembly",
@@ -45,13 +46,14 @@
         "municipality",
         "zip-code"
       ],
+      "layers_holding_hook_but_silent": [],
+      "layers_unexercised": [],
       "atpoint_sites": [
         "load",
         "load",
         "loadZipCodes"
       ],
-      "atpoint_hooks_reached": 2,
-      "atpoint_hooks_unreached": 1,
+      "atpoint_hooks_fired": 2,
       "layer_ids": [
         "cc-director-district",
         "city-ward",
@@ -76,7 +78,7 @@
       ]
     },
     "il": {
-      "layers_sending_point": 20,
+      "layers_sending_point": 19,
       "layers": [
         "ccpsa-district-council",
         "community-area",
@@ -87,7 +89,6 @@
         "cps-hs-network",
         "cps-middle",
         "cps-network",
-        "library",
         "municipality",
         "police-beat",
         "police-district",
@@ -99,6 +100,10 @@
         "ward-precinct",
         "zip-code"
       ],
+      "layers_holding_hook_but_silent": [
+        "library"
+      ],
+      "layers_unexercised": [],
       "atpoint_sites": [
         "load",
         "load",
@@ -107,8 +112,7 @@
         "loadPoliceDistricts",
         "loadZipCodes"
       ],
-      "atpoint_hooks_reached": 6,
-      "atpoint_hooks_unreached": 0,
+      "atpoint_hooks_fired": 6,
       "layer_ids": [
         "ccbr",
         "ccpsa-district-council",
@@ -160,13 +164,14 @@
         "school-district-unified",
         "zip-code"
       ],
+      "layers_holding_hook_but_silent": [],
+      "layers_unexercised": [],
       "atpoint_sites": [
         "load",
         "load",
         "loadZipCodes"
       ],
-      "atpoint_hooks_reached": 2,
-      "atpoint_hooks_unreached": 1,
+      "atpoint_hooks_fired": 2,
       "layer_ids": [
         "county",
         "county-commissioner",
@@ -185,23 +190,25 @@
       ]
     },
     "ny": {
-      "layers_sending_point": 9,
+      "layers_sending_point": 4,
       "layers": [
-        "community-district",
-        "council",
         "es-zone",
         "hs-zone",
-        "library",
         "ms-zone",
-        "police-precinct",
-        "police-sector",
         "zip-code"
       ],
+      "layers_holding_hook_but_silent": [
+        "community-district",
+        "council",
+        "library",
+        "police-precinct",
+        "police-sector"
+      ],
+      "layers_unexercised": [],
       "atpoint_sites": [
         "load"
       ],
-      "atpoint_hooks_reached": 1,
-      "atpoint_hooks_unreached": 0,
+      "atpoint_hooks_fired": 1,
       "layer_ids": [
         "borough",
         "borough-president",
@@ -242,14 +249,15 @@
         "ward",
         "zip-code"
       ],
+      "layers_holding_hook_but_silent": [],
+      "layers_unexercised": [],
       "atpoint_sites": [
         "load",
         "load",
         "loadWards",
         "loadZipCodes"
       ],
-      "atpoint_hooks_reached": 3,
-      "atpoint_hooks_unreached": 1,
+      "atpoint_hooks_fired": 3,
       "layer_ids": [
         "aldermanic-district",
         "county",

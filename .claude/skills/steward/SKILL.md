@@ -107,8 +107,14 @@ by its command line from a shell whose own command line contains it.
 
 `scripts/probe_point_transmission.mjs` is the one browser gate that is not a
 page test: it measures which layers send the reader's selected point to a
-server, which no regex can see (a registration factory serves as many layers
-as it is CALLED, and `registerCountyLayer` closes over its entries). Red here
+server, which neither a regex nor a structural read can see. A registration
+factory serves as many layers as it is CALLED, `registerCountyLayer` closes
+over its entries, and — the one that cost a wrong published figure — a layer
+that merely CARRIES an `.atPoint` hook may never fire it, since the hook is
+invoked only inside `queryFeatureAt` and the nearest-point factory calls its
+loader directly. So the probe replaces every hook with a recorder and counts
+the ones that FIRE, at more than one point because coverage-gated layers are
+not queried outside their coverage. Red here
 means an app changed what it transmits — re-run it WITHOUT `--check`, then
 `python3 scripts/build_privacy_page.py`, and read the diff to
 `point-transmission.json` as the privacy claim it is. `build_privacy_page.py`

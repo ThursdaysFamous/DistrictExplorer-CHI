@@ -4,21 +4,18 @@
 // WHY THIS EXISTS. `scripts/build_privacy_page.py` publishes, per app, how many
 // layers ask a government server about your exact selected point rather than
 // downloading a boundary set and testing the point in your browser. It measured
-// that by counting `loadArcGISPointGeoJSON(` call sites, and on 2026-09-05 that
-// figure was wrong for three of the six apps: Illinois published 10 against a
-// true 20, and New York City and San Francisco published "None." against a true
-// 9 and 3. Two apps were telling readers nothing left their browser when nine
-// layers and three layers did.
+// that by counting `loadArcGISPointGeoJSON(` call sites, and the figure was
+// wrong: Illinois published 10 against a true 19, and New York City published
+// "None." against a true 4 — an app telling readers nothing about their click
+// left the browser while four of its layers sent it.
 //
 // NO STATIC READ CAN BE RIGHT, AND THAT IS MEASURED RATHER THAN ASSUMED. Two
 // separate defects put the answer out of a regex's reach:
 //
 //   * A REGISTRATION FACTORY serves as many layers as it is CALLED, from one
-//     source occurrence. `makeCachedLoader` (which attaches the Socrata
-//     point hook) is called 7, 8 and 5 times in il/ny/ca against true counts of
-//     8, 9 and 3 — wrong in BOTH directions, because Illinois's CPS factories
-//     each build one loader for three and two layers while San Francisco
-//     defines two factories it never calls for a registered layer.
+//     source occurrence, so counting occurrences is wrong in both directions:
+//     Illinois's CPS factories each build one loader for three layers and for
+//     two, while San Francisco defines two it never calls for a layer at all.
 //
 //   * `registerCountyLayer` CLOSES OVER its entries. The spec it hands to
 //     `registerLayer` never references them, so even a full walk of the
@@ -26,21 +23,33 @@
 //     loader is the Chicago entry's `loadGeometry`) or `county-board` (whose
 //     Cook entry carries an explicit ArcGIS `.atPoint`). Both send the point.
 //
-// SO THE MEASUREMENT IS BEHAVIOURAL. Each app is booted in Chromium with two
-// one-line injections — the layer registry onto the debug namespace, and
-// `registerCountyLayer`'s entries onto `window` — and every loader the layers
-// hold is inspected for the `.atPoint` hook. `queryFeatureAt` calls that hook
-// whenever the full boundary set is not yet cached, so a loader carrying it
-// transmits the selected point.
+// SO THE MEASUREMENT IS BEHAVIOURAL — AND "BEHAVIOURAL" MEANS THE HOOK FIRES,
+// NOT THAT A LOADER CARRIES ONE. This file's first version inspected each
+// layer's loaders for a `.atPoint` property and counted the layers that had
+// one. THAT OVERCOUNTS, because carrying the hook is necessary and not
+// sufficient: `.atPoint` is invoked in exactly ONE place in every instance,
+// inside `queryFeatureAt`, and a layer whose query does not route through
+// `queryFeatureAt` never fires it. `registerNearestPointLayer.query` calls
+// `opts.loader()` directly, and several NYC and SF layers call their load
+// function directly too — so a layer can hold a `makeCachedLoader` result,
+// carry the Socrata hook, and never send a point anywhere. Published on the
+// privacy page, that reads as an app confessing to a transmission it does not
+// make.
+//
+// So each app is booted in Chromium, every observed `.atPoint` is REPLACED
+// with a recorder, every layer is switched on, a point inside the instance's
+// own coverage is selected, and the hooks that actually FIRE are counted. A
+// layer whose query never ran is reported UNKNOWN rather than counted as a no:
+// silence is not evidence of not sending.
 //
 // AND IT RECONCILES ITSELF, which is what keeps a future hiding place from
 // silently reading as zero. Every `.atPoint` assignment site in the shipped
-// source must be either REACHED by an observed layer or reported as unreached;
-// an observed hook whose body is NOT in the source means the probe's own
-// injection or parse has broken, and that is a hard failure rather than a
-// smaller number. Today six of six sites are reached in Illinois, and the three
-// unreached ones across wi/ia/mi are all the engine's `makeCachedLoader`,
-// carried by every instance and used for a layer by only three.
+// source is reported as either FIRED or never fired; an observed hook whose
+// body is NOT in the source means the probe's own injection or parse has
+// broken, and that is a hard failure rather than a smaller number. A layer
+// whose query never ran is counted in `layers_unexercised` and named, because
+// a probe that quietly reports "does not send" for a layer it never asked is
+// the same defect one level up.
 //
 // The result is written to point-transmission.json at the repo root, which
 // `build_privacy_page.py` reads. That generator stays stdlib-only — it cannot
@@ -66,6 +75,34 @@ const OUT = join(ROOT, "point-transmission.json");
 const BASE = (process.env.BASE_URL || "http://localhost:8000").replace(/\/+$/, "") + "/";
 const CHECK = process.argv.includes("--check");
 const BOOT_TIMEOUT = 45000;
+const SETTLE_MS = 6000;   // time for every layer's query to reach its loader
+
+// The point to select. Each instance's own worksheet anchor is used because it
+// is chosen to be INSIDE that instance's coverage — a point outside it would
+// suppress coverage-gated layers, which would then read as "does not send".
+function anchorOf(tag) {
+  const rel = tag === "il" ? "metro-worksheet.json" : join(tag, "metro-worksheet.json");
+  const w = JSON.parse(readFileSync(join(ROOT, rel), "utf8"));
+  const a = w.anchor_point;
+  if (!a || typeof a.lat !== "number" || typeof a.lng !== "number")
+    problem(`${tag}: no usable anchor_point in its worksheet`);
+  return a || { lat: 0, lng: 0 };
+}
+
+// EXTRA POINTS, because coverage gating is real. A layer that declares
+// `coverage(point)` is not queried outside it, and a probe that selects one
+// point would report "does not send" for a layer it never asked. Illinois's
+// elementary and high-school district layers declare
+// `outsideChicagoSchoolCoverage` and are hidden inside the city, which is
+// exactly where the worksheet anchor is — so the anchor alone leaves both
+// unexercised. Evanston is an elementary + high-school PAIR (District 65 and
+// Township 202) rather than unified territory, so it exercises both.
+//
+// Anything still unexercised after every point here is REPORTED, never counted
+// as a no: this list is a way to reduce the unknowns, not to hide them.
+const EXTRA_POINTS = {
+  il: [{ lat: 42.0451, lng: -87.6877, note: "Evanston — elementary D65 + high-school D202, outside Chicago" }],
+};
 
 // An instance is a top-level directory with its own index.html and data/app —
 // the same rule validate_card_links.py and validate_instance_registration.py
@@ -160,66 +197,120 @@ async function measure(browser, tag) {
   if (countySites !== injectedCounty)
     problem(`${tag}: registerCountyLayer injection matched ${injectedCounty} of ${countySites} sites`);
 
-  const observed = await page.evaluate(() => {
+  const points = [anchorOf(tag), ...(EXTRA_POINTS[tag] || [])];
+  const observed = await page.evaluate(async ({ points, settle }) => {
     const ns = Object.keys(window).find((k) => /Explorer$/.test(k) && window[k] && window[k].__probeLayers);
-    const layers = window[ns].__probeLayers;
+    const api = window[ns];
+    const layers = api.__probeLayers;
     const byId = {};
     for (const c of (window.__dxCountyEntries || [])) (byId[c.id] = byId[c.id] || []).push(...c.entries);
 
-    // Walk everything a layer module holds. Functions are leaves — the hook is
+    // Find every loader each layer holds, INCLUDING the ones a
+    // registerCountyLayer entry closes over. Functions are leaves: the hook is
     // a property ON the loader, so there is never a reason to descend into one.
     function walk(node, seen, out, depth) {
       if (depth > 6 || node == null) return;
-      if (typeof node === "function") {
-        if (typeof node.atPoint === "function")
-          out.push(Function.prototype.toString.call(node.atPoint));
-        return;
-      }
+      if (typeof node === "function") { if (typeof node.atPoint === "function") out.push(node); return; }
       if (typeof node !== "object" || seen.has(node)) return;
       seen.add(node);
       if (Array.isArray(node)) { node.forEach((v) => walk(v, seen, out, depth + 1)); return; }
       for (const k of Object.keys(node)) {
-        if (k === "_map" || k === "_container" || k === "map") continue;  // Leaflet's, not ours
+        if (k === "_map" || k === "_container" || k === "map") continue;   // Leaflet's, not ours
         let v; try { v = node[k]; } catch { continue; }
         walk(v, seen, out, depth + 1);
       }
     }
-    return layers.map((m) => {
-      const hooks = [];
-      walk(m, new Set(), hooks, 0);
-      for (const e of (byId[m.id] || [])) walk(e, new Set(), hooks, 0);
-      return { id: m.id, hooks };
-    });
-  });
+
+    const fired = new Set();        // loader tokens whose .atPoint actually ran
+    const queried = new Set();      // layer ids whose query() was invoked
+    const holders = new Map();      // layer id -> loader tokens it holds
+    const bodies = new Map();       // loader token -> the hook's source text
+    const tokenOf = new WeakMap();
+    let token = 0;
+
+    for (const m of layers) {
+      const loaders = [];
+      walk(m, new Set(), loaders, 0);
+      for (const e of (byId[m.id] || [])) walk(e, new Set(), loaders, 0);
+      const mine = [];
+      for (const load of loaders) {
+        if (!tokenOf.has(load)) {
+          const t = ++token;
+          tokenOf.set(load, t);
+          bodies.set(t, Function.prototype.toString.call(load.atPoint));
+          // REPLACE the hook with a recorder. Resolving EMPTY is the app's own
+          // "the point query found nothing" path, which defers to the full set,
+          // so no card is made wrong by being measured.
+          load.atPoint = function () {
+            fired.add(t);
+            return Promise.resolve({ type: "FeatureCollection", features: [] });
+          };
+        }
+        mine.push(tokenOf.get(load));
+      }
+      holders.set(m.id, mine);
+
+      // Record that a layer was actually ASKED. Without this, a layer supp-
+      // ressed by coverage reads exactly like one that does not send.
+      if (typeof m.query === "function") {
+        const original = m.query;
+        m.query = function () { queried.add(m.id); return original.apply(this, arguments); };
+      }
+    }
+
+    // Switch everything on, THEN select: each layer is live when the selection
+    // dispatches its query. Every point is selected in turn and the recorders
+    // accumulate, so a layer only has to be in coverage at ONE of them.
+    for (const box of document.querySelectorAll('input[type="checkbox"][id^="toggle-"]'))
+      if (!box.checked) box.click();
+    for (const pt of points) {
+      api.setSelectedPoint(pt.lat, pt.lng);
+      await new Promise((r) => setTimeout(r, settle));
+    }
+
+    return {
+      layers: layers.map((m) => ({
+        id: m.id,
+        holds: (holders.get(m.id) || []).length,
+        queried: queried.has(m.id),
+        sends: (holders.get(m.id) || []).some((t) => fired.has(t)),
+      })),
+      firedBodies: [...fired].map((t) => bodies.get(t)),
+      allBodies: [...bodies.values()],
+    };
+  }, { points: points.map((p) => ({ lat: p.lat, lng: p.lng })), settle: SETTLE_MS });
   await ctx.close();
 
-  const sending = observed.filter((o) => o.hooks.length).map((o) => o.id).sort();
+  const sending = observed.layers.filter((o) => o.sends).map((o) => o.id).sort();
+  // Asked, holds a hook, did not fire it: a real measurement — its query does
+  // not route through queryFeatureAt, which is the ONLY place the hook is
+  // invoked. This is the set the first version of this probe counted as
+  // sending, and is why it overcounted.
+  const holdsButSilent = observed.layers
+    .filter((o) => o.holds && o.queried && !o.sends).map((o) => o.id).sort();
+  // Holds a hook and was never asked — not evidence either way, so it is named
+  // rather than quietly counted as a no.
+  const unexercised = observed.layers
+    .filter((o) => o.holds && !o.queried && !o.sends).map((o) => o.id).sort();
 
-  // RECONCILE. Every hook body observed at runtime must be findable in the
-  // shipped source; one that is not means this probe read something the app
-  // does not contain, and no number it produces can be trusted.
-  const bodies = new Set();
-  for (const o of observed) for (const h of o.hooks) bodies.add(flat(h));
-  for (const b of bodies)
+  // RECONCILE. Every hook body seen at runtime must be findable in the shipped
+  // source; one that is not means this probe read something the app does not
+  // contain, and no number it produces can be trusted.
+  for (const b of observed.allBodies.map(flat))
     if (!flatSrc.includes(b))
       problem(`${tag}: observed an .atPoint body that is not in the shipped source — ${b.slice(0, 90)}`);
 
-  // A site the source declares but no layer reaches is REPORTED, not absorbed:
-  // today that is the engine's own `makeCachedLoader` in the three instances
-  // with no Socrata-backed layer. If the two numbers ever meet, every hook the
-  // app defines is in use; if a reached one goes quiet, this figure drops and
-  // the drift gate below makes someone look.
-  const unreached = sites.length - bodies.size;
-  if (unreached < 0)
-    problem(`${tag}: ${bodies.size} distinct hooks observed against ${sites.length} in the source ` +
-            `— a loader is reaching a hook the source does not declare`);
+  const firedDistinct = new Set(observed.firedBodies.map(flat)).size;
+  if (firedDistinct > sites.length)
+    problem(`${tag}: ${firedDistinct} distinct hooks fired against ${sites.length} declared in the source`);
 
   return {
     layers_sending_point: sending.length,
     layers: sending,
+    layers_holding_hook_but_silent: holdsButSilent,
+    layers_unexercised: unexercised,
     atpoint_sites: [...sites].sort(),
-    atpoint_hooks_reached: bodies.size,
-    atpoint_hooks_unreached: Math.max(unreached, 0),
+    atpoint_hooks_fired: firedDistinct,
     layer_ids: layerIds,
   };
 }
@@ -231,8 +322,12 @@ for (const tag of instances()) {
   apps[tag] = await measure(browser, tag);
   const a = apps[tag];
   console.log(`${a.layers_sending_point} of ${a.layer_ids.length} layers send the point ` +
-              `(${a.atpoint_hooks_reached} of ${a.atpoint_sites.length} .atPoint hooks reached)`);
-  if (a.layers_sending_point) console.log(`        ${a.layers.join(", ")}`);
+              `(${a.atpoint_hooks_fired} of ${a.atpoint_sites.length} .atPoint hooks fired)`);
+  if (a.layers_sending_point) console.log(`        sends: ${a.layers.join(", ")}`);
+  if (a.layers_holding_hook_but_silent.length)
+    console.log(`        holds a hook and never fires it: ${a.layers_holding_hook_but_silent.join(", ")}`);
+  if (a.layers_unexercised.length)
+    console.log(`        UNEXERCISED (holds a hook, query never ran): ${a.layers_unexercised.join(", ")}`);
 }
 await browser.close();
 
