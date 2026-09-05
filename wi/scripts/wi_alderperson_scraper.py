@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """
-Scrape the alderperson rosters for the six big Wisconsin cities whose
+Scrape the alderperson rosters for the Wisconsin municipalities whose
 aldermanic districts the statewide dissolve ships AND whose rosters have a
-verified open route (measured 2026-08-26). Stage 1 of the pair;
-build_wi_alderperson_roster.py writes data/app/wi-alderpersons.json.
+verified open route — six measured 2026-08-26, eleven more 2026-09-05.
+Stage 1 of the pair; build_wi_alderperson_roster.py writes
+data/app/wi-alderpersons.json.
 
-THE SIX, each with its route and its measured trap:
+THE FIRST SIX, each with its route and its measured trap:
 
   Milwaukee (15)  — Legistar (webapi.legistar.com), the Common Council's own
                     system of record: OfficeRecordTitle carries the district
@@ -18,6 +19,14 @@ THE SIX, each with its route and its measured trap:
                     shapefile corroborates per district where it answers, and
                     is not required to. Current membership is filtered
                     client-side against today's date.
+                    THAT MOVE COST ONE SUFFIX AND IT IS NOT PUT BACK BY HAND:
+                    the retired GIS layer spelled district 15 "Russell W
+                    Stamper, II" and Legistar — the Council's own system of
+                    record — carries First "Russell W." / Last "Stamper", with
+                    no suffix field anywhere in the record (Chambers Jr. keeps
+                    his, inside the LAST name). Restoring the II would mean
+                    typing a name this project cannot source, so the shipped
+                    spelling is the Council's own.
   Madison (20)    — the council index page's per-alder links. THE INDEX'S
                     FLAT TEXT PAIRING IS A TRAP: District 1 is vacant, so a
                     flattened read pairs every alder with the district ABOVE
@@ -56,12 +65,23 @@ THE SIX, each with its route and its measured trap:
                     seat e-mail (alddistN@waukesha-wi.gov — the seat's, so
                     contact survives turnover).
 
+THE ELEVEN OF 2026-09-05 — Stevens Point, Menomonie, Manitowoc, Sheboygan,
+Superior, Portage, Viroqua, Menasha, Howard, Tomah and Eau Claire — carry
+their route and their traps on each scrape_* function below, under the sweep
+that found them. Three of those traps are worth naming here because they are
+the ones that ship a WRONG answer rather than none: Manitowoc's anchors carry
+a title= attribute naming the PREVIOUS alderperson on two rows; Menasha's
+District 1 cell holds a staff member's mailto that is not the alderperson's;
+and Menasha and Portage both publish their members' HOME ADDRESSES, which
+never ship, for anybody, anywhere in this fleet.
+
 Appleton's roster page is verified readable and is deliberately NOT here:
 its geometry cannot ship (Outagamie submits all 50 of its wards uncoded and
 the city's own GIS publishes no aldermanic layer — both measured), so a
 roster would have no card to ride. The gap record carries the ready route.
 """
 
+import html as H
 import io
 import json
 import os
@@ -71,6 +91,7 @@ import struct
 import sys
 import time
 import unicodedata
+import urllib.parse
 import urllib.request
 import zipfile
 
@@ -102,6 +123,91 @@ RACINE_INDEX = ("https://cityofracinewi.gov/government/city-leadership"
                 "/common-council/cityalderman/")
 WAUKESHA_INDEX = "https://www.waukesha-wi.gov/about_the_common_council/index.php"
 
+# ---------------------------------------------------------------------------
+# THE ELEVEN ADDED 2026-09-05, each hand-read from its own page before a line of
+# parser was written. They came out of a sweep of all 149 unrostered districted
+# municipalities: home page (robots.txt honoured first), then up to two hops of
+# council-ish links, scoring how many of the municipality's districts a page
+# pairs with a person. The sweep is a TRIAGE — it points at pages worth reading;
+# nothing below ships from its score.
+#
+# WHAT THE SWEEP MEASURED, over all 149:
+#
+#     32  a page pairing every district with a name, read automatically
+#     14  the same, partially
+#     67  home page readable, no such pairing found
+#     17  the host publishes `User-agent: * / Disallow: /`
+#     15  the host answers HTTP 403 to this client
+#      3  a network error or an HTTP 503
+#      1  no municipal website in the Elections Commission's clerk file (Hurley)
+#
+# So the record this replaces — "no bulk source exists", which is true — was
+# silent about the thing that actually decides each city, and 32 municipalities
+# were publishing exactly what the gap said was wanted. The 17 blanket Disallows
+# are the finding worth naming: Baraboo, Cudahy, Delavan, Elroy, Marion,
+# Marshfield, Mauston, Merrill, Prairie du Chien, Princeton, Reedsburg, Rice
+# Lake, Ripon, St Croix Falls, St Francis, Tomahawk, Westfield. Those are shut,
+# not unexamined, and nothing here renames a user agent to get past one.
+#
+# TEN OF THE ELEVEN BELOW CAME OUT OF THAT 32, AND MENOMONIE DID NOT — its
+# council page pairs every seat with a name and the triage scored it 0, because
+# the crawl never reached the page inside its six-link budget. The sweep
+# UNDER-reports, which is the right direction for a triage and the reason the
+# 67 "no pairing found" is a floor rather than a verdict.
+#
+# THE TWENTY-TWO FULL MATCHES NOT BUILT HERE, with the page the sweep scored, so
+# the next pass starts from a measurement instead of repeating this one:
+#
+#   New Berlin        C 7  https://www.newberlinwi.gov/
+#   Sturgeon Bay      C 7  https://www.sturgeonbaywi.org/government/city_council/index.php
+#   Altoona           C 6  https://www.altoonawi.gov/government/elected_officials.php
+#   Waupaca           C 5  https://cityofwaupaca.org/government/mayor-city-council/
+#   Algoma            C 4  https://www.algomacity.org/government/city_council.php
+#   Black River Falls C 4  https://blackriverfallswi.gov/common-council-committee-of-the-whole
+#   Cumberland        C 4  https://cityofcumberland.net/city-council
+#   Dodgeville        C 4  https://www.cityofdodgeville.com/council
+#   Eagle River       C 4  https://eagleriverwi.gov/city-government/elected-officials/
+#   Germantown        V 4  https://www.germantownwi.gov/299/Village-Board
+#   Hillsboro         C 4  https://www.hillsborowi.com/mayor-and-council
+#   Nekoosa           C 4  https://cityofnekoosa.org/city-council
+#   New Holstein      C 4  https://cityofnewholstein.org/elected-officials/
+#   New Lisbon        C 4  https://cityofnewlisbon.com/common-council
+#   Oconomowoc        C 4  https://oconomowoc-wi.gov/225/Common-Council
+#   Horicon           C 3  https://www.horiconwi.gov/185/Elected-Officials
+#   Neenah            C 3  https://www.ci.neenah.wi.us/common-council/
+#   Wautoma           C 3  http://www.cityofwautoma.com/common-council
+#   Westby            C 3  https://www.cityofwestby.org/westby-city-council
+#   Wisconsin Dells   C 3  https://www.citywd.org/departments/city-government
+#   Greenwood         C 2  https://cityofgreenwood.wi.gov/city-council
+#   Montreal          C 2  https://montrealwis.com/departments/city-council/
+#
+# These are ADDRESSES THIS MODULE DOES NOT FETCH — a queue, deliberately in a
+# comment rather than in an upper-case table, because validate_robots.py reads
+# upper-case attributes as scheduled fetches and would report policies for
+# requests nobody makes.
+LTSB_WARDS = ("https://services1.arcgis.com/FDsAtKBk8Hy4cAH0/arcgis/rest"
+              "/services/WI_Municipal_Wards_Current/FeatureServer/0/query")
+STEVENS_POINT_DIR = "https://stevenspoint.com/Directory.aspx?DID=23"
+MENOMONIE_INDEX = "https://www.menomonie-wi.gov/248/City-Council"
+MANITOWOC_INDEX = "https://www.manitowoc.org/78/Meet-Your-Alderperson"
+SHEBOYGAN_INDEX = "https://www.sheboyganwi.gov/395/Common-Council"
+SUPERIOR_INDEX = "https://www.ci.superior.wi.us/697/City-Councilor-Information"
+PORTAGE_INDEX = "https://www.portagewi.gov/mayor-and-council"
+VIROQUA_INDEX = ("http://viroqua-wisconsin.com/government"
+                 "/city_council_and_committees.php")
+MENASHA_INDEX = ("https://www.menashawi.gov/residents/government"
+                 "/common_council/index.php")
+HOWARD_INDEX = ("https://www.villageofhoward.com/208"
+                "/Village-President-Board-of-Trustees")
+TOMAH_INDEX = "https://www.tomahwi.gov/citycouncil"
+EAU_CLAIRE_INDEX = "https://www.eauclairewi.gov/310/City-Council"
+
+ORDINALS = {"first": 1, "second": 2, "third": 3, "fourth": 4, "fifth": 5,
+            "sixth": 6, "seventh": 7, "eighth": 8, "ninth": 9, "tenth": 10,
+            "eleventh": 11, "twelfth": 12, "thirteenth": 13, "fourteenth": 14,
+            "fifteenth": 15, "sixteenth": 16, "seventeenth": 17,
+            "eighteenth": 18, "nineteenth": 19, "twentieth": 20}
+
 # Districts where the certified April 2026 canvass OVERRIDES the city GIS,
 # each pinned only after its story was read. The pin is self-retiring twice
 # over: it fails if the canvass stops naming this winner, and it fails the
@@ -129,6 +235,17 @@ CITIES = {  # COUSUBFP -> (name, seats)
     "39225": ("Kenosha", 17),
     "66000": ("Racine", 15),
     "84250": ("Waukesha", 15),
+    "77200": ("Stevens Point", 11),
+    "51025": ("Menomonie", 11),
+    "48500": ("Manitowoc", 10),
+    "72975": ("Sheboygan", 10),
+    "78650": ("Superior", 10),
+    "64100": ("Portage", 9),
+    "82925": ("Viroqua", 9),
+    "50825": ("Menasha", 8),
+    "35950": ("Howard", 8),
+    "80075": ("Tomah", 8),
+    "22300": ("Eau Claire", 5),
 }
 
 
@@ -172,7 +289,6 @@ def fold_set(name):
 def strip_tags(html):
     t = re.sub(r"<script.*?</script>|<style.*?</style>", "", html, flags=re.S)
     t = re.sub(r"<[^>]+>", "\n", t)
-    import html as H
     return [l.strip() for l in H.unescape(t).split("\n") if l.strip()]
 
 
@@ -563,6 +679,462 @@ def scrape_waukesha():
     return members, WAUKESHA_INDEX
 
 
+# ========================================================= the eleven of 2026-09-05
+# One helper first. TWO OF THE TEN PRINT A WARD NUMBER WHERE THE KEY IS A
+# DISTRICT: Menomonie's council page reads "Jeff Luther, Ward 1" and Viroqua's
+# table reads "WARD 1 | SETH MCCLURG", while the file this roster keys into is
+# dissolved on ALDERID. In both cities every ward is its own district today and
+# ward N carries ALDERID N — measured 2026-09-05, 11 of 11 and 9 of 9 — but that
+# is a fact about a filing, not about the English language, and a re-warding
+# would silently move every name one seat. So it is WITNESSED on every run from
+# the same publisher whose file draws the districts: if the identity breaks,
+# those two cities fail (isolated, carried forward) rather than shipping a
+# plausible wrong answer.
+_LTSB_CACHE = {}
+
+
+def ltsb_ward_to_alder(mcd_name, ctv):
+    """{ward int -> ALDERID str} for one municipality, from LTSB's ward layer."""
+    key = (mcd_name, ctv)
+    if key not in _LTSB_CACHE:
+        q = urllib.parse.urlencode({
+            "where": "MCD_NAME='%s' AND CTV='%s'" % (mcd_name.replace("'", "''"), ctv),
+            "outFields": "WARDID,ALDERID", "returnGeometry": "false",
+            "f": "json", "resultRecordCount": 500})
+        d = json.loads(fetch(LTSB_WARDS + "?" + q))
+        if "error" in d:
+            raise SystemExit("LTSB ward query failed for %s: %s"
+                             % (mcd_name, d["error"]))
+        rows = [f["attributes"] for f in d.get("features", [])]
+        if not rows:
+            raise SystemExit("LTSB carries no %s %s wards" % (mcd_name, ctv))
+        _LTSB_CACHE[key] = {int(r["WARDID"]): (r["ALDERID"] or "").strip()
+                            for r in rows}
+    return _LTSB_CACHE[key]
+
+
+def require_ward_is_district(mcd_name, ctv, seats):
+    """The city numbers its seats by ward; assert ward N IS district N."""
+    m = ltsb_ward_to_alder(mcd_name, ctv)
+    if len(m) != seats:
+        raise SystemExit("%s: the state files %d wards for a %d-seat council, so "
+                         "its page's ward numbers can no longer be read as "
+                         "districts" % (mcd_name, len(m), seats))
+    bad = sorted("%d->%s" % (w, a) for w, a in m.items() if a != "%02d" % w)
+    if bad:
+        raise SystemExit("%s: ward and district have stopped coinciding (%s) — the "
+                         "council page numbers seats by ward and cannot be keyed "
+                         "to districts any more" % (mcd_name, ", ".join(bad)))
+
+
+# ------------------------------------------------------------- Stevens Point
+def scrape_stevens_point():
+    """The city's CivicPlus staff directory, one category per body.
+
+    Its districts are ORDINAL WORDS ("First District"), each printed TWICE per
+    entry — the responsive layout renders one copy for wide and one for narrow,
+    exactly Green Bay's shape — so the split is on the entry container.
+    NO E-MAIL SHIPS AND THAT IS THE CITY'S CHOICE: every "Email Ald. X" link
+    is a /formcenter/ form, not a mailto, so there is no address to carry.
+    """
+    page = fetch(STEVENS_POINT_DIR)
+    members = {}
+    for li in re.split(r'<li class="list-group-item', page)[1:]:
+        t = re.search(r">\s*(%s)\s+District\s*<" % "|".join(ORDINALS), li, re.I)
+        if not t:
+            continue
+        n = ORDINALS[t.group(1).lower()]
+        nm = re.search(r'href="(/m/directory/employee\?eid=\d+)"[^>]*>\s*([^<]+?)\s*<', li)
+        if not nm:
+            continue
+        entry = {"name": " ".join(nm.group(2).split()),
+                 "url": "https://stevenspoint.com" + nm.group(1)}
+        ph = re.search(r'href="tel:([^",]+)', li)
+        if ph:
+            entry["phone"] = ph.group(1).strip()
+        key = "%02d" % n
+        if key in members and members[key]["name"] != entry["name"]:
+            raise SystemExit("stevens point lists two names for district %d" % n)
+        members[key] = entry
+    if len(members) != 11:
+        raise SystemExit("stevens point names %d of 11 districts" % len(members))
+    return members, STEVENS_POINT_DIR
+
+
+# ----------------------------------------------------------------- Menomonie
+def scrape_menomonie():
+    """"NAME, Ward N" per <li>, in two columns. The mayor's row says ", Mayor"
+    and carries no ward, which is what keeps him out."""
+    require_ward_is_district("Menomonie", "C", 11)
+    page = fetch(MENOMONIE_INDEX)
+    members = {}
+    for li in re.findall(r"<li\b[^>]*>(.*?)</li>", page, re.S):
+        m = re.search(r"</a>\s*,\s*Ward\s+(\d{1,2})\b", li)
+        if not m:
+            continue
+        nm = re.search(r'href="(/[Dd]irectory\.aspx\?EID=\d+)"[^>]*>([^<]+)</a>', li)
+        if not nm:
+            raise SystemExit("menomonie: a ward row with no directory link (%r)"
+                             % li[:120])
+        n = int(m.group(1))
+        entry = {"name": " ".join(nm.group(2).split()),
+                 "url": "https://www.menomonie-wi.gov" + nm.group(1)}
+        key = "%02d" % n
+        if key in members and members[key]["name"] != entry["name"]:
+            raise SystemExit("menomonie lists two names for ward %d" % n)
+        members[key] = entry
+    if len(members) != 11:
+        raise SystemExit("menomonie names %d of 11 wards" % len(members))
+    return members, MENOMONIE_INDEX
+
+
+# ----------------------------------------------------------------- Manitowoc
+def scrape_manitowoc():
+    """The Common Council table: NAME | District | Term | Phone.
+
+    TWO TRAPS, BOTH IN THE NAME COLUMN. Two anchors carry a title= attribute
+    naming the PREVIOUS alderperson — title="Scott McMeans" on the row whose
+    text reads "Chad Beeman", title="Steve Czekala" on Brett Norell's — so a
+    title-keyed read ships two people who left. The anchor TEXT is the name.
+    And one row's href points at wi-manitowoc2.civicplus.com, the site's own
+    staging host; only on-domain links ship, so that district carries no url
+    rather than a link to a staging copy.
+
+    The mayor's table sits above and has three columns and no district, so
+    requiring a district cell is what excludes him.
+    """
+    page = fetch(MANITOWOC_INDEX)
+    members = {}
+    for row in re.findall(r"<tr\b[^>]*>(.*?)</tr>", page, re.S):
+        cells = re.findall(r"<td\b[^>]*>(.*?)</td>", row, re.S)
+        if len(cells) != 4:
+            continue
+        nm = re.search(r"<a\b[^>]*>\s*([^<]+?)\s*</a>", cells[0])
+        dm = re.match(r"^\s*(\d{1,2})\s*(?:<br\s*/?>)?\s*$", cells[1])
+        if not (nm and dm):
+            continue
+        n = int(dm.group(1))
+        name = " ".join(H.unescape(nm.group(1)).split())
+        entry = {"name": name}
+        href = re.search(r'href="([^"]+)"', cells[0])
+        # `/path` or an absolute manitowoc.org URL, and NEVER `//host/path`,
+        # which urljoin would turn into somebody else's origin
+        if href and re.match(r"^(?:https?://(?:www\.)?manitowoc\.org)?/(?!/)",
+                             href.group(1)):
+            entry["url"] = urllib.parse.urljoin(MANITOWOC_INDEX, href.group(1))
+        ph = re.search(r"\(?\d{3}\)?[\s.-]\s*\d{3}-\d{4}", cells[3])
+        if ph:
+            entry["phone"] = " ".join(ph.group(0).split())
+        key = "%02d" % n
+        if key in members and members[key]["name"] != name:
+            raise SystemExit("manitowoc lists two names for district %d" % n)
+        members[key] = entry
+    if len(members) != 10:
+        raise SystemExit("manitowoc names %d of 10 districts" % len(members))
+    return members, MANITOWOC_INDEX
+
+
+# ----------------------------------------------- Sheboygan and Eau Claire
+def civicplus_hcards(page):
+    """[(name, job title, profile href)] for a CivicPlus staff-directory
+    widget. Two cities below publish their council through it, one h-card per
+    member, and the job title is where the district lives."""
+    out = []
+    for li in re.split(r'<li class="widgetItem h-card"', page)[1:]:
+        nm = re.search(r'class="widgetTitle field p-name">\s*(.*?)\s*</h4>', li, re.S)
+        jt = re.search(r'class="field p-job-title">\s*(.*?)\s*</div>', li, re.S)
+        if not (nm and jt):
+            continue
+        u = re.search(r'class="field p-link"><a href="([^"]+)"', li)
+        out.append((" ".join(re.sub(r"<[^>]+>", " ", H.unescape(nm.group(1))).split()),
+                    " ".join(re.sub(r"<[^>]+>", " ", H.unescape(jt.group(1))).split()),
+                    u.group(1) if u else None))
+    return out
+
+
+def scrape_sheboygan():
+    """One h-card per member, the job title reading "District N (Wards a, b)"
+    with a council role sometimes appended.
+
+    THE PAGE'S WARD LISTS ARE BEHIND THE STATE'S FILE — District 9 names wards
+    17 and 18 where LTSB also files ward 23 there — so the ward parenthesis is
+    read as prose and never as a key; the district number is the key.
+
+    ROBOTS: sheboyganwi.gov's `*` group is `Allow: /` with
+    Content-Signal: search=yes,ai-train=no,use=reference. Nine crawlers are
+    disallowed BY NAME (Amazonbot, CCBot, ClaudeBot, GPTBot and the rest); this
+    weekly civic-data fetch is none of them, nothing here trains on the page,
+    and naming the alderperson with a link back to this page is the reference
+    use the signal permits. Recorded so the reading is visible and the operator
+    can drop this city if they read it differently.
+    """
+    members = {}
+    for name, title, href in civicplus_hcards(fetch(SHEBOYGAN_INDEX)):
+        d = re.search(r"District\s+(\d{1,2})\b", title)
+        if not d:
+            continue
+        n = int(d.group(1))
+        entry = {"name": name}
+        if href:
+            entry["url"] = urllib.parse.urljoin(SHEBOYGAN_INDEX, href)
+        key = "%02d" % n
+        if key in members and members[key]["name"] != name:
+            raise SystemExit("sheboygan lists two names for district %d" % n)
+        members[key] = entry
+    if len(members) != 10:
+        raise SystemExit("sheboygan names %d of 10 districts" % len(members))
+    return members, SHEBOYGAN_INDEX
+
+
+def scrape_eau_claire():
+    """The same widget, job titles reading "City Council - District N".
+
+    THIS CITY WAS RECORDED AS BLOCKED AND IS NOT. The gap record has said since
+    2026-08-26 that "Eau Claire and Janesville sit behind Akamai denies";
+    measured 2026-09-05, https://www.eauclairewi.gov/310/City-Council answers
+    200 with all five district councillors on it. Whatever the earlier probe
+    met, the claim was carried forward without being re-measured — and a
+    blocked-by-default record is how a readable source stays unread.
+
+    Eau Claire seats ELEVEN and only FIVE are districted: the council is five
+    district members, five at-large and a president, whose h-cards carry a job
+    title with no district in it and are excluded by requiring one. The other
+    six are a City-card fact, not an aldermanic-district one.
+    """
+    members = {}
+    for name, title, href in civicplus_hcards(fetch(EAU_CLAIRE_INDEX)):
+        d = re.search(r"City Council\s*[-–]\s*District\s+(\d{1,2})\b", title)
+        if not d:
+            continue
+        n = int(d.group(1))
+        entry = {"name": name}
+        if href:
+            entry["url"] = urllib.parse.urljoin(EAU_CLAIRE_INDEX, href)
+        key = "%02d" % n
+        if key in members and members[key]["name"] != name:
+            raise SystemExit("eau claire lists two names for district %d" % n)
+        members[key] = entry
+    if len(members) != 5:
+        raise SystemExit("eau claire names %d of 5 districts" % len(members))
+    return members, EAU_CLAIRE_INDEX
+
+
+# ------------------------------------------------------------------ Superior
+def scrape_superior():
+    """One table row per councilor: a left cell headed "Nth District - Area",
+    a right cell with the name in an h1.headline, a mailto and a phone.
+
+    TWO REASONS THIS PARSES PER ROW AND NEVER OVER THE PAGE: every bio repeats
+    its own ordinal in prose ("1st District Councilor Nicholas Ledin is…"), and
+    the district-5 heading is misspelt "5th Disrtict", which is why the anchor
+    is the ordinal plus "Dis" rather than the whole word.
+
+    There is also a VILLAGE of Superior (COUSUBFP 78660, one uncoded ward). The
+    city is 78650 and is the only one of the two with districts.
+    """
+    page = fetch(SUPERIOR_INDEX)
+    members = {}
+    for row in re.findall(r"<tr\b[^>]*>(.*?)</tr>", page, re.S):
+        d = re.search(r"(\d{1,2})(?:st|nd|rd|th)\s+Dis[a-z]*\b", row, re.I)
+        nm = re.search(r'<h1 class="headline">\s*(.*?)\s*</h1>', row, re.S)
+        if not (d and nm):
+            continue
+        n = int(d.group(1))
+        name = " ".join(re.sub(r"<[^>]+>", " ", H.unescape(nm.group(1))).split())
+        entry = {"name": name}
+        em = re.search(r'href="mailto:([^"?]+)"', row)
+        if em:
+            entry["email"] = em.group(1).strip()
+        ph = re.search(r"\(\d{3}\)\s*\d{3}-\d{4}", re.sub(r"<[^>]+>", " ", row))
+        if ph:
+            entry["phone"] = " ".join(ph.group(0).split())
+        key = "%02d" % n
+        if key in members and members[key]["name"] != name:
+            raise SystemExit("superior lists two names for district %d" % n)
+        members[key] = entry
+    if len(members) != 10:
+        raise SystemExit("superior names %d of 10 districts" % len(members))
+    return members, SUPERIOR_INDEX
+
+
+# ------------------------------------------------------------------- Portage
+def scrape_portage():
+    """Contact cards: <strong>NAME</strong>, then "District N Alderperson
+    Term …", then a line this parser must never read, then a phone, then a
+    mailto.
+
+    THE THIRD LINE IS THE ALDERPERSON'S HOME ADDRESS. Portage publishes it; the
+    fleet does not ship one for anybody, so the card is read field by field —
+    the name from the <strong>, the district from the line that says District,
+    the phone by its own shape and the address from the mailto — and the line
+    between the district and the phone is never touched.
+    """
+    page = fetch(PORTAGE_INDEX)
+    members = {}
+    for card in re.split(r'<div class="card-body">', page)[1:]:
+        card = card.split("</div>")[0]
+        nm = re.search(r"<strong>\s*([^<]+?)\s*</strong>", card)
+        d = re.search(r"District\s+(\d{1,2})\s+Alderperson", card)
+        if not (nm and d):
+            continue
+        n = int(d.group(1))
+        name = " ".join(H.unescape(nm.group(1)).split())
+        entry = {"name": name}
+        em = re.search(r'href="mailto:([^"?]+)"', card)
+        if em:
+            entry["email"] = em.group(1).strip()
+        ph = re.search(r"(?<![-\d])\d{3}-\d{3}-\d{4}(?![-\d])",
+                       re.sub(r"<[^>]+>", " ", card))
+        if ph:
+            entry["phone"] = ph.group(0)
+        key = "%02d" % n
+        if key in members and members[key]["name"] != name:
+            raise SystemExit("portage lists two names for district %d" % n)
+        members[key] = entry
+    if len(members) != 9:
+        raise SystemExit("portage names %d of 9 districts" % len(members))
+    return members, PORTAGE_INDEX
+
+
+# ------------------------------------------------------------------- Viroqua
+def scrape_viroqua():
+    """A five-column table: WARD N | NAME | Term Expires | mailto | tel.
+
+    The city numbers its seats by ward, so the same LTSB witness Menomonie uses
+    applies here; the MAYOR row's first cell says MAYOR and carries no number,
+    which is what excludes it. Names print in capitals and ship that way — this
+    project renders what the publisher wrote.
+    """
+    require_ward_is_district("Viroqua", "C", 9)
+    page = fetch(VIROQUA_INDEX)
+    members = {}
+    for row in re.findall(r"<tr\b[^>]*>(.*?)</tr>", page, re.S):
+        cells = re.findall(r"<td\b[^>]*>(.*?)</td>", row, re.S)
+        if len(cells) < 2:
+            continue
+        w = re.match(r"^\s*WARD\s+(\d{1,2})\s*$",
+                     re.sub(r"<[^>]+>", " ", H.unescape(cells[0])).strip(), re.I)
+        if not w:
+            continue
+        n = int(w.group(1))
+        name = " ".join(re.sub(r"<[^>]+>", " ", H.unescape(cells[1])).split())
+        if not name:
+            raise SystemExit("viroqua: ward %d has no name cell" % n)
+        entry = {"name": name}
+        em = re.search(r'href="mailto:([^"?]+)"', row)
+        if em:
+            entry["email"] = em.group(1).strip()
+        ph = re.search(r"\(\d{3}\)\s*\d{3}-\d{4}", re.sub(r"<[^>]+>", " ", row))
+        if ph:
+            entry["phone"] = " ".join(ph.group(0).split())
+        key = "%02d" % n
+        if key in members and members[key]["name"] != name:
+            raise SystemExit("viroqua lists two names for ward %d" % n)
+        members[key] = entry
+    if len(members) != 9:
+        raise SystemExit("viroqua names %d of 9 wards" % len(members))
+    return members, VIROQUA_INDEX
+
+
+# ------------------------------------------------------------------- Menasha
+def scrape_menasha():
+    """Eight table cells, laid out DOWN THE COLUMNS (1, 5, 2, 6, 3, 7, 4, 8),
+    each headed "District N Alderperson" with the name under it.
+
+    TWO THINGS ARE DELIBERATELY NOT READ. The line under each name is the
+    alderperson's HOME ADDRESS, which never ships. And District 1's cell
+    contains href="mailto:rnichols@ci.menasha.wi.us" wrapping an empty <br> —
+    that is not Chris Rand's address, and taking it would attach one person's
+    mail to another's name, the same shape as the county page whose footer
+    webmaster@ once shipped as a sheriff. So NO e-mail ships for Menasha; the
+    city routes contact through a per-district "Contact Me" form anyway.
+    """
+    page = fetch(MENASHA_INDEX)
+    members = {}
+    for cell in re.findall(r"<td\b[^>]*>(.*?)</td>", page, re.S):
+        d = re.search(r"District\s+(\d{1,2})\s+Alderperson", cell)
+        if not d:
+            continue
+        n = int(d.group(1))
+        after = cell[d.end():]
+        nm = re.search(r"<strong>\s*(?:<[^>]+>\s*)*([^<]+?)\s*<", after)
+        if not nm:
+            raise SystemExit("menasha: district %d cell has no name in bold" % n)
+        name = " ".join(H.unescape(nm.group(1)).split())
+        if not re.match(r"^[A-ZÀ-Þ][A-Za-zÀ-ÿ.'’ -]+$", name):
+            raise SystemExit("menasha district %d name reads %r — the cell shape "
+                             "moved" % (n, name))
+        entry = {"name": name}
+        ph = re.search(r"\(\d{3}\)\s*\d{3}-\d{4}", re.sub(r"<[^>]+>", " ", after))
+        if ph:
+            entry["phone"] = " ".join(ph.group(0).split())
+        key = "%02d" % n
+        if key in members and members[key]["name"] != name:
+            raise SystemExit("menasha lists two names for district %d" % n)
+        members[key] = entry
+    if len(members) != 8:
+        raise SystemExit("menasha names %d of 8 districts" % len(members))
+    return members, MENASHA_INDEX
+
+
+# -------------------------------------------------------------------- Howard
+def scrape_howard():
+    """A village, not a city: eight TRUSTEE districts, one <li> each, reading
+    "NAME, District N (Wards a-b)". The Village President sits in his own list
+    above with ", Village President" and no district, which is what keeps a
+    citywide officer off a district card."""
+    page = fetch(HOWARD_INDEX)
+    members = {}
+    for li in re.findall(r"<li\b[^>]*>(.*?)</li>", page, re.S):
+        d = re.search(r"District\s+(\d{1,2})\b", re.sub(r"<[^>]+>", " ", li))
+        nm = re.search(r'href="([^"]*[Dd]irectory\.aspx\?EID=\d+)"[^>]*>(.*?)</a>',
+                       li, re.S)
+        if not (d and nm):
+            continue
+        n = int(d.group(1))
+        name = " ".join(re.sub(r"<[^>]+>", " ", H.unescape(nm.group(2))).split())
+        entry = {"name": name,
+                 "url": urllib.parse.urljoin(HOWARD_INDEX, nm.group(1))}
+        key = "%02d" % n
+        if key in members and members[key]["name"] != name:
+            raise SystemExit("howard lists two names for district %d" % n)
+        members[key] = entry
+    if len(members) != 8:
+        raise SystemExit("howard names %d of 8 trustee districts" % len(members))
+    return members, HOWARD_INDEX
+
+
+# --------------------------------------------------------------------- Tomah
+def scrape_tomah():
+    """Drupal view rows: the title field is the member's name and profile link,
+    the position field reads "District N Alderperson". The mayor's row has the
+    same shape with position "Mayor", so requiring a district excludes him."""
+    page = fetch(TOMAH_INDEX)
+    members = {}
+    for row in re.split(r'<div class="views-row', page)[1:]:
+        nm = re.search(r'views-field-title[^>]*>.*?<a href="([^"]+)"[^>]*>\s*'
+                       r'([^<]+?)\s*</a>', row, re.S)
+        pos = re.search(r'views-field-field-position.*?class="field-content">\s*'
+                        r'([^<]*?)\s*</div>', row, re.S)
+        if not (nm and pos):
+            continue
+        d = re.search(r"District\s+(\d{1,2})\b", H.unescape(pos.group(1)))
+        if not d:
+            continue
+        n = int(d.group(1))
+        name = " ".join(H.unescape(nm.group(2)).split())
+        entry = {"name": name,
+                 "url": urllib.parse.urljoin(TOMAH_INDEX, nm.group(1))}
+        key = "%02d" % n
+        if key in members and members[key]["name"] != name:
+            raise SystemExit("tomah lists two names for district %d" % n)
+        members[key] = entry
+    if len(members) != 8:
+        raise SystemExit("tomah names %d of 8 districts" % len(members))
+    return members, TOMAH_INDEX
+
+
+
 # ONE CITY NEVER TAKES THE OTHER FIVE DOWN. Until 2026-09-03 the six scrapes
 # ran unguarded and any raise ended the run, so greenbaywi.gov timing out after
 # three 60-second tries cost Milwaukee, Madison, Kenosha, Racine and Waukesha
@@ -597,7 +1169,18 @@ def main():
             ("31000", "Green Bay", 12, scrape_green_bay),
             ("39225", "Kenosha", 17, scrape_kenosha),
             ("66000", "Racine", 15, scrape_racine),
-            ("84250", "Waukesha", 15, scrape_waukesha)):
+            ("84250", "Waukesha", 15, scrape_waukesha),
+            ("77200", "Stevens Point", 11, scrape_stevens_point),
+            ("51025", "Menomonie", 11, scrape_menomonie),
+            ("48500", "Manitowoc", 10, scrape_manitowoc),
+            ("72975", "Sheboygan", 10, scrape_sheboygan),
+            ("78650", "Superior", 10, scrape_superior),
+            ("64100", "Portage", 9, scrape_portage),
+            ("82925", "Viroqua", 9, scrape_viroqua),
+            ("50825", "Menasha", 8, scrape_menasha),
+            ("35950", "Howard", 8, scrape_howard),
+            ("80075", "Tomah", 8, scrape_tomah),
+            ("22300", "Eau Claire", 5, scrape_eau_claire)):
         result, reason = attempt(name, fn)
         if result is None:
             failures[code] = {"municipality": name, "reason": reason}
@@ -621,8 +1204,9 @@ def main():
                   ensure_ascii=False)
     total = sum(len(c["members"]) for c in got.values())
     madison = got.get("48000", {}).get("vacantDistricts")
-    print("scraped %d alderpersons across %d of 6 cities (Madison vacant: %s)%s -> %s"
-          % (total, len(got), madison or "none",
+    print("scraped %d alderpersons across %d of %d municipalities (Madison "
+          "vacant: %s)%s -> %s"
+          % (total, len(got), len(CITIES), madison or "none",
              "" if not failures else "; MISSED %s" % ", ".join(
                  sorted(f["municipality"] for f in failures.values())),
              out_path))
