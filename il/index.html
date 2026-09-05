@@ -13870,6 +13870,38 @@ function initChiExplorer() {
   var loadBooneLibraryDistricts = makeCached(function () {
     return fetchJSONWithRetry("data/app/boone-library-districts.json", {}, 2);
   });
+
+  /* Each of the five bodies' own website, from the SAME County Clerk yearbook
+   * the names came from — so the card links the body rather than only naming
+   * it, and one document backs both. Not scraped: the yearbook prints these as
+   * plain text under each body's heading, and a five-row hand-kept table beside
+   * the names it belongs with is honest where a sixth entry appearing without
+   * one would not be. www.northsuburbanlibrary.org refuses this client with a
+   * 403 (a CDN turning away datacenter traffic, not a dead site) and is shipped
+   * anyway, because the county publishes it and a reader's browser reaches it. */
+  // Each address is written as `url: "…"` rather than as a bare string value,
+  // because that is the literal scripts/validate_card_links.py extracts. A map
+  // of plain strings reads identically and would never be probed, so a district
+  // that moved or folded would keep a dead link on its card indefinitely — the
+  // same reason the six statewide library loaders name their files literally.
+  var BOONE_DISTRICT_SITES = {
+    "BELVIDERE PARK DISTRICT": { url: "https://www.belviderepark.org/" },
+    "ROCKFORD PARK DISTRICT": { url: "https://www.rockfordparkdistrict.org/" },
+    "IDA PUBLIC LIBRARY": { url: "https://www.idapubliclibrary.org/" },
+    "CHERRY VALLEY DISTRICT LIBRARY": { url: "https://www.cherryvalleylib.org/" },
+    "NORTH SUBURBAN DISTRICT LIBRARY": { url: "https://www.northsuburbanlibrary.org/" }
+  };
+  function booneDistrictLink(result) {
+    var name = result && result.name ? String(result.name) : "";
+    var site = BOONE_DISTRICT_SITES[name];
+    var safe = site ? safeHttpUrl(site.url) : null;
+    if (!safe) return null;
+    // The card body prints the yearbook's own capitals; the link LABEL reads
+    // as a sentence, so "BELVIDERE PARK DISTRICT" does not shout twice in one
+    // card. Only the display changes — the name shipped in the data does not.
+    var pretty = name.toLowerCase().replace(/\b[a-z]/g, function (c) { return c.toUpperCase(); });
+    return { label: pretty + " (official)", url: safe };
+  }
   /* ---------- Six counties' library districts, from a STATEWIDE layer whose
    * publisher is neither the county nor the library -----------------------
    * Carroll, Lee, Randolph, Sangamon, St. Clair and Stephenson publish no
@@ -23220,7 +23252,8 @@ function initChiExplorer() {
         fields: [
           { name: "name", label: "Park District", keys: ["district"], primary: true },
           { label: "County", value: "Boone County" }
-        ]
+        ],
+        primaryLink: booneDistrictLink
       }),
       // Peoria's 4 — from the same taxing family as its fire and library
       // entries, and carrying the same per-district WebSite column, so each
@@ -23628,7 +23661,8 @@ function initChiExplorer() {
         fields: [
           { name: "name", label: "Library District", keys: ["district"], primary: true },
           { label: "County", value: "Boone County" }
-        ]
+        ],
+        primaryLink: booneDistrictLink
       }),
       // Peoria's 10 — the third of the county's taxing tilings, and like its
       // fire and park siblings it carries the district's own WebSite, so the
