@@ -1948,17 +1948,6 @@ detail into `blocker`.
       "wanted": "The missing counties' PSAP-boundary filings reaching the OEC aggregate — the state's roughly weekly refresh carries them the moment a county files."
     },
     {
-      "id": "wtcs-district-holes",
-      "concept": "Technical College District",
-      "area": "Wisconsin — statewide",
-      "kind": "data-quality",
-      "layer": "wtcs-district",
-      "summary": "The technical college card draws each district with its interior cutouts filled in, so a point the state excludes from a district is still shown inside one. Every other answer on that card is right.",
-      "why": "The state's map service can hand the same shapes over in two formats, and one of them quietly turns a cut-out into solid ground. This layer was built through that one; the county board layer has been rebuilt through the other.",
-      "wanted": "Nothing from the state \u2014 the shapes are already published correctly. This is a rebuild of the layer through the corrected reader, which is queued.",
-      "blocker": "MEASURED 2026-09-05, as a side finding of the supervisory-district rebuild. ArcGIS's GeoJSON export silently UNNESTS interior rings: it returns a feature's holes as separate SHELLS, so an area the publisher cut out becomes an area the layer claims. Measured on this layer's own DPI endpoint, same query, same generalisation, only the format changed: f=geojson returns 16 features with ZERO holes, f=json returns the same 16 with 109. The shipped wtcs-districts.json carries 0, so it fills all 109. THE BUILDER'S OWN GATE CANNOT SEE THIS: build_wi_wtcs_districts.py asserts that the union's one lawful interior hole is Lake Winnebago, a check written because holes matter here, but it runs on make_valid copies at the UNION level, and shapely's make_valid re-nests an unnested inner shell as a hole, so the gate passes identically on either fetch (112 union holes both ways, measured 2026-09-05) and will not certify the rebuild; the rebuild needs a per-feature hole assertion. The fix is not new code \u2014 fetch_layer in build_wi_supervisory_districts.py was switched to f=json with a containment-aware converter on 2026-09-05 and every caller of it is correct; this builder fetches f=geojson itself and is one of eight that still do (wi/WATCH.md names all eight, and records that build_metro_outline.py was MEASURED unaffected because TIGERweb's county layer has no interior rings either way). WHAT IS NOT YET MEASURED IS THE READER IMPACT: a hole in one technical college district is often another district, so the card may still answer correctly at many of these points, and no count of wrong answers is claimed here. The supervisory layer's equivalent rebuild (2026-09-05) restored 277 source holes on 95 features; at an interior point of each, 133 went from wrong to right against the service's own answer and about 100 stay wrong inside slivers under 0.008 km2 that simplification keeps. GEOMETRY AND CARD ARE DIFFERENT COUNTS: the app renders the FIRST containing feature, so where main's geometry held two districts at one point the card showed one of them by file order, and the card-visible correction is 62 to 63 points. Retire this record by rebuilding the layer through the corrected path and diffing at an INTERIOR POINT of each restored hole — never its centroid, which for a non-convex hole falls outside it, lands in the owner's shell and reads as agreement. The supervisory rebuild measured that way found 133 points corrected and 108 still wrong, every one of the 108 under 0.0073 km2 and dropped by simplification in both versions, so expect a residual here too and state it rather than claiming the rebuild closes everything."
-    },
-    {
       "id": "ng911-ems-filings",
       "concept": "EMS service areas",
       "area": "Iowa, Jefferson, Langlade, Vilas and Walworth counties",
@@ -6158,6 +6147,108 @@ recorded as a candidate rather than made in passing.
 ## Backlog — researched candidates, deliberately not (yet) built
 
 Every entry cites where it's recorded and the blocker.
+
+### FLEET-WIDE — 69 builders ask ArcGIS for GeoJSON, and that exporter unnests holes
+
+**Recorded 2026-09-05, measured, and open on every instance except the two
+Wisconsin layers already rebuilt.** This is a backlog item rather than a gap
+record because nobody has measured which of the remaining layers HAS interior
+rings, and a layer with none is unaffected no matter how it is fetched.
+
+**The defect.** ArcGIS's GeoJSON export silently UNNESTS interior rings: it
+returns a feature's holes as separate PARTS, so ground the publisher cut out
+of a district becomes ground the district claims, and the app's
+point-in-polygon test — which subtracts `ring[1:]` from each part's shell —
+has nothing left to subtract. Esri JSON (`f=json`) carries the rings with
+their orientation intact and converts correctly. Two Wisconsin layers were
+measured and both were wrong:
+
+| layer | holes as `f=geojson` | as `f=json` | card answers corrected |
+|---|---|---|---|
+| `county-supervisory-districts` | 607 | 847 | 63 |
+| `wtcs-districts` | 0 | 109 | 59 |
+
+**THE TEST IS PER LAYER AND COSTS TWO FETCHES.** Ask the same query both
+ways and compare interior-ring counts. A layer that returns the same count
+either way has no interior rings and is not affected — `build_metro_outline.py`
+was measured that way and is clean, because TIGERweb's county layer has none.
+
+**The surface, measured 2026-09-05** — files whose Python asks a server for
+GeoJSON, counting BOTH spellings (`f=geojson` inside a URL string and the dict
+form `"f": "geojson"`):
+
+| tree | files | call sites |
+|---|---|---|
+| `scripts/` (Illinois) | 35 | 43 |
+| `ia/scripts/` | 15 | 18 |
+| `wi/scripts/` | 10 | 11 |
+| `mi/scripts/` | 7 | 7 |
+| `ny/scripts/` | 1 | 1 |
+| `ca/scripts/` | 1 | 1 |
+
+**COUNT BOTH SPELLINGS.** Grepping only `f=geojson` reports Illinois as 3
+files instead of 35 — that mistake was made here first, and the dict form is
+the commoner one by an order of magnitude.
+
+**THE DEFECT TRACKS THE HOST, NOT ARCGIS IN GENERAL — so 26 of those 69 files
+are the ones to check first.** Measured 2026-09-05 across twelve layers on six
+hosts:
+
+| host class | layers | interior rings `f=geojson` vs `f=json` |
+|---|---|---|
+| ArcGIS Online (`services*.arcgis.com`) | 2 | **both AFFECTED** — LTSB 1 vs 2 on Marathon alone; DPI 0 vs 109 |
+| on-premises ArcGIS Server + TIGERweb | 10 | all identical, on four hosts |
+
+The clean ten are not a null result: Madison's ward layer keeps **44** interior
+rings through the GeoJSON exporter, its association layer 14, its TIF layer 4,
+Milwaukee's MPS layer 2, its TID layer 1, and LTSB's on-premises ward layer 1.
+Rings that survive are evidence the exporter nests correctly; **a layer with no
+interior rings either way proves nothing about the exporter** and is merely
+unaffected — TIGERweb's legislative and county layers are clean only in that
+weaker sense.
+
+**LTSB IS ITS OWN CONTROL, which is what makes this more than a correlation**:
+the same publisher's on-premises ward layer keeps its ring while its ArcGIS
+Online supervisory layer drops one, so the difference is the HOST rather than
+the publisher, the data or the query.
+
+Twelve layers on six hosts is a strong signal, not a proof, so the per-layer
+test above stays the rule. But it says where to look first — files naming an
+ArcGIS Online host: 11 in `ia/`, 8 in `scripts/`, 4 in `wi/`, 3 in `mi/`, none
+in `ny/` or `ca/`.
+
+Two narrowings worth carrying, both measured:
+
+* A fetch with `returnGeometry=false` cannot be affected, whatever its format.
+  `wi_county_board_scraper.py` names both formats but only its line 4000 is
+  exposed; the other five set `returnGeometry=false`.
+* Wisconsin's `build_wi_supervisory_districts.py` appears in a naive grep and
+  is CLEAN — its two hits are comments explaining the defect. Read the line
+  before counting the file.
+* A file that reaches many hosts may reach only ONE with geometry. Wisconsin's
+  `wi_county_board_scraper.py` was first recorded as unmeasurable "because its
+  line 4000 hits a different county-owned host per county"; it carries three
+  layer specs, and that line runs solely for a county declaring a
+  `district_witness` — Lincoln alone, on-premises and measured clean. COUNT THE
+  CALL SITES THAT ASK FOR GEOMETRY, not the hosts a file mentions.
+
+**A GATE DOWNSTREAM OF `make_valid` CANNOT SEE THIS.** shapely's `make_valid`
+RE-NESTS an unnested inner shell as a hole — a 10×10 square with a 2×2 hole
+gives `Polygon, holes=1, area=96.0` from both forms — so any check that
+validates before it measures is blind by construction. The WTCS builder's
+Lake Winnebago rule was doubly blind, because a tiling's UNION also fills a
+district's hole from its neighbour. A gate for this must run on the geometry
+as SHIPPED: `build_wi_wtcs_districts.py` carries the pattern (an interior-ring
+floor, plus a pinned count of parts nested inside another part of the same
+district).
+
+**Do not tune that nested-part gate by shape.** Attempted and refused here:
+the server generalization emits degenerate micro-parts, and 22 of WTCS's 103
+real holes are smaller than the largest of them while 29 share their 4-vertex
+count — so an area or vertex threshold blinds the gate to real cutouts. The
+interior-ring floor is what actually catches an unnested fetch, which shows up
+there as zero.
+
 
 ### The Wisconsin ask ledger — opened 2026-08-27, nine asks SENT, awaiting replies
 
