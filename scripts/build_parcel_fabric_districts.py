@@ -111,23 +111,60 @@ BOONE_PARCELS = ("https://maps.boonecountyil.org/arcgis/rest/services/"
 # narrower thing: read as a membership list it omits twelve codes on 956
 # parcels, and the first attempt at this build read that omission as the county
 # contradicting itself and stopped.
+#
+# TWO COUNTY DOCUMENTS, EACH USED FOR WHAT IT OWNS. The Clerk's "Taxcode Value
+# within District Report" owns the LINES — which tax codes pay into which
+# district — and abbreviates the names to fit its columns (`PDBV - BELVIDERE PK
+# DIST`, `LYBV - IDA LIBRARY`). The Clerk's YEARBOOK, the same office's annual
+# directory of officials and already scraped weekly by
+# boone_municipal_officials_scraper.py, owns the NAMES: it gives each body a
+# section heading, address, telephone and website. So the names below are the
+# yearbook's headings verbatim, and nothing is expanded or invented. Checking
+# the districts' own websites instead was tried and is the worse route — two of
+# the five were unreachable from here, and cherryvalleylibrary.org turns out to
+# be a library in Cherry Valley, NEW YORK, where the yearbook's own
+# cherryvalleylib.org is the Illinois one.
+#
+# BOONE LEVIES FIVE OF THESE, NOT TWO. The first cut of this build shipped
+# Belvidere and Ida alone, which would have told a resident of the county's
+# western strip (Loves Park, in Rockford Park District and North Suburban
+# District Library) or its south-west corner (Cherry Valley District Library)
+# that they are in NO park or library district. They are in one; it is simply
+# seated in Winnebago County and reaches across the line — the same shape as
+# Stark's Kewanee and Williamsfield entries. Only the Boone slice is drawn, and
+# the entries are coverage-gated to Boone, so no district is claimed anywhere
+# this build cannot see it.
 BELVIDERE_PARK = "BELVIDERE PARK DISTRICT"
-IDA_LIBRARY = "IDA PUBLIC LIBRARY DISTRICT"
-BOONE_PARK_CODES = {
-        "03008": BELVIDERE_PARK, "05001": BELVIDERE_PARK, "05002": BELVIDERE_PARK, "05005": BELVIDERE_PARK, "05007": BELVIDERE_PARK, "05008": BELVIDERE_PARK,
-        "05009": BELVIDERE_PARK, "05010": BELVIDERE_PARK, "05011": BELVIDERE_PARK, "05012": BELVIDERE_PARK, "05110": BELVIDERE_PARK, "05111": BELVIDERE_PARK,
-        "05901": BELVIDERE_PARK, "05903": BELVIDERE_PARK, "05904": BELVIDERE_PARK, "06004": BELVIDERE_PARK, "06005": BELVIDERE_PARK, "06012": BELVIDERE_PARK,
-        "06111": BELVIDERE_PARK, "07004": BELVIDERE_PARK, "07014": BELVIDERE_PARK, "07044": BELVIDERE_PARK, "08002": BELVIDERE_PARK, "08102": BELVIDERE_PARK,
-        "09700": BELVIDERE_PARK,
-}
-BOONE_LIBRARY_CODES = {
-        "05005": IDA_LIBRARY, "05012": IDA_LIBRARY, "05111": IDA_LIBRARY, "05901": IDA_LIBRARY, "05903": IDA_LIBRARY, "05904": IDA_LIBRARY,
-        "06004": IDA_LIBRARY, "06005": IDA_LIBRARY, "06012": IDA_LIBRARY, "06111": IDA_LIBRARY, "07002": IDA_LIBRARY, "07004": IDA_LIBRARY,
-        "07012": IDA_LIBRARY, "07014": IDA_LIBRARY, "07044": IDA_LIBRARY, "08002": IDA_LIBRARY, "08102": IDA_LIBRARY, "09700": IDA_LIBRARY,
-}
+ROCKFORD_PARK = "ROCKFORD PARK DISTRICT"
+IDA_LIBRARY = "IDA PUBLIC LIBRARY"
+CHERRY_VALLEY_LIBRARY = "CHERRY VALLEY DISTRICT LIBRARY"
+NORTH_SUBURBAN_LIBRARY = "NORTH SUBURBAN DISTRICT LIBRARY"
 
-# slug -> source config. name_prop is both the case-insensitive read key and
-# the property the shipped feature carries (upstream casing preserved).
+BOONE_PARK_CODES = {"03007": ROCKFORD_PARK}
+for _code in ("03008 05001 05002 05005 05007 05008 05009 05010 05011 05012 05110 "
+              "05111 05901 05903 05904 06004 06005 06012 06111 07004 07014 07044 "
+              "08002 08102 09700").split():
+    BOONE_PARK_CODES[_code] = BELVIDERE_PARK
+
+BOONE_LIBRARY_CODES = {}
+for _code in ("05005 05012 05111 05901 05903 05904 06004 06005 06012 06111 07002 "
+              "07004 07012 07014 07044 08002 08102 09700").split():
+    BOONE_LIBRARY_CODES[_code] = IDA_LIBRARY
+for _code in ("05009", "07005"):
+    BOONE_LIBRARY_CODES[_code] = CHERRY_VALLEY_LIBRARY
+for _code in ("03004", "03007", "03011", "05008"):
+    BOONE_LIBRARY_CODES[_code] = NORTH_SUBURBAN_LIBRARY
+
+def _in_clause(codes):
+    return "tax_code IN (%s)" % ", ".join("'%s'" % c for c in sorted(codes))
+
+# slug -> source config. name_prop is the case-insensitive read key, and by
+# default also the property the shipped feature carries (upstream casing
+# preserved). A code_map source must set out_prop instead: its name_prop names
+# the INPUT column (Boone's `tax_code`) while the value that ships is a district
+# NAME, and shipping a district name under a key that says "tax code" is exactly
+# the kind of confidently-mislabelled column this builder refuses to carry
+# forward from a county.
 SOURCES = [
     {"slug": "rock-island-fire", "out": "rock-island-fire-districts.json",
      "layer": RI + "2", "name_prop": "FirePD", "expect": 17,
@@ -148,22 +185,33 @@ SOURCES = [
      "layer": RI + "8", "name_prop": "park_distr", "expect": 1,
      "edit_pin": 1642177768661, "probes": []},
     # Boone's two, the first sources here whose upstream is a PARCEL FABRIC
-    # rather than a district tiling: 12,264 parcels for the park district and
-    # 8,351 for the library, paged 1,000 at a time. Each `expect` is 1 because
-    # each is a single district, so the guards that carry the weight are the
-    # raw-area retention every source gets and the probes below.
+    # rather than a district tiling: ~13k parcels for the park districts and
+    # ~8.7k for the libraries, paged 1,000 at a time. The probes carry the
+    # weight here, and they are chosen to discriminate rather than to pass —
+    # every district gets a positive, every negative sits on a REAL parcel in a
+    # code the Clerk's report puts in no such district, and the two sources
+    # cross-check each other: 05007 is in the Belvidere park district and in no
+    # library, 03004 is in the North Suburban library and in no park district,
+    # so a source that quietly reused the other's code map would fail both.
     {"slug": "boone-park", "out": "boone-park-districts.json",
-     "layer": BOONE_PARCELS, "name_prop": "tax_code", "expect": 1,
-     "code_map": BOONE_PARK_CODES, "where": "tax_code IN ('03008', '05001', '05002', '05005', '05007', '05008', '05009', '05010', '05011', '05012', '05110', '05111', '05901', '05903', '05904', '06004', '06005', '06012', '06111', '07004', '07014', '07044', '08002', '08102', '09700')",
-     "probes": [(42.25670, -88.83936, BELVIDERE_PARK),   # Belvidere City Hall
-                (42.39942, -88.74059, None),             # Capron — outside it
-                (42.36835, -88.82205, None)]},           # Poplar Grove — outside
+     "layer": BOONE_PARCELS, "name_prop": "tax_code", "expect": 2,
+     "out_prop": "district", "code_map": BOONE_PARK_CODES,
+     "where": _in_clause(BOONE_PARK_CODES),
+     "probes": [(42.25670, -88.83936, BELVIDERE_PARK),        # Belvidere City Hall (05005)
+                (42.32119, -88.83908, BELVIDERE_PARK),        # 05007 — the district reaches past the city
+                (42.33062, -88.93750, ROCKFORD_PARK),         # 03007 — the Loves Park strip
+                (42.39853, -88.74735, None),                  # Capron village (04003) — in neither
+                (42.34853, -88.93519, None)]},                # 03004 — library only, no park
     {"slug": "boone-library", "out": "boone-library-districts.json",
-     "layer": BOONE_PARCELS, "name_prop": "tax_code", "expect": 1,
-     "code_map": BOONE_LIBRARY_CODES, "where": "tax_code IN ('05005', '05012', '05111', '05901', '05903', '05904', '06004', '06005', '06012', '06111', '07002', '07004', '07012', '07014', '07044', '08002', '08102', '09700')",
-     "probes": [(42.25670, -88.83936, IDA_LIBRARY),      # Belvidere City Hall
-                (42.39942, -88.74059, None),             # Capron (N. Suburban)
-                (42.36835, -88.82205, None)]},           # Poplar Grove
+     "layer": BOONE_PARCELS, "name_prop": "tax_code", "expect": 3,
+     "out_prop": "district", "code_map": BOONE_LIBRARY_CODES,
+     "where": _in_clause(BOONE_LIBRARY_CODES),
+     "probes": [(42.25670, -88.83936, IDA_LIBRARY),              # Belvidere City Hall (05005)
+                (42.24308, -88.93207, CHERRY_VALLEY_LIBRARY),    # 05009
+                (42.33062, -88.93750, NORTH_SUBURBAN_LIBRARY),   # 03007
+                (42.34853, -88.93519, NORTH_SUBURBAN_LIBRARY),   # 03004
+                (42.39853, -88.74735, None),                    # Capron village (04003)
+                (42.32119, -88.83908, None)]},                  # 05007 — park only, no library
     {"slug": "kendall-fire", "out": "kendall-fire-districts.json",
      "layer": KENDALL + "Fire_Protection_Districts/FeatureServer/0",
      "name_prop": "fire", "expect": 10,
@@ -290,6 +338,11 @@ def build_source(cfg):
         print("  (no edit stamp published — count+name pin is the guard; "
               "live stamp: %r)" % edit_ms)
 
+    if cfg.get("code_map") is not None and not cfg.get("out_prop"):
+        fail("%s: a code_map source must set out_prop — name_prop names the "
+             "input column, and shipping a district name under it would "
+             "mislabel the column" % cfg["slug"])
+
     # WHERE + PAGINATION, because Boone's upstream is not a district tiling.
     # Every other source here publishes one row per district (9 to 40 of them),
     # so a single unpaginated query was right and its 1,000-row cap was never
@@ -317,7 +370,13 @@ def build_source(cfg):
                  % (cfg["slug"], MAX_FETCH_ROWS))
     geo = {"features": features}
 
-    named, blanks = {}, 0
+    # Accumulate PARTS and union each district ONCE at the end. Unioning
+    # incrementally per row — the shape this loop had — is quadratic in the row
+    # count. Harmless for a 17-row district tiling, and it does not finish in
+    # any usable time over Boone's 12,264 parcels, which is what a parcel fabric
+    # costs. Same geometry either way; a single unary_union over a list is the
+    # call shapely is built for.
+    parts, blanks = {}, 0
     excl = set(cfg.get("exclude_names", []))
     for f in geo.get("features", []):
         props = f.get("properties") or {}
@@ -342,7 +401,9 @@ def build_source(cfg):
         g = polygonal(clean(shape(f["geometry"])))
         if g is None or g.is_empty:
             fail("%s: %r has no usable geometry" % (cfg["slug"], name))
-        named[name] = unary_union([named[name], g]) if name in named else g
+        parts.setdefault(name, []).append(g)
+
+    named = {n: (unary_union(v) if len(v) > 1 else v[0]) for n, v in parts.items()}
 
     if blanks != cfg.get("expect_blanks", 0):
         fail("%s: %d blank-named rows, expected %d — the layer changed"
@@ -456,6 +517,7 @@ def build_source(cfg):
     if seams:
         print("  gaps kept by design (contested seam or short-frontage outlier):", seams)
 
+    out_prop = cfg.get("out_prop", cfg["name_prop"])
     features = []
     for n in ordered:
         g = from_ft(final_ft[n])
@@ -467,13 +529,13 @@ def build_source(cfg):
             return [rnd(x) for x in c]
         geom["coordinates"] = rnd(geom["coordinates"])
         features.append({"type": "Feature",
-                         "properties": {cfg["name_prop"]: n},
+                         "properties": {out_prop: n},
                          "geometry": geom})
     fc = {"type": "FeatureCollection", "features": features}
 
     for lat, lng, want in cfg["probes"]:
         p = Point(lng, lat)
-        hits = [f["properties"][cfg["name_prop"]] for f in features
+        hits = [f["properties"][out_prop] for f in features
                 if shape(f["geometry"]).contains(p)]
         got = hits[0] if hits else None
         print("  probe %.5f,%.5f -> %-30s [%s]"
