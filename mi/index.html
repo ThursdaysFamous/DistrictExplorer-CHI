@@ -5991,6 +5991,7 @@ function initMichiganExplorer() {
     "precinct",          // 3,895 voting precincts across all 83 counties, pre-built from the state's own 2026-cycle layer — 38.8 km2 mean feature area against a 6.4 km2 median, a six-fold skew because a rural township precinct and a city precinct are barely the same kind of object; the finest tiling this instance ships
     "municipality",      // 533 incorporated places, live from TIGERweb (no data/app file) — 281 cities and 252 villages, small dense pockets inside the township fabric, so the smallest layer this instance ships at a 12 km2 mean
     "police-station",    // 1,290 police-station points in Michigan's envelope, live from the USGS National Map (no data/app file) — a nearest-3 proximity layer, ranked with the other point layers rather than by feature area
+    "fire-station",      // 2,838 fire and EMS station points in Michigan's envelope, live from the USGS National Map (no data/app file) — a nearest-3 proximity layer, ranked with the other point layers rather than by feature area
     "post-office"        // 1,799 post-office points in Michigan's envelope, live from the USGS National Map (no data/app file) — a nearest-3 proximity layer, so it is ranked last with the other point layers rather than by feature area
   ];
   /* ==== GENERATED:END layer-area-rank ==== */
@@ -9153,6 +9154,47 @@ function initMichiganExplorer() {
     line: usgsStructureLine("Police station")
   });
 
+
+  /* ---------- 14. Fire & EMS Stations (nearest 3) — USGS National Map ----------
+   * structures layer 51, through the same paged envelope loader post-office
+   * introduced — AND THIS IS THE LAYER THAT LOADER EXISTS FOR. Measured
+   * 2026-09-04, Michigan's envelope holds 2,838 stations against the
+   * service's 2,000-record cap, and the cap is not an error: a single request
+   * returns HTTP 200 with exactly 2,000 rows and exceededTransferLimit set.
+   * The 838 it drops are real stations, and a nearest-3 card built on the
+   * short set would rank the wrong three wherever one of them was closest —
+   * looking, at every point, exactly like a correct answer. Paged it is two
+   * requests and 2,838.
+   *
+   * FIRE AND EMS ARE ONE LAYER BECAUSE THE SOURCE MAKES THEM ONE: USGS names
+   * this layer "Fire Stations/EMS Stations" and does not separate them, so
+   * the label says both rather than implying a distinction the data does not
+   * carry.
+   *
+   * A BUILDING, NOT A JURISDICTION, the same caveat police-station carries
+   * and for the same reason — which department or ambulance service is
+   * dispatched to a point is a service-area question, a separate concept this
+   * instance has not been researched for. The intro says so before the first
+   * result.
+   *
+   * Out-of-state points are deliberate: 1,406 of the 2,838 are in Michigan,
+   * the rest Wisconsin (798), Illinois (578) and a handful in Indiana, Iowa,
+   * Ohio and Minnesota. Nearest is a proximity fact. ---------- */
+  var USGS_FIRE_LAYER = "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/51";
+  var loadFireStations = usgsStructuresLoader(USGS_FIRE_LAYER, "USGS fire and EMS stations");
+
+  registerNearestPointLayer({
+    id: "fire-station",
+    group: "safety",
+    color: "#A3341F",
+    fill: "#E8927C",
+    label: "Fire & EMS Station",
+    loader: loadFireStations,
+    intro: "Nearest fire and EMS stations (USGS National Map structures data), straight-line distance. " +
+      "These are station buildings, not service areas — they do not say which department is dispatched here:",
+    line: usgsStructureLine("Fire station")
+  });
+
   /* ==== ENGINE:BEGIN hover-explorer ==== */
   /* =========================================================================
    * HOVER EXPLORER — a live popup (on by default, toggled bottom-left) that
@@ -9714,7 +9756,7 @@ function initMichiganExplorer() {
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
   var LAYER_SIDEBAR_RANK = ["us-house", "mi-senate", "mi-house", "county-commissioner",
     "school-district-unified", "school-district-elementary",
-    "county", "county-subdivision", "municipality", "zip-code", "precinct", "police-station", "post-office"];
+    "county", "county-subdivision", "municipality", "zip-code", "precinct", "police-station", "fire-station", "post-office"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -9815,8 +9857,8 @@ function initMichiganExplorer() {
     "#1B7A3D": "#58CD7A", "#2E9E6B": "#5BEAA5", "#2F6B3A": "#6FBE7B", "#41B6E6": "#C6EBFE",
     "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD", "#4B2E83": "#9E7BF1", "#4C8F59": "#83DC93",
     "#5C4B8C": "#AB95EF", "#6B7280": "#B1BBCE", "#7A5C3E": "#CFA57D", "#8C2E4A": "#F47294",
-    "#8F7BC4": "#D1C2FF", "#A98B6C": "#F3CBA1", "#B0316E": "#FD88B8", "#B26A00": "#FFB15F",
-    "#D06A9C": "#FFBDDA", "#D19133": "#FED7A7"};
+    "#8F7BC4": "#D1C2FF", "#A3341F": "#FE8269", "#A98B6C": "#F3CBA1", "#B0316E": "#FD88B8",
+    "#B26A00": "#FFB15F", "#D06A9C": "#FFBDDA", "#D19133": "#FED7A7"};
   /* ==== GENERATED:END dark-map-palette ==== */
   /* ==== ENGINE:BEGIN districtry-theme ==== */
   /* The theme controller and the wordmark fleet switch, shared for the same

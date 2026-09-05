@@ -10852,7 +10852,18 @@ function initWisconsinExplorer() {
    * structures layer 38, the fleet's post-office source. Country-wide, so the
    * METRO_BBOX envelope (the whole state here) is mandatory; f=geojson serves
    * lowercase property names (name/address/city/state/zipcode). CORS-open;
-   * public domain ("USGS The National Map"). ---------- */
+   * public domain ("USGS The National Map").
+   *
+   * THIS AND THE TWO STATION LOADERS BELOW EACH MAKE ONE REQUEST AND DO NOT
+   * READ exceededTransferLimit, so they are correct only while the envelope
+   * holds fewer records than the service's maxRecordCount. Measured
+   * 2026-09-04 against these exact URLs: post office 1,107, law enforcement
+   * 728, fire/EMS 1,548, cap 2,000 — none truncating, fire/EMS closest at 77%.
+   * THE NUMBERS ARE NOT REPEATED HERE AS A LIVE CLAIM: a count in a comment
+   * goes stale silently, which is what the old "807"/"1,743" here had already
+   * done. wi/scripts/validate_sources.py measures all three against the cap
+   * READ LIVE every month and fails when one crosses; page the loader then
+   * (the engine's loadArcGISPaged). ---------- */
   var USGS_POST_OFFICE_LAYER = "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/38";
   var loadPostOffices = makeCached(function () {
     var url = USGS_POST_OFFICE_LAYER + "/query?geometry=" +
@@ -10867,8 +10878,8 @@ function initWisconsinExplorer() {
 
   /* ---------- 14-15. Police + Fire Stations (nearest 3) — USGS ----------
    * The safety group's first members, the reference fork's exact pattern:
-   * structures layers 53 (Law Enforcement, 807 in the state envelope) and 51
-   * (Fire/EMS, 1,743), same service/schema/loader shape as post-office below,
+   * structures layers 53 (Law Enforcement) and 51 (Fire/EMS), same
+   * service/schema/loader shape as post-office below,
    * IL's colour pairs kept for fleet parity. No coverage function — the
    * envelope deliberately reaches past the state line, so a reader in
    * Superior or Marinette sees the genuinely nearest stations, which may be

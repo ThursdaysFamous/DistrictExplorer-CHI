@@ -955,6 +955,18 @@
         "note": "Boone County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
       },
       {
+        "file": "boone-library-districts.json",
+        "min_features": 3,
+        "max_features": 3,
+        "note": "Boone's 3 library districts, pre-built by scripts/build_parcel_fabric_districts.py. Boone publishes NO library boundary — measured across its whole ArcGIS server (12 folders, 99 services) and its AGOL org (510 items) — so each district is the DISSOLVE of the parcels the county's own fabric assigns to the tax codes its Clerk's 2025 Taxcode Value within District Report puts in LYBV (18), LYCV (2) and LYNS (4), road voids closed at 75 ft by the same rules as the Rock Island files. Two of the three are seated in Winnebago and reach across the line; only their Boone slice is drawn. Bounds are an EQUALITY: the county levies exactly these three, and shipping only Ida would tell a Loves Park or Cherry Valley resident they are in no library district."
+      },
+      {
+        "file": "boone-park-districts.json",
+        "min_features": 2,
+        "max_features": 2,
+        "note": "Boone's 2 park districts, pre-built by scripts/build_parcel_fabric_districts.py from the parcels the county's own fabric assigns to the tax codes its Clerk's 2025 Taxcode Value within District Report puts in PDBV (25) and PDRF (1) — the county publishes no park boundary of any kind. Same 75 ft road-void closing and probe gates as its library sibling; Rockford Park District is seated in Winnebago and only its Boone slice is drawn. Bounds are an EQUALITY: the county levies exactly these two, and the rest of Boone genuinely sits in no park district."
+      },
+      {
         "file": "brown-county-outline.json",
         "min_features": 1,
         "max_features": 1,
@@ -2575,7 +2587,7 @@
     ]
   },
   "sw": {
-    "cache_name": "districtry-il-shell-v10",
+    "cache_name": "districtry-il-shell-v11",
     "shell_urls": [
       "./",
       "./sources.html",

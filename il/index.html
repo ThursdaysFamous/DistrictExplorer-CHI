@@ -13851,6 +13851,25 @@ function initChiExplorer() {
       "district", "Boone County fire districts");
   });
 
+  /* Boone's park and library districts, pre-built by
+   * scripts/build_parcel_fabric_districts.py. Boone publishes NO district
+   * boundary for either — measured across its whole ArcGIS server (12 folders,
+   * 99 services) and its AGOL org (510 items) — so each district is the
+   * DISSOLVE OF ITS OWN PARCELS: the county's parcel fabric carries a tax_code,
+   * and the County Clerk's "Taxcode Value within District Report" (tax year
+   * 2025) says which districts each code pays into. Both halves are the
+   * county's own, which is what separates this from a contractor's statewide
+   * layer. Two park districts and three libraries — every taxing body of either
+   * kind the county levies, including the three seated in Winnebago whose
+   * territory reaches across the line. Partial tilings, correctly: most of Boone
+   * sits in no park or library district, and the card says so by finding
+   * nothing. */
+  var loadBooneParkDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/boone-park-districts.json", {}, 2);
+  });
+  var loadBooneLibraryDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/boone-library-districts.json", {}, 2);
+  });
   /* ---------- Six counties' library districts, from a STATEWIDE layer whose
    * publisher is neither the county nor the library -----------------------
    * Carroll, Lee, Randolph, Sangamon, St. Clair and Stephenson publish no
@@ -13930,7 +13949,6 @@ function initChiExplorer() {
       ]
     });
   }
-
   var GRUNDY_GIS = "https://maps.grundyco.org/arcgis/rest/services/";
   /* Grundy's polling places live in a sibling layer keyed by POLLINGID. Stamp
    * them onto the precinct features at load time (the Kendall/LaSalle
@@ -23188,6 +23206,22 @@ function initChiExplorer() {
           { label: "County", value: "Rock Island County" }
         ]
       }),
+      // Boone's 2, dissolved from the county's own parcel fabric because Boone
+      // publishes no park boundary at all — see loadBooneParkDistricts. Belvidere
+      // is the county's own district; ROCKFORD PK DISTRICT is seated in Winnebago
+      // and reaches across the line into Boone's western strip, so only that
+      // slice is drawn (the Stark shape). A partial tiling, correctly: most of
+      // the county sits in no park district and the card finds nothing there.
+      polygonCountyEntry({
+        key: "boone",
+        coverage: booneCountyCoverage,
+        loader: loadBooneParkDistricts,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
+        fields: [
+          { name: "name", label: "Park District", keys: ["district"], primary: true },
+          { label: "County", value: "Boone County" }
+        ]
+      }),
       // Peoria's 4 — from the same taxing family as its fire and library
       // entries, and carrying the same per-district WebSite column, so each
       // park district's card links the district itself.
@@ -23577,6 +23611,23 @@ function initChiExplorer() {
         fields: [
           { name: "name", label: "Library District", keys: ["library_di"], primary: true },
           { label: "County", value: "Rock Island County" }
+        ]
+      }),
+      // Boone's 3, from the same parcel dissolve as its park entry. All three of
+      // the county's library taxing bodies are drawn, not just Ida: Cherry Valley
+      // and North Suburban are seated in Winnebago and reach into Boone's
+      // south-west and western strips, and shipping Ida alone would have told a
+      // resident of either that they are in NO library district when they are in
+      // one. Names are the County Clerk's own strings — see the builder's note on
+      // why they are not expanded from three different publishers' websites.
+      polygonCountyEntry({
+        key: "boone",
+        coverage: booneCountyCoverage,
+        loader: loadBooneLibraryDistricts,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
+        fields: [
+          { name: "name", label: "Library District", keys: ["district"], primary: true },
+          { label: "County", value: "Boone County" }
         ]
       }),
       // Peoria's 10 — the third of the county's taxing tilings, and like its
