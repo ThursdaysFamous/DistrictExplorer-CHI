@@ -9171,6 +9171,31 @@ function initIowaExplorer() {
   var loadCityContact = makeCached(function () {
     return fetchJSONWithRetry("data/app/ia-city-contact.json", {}, 2);
   });
+  // A city can be published by TWO counties: North English straddles the
+  // Iowa/Keokuk line and each county publishes the half it administers, its
+  // mayor and council from one and its clerk from the other. So the credit is
+  // a list, and the card names both rather than picking one.
+  function countyPublisherPhrase(rec) {
+    var names = [];
+    var sources = (rec && rec.sources) || [];
+    for (var i = 0; i < sources.length; i++) {
+      if (sources[i] && sources[i].county) names.push(String(sources[i].county) + " County");
+    }
+    if (!names.length) return "the county";
+    if (names.length === 1) return names[0];
+    return names.slice(0, -1).join(", ") + " and " + names[names.length - 1];
+  }
+  // EIGHTY-FOUR MORE CITIES, AND THE PUBLISHER IS THE COUNTY. Eight Iowa
+  // counties publish every city inside them with its clerk, its mayor and its
+  // whole council -- the route ia-municipal-officeholders recorded as NOT YET
+  // PROBED (the county auditors, Iowa Code 47.2). Three more counties publish
+  // the same page and are refused by the builder because their own term dates
+  // ended in January 2026. This is a SEPARATE file from ia-city-officials.json
+  // on purpose: that one is read from each CITY's own page on its own weekly
+  // cadence, and where both name a city the city's own page wins.
+  var loadCountyCityOfficials = makeCached(function () {
+    return fetchJSONWithRetry("data/app/ia-county-city-officials.json", {}, 2);
+  });
 
   registerLayer({
     id: "municipality",
@@ -9197,7 +9222,8 @@ function initIowaExplorer() {
       return Promise.all([
         queryFeatureAt(loadPlaces, point),
         loadCityContact().catch(function () { return null; }),
-        loadCityOfficials().catch(function () { return null; })
+        loadCityOfficials().catch(function () { return null; }),
+        loadCountyCityOfficials().catch(function () { return null; })
       ]).then(function (parts) {
         var feature = parts[0];
         if (!feature) return null; // unincorporated — the engine renders this layer's own emptyNote
@@ -9205,6 +9231,7 @@ function initIowaExplorer() {
         var geoid = findPropCI(props, ["geoid"]);
         var contact = (parts[1] && geoid != null) ? parts[1][String(geoid)] : null;
         var officials = (parts[2] && geoid != null) ? parts[2][String(geoid)] : null;
+        var byCounty = (parts[3] && geoid != null) ? parts[3][String(geoid)] : null;
         return {
           seq: seq,
           name: findPropCI(props, ["name"]),
@@ -9212,7 +9239,8 @@ function initIowaExplorer() {
           phone: contact ? contact.phone : null,
           email: contact ? contact.email : null,
           url: contact ? contact.url : null,
-          officials: officials || null
+          officials: officials || null,
+          countyOfficials: officials ? null : (byCounty || null)
         };
       });
     },
@@ -9237,10 +9265,15 @@ function initIowaExplorer() {
       // city with no contact at all had been told "the phone and website
       // above" with nothing above it, and the website is the FOOTER link,
       // which renders BELOW. Both were caught in a browser, not in review.
-      // THE FIVE CITIES THIS APP CAN NAME FROM THEIR OWN PAGES. 932 cities
-      // name nobody anywhere in this app (939 less these five and the two
-      // that elect by ward), which is why the absence note below still runs
-      // for everyone else.
+      // THE FIVE CITIES THIS APP CAN NAME FROM THEIR OWN PAGES, which is a
+      // different thing from the 84 its COUNTY names in the branch below --
+      // and where a city appears in both, the city's own page wins.
+      // 847 cities name nobody anywhere in this app (939 less these five, the
+      // 84 their counties publish, and the three that elect by ward), which is
+      // why the absence note further down still runs for everyone else.
+      // THIS COUNT HAS BEEN STALE TWICE. It read 932 and named "the two that
+      // elect by ward" for a day after Cedar Rapids shipped as the third, so
+      // it is derived here from the same three numbers the gap record carries.
       if (result.officials && result.officials.members && result.officials.members.length) {
         wrap.appendChild(renderSectionLabel("ELECTED BY THE WHOLE CITY"));
         wrap.appendChild(renderPersonRows(result.officials.members.map(function (rec) {
@@ -9257,6 +9290,34 @@ function initIowaExplorer() {
             "council page. Iowa publishes no statewide list of city officials, " +
             "so this app can name them in only a handful of cities; where it " +
             "cannot, the card says so."
+        }]));
+      } else if (result.countyOfficials && result.countyOfficials.members &&
+                 result.countyOfficials.members.length) {
+        // NAMED BY THE COUNTY, NOT BY THE CITY, and the card says which.
+        // Nothing here asserts at-large: 93 of these officials carry a ward
+        // their own county publishes, so the seat rides the row and the copy
+        // makes no claim about how the rest are elected.
+        wrap.appendChild(renderSectionLabel("CITY OFFICIALS"));
+        wrap.appendChild(renderPersonRows(result.countyOfficials.members.map(function (rec) {
+          var row = { name: String(rec.name) };
+          var marks = [];
+          if (rec.role) marks.push(String(rec.role));
+          if (rec.seat) marks.push(String(rec.seat));
+          if (marks.length) row.badge = marks.join(" \u00b7 ");
+          if (rec.phone) row.phone = String(rec.phone);
+          if (rec.email) row.email = String(rec.email);
+          var notes = [];
+          if (rec.status) notes.push(String(rec.status));
+          if (rec.termEnds) notes.push("Term ends " + String(rec.termEnds));
+          if (notes.length) row.note = notes.join(" \u00b7 ");
+          return row;
+        })));
+        wrap.appendChild(renderFieldStack([{
+          label: "City officials",
+          value: "Named by " + countyPublisherPhrase(result.countyOfficials) +
+            ", which publishes the officials of every city inside it. Iowa has " +
+            "no statewide list of city officeholders, so most cities in this " +
+            "app name nobody; where a county publishes them, this card does."
         }]));
       } else {
         // WHAT THIS CARD STILL CANNOT ANSWER, said with somewhere to go. A
@@ -9279,9 +9340,11 @@ function initIowaExplorer() {
           note += " The city directory this app reads carries no phone or website " +
             "for it either.";
         }
-        note += " A few Iowa cities publish a roster this app can read, and their " +
-          "cards do name them; Des Moines and Waterloo elect by ward, and those " +
-          "cards name a ward's own council member.";
+        note += " Eight Iowa counties do publish the officials of every city " +
+          "inside them, and those cards name them; a few cities publish a " +
+          "roster of their own that this app can read; and Des Moines, " +
+          "Waterloo and Cedar Rapids elect by ward or district, so those " +
+          "cards name the member for the seat you are standing in.";
         wrap.appendChild(renderFieldStack([{ label: "City officials", value: note }]));
       }
       return wrap;

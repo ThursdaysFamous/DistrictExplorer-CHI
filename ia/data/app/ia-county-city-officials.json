@@ -1,0 +1,5362 @@
+{
+ "1902125": {
+  "city": "Andrew",
+  "members": [
+   {
+    "county": "Jackson",
+    "name": "Chris Budde",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Jackson",
+    "name": "Patty Hardin",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Jackson",
+    "name": "Mike Roeder",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Zach Jamison",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Donald L. Regan",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Sally Rowan",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Tracey Till",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "John Williams",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Jackson",
+    "url": "https://jacksoncounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1902755": {
+  "city": "Arion",
+  "members": [
+   {
+    "county": "Crawford",
+    "email": "townofarion@gmail.com",
+    "name": "Tisha Carey",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Crawford",
+    "name": "Jeff Stephens",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Kenneth Beam",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Kristi Stephens",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Michelle Stephens",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   }
+  ],
+  "officeAddress": "204 2nd St Arion, IA 51520",
+  "sources": [
+   {
+    "county": "Crawford",
+    "url": "https://www.crawfordcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1903340": {
+  "city": "Aspinwall",
+  "members": [
+   {
+    "county": "Crawford",
+    "email": "cityofaspinwall@gmail.com",
+    "name": "Lisa Kerkhoff",
+    "phone": "(319) 931-9831",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Crawford",
+    "name": "Thomas W. Irlbeck",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Fred Irlbeck",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Ted A. Jansen",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Kody Kerkhoff",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Carol Lile",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Rick Warner",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   }
+  ],
+  "officeAddress": "P.O. Box 6 Aspinwall, IA 51432",
+  "officePhone": "(712) 653-3250",
+  "sources": [
+   {
+    "county": "Crawford",
+    "url": "https://www.crawfordcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1903385": {
+  "city": "Atalissa",
+  "members": [
+   {
+    "county": "Muscatine",
+    "name": "Samantha Perry",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Karen Rock",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Timothy Devore",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Angie Dickey",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Annie Gerstbrein",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Scott Skubal",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Brian VanDusen",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Muscatine",
+    "url": "https://muscatinecountyiowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1904330": {
+  "city": "Baldwin",
+  "members": [
+   {
+    "county": "Jackson",
+    "name": "Janice Dunne",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Jackson",
+    "name": "John Wogomon",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Michael Bartels",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Kelly Eckelberg",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Amy Hayward",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Teresa McLeod",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Mary Jean Miller",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Jackson",
+    "url": "https://jacksoncounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1905185": {
+  "city": "Beaver",
+  "members": [
+   {
+    "county": "Boone",
+    "email": "sarahevans201@gmail.com",
+    "name": "Sarah Miller",
+    "phone": "(515) 231-4819",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Boone",
+    "name": "Kenneth M. Elsberry",
+    "phone": "(515) 360-5683",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "adamerickson817@gmail.com",
+    "name": "Adam Erickson",
+    "phone": "(515) 290-7686",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "name": "Natalie Ericson",
+    "phone": "(515) 231-4375",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "name": "Paula Evans",
+    "phone": "(515) 275-2779",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "jeffh@jensenbuilders.com",
+    "name": "Jeff Hammer",
+    "phone": "(515) 275-2440",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "akent77@gmail.com",
+    "name": "Andy Kent",
+    "phone": "(515) 201-7988",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   }
+  ],
+  "officeAddress": "121 3rd St. P.O. Box 97 Beaver, IA 50031",
+  "officePhone": "(515) 386-2536",
+  "sources": [
+   {
+    "county": "Boone",
+    "url": "https://boonecounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1905635": {
+  "city": "Bellevue",
+  "members": [
+   {
+    "county": "Jackson",
+    "name": "Teresa Weinschenk",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Jackson",
+    "name": "William J. Reistroffer",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Thomas Davis",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Dan Jacobs",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Memphis R. Jess",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Lyn Medinger",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Brent P. Roling",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Jackson",
+    "url": "https://jacksoncounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1906040": {
+  "city": "Berkley",
+  "members": [
+   {
+    "county": "Boone",
+    "name": "Richard Bryant",
+    "phone": "(515) 726-0733",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Boone",
+    "name": "Ken Gustin",
+    "phone": "(515) 971-2756",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "name": "Teresa Ann Bebb",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "name": "Marilyn Bryant",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "name": "Crystal Hellyer",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "name": "Dan Johnson",
+    "phone": "(515) 275-4860",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "name": "Stephanie Lambert",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "officeAddress": "266 284th St. Berkley, IA 50220",
+  "officePhone": "(515) 275-4360",
+  "sources": [
+   {
+    "county": "Boone",
+    "url": "https://boonecounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1907480": {
+  "city": "Boone",
+  "members": [
+   {
+    "county": "Boone",
+    "email": "oelmquist@booneiowa.gov",
+    "name": "Ondrea Elmquist",
+    "phone": "(515) 432-4211",
+    "role": "City Administrator"
+   },
+   {
+    "county": "Boone",
+    "email": "dcasotti@booneiowa.gov",
+    "name": "Dave Casotti",
+    "phone": "(515) 460-1107",
+    "role": "Mayor"
+   },
+   {
+    "county": "Boone",
+    "email": "kangstrom@booneiowa.gov",
+    "name": "Kyle Angstrom",
+    "phone": "(515) 230-5259",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "lswboonecouncil@gmail.com",
+    "name": "Linda S. Williamson",
+    "phone": "(515) 230-0417",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "jhammer0529@gmail.com",
+    "name": "Jordan Hammer",
+    "phone": "(515) 298-4660",
+    "role": "City Council",
+    "seat": "Ward 1",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "chenson@city.boone.ia.us",
+    "name": "Cory Henson",
+    "phone": "(515) 490-0309",
+    "role": "City Council",
+    "seat": "Ward 2",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "lmkahookele@gmail.com",
+    "name": "Lisa Kahookele",
+    "phone": "(515) 291-3810",
+    "role": "City Council",
+    "seat": "Ward 3",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "tmoorman@city.boone.ia.us",
+    "name": "Terry Moorman",
+    "phone": "(515) 314-1568",
+    "role": "City Council",
+    "seat": "Ward 4",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "kolehilsabeck@gmail.com",
+    "name": "Kole Hilsabeck",
+    "phone": "(515) 835-1902",
+    "role": "City Council",
+    "seat": "Ward 5",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "niemants@msn.com",
+    "name": "John Niemants",
+    "phone": "(515) 230-6518",
+    "role": "Park Commissioners",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "name": "Kevin Pearson",
+    "phone": "(515) 432-6481",
+    "role": "Park Commissioners",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "marcjenn95@gmail.coom",
+    "name": "Marc Peter",
+    "phone": "(515) 290-9067",
+    "role": "Park Commissioners",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "daveasherry@gmail.com",
+    "name": "David Sherry",
+    "phone": "(515) 230-4030",
+    "role": "Park Commissioners",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "sthorngren78@gmail.com",
+    "name": "Susan Thorngren",
+    "phone": "(312) 771-1667",
+    "role": "Park Commissioners",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "officeAddress": "928 8th St. Boone, IA 50036",
+  "officePhone": "(515) 432-4211",
+  "sources": [
+   {
+    "county": "Boone",
+    "url": "https://boonecounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1907750": {
+  "city": "Boxholm",
+  "members": [
+   {
+    "county": "Boone",
+    "email": "cityofboxholm@gmail.com",
+    "name": "Leah Porter",
+    "phone": "(515) 298-0720",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Boone",
+    "email": "mamasue432@gmail.com",
+    "name": "Carrie Sue Shreve",
+    "phone": "(515) 351-1454",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "robynldodson@gmail.com",
+    "name": "Robyn Dodson",
+    "phone": "(515) 351-0837",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "vehelling@gmail.com",
+    "name": "Victoria Helling",
+    "phone": "(817) 694-1732",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "name": "Nathan Stuhr",
+    "phone": "(712) 830-6596",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "name": "Veva Teeters",
+    "phone": "(515) 351-9336",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "name": "Brandon Wendt",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "officeAddress": "P.O. Box 184 Boxholm, IA 50040",
+  "officePhone": "(515) 298-0720",
+  "sources": [
+   {
+    "county": "Boone",
+    "url": "https://boonecounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1909145": {
+  "city": "Buck Grove",
+  "members": [
+   {
+    "county": "Crawford",
+    "email": "buckgrove@outlook.com",
+    "name": "Ken Kahl",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Crawford",
+    "name": "Kevin Stover",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Lois Johnson",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Aaron Schroeder",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Derrick Schwery",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Michele Stover",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   }
+  ],
+  "officeAddress": "330 4th St Buck Grove, IA 51528",
+  "officePhone": "(712) 223-5575",
+  "sources": [
+   {
+    "county": "Crawford",
+    "url": "https://www.crawfordcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1909730": {
+  "city": "Bussey",
+  "members": [
+   {
+    "county": "Marion",
+    "email": "cityofbussey@iowatelecom.net",
+    "name": "Nicole Beary",
+    "phone": "(641) 944-5532",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Marion",
+    "name": "Larry D. Pinegar",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Wade A. Bonnett",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Brian Des Planque",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "William Greatbatch",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Mason J. Sanders",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Stephanie Sterner",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   }
+  ],
+  "officeAddress": "P.O. Box 190 Bussey, IA 50044",
+  "officePhone": "(641) 944-5532",
+  "sources": [
+   {
+    "county": "Marion",
+    "url": "https://www.marioncountyiowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1912900": {
+  "city": "Charter Oak",
+  "members": [
+   {
+    "county": "Crawford",
+    "email": "cocityclerk@frontiernet.net",
+    "name": "Sara Bohlmann",
+    "phone": "(712) 678-3580",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Crawford",
+    "name": "Peggy Staley",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Alec Castillo",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Wayne Copeland",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Chaise Hampton",
+    "role": "City Council",
+    "status": "Elected to Fill Vacancy for Term Remainder",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Russ Maack",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Randy Ulmer",
+    "role": "City Council",
+    "status": "Elected to Fill Vacancy for Term Remainder",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Carol Meyer",
+    "phone": "(712) 678-3425",
+    "role": "Library"
+   }
+  ],
+  "officeAddress": "453 Railroad Street P.O. Box 74 Charter Oak, IA 51439",
+  "officePhone": "(712) 678-3580",
+  "sources": [
+   {
+    "county": "Crawford",
+    "url": "https://www.crawfordcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1914025": {
+  "city": "Clear Lake",
+  "members": [
+   {
+    "county": "Cerro Gordo",
+    "email": "sdiers@cityofclearlake.org",
+    "name": "Steve Diers",
+    "role": "City Administrator"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "clclerk@cltel.net",
+    "name": "Jennifer Larsen",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "mebeling@cityofclearlake.org",
+    "name": "Mark Ebeling",
+    "role": "Mayor",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "tnelson@cityofclearlake.org",
+    "name": "Tony Nelson",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "creighton@cityofclearlake.org",
+    "name": "Creighton Schmidt",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "dtesar@cityofclearlake.org",
+    "name": "Deb Tesar",
+    "role": "City Council",
+    "seat": "Ward 1",
+    "status": "Appointed to Fill Vacancy until Election",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "bsmith@cityofclearlake.org",
+    "name": "Bennett Smith",
+    "role": "City Council",
+    "seat": "Ward 2",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "bethann@cityofclearlake.org",
+    "name": "Beth Ann Schumacher",
+    "role": "City Council",
+    "seat": "Ward 3",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Cerro Gordo",
+    "url": "https://cerrogordo.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1915645": {
+  "city": "Conesville",
+  "members": [
+   {
+    "county": "Muscatine",
+    "name": "Carol Zuniga",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Thomas VanAuken",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Joseph Carson",
+    "role": "City Council",
+    "status": "Elected to Fill Vacancy for Term Remainder",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Corey Clevenger",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Cory Conaway",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Matt Storm",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Azure VanAuken",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Muscatine",
+    "url": "https://muscatinecountyiowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1919765": {
+  "city": "Deloit",
+  "members": [
+   {
+    "county": "Crawford",
+    "email": "cityofdeloit@frontier.com",
+    "name": "Corrine Mehaffey",
+    "phone": "(712) 263-3408",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Crawford",
+    "name": "Tyler Braasch",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Gloria Anderson",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Matt Gosch",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Eric Grage",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Connie Mulligan",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Libbie Schillerberg",
+    "role": "City Council",
+    "status": "Appointed to Fill Vacancy until Election"
+   }
+  ],
+  "officeAddress": "P.O. Box 473 Deloit, IA 51441",
+  "officePhone": "(712) 263-3408",
+  "sources": [
+   {
+    "county": "Crawford",
+    "url": "https://www.crawfordcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1919855": {
+  "city": "Delta",
+  "members": [
+   {
+    "county": "Keokuk",
+    "name": "Faye Carey",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Jim Ahlberg",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Dolores Carey",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Barbara Fisher",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Shannon Kleinschmidt",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Melvin Lambert",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Nathan Slagter",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Keokuk",
+    "url": "https://keokukcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1919945": {
+  "city": "Denison",
+  "members": [
+   {
+    "county": "Crawford",
+    "email": "cityclerk@denisonia.com",
+    "name": "Jodie Flaherty",
+    "phone": "(712) 263-3143",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Crawford",
+    "name": "Dustin Logan",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Jessica Zupp-Smith",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Greg Miller",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "David Peterson",
+    "role": "City Council",
+    "seat": "Ward 1",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "John Granzen",
+    "role": "City Council",
+    "seat": "Ward 2",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Terry Crawford",
+    "role": "City Council",
+    "seat": "Ward 3",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Kari Meyer",
+    "phone": "(712) 263-9355",
+    "role": "Library"
+   }
+  ],
+  "officeAddress": "111 North Main Street P.O. Box 668 Denison, IA 51442",
+  "officePhone": "(712) 263-3143",
+  "sources": [
+   {
+    "county": "Crawford",
+    "url": "https://www.crawfordcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1922080": {
+  "city": "Dougherty",
+  "members": [
+   {
+    "county": "Cerro Gordo",
+    "email": "doughertyofficial@hotmail.com",
+    "name": "Leighcen Franke",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Cerro Gordo",
+    "name": "Lynn Nagel",
+    "role": "Mayor",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "name": "Nicolette Nagel",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "nossamy@netins.net",
+    "name": "Amy L Noss",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "name": "Susan OBrien",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "name": "Joel Rooney",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "name": "Andy Schuster",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Cerro Gordo",
+    "url": "https://cerrogordo.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1922215": {
+  "city": "Dow City",
+  "members": [
+   {
+    "county": "Crawford",
+    "email": "dowcity@frontiernet.net",
+    "name": "Kim Mueller",
+    "phone": "(712) 674-3350",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Crawford",
+    "name": "Kody Meyer",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Ace Ettleman",
+    "role": "City Council",
+    "status": "Elected to Fill Vacancy for Term Remainder",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Alec Hast",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Doyle Siglin",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Nick Steinkuehler",
+    "role": "City Council",
+    "status": "Elected to Fill Vacancy for Term Remainder",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Jennifer Williams",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   }
+  ],
+  "officeAddress": "117 N Franklin Street P.O. Box 315 Dow City, IA 51528",
+  "officePhone": "(712) 674-3350",
+  "sources": [
+   {
+    "county": "Crawford",
+    "url": "https://www.crawfordcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1928920": {
+  "city": "Fraser",
+  "members": [
+   {
+    "county": "Boone",
+    "email": "cityoffraser@outlook.com",
+    "name": "Leah Porter",
+    "phone": "(515) 298-0720",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Boone",
+    "email": "joelwilson780@gmail.com",
+    "name": "Joel Wilson",
+    "phone": "(515) 709-0220",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "duncanmxz@yahoo.com",
+    "name": "Josh Duncan",
+    "phone": "(515) 460-1901",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "julieannsutton1980@gmail.com",
+    "name": "Julie Krause",
+    "phone": "(515) 709-9210",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Boone",
+    "name": "Amy Laube",
+    "phone": "(515) 432-6160",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Boone",
+    "name": "Brett Vaughn",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Boone",
+    "name": "Stephanie Voughn",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   }
+  ],
+  "officeAddress": "1008 157th P.O. Box 380 Fraser, IA 50036",
+  "officePhone": "(515) 298-0720",
+  "sources": [
+   {
+    "county": "Boone",
+    "url": "https://boonecounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1929280": {
+  "city": "Fruitland",
+  "members": [
+   {
+    "county": "Muscatine",
+    "name": "Tori Roenfeldt",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Marty Hills",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Tamara Bowers",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Susie Garrett",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Sarah Hillman",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Chris Painter",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Jennifer Smith",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Muscatine",
+    "url": "https://muscatinecountyiowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1930540": {
+  "city": "Gibson",
+  "members": [
+   {
+    "county": "Keokuk",
+    "name": "Mary Kay Stein",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Steve Van Zee",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Greg Ehret",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Sherry Ehret",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Jim Schultz",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Stacy Schultz",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Tommy Stein",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Keokuk",
+    "url": "https://keokukcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1933870": {
+  "city": "Hamilton",
+  "members": [
+   {
+    "county": "Marion",
+    "email": "tfweldon@gmail.com",
+    "name": "Tiffani Weldon",
+    "phone": "(641) 891-2479",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Marion",
+    "name": "Justin Pinegar",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "John Davis",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Braxton Davis",
+    "role": "City Council",
+    "status": "Appointed to Fill Vacancy until Election",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Stormie DeShaw",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Amber Dykstra",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   }
+  ],
+  "officeAddress": "407 East Street P.O. Box 145 Hamilton, IA 50116",
+  "officePhone": "(641) 891-2479",
+  "sources": [
+   {
+    "county": "Marion",
+    "url": "https://www.marioncountyiowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1934545": {
+  "city": "Harper",
+  "members": [
+   {
+    "county": "Keokuk",
+    "name": "Nicole Osweiler",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Luke McCarville",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Colton Altenhofen",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Connie Baker",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Mary Lou Kane",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Roberta Peiffer",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "James Sines",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Keokuk",
+    "url": "https://keokukcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1934860": {
+  "city": "Harvey",
+  "members": [
+   {
+    "county": "Marion",
+    "email": "jgeerycoh@gmail.com",
+    "name": "Jennifer Geery",
+    "phone": "(641) 949-6294",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Marion",
+    "name": "Kelly Cooper",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Adam Dubois",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Leonard Geery",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Donald Nilius Jr.",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Dennis Seibert",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Scott Starmer",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   }
+  ],
+  "officeAddress": "P.O. Box 87 Harvey, IA 50119",
+  "officePhone": "(641) 949-6294",
+  "sources": [
+   {
+    "county": "Marion",
+    "url": "https://www.marioncountyiowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1935445": {
+  "city": "Hayesville",
+  "members": [
+   {
+    "county": "Keokuk",
+    "name": "Stephanie Anderson",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Chris Gammack",
+    "role": "Mayor",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Marcus Anderson",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Melissa Bird",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Larry Bird",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Steven Clubb",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Zeb Webb",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Keokuk",
+    "url": "https://keokukcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1935670": {
+  "city": "Hedrick",
+  "members": [
+   {
+    "county": "Keokuk",
+    "name": "Ashley Olinger",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Mike Spillman",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Jeremy Greiner",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Dustin Griffiths",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Mike Mefford",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Christine Norris",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "JD Olinger",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Keokuk",
+    "url": "https://keokukcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1940980": {
+  "city": "Keota",
+  "members": [
+   {
+    "county": "Keokuk",
+    "name": "Hunter Bruns",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Ryan Carr",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Keith Conrad",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Matt Greiner",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Chad M. Greiner",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "John Todd Mather",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Heath McDonald",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Keokuk",
+    "url": "https://keokukcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1941070": {
+  "city": "Keswick",
+  "members": [
+   {
+    "county": "Keokuk",
+    "name": "Joy Denison",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Mark Zittergruen",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Kyle Leer",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Rebecca Leer",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Chloe Lundy",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Isik Schmidt",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Nicholas Watts",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Keokuk",
+    "url": "https://keokukcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1941475": {
+  "city": "Kinross",
+  "members": [
+   {
+    "county": "Keokuk",
+    "name": "Tracey Wildeboer",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Ben Mast",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Carol Gehman",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Lindsey Gillespie",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Mark Lingard",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Maleah Mast",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Charles Sandersfeld",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Keokuk",
+    "url": "https://keokukcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1941610": {
+  "city": "Kiron",
+  "members": [
+   {
+    "county": "Crawford",
+    "email": "kironcty@schallertel.net",
+    "name": "Kandice Moore",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Crawford",
+    "name": "Mike Lickteig",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Scott Anderson",
+    "role": "City Council",
+    "status": "Elected to Fill Vacancy for Term Remainder",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Bob Brown",
+    "role": "City Council",
+    "status": "Elected to Fill Vacancy for Term Remainder",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Kathy Lickteig",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Paul Schultz",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Nathan Tremblay",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "officeAddress": "12 N Grove Kiron, IA 51448-0215",
+  "officePhone": "(712) 675-4700",
+  "sources": [
+   {
+    "county": "Crawford",
+    "url": "https://www.crawfordcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1942015": {
+  "city": "Knoxville",
+  "members": [
+   {
+    "county": "Marion",
+    "email": "jwyman@knoxvilleia.gov",
+    "name": "Jodie Wyman",
+    "phone": "(641) 828-0550",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Marion",
+    "name": "Brian Hatch",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "John Gotta",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Daniel Losada",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Bridget Mohler",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Christopher Nichols",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Dawn Rankin",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "officeAddress": "305 S 3rd Street Knoxville, IA 50138",
+  "officePhone": "(641) 828-0550",
+  "sources": [
+   {
+    "county": "Marion",
+    "url": "https://www.marioncountyiowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1942330": {
+  "city": "Ladora",
+  "members": [
+   {
+    "county": "Iowa",
+    "name": "Kyle Shaull",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Holly Dahlstrom",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Melissa Huber",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Brian Ward",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Rhonda Ward",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Craig York",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "officeAddress": "P.O. Box 169 Ladora, IA 52251",
+  "officePhone": "(319) 623-3506",
+  "sources": [
+   {
+    "county": "Iowa",
+    "url": "https://iowacounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1943050": {
+  "city": "La Motte",
+  "members": [
+   {
+    "county": "Jackson",
+    "name": "Joyce Hancock",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Jackson",
+    "name": "Matt Wagner",
+    "role": "Mayor",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Mark A. Althaus",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Ryan Fagan",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Jayson Haynes",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Steve Nemmers",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Brenda Pankowski",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Jackson",
+    "url": "https://jacksoncounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1947280": {
+  "city": "Luther",
+  "members": [
+   {
+    "county": "Boone",
+    "email": "lutherclerk@gmail.com",
+    "name": "Deanna Sandegren",
+    "phone": "(515) 517-0023",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Boone",
+    "email": "lutheriowamayor@gmail.com",
+    "name": "Malorie Shaller",
+    "phone": "(712) 887-0574",
+    "role": "Mayor",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "name": "Rob Dobek",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "name": "Trevor Mathis",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "mjmiller01@hotmail.com",
+    "name": "Mike Miller",
+    "phone": "(515) 333-8361",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "bdowens1971@gmail.com",
+    "name": "Robert L. Owens",
+    "phone": "(515) 230-7026",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "jsandegren50152@gmail.com",
+    "name": "Jeff A. Sandegren",
+    "phone": "(515) 298-1490",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "officeAddress": "5 Luther St. Luther, IA 50152",
+  "officePhone": "(515) 517-0023",
+  "sources": [
+   {
+    "county": "Boone",
+    "url": "https://boonecounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1948450": {
+  "city": "Madrid",
+  "members": [
+   {
+    "county": "Boone",
+    "email": "cityclerk@madridiowa.org",
+    "name": "Kristen Renslow",
+    "phone": "(515) 795-3930",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Boone",
+    "email": "mayor@madridiowa.org",
+    "name": "Thomas W. Brown",
+    "phone": "(515) 975-2252",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "cjrigbyjr@gmail.com",
+    "name": "Chuck Rigby",
+    "phone": "(515) 249-5427",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "lane@midnatg.com",
+    "name": "Lane Shaver",
+    "phone": "(515) 250-1839",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "damonlisadouglas@gmail.com",
+    "name": "Lisa Hollis",
+    "phone": "(515) 418-6775",
+    "role": "City Council",
+    "seat": "Ward 1",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "burich02@gmail.com",
+    "name": "Steve F. Burich",
+    "phone": "(515) 205-4172",
+    "role": "City Council",
+    "seat": "Ward 2",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "daltoncontractors@gmail.com",
+    "name": "Dustin Dalton",
+    "phone": "(515) 380-2275",
+    "role": "City Council",
+    "seat": "Ward 3",
+    "termEnds": "2029"
+   }
+  ],
+  "officeAddress": "304 S. Water St. Madrid, IA 50156",
+  "officePhone": "(515) 795-3930",
+  "sources": [
+   {
+    "county": "Boone",
+    "url": "https://boonecounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1948855": {
+  "city": "Manilla",
+  "members": [
+   {
+    "county": "Crawford",
+    "name": "Lori Jahn",
+    "phone": "(712) 654-2632",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Crawford",
+    "name": "Corey Gaskill",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Kurt Chapman",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Lana Georgius",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Paul Heiman",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Roger Kenkel",
+    "role": "City Council",
+    "termEnds": "2029"
+   },
+   {
+    "county": "Crawford",
+    "name": "Sam Rauterkus",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Vicky Cadwell",
+    "role": "Library"
+   }
+  ],
+  "officeAddress": "P.O. Box 398 Manilla, IA 51454-0398",
+  "officePhone": "(712) 654-2632",
+  "sources": [
+   {
+    "county": "Crawford",
+    "url": "https://www.crawfordcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1949215": {
+  "city": "Maquoketa",
+  "members": [
+   {
+    "county": "Jackson",
+    "name": "Josh Boldt",
+    "role": "City Manager"
+   },
+   {
+    "county": "Jackson",
+    "name": "Tom Messerli",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Joshua J. Collister",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Kevin Kuhlman",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Ginger Bennett",
+    "role": "City Council",
+    "seat": "Ward 1",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Justin Hayward",
+    "role": "City Council",
+    "seat": "Ward 2",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Caroline Ehlinger",
+    "role": "City Council",
+    "seat": "Ward 3",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Richard Rickerl",
+    "role": "City Council",
+    "seat": "Ward 4",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Mark Lyon",
+    "role": "City Council",
+    "seat": "Ward 5",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Jackson",
+    "url": "https://jacksoncounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1949395": {
+  "city": "Marengo",
+  "members": [
+   {
+    "county": "Iowa",
+    "name": "Travis Schlabach",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "William Geoghagan",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "John Hinshaw",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Shawn Huedepohl",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Jennifer Olson",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Karen Wayson-Kisling",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "officeAddress": "153 E. Main St. P.O. Box 245 Marengo, IA 52301",
+  "officePhone": "(319) 642-3232",
+  "sources": [
+   {
+    "county": "Iowa",
+    "url": "https://iowacounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1949935": {
+  "city": "Martinsburg",
+  "members": [
+   {
+    "county": "Keokuk",
+    "name": "Ann Spilman",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Mike Jasper",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Todd Harbison",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Todd Moore",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Mary A. Wells",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Robert L. Wells Jr.",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Leon Wickenkamp",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Keokuk",
+    "url": "https://keokukcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1950070": {
+  "city": "Marysville",
+  "members": [
+   {
+    "county": "Marion",
+    "email": "tfweldon@gmail.com",
+    "name": "Tiffani Weldon",
+    "phone": "(641) 891-2479",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Marion",
+    "name": "Corey Bakalar",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Angie Bakalar",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Karrie Keegel",
+    "role": "City Council",
+    "status": "Elected to Fill Vacancy for Term Remainder",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Melody Pettyjohn",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Mark Pettyjohn",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Gary Pettyjohn",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "officeAddress": "P.O. Box 155 Marysville, IA 50116",
+  "officePhone": "(641) 891-2479",
+  "sources": [
+   {
+    "county": "Marion",
+    "url": "https://www.marioncountyiowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1950160": {
+  "city": "Mason City",
+  "members": [
+   {
+    "county": "Cerro Gordo",
+    "email": "aburnett@masoncity.net",
+    "name": "Aaron Burnett",
+    "role": "City Administrator"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "dblack@masoncity.net",
+    "name": "Diana Black",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "jlee@masoncity.net",
+    "name": "John Lee",
+    "role": "Mayor",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "padams@masoncity.net",
+    "name": "Paul Adams",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "tlatham@masoncity.net",
+    "name": "Tim Latham",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "jhines@masoncity.net",
+    "name": "Jeffery Hines",
+    "role": "City Council",
+    "seat": "Ward 1",
+    "status": "Elected to Fill Vacancy for Term Remainder",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "wsymonds@masoncity.net",
+    "name": "Will Symonds",
+    "role": "City Council",
+    "seat": "Ward 2",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "jmasson@masoncity.net",
+    "name": "Joshua Masson",
+    "role": "City Council",
+    "seat": "Ward 3",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "jjaszewski@masoncity.net",
+    "name": "John Jaszewski",
+    "role": "City Council",
+    "seat": "Ward 4",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "softballdoc@MSN.com",
+    "name": "Mike \"Doc\" Adams",
+    "role": "Park Board",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "name": "Anne Hansen",
+    "role": "Park Board",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "mcjkoppin@gmail.com",
+    "name": "James Koppin",
+    "role": "Park Board",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "JayLalacpd@gmail.com",
+    "name": "Jay Lala",
+    "role": "Park Board",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "tlevenhagen29@gmail.com",
+    "name": "Troy Levenhagen",
+    "role": "Park Board",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Cerro Gordo",
+    "url": "https://cerrogordo.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1950935": {
+  "city": "Melcher-Dallas",
+  "members": [
+   {
+    "county": "Marion",
+    "email": "mdcityhall@windstream.net",
+    "name": "Stephanie Ripperger",
+    "phone": "(641) 947-6501",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Marion",
+    "name": "Terry A Fisher",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Mark Herold",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Aaron Hudspeth",
+    "role": "City Council",
+    "status": "Elected to Fill Vacancy for Term Remainder",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "David Johnson",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Leonard Butch Mason",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Darrel Lee Thomas",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   }
+  ],
+  "officeAddress": "305 D Main East Melcher-Dallas, IA 50062",
+  "officePhone": "(641) 947-6501",
+  "sources": [
+   {
+    "county": "Marion",
+    "url": "https://www.marioncountyiowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1951420": {
+  "city": "Meservey",
+  "members": [
+   {
+    "county": "Cerro Gordo",
+    "email": "cityofmeservey11@gmail.com",
+    "name": "Aimee J Frohling",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Cerro Gordo",
+    "name": "Richard Miller",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "jenny50457@gmail.com",
+    "name": "Jenny Burke",
+    "role": "City Council",
+    "seat": "At Large",
+    "status": "Elected to Fill Vacancy for Term Remainder",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "name": "Mike Gobeli",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "name": "Michael McNutt",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "cynevamyers@gmail.com",
+    "name": "Cyneva Zoe Myers",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "name": "Pat White",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Cerro Gordo",
+    "url": "https://cerrogordo.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1952050": {
+  "city": "Miles",
+  "members": [
+   {
+    "county": "Jackson",
+    "name": "Brenda Tebbe",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Jackson",
+    "name": "Brandon L. Meyer",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Nancy Corlis",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Laura Horst",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Andy Petersen",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Nate Voss",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Ron Wilslef",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Jackson",
+    "url": "https://jacksoncounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1952230": {
+  "city": "Millersburg",
+  "members": [
+   {
+    "county": "Iowa",
+    "name": "Travis Gensley",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Jeffrey Clark",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Michael Gorsch",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Loren Hall",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Jeffrey Kruse",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Renee Moravec",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "officeAddress": "P.O. Box 123 Millersburg, IA 52308",
+  "officePhone": "(319) 655-7674",
+  "sources": [
+   {
+    "county": "Iowa",
+    "url": "https://iowacounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1953265": {
+  "city": "Monmouth",
+  "members": [
+   {
+    "county": "Jackson",
+    "name": "Stephanie VonBehren",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Jackson",
+    "name": "William Kramer",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Zachary Bickford",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Emily Clark",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Richard Delaney",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Douglas E. DeMoss",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Julie Kramer",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Jackson",
+    "url": "https://jacksoncounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1955110": {
+  "city": "Muscatine",
+  "members": [
+   {
+    "county": "Muscatine",
+    "name": "Matthew Mardesen",
+    "role": "City Administrator"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Cinda Hilger",
+    "role": "Administrative Secretary"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Brad Bark",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Matt Conard",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Angela Lewis",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Don Lampe",
+    "role": "City Council",
+    "seat": "Ward 1",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Jeff Osborne",
+    "role": "City Council",
+    "seat": "Ward 2",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Peggy S. Gordon",
+    "role": "City Council",
+    "seat": "Ward 3",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Nadine Brockert",
+    "role": "City Council",
+    "seat": "Ward 4",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "John Jindrich",
+    "role": "City Council",
+    "seat": "Ward 5",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Muscatine",
+    "url": "https://muscatinecountyiowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1956685": {
+  "city": "Nichols",
+  "members": [
+   {
+    "county": "Muscatine",
+    "name": "Aeneas Schmitz",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Cynthia Massey",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Russell E. Grim",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Jay Hora",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Kelsie Lampe",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Todd Mahan",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Matthew Thomas Reimers",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Muscatine",
+    "url": "https://muscatinecountyiowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1957225": {
+  "city": "North English",
+  "members": [
+   {
+    "county": "Iowa",
+    "name": "Daniel Strohman",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Beth Carter",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Andrew Custer",
+    "role": "City Council",
+    "status": "Appointed to Fill Vacancy until Election",
+    "termEnds": "2029",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Louis Garringer",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Gerald Haugland",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Kathy O-Rourke",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Tara Hayne",
+    "role": "City Clerk"
+   }
+  ],
+  "officeAddress": "P.O. Box 220 North English, IA 52316",
+  "officePhone": "(319) 664-3810",
+  "sources": [
+   {
+    "county": "Iowa",
+    "url": "https://iowacounty.iowa.gov/about/elected_officials/city/"
+   },
+   {
+    "county": "Keokuk",
+    "url": "https://keokukcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1958665": {
+  "city": "Ogden",
+  "members": [
+   {
+    "county": "Boone",
+    "email": "admin@ogdeniowa.org",
+    "name": "Emily Clausen",
+    "phone": "(515) 275-2917",
+    "role": "City Administrator"
+   },
+   {
+    "county": "Boone",
+    "email": "clerk@ogdeniowa.org",
+    "name": "Allison Frazier",
+    "phone": "(515) 275-2917",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Boone",
+    "email": "listonmargaret@gmail.com",
+    "name": "Margaret E Liston",
+    "phone": "(515) 291-9451",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Boone",
+    "name": "Lori Anderson",
+    "phone": "(515) 275-2560",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "ajcrane3672@gmail.com",
+    "name": "Aaron Crane",
+    "phone": "(641) 891-4882",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "name": "Denny Good",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "daveohlson1964@gmail.com",
+    "name": "David Ohlson",
+    "phone": "(515) 231-9447",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "name": "Brian Reimers",
+    "phone": "(515) 290-0508",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   }
+  ],
+  "officeAddress": "513 W. Walnut St. Ogden, IA 50212",
+  "officePhone": "(515) 275-2917",
+  "sources": [
+   {
+    "county": "Boone",
+    "url": "https://boonecounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1959070": {
+  "city": "Ollie",
+  "members": [
+   {
+    "county": "Keokuk",
+    "name": "Lynn Winn",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Scott Vetter",
+    "role": "Mayor",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Justin W. Haile",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Jeff Miller",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Dana Miller",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Keaton Philips",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Chris Winn",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Keokuk",
+    "url": "https://keokukcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1961770": {
+  "city": "Parnell",
+  "members": [
+   {
+    "county": "Iowa",
+    "name": "Rick Rodgers",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Jared Dhondt",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Ann Krakow",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Ryan Murphy",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Larry Schropp",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Brad Strausser",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   }
+  ],
+  "officeAddress": "P.O. Box 15 Parnell, IA 52325",
+  "officePhone": "(319) 461-0627",
+  "sources": [
+   {
+    "county": "Iowa",
+    "url": "https://iowacounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1962040": {
+  "city": "Pella",
+  "members": [
+   {
+    "county": "Marion",
+    "email": "msmith@cityofpella.com",
+    "name": "Mandy Smith",
+    "phone": "(641) 628-4173",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Marion",
+    "name": "Donald DeWaard",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Calvin Bandstra",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Harold Van Stryland",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Lynn Branderhorst",
+    "role": "City Council",
+    "seat": "Ward 1",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "John Butler",
+    "role": "City Council",
+    "seat": "Ward 2",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Spencer Carlstone",
+    "role": "City Council",
+    "seat": "Ward 3",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "David Hopkins",
+    "role": "City Council",
+    "seat": "Ward 4",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "officeAddress": "825 Broadway P.O. Box 88 Pella, IA 50219",
+  "officePhone": "(641) 628-4173",
+  "sources": [
+   {
+    "county": "Marion",
+    "url": "https://www.marioncountyiowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1962850": {
+  "city": "Pilot Mound",
+  "members": [
+   {
+    "county": "Boone",
+    "name": "Leah Porter",
+    "phone": "(515) 298-0720",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Boone",
+    "name": "Donald Porter",
+    "phone": "(515) 230-9897",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "robyn.carlson17@gmail.com",
+    "name": "Robyn Carlson",
+    "phone": "(712) 790-3740",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "j.conis@yahoo.com",
+    "name": "Jeffrey Conis",
+    "phone": "(515) 360-4666",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "email": "deck76@wccta.net",
+    "name": "Deck Crouch",
+    "phone": "(515) 353-4222",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "name": "Whitney Miller",
+    "phone": "(515) 297-3797",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Boone",
+    "name": "Joshua Miller",
+    "phone": "(515) 298-3782",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "officeAddress": "P.O. Box 128 Pilot Mound, IA 50223",
+  "officePhone": "(515) 298-0720",
+  "sources": [
+   {
+    "county": "Boone",
+    "url": "https://boonecounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1963750": {
+  "city": "Pleasantville",
+  "members": [
+   {
+    "county": "Marion",
+    "email": "cityhall@discoverpleasantville.com",
+    "name": "Rachel Reed",
+    "phone": "(515) 848-3316",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Marion",
+    "name": "Kody Jurgens",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Aaron D Hurt",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Chelsea Kain",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Rachel L. Lopez",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Kyle Patterson",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Marion",
+    "name": "Jordan Van Ness",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   }
+  ],
+  "officeAddress": "108 W Jackson P.O. Box 566 Pleasantville, IA 50225",
+  "officePhone": "(515) 848-3316",
+  "sources": [
+   {
+    "county": "Marion",
+    "url": "https://www.marioncountyiowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1963885": {
+  "city": "Plymouth",
+  "members": [
+   {
+    "county": "Cerro Gordo",
+    "email": "plymouth@myomnitel.com",
+    "name": "Brenda Dunbar",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "amyberding9713@gmail.com",
+    "name": "Amy Berding",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "nealobrennan@gmail.com",
+    "name": "Neal Brennan",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "mdirksen45@gmail.com",
+    "name": "Matt Dirksen",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "lissahedrick@gmail.com",
+    "name": "Lissa Merfield",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "zryg@icloud.com",
+    "name": "Zach Ryg",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "name": "Jay Stump",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Cerro Gordo",
+    "url": "https://cerrogordo.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1964605": {
+  "city": "Preston",
+  "members": [
+   {
+    "county": "Jackson",
+    "name": "Sheryl Ganzer",
+    "role": "City Administrator"
+   },
+   {
+    "county": "Jackson",
+    "name": "Tyler L. Sieverding",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Leesa Budde",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Matt Gerardy",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Dylan Meyer",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Matt Petersen",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Adam E. Reuter",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Jackson",
+    "url": "https://jacksoncounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1966720": {
+  "city": "Richland",
+  "members": [
+   {
+    "county": "Keokuk",
+    "name": "Sarah Claeys",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Keokuk",
+    "name": "John Capps",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Joseph Adrian",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Cyndia Crafton",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Jim Gaines",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Michael T. Hadley",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Steve Pfeifer",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Keokuk",
+    "url": "https://keokukcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1966855": {
+  "city": "Ricketts",
+  "members": [
+   {
+    "county": "Crawford",
+    "name": "Pam Tripp",
+    "phone": "(712) 679-2411",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Crawford",
+    "name": "Brad Riessen",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Drene Briggle",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Sherry Reiling",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Carol Schlensig",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   }
+  ],
+  "officeAddress": "P.O. Box 47 Ricketts, IA 51460",
+  "officePhone": "(712) 679-2425",
+  "sources": [
+   {
+    "county": "Crawford",
+    "url": "https://www.crawfordcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1968025": {
+  "city": "Rock Falls",
+  "members": [
+   {
+    "county": "Cerro Gordo",
+    "email": "rockfallsia@gmail.com",
+    "name": "Tammi Kuhlers",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Cerro Gordo",
+    "name": "Tim Dodd",
+    "role": "Mayor",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "name": "Mark Brosz",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "name": "Scott Ennis",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "name": "Chad Kahler",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "name": "Jordan Navratil",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "name": "Denny Paulson",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Cerro Gordo",
+    "url": "https://cerrogordo.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1968250": {
+  "city": "Rockwell",
+  "members": [
+   {
+    "county": "Cerro Gordo",
+    "email": "rockwellclerk@netins.net",
+    "name": "Lorna Weier",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "Larry.wentz.iii@gmail.com",
+    "name": "Larry Wentz",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "abbienielsen43@gmail.com",
+    "name": "Abbie Emhoff",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "name": "Brian Koob",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "name": "Bradley Meyer",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "donoconnor1961@gmail.com",
+    "name": "Don O'Connor",
+    "role": "City Council",
+    "seat": "At Large",
+    "status": "Appointed to Fill Vacancy until Election",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "worleys@netins.net",
+    "name": "Tracy Jo Worley",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Cerro Gordo",
+    "url": "https://cerrogordo.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1969510": {
+  "city": "Sabula",
+  "members": [
+   {
+    "county": "Jackson",
+    "name": "Lynn Parker",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Jackson",
+    "name": "Curtis D. Johnson",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Jeremy Lee Diercks",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Timothy Hibbard",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Mike O\u2019Hara",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Erica Shoemaker",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Dave Ward",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Jackson",
+    "url": "https://jacksoncounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1969960": {
+  "city": "St Donatus",
+  "members": [
+   {
+    "county": "Jackson",
+    "name": "Rose Koos",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Jackson",
+    "name": "Ron Hilkin",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Tracy Benson",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Pat Gregorich",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Carrie Maro",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Edward Pickel",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Tricia M. Ploessl",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Jackson",
+    "url": "https://jacksoncounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1971130": {
+  "city": "Schleswig",
+  "members": [
+   {
+    "county": "Crawford",
+    "email": "schleswigclerk@iowatelecom.net",
+    "name": "Kris Kluender",
+    "phone": "(712) 676-3361",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Crawford",
+    "name": "Beth Winquist",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Rory Degen",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "John Fineran",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Richard Hanlin",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Troy Kluender",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Paul Outhouse",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Amy Hoffmeier",
+    "phone": "(712) 676-3470",
+    "role": "Library"
+   }
+  ],
+  "officeAddress": "111 2nd St P.O. Box 276 Schleswig, IA 51461",
+  "officePhone": "(712) 676-3361",
+  "sources": [
+   {
+    "county": "Crawford",
+    "url": "https://www.crawfordcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1973110": {
+  "city": "Sigourney",
+  "members": [
+   {
+    "county": "Keokuk",
+    "name": "Ashley Fry",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Gary Iosbaker",
+    "role": "Mayor",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "David Goldman",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Randy Schultz",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Edward M. Conrad",
+    "role": "City Council",
+    "seat": "Ward 1",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Jesse Hannam",
+    "role": "City Council",
+    "seat": "Ward 2",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Connie J. Mclaughlin",
+    "role": "City Council",
+    "seat": "Ward 3",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Larry Chmelar",
+    "role": "City Council",
+    "seat": "Ward 4",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Keokuk",
+    "url": "https://keokukcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1974055": {
+  "city": "South English",
+  "members": [
+   {
+    "county": "Keokuk",
+    "name": "Stephanie Lown",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Ed Shafranek",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Emily Clarahan",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Hope Frazier",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Nick Frazier",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Cameron Miller",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Roger Murphy",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Keokuk",
+    "url": "https://keokukcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1974460": {
+  "city": "Spragueville",
+  "members": [
+   {
+    "county": "Jackson",
+    "name": "Marie Rossmann",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Jackson",
+    "name": "Caroline M. Bredekamp",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Tracie Bredekamp",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Lisa Holdgrafer",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Travis Kieffer",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Landon Ruchotzke",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Tom Schroeder",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Jackson",
+    "url": "https://jacksoncounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1974505": {
+  "city": "Springbrook",
+  "members": [
+   {
+    "county": "Jackson",
+    "name": "Julia Boop",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Jackson",
+    "name": "James C. Portz",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Jeffrey Gerlach",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Kelly Gerlach",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Toby J. Giesemann",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Michael Griffin",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Richard Heiar",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Jackson",
+    "url": "https://jacksoncounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1975450": {
+  "city": "Stockton",
+  "members": [
+   {
+    "county": "Muscatine",
+    "name": "Sherri Bell",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Lance McConnell",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Cody Drapeaux",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Cynthia Pedersen",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Josh Smyser",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Derryl Glenn Van Dee",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Scott N. Wolf",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Muscatine",
+    "url": "https://muscatinecountyiowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1976620": {
+  "city": "Swaledale",
+  "members": [
+   {
+    "county": "Cerro Gordo",
+    "email": "cityofswaledale@gmail.com",
+    "name": "Katie Sprung",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "darwinhanson1229@gmail.com",
+    "name": "Darwin Hanson",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "name": "Mackenna Hambly",
+    "role": "City Council",
+    "seat": "At Large",
+    "status": "Appointed to Fill Vacancy until Election",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "name": "Darwin Johnson",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "name": "Tim Larson",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "name": "Roger Mhyre",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "name": "Makia Miller",
+    "role": "City Council",
+    "seat": "At Large",
+    "status": "Appointed to Fill Vacancy until Election",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Cerro Gordo",
+    "url": "https://cerrogordo.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1977835": {
+  "city": "Thornburg",
+  "members": [
+   {
+    "county": "Keokuk",
+    "name": "Jeanine Bos",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Steve Bos",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Jayne Garcia",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Dale Walker",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Debra Walker",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Keokuk",
+    "url": "https://keokukcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1977880": {
+  "city": "Thornton",
+  "members": [
+   {
+    "county": "Cerro Gordo",
+    "email": "cityclerk@thornton-iowa.com",
+    "name": "Megan Hobscheidt",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "jensenmb4@yahoo.com",
+    "name": "Mike Jensen",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "stevenberge2008@hotmail.com",
+    "name": "Steven Berge",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "ranbohman55@gmail.com",
+    "name": "Randall A Bohman",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "name": "Jared Dietzenbach",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "hicokbill@gmail.com",
+    "name": "William Hicok",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "bradwillman@hotmail.com",
+    "name": "Brad Willman",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Cerro Gordo",
+    "url": "https://cerrogordo.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1980130": {
+  "city": "Vail",
+  "members": [
+   {
+    "county": "Crawford",
+    "email": "cityclerk.cityofvail@gmail.com",
+    "name": "Tisha Carey",
+    "phone": "(712) 677-2130",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Crawford",
+    "name": "Monte Crichton",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Suzi Blume",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Tyson Ernst",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Marc Kinney",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Tom McCullough",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Dustin Miller",
+    "role": "City Council",
+    "status": "Appointed to Fill Vacancy until Election",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   }
+  ],
+  "officeAddress": "P.O. Box 128 Vail, IA 51465",
+  "officePhone": "(712) 677-2210",
+  "sources": [
+   {
+    "county": "Crawford",
+    "url": "https://www.crawfordcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1980580": {
+  "city": "Ventura",
+  "members": [
+   {
+    "county": "Cerro Gordo",
+    "email": "ventura@cltel.net",
+    "name": "Donna Powers",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Cerro Gordo",
+    "name": "Joe Schmit",
+    "role": "Mayor",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "darylheinemann@gmail.com",
+    "name": "Daryl Heinemann",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "randymccollom@hotmail.com",
+    "name": "Randy McCollom",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "johnquintus@cltel.com",
+    "name": "John Quintus",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "name": "Chuck Shropshire",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Cerro Gordo",
+    "email": "michael.thackery@gmail.com",
+    "name": "Michael Thackery",
+    "role": "City Council",
+    "seat": "At Large",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Cerro Gordo",
+    "url": "https://cerrogordo.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1980805": {
+  "city": "Victor",
+  "members": [
+   {
+    "county": "Iowa",
+    "name": "Eric Refer",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Donald Craig",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Marla Faga",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Lisa Rhinehart",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Shawn Sternhagen",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Cindy Trout Smith",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   }
+  ],
+  "officeAddress": "P.O. Box R Victor, IA 52347",
+  "officePhone": "(319) 647-2241",
+  "sources": [
+   {
+    "county": "Iowa",
+    "url": "https://iowacounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1983055": {
+  "city": "Webster",
+  "members": [
+   {
+    "county": "Keokuk",
+    "name": "Janet Berg",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Bryan E. Lee",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Steve Black",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Gerald Glandon",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Scott A. Mihal",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Scott Shifflett",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Steven Street",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Keokuk",
+    "url": "https://keokukcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1984315": {
+  "city": "West Liberty",
+  "members": [
+   {
+    "county": "Muscatine",
+    "name": "Lee Geertz",
+    "role": "City Administrator"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Shari Hoffert",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Mark Danner Smith",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Cara Calvin-McFerren",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Dana Dominguez",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Omar Martinez",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Tim Parizek",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Joshua Shiltz Costa",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Muscatine",
+    "url": "https://muscatinecountyiowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1984630": {
+  "city": "Westside",
+  "members": [
+   {
+    "county": "Crawford",
+    "email": "cityhall@cityofwestside.com",
+    "name": "Sandy Koch",
+    "phone": "(712) 663-4493",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Crawford",
+    "name": "Michell Simons",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Larry Jons",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Allan Kock",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Nicole Kock",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Jary Quandt",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Kevin Simons",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Crawford",
+    "name": "Cathy Meyer",
+    "phone": "(712) 663-4493",
+    "role": "Library"
+   }
+  ],
+  "officeAddress": "P.O. Box 417 Westside, IA 51467-0417",
+  "officePhone": "(712) 663-4493",
+  "sources": [
+   {
+    "county": "Crawford",
+    "url": "https://www.crawfordcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1984900": {
+  "city": "What Cheer",
+  "members": [
+   {
+    "county": "Keokuk",
+    "name": "Melanie Vermillion",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Darrell Wilkening",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Lisa Brackelsberg",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Frank Calvert",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Dwight Danner Sr.",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Donna S. Rogers",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Keokuk",
+    "name": "Sandra Van Patten",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Keokuk",
+    "url": "https://keokukcounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1985845": {
+  "city": "Williamsburg",
+  "members": [
+   {
+    "county": "Iowa",
+    "name": "Adam Grier",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Tyler Marshall",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Jeff Steinkamp",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Jake Tornholm",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Dale Walter",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Iowa",
+    "name": "Anne Zalenski",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "officeAddress": "210 W. State St. P.O. Box 596 Williamsburg, IA 52361",
+  "officePhone": "(319) 668-1133",
+  "sources": [
+   {
+    "county": "Iowa",
+    "url": "https://iowacounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1986070": {
+  "city": "Wilton",
+  "members": [
+   {
+    "county": "Muscatine",
+    "name": "Jeff Horne",
+    "role": "City Administrator"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Lizabeth Maurer",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Keith W. Stanley",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Wayne Budding",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Ted Marolf",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Michael Rohwer",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Allen (Bill) Voss",
+    "role": "City Council",
+    "termEnds": "2029",
+    "termLength": "4 Years"
+   },
+   {
+    "county": "Muscatine",
+    "name": "Stevie Whitehead",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "4 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Muscatine",
+    "url": "https://muscatinecountyiowa.gov/about/elected_officials/city/"
+   }
+  ]
+ },
+ "1987690": {
+  "city": "Zwingle",
+  "members": [
+   {
+    "county": "Jackson",
+    "name": "Shane Chapman",
+    "role": "City Clerk"
+   },
+   {
+    "county": "Jackson",
+    "name": "Joas Troyer",
+    "role": "Mayor",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Irene Dahlman",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Homer Dahlman Jr",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Collin Frazier",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "James A. Hoerner",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   },
+   {
+    "county": "Jackson",
+    "name": "Paul Taylor",
+    "role": "City Council",
+    "termEnds": "2027",
+    "termLength": "2 Years"
+   }
+  ],
+  "sources": [
+   {
+    "county": "Jackson",
+    "url": "https://jacksoncounty.iowa.gov/about/elected_officials/city/"
+   }
+  ]
+ }
+}
