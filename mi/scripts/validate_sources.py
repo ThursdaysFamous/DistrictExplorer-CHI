@@ -135,18 +135,47 @@ PROVENANCE = [
             "Detroit's seven City Council districts, from the city's own ArcGIS org. "
             "Pre-built by mi/scripts/build_mi_detroit_council.py. "
             "WHAT THIS ROW WATCHES IS A NAME COLLISION, not an outage. The city "
-            "publishes THREE council-district services -- one titled 'Current' dating "
-            "from 2016, this one named for 2026, and one named for 2013 that was "
-            "CREATED in December 2025 -- and their names do not settle which is in "
-            "force. The builder decides it by measurement and gates it in both "
-            "directions: 'Current' must carry geometry identical to this service and "
-            "the 2013 archive must differ, and against Census 2020 blocks this plan "
-            "must balance (measured 4.28% worst deviation) while the archive must not "
-            "(13.51%). If the archived plan ever comes into balance too, the build "
-            "refuses, because the test has stopped telling them apart. "
+            "publishes FOUR council-district boundary services -- one titled 'Current' "
+            "dating from 2016, this one named for 2026, one named for 2013 that was "
+            "CREATED in December 2025, and NewDistrictBoundariesOption6, which reads "
+            "like a rejected draft and is the same plan redigitised (99.575% point "
+            "agreement, measured) -- and their names do not settle which is in force. "
+            "The builder decides it by measurement and gates it in both directions: "
+            "'Current' must carry geometry identical to this service and the 2013 "
+            "archive must differ, and against Census 2020 blocks this plan must balance "
+            "(measured 4.28% worst deviation) while the archive must not (13.51%). If "
+            "the archived plan ever comes into balance too, the build refuses, because "
+            "the test has stopped telling them apart. "
+            "THE PLAN'S OWN DATES ARE IN THIS SERVICE'S `description` FIELD -- adopted "
+            "by the Council on 2024-02-06, in effect from 2026-01-01 -- so a watcher "
+            "reading this row should read that field too; the city states the dates on "
+            "the data itself. "
             "A REDRAW REACHES THIS APP ONLY THROUGH THAT BUILDER -- the file is "
             "pre-built and cache-first -- so this row existing is what makes a "
             "vanished or moved service visible at all."
+        ),
+    },
+    {
+        "layer": "detroit-council",
+        "app_file": "mi-detroit-council-members.json",
+        "source_url": "https://detroitmi.gov/government/city-council",
+        "blocked": ("Cloudflare managed challenge. Measured 2026-09-05 on the front door, "
+                    "this page and robots.txt alike, on the plain requests rung AND the "
+                    "stdlib client-hints rung that unblocked Kendall: 'Just a moment...' "
+                    "with cf_chl markers every time. This project does not defeat a "
+                    "challenge, so the roster is read from the Internet Archive's copy of "
+                    "this same page and REACHABLE AGAIN is the actionable state -- it would "
+                    "mean the scraper's direct rung can serve and the archive hop can go."),
+        "note": (
+            "Detroit's nine City Council members -- seven by district, two at large "
+            "(2012 charter Art. 4 SS4-101). Built by mi/scripts/mi_detroit_council_scraper.py "
+            "into mi/scripts/build_mi_detroit_council_roster.py, weekly. "
+            "THE FRESHNESS GUARD IS IN THE SCRAPER, NOT HERE: a snapshot older than 45 days "
+            "is refused rather than served, so this roster cannot go quietly stale even "
+            "though its source is unreachable. The card prints the snapshot's date. "
+            "NO CONTACT SHIPS AND THAT IS THE GAP `detroit-council-contact`, not an "
+            "omission: neither this page nor any member's own page carries a single "
+            "mailto: or tel: link, measured on both through the Archive."
         ),
     },
     {

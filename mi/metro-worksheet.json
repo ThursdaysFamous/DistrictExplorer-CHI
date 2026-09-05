@@ -244,7 +244,7 @@
             "url": "https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/city_council_districts_2026/FeatureServer/0"
           }
         ],
-        "people": "NONE, and that is measured rather than skipped. Every route to Detroit's council membership is shut to this client: detroitmi.gov and data.detroitmi.gov sit behind a Cloudflare managed challenge (403 on robots.txt itself, so even the policy cannot be read — this project does not defeat a challenge); mvic.sos.state.mi.us is challenged too; the city's ArcGIS org publishes 225 items, all geometry, no roster; and Detroit's Legistar was abandoned in 2017 and never carried a district in OfficeRecordTitle even while maintained, where Milwaukee's carries \"3rd District\" in that same field — test a vendor by content per city, never by its name. Its Persons table flags all 45 records active, five of them system accounts and several members who left office in 2013. Recorded as the gap detroit-council-roster; the ask is drafted and held.",
+        "people": "The nine members of Detroit's City Council, from the council's own page at detroitmi.gov — seven by district and two at large, per the 2012 charter Art. 4 §4-101. THE LIVE PAGE REFUSES THIS CLIENT: detroitmi.gov sits behind a Cloudflare managed challenge on both the plain and the client-hints rungs, and this project does not defeat a challenge, so the roster is read from the Internet Archive's copy of that same page — the fleet's terminal fetch rung, in weekly use for Kendall and McHenry since 2026-07 — and the card states which day's copy it read. A snapshot older than 45 days is refused rather than served. NO PER-MEMBER phone or e-mail ships: neither the listing nor a member's own profile page carries a single mailto: or tel: link, measured on both, and that absence is the gap detroit-council-contact. The BODY's own office does ship — City Council Office, 2 Woodward Ave. Suite 1340, (313) 224-3443, published once for the whole Council — rendered for the body under the switchboard rule rather than attached to any member. mvic.sos.state.mi.us is challenged the same way; data.detroitmi.gov is NOT (it answers 200 with a readable robots.txt, and an earlier version of this note said otherwise on the strength of one substring match). Detroit's Legistar is abandoned since 2017 and never carried a district in OfficeRecordTitle even while maintained, where Milwaukee's carries \"3rd District\" in that same field — test a vendor by content per city, never by its name; its Persons table also flags all 45 records active, five of them system accounts.",
         "applies": "Detroit only. Coverage is the layer's own tiling, which is exact rather than approximate: the districts sum to the city's Census 2020 population, so their union IS the city."
       }
     },
@@ -339,7 +339,7 @@
       }
     }
   ],
-  "min_register_layer": 6,
+  "min_register_layer": 7,
   "anchor_point": {
     "lat": 42.7337,
     "lng": -84.5553,
@@ -446,11 +446,16 @@
         "file": "coverage-gaps.json",
         "min_keys": 0,
         "note": "The Data gaps panel's content; empty at arrival — this instance's first recorded gap ships with the layer it belongs to."
+      },
+      {
+        "file": "mi-detroit-council-members.json",
+        "min_keys": 4,
+        "note": "Detroit's nine council members — seven by district plus two at large (charter Art. 4 §4-101). Built by mi/scripts/build_mi_detroit_council_roster.py from mi_detroit_council_scraper.py's cache. Four top-level keys: districts, citywide, sourceUrl, archivedAt."
       }
     ]
   },
   "sw": {
-    "cache_name": "districtry-mi-shell-v4",
+    "cache_name": "districtry-mi-shell-v5",
     "shell_urls": [
       "./",
       "./manifest.webmanifest",
@@ -481,6 +486,11 @@
       "file": "mi-validate-sources.yml",
       "purpose": "source freshness (MI manifest: TIGERweb, congress-legislators, Open States, senate.michigan.gov)",
       "schedule": "1st of month 16:00 UTC"
+    },
+    {
+      "file": "update-detroit-council-roster.yml",
+      "purpose": "Detroit City Council roster (the city's own page, via the Internet Archive)",
+      "schedule": "Wed 18:30 UTC"
     }
   ],
   "geocoder": {
@@ -530,6 +540,11 @@
     "file": "history.html",
     "intro": "districtry Michigan answers for all 83 counties: the county commissioner districts Michigan's own Bureau of Elections compiles from every county's apportionment filing, plus the national tier every U.S. state can serve from national publishers. It was built dark across three changes in one day — the national tier, the commissioner flagship, then publication — rather than going live on arrival.",
     "entries": [
+      {
+        "date": "2026-09-05",
+        "title": "Detroit's council districts, and the route that was never walked",
+        "body": "Detroit became the first city this app answers for in Michigan: seven City Council districts, drawn from the city's own published boundaries. Which boundaries took some deciding — the city publishes four competing versions and their names do not settle which is in force, so the choice was made by arithmetic instead. The plan that ships divides Detroit's people almost evenly on the 2020 census; the one it replaced is out by three times as much, which is what a map drawn on the 2010 census looks like ten years later. A fourth version, whose name reads like a rejected draft, turned out to be the very same lines drawn at a coarser resolution, and it is the one that names the dates: the Council adopted this plan on 6 February 2024 and it took effect on 1 January 2026. The card first shipped naming your district and nobody in it, on the finding that every route to the council's membership was closed. Two of those five findings were wrong. The city's open-data portal was called blocked when it answers perfectly well — a conclusion drawn from searching a page for the word \"challenge\" while the server was plainly saying yes. And the route this project already uses every week for two Illinois counties, reading a public archive of a page whose live version refuses us, was never tried at all. It answers with all nine members. So the card now names your council member, and the two members every Detroiter elects citywide, and tells you which day's archived copy it read. A copy older than 45 days is refused rather than shown to you. No phone number or e-mail appears, and that is the city's doing rather than ours: it publishes none, on the council listing or on any member's own page. That absence is recorded as a gap, in the same place as every other thing this app cannot yet tell you."
+      },
       {
         "date": "2026-09-03",
         "title": "Published",

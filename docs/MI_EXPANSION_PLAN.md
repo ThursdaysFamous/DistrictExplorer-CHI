@@ -223,10 +223,25 @@ Each opens its own refreshed plan PR with its own measured ledger when it begins
   deviation) and the archive must not (13.51%, which is a plan drawn on 2010 seen from 2020). The
   seven districts sum to 639,111 — Detroit's Census 2020 population exactly — which is both the
   tiling proof and the reason `coverage` is the layer's own tiling with no separate city outline.
-  NO ROSTER, measured across five routes: detroitmi.gov and data.detroitmi.gov sit behind a
-  Cloudflare managed challenge that 403s on robots.txt ITSELF, and Detroit's Legistar was abandoned
-  in 2017 and never carried a district in OfficeRecordTitle where Milwaukee's does — test a vendor
-  by content per city (gap `detroit-council-roster`, ask drafted and held).
+  THE ROSTER SHIPPED THE SAME DAY, ON REVIEW, AND THE FIX IS THE LESSON. The layer first shipped
+  naming NOBODY, on a finding that five routes to the membership were shut. Two of the five were
+  wrong. `data.detroitmi.gov` was recorded as challenged when it answers **HTTP 200 with a readable
+  robots.txt** — a verdict reached by grepping a 68 KB page for the word "challenge" and finding
+  one hit WHILE THE STATUS CODE SAID 200. And the fleet's OWN terminal fetch rung, the Internet
+  Archive, in weekly use for Kendall and McHenry since 2026-07, was never attempted; it answers
+  with all nine members, their districts and their roles. **A ROUTE NOT WALKED IS NOT A ROUTE
+  MEASURED**, and five routes were claimed shut with four examined. So all nine ship — seven on the
+  polygons, two at large in a `citywide` block (the Des Moines shape) — with the card printing which
+  day's archived copy it read and the scraper refusing one over 45 days old. What survived
+  measurement is narrower and holds: detroitmi.gov and mvic.sos.state.mi.us DO carry a genuine
+  Cloudflare managed challenge on the plain AND the client-hints rung, so there is deliberately no
+  headless rung here; and Legistar was abandoned in 2017 and never carried a district in
+  OfficeRecordTitle where Milwaukee's does — test a vendor by content per city. The remaining gap is
+  `detroit-council-contact`: no phone and no e-mail anywhere on either city surface, measured.
+  Three further corrections came out of the same review — the org holds **1,512 items (795 feature
+  services)**, not 225; the plan's own dates (adopted 2024-02-06, effective 2026-01-01) were sitting
+  in the shipped service's `description` and were never cited; and `SIMPLIFY` at 8% moved D5's
+  boundary 135 m, against a city tier that simplifies at 20-25%. All three are fixed.
   **GRAND RAPIDS IS NEXT** — its three wards elect two commissioners each, so the at-large question
   arrives in a different shape than Detroit's, and its publisher has not been researched yet.
 - **The 619 commissioners** — gap `mi-commissioner-roster`. The honest route is county-by-county

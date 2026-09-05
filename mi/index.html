@@ -9228,20 +9228,49 @@ function initMichiganExplorer() {
    * population exactly, so their union IS the city and a point inside any of
    * them is inside Detroit. No separate city outline is fetched.
    *
-   * THIS CARD NAMES NOBODY, and the reason is measured rather than shrugged
-   * at. Every route to the membership is shut to this client: detroitmi.gov
-   * and data.detroitmi.gov sit behind a Cloudflare managed challenge (403 on
-   * robots.txt itself, so even the policy cannot be read, and this project
-   * does not defeat a challenge); the city's ArcGIS org publishes 225 items
-   * and no roster; and Detroit's Legistar — the vendor whose Milwaukee
-   * instance this repo scrapes weekly — was abandoned in 2017 and never
-   * carried a district in OfficeRecordTitle even while maintained. Its
-   * Persons table flags all 45 records active, including five system accounts
-   * and members who left office in 2013. The gap is recorded; the ask is
-   * drafted and held. ---------- */
+   * THE CARD NAMES ALL NINE MEMBERS, AND AN EARLIER VERSION OF THIS COMMENT
+   * SAID IT COULD NOT. That claim rested on five measurements, two of them
+   * wrong: `data.detroitmi.gov` was called challenged when it answers 200 with
+   * a readable robots.txt (the verdict came from grepping a page for the word
+   * "challenge" while the status code said 200), and the fleet's own terminal
+   * fetch rung — the Internet Archive, in weekly use for Kendall and McHenry
+   * since 2026-07 — was never tried. It answers with all nine.
+   *
+   * What survived measurement: detroitmi.gov itself and mvic.sos.state.mi.us
+   * DO sit behind a Cloudflare managed challenge, on the plain and the
+   * client-hints rungs alike, and this project does not defeat one — so the
+   * roster rides a public archive of the city's own council page and the card
+   * says which day's copy it read. Detroit's Legistar is abandoned since 2017
+   * and never carried a district in OfficeRecordTitle even while maintained,
+   * so it could not place a member on a district card either way.
+   *
+   * SEVEN OF THE NINE SIT ON THESE POLYGONS AND TWO DO NOT (charter Art. 4
+   * §4-101). The at-large pair ships beside the district member rather than
+   * being dropped, because a card naming only the district member would answer
+   * seven ninths of the question and look complete doing it. NO PER-MEMBER
+   * phone or e-mail ships, because the city publishes none on either surface
+   * (gap `detroit-council-contact`) — but the Council's OWN office and
+   * switchboard are published once and do ship, rendered for the body rather
+   * than attached to whoever's district you clicked. ---------- */
   var loadDetroitCouncilDistricts = makeCached(function () {
     return fetchJSONWithRetry("data/app/mi-detroit-council-districts.json", {}, 2);
   });
+  var loadDetroitCouncilRoster = makeCached(function () {
+    return fetchJSONWithRetry("data/app/mi-detroit-council-members.json", {}, 2);
+  });
+
+  // "20260831152830" -> "31 August 2026". The card states which day's archived
+  // copy it read, because the live page refuses this client and a reader is
+  // owed the recency rather than an implied "now".
+  function detroitSnapshotDate(stamp) {
+    var m = /^(\d{4})(\d{2})(\d{2})/.exec(String(stamp || ""));
+    if (!m) return null;
+    var months = ["January", "February", "March", "April", "May", "June", "July",
+                  "August", "September", "October", "November", "December"];
+    var mon = months[Number(m[2]) - 1];
+    if (!mon) return null;
+    return String(Number(m[3])) + " " + mon + " " + m[1];
+  }
 
   function detroitCoverage(point) {
     // The districts tile the city exactly (the builder asserts the population
@@ -9253,25 +9282,101 @@ function initMichiganExplorer() {
     });
   }
 
-  registerPolygonLayer({
+  registerLayer({
     id: "detroit-council",
     group: "political",
     label: "Detroit Council District",
-    loader: loadDetroitCouncilDistricts,
     coverage: detroitCoverage,
-    style: { color: "#0F5C8C", weight: 2, fillColor: "#2E8FC4", fillOpacity: 0.06 },
-    fields: [
-      { name: "district", label: "District", keys: ["District", "district_number"], primary: true },
-      { label: "Your council member",
-        value: "Not named here. Detroit's own website and open-data portal both sit behind " +
-               "a challenge this app does not try to defeat, the city publishes no roster " +
-               "alongside these boundaries, and its legislative-records system stopped " +
-               "listing council members in 2017. The City Council's own page is the " +
-               "current source." },
-      { label: "Also representing you",
-        value: "Two council members and the mayor are elected citywide rather than by " +
-               "district, so they are not tied to this boundary." }
-    ]
+    overlay: {
+      load: loadDetroitCouncilDistricts,
+      style: { color: "#0F5C8C", weight: 2, fillColor: "#2E8FC4", fillOpacity: 0.06 }
+    },
+    hoverName: function (feature) {
+      var v = findPropCI(feature.properties || {}, ["District", "district_number"]);
+      return (v == null || v === "") ? null : String(v);
+    },
+    query: function (point, seq) {
+      // The roster is a small same-origin file and its failure is not this
+      // layer's failure: the district still answers, identity-only.
+      return Promise.all([
+        queryFeatureAt(loadDetroitCouncilDistricts, point),
+        loadDetroitCouncilRoster().catch(function () { return null; })
+      ]).then(function (parts) {
+        var feature = parts[0];
+        if (!feature) return null;
+        var district = findPropCI(feature.properties || {}, ["District", "district_number"]);
+        var roster = parts[1];
+        return {
+          seq: seq,
+          district: district,
+          member: (roster && roster.districts && district != null)
+            ? roster.districts[String(district)] : null,
+          citywide: (roster && roster.citywide) || null,
+          office: (roster && roster.office) || null,
+          rosterUrl: roster ? roster.sourceUrl : null,
+          archivedAt: roster ? roster.archivedAt : null
+        };
+      });
+    },
+    cardIdentifier: function (result) {
+      return result.district ? "District " + String(result.district) : "Unknown district";
+    },
+    render: function (result) {
+      var wrap = cardEl("div", "card-flush");
+      if (result.member && result.member.name) {
+        wrap.appendChild(renderPersonRows([{
+          name: result.member.name,
+          badge: "Council member",
+          links: result.member.profileUrl
+            ? [{ label: "Profile", url: result.member.profileUrl }] : null
+        }]));
+      }
+      // The two seats no district can carry. Every Detroit reader elects these
+      // people too, so leaving them off would make a partial answer look whole.
+      if (result.citywide && result.citywide.length) {
+        wrap.appendChild(renderSectionLabel("ELECTED BY THE WHOLE CITY"));
+        wrap.appendChild(renderPersonRows(result.citywide.map(function (rec) {
+          return {
+            name: rec.name,
+            badge: "At large",
+            links: rec.profileUrl ? [{ label: "Profile", url: rec.profileUrl }] : null
+          };
+        }), { tinted: true }));
+      }
+      // The Council's own office and switchboard — published once, for the
+      // BODY. It renders here rather than on a member row precisely because it
+      // is not anyone's direct line (EXPANSION_GUIDE Part 5's switchboard rule).
+      if (result.office && result.office.phone) {
+        wrap.appendChild(renderOfficeGroup({
+          label: "City Council Office",
+          offices: [{
+            label: "All nine members",
+            lines: result.office.lines || [],
+            phone: result.office.phone
+          }]
+        }));
+      }
+      var rows = [{ label: "District", value: result.district ? String(result.district) : "Unknown",
+                    primary: true }];
+      rows.push({ label: "Also representing you",
+                  value: "Detroit's mayor is elected citywide and is a separate office from "
+                       + "the Council, so no mayor is named on this card." });
+      var day = detroitSnapshotDate(result.archivedAt);
+      if (day) {
+        rows.push({ label: "Roster read",
+                    value: "From the Internet Archive's copy of the City Council's own page, "
+                         + "taken " + day + ". detroitmi.gov refuses automated requests, so "
+                         + "this app reads the archived copy rather than the live page. The "
+                         + "city publishes no phone or e-mail for individual members, so the "
+                         + "Council's own office above is the number it gives for all nine." });
+      }
+      wrap.appendChild(renderFieldStack(rows));
+      return wrap;
+    },
+    primaryLink: function (result) {
+      var url = safeHttpUrl(result.rosterUrl) || "https://detroitmi.gov/government/city-council";
+      return { label: "Detroit City Council", url: url };
+    }
   });
 
   /* ==== ENGINE:BEGIN hover-explorer ==== */
