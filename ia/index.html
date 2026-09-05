@@ -8410,7 +8410,7 @@ function initIowaExplorer() {
   var loadIaSupervisorMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/ia-supervisor-members.json", {}, 2);
   });
-  // Which supervisor chairs the board — 36 of 99 counties, from each one's own
+  // Which supervisor chairs the board — 35 of 99 counties, from each one's own
   // board page. No statewide publisher records it, and the chair changes by
   // the board's own vote each January, which is why this rides a weekly
   // re-scrape rather than an answer someone gave once.
