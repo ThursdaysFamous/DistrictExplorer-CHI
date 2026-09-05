@@ -52,6 +52,33 @@
 // fresh load — so the probe pins it rather than sampling whichever way the
 // download raced.
 //
+// TWO BLIND SPOTS, NAMED BECAUSE BOTH ARE EMPTY TODAY AND NEITHER IS
+// STRUCTURALLY IMPOSSIBLE. Measured 2026-09-05 by an audit harness that
+// instruments `queryFeatureAt` itself at the source level and compares what it
+// sees against what this probe records:
+//
+//   * ATTRIBUTION IS BY LOADER, NOT BY LAYER. A layer is marked as sending if
+//     ANY layer holding the same loader object fired its hook, so two layers
+//     sharing one loader stand or fall together. Exactly one such pair exists
+//     in the fleet — Illinois's `police-district` and `ccpsa-district-council`
+//     share `loadPoliceDistricts` deliberately, to avoid a double fetch — and
+//     it is NOT a miscount, because both route through `queryFeatureAt`
+//     (il/index.html:14228 and :14454). A future layer sharing a loader with
+//     one that queries differently would be.
+//
+//   * THE WALK ONLY REACHES LOADERS THE MODULE HOLDS — on the module object or
+//     on a registerCountyLayer entry. A loader referenced solely inside a
+//     query closure would never have its hook replaced, would fire the
+//     ORIGINAL, and would appear in neither list: a silent undercount rather
+//     than a reported one. Measured across all six instances: of 101
+//     `queryFeatureAt` invocations, 43 carried a hook and ZERO used a loader
+//     this walk had not already found. The hole is real and currently empty.
+//
+// Closing either needs per-layer attribution through a wrapped `query` plus a
+// wrapped `queryFeatureAt`, which is more machinery than two empty cases earn.
+// They are recorded here so the next reader measures rather than assumes — the
+// audit above is ~30 lines and reproducible from this comment.
+//
 // AND IT RECONCILES ITSELF, which is what keeps a future hiding place from
 // silently reading as zero. Every `.atPoint` assignment site in the shipped
 // source is reported as either FIRED or never fired; an observed hook whose
