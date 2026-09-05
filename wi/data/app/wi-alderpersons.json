@@ -1,4 +1,86 @@
 {
+ "02375": {
+  "members": {
+   "01": {
+    "name": "Josh Lambrecht",
+    "phone": "(920) 268-4808",
+    "url": "https://www.appletonwi.gov/government/district_1.php"
+   },
+   "02": {
+    "name": "Vered Meltzer",
+    "phone": "(920) 809-6669",
+    "url": "https://www.appletonwi.gov/government/district_2.php"
+   },
+   "03": {
+    "name": "Brad Firkus",
+    "phone": "(920) 358-0339",
+    "url": "https://www.appletonwi.gov/government/district_3.php"
+   },
+   "04": {
+    "name": "Martyn Smith",
+    "phone": "(920) 215-0982",
+    "url": "https://www.appletonwi.gov/government/district_4.php"
+   },
+   "05": {
+    "name": "Katie Van Zeeland",
+    "phone": "(920) 358-0501",
+    "url": "https://www.appletonwi.gov/government/district_5.php"
+   },
+   "06": {
+    "name": "Denise Fenton",
+    "phone": "(920) 475-1603",
+    "url": "https://www.appletonwi.gov/government/district_6.php"
+   },
+   "07": {
+    "name": "Patrick Hayden",
+    "phone": "(920) 585-9530",
+    "url": "https://www.appletonwi.gov/government/district_7.php"
+   },
+   "08": {
+    "name": "Patti Heffernan",
+    "phone": "(920) 680-5911",
+    "url": "https://www.appletonwi.gov/government/district_8.php"
+   },
+   "09": {
+    "name": "Alex Schultz",
+    "phone": "(920) 221-1233",
+    "url": "https://www.appletonwi.gov/government/district_9.php"
+   },
+   "10": {
+    "name": "Vaya Jones",
+    "phone": "(920) 810-7996",
+    "url": "https://www.appletonwi.gov/government/district_10.php"
+   },
+   "11": {
+    "name": "Adrian Stancil-Martin",
+    "phone": "(414) 301-3651",
+    "url": "https://www.appletonwi.gov/government/district_11.php"
+   },
+   "12": {
+    "name": "Nate Wolff",
+    "phone": "(920) 450-3543",
+    "url": "https://www.appletonwi.gov/government/district_12.php"
+   },
+   "13": {
+    "name": "Sheri S Hartzheim",
+    "phone": "(920) 570-2873",
+    "url": "https://www.appletonwi.gov/government/district_13.php"
+   },
+   "14": {
+    "name": "Christopher Croatt",
+    "phone": "(920) 735-9532",
+    "url": "https://www.appletonwi.gov/government/district_14.php"
+   },
+   "15": {
+    "name": "Denis Dougherty",
+    "phone": "(920) 259-9153",
+    "url": "https://www.appletonwi.gov/government/district_15.php"
+   }
+  },
+  "municipality": "Appleton",
+  "seats": 15,
+  "sourceUrl": "https://www.appletonwi.gov/government/common_council.php"
+ },
  "22300": {
   "members": {
    "01": {
