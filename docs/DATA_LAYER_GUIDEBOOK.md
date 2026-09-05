@@ -6211,6 +6211,12 @@ Two narrowings worth carrying, both measured:
 * Wisconsin's `build_wi_supervisory_districts.py` appears in a naive grep and
   is CLEAN — its two hits are comments explaining the defect. Read the line
   before counting the file.
+* A file that reaches many hosts may reach only ONE with geometry. Wisconsin's
+  `wi_county_board_scraper.py` was first recorded as unmeasurable "because its
+  line 4000 hits a different county-owned host per county"; it carries three
+  layer specs, and that line runs solely for a county declaring a
+  `district_witness` — Lincoln alone, on-premises and measured clean. COUNT THE
+  CALL SITES THAT ASK FOR GEOMETRY, not the hosts a file mentions.
 
 **A GATE DOWNSTREAM OF `make_valid` CANNOT SEE THIS.** shapely's `make_valid`
 RE-NESTS an unnested inner shell as a hole — a 10×10 square with a 2×2 hole
