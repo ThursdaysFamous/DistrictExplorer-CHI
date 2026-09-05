@@ -1401,6 +1401,12 @@
         "note": "Jo Daviess County coverage outline — gates the county's dispatch entry. Shipped 2026-08-02 as gap-location geometry (the gaps panel tests pins against <slug>-county-outline.json); promoted 2026-08-17 to the dispatched county's coverage test when Jo Daviess joined as the 51st, referenced by loadJoDaviessCountyOutline in index.html. The board-district builder asserts its district union stays within 0.25% of this outline, so the coverage test and the card cannot disagree about where the county is."
       },
       {
+        "file": "jo-daviess-precincts.json",
+        "min_features": 28,
+        "max_features": 28,
+        "note": "Jo Daviess County's 28 voting precincts, dissolved from the 29 Census 2020 voting districts by scripts/build_jodaviess_precincts.py. The ONE difference from the census fabric is Warren, merged from Warren I and Warren II — a self-describing merge witnessed CURRENT by two county offices: the Clerk's certified 17 March 2026 General Primary results, which name the 28 in prose with Warren singular, and the GIS department's polling map of 12 Aug 2026, which writes \"Dunleith I, II, III\" where precincts share a building and so would have written \"Warren I, II\" had there been two. The 29 districts sum to the county's exact 22,035, which proves the fabric tiled the county in 2020 and NOT that it is current — that comes from the two witnesses. Bounds are an EQUALITY. Not to be confused with Jersey, which shared this county's gap record and stays shut: its Jersey 9 and Jersey 10 vanish into an unnamed subset of Jersey 1-8."
+      },
+      {
         "file": "johnson-county-outline.json",
         "min_features": 1,
         "max_features": 1,
@@ -2547,7 +2553,7 @@
     ]
   },
   "sw": {
-    "cache_name": "districtry-il-shell-v10",
+    "cache_name": "districtry-il-shell-v11",
     "shell_urls": [
       "./",
       "./sources.html",
