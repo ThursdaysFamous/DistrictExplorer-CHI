@@ -1093,3 +1093,120 @@ note is drafted and waits on a route rather than on a send.
   gap narrows to name it, and nothing is drawn from a map known to be wrong.
 * **No reply** → follow up once at ~3 weeks and once at ~2 more, then `UNRESPONSIVE` — a
   claim about the ask, never about the city.
+
+---
+
+## Ask 17 — League of Wisconsin Municipalities: terms, before any money changes hands
+
+**NOT YET ASKED — DRAFTED 2026-09-05.** Nothing here has been bought, and nothing should
+be until this is answered.
+
+**One number in the draft below is deliberately absent.** A sweep of all 608 city and
+village websites was running when this was written, and the mail says "I have been
+through the cities' and villages' own websites" rather than naming a count, because a
+count that is not finished is not a measurement. When the sweep lands, its figures go
+into the `municipal-officers` gap record and this draft can name them.
+
+**This ask exists because its prerequisite is now met.** The `municipal-officers` gap
+record has said since 2026-09-02 that the League route needed one thing established
+first: *"What was measured is the sign-in, NOT that officer names sit behind it —
+establish that before any purchase or permission ask, because the Jo Daviess route costs
+money and a signature."* Measured 2026-09-05, from the League's own public pages, with no
+sign-in and no account:
+
+**THE RECORD WAS LOOKING AT THE WRONG PAGE.** `lwm-info.org/directory.aspx` — the URL the
+record measured as "presenting a Sign In control" — is the League's **own staff
+directory**: six employees, Executive Director through Government Affairs Director. It
+answers 200 to an ordinary browser and gates nothing. The "Sign In" seen there is the
+site-wide CivicPlus header control that appears on every page of the site, including the
+front page the record measured as 200 without noticing it there.
+
+**THE MUNICIPAL PRODUCT IS A PUBLICATION, NOT A WEB DIRECTORY**, and the League describes
+its contents itself, at `lwm-info.org/1236/Directory-of-Cities-Villages`:
+
+> "The League's Annual Directory is *the* municipal phone book: well used by
+> municipalities throughout Wisconsin. It lists all city and village elected officials,
+> governing body meeting days… The Directory is no longer available for download from our
+> website, but League members may request a free copy by emailing the League. Non-members
+> may purchase a copy through our mailing lists page."
+
+*All city and village elected officials* is both halves of this gap — the executive and
+the governing body — in one document. That is the establishing measurement the record
+asked for, and it did not cost anything.
+
+**AND THERE IS A CHEAPER, NARROWER PRODUCT WITH A TERM THAT BLOCKS IT.**
+`lwm-info.org/713/Mailing-Lists` sells contact lists as Excel spreadsheets:
+
+| List | Contacts | Price |
+|---|---|---|
+| **Chief Executives** (Mayors, City and Village Managers, Village Presidents) | ~600 | **$30.00** |
+| Clerks (*the only list that contains emails*) | ~600 | $50.00 |
+| Administrators, Managers | ~230 | $10.00 |
+| Finance Director, Treasurer, Comptroller, HR Director | ~670 | $35.00 |
+
+Thirty dollars would name a mayor or village president in essentially every city and
+village in Wisconsin. **The page also says what the buyer may do with it:** *"Mailing
+lists are emailed as an Excel spreadsheet **for your exclusive use**."* Exclusive use is
+the opposite of publishing on a free public map, so **the purchase does not answer the
+question — the terms do**, and paying first and asking afterwards is how a project ends
+up with data it cannot use. That is the Jo Daviess lesson exactly: ask for written
+permission BEFORE signing or paying.
+
+### Recipients
+
+| WRITE TO | WHO | WHY THIS ADDRESS |
+|---|---|---|
+| `league@lwm-info.org` | The League's general mailbox | The address the League's own Directory page gives for requesting the Directory, and the one on its Contact page. A terms question is an organisation's answer rather than one person's. |
+
+### The draft
+
+> **Subject:** Reuse terms for the Directory of City and Village Officials
+>
+> Dear League of Wisconsin Municipalities,
+>
+> I run districtry (https://districtry.com/wi/), a free, non-commercial site that shows
+> Wisconsinites which civic districts cover any point in the state and who represents them
+> there. It carries the Legislature's ward and district files, the Elections Commission's
+> statewide municipal clerk directory, all 72 county boards, and the alderpersons of
+> eighteen cities read from those cities' own pages. There are no adverts and nothing is
+> sold.
+>
+> The one level it cannot answer for is the municipal governing body. Outside those
+> eighteen cities it can name no mayor, no village president and no council or village
+> board member, because I have found no source that publishes them together, and I have
+> been through the cities' and villages' own websites looking for one. Your Annual
+> Directory of City and Village Officials plainly does publish them together, and your
+> Chief Executives mailing list would cover the executive half.
+>
+> Before buying either I would rather ask what I may do with it, because the mailing-list
+> page says the spreadsheet is "for your exclusive use", and what I would want to do is the
+> opposite: show a reader the name of their own mayor or village president, or their own
+> village board, on the page for their own municipality, with the League credited as the
+> source and a link to you.
+>
+> So: would the League be willing to let a free public site display officeholder names
+> from the Directory, or from the Chief Executives list, with attribution? If there is a
+> licence, a fee, or a form for that, I will follow it. If the answer is simply no, that is
+> a completely acceptable answer — I would record it and stop looking, and the site would
+> keep pointing readers at each municipality's own website instead. I would rather know
+> than guess, and I never publish a name I cannot source.
+>
+> Thank you for your time,
+> <YOUR NAME>
+> <YOUR E-MAIL>
+
+### What each answer means
+
+* **Yes, with attribution** — Wisconsin's municipality card names a mayor or village
+  president in ~600 municipalities and the `municipal-officers` gap closes on its
+  executive half; the Directory would close the governing-body half as well. The purchase
+  becomes a decision about money rather than about permission, and it is the operator's.
+* **No** — a clean, citable no. The gap record records the League route CLOSED rather than
+  unexplored, and what remains is the per-municipality ladder: 608 city and village sites
+  read one at a time, which the 2026-09-05 sweep is measuring.
+* **"Members get it free"** — districtry is not a municipality and cannot join, so this
+  is really the purchase route with a different price. Worth asking whether a
+  non-commercial public-information use has any standing.
+
+**Nothing is blocked on the answer.** The clerk ships statewide today and the sweep's
+per-municipality route needs nothing from the League.
