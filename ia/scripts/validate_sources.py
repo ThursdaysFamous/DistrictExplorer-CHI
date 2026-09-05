@@ -491,6 +491,156 @@ PROVENANCE = [
             "the sweep and not of the city."
         ),
     },
+    # THE COUNTY-PUBLISHED CITY OFFICIALS -- 8 counties, 84 cities, 605 people.
+    # This is the route ia-municipal-officeholders recorded as NOT YET PROBED:
+    # the county auditors, Iowa's statutory commissioners of elections under
+    # Iowa Code 47.2. Eleven counties publish a full city-officials page and
+    # ELEVEN ARE LISTED HERE, including the three the builder currently refuses
+    # -- Sac, Shelby and Winnebago still publish terms that ended in January
+    # 2026. They are registered deliberately: their pages are exactly what a
+    # monthly human look should re-check, because one of them updating is how
+    # this file gains a county, and this validator is the only surface that
+    # asks about them at all.
+    {
+        "layer": "municipality",
+        "app_file": "ia-county-city-officials.json",
+        "source_url": "https://boonecounty.iowa.gov/about/elected_officials/city/",
+        "note": (
+            "Boone County's nine cities. THE PAGE THIS PARSER WAS WRITTEN AGAINST, "
+            "and NOT the page that settles the markup for the other ten -- an earlier "
+            "version of this note said it was, which is the generalising-from-one error "
+            "this project keeps correcting elsewhere. Here the clerk's and the mayor's "
+            "role sits in a <b> INSIDE the name's own div, as it does in Crawford, Iowa, "
+            "Marion and Winnebago; the other six counties give every role a positionTitle "
+            "heading instead. Its 59 mailto hrefs are all EMPTY, where Cerro Gordo's 56, "
+            "Shelby's 11 and Marion's 8 are populated. The seat follows a <br/> in that "
+            "same div. Read flat, Beaver's clerk becomes a "
+            "person called 'City Clerk Sarah Miller'; keyed on the heading alone, the "
+            "clerk and the mayor are filed as council members. Boone city is also the "
+            "ward case -- five ward seats and two at large, published by the county and "
+            "by nobody else."
+        ),
+    },
+    {
+        "layer": "municipality",
+        "app_file": "ia-county-city-officials.json",
+        "source_url": "https://cerrogordo.gov/about/elected_officials/city/",
+        "note": (
+            "Cerro Gordo County's ten cities, Mason City and Clear Lake among them. IT "
+            "CARRIES THE MOST SEATS OF THE EIGHT (51 of the 93 shipped) and it is where "
+            "the vacancy annotation appears: 'Appointed to Fill Vacancy until Election' "
+            "sits in its own div behind an info icon, so a text read folds it into the "
+            "person's name. It is a real status and ships as one, never as part of a "
+            "name."
+        ),
+    },
+    {
+        "layer": "municipality",
+        "app_file": "ia-county-city-officials.json",
+        "source_url": "https://www.crawfordcounty.iowa.gov/about/elected_officials/city/",
+        "note": (
+            "Crawford County's thirteen cities. THE ADDRESS CASE FOR THE GROUP: its "
+            "small towns publish an office mailbox that is the TOWN'S OWN NAME -- "
+            "townofarion@, buckgrove@, dowcity@, kironcty@, schleswigclerk@ -- which "
+            "the anchored mayor|clerk|city prefix the city and county builders use "
+            "reads as private and drops. The office test here is widened for exactly "
+            "that class and is still narrow enough to drop Manilla's clerk at "
+            "laura@manillaia.com, a city-domain address carrying another first name."
+        ),
+    },
+    {
+        "layer": "municipality",
+        "app_file": "ia-county-city-officials.json",
+        "source_url": "https://iowacounty.iowa.gov/about/elected_officials/city/",
+        "note": (
+            "Iowa County's seven cities. It publishes NO e-mail and NO phone for any "
+            "official, which is why this file's contact floors are 100 and 75 rather "
+            "than one per person: the floor measures what the sources publish. It is "
+            "also half of the North English case -- that city straddles the Iowa/Keokuk "
+            "line, and this county publishes its mayor and council while Keokuk "
+            "publishes its clerk."
+        ),
+    },
+    {
+        "layer": "municipality",
+        "app_file": "ia-county-city-officials.json",
+        "source_url": "https://jacksoncounty.iowa.gov/about/elected_officials/city/",
+        "note": (
+            "Jackson County's thirteen cities. IT PUBLISHES TWO CITY CLERKS FOR ANDREW, "
+            "both named and neither annotated, which is the reason nothing here assumes "
+            "one clerk per city -- a builder keyed on a single clerk would silently "
+            "drop one real person's name."
+        ),
+    },
+    {
+        "layer": "municipality",
+        "app_file": "ia-county-city-officials.json",
+        "source_url": "https://keokukcounty.iowa.gov/about/elected_officials/city/",
+        "note": (
+            "Keokuk County's seventeen cities, the largest of the eight. Its seats are "
+            "mostly TWO-YEAR terms, which is what makes the currency gate an expired- "
+            "term test rather than a look for a particular end year: a current two-year "
+            "term here ends 2027, the same year a STALE four-year term ends in Sac and "
+            "Shelby, so the year alone proves nothing."
+        ),
+    },
+    {
+        "layer": "municipality",
+        "app_file": "ia-county-city-officials.json",
+        "source_url": "https://www.marioncountyiowa.gov/about/elected_officials/city/",
+        "note": (
+            "Marion County's eight cities, Knoxville and Pella among them. NOT to be "
+            "confused with the CITY of Marion in Linn County, whose council roster is a "
+            "separate and still-open gap (marion-council-roster) -- a different unit of "
+            "government with a similar name, and the two must never be joined on it."
+        ),
+    },
+    {
+        "layer": "municipality",
+        "app_file": "ia-county-city-officials.json",
+        "source_url": "https://muscatinecountyiowa.gov/about/elected_officials/city/",
+        "note": (
+            "Muscatine County's eight cities. Like Iowa and Jackson it publishes no "
+            "contact detail at all, so what this row really watches is whether the page "
+            "keeps naming people: a county that quietly drops to identity-only would "
+            "still return HTTP 200 and would fail the builder's floors rather than this "
+            "check."
+        ),
+    },
+    {
+        "layer": "municipality",
+        "app_file": "ia-county-city-officials.json",
+        "source_url": "https://www.saccountyiowa.gov/about/elected_officials/city/",
+        "note": (
+            "Sac County -- REFUSED BY THE BUILDER, and registered so a human looks. 29 "
+            "of its 61 officials still carry a term that ended in January 2026, and its "
+            "four-year seats split across 2025 and 2027 where the eight shipped "
+            "counties straddle 2027 and 2029: a page last maintained after the November "
+            "2023 city election. If it is updated, it ships on the next weekly run with "
+            "nothing to edit anywhere."
+        ),
+    },
+    {
+        "layer": "municipality",
+        "app_file": "ia-county-city-officials.json",
+        "source_url": "https://shelbycounty.iowa.gov/about/elected_officials/city/",
+        "note": (
+            "Shelby County -- REFUSED, 38 of 77 officials on an expired term, the "
+            "largest shortfall of the three. Same signature as Sac, and its eleven "
+            "cities would be the single biggest addition if the county updates."
+        ),
+    },
+    {
+        "layer": "municipality",
+        "app_file": "ia-county-city-officials.json",
+        "source_url": "https://winnebagocountyiowa.gov/about/elected_officials/city/",
+        "note": (
+            "Winnebago County -- REFUSED, 22 of 51. It is the one worth re-reading "
+            "first if any of the three changes, because it dates the fewest of its "
+            "officials at all, so a page that started dating them could pass or fail "
+            "for a reason unrelated to being updated."
+        ),
+    },
     {
         "layer": "iowa-aea",
         "app_file": "ia-aeas.json",
