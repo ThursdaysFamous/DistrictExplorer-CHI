@@ -50,6 +50,7 @@ import argparse
 import json
 import os
 import re
+from urllib.parse import urlsplit
 import sys
 
 try:
@@ -75,6 +76,30 @@ CATALOG_API = "https://api.us.socrata.com/api/catalog/v1"
 SOCRATA = []
 
 # Same-origin data/app files and the upstream source each was built from.
+# EVERY PATH ON THIS HOST, NOT ONE. milwaukeemaps.milwaukee.gov publishes
+# `User-agent: * / Disallow: /` (Googlebot excepted), measured 2026-09-05, so a
+# Disallow on one row is a Disallow on all six — and one of the six is
+# `election/alderman/MapServer/0`, the very URL the alderperson scraper stopped
+# fetching in this same change. Retiring it there and leaving the monthly
+# provenance probe requesting it would have been the fix in name only.
+#
+# NOTHING IS LOST BY NOT ASKING. All six layers ship as committed data/app
+# files, rebuilt by an OPERATOR running a builder — the app never touches this
+# host at runtime (wi/index.html says so at its Racine block) — so the monthly
+# GET was the only scheduled request, and its whole yield was "the service still
+# exists". A re-pull is a deliberate act with the policy in view.
+#
+# `blocked` WOULD NOT HAVE DONE THIS: that flag is for a host that REFUSES us,
+# where the request is how we learn the refusal still stands, so it fetches and
+# only inverts the reading. A robots Disallow is the opposite — the host is
+# ASKING us not to request — and the honest answer is not to.
+ROBOTS_MILWAUKEEMAPS = (
+    "milwaukeemaps.milwaukee.gov disallows every path to every agent but "
+    "Googlebot (robots.txt, measured 2026-09-05). The layer ships as a "
+    "committed data/app file from an operator rebuild, so nothing here needs "
+    "this host on a schedule; the shipped file is checked above instead.")
+
+
 PROVENANCE = [
     {
         "layer": "us-house",
@@ -616,6 +641,7 @@ PROVENANCE = [
         "layer": "aldermanic-district",
         "app_file": "wi-alderpersons.json",
         "source_url": "https://milwaukeemaps.milwaukee.gov/arcgis/rest/services/election/alderman/MapServer/0",
+        "robots_disallowed": ROBOTS_MILWAUKEEMAPS,
         "note": (
             "Milwaukee's roster layer (ALDERPERSON attribute, 15/15). The "
             "host drops ~1 in 4-8 requests with TCP resets — the scraper "
@@ -628,6 +654,7 @@ PROVENANCE = [
         "layer": "mps-school-board",
         "app_file": "mps-school-board-districts.json",
         "source_url": "https://milwaukeemaps.milwaukee.gov/arcgis/rest/services/AGO/MPS_School_Districts/MapServer/1",
+        "robots_disallowed": ROBOTS_MILWAUKEEMAPS,
         "note": (
             "Milwaukee's own MPS board-district layer, server-reprojected and "
             "pre-built by wi/scripts/build_mps_school_board_districts.py (the "
@@ -662,6 +689,7 @@ PROVENANCE = [
         "layer": "mpd-district",
         "app_file": "mpd-districts.json",
         "source_url": "https://milwaukeemaps.milwaukee.gov/arcgis/rest/services/MPD/MPD_geography/MapServer/2",
+        "robots_disallowed": ROBOTS_MILWAUKEEMAPS,
         "note": (
             "The city's own MPD districts layer (field POLICE, districts 1-7), "
             "server-reprojected and pre-built by "
@@ -702,6 +730,7 @@ PROVENANCE = [
         "layer": "milwaukee-neighborhoods",
         "app_file": "milwaukee-neighborhoods.json",
         "source_url": "https://milwaukeemaps.milwaukee.gov/arcgis/rest/services/planning/special_districts/MapServer/4",
+        "robots_disallowed": ROBOTS_MILWAUKEEMAPS,
         "note": (
             "The city's own neighborhoods layer (field NEIGHBORHD, 190 "
             "polygons), server-reprojected and pre-built by "
@@ -714,6 +743,7 @@ PROVENANCE = [
         "layer": "mpd-squad-area",
         "app_file": "mpd-squad-areas.json",
         "source_url": "https://milwaukeemaps.milwaukee.gov/arcgis/rest/services/MPD/MPD_geography/MapServer/1",
+        "robots_disallowed": ROBOTS_MILWAUKEEMAPS,
         "note": (
             "The city's own MPD squad-area layer (field SQUADAREA, 25 "
             "squads — the beat analog), server-reprojected and pre-built by "
@@ -843,6 +873,14 @@ PROVENANCE = [
         "layer": "tid-district",
         "app_file": "tid-districts.json",
         "source_url": "https://milwaukeemaps.milwaukee.gov/arcgis/rest/services/planning/special_districts/MapServer/8",
+        "robots_disallowed": (
+            "milwaukeemaps.milwaukee.gov publishes `User-agent: * / Disallow: /` "
+            "(Googlebot excepted), measured 2026-09-05. The TID layer is built by "
+            "an OPERATOR rebuild, not a schedule, so nothing here needs the host "
+            "on a cadence — but this monthly provenance probe did, and went on "
+            "requesting it after the weekly alderperson scrape stopped. A "
+            "re-pull is a deliberate act with the policy in view; a monthly "
+            "automated GET is not."),
         "note": (
             "The city's own Tax Incremental Districts layer (79 active; "
             "field TID + NAME + create date), server-reprojected and "
@@ -1384,6 +1422,22 @@ def check_provenance(findings, offline):
         if not os.path.exists(fpath):
             findings.add(FAIL, layer, "built data file data/app/%s is missing" % p["app_file"])
         if offline:
+            continue
+        disallowed = p.get("robots_disallowed")
+        if disallowed:
+            # NOT FETCHED, AND `blocked` WOULD NOT HAVE DONE THIS. That flag is
+            # for a host that REFUSES us — Akamai, a captcha — where the request
+            # is how we learn the refusal still stands, so it fetches and only
+            # inverts the reading. A robots Disallow is the opposite situation:
+            # the host is ASKING us not to request, and the polite answer is not
+            # to. Carrying this row under `blocked` would have left the monthly
+            # job requesting milwaukeemaps.milwaukee.gov every month while the
+            # scraper that stopped doing so was cited as the fix.
+            findings.add(OK, layer,
+                         "NOT REQUESTED — %s disallows this path in robots.txt, so "
+                         "this row is checked by the shipped file above and never "
+                         "fetched. %s" % (urlsplit(p["source_url"]).hostname,
+                                          disallowed))
             continue
         if p.get("probe_as") == "scraper":
             ok, res = scraper_get(p["source_url"])

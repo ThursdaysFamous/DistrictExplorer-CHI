@@ -139,21 +139,31 @@ def scheduled_scraper_modules():
     fetches that never happen.
     """
     import importlib
-    workflows = os.path.join(os.path.dirname(os.path.dirname(SCRIPT_DIR)),
-                             ".github", "workflows")
-    texts = []
-    for name in sorted(os.listdir(workflows)):
-        if name.endswith((".yml", ".yaml")):
-            with open(os.path.join(workflows, name), encoding="utf-8") as f:
-                texts.append((name, f.read()))
+    texts = workflow_texts()
     out = []
-    for path in sorted(glob.glob(os.path.join(SCRIPT_DIR, "*_scraper.py"))):
-        stem = os.path.basename(path)[:-3]
-        runs = [n for n, t in texts if stem in t]
-        if not runs:
-            continue
-        out.append((importlib.import_module(stem),
-                    "%s [%s]" % (stem, ", ".join(runs))))
+    # SCRAPERS AND BUILDERS BOTH FETCH. Globbing *_scraper.py alone left the
+    # scheduled build_*.py fetchers outside a sweep whose stated contract is
+    # "every address this instance requests on a schedule" — the Open States CSV
+    # in build_wi_legislature_roster.py and the two in
+    # build_rusd_school_board_districts.py among them. The contract was right;
+    # the glob was narrower than the sentence.
+    for pattern in ("*_scraper.py", "build_*.py"):
+        for path in sorted(glob.glob(os.path.join(SCRIPT_DIR, pattern))):
+            stem = os.path.basename(path)[:-3]
+            if any(stem == m.__name__ for m, _l in out):
+                continue
+            runs = [n for n, t in texts if stem in t]
+            if not runs:
+                continue
+            try:
+                mod = importlib.import_module(stem)
+            except Exception as exc:  # noqa: BLE001
+                raise SystemExit(
+                    "robots: %s is run by %s but could not be imported (%s: %s) — "
+                    "a module this sweep cannot read is a module whose fetches go "
+                    "unchecked, which is the state this gate exists to prevent"
+                    % (stem, ", ".join(runs), type(exc).__name__, exc))
+            out.append((mod, "%s [%s]" % (stem, ", ".join(runs))))
     if len(out) < 2:
         raise SystemExit("robots: discovered %d scheduled scraper(s) under %s — "
                          "that cannot be right, and a narrowed sweep reporting "
@@ -162,8 +172,21 @@ def scheduled_scraper_modules():
     return out
 
 
+def workflow_texts():
+    """[(filename, text)] for every workflow file."""
+    root = os.path.join(os.path.dirname(os.path.dirname(SCRIPT_DIR)),
+                        ".github", "workflows")
+    out = []
+    for name in sorted(os.listdir(root)):
+        if name.endswith((".yml", ".yaml")):
+            with open(os.path.join(root, name), encoding="utf-8") as f:
+                out.append((name, f.read()))
+    return out
+
+
 def fetched_urls():
     """[(url, why)] — every address this instance requests on a schedule."""
+    texts = workflow_texts()
     import wi_county_board_scraper as board
     import wi_county_officer_contact_scraper as officers
     _excluded_specs_are_unscheduled(board)
@@ -191,12 +214,49 @@ def fetched_urls():
     # instance requests on a schedule". A scraper written tomorrow is swept the
     # day its workflow lands, and one that exists but is not scheduled is
     # correctly left alone.
+    _module_exclusions_still_unscheduled(texts)
     for module, label in scheduled_scraper_modules():
+        skip = NOT_FETCHED_BY_MODULE.get(module.__name__, {})
         for nm in dir(module):
-            if not nm.isupper() or nm in NOT_FETCHED:
+            if not nm.isupper() or nm in NOT_FETCHED or nm in skip:
                 continue
             for url in _strings(getattr(module, nm)):
                 out.append((url, "%s %s" % (label, nm)))
+    # THE MONTHLY MANIFEST FETCHES TOO. validate_sources.py's PROVENANCE and
+    # ENDPOINTS rows are requested by wi-validate-sources on the 1st of every
+    # month, which is a schedule, and one of them was still requesting the very
+    # host this gate had just found publishing a blanket Disallow. A row that
+    # declares `robots_disallowed` is not fetched and is skipped here too.
+    # BY PATH, NEVER BY NAME. `validate_sources` exists in every instance's
+    # scripts/ AND at the repo root, and by the time this runs the modules swept
+    # above have already put the ROOT scripts/ on sys.path — one of them imports
+    # the fleet-wide `undeliverable` from there. A bare `import validate_sources`
+    # therefore resolved to ILLINOIS's, and this sweep quietly began reporting
+    # Kane and Coles County hosts as Wisconsin's scheduled fetches. Caught
+    # because two Illinois hostnames appeared in a Wisconsin run's output.
+    import importlib.util
+    _vs_path = os.path.join(SCRIPT_DIR, "validate_sources.py")
+    _spec = importlib.util.spec_from_file_location("wi_validate_sources", _vs_path)
+    try:
+        vs = importlib.util.module_from_spec(_spec)
+        _spec.loader.exec_module(vs)
+    except Exception as exc:  # noqa: BLE001
+        raise SystemExit("robots: %s could not be imported (%s) — its monthly "
+                         "fetches would go unswept" % (_vs_path, type(exc).__name__))
+    if os.path.dirname(os.path.abspath(vs.__file__)) != SCRIPT_DIR:
+        raise SystemExit("robots: loaded %s, which is not this instance's — a sweep "
+                         "reporting another state's hosts is not this gate"
+                         % vs.__file__)
+    for row in getattr(vs, "PROVENANCE", []):
+        if row.get("robots_disallowed") or not row.get("source_url"):
+            continue
+        out.append((row["source_url"],
+                    "validate_sources PROVENANCE [%s] (monthly)" % row.get("layer")))
+    for row in getattr(vs, "ENDPOINTS", []):
+        if row.get("url"):
+            out.append((row["url"],
+                        "validate_sources ENDPOINTS [%s] (monthly)" % row.get("layer")))
+
     seen, uniq = set(), []
     for url, why in out:
         if url.startswith("http") and url not in seen:
@@ -263,6 +323,53 @@ NOT_FETCHED = {"CARRIED_CONTACTS", "DOCUMENT_ROSTERS",
 # exists to notice a disallowed crawl would be looking away from exactly the
 # county it was hidden for. So the claim is CHECKED rather than trusted.
 CARRIER_REGISTERED = "SINGLE_COUNTY_CARRIERS"
+
+
+# ATTRIBUTES A SCHEDULED MODULE OWNS BUT A SCHEDULED RUN NEVER FETCHES.
+# Widening the sweep to build_*.py immediately over-reported two counties whose
+# robots.txt disallows the path this repo has in a table — Jackson and Polk in
+# build_wi_county_board_directory.COUNTY_SITES — and the report was wrong,
+# because that table is 72 CARD-LINK TARGETS. Only `--probe` fetches them, and
+# smoke-test.yml runs `--check`, whose own step comment says "and fetches
+# nothing". Robots governs crawling, not linking, and a gate that cannot tell
+# the two apart would end up arguing that the app must stop LINKING a county to
+# its own website.
+#
+# THE EXCLUSION IS MECHANICALLY CHECKED, not asserted: every workflow that runs
+# the module must invoke it with `needs` and never with `fetches`. Put --probe
+# in CI and this fires, which is the property NOT_FETCHED's own comment demands
+# of an exclusion.
+NOT_FETCHED_BY_MODULE = {
+    "build_wi_county_board_directory": {
+        "COUNTY_SITES": {
+            "needs": "--check",
+            "fetches": "--probe",
+            "why": "72 county-website link targets for the board card; only the "
+                   "operator's --probe requests them, and CI runs --check, "
+                   "which fetches nothing.",
+        },
+    },
+}
+
+
+def _module_exclusions_still_unscheduled(texts):
+    """A per-module exclusion must match how the workflows actually invoke it."""
+    for module, attrs in sorted(NOT_FETCHED_BY_MODULE.items()):
+        runs = [(n, t) for n, t in texts if module in t]
+        for attr, spec in sorted(attrs.items()):
+            for name, text in runs:
+                if spec["fetches"] and ("%s.py %s" % (module, spec["fetches"])) in text:
+                    raise SystemExit(
+                        "robots: FAIL — %s.%s is excluded from the sweep because "
+                        "only %s fetches it, but %s now runs exactly that. Its "
+                        "hosts are being requested on a schedule and unchecked."
+                        % (module, attr, spec["fetches"], name))
+                if spec["needs"] and ("%s.py %s" % (module, spec["needs"])) not in text:
+                    raise SystemExit(
+                        "robots: FAIL — %s.%s is excluded on the grounds that %s "
+                        "runs %s, and it no longer does. Re-establish how that "
+                        "workflow invokes the module before trusting the exclusion."
+                        % (module, attr, name, spec["needs"]))
 
 
 def _excluded_specs_are_unscheduled(board):

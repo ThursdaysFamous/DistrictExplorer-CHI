@@ -7,16 +7,17 @@ build_wi_alderperson_roster.py writes data/app/wi-alderpersons.json.
 
 THE SIX, each with its route and its measured trap:
 
-  Milwaukee (15)  — the city's own GIS layer election/alderman/MapServer/0,
-                    whose ALDERPERSON attribute names all 15. The host drops
-                    roughly 1 in 4-8 requests with TCP resets, so the fetch
-                    retries and then falls back to the same data's CKAN
-                    shapefile (data.milwaukee.gov, reliable). WITNESSED
-                    weekly against the city's Legistar API (COMMON COUNCIL
-                    is body 1): a name-set mismatch fails the city loudly.
-                    Legistar is a witness, never a source — and its date
-                    filters are ignored server-side (the county lesson), so
-                    membership is filtered client-side against today.
+  Milwaukee (15)  — Legistar (webapi.legistar.com), the Common Council's own
+                    system of record: OfficeRecordTitle carries the district
+                    ("3rd District", cross-checked against OfficeRecordSort)
+                    and First/Last carry the name. NEVER OfficeRecordFullName,
+                    which is "ALD. SURNAME".
+                    THE CITY'S GIS LAYER WAS THE SOURCE UNTIL 2026-09-05 and is
+                    not fetched any more: milwaukeemaps.milwaukee.gov publishes
+                    `User-agent: * / Disallow: /`. The city's open-data CKAN
+                    shapefile corroborates per district where it answers, and
+                    is not required to. Current membership is filtered
+                    client-side against today's date.
   Madison (20)    — the council index page's per-alder links. THE INDEX'S
                     FLAT TEXT PAIRING IS A TRAP: District 1 is vacant, so a
                     flattened read pairs every alder with the district ABOVE
@@ -270,24 +271,33 @@ def scrape_milwaukee():
 
     # Corroboration, not a dependency: where the city's open-data shapefile
     # answers, its districts must agree with Legistar's.
+    # ONLY THE FETCH IS ALLOWED TO FAIL QUIETLY. A parse error inside this try
+    # would have been reported as "did not answer", which is a different fact
+    # about a different party — so the download is the only thing it covers.
     try:
-        z = zipfile.ZipFile(io.BytesIO(fetch(MKE_CKAN_ZIP, binary=True)))
+        blob = fetch(MKE_CKAN_ZIP, binary=True)
+    except Exception as exc:  # noqa: BLE001 — a witness that declines is not a failure
+        print("milwaukee: the CKAN shapefile did not answer (%s); Legistar's %d "
+              "districts ship uncorroborated this run"
+              % (type(exc).__name__, len(members)), file=sys.stderr)
+    else:
+        z = zipfile.ZipFile(io.BytesIO(blob))
         dbf = next(n for n in z.namelist() if n.lower().endswith(".dbf"))
         ckan = {"%02d" % int(row["DISTRICT"]): row["ALDERPERSO"].strip()
                 for row in read_dbf(z.read(dbf))}
-    except Exception as exc:  # noqa: BLE001 — a witness that declines is not a failure
-        print("milwaukee: the CKAN shapefile did not answer (%s); Legistar's 15 "
-              "districts ship uncorroborated this run" % type(exc).__name__,
-              file=sys.stderr)
-    else:
+        # PER DISTRICT, NOT MEMBERSHIP. Asking only whether CKAN's name is
+        # somewhere in the current council would pass a shapefile that had every
+        # alderperson right and every district wrong — which is precisely the
+        # failure a second source is here to catch.
         disagree = sorted(d for d, name in ckan.items()
-                          if d in members and fold(name) not in current)
+                          if d in members and fold(name) != fold(members[d]["name"]))
         if disagree:
-            raise SystemExit("milwaukee: the CKAN shapefile names %s for district(s) "
-                             "%s, and Legistar's current COMMON COUNCIL membership "
-                             "does not carry them — one of the two is stale"
-                             % ([ckan[d] for d in disagree], disagree))
-        print("milwaukee: CKAN corroborates %d of %d districts"
+            raise SystemExit(
+                "milwaukee: CKAN and Legistar name different people for district(s) "
+                "%s — %s — so one of the two is stale and neither is trusted"
+                % (disagree, ["%s: CKAN %r vs Legistar %r"
+                              % (d, ckan[d], members[d]["name"]) for d in disagree]))
+        print("milwaukee: CKAN corroborates %d of %d districts by name"
               % (sum(1 for d in ckan if d in members), len(members)),
               file=sys.stderr)
     return members, source
