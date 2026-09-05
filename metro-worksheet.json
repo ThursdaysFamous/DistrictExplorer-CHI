@@ -461,12 +461,16 @@
             "label": "Pre-built from the county's published district map, for the counties that publish no vector data"
           },
           {
+            "label": "Illinois Broadband Office / Connected Nation, IL_Boundary_Layers layer 11 \u2014 Carroll, Lee, Randolph, Sangamon, St. Clair and Stephenson ONLY. Not a county or library publication: its copyrightText and item description are both empty and every attribute besides the library name and type is a broadband service metric, so each of those cards names this publisher on the card itself.",
+            "url": "https://services.arcgis.com/R0IGaIgf2sox9aCY/arcgis/rest/services/IL_Boundary_Layers/FeatureServer/11"
+          },
+          {
             "label": "Which county feeds which entry, county by county (COUNTY_STATUS.md)",
             "url": "https://github.com/ThursdaysFamous/districtry/blob/main/docs/COUNTY_STATUS.md"
           }
         ],
         "people": "Name-only in most counties; where a county's GIS carries trustees or a district office, the card shows them. Cicero's library board comes from the Cook County Clerk's directory of elected officials (cook-library-trustees.json, rebuilt weekly by CI).",
-        "applies": "The counties that publish a library-district layer."
+        "applies": "The counties that publish a library-district layer, plus six that publish none and are drawn from a statewide layer instead."
       }
     },
     {
@@ -983,6 +987,12 @@
         "note": "Carroll County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
       },
       {
+        "file": "carroll-library-districts.json",
+        "min_features": 7,
+        "max_features": 7,
+        "note": "Boundaries from the Illinois Broadband Office / Connected Nation IL_Boundary_Layers service, layer 11, pre-built by scripts/build_statewide_library_districts.py (clipped to the county, simplified 5 m). NOT a county or library publication: copyrightText and the item description are both empty and every other attribute is a broadband service metric, so every card built on it names the publisher. Carroll's 7, and the county that validates the whole source: these are exactly the seven library tax lines the County Clerk's own Tax Code by District Listing names, and the builder refuses to write if they ever stop matching. Shannon and Lake Carroll correctly sit in NO library district, which the Clerk's tax codes independently confirm."
+      },
+      {
         "file": "cass-county-board-districts.json",
         "min_features": 4,
         "max_features": 4,
@@ -1478,6 +1488,12 @@
         "note": "Lee County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
       },
       {
+        "file": "lee-library-districts.json",
+        "min_features": 11,
+        "max_features": 11,
+        "note": "Boundaries from the Illinois Broadband Office / Connected Nation IL_Boundary_Layers service, layer 11, pre-built by scripts/build_statewide_library_districts.py (clipped to the county, simplified 5 m). NOT a county or library publication: copyrightText and the item description are both empty and every other attribute is a broadband service metric, so every card built on it names the publisher. Lee's 11. Five are seated in neighbouring counties and reach across the line; only the Lee slice is drawn, so a reader on either side is answered by their own county's entry."
+      },
+      {
         "file": "livingston-county-board-districts.json",
         "min_features": 3,
         "max_features": 3,
@@ -1798,6 +1814,12 @@
         "note": "Randolph County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
       },
       {
+        "file": "randolph-library-districts.json",
+        "min_features": 9,
+        "max_features": 9,
+        "note": "Boundaries from the Illinois Broadband Office / Connected Nation IL_Boundary_Layers service, layer 11, pre-built by scripts/build_statewide_library_districts.py (clipped to the county, simplified 5 m). NOT a county or library publication: copyrightText and the item description are both empty and every other attribute is a broadband service metric, so every card built on it names the publisher. Randolph's 9, a mix of two large districts and seven municipal libraries — the county is 27.6% covered and the rest genuinely sits in no library district."
+      },
+      {
         "file": "richland-county-outline.json",
         "min_features": 1,
         "max_features": 1,
@@ -1839,6 +1861,12 @@
         "min_features": 1,
         "max_features": 1,
         "note": "Sangamon County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
+        "file": "sangamon-library-districts.json",
+        "min_features": 16,
+        "max_features": 16,
+        "note": "Boundaries from the Illinois Broadband Office / Connected Nation IL_Boundary_Layers service, layer 11, pre-built by scripts/build_statewide_library_districts.py (clipped to the county, simplified 5 m). NOT a county or library publication: copyrightText and the item description are both empty and every other attribute is a broadband service metric, so every card built on it names the publisher. Sangamon's 16, including Springfield's Lincoln Library as a CITY library rather than a district. Farmersville-Waggoner's 3,444 m2 border sliver is dropped: it never reaches 10 m inside the county and its body is seated in Montgomery."
       },
       {
         "file": "sangamon-judicial-subcircuits.json",
@@ -1900,6 +1928,12 @@
         "note": "St. Clair County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
       },
       {
+        "file": "st-clair-library-districts.json",
+        "min_features": 19,
+        "max_features": 19,
+        "note": "Boundaries from the Illinois Broadband Office / Connected Nation IL_Boundary_Layers service, layer 11, pre-built by scripts/build_statewide_library_districts.py (clipped to the county, simplified 5 m). NOT a county or library publication: copyrightText and the item description are both empty and every other attribute is a broadband service metric, so every card built on it names the publisher. St. Clair's 19, the densest of the six. East Saint Louis, Belleville and O'Fallon are municipal libraries; New Athens, Marissa and Freeburg are districts."
+      },
+      {
         "file": "stark-county-board-districts.json",
         "min_features": 2,
         "max_features": 2,
@@ -1947,6 +1981,12 @@
         "min_features": 1,
         "max_features": 1,
         "note": "Stephenson County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
+      },
+      {
+        "file": "stephenson-library-districts.json",
+        "min_features": 5,
+        "max_features": 5,
+        "note": "Boundaries from the Illinois Broadband Office / Connected Nation IL_Boundary_Layers service, layer 11, pre-built by scripts/build_statewide_library_districts.py (clipped to the county, simplified 5 m). NOT a county or library publication: copyrightText and the item description are both empty and every other attribute is a broadband service metric, so every card built on it names the publisher. Stephenson's 5. Pearl City Public Library District appears here AND in Carroll's file, each with its own county's slice — the district straddles the line and neither county's reader loses their answer."
       },
       {
         "file": "stephenson-fire-districts.json",
@@ -2535,7 +2575,7 @@
     ]
   },
   "sw": {
-    "cache_name": "districtry-il-shell-v9",
+    "cache_name": "districtry-il-shell-v10",
     "shell_urls": [
       "./",
       "./sources.html",
