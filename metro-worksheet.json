@@ -1021,6 +1021,12 @@
         "note": "Carroll County coverage outline (scripts/build_county_outline.py) — gates the county's dispatch entries."
       },
       {
+        "file": "macoupin-library-districts.json",
+        "min_features": 11,
+        "max_features": 11,
+        "note": "Boundaries from the Illinois Broadband Office / Connected Nation IL_Boundary_Layers service, layer 11, pre-built by scripts/build_statewide_library_districts.py — the same source, licence and disclosure as its six siblings (see carroll-library-districts.json). MACOUPIN IS THE SECOND COUNTY IN THAT SET WHOSE OWN CLERK PUBLISHES A LIST TO CHECK IT AGAINST, and the stronger of the two: her DEVNET Taxcode Value within District Report names, across all 224 of the county's tax codes, five LY* library districts, one TL* township library and five VL* municipal libraries — exactly the eleven the layer draws inside the county, with the layer's own LibraryType agreeing with the Clerk's code prefix on every one. The builder refuses to write if that stops being true. ONE NAME DISAGREEMENT IS CARRIED RATHER THAN RESOLVED SILENTLY: the Clerk writes “Virden Library District” under the code LYGP where the layer writes “Grand Prairie of the West Public Library District”; the Clerk's own GP code shows the county knows both names, so this is one body under two labels. TWO BODIES SEATED IN NEIGHBOURING COUNTIES REACH OVER THE LINE AND NEITHER SHIPS, for different reasons that are both measured: Divernon Township Library reaches 0.9 m and falls to the existing reach rule, while Hayner Public Library District reaches 20.6 m over 0.060 km² — past that rule — and is excluded because not one of the county's 224 tax codes levies for it. The exclusion is DECLARED in the builder and the builder MEASURES the reach and refuses to write if it has moved, so an undeclared newcomer fails the build instead of shipping and a stale entry fails it instead of rotting."
+      },
+      {
         "file": "carroll-library-districts.json",
         "min_features": 7,
         "max_features": 7,
@@ -2620,7 +2626,7 @@
     ]
   },
   "sw": {
-    "cache_name": "districtry-il-shell-v14",
+    "cache_name": "districtry-il-shell-v15",
     "shell_urls": [
       "./",
       "./sources.html",

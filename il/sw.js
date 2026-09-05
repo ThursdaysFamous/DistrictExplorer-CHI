@@ -43,7 +43,7 @@
 // refreshed per election.)
 /* ==== TEMPLATE:END sw-version-history ==== */
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "districtry-il-shell-v14";
+const CACHE_NAME = "districtry-il-shell-v15";
 
 const SHELL_URLS = [
   "./",
@@ -83,6 +83,7 @@ const GEOMETRY_URLS = [
   "./data/app/calhoun-county-outline.json",
   "./data/app/carroll-county-board-districts.json",
   "./data/app/carroll-county-outline.json",
+  "./data/app/macoupin-library-districts.json",
   "./data/app/carroll-library-districts.json",
   "./data/app/cass-county-board-districts.json",
   "./data/app/cass-county-outline.json",
