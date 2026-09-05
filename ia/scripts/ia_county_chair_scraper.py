@@ -57,8 +57,10 @@ re-measured after two further refusals were added (a chair QUALIFIED by another
 body, and a pairing whose own term dates have expired), which cost exactly one
 county -- Mahaska, whose page says "Term: 2017 - 2020":
 38 yield exactly one chair before that exclusion, 36 after it, and 35 once the
-two refusals above are applied, 38 none, 17 unreachable, 7 have no roster to gate
-with. ZERO counties yield two candidates. The widest accepted pairing is 28
+two refusals above are applied, 39 none, 17 unreachable, 7 have no roster to gate
+with -- 98, and the arithmetic is the check: Mahaska moved from the one column
+to the none column, so a split that still reads 38 there sums to 97 and is a
+count taken before the refusal it describes. ZERO counties yield two candidates. The widest accepted pairing is 28
 characters (Muscatine's `Danny Chick Supervisor - 1st District (Chair)`, two
 under the cap); the tightest REJECTED one is 84, exactly three times that, so
 GAP_CAP at 30 sits in the middle of a wide gap and is not a knob to turn when
@@ -172,6 +174,18 @@ NAMEISH = re.compile(r"\b([A-Z][a-z]{1,})(?:\s+[A-Z]\.?)?\s+([A-Z][A-Za-z'’\-]
 # NAME through the end of the role, which is where a qualifier can live, and
 # never over what follows.
 OTHERBODY_LEAD = 45           # chars before the name a body's heading can sit in
+                              # ON A FLAT PARENT THIS WINDOW READS THE PREVIOUS
+                              # PERSON. The 45 chars are cut from the PARENT
+                              # element when that parent is <= OTHERBODY_SCOPE_CAP,
+                              # so where a county lists supervisors as siblings
+                              # with no per-member container, the text before a
+                              # name can be the END of the member above it -- a
+                              # trailing "Budget Committee" line there refuses a
+                              # real chair. It errs toward REFUSING, which is the
+                              # safe direction and why it is recorded here rather
+                              # than tuned: a narrower window would start
+                              # accepting chairs of other bodies, which is the
+                              # error this whole test exists to prevent.
 OTHERBODY_SCOPE_CAP = 600     # a record or a section, never a page
 OTHERBODY_TEXT = re.compile(
     r"\bcommittee\b|\bcommission\b|\bauthority\b|\bconservation\b|\bE\.?M\.?S\.?\b"
@@ -186,6 +200,14 @@ OTHERBODY_TEXT = re.compile(
 # Refusing loses a possibly-right answer, which is the safe direction and the
 # same call Worth County's exclusion made.
 TERM_RANGE = re.compile(r"\b(20\d{2})\s*(?:-|\u2013|\u2014|to|through)\s*(20\d{2})\b", re.I)
+# TWO KNOWN BLIND SPOTS, RECORDED RATHER THAN WIDENED UNMEASURED. This catches
+# "Term expires 12/31/2024" and "Term ends 2024" and does NOT catch the
+# month-name form, "Term ends December 31, 2024". A county writing it that way
+# is read as carrying no term at all, which means it is ACCEPTED rather than
+# refused -- the unsafe direction -- so this is the one of the two worth
+# closing. It is left alone here because widening it can only ADD refusals and
+# adding refusals without re-running the 98-county sweep is how a county goes
+# dark for a reason nobody measured; close it in the same change that re-sweeps.
 TERM_END = re.compile(r"term\s*(?:expires?|ends?)\s*:?\s*(?:\d{1,2}[-/])?(?:\d{1,2}[-/])?(20\d{2})", re.I)
 
 
