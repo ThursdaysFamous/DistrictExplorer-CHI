@@ -6001,7 +6001,7 @@ function initWisconsinExplorer() {
     "mpd-district",      // Milwaukee's seven police districts — a seventh of the city each, the largest of the city-scoped tier; the fleet's second city police-district layer
     "mps-school-board",  // the two school boards Wisconsin elects BY DISTRICT — Milwaukee's eight and Racine Unified's nine; every other board in the state is at large and has no geometry to draw
     "mpd-squad-area",    // The 25 MPD patrol squad areas — a twenty-fifth of the city each, nested inside the seven police districts (subOf), between the MPS board's eighths and the aldermanic fabric
-    "aldermanic-district", // 838 city and village council districts — each a union of wards, smaller than a ZCTA, above the ward layer they dissolve from
+    "aldermanic-district", // 853 city and village council districts — each a union of wards, smaller than a ZCTA, above the ward layer they dissolve from
     "ward",              // 7,161 municipal wards — the ballot sub-unit every district is built from; smaller than a ZCTA on average, above the amenity points
     "milwaukee-neighborhoods", // The city's 190 named neighborhoods — an identity fabric, not an electing body; below the ward layer's statewide average, above the amenity points
     "madison-neighborhood-assoc", // 116 active city-registered association boundaries averaging 1.1 km² — just below Milwaukee's neighborhood fabric (1.3 km²) and above the TID slices; they nest and overlap by design, so the card collects every association at the point
@@ -9987,11 +9987,14 @@ function initWisconsinExplorer() {
    * build_wi_aldermanic_districts.py dissolves the coded city/village wards
    * on the statewide municipality key (COUSUBFP + ALDERID — never the
    * county-qualified ALDER_FIPS, which splits cross-county cities), cross-
-   * witnessed against the state's own BAS pre-dissolve edition. 838
-   * districts in 155 municipalities ship; ten measurably incomplete
-   * submissions (Appleton the flagship) are excluded on the record, so
-   * everywhere else the honest no-district answer IS the answer. The roster
-   * (wi-alderpersons.json, weekly CI) covers the 17 municipalities with a
+   * witnessed against the state's own BAS pre-dissolve edition. 853
+   * districts in 156 municipalities ship; nine measurably incomplete
+   * submissions are excluded on the record, so everywhere else the honest
+   * no-district answer IS the answer. Appleton's fifteen are the one set
+   * composed LOCALLY: its county files every ward uncoded, and the city
+   * clerk's own polling-locations page supplies the assignment under four
+   * witnesses (see the builder). The roster
+   * (wi-alderpersons.json, weekly CI) covers the 18 municipalities with a
    * verified witnessed route; the other 138 councils are a recorded gap, and
    * their cards stay identity-only rather than guessing.
    * In the nine villages that elect trustees by district the officer is a
@@ -10086,7 +10089,7 @@ function initWisconsinExplorer() {
         ]));
       }
       // no roster city -> identity-only card: the council rosters beyond the
-      // 17 verified municipalities are a recorded data gap, never a guess
+      // 18 verified municipalities are a recorded data gap, never a guess
       return wrap;
     },
     primaryLink: function (result) {
