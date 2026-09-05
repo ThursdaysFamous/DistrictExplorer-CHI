@@ -69,7 +69,7 @@ about which part of the city a reader is standing in.
 
 Nothing asserts at-large either. The five cities on `ia-city-officials.json`
 were each read from the city's own page and each verified at-large; these 84
-were not, and 109 of their officials carry a seat that says otherwise, so the
+were not, and 93 of their officials carry a seat that says otherwise, so the
 card's copy for them says who published the roster and stops there.
 
 NO HOME ADDRESSES. The county pages publish CITY HALL's address and phone

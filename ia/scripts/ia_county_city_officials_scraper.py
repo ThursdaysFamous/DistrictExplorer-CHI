@@ -32,7 +32,13 @@ THREE TRAPS, ALL IN THE MARKUP AND ALL SILENT
    and the other SIX give every role a `div.positionTitle` heading instead.
    Measured 2026-09-05: <b> in Boone (19), Crawford (32), Iowa (7), Marion (16)
    and Winnebago (14); headings only in Cerro Gordo, Jackson, Keokuk,
-   Muscatine, Sac and Shelby; Crawford uses BOTH. Read the text flat and the
+   Muscatine, Sac and Shelby. THE <b> IS AN ADDITION, NOT AN ALTERNATIVE: in all
+   five, City Council still comes from a positionTitle heading exactly as it does
+   in the other six, and what the <b> carries is the NON-COUNCIL roles -- so
+   "Crawford uses both" is no distinction, every one of the five does. What IS
+   distinctive about Crawford is a THIRD <b> role, Library (6); Boone and
+   Winnebago carry City Administrator there instead, and Iowa carries only Mayor
+   because it publishes no clerk at all. Read the text flat and the
    clerk is a person called "City Clerk Sarah Miller"; take positionTitle for
    every row and, in those five, the clerk and the mayor are filed as council
    members. That is the Franklin trap in both directions at once, so the role
