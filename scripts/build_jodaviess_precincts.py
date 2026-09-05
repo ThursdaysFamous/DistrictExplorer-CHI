@@ -73,8 +73,12 @@ COUNTY_POP_2020 = 22035
 EXPECTED_VTDS = 29
 EXPECTED_PRECINCTS = 28
 
-RESULTS_URL = "https://jodaviesscountyil.gov/1380/Election-Results"
-POLLING_MAP_URL = ("https://jodaviesscountyil.gov/DocumentCenter/View/676/"
+# WWW, not the bare host: jodaviesscountyil.gov answers 301 and only
+# www.jodaviesscountyil.gov answers 200, so a bare-host literal on a card is a
+# redirect a reader's browser follows and the monthly link gate reports as a
+# hop. The county board scraper already used www; these two did not.
+RESULTS_URL = "https://www.jodaviesscountyil.gov/1380/Election-Results"
+POLLING_MAP_URL = ("https://www.jodaviesscountyil.gov/DocumentCenter/View/676/"
                    "Polling-Places-Map-revised-08-12-2026-PDF")
 SOURCE_LABEL = ("Census 2020 voting districts, one per precinct except Warren, "
                 "which the county merged from Warren I and Warren II — the "

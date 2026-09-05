@@ -969,3 +969,127 @@ posture. The ask is for the four names, not for an exemption.
   stays unshipped for good, and the record retires the route rather than leaving it open.
 * **No reply** → follow up once at ~3 weeks and once at ~2 more, then `UNRESPONSIVE` — a
   claim about the ask, never about the city.
+
+---
+
+## Ask 16 — five Illinois city clerks: has your ward map changed since it was drawn?
+
+> **NOT YET ASKED — DRAFTED 2026-09-05.** Five separate notes, one per city clerk. They
+> ask the same single question and are worth sending together, but they are NOT a batch:
+> each city's own map is the subject, and a mail-merge that named the wrong city would be
+> worse than no ask at all.
+
+**Why these five and not six.** Eight cities name their council members by ward while the
+map cannot say where those wards are (`pass9-ward-seats-without-maps`). Six have boundaries
+in hand — Peoria County's own Wards layer for Chillicothe, Elmwood and West Peoria, and
+Henry County's archived `Wards.shp` for Galva, Colona and Geneseo. Measured on 2026-09-05
+against each city's own Census place polygon, the share of the CITY that no ward polygon
+covers runs:
+
+| City | Uncovered | Acres | Largest single piece |
+|---|---:|---:|---:|
+| West Peoria | 8.0% | 107 | 77 |
+| Colona | 3.9% | 98 | 91 |
+| Chillicothe | 3.3% | 116 | 101 |
+| Galva | 2.9% | 52 | 21 (six pieces) |
+| Geneseo | 1.7% | 52 | 37 |
+| **Elmwood** | **0.4%** | **4** | **2** |
+
+The ward layers this instance already ships leave Rockford 0.5% of itself uncovered,
+Evanston 0.1% and Aurora 0.1%. **Elmwood is in that company and shipped on 2026-09-05; the
+other five are an order of magnitude worse and are held.** Every source is 2006–2015
+county-held linework, so the uncovered ground is most likely annexation the ward map never
+grew to cover — which means a resident standing there HAS a ward and the layer would tell
+them they have none. That is a wrong answer rather than a missing one, and it is what these
+five notes exist to resolve.
+
+### Recipients, and how each address was arrived at
+
+| City | Recipient | Where the address comes from |
+|---|---|---|
+| Chillicothe | Clerk Jill Byrnes, `cityclerk@cityofchillicotheil.org` | the Peoria County Clerk's directory; an office-mailbox form, not a person's |
+| West Peoria | Clerk Mary "Margie" Barnes, `city_clerk@cityofwestpeoria.com` | the Peoria County Clerk's directory — **see the domain note below** |
+| Galva | Clerk Debbie VanWassenhove, `cityclerk@galvail.gov` | the city's own site |
+| Colona | Clerk Charlotte Park, `office@colonail.com` | the city's own site |
+| Geneseo | Clerk Paige Seibel — **no address; see below** | — |
+
+All five domains were checked and all five route mail (MX present and resolving,
+2026-09-05).
+
+**West Peoria's two domains, for whoever sends.** The county clerk's directory gives
+`city_clerk@cityofwestpeoria.com` while the city's website is `cityofwestpeoria.org`, and
+**both domains accept mail** — `.com` through Outlook, `.org` through its own host. The
+`.com` is what the county publishes, so that is what is drafted; nothing on the city's own
+site names either address, so this is not settled here. If it bounces, `.org` is the obvious
+retry.
+
+**GENESEO HAS NO PUBLISHED ADDRESS AND NONE IS GUESSED.** Its city-clerk page carries no
+e-mail at all, and every one of the five addresses on its contact page belongs to the POLICE
+DEPARTMENT — the chief, the deputy chief, the FOIA officer, the department mailbox and the
+community service officer. Sending a ward question to a police mailbox because it is the
+only address on the page is exactly the inference this file forbids. The one published route
+is the telephone the Henry County Clerk's directory gives, **309-944-6419**, so Geneseo's
+note is drafted and waits on a route rather than on a send.
+
+### The note, as sent to Chillicothe. The other four are this with the city, the clerk, the source and the measured figure changed.
+
+> Subject: One question about Chillicothe's ward boundaries
+>
+> Dear Clerk Byrnes,
+>
+> I build districtry.com, a free, non-commercial site that shows people which civic
+> districts they live in — wards, county board districts, school and fire districts, and so
+> on. It carries no advertising and sells nothing.
+>
+> Chillicothe's four aldermanic wards are already named on the site, from the Peoria County
+> Clerk's own directory of elected officials, so a resident can see who represents Ward 2.
+> What the site cannot yet show is WHERE those wards are.
+>
+> Peoria County's GIS publishes a Wards layer that includes Chillicothe, and I have it. My
+> hesitation is its age: it appears to be county-held linework drawn well before the 2020
+> census, and when I compare it against the city's current limits about 3% of Chillicothe —
+> roughly 116 acres, the largest single piece about 101 — falls inside no ward at all. My
+> guess is that this is ground annexed since the map was drawn, which would mean those
+> residents do have a ward and my map would wrongly tell them they have none. I would rather
+> show nothing than show that.
+>
+> So one question, and either answer finishes it:
+>
+> Have Chillicothe's ward boundaries changed since that county map was made — and if so, is
+> there a current map, shapefile, ordinance or written description I could use?
+>
+> If the wards have not been redrawn and the county's map is still correct, saying so in one
+> line is a complete answer and I will publish it with that confirmation noted. If this is
+> not something your office keeps, that is equally useful — I will record it as the reason
+> Chillicothe's wards are not drawn and stop asking.
+>
+> With thanks for your time,
+>
+> `<YOUR NAME>`
+> `<YOUR E-MAIL>`
+> districtry.com
+
+### The four variants, in one line each
+
+* **West Peoria** — Clerk Barnes; Peoria County's Wards layer; **8.0%, about 107 acres,
+  largest piece 77**. Highest percentage of the six.
+* **Galva** — Clerk VanWassenhove; the Henry County Clerk's archived ward shapefile;
+  **2.9%, about 52 acres across six separate pieces** (say "six separate pieces" — it reads
+  as scattered annexation rather than one missing block, and that is what the measurement
+  shows).
+* **Colona** — Clerk Park; same Henry County source; **3.9%, about 98 acres, almost all of
+  it one 91-acre piece**.
+* **Geneseo** — Clerk Seibel; same Henry County source; **1.7%, about 52 acres, largest
+  piece 37**. Held for want of an address (above).
+
+### What each answer means
+
+* **"They have not changed"** → the six ship exactly as Whiteside County's six did after its
+  clerk confirmed the same thing on 2026-08-03, with the confirmation and its date on the
+  record. This is the outcome the Rock Island precedent says is most likely.
+* **A current map or shapefile** → better still: the boundary ships as the city draws it and
+  the county-held linework is retired.
+* **"They changed and we have no map"** → the honest close. That city stays unshipped, the
+  gap narrows to name it, and nothing is drawn from a map known to be wrong.
+* **No reply** → follow up once at ~3 weeks and once at ~2 more, then `UNRESPONSIVE` — a
+  claim about the ask, never about the city.
