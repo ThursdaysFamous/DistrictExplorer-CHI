@@ -1033,6 +1033,24 @@
         "note": "Boone's 2 park districts, pre-built by scripts/build_parcel_fabric_districts.py from the parcels the county's own fabric assigns to the tax codes its Clerk's 2025 Taxcode Value within District Report puts in PDBV (25) and PDRF (1) — the county publishes no park boundary of any kind. Same 75 ft road-void closing and probe gates as its library sibling; Rockford Park District is seated in Winnebago and only its Boone slice is drawn. Bounds are an EQUALITY: the county levies exactly these two, and the rest of Boone genuinely sits in no park district."
       },
       {
+        "file": "woodford-fire-districts.json",
+        "min_features": 17,
+        "max_features": 17,
+        "note": "Woodford's 17 fire protection districts, pre-built by scripts/build_parcel_fabric_districts.py. The county publishes no district tiling — its \u201cFire Protection Districts\u201d service is its 25,824-row PARCEL FABRIC, one record per property — so each district is the DISSOLVE of the parcels whose Fire_Prote column names it, road voids closed at 75 ft by the Rock Island rules. The set is corroborated by the Clerk's certified 2025 Tax Year 1st Distribution settlement sheets, which levy for exactly these 17, code for code. Bounds are an EQUALITY. The Village of Metamora is a deliberate hole: all 1,701 parcels with no fire district are inside it, it runs its own department, and the district around it is named Metamora RURAL."
+      },
+      {
+        "file": "woodford-library-districts.json",
+        "min_features": 6,
+        "max_features": 6,
+        "note": "Woodford's 6 library districts, pre-built by scripts/build_parcel_fabric_districts.py from the Library_Di column of the same 25,824-row parcel fabric, with the same 75 ft closing and probe gates as its fire sibling; the Clerk's certified 2025 settlement sheets levy for exactly these 6. Bounds are an EQUALITY. One of the six, Minonk City Library, is MUNICIPAL rather than a district \u2014 its 1,230 parcels are the City of Minonk exactly, and none lie outside it \u2014 so its feature carries a note the card renders."
+      },
+      {
+        "file": "woodford-park-districts.json",
+        "min_features": 3,
+        "max_features": 3,
+        "note": "Woodford's 3 park districts, pre-built by scripts/build_parcel_fabric_districts.py from the Park_Distr column of the same 25,824-row parcel fabric; the Clerk's certified 2025 settlement sheets levy for exactly these 3. Bounds are an EQUALITY: most of the county genuinely sits in no park district, and only 4,113 of its parcels are in one."
+      },
+      {
         "file": "brown-county-outline.json",
         "min_features": 1,
         "max_features": 1,
