@@ -1075,8 +1075,9 @@ Emergency Management Dept. runs a 911 program requiring counties to submit PSAP/
 boundaries to a state GIS standard, but no open statewide aggregate was found on the state's ArcGIS
 organization in the research pass (only county-local layers, e.g. Linn and Scott) — the "ask is a
 route, not a last resort" precedent (`docs/EXPANSION_GUIDE.md` §5.1; Wisconsin's WEC answered in 22
-minutes). SOS asks go out alongside it: licence terms for the LSA/DE layers, and whether a
-current-edition polling-place export exists beyond the 2024-08 item.
+minutes). SOS asks go out alongside it: licence terms for the LSA/DE layers, and — since 2026-09-05, when
+the polling question was measured — not whether a current export exists (it does, HSEMD's, created
+2026-05-21) but whether it can carry the precinct column its own 2024 predecessor carried.
 
 ## Phase 4 roadmap — officeholders, polling, second city
 
@@ -1097,10 +1098,51 @@ takes PART of a township, and the state precinct layer's single `Castle Grove/Lo
 spans districts 1, 2 and 3. So the remaining route is the county's own GIS file, drafted as Ask 14
 and held for the operator. **A ROUTE NAMED IN A GAP RECORD IS A HYPOTHESIS UNTIL SOMEBODY OPENS THE
 FILE.**
-**Polling places** ship only if the SOS ask
-in phase 3 lands a current per-election edition — `IowaPollingPlaces` joined to `precinct` by `PPID`
-under the full Wisconsin display contract (election named, provisional wording while pre-certification,
-pull dated, retired once the election passes) — the August 2024 item never ships labeled "current."
+~~**Polling places** ship only if the SOS ask in phase 3 lands a current per-election edition —
+`IowaPollingPlaces` joined to `precinct` by `PPID`~~ — **MEASURED SHUT 2026-09-05, and the ask was
+aimed at the wrong thing.** HSEMD publishes a CURRENT edition already, openly and unlicensed
+(`PollingPlaces2026`, created 2026-05-21, 1,658 points, `licenseInfo` and `copyrightText` both
+empty), so "a current edition" was never what was missing. **What is missing is the KEY**, and
+three columns are the whole story: the 2024 edition carried `Precinct_Name`, `Election_Date` and
+`Election_Description`, and the 2026 one carries none of them.
+
+| | 2024 edition | 2026 edition |
+|---|---|---|
+| joins to `precinct` | **1,625 of 1,658 — 98.0%**, on `Precinct_Name` | **365 of 1,658 — 22.0%** on `Pre_Code`, and **0%** in Polk, Linn, Scott and Black Hawk |
+| names its election | yes — 5 Nov 2024, per-county wording | **no such field** |
+| current | no — a 2024 General snapshot | yes |
+
+So the two properties the display contract needs — JOINABLE and CURRENT — exist in different
+files and never in the same one. The 2024 file is joinable and names an election that passed ten
+months ago, which the contract's own "retired once the election passes" rule refuses. The 2026
+file is current and cannot be attached to a precinct by anything published.
+
+**THERE ARE TWO PUBLISHERS, AND A FIRST DRAFT OF THIS ENTRY COLLAPSED THEM INTO ONE.** The
+corrections it made to the old sentence were themselves wrong, and are restated here as measured:
+
+* **`PPID` IS a usable join key** — on the LEGISLATURE's own `IowaPollingPlaces` (item
+  `b5df2a66…`, org `vPD5PVLI6sfkZ5E4`, the same org this app reads its precincts from), CC0,
+  modified 2024-08-01, crediting the Secretary of State. 1,386 rows, all `ACTIVE='2024'`, and on
+  `PPID` it matches **1,619 of the 1,660 precincts (97.5%)**. The currency objection stands; the
+  earlier "could never have been made" does not — it was true of HSEMD's editions and stated of
+  the datum.
+* **The "August 2024 item" is the Legislature's**, not `IowaPollingPlaces_buffer`, which HSEMD
+  created 2024-10-02.
+* **`Pre_Code` is a key — to the 2024 file.** HSEMD's own 2024 layer 0 carries `Precinct_Code` in
+  the same county-idiom scheme, and bridging 2026 → 2024 on (county, code) matches **1,556 of
+  1,658 (93.8%) with zero ambiguity**, 1,541 of them landing on a precinct name the fabric
+  carries. It is not a key to the FABRIC, which is a different claim than the one first made.
+* **A geometric join is not a serving relationship** — this one holds. All 1,658 points fall
+  inside some precinct, but only 923 of 1,660 contain exactly one, **449 contain none and 288
+  contain several**; a polling place is a building, and buildings sit where they sit.
+
+**So the join exists and is two years old.** Shipping the 2024 crosswalk over the 2026 file is
+refused for a stated reason rather than because nothing joins: it would attach current polling
+places to precincts through a two-year-old code map, and **60 to 71 of the bridged rows name a
+different building in 2026** — exactly where a re-coded county would send a reader to the wrong
+room with every count intact. The full measurement is the `ia-polling-places` gap record; Ask 4
+is re-drafted to ask for the dropped column, addressed to the Secretary of State (who supplies)
+and HSEMD (who hosts).
 **The municipal probe ran on 2026-09-03 and its yield was three findings, one of which SHIPPED the next day** (the full
 measurement is the `ia-municipal-officeholders` gap record): the League of Cities is NOT gated
 and publishes a phone for 935 of 948 cities while naming nobody; the Secretary of State

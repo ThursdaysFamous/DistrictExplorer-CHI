@@ -298,8 +298,11 @@ PROVENANCE = [
              "cell names one; the set and the shipped names both come from the "
              "county's own 2025 Tax Distribution List with EAV (which names "
              "no office and does not say 'certified'). MVK "
-             "RESCUE SQUAD is excluded although the Clerk codes it FDMV: its "
-             "2,257 parcels are exactly the union of Mazon and Verona-Kinsman."},
+             "RESCUE SQUAD is excluded: the county names it the Mazon Verona "
+             "Kinsman Rescue Squad District (70 ILCS 2005/6, its own board and "
+             "levy), and a rescue-squad district is not a fire protection "
+             "district. Its 2,257 parcels are exactly the union of Mazon and "
+             "Verona-Kinsman."},
     {"layer": "Grundy County library districts (pre-built from the parcel fabric)",
      "app_file": "grundy-library-districts.json",
      "source_url": SERVICE_GRUNDY_PARCELS + "?f=json",

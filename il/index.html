@@ -23342,10 +23342,13 @@ function initChiExplorer() {
       }),
       // Grundy — 13 districts dissolved from the county's parcel fabric. MVK
       // RESCUE SQUAD is deliberately absent though the Clerk codes it FDMV,
-      // the same FD prefix every fire district carries: all 2,257 of its
-      // parcels are ALSO in Mazon (1,224) or Verona-Kinsman (1,033), summing
-      // to exactly its own total, so it is an EMS levy laid over those two
-      // rather than a fourteenth district — see the builder's note.
+      // the same FD prefix every fire district carries. IT IS A DISTRICT, not
+      // a levy: the county names it the Mazon Verona Kinsman Rescue Squad
+      // District (70 ILCS 2005/6, its own five trustees and its own levy). It
+      // is excluded because a rescue-squad district is not a fire protection
+      // district, and this card must name the body that answers a fire call.
+      // Three county documents agree it OVERLAYS two fire districts rather
+      // than sitting beside them — see the builder's note.
       polygonCountyEntry({
         key: "grundy",
         coverage: grundyCountyCoverage,

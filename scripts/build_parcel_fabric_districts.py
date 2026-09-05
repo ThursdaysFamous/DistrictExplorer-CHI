@@ -213,11 +213,17 @@ GRUNDY_DISTRICTS_COL = ("GrundyParcels.dbo.GISParcelsJoinedDistrictCodes_"
 # ZERO of county research, ahead of every technical probe, and this build did
 # not. Asked afterwards (2026-09-05) the answer is genuinely ambiguous rather
 # than obviously fine, so it is recorded here and put to the county rather than
-# resolved by this script in either direction (docs/ASK_DRAFTS.md Ask 17,
+# resolved by this script in either direction (docs/ASK_DRAFTS.md Ask 18,
 # DRAFTED and HELD):
-#   - the county SELLS a bundled parcel data product — its GIS Data Request page
-#     publishes a fee schedule, $0.35 per parcel plus a $100 processing fee,
-#     ordered by section, township, full county or custom area;
+#   - the county SELLS BOTH OF THE THINGS THIS BUILD PRODUCES. Its GIS Data
+#     Request page publishes a fee schedule with a "Tax Parcel Data" line
+#     ($0.35 per parcel, real-estate information built in at $0.10 of that,
+#     plus a $100 processing and handling fee, ordered by section, township,
+#     full county or custom area) AND a "Government Boundary Data" line reading
+#     "Individual Boundary Data of Taxing Bodies $100.00". This build bulk-read
+#     27,661 parcels and dissolved taxing-body boundaries — the two priced
+#     products. Cheques are payable to the Grundy County GIS Automation Fund
+#     and requests go to gisdatarequest@grundycountyil.gov;
 #   - the county ALSO runs THIS server open and unauthenticated, backing the
 #     "GIS Interactive Map" property viewer it links from its own home page. No
 #     token, no referer check, and the service's copyrightText is EMPTY;
@@ -247,6 +253,17 @@ GRUNDY_DISTRICTS_COL = ("GrundyParcels.dbo.GISParcelsJoinedDistrictCodes_"
 # The county's "Rates & Extensions" PDF would have been the obvious witness and
 # is NOT usable: all 102 pages are a scan with no text layer, and 101
 # characters extract from the whole document.
+#
+# A THIRD WITNESS EXISTS AND AN EARLIER DRAFT SAID IT DID NOT — the "Rates &
+# Extensions" scan is not the county's only rates document. GRUNDY_RATES_BY_CODE
+# below is 51 pages of TEXT giving, per tax code, every district that levies on
+# it with its code and rate. Joined to the parcels' own VPTaxCode it covers all
+# 167 tax codes the fabric uses and agrees with the fabric on EVERY fire,
+# library and park membership. That makes the composition corroborated per TAX
+# CODE and not only per district name, and it is what independently establishes
+# the MVK overlay described above.
+GRUNDY_RATES_BY_CODE = ("https://www.grundycountyil.gov/Documents/Communities/"
+                        "Taxes/District%20Rates%20By%20Tax%20Code%202025.pdf")
 GRUNDY_TAX_YEAR = 2025
 GRUNDY_REPORT = ("https://www.grundycountyil.gov/Documents/Communities/Taxes/"
                  "Tax%20Distribution%20Listing%20with%20EAV%202025.pdf")
@@ -270,15 +287,25 @@ GRUNDY_FIRE = {
     "SENECA FIRE AND AMBUL": "SENECA FIRE PROT & AMBUL",
     "VERONA-KINSMAN FIRE": "VERONA-KINSMAN FIRE",
 }
-# MVK RESCUE SQUAD IS DELIBERATELY NOT HERE, and the reason is measured rather
-# than assumed from its name. The Clerk codes it FDMV — an FD code, the same
-# prefix every fire district carries — so a build keyed on the Clerk's coding
-# would ship it as a fourteenth fire district. All 2,257 of its parcels are
-# ALSO in a named fire district, 1,224 in Mazon and 1,033 in Verona-Kinsman,
-# summing to exactly its own total: it is the union of those two districts,
-# which is what its name says (Mazon-Verona-Kinsman) and what an EMS levy laid
-# over existing fire districts looks like. Including it would put two fire
-# districts on one card for 2,257 parcels.
+# MVK RESCUE SQUAD IS DELIBERATELY NOT HERE, and the EXCLUSION IS RIGHT WHILE
+# AN EARLIER DRAFT'S REASON FOR IT WAS WRONG. That draft called it "an EMS levy
+# laid over those two and not a fourteenth district". It IS a district: the
+# county's own Appointed Local Public Entity Report names it the MAZON VERONA
+# KINSMAN RESCUE SQUAD DISTRICT, established under 70 ILCS 2005/6, with its own
+# five-trustee board appointed by the County Board Chairman and its own annual
+# property tax levy. It is excluded because a RESCUE SQUAD DISTRICT IS NOT A
+# FIRE PROTECTION DISTRICT — the same distinction the fleet draws elsewhere —
+# and the fire card must name the body that answers a fire call.
+#
+# THREE COUNTY DOCUMENTS AGREE THAT IT SITS ON TOP OF TWO FIRE DISTRICTS RATHER
+# THAN BESIDE THEM:
+#   - the parcel fabric: all 2,257 of its parcels are ALSO in Mazon (1,224) or
+#     Verona-Kinsman (1,033), summing to exactly its own total;
+#   - the Clerk's District Rates by Taxcode report (below): twelve tax codes
+#     carry MVK, and every one of them ALSO carries a fire protection district
+#     — Mazon on seven, Verona-Kinsman on five. MVK never appears alone;
+#   - the entity report: its service description is the same "fire and EMS
+#     services to its residents and townships" as the districts it overlays.
 GRUNDY_LIBRARY = {n: n for n in (
     "COAL CITY LIBRARY", "FOSSIL RIDGE LIBRARY", "MORRIS AREA LIBRARY",
     "PRAIRIE CREEK LIBRARY", "SENECA LIBRARY", "THREE RIVERS LIBRARY")}
@@ -343,6 +370,16 @@ WOODFORD_CODE_RE = r"^(?P<code>[A-Z]{2}[A-Z0-9]{2}) - (?P<name>.+)$"
 # 2025, in the county's own "County Taxes" archive and linked from its Real
 # Estate Tax Information page. Re-verifying the district SET means re-reading
 # these two, not searching the county's site again.
+#
+# WHOSE DOCUMENT IT IS, ANSWERED. An earlier note said the office could not be
+# established because the archive page is titled only "County Taxes" and the
+# document names none — true of both pages read on their own, and wrong about
+# the county, because the NAVIGATION says it: the Real Estate Tax Information
+# page that links the archive breadcrumbs Home > Government > Departments >
+# TREASURER, and its "Tax Distribution" menu item is this archive
+# (Archive.aspx?AMID=44), which holds ADID=3720. So it is the Treasurer's
+# distribution archive. The document still says no such thing itself and still
+# never says "certified", so neither does any card.
 WOODFORD_TAX_YEAR = 2025
 WOODFORD_SETTLEMENT_SHEETS = "https://www.woodford-county.org/Archive.aspx?ADID=3720"
 WOODFORD_COUNTY_SUMMARY = "https://www.woodford-county.org/Archive.aspx?ADID=3719"
@@ -369,10 +406,13 @@ WOODFORD_COUNTY_SUMMARY = "https://www.woodford-county.org/Archive.aspx?ADID=371
 # resident lives inside. Measured, not inferred: all 1,230 of its parcels are
 # in the City of Minonk and all 1,230 of the city's parcels are in it. The
 # app's existing LIBRARY_GOVERNANCE wording for a city library ("levies no
-# district tax of its own") is NOT reused, because the Clerk's own 2025
-# settlement sheet shows LYMI levying $99,987.82 under a `016 - Library` fund —
-# so the note states the territory, which is what was measured, and makes no
-# claim about which body votes the levy.
+# district tax of its own") is NOT reused, because the county's own 2025
+# settlement sheet shows LYMI levying $51,791.31 on its `016 - Library` fund
+# ($99,987.82 across both of its funds) — so the note states the territory,
+# which is what was measured, and makes no claim about which body votes the
+# levy. (Both halves of that sentence were wrong in an earlier draft: it said
+# "the Clerk's", the attribution retracted fourteen lines below, and quoted the
+# two-fund total as if it were the Library line.)
 # THE FIRST VERSION OF THIS NOTE SAID "its area is exactly the city" AND THAT
 # WAS FALSE, because it was measured against the county's parcel ATTRIBUTE
 # (`Village`) and never against the county's corporate-boundary LAYER. Both
@@ -581,18 +621,21 @@ SOURCES = [
      "out_fields": GRUNDY_DISTRICTS_COL,
      "where": GRUNDY_DISTRICTS_COL + " LIKE '%FIRE%'",
      "expect_rows": 27141, "multi_value": ",", "code_map": GRUNDY_FIRE,
+     "expect_unmapped": ["MVK RESCUE SQUAD"], "token_re": r"\bFIRE\b|RESCUE SQUAD",
      "out_prop": "district", "probes": GRUNDY_FIRE_PROBES},
     {"slug": "grundy-library", "out": "grundy-library-districts.json",
      "layer": GRUNDY_PARCELS, "name_prop": GRUNDY_DISTRICTS_COL, "expect": 6,
      "out_fields": GRUNDY_DISTRICTS_COL,
      "where": GRUNDY_DISTRICTS_COL + " LIKE '%LIBRARY%'",
      "expect_rows": 24485, "multi_value": ",", "code_map": GRUNDY_LIBRARY,
+     "expect_unmapped": [], "token_re": r"\bLIBRARY\b",
      "out_prop": "district", "probes": GRUNDY_LIBRARY_PROBES},
     {"slug": "grundy-park", "out": "grundy-park-districts.json",
      "layer": GRUNDY_PARCELS, "name_prop": GRUNDY_DISTRICTS_COL, "expect": 2,
      "out_fields": GRUNDY_DISTRICTS_COL,
      "where": GRUNDY_DISTRICTS_COL + " LIKE '%PARK DIST%'",
      "expect_rows": 1779, "multi_value": ",", "code_map": GRUNDY_PARK,
+     "expect_unmapped": [], "token_re": r"PARK DIST",
      "out_prop": "district", "probes": GRUNDY_PARK_PROBES},
     {"slug": "kendall-fire", "out": "kendall-fire-districts.json",
      "layer": KENDALL + "Fire_Protection_Districts/FeatureServer/0",
@@ -881,7 +924,15 @@ def build_source(cfg):
     # any usable time over Boone's 12,264 parcels, which is what a parcel fabric
     # costs. Same geometry either way; a single unary_union over a list is the
     # call shapely is built for.
-    parts, blanks, no_geom = {}, 0, {}
+    parts, blanks, no_geom, unmapped = {}, 0, {}, {}
+    # The row lists EVERY taxing body the parcel pays into, so "unmapped" has to
+    # mean "looks like this concept and is not in the map", never "is on the
+    # row and is not in the map" — the latter is every township, school and TIF
+    # in the county. token_re is the source's own keyword, the same one its
+    # where clause filters on, so the two cannot drift apart.
+    _tok = re.compile(cfg["token_re"], re.I) if cfg.get("token_re") else None
+    def concept_token(x):
+        return bool(_tok.search(x)) if _tok else False
     excl = set(cfg.get("exclude_names", []))
     for f in geo.get("features", []):
         props = f.get("properties") or {}
@@ -909,6 +960,17 @@ def build_source(cfg):
             listed = [" ".join(x.split()) for x in
                       str(v or "").split(cfg["multi_value"])]
             hits = [cfg["code_map"][x] for x in listed if x in cfg["code_map"]]
+            # EVERY TOKEN THE WHERE CLAUSE LET THROUGH BUT THE MAP DOES NOT
+            # CARRY is collected and reported below. The where clause is a
+            # KEYWORD filter (`LIKE '%FIRE%'`), so a body whose name lacks the
+            # keyword never reaches this loop at all — that is what
+            # expect_rows and the district-count equality catch. What this
+            # catches is the other half: a body that DOES match the keyword,
+            # arrives here, and is silently dropped because nobody added it to
+            # the map. Both halves were invisible before.
+            for x in listed:
+                if x and x not in cfg["code_map"] and concept_token(x):
+                    unmapped[x] = unmapped.get(x, 0) + 1
             if len(set(hits)) > 1:
                 fail("%s: a parcel lists %d of this concept's districts (%s) — "
                      "the county's roll changed or the map is wrong; refusing "
@@ -940,6 +1002,24 @@ def build_source(cfg):
 
     named = {n: (unary_union(v) if len(v) > 1 else v[0]) for n, v in parts.items()}
 
+    # The multi_value vocabulary, DECLARED rather than assumed. `expect_unmapped`
+    # pins the tokens the where clause admits and the map deliberately ignores —
+    # Grundy's fire filter admits MVK RESCUE SQUAD, which is a rescue-squad
+    # district and not a fire protection district. A token appearing here that
+    # is not pinned means the county added a body nobody has classified, and the
+    # build stops rather than quietly drawing one district fewer.
+    if cfg.get("multi_value"):
+        got = sorted(unmapped)
+        want = sorted(cfg.get("expect_unmapped", []))
+        if got != want:
+            fail("%s: the %s filter admitted token(s) the map does not carry — "
+                 "got %s, expected %s. Classify each one (is it this concept?) "
+                 "and pin it in expect_unmapped."
+                 % (cfg["slug"], cfg["name_prop"].split(".")[-1], got, want))
+        if got:
+            print("  %d token(s) admitted by the filter and deliberately not "
+                  "mapped: %s" % (len(got), ", ".join("%s (%d parcels)"
+                                                      % (k, unmapped[k]) for k in got)))
     if sum(no_geom.values()) != cfg.get("expect_no_geometry", 0):
         fail("%s: %d rows carry no geometry, expected %d (%s) — the county's "
              "roll changed; re-verify before re-pinning"
