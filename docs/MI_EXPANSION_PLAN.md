@@ -242,8 +242,76 @@ Each opens its own refreshed plan PR with its own measured ledger when it begins
   services)**, not 225; the plan's own dates (adopted 2024-02-06, effective 2026-01-01) were sitting
   in the shipped service's `description` and were never cited; and `SIMPLIFY` at 8% moved D5's
   boundary 135 m, against a city tier that simplifies at 20-25%. All three are fixed.
-  **GRAND RAPIDS IS NEXT** — its three wards elect two commissioners each, so the at-large question
-  arrives in a different shape than Detroit's, and its publisher has not been researched yet.
+  **GRAND RAPIDS SHIPPED 2026-09-05 AS THE SECOND CITY, AND CONVERTED THE CONCEPT.** §3.0 says a
+  concept appearing in a second city becomes a DISPATCHED concept, so `detroit-council` became
+  `city-ward` with two municipality-keyed entries, an alias shim for every permalink already shared,
+  and `registerCountyLayer` ported in from Iowa — a third copy of shared code, recorded as a debt in
+  `mi/WATCH.md` rather than promoted to `engine/` inside a PR about a city. No shared entry helper:
+  Iowa's two cities are near-identical and Michigan's are not, and the dispatcher already lets each
+  entry bring its own card.
+  **THE CITY'S SHAPE CAME FROM THE CITY, NOT FROM MEMORY**: "This legislative body consists of the
+  Mayor and six Commissioners… The residents of each Ward directly elect two commissioners." Two per
+  ward ride the polygons; the mayor rides a citywide block.
+  **THE REAL QUESTION WAS AGE.** The ward geometry was last edited **2018-01-24** — before the census
+  it balances on — while its own description claims it is "maintained to reflect the most current
+  adopted ward configuration". A description is a claim. Michigan's OWN 2026 precinct layer carries a
+  WARD column assigning the city's 59 precincts 20/20/19, and dissolved by it, it agrees with the
+  city's polygons on **99.575%** of 4,000 points: two independent publishers, one edited in 2018 and
+  one built for the 2026 cycle, drawing the same three lines. So 2018 means UNCHANGED, and that
+  agreement is a gate rather than a note. Balance is 3.60% worst on Census 2020.
+  **THE POPULATION IDENTITY IS NOT EXACT AND IS NOT CLAIMED TO BE** — unlike Detroit's, which sums to
+  its census count exactly. Twenty-one of 2,883 blocks fall on one side of the ward outline and the
+  other side of the Census place outline (+66 against 198,917): two digitisations of one municipal
+  edge. The builder bounds that rather than asserting zero, because pretending otherwise would have
+  been the more comfortable lie.
+  **SIX OF SEVEN SEATS SHIP, AND THE SEVENTH IS A STATED VACANCY.** The city publishes one Ward 1
+  commissioner where Wards 2 and 3 have two, so the roster carries `seats` and the card accounts
+  for the seventh — the Alexander machinery, used for the first time on a districted body. This
+  PR first said "no vacancy stated anywhere", **on a measurement of one page**. The city's own news
+  post of 2026-04-17 states the vacancy "was created following the resignation of former
+  Commissioner Drew Robbins", and a 2026-03-31 post names ten applicants advancing. ONE PAGE IS NOT
+  THE CITY — the same error that once called Detroit's open-data portal blocked. The card now names
+  the vacancy and its cause, and deliberately says nothing about how it was resolved, because no
+  city source found on 2026-09-05 does.
+  **THE CAUSE WAS A STRING LITERAL IN THE CARD AND IS NOW DATA, WHICH IS THE THIRD OF THIS PR'S OWN
+  CLAIMS TO BE WRONG.** That literal named Ward 1's predecessor on a row that fires for ANY ward the
+  city names short of its seats, so a later Ward 2 or 3 vacancy would have rendered his name on the
+  wrong card. The scraper now fetches and verifies the cause per ward from the city's own post, the
+  builder refuses a vacancy for a ward the city fully seats or one with no on-site source, and the
+  card renders the sentence — and a link to that post — from the roster, falling back to the
+  neutral "not listed there" wording for a short ward with no verified cause. Nothing in CI had ever
+  selected a point in either city, because the instance's anchor is in Lansing where `city-ward`
+  hides; the smoke test now carries eight checks that do, including a STUBBED roster that makes a
+  full ward short — the only scenario that catches the ward-agnostic shape, since under the broken
+  code every check against the live roster still passes.
+  A related trap avoided by construction: the departed
+  commissioner's own page still answers 200 and is still in the sitemap, so a scraper walking
+  sitemap entries would ship him as sitting. Each
+  member's own page gives ward, e-mail and direct phone. Three traps recorded: the e-mail domain is
+  `grcity.us` and NOT the website's, so a hostname-keyed scraper finds none; the listing's role
+  labels sit beside an anchor that is not their own (the Franklin grid trap, which put Ward 1 on a
+  Ward 3 member until the member pages contradicted it); and 616.456.3000 is on every page and is the
+  switchboard, detected as the number common to all rather than hardcoded.
+  **TWO MORE OF THIS PR'S OWN CLAIMS WERE WRONG AND ARE CORRECTED.** "The city publishes two ward
+  services" came from a search capped at the first 100 of the org's 681 — swept in full there are
+  EIGHT, of which three are byte-identical to what ships, one differs only at the perimeter and
+  three are single-ward layers agreeing with their own ward. No newer plan exists, so the currency
+  finding stands and only the count was wrong. And the shipped map disclaimer was an author-composed
+  paraphrase while the docstring called it verbatim; the card now quotes the city's Data Access and
+  Use Constraint Agreement in its own words, which is what the Des Moines precedent it cited
+  actually does.
+  **SIMPLIFICATION IS 50%, AND COPYING THE SIBLINGS' 20-25% WOULD HAVE BEEN WRONG**: mapshaper's
+  percentage is a share of the SOURCE vertex count, so on a three-feature layer 20% leaves too little
+  to describe the line and agreement falls to 98.95%, below the fleet's floor. The floor was never
+  the thing to move.
+  **AND A LATENT ENGINE BUG SURFACED**: `findPropCI` lowercases the property KEY and compares it
+  against the candidate as given, so candidates must be lowercase. `["Ward", "WARD"]` could never
+  match and rendered "Unknown ward" on a card whose feature plainly carried Ward; Detroit's
+  `["District", "district_number"]` had been working only through its second, already-lowercase
+  candidate. Both fixed, the contract recorded at the helper, and every call site in the file
+  audited.
+  **NEXT: no third Michigan city has been researched.** Lansing, Ann Arbor and Sterling Heights are
+  the obvious candidates by population; none has been checked for a published boundary.
 - **The 619 commissioners** — gap `mi-commissioner-roster`. The honest route is county-by-county
   against each board's own page, weekly and count-guarded; ten of the twelve counties sampled
   publish a readable one. Oakland answers only through its CMS origin and Ottawa sits behind a

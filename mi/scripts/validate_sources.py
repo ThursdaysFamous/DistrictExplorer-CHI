@@ -179,6 +179,46 @@ PROVENANCE = [
         ),
     },
     {
+        "layer": "city-ward",
+        "app_file": "mi-grand-rapids-wards.json",
+        "source_url": ("https://services2.arcgis.com/L81TiOwAPO1ZvU9b/arcgis/rest/"
+                       "services/CGR_Wards/FeatureServer/0"),
+        "note": (
+            "Grand Rapids's three City Commission wards, from the city's own ArcGIS org. "
+            "Pre-built by mi/scripts/build_mi_grand_rapids_wards.py. "
+            "WHAT THIS ROW WATCHES IS AGE, NOT A NAME COLLISION. The city's second ward "
+            "service (City_of_Grand_Rapids_Wards) is a DUPLICATE -- identical Shape__Area to "
+            "eight decimals -- and the build refuses if the two ever diverge. The live "
+            "question is currency: this layer's geometry was last edited 2018-01-24, before "
+            "the census it is checked against, while its item description claims it is "
+            "'maintained to reflect the most current adopted ward configuration'. The gate is "
+            "Michigan's own 2026 voting-precinct layer, which carries a WARD column and "
+            "assigns the city's 59 precincts 20/20/19; dissolved by it, it agrees with these "
+            "polygons on 99.575% of 4,000 points. If that agreement ever falls below 99%, or "
+            "the per-ward precinct counts move, the build refuses -- which is what a redraw "
+            "would look like, and is the only thing standing between this app and a "
+            "decade-old ward map."
+        ),
+    },
+    {
+        "layer": "city-ward",
+        "app_file": "mi-grand-rapids-council-members.json",
+        "source_url": "https://www.grandrapidsmi.gov/Government/City-Commission",
+        "note": (
+            "Grand Rapids's City Commission -- two commissioners per ward plus a mayor at "
+            "large, seven seats, of which the city publishes six. Built by "
+            "mi/scripts/mi_grand_rapids_council_scraper.py into "
+            "build_mi_grand_rapids_council.py, weekly. "
+            "UNLIKE DETROIT'S NEXT DOOR THIS SOURCE IS DIRECTLY READABLE: the city answers "
+            "200 and its robots.txt permits /government/, so there is no archive hop and a "
+            "refusal here should FAIL the run rather than fall back to an older copy. "
+            "The roster ships `seats` so the card states the unlisted seat; the builder "
+            "refuses below five named. Two traps: member e-mail is @grcity.us, NOT the "
+            "website's own domain, and 616.456.3000 appears on every member's page and is "
+            "the city switchboard, detected rather than hardcoded and hoisted to the body."
+        ),
+    },
+    {
         "layer": "county-commissioner",
         "app_file": "mi-commissioner-districts.json",
         "source_url": "https://gisagocss.state.mi.us/arcgis/rest/services/OpenData/boundaries/MapServer/10",
