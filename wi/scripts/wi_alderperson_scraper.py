@@ -65,8 +65,8 @@ THE FIRST SIX, each with its route and its measured trap:
                     seat e-mail (alddistN@waukesha-wi.gov — the seat's, so
                     contact survives turnover).
 
-THE ELEVEN OF 2026-09-05 — Stevens Point, Menomonie, Manitowoc, Sheboygan,
-Superior, Portage, Viroqua, Menasha, Howard, Tomah and Eau Claire — carry
+THE TWELVE OF 2026-09-05 — Stevens Point, Menomonie, Manitowoc, Sheboygan,
+Superior, Portage, Viroqua, Menasha, Howard, Tomah, Eau Claire and Appleton — carry
 their route and their traps on each scrape_* function below, under the sweep
 that found them. Three of those traps are worth naming here because they are
 the ones that ship a WRONG answer rather than none: Manitowoc's anchors carry
@@ -75,10 +75,14 @@ District 1 cell holds a staff member's mailto that is not the alderperson's;
 and Menasha and Portage both publish their members' HOME ADDRESSES, which
 never ship, for anybody, anywhere in this fleet.
 
-Appleton's roster page is verified readable and is deliberately NOT here:
-its geometry cannot ship (Outagamie submits all 50 of its wards uncoded and
-the city's own GIS publishes no aldermanic layer — both measured), so a
-roster would have no card to ride. The gap record carries the ready route.
+APPLETON WAS HELD OUT UNTIL 2026-09-05 for exactly one reason and it was the
+right one: its roster page has been readable since 2026-08-26 and its GEOMETRY
+could not be drawn, so there was no card for the names to ride. Outagamie
+County still files all 50 of its Appleton wards uncoded; what changed is that
+the CITY CLERK's own polling-locations page turned out to state the
+composition, and build_wi_aldermanic_districts.py now composes the fifteen
+districts from it under four independent witnesses. A roster and the boundary
+it rides ship together or not at all.
 """
 
 import html as H
@@ -201,6 +205,7 @@ HOWARD_INDEX = ("https://www.villageofhoward.com/208"
                 "/Village-President-Board-of-Trustees")
 TOMAH_INDEX = "https://www.tomahwi.gov/citycouncil"
 EAU_CLAIRE_INDEX = "https://www.eauclairewi.gov/310/City-Council"
+APPLETON_INDEX = "https://www.appletonwi.gov/government/common_council.php"
 
 ORDINALS = {"first": 1, "second": 2, "third": 3, "fourth": 4, "fifth": 5,
             "sixth": 6, "seventh": 7, "eighth": 8, "ninth": 9, "tenth": 10,
@@ -246,6 +251,7 @@ CITIES = {  # COUSUBFP -> (name, seats)
     "35950": ("Howard", 8),
     "80075": ("Tomah", 8),
     "22300": ("Eau Claire", 5),
+    "02375": ("Appleton", 15),
 }
 
 
@@ -1135,6 +1141,65 @@ def scrape_tomah():
 
 
 
+
+# ------------------------------------------------------------------ Appleton
+def scrape_appleton():
+    """The city's common-council page, one directory block per alderperson:
+    "<h2>NAME, District N</h2>", a "Read More" link to that district's own
+    city page, and a tel: link.
+
+    SHIPPED FROM 2026-09-05, when the geometry it rides finally could be drawn
+    — Outagamie County still files every Appleton ward uncoded, and the city
+    clerk's own polling-locations page supplies the composition instead
+    (build_wi_aldermanic_districts.py, LOCAL_COMPOSITION). This roster route
+    had been verified readable and recorded as WAITING for that geometry since
+    2026-08-26; a roster with no card to ride is not shipped.
+
+    TWO TRAPS. Five members link a personal blog, Wordpress site or Facebook
+    page from the same block; those are the member's own, not the city's, so
+    the url read here is the `rz-bus-readmore` anchor — the city's district
+    page — and its district number is cross-checked against the heading's.
+    AND THE PAGE CARRIES `<base href="https://www.appletonwi.gov/">`, so its
+    relative hrefs resolve against the SITE ROOT rather than against the page's
+    own directory: joining `government/district_1.php` to the page URL gives
+    /government/government/district_1.php, which answers 404 (measured). The
+    base is read from the page and its absence fails the city, because the day
+    it disappears is the day every link here would silently become a 404.
+    """
+    page = fetch(APPLETON_INDEX)
+    base = re.search(r'<base\b[^>]*href="([^"]+)"', page, re.I)
+    if not base:
+        raise SystemExit("appleton: the page no longer declares a <base href>, so its "
+                         "relative links cannot be resolved the way a browser does")
+    base_url = urllib.parse.urljoin(APPLETON_INDEX, base.group(1))
+    members = {}
+    for block in re.split(r"<h2>", page)[1:]:
+        h = re.match(r"\s*([^<,]+?)\s*,\s*District\s+(\d{1,2})\s*</h2>", block)
+        if not h:
+            continue
+        name, n = " ".join(H.unescape(h.group(1)).split()), int(h.group(2))
+        entry = {"name": name}
+        u = re.search(r'href="(government/district_(\d{1,2})\.php)"[^>]*'
+                      r'class="rz-bus-readmore"', block)
+        if u:
+            if int(u.group(2)) != n:
+                raise SystemExit("appleton: %s is headed District %d and its Read More "
+                                 "goes to district_%s.php" % (name, n, u.group(2)))
+            entry["url"] = urllib.parse.urljoin(base_url, u.group(1))
+        ph = re.search(r'href="tel:([^"]+)"', block)
+        if ph:
+            digits = re.sub(r"\D", "", ph.group(1))
+            if len(digits) == 10:
+                entry["phone"] = "(%s) %s-%s" % (digits[:3], digits[3:6], digits[6:])
+        key = "%02d" % n
+        if key in members and members[key]["name"] != name:
+            raise SystemExit("appleton lists two names for district %d" % n)
+        members[key] = entry
+    if len(members) != 15:
+        raise SystemExit("appleton names %d of 15 districts" % len(members))
+    return members, APPLETON_INDEX
+
+
 # ONE CITY NEVER TAKES THE OTHER FIVE DOWN. Until 2026-09-03 the six scrapes
 # ran unguarded and any raise ended the run, so greenbaywi.gov timing out after
 # three 60-second tries cost Milwaukee, Madison, Kenosha, Racine and Waukesha
@@ -1180,7 +1245,8 @@ def main():
             ("50825", "Menasha", 8, scrape_menasha),
             ("35950", "Howard", 8, scrape_howard),
             ("80075", "Tomah", 8, scrape_tomah),
-            ("22300", "Eau Claire", 5, scrape_eau_claire)):
+            ("22300", "Eau Claire", 5, scrape_eau_claire),
+            ("02375", "Appleton", 15, scrape_appleton)):
         result, reason = attempt(name, fn)
         if result is None:
             failures[code] = {"municipality": name, "reason": reason}

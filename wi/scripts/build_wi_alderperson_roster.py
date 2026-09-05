@@ -3,9 +3,10 @@
 Build data/app/wi-alderpersons.json from wi_alderperson_scraper.py's
 intermediate — the aldermanic-district card's roster for the 17 municipalities
 whose routes are verified (the six of 2026-08-26: Milwaukee, Madison, Green
-Bay, Kenosha, Racine, Waukesha; and the eleven of 2026-09-05: Stevens Point,
+Bay, Kenosha, Racine, Waukesha; and the twelve of 2026-09-05: Stevens Point,
 Menomonie, Manitowoc, Sheboygan, Superior, Portage, Viroqua, Menasha, Howard,
-Tomah, Eau Claire — 193 seats, 192 filled + Madison's vacant District 1).
+Tomah, Eau Claire, Appleton — 208 seats, 207 filled + Madison's vacant
+District 1).
 Keyed by COUSUBFP + zero-padded district id, the exact key pair the
 dissolved geometry carries, and CROSS-GATED against the shipped geometry
 file: a roster row naming a district the map does not draw fails the build,
@@ -34,7 +35,7 @@ FLOORS = {
     "39225": ("Kenosha", 17, 17, 0, 0, 0),
     "66000": ("Racine", 15, 15, 0, 0, 13),
     "84250": ("Waukesha", 15, 15, 14, 14, 0),
-    # The eleven added 2026-09-05. Each field floor is the FIRST RUN'S measured
+    # The twelve added 2026-09-05. Each field floor is the FIRST RUN'S measured
     # count less one, so a single member's blank cell is tolerated and a column
     # emptying is not; a zero is a field the source genuinely does not publish,
     # written down rather than left to look like an omission:
@@ -59,6 +60,11 @@ FLOORS = {
     "35950": ("Howard", 8, 8, 0, 0, 7),
     "80075": ("Tomah", 8, 8, 0, 0, 7),
     "22300": ("Eau Claire", 5, 5, 0, 0, 4),
+    # Appleton joins 2026-09-05, the day its geometry could first be drawn
+    # (build_wi_aldermanic_districts.py, LOCAL_COMPOSITION). Its council page
+    # carries a phone and the city's own per-district page for every seat and
+    # no e-mail for any.
+    "02375": ("Appleton", 15, 15, 0, 14, 14),
 }
 
 

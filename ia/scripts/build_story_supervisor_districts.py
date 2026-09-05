@@ -31,9 +31,10 @@ filled paths" are different claims, and only the second one licenses the
 Jackson method.
 
 What draws Story's districts is STROKES — nine curves at linewidth 12, the
-only curves on the page at that weight out of 10,235. The reading rule
-survives intact, because the rule was never "look for fills": it is READ THE
-PATH OBJECTS, NEVER THE PIXELS. These are path objects.
+only curves on the page at that weight out of 10,761 (pdfplumber 0.11.10;
+an earlier pass published 10,235 and that figure was wrong). The reading
+rule survives intact, because the rule was never "look for fills": it is
+READ THE PATH OBJECTS, NEVER THE PIXELS. These are path objects.
 
 WHAT THE PAGE ACTUALLY CONTAINS (measured 2026-09-05)
 -------------------------------------------------------
@@ -70,23 +71,49 @@ Story has held no election on these lines, so the map is the only source for
 the composition, which makes the independent check below load-bearing rather
 than reassuring.
 
-THE CHECK IS A DIFFERENT COUNTY PRODUCT, AND IT IS EXACT
------------------------------------------------------------
-The Legislative Services Agency publishes the adopted plan's district
-populations: 32,783 / 32,894 / 32,860. Those are not used anywhere in the
-derivation. Sorting all 2,797 blocks by the fitted rings and summing POP100
-reproduces all three EXACTLY, district by district IN ORDER — which confirms
-the numeral-to-ring labelling as well as the lines, because the three values
-are distinct and a swap would show. A single misplaced populated block would
+TWO CHECKS, NEITHER OF WHICH IS THE MAP CHECKING ITSELF
+----------------------------------------------------------
+THE POPULATIONS, AND THERE ARE TWO CANDIDATE PLANS. The Legislative Services
+Agency published a First Plan (2025-12-04) at 32,783 / 32,894 / 32,860 and,
+after the Board rejected it on 2026-01-06 "based on compactness of districts",
+a Second Plan (2026-01-14) at 32,940 / 32,793 / 32,804. Iowa Code
+331.210A(2)(d) then lets the Board approve either one or an amendment, and the
+Board's 2026-01-27 approval does not say which. Sorting all 2,797 blocks by
+the fitted rings and summing POP100 reproduces the FIRST plan's three numbers
+EXACTLY, district by district IN ORDER, and matches none of the second's — so
+the county adopted the first plan, and this build says so because it measured
+it. That also confirms the numeral-to-ring labelling, since the three values
+are distinct and a swap would show; a single misplaced populated block would
 break it.
 
-Two further measurements are recorded rather than gated as separate claims:
-16 of the 19 blocks the fitted line does not cleanly nest hold ZERO people,
-and the three that hold people nest at 88%, 99% and 99%. And Story's
-districts SPLIT A PRECINCT — Roland/Howard Twp is 110 blocks (1,837 people)
-in District 2 and 3 blocks (32 people) in District 1, each nesting at 99.8%
-— so precincts could not have been the resolution unit even if blocks had
-been optional.
+THE PRECINCT LISTS. The First Plan also names the precincts in each district,
+and this app already ships Iowa's precinct fabric, so those lists can be
+dissolved and compared to the districts the map produced — a different
+document and a different geometry reaching the same answer, at worst IoU
+0.99127. See check_against_lsa_precincts() for why it is an overlap test
+rather than an equality.
+
+CORRECTED 2026-09-05 — STORY'S DISTRICTS DO NOT SPLIT A PRECINCT, AND THIS
+FILE SAID THEY DID. Iowa Code 49.3(2)(1) requires that "all boundaries shall
+follow precinct boundaries", and LSA's First Plan lists Roland/Howard Twp
+whole in District 2, so a split was never possible. What the block sort split
+is the SHIPPED PRECINCT POLYGON: `ia-precincts.json` carries a 2024 vintage in
+which that precinct still holds its 2020 census voting-district geometry —
+measured against TIGERweb's own `HOWARD TWP W/O STORY CITY` at IoU 0.999573,
+whose POP100 of 1,869 is exactly the 1,837 + 32 the sort divided. The county
+re-precincted (43 census voting districts against 45 current precincts), and
+only 6 of the 45 shipped Story precincts still match a voting district to
+within IoU 0.999, so the stale ones are the rural remainder rather than the
+fabric as a whole.
+
+The conclusion that stood on that claim is unchanged and now rests on
+something firmer: BLOCKS WERE STILL THE NECESSARY UNIT, because the precinct
+layer this app ships cannot be trusted to draw the current lines — which is
+what the precinct gate below measures rather than assumes.
+
+One further measurement is recorded rather than gated: 16 of the 19 blocks the
+fitted line does not cleanly nest hold ZERO people, and the three that hold
+people nest at 88%, 99% and 99%.
 
 Occasional OPERATOR step, not CI: these lines move when the county redraws
 them, which SF 75 has just done and which will not happen again for years.
@@ -103,6 +130,7 @@ import hashlib
 import json
 import math
 import os
+import re
 import subprocess
 import sys
 import urllib.parse
@@ -145,12 +173,52 @@ MIN_BLOCK_SHARE = 0.50       # measured worst 0.6259
 RING_OVERLAP_CEILING_M2 = 1.0
 UNCOVERED_CEILING_PCT = 0.05  # of county area; measured 0.0057
 
-# --- the independent witness ------------------------------------------------
-# Iowa Legislative Services Agency's published populations for the adopted
-# plan. NOT an input to the derivation — the gate.
-LSA_POPULATIONS = {"1": 32783, "2": 32894, "3": 32860}
-LSA_CITE = ("Iowa Legislative Services Agency, county redistricting ledger — "
-            "adopted plan populations 32,783 / 32,894 / 32,860")
+# --- the independent witness, and there are TWO candidates ------------------
+# The Legislative Services Agency published two plans for Story, and naming
+# only one of them understated this gate. The Board REJECTED the first plan on
+# 2026-01-06 "based on compactness of districts"; LSA published a second on
+# 2026-01-14; and Iowa Code 331.210A(2)(d), quoted in that second report, lets
+# the board then "approve the second plan, THE FIRST PLAN, or an amended plan".
+# The board approved on 2026-01-27 without the record saying which.
+#
+# The geometry says which. The two plans reshuffle the county completely — the
+# first puts Story City in District 1 and Ames 2 in District 2, the second puts
+# both in District 1 — and their population triples are disjoint. The map's
+# blocks reproduce the FIRST plan's three numbers exactly and match none of the
+# second's, so the county adopted the first plan. Gating on the match alone
+# would leave that inference invisible; gating on the MISMATCH too makes it a
+# measurement.
+LSA_FIRST_PLAN_DOC = "https://www.legis.iowa.gov/docs/publications/CSR/1545311.pdf"
+LSA_SECOND_PLAN_DOC = "https://www.legis.iowa.gov/docs/publications/CSR/1595873.pdf"
+LSA_POPULATIONS = {"1": 32783, "2": 32894, "3": 32860}    # First Plan, 2025-12-04
+LSA_SECOND_POPULATIONS = {"1": 32940, "2": 32793, "3": 32804}   # rejected shape
+LSA_CITE = ("Iowa Legislative Services Agency, Story County Supervisor "
+            "Redistricting Report - First Plan (2025-12-04), Attachment 3: "
+            "32,783 / 32,894 / 32,860")
+
+# --- the second gate: LSA's own precinct lists ------------------------------
+# The First Plan names the precincts in each district (Iowa Code 49.3(2)(1):
+# "All boundaries shall follow precinct boundaries"), and this app already
+# ships Iowa's precinct fabric. Dissolving those lists is therefore a check on
+# the map that uses no part of the map — different document, different
+# geometry, same answer.
+LSA_FIRST_PLAN_PRECINCTS = {
+    "1": ["Ames 10", "Ames 11", "Ames 12", "Ames 21", "Ames 22", "Ames 24",
+          "Ames 7/Franklin Twp 2", "Ames 8", "Ames 9", "Franklin Twp", "Gilbert",
+          "Story City 1", "Story City 2/Lafayette Twp/Howard Twp 2"],
+    "2": ["Ames 2", "Ames 3/Grant Twp", "Ames 6", "Cambridge/Union Twp",
+          "Collins/Collins Twp", "Colo/New Albany Twp", "Huxley 1",
+          "Huxley 2/Palestine Twp", "Kelley", "Maxwell/Indian Creek Twp",
+          "McCallsburg/Warren Twp", "Milford Twp", "Nevada 1/Richland Twp",
+          "Nevada 2/Grant Twp 2", "Nevada 3", "Nevada 4/Nevada Twp",
+          "Roland/Howard Twp", "Slater/Sheldahl", "Washington Twp",
+          "Zearing/Lincoln Twp/Sherman Twp"],
+    "3": ["Ames 1", "Ames 13", "Ames 14", "Ames 15", "Ames 16/Washington Twp 3",
+          "Ames 17", "Ames 18", "Ames 19", "Ames 20", "Ames 23", "Ames 4",
+          "Ames 5/Washington Twp 2"],
+}
+PRECINCTS_PATH = os.path.join(REPO_ROOT, "data", "app", "ia-precincts.json")
+MIN_PRECINCT_IOU = 0.98      # measured 0.99127 / 0.99854 / 0.99646
 
 
 def fail(msg):
@@ -283,6 +351,79 @@ def fetch_blocks(shape_fn):
     return out
 
 
+def lsa_precinct_name(name):
+    """LSA's precinct spelling -> the spelling ia-precincts.json ships.
+
+    Two differences, both mechanical. LSA writes Ames precincts unpadded and
+    sometimes with the township share appended ("Ames 7/Franklin Twp 2"), where
+    the shipped fabric writes "Ames 07"; and LSA writes plain "Huxley 1" where
+    the shipped name carries the township ("Huxley 1/Union Twp 2"). Everything
+    else matches character for character.
+    """
+    name = re.sub(r"\s+", " ", name).strip()
+    m = re.match(r"^Ames (\d+)", name)
+    if m:
+        return "Ames %02d" % int(m.group(1))
+    if name == "Huxley 1":
+        return "Huxley 1/Union Twp 2"
+    return name
+
+
+def check_against_lsa_precincts(shipped, shape_fn, union_fn, transform_fn, fwd):
+    """Rebuild the districts from LSA's precinct lists and compare.
+
+    This is the second witness, and it shares nothing with the first: the map
+    supplies no part of it and the population figures supply no part of it. If
+    the map were misread or misgeoreferenced, the dissolve would not land on it.
+
+    It is an IoU rather than an equality because the two are not the same
+    fabric: the districts here are unions of census BLOCKS, and Iowa's shipped
+    precinct layer carries a 2024 vintage in which several rural Story
+    precincts still hold their 2020 census voting-district geometry. Those
+    disagree with the current lines by slivers, not by territory.
+    """
+    try:
+        with open(PRECINCTS_PATH) as f:
+            pf = json.load(f)
+    except OSError as e:
+        fail("%s is missing (%s); the precinct gate needs it"
+             % (os.path.relpath(PRECINCTS_PATH, REPO_ROOT), e))
+    by_name = {f["properties"]["name"]: shape_fn(f["geometry"]).buffer(0)
+               for f in pf.get("features", [])
+               if f["properties"].get("county") == "Story"}
+
+    listed = [lsa_precinct_name(n)
+              for v in LSA_FIRST_PLAN_PRECINCTS.values() for n in v]
+    if len(listed) != len(set(listed)):
+        fail("LSA's first plan lists a precinct in more than one district")
+    missing = sorted(set(listed) - set(by_name))
+    unlisted = sorted(set(by_name) - set(listed))
+    if missing or unlisted:
+        fail("LSA's first plan and the shipped precinct fabric do not describe "
+             "the same %d precincts — listed but not shipped: %s; shipped but "
+             "not listed: %s. A renamed or re-drawn precinct invalidates this "
+             "gate rather than merely failing it."
+             % (len(by_name), missing, unlisted))
+
+    worst = 1.0
+    for k in sorted(shipped):
+        dissolved = union_fn([by_name[lsa_precinct_name(n)]
+                              for n in LSA_FIRST_PLAN_PRECINCTS[k]]).buffer(0)
+        inter = transform_fn(fwd, dissolved.intersection(shipped[k])).area
+        union = transform_fn(fwd, dissolved.union(shipped[k])).area
+        iou = inter / union if union else 0.0
+        worst = min(worst, iou)
+        if iou < MIN_PRECINCT_IOU:
+            fail("district %s dissolved from LSA's own precinct list overlaps "
+                 "the map-derived district at only IoU %.5f (floor %.2f) — two "
+                 "independent descriptions of the same district disagree"
+                 % (k, iou, MIN_PRECINCT_IOU))
+    print("PRECINCT GATE: LSA's first-plan precinct lists (%d precincts, %d/%d "
+          "matching the shipped fabric) dissolve onto the map-derived districts "
+          "at worst IoU %.5f" % (len(listed), len(listed), len(by_name), worst),
+          file=sys.stderr)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--check", action="store_true",
@@ -400,14 +541,23 @@ def main():
         shipped[k] = u
     if pops != LSA_POPULATIONS:
         fail("the derived district populations are %s and the Legislative "
-             "Services Agency publishes %s for the adopted plan. Those numbers "
-             "are not an input to this derivation, so a disagreement means the "
-             "lines, the labels or the fit are wrong — not that the check is."
-             % (pops, LSA_POPULATIONS))
-    print("POPULATION GATE: %s — matches LSA's published %s exactly, district "
-          "by district in order" % (dict(sorted(pops.items())),
-                                    dict(sorted(LSA_POPULATIONS.items()))),
-          file=sys.stderr)
+             "Services Agency's FIRST plan publishes %s. Those numbers are not "
+             "an input to this derivation, so a disagreement means the lines, "
+             "the labels or the fit are wrong — not that the check is. (Its "
+             "SECOND plan is %s; if the derivation matches THAT, the county "
+             "adopted the other plan and this whole build needs redoing "
+             "against it, not adjusting.)"
+             % (pops, LSA_POPULATIONS, LSA_SECOND_POPULATIONS))
+    if pops == LSA_SECOND_POPULATIONS:
+        fail("the derived populations match LSA's SECOND plan, which the map "
+             "is not supposed to draw")
+    print("POPULATION GATE: %s — matches LSA's FIRST plan exactly, district by "
+          "district in order, and matches none of the second plan's %s"
+          % (dict(sorted(pops.items())),
+             dict(sorted(LSA_SECOND_POPULATIONS.items()))), file=sys.stderr)
+
+    # --- SECOND GATE: LSA's own precinct lists, dissolved -------------------
+    check_against_lsa_precincts(shipped, shape, unary_union, transform, fwd)
 
     # shipped[] is lon/lat, because that is what the app reads; `county` is in
     # the plan CRS, because a tolerance in square degrees means nothing. Project
@@ -422,9 +572,19 @@ def main():
           "%.3f m2" % slack, file=sys.stderr)
 
     def rnd(o, p=6):
+        """Round every coordinate to p decimals.
+
+        THE TUPLE BRANCH IS THE WHOLE POINT. shapely's mapping() returns
+        coordinates as nested TUPLES, not lists; a version of this that handled
+        only list and dict fell through to `return o` on every coordinate pair
+        and rounded nothing, shipping 15-decimal floats in a file whose whole
+        precision budget is 6. It looked like it worked because the output was
+        valid GeoJSON of the right shape -- 31% larger, and nothing measured
+        the size.
+        """
         if isinstance(o, float):
             return round(o, p)
-        if isinstance(o, list):
+        if isinstance(o, (list, tuple)):
             return [rnd(x, p) for x in o]
         if isinstance(o, dict):
             return {k: rnd(v, p) for k, v in o.items()}

@@ -12104,6 +12104,45 @@ function initChiExplorer() {
         }) };
       });
   });
+  /* ELMWOOD'S THREE WARDS — the only one of the six cities in
+   * `pass9-ward-seats-without-maps` that ships, and the measurement is why.
+   * Peoria County's own server publishes a Wards layer covering Chillicothe,
+   * Elmwood and West Peoria, and Henry County's archive covers Galva, Colona
+   * and Geneseo; all six are 2006-2015 county-held linework and NONE of the
+   * cities says whether it redrew after 2020. Measured against each city's own
+   * Census place polygon on 2026-09-05, the share of the CITY that no ward
+   * covers runs West Peoria 8.0%, Colona 3.9%, Chillicothe 3.3%, Galva 2.9%,
+   * Geneseo 1.7% — and ELMWOOD 0.4%, four acres.
+   *
+   * THE COMPARISON THAT DECIDES IT is what this layer already ships: measured
+   * the same way, Rockford leaves 0.5% of itself uncovered, Evanston 0.1%,
+   * Aurora 0.1%. Elmwood is in that company; the other five are an order of
+   * magnitude worse, and their uncovered ground is almost certainly annexation
+   * the ward map never grew to cover — so a card there would tell a resident
+   * who HAS a ward that they have none, which is a wrong answer rather than a
+   * missing one. The five are held pending their clerks (asks drafted, unsent)
+   * and `pass9-ward-seats-without-maps` carries the measurement.
+   *
+   * Filtered to ELMWOOD in the QUERY rather than after the fetch, so the two
+   * cities this entry does not serve are never downloaded and can never be
+   * drawn by a later edit that forgets to filter. Note /arcgis/rest/, not
+   * /server/rest/ — the opposite of Knox's host, which is why a host ladder
+   * has to try both. The county's six aldermen (two per ward) join from
+   * municipal-officials.json like every other suburban entry. */
+  var ELMWOOD_WARDS = "https://gis.peoriacounty.gov/arcgis/rest/services/DP/Elections/" +
+    "MapServer/13/query?where=CORP_NAME%3D%27ELMWOOD%27&outFields=Ward&outSR=4326" +
+    "&f=geojson&geometryPrecision=5";
+  var loadElmwoodWards = makeCached(function () {
+    return fetchJSONWithRetry(ELMWOOD_WARDS, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+      .then(function (geojson) {
+        if (!hasUsableGeometry(geojson)) {
+          throw new Error("Elmwood ward layer returned no usable geometry");
+        }
+        return { type: "FeatureCollection", features: (geojson.features || []).map(function (f) {
+          return wardFeature(f, "Elmwood", "Ward", findPropCI(f.properties || {}, ["ward"]));
+        }) };
+      });
+  });
   var loadPeoriaBoardMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/peoria-county-board-members.json", {}, 2);
   });
@@ -16782,7 +16821,12 @@ function initChiExplorer() {
       municipalWardEntry("freeport", loadFreeportWards),
       municipalWardEntry("st-clair-cities", loadStClairCityWards),
       municipalWardEntry("whiteside-cities", loadWhitesideWards),
-      municipalWardEntry("peoria-city", loadPeoriaCityDistricts)
+      municipalWardEntry("peoria-city", loadPeoriaCityDistricts),
+      // Elmwood (Peoria, 2026-09-05) — three wards, six aldermen. The one city
+      // of the pass-9 six whose ward map covers its own limits to the standard
+      // the shipped layers set; see loadElmwoodWards for the measurement and
+      // for why the other five are held.
+      municipalWardEntry("elmwood", loadElmwoodWards)
     ]
   });
   declareDataSource("ward", {
@@ -27162,7 +27206,7 @@ function initChiExplorer() {
         primaryLink: function () {
           return {
             label: "Jo Daviess County Clerk — election results",
-            url: "https://jodaviesscountyil.gov/1380/Election-Results"
+            url: "https://www.jodaviesscountyil.gov/1380/Election-Results"
           };
         }
       },

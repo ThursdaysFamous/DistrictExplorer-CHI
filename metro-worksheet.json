@@ -28,84 +28,18 @@
   "repo_issues": "https://github.com/ThursdaysFamous/districtry/issues/new",
   "feedback_subject": "districtry Illinois feedback",
   "metro_explorers": [
-    {
-      "id": "chicago",
-      "label": "Illinois",
-      "url": "https://districtry.com/il/",
-      "emoji": "🌭",
-      "explorer_name": "districtry Illinois",
-      "bbox": {
-        "minLng": -91.52,
-        "minLat": 36.96,
-        "maxLng": -87.01,
-        "maxLat": 42.51
-      }
-    },
-    {
-      "id": "nyc",
-      "label": "New York City",
-      "url": "https://districtry.com/ny/",
-      "emoji": "🗽",
-      "explorer_name": "districtry New York City",
-      "bbox": {
-        "minLng": -74.3,
-        "minLat": 40.45,
-        "maxLng": -73.6,
-        "maxLat": 41.0
-      }
-    },
-    {
-      "id": "sf",
-      "label": "San Francisco",
-      "url": "https://districtry.com/ca/",
-      "emoji": "🌉",
-      "explorer_name": "districtry San Francisco",
-      "bbox": {
-        "minLng": -122.6,
-        "minLat": 37.6,
-        "maxLng": -122.3,
-        "maxLat": 37.95
-      }
-    },
-    {
-      "id": "wisconsin",
-      "label": "Wisconsin",
-      "url": "https://districtry.com/wi/",
-      "emoji": "🧀",
-      "explorer_name": "districtry Wisconsin",
-      "bbox": {
-        "minLng": -92.89,
-        "minLat": 42.49,
-        "maxLng": -86.25,
-        "maxLat": 47.31
-      }
-    },
-    {
-      "id": "iowa",
-      "label": "Iowa",
-      "url": "https://districtry.com/ia/",
-      "emoji": "🌽",
-      "explorer_name": "districtry Iowa",
-      "bbox": {
-        "minLng": -96.64,
-        "minLat": 40.37,
-        "maxLng": -90.14,
-        "maxLat": 43.5
-      }
-    },
-    {
-      "id": "michigan",
-      "label": "Michigan",
-      "url": "https://districtry.com/mi/",
-      "emoji": "🚗",
-      "explorer_name": "districtry Michigan",
-      "bbox": {
-        "minLng": -87.6,
-        "minLat": 41.7,
-        "maxLng": -82.11,
-        "maxLat": 48.01
-      }
-    }
+    { "id": "chicago", "label": "Illinois", "url": "https://districtry.com/il/", "emoji": "🌭", "explorer_name": "districtry Illinois",
+      "bbox": { "minLng": -91.52, "minLat": 36.96, "maxLng": -87.01, "maxLat": 42.51 } },
+    { "id": "nyc", "label": "New York City", "url": "https://districtry.com/ny/", "emoji": "🗽", "explorer_name": "districtry New York City",
+      "bbox": { "minLng": -74.3, "minLat": 40.45, "maxLng": -73.6, "maxLat": 41.0 } },
+    { "id": "sf", "label": "San Francisco", "url": "https://districtry.com/ca/", "emoji": "🌉", "explorer_name": "districtry San Francisco",
+      "bbox": { "minLng": -122.6, "minLat": 37.6, "maxLng": -122.3, "maxLat": 37.95 } },
+    { "id": "wisconsin", "label": "Wisconsin", "url": "https://districtry.com/wi/", "emoji": "🧀", "explorer_name": "districtry Wisconsin",
+      "bbox": { "minLng": -92.89, "minLat": 42.49, "maxLng": -86.25, "maxLat": 47.31 } },
+    { "id": "iowa", "label": "Iowa", "url": "https://districtry.com/ia/", "emoji": "🌽", "explorer_name": "districtry Iowa",
+      "bbox": { "minLng": -96.64, "minLat": 40.37, "maxLng": -90.14, "maxLat": 43.5 } },
+    { "id": "michigan", "label": "Michigan", "url": "https://districtry.com/mi/", "emoji": "🚗", "explorer_name": "districtry Michigan",
+      "bbox": { "minLng": -87.6, "minLat": 41.7, "maxLng": -82.11, "maxLat": 48.01 } }
   ],
   "hover_number_keys": [
     [
@@ -527,7 +461,7 @@
             "label": "Pre-built from the county's published district map, for the counties that publish no vector data"
           },
           {
-            "label": "Illinois Broadband Office / Connected Nation, IL_Boundary_Layers layer 11 — Carroll, Lee, Randolph, Sangamon, St. Clair and Stephenson ONLY. Not a county or library publication: every attribute besides the library name and type is a broadband service metric. Its licence (AGOL item 675906ae06b5460296154760b7fb1367) permits public use, disclaims warranty, says the data is NOT for legal boundary determinations, and requires both attribution and disclosure of any changes — so each of those cards names this publisher AND states that the boundary shown was clipped to the county and simplified to 5 m.",
+            "label": "Illinois Broadband Office / Connected Nation, IL_Boundary_Layers layer 11 \u2014 Carroll, Lee, Randolph, Sangamon, St. Clair and Stephenson ONLY. Not a county or library publication: every attribute besides the library name and type is a broadband service metric. Its licence (AGOL item 675906ae06b5460296154760b7fb1367) permits public use, disclaims warranty, says the data is NOT for legal boundary determinations, and requires both attribution and disclosure of any changes \u2014 so each of those cards names this publisher AND states that the boundary shown was clipped to the county and simplified to 5 m.",
             "url": "https://services.arcgis.com/R0IGaIgf2sox9aCY/arcgis/rest/services/IL_Boundary_Layers/FeatureServer/11"
           },
           {
@@ -611,7 +545,11 @@
             "url": "https://gis.cookcountyil.gov/traditional/rest/services/politicalBoundary/MapServer/22"
           },
           {
-            "label": "Each ward-electing suburb's own GIS service, municipality by municipality"
+            "label": "Peoria County GIS \u2014 DP/Elections, layer 13 (Elmwood's wards; the COUNTY publishes them, not the city)",
+            "url": "https://gis.peoriacounty.gov/arcgis/rest/services/DP/Elections/MapServer/13"
+          },
+          {
+            "label": "Each other ward-electing suburb's own GIS service, municipality by municipality"
           }
         ],
         "people": "Chicago's alderpersons come from a live join against the city's own roster dataset (htai-wnw4); each suburban ward's holder comes from municipal-officials.json.",
@@ -1005,7 +943,7 @@
         "file": "belvidere-city-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "City of Belvidere corporate limits (scripts/build_place_outline.py) — the ONLY municipal outline this instance ships, and it exists to carve one hole in a county source rather than to draw a city. Boone's Fire_Districts layer tiles every acre of the county, so a Belvidere address returned Fire District 2 while the Clerk's own district-rates report gives 18 of 55 tax codes no fire line at all — those 18 being the city's, which runs a MUNICIPAL fire department. TWENTY-TWO of its twenty-four rings are HOLES, unincorporated pockets the city annexed around, and they are load-bearing: a resident of one is not in the city, so they ARE in the fire district and keep their card. The even-odd test both the builder and pointInGeometry use gets that right, and the builder gates its own area against the Census's published AREALAND so a hole counted as solid (43.05 km² against a real 35.19) fails the build."
+        "note": "City of Belvidere corporate limits (scripts/build_place_outline.py) \u2014 the ONLY municipal outline this instance ships, and it exists to carve one hole in a county source rather than to draw a city. Boone's Fire_Districts layer tiles every acre of the county, so a Belvidere address returned Fire District 2 while the Clerk's own district-rates report gives 18 of 55 tax codes no fire line at all \u2014 those 18 being the city's, which runs a MUNICIPAL fire department. TWENTY-TWO of its twenty-four rings are HOLES, unincorporated pockets the city annexed around, and they are load-bearing: a resident of one is not in the city, so they ARE in the fire district and keep their card. The even-odd test both the builder and pointInGeometry use gets that right, and the builder gates its own area against the Census's published AREALAND so a hole counted as solid (43.05 km\u00b2 against a real 35.19) fails the build."
       },
       {
         "file": "bond-county-outline.json",
@@ -1807,7 +1745,7 @@
         "file": "municipal-ward-coverage.json",
         "min_features": 50,
         "max_features": 76,
-        "note": "Ward-electing municipalities' outlines, tagged by dispatch entry — the cheap same-origin coverage test for every non-Chicago entry of the ward layer, metro or not (build_municipal_ward_coverage.py; Rockford is the first outside the metro, Moline and Silvis the first on the Mississippi, Mendota the first whose seats were already in the roster before its geometry was). 71 municipalities across twenty-five entries as of 2026-09-04, when Madison's six ward cities joined on one county layer; the pass-6 ward tranche (2026-08-02) had taken it to 56 across twenty-one. THE COUNT MOVES WITHOUT A SOURCE BEING ADDED: build_municipal_ward_coverage.py queries TIGERweb's place service UNPINNED, so any rebuild adopts that day's vintage for every municipality already here — Madison's six re-drew 22 unrelated outlines — which is why the builder now names what it redrew and why this bound has room above the current count."
+        "note": "Ward-electing municipalities' outlines, tagged by dispatch entry — the cheap same-origin coverage test for every non-Chicago entry of the ward layer, metro or not (build_municipal_ward_coverage.py; Rockford is the first outside the metro, Moline and Silvis the first on the Mississippi, Mendota the first whose seats were already in the roster before its geometry was). 72 municipalities across twenty-six entries as of 2026-09-05, when Madison's six ward cities joined on one county layer; the pass-6 ward tranche (2026-08-02) had taken it to 56 across twenty-one. THE COUNT MOVES WITHOUT A SOURCE BEING ADDED: build_municipal_ward_coverage.py queries TIGERweb's place service UNPINNED, so any rebuild adopts that day's vintage for every municipality already here \u2014 Madison's six re-drew 22 unrelated outlines — which is why the builder now names what it redrew and why this bound has room above the current count."
       },
       {
         "file": "ogle-county-board-districts.json",
@@ -2664,7 +2602,7 @@
     ]
   },
   "sw": {
-    "cache_name": "districtry-il-shell-v12",
+    "cache_name": "districtry-il-shell-v13",
     "shell_urls": [
       "./",
       "./sources.html",
