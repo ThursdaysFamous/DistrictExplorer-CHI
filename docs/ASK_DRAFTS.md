@@ -1126,10 +1126,10 @@ directory**: its employees, Executive Director through Government Affairs Direct
 answers 200 to an ordinary browser and gates nothing. (**A first version of this note said
 *six employees*. That was a filter artefact** — it came from grepping the page for lines
 matching `director|member|official`, which surfaces only the titles containing the word
-*Director* — and an unfiltered read gives eighteen. The six is retracted; the eighteen is
-not restated as a measurement of my own, because the page could not be re-read on
-2026-09-05, `/directory.aspx` now redirecting to `/m/directory`, which timed out on every
-attempt. **The finding does not rest on the count either way**: what matters is that this
+*Director* — and an unfiltered read gives eighteen, sixteen League staff plus two League
+Insurance. The six is retracted; the eighteen is not restated as a measurement of my own,
+because the page could not be re-read on 2026-09-05, `/directory.aspx` now redirecting to
+`/m/directory`, which timed out on every attempt. **The finding does not rest on the count either way**: what matters is that this
 is the League's staff, not Wisconsin's municipal officials, and that nothing on it is
 gated.) The "Sign In" seen there is the
 site-wide CivicPlus header control that appears on every page of the site, including the
