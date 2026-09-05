@@ -1014,8 +1014,9 @@ PROVENANCE = [
         "source_url": "https://services3.arcgis.com/GoOAGCoqFEhZEh7f/arcgis/rest/services/WI_NG911_GIS_Service_Polygons_and_Road_Centerline_Data_v2/FeatureServer/2",
         "note": (
             "The same service's EmergencyMedicalServicesBoundary layer, same "
-            "builder and gates — 2,444 effective polygons to 580 services at "
-            "first build. Regional ambulance providers re-prove the "
+            "builder and gates — 2,443 effective polygons to 579 services at "
+            "first build (2026-08-26), 2,444 to 580 after the 2026-09-05 "
+            "rebuild. Regional ambulance providers re-prove the "
             "DsplayName+Agency_ID pair key (some EMS Agency_IDs are not "
             "county domains); absences are gap ng911-ems-filings."
         ),
