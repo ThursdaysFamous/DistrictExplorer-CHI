@@ -1,0 +1,85 @@
+name: Update Grand Rapids council roster
+
+# Weekly refresh of Grand Rapids's City Commission
+# (mi/data/app/mi-grand-rapids-council-members.json, read by the Grand Rapids
+# entry of mi/index.html's `city-ward` card).
+#
+# The city elects two commissioners from each of three wards plus a mayor at
+# large — seven seats — and currently publishes six of them. The builder ships
+# `seats` beside the members so the card states the shortfall rather than
+# concealing it, and REFUSES to write below five named, so a page rebuild that
+# empties the roster fails loudly instead of shipping an empty commission.
+#
+# Unlike Detroit's next door, this source is directly readable: the city
+# answers 200 and its robots.txt permits /government/. There is deliberately no
+# archive rung — if the city ever starts refusing this client, the run fails and
+# a human decides, rather than silently switching to an older copy.
+
+on:
+  schedule:
+    - cron: "30 18 * * 4" # Thursday 18:30 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-roster:
+    runs-on: ubuntu-latest
+    steps:
+      # Pushed and PR-opened as BOT_PR_TOKEN so the resulting PR actually runs
+      # CI; falls back to github.token when the secret is absent.
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.BOT_PR_TOKEN || github.token }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      # Stdlib only — mi/scripts carries no third-party HTTP dependency.
+      - name: Scrape the City Commission pages
+        run: python3 mi/scripts/mi_grand_rapids_council_scraper.py
+
+      - name: Rebuild the Grand Rapids council roster
+        run: python3 mi/scripts/build_mi_grand_rapids_council.py
+
+      - name: Validate app + data files
+        run: python3 mi/scripts/validate_index.py mi/index.html
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet -- mi/data/app/mi-grand-rapids-council-members.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open or update pull request
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.BOT_PR_TOKEN || github.token }}
+        run: |
+          # Fixed branch (not per-run): an unmerged roster PR is refreshed in
+          # place by the force-push below instead of spawning a duplicate PR.
+          branch="bot/grand-rapids-council-roster-update"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          # Cut from main's CURRENT tip — see update-mi-legislature-roster.yml
+          # for the measured reason.
+          git fetch --depth=1 origin main
+          git checkout -B "$branch" FETCH_HEAD
+          git add mi/data/app/mi-grand-rapids-council-members.json
+          git commit -m "Update Grand Rapids council roster"
+          git push -u origin "$branch" --force
+          if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then
+            gh pr create \
+              --title "Update Grand Rapids council roster" \
+              --body "Automated weekly refresh of the Grand Rapids entry of the \`city-ward\` card — the City Commission, read from the city's own commission pages. Grand Rapids elects two commissioners from each of three wards plus a mayor at large (seven seats) and publishes six of them; the file carries \`seats\` so the card states the unlisted seat rather than concealing it. Each member's ward, e-mail and direct phone come from that member's own page; the number common to every page is the city switchboard and is hoisted to the body rather than repeated as a direct line. Please review the diff before merging — this changes data about real officeholders." \
+              --base main \
+              --head "$branch"
+          else
+            echo "PR already open for $branch; force-push refreshed it."
+          fi

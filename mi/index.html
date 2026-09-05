@@ -5988,7 +5988,7 @@ function initMichiganExplorer() {
     "county-commissioner", // 619 districts across all 83 counties — the finest tiling this instance ships, smaller than a state House district
     "county-subdivision", // 1,581 records tiling the state, live from TIGERweb (no data/app file) — 1,122 general-law townships, 118 charter townships, 301 city placeholder records for 281 distinct cities (18 of which cross a county line), and 40 'not defined' records that are pure Great Lakes water
     "zip-code",          // 1,010 ZIP Code Tabulation Areas covering Michigan, live from TIGERweb (no data/app file) — 139.7 km2 mean feature area, between a township and a precinct
-    "detroit-council",   // seven districts over Detroit's 139 sq mi — smaller than a typical Michigan ZCTA, far larger than a precinct
+    "city-ward",         // Detroit's seven districts over 139 sq mi and Grand Rapids's three wards over 45 — both smaller than a typical Michigan ZCTA and far larger than a precinct; ranked on the larger city's districts
     "precinct",          // 3,895 voting precincts across all 83 counties, pre-built from the state's own 2026-cycle layer — 38.8 km2 mean feature area against a 6.4 km2 median, a six-fold skew because a rural township precinct and a city precinct are barely the same kind of object; the finest tiling this instance ships
     "municipality",      // 533 incorporated places, live from TIGERweb (no data/app file) — 281 cities and 252 villages, small dense pockets inside the township fabric, so the smallest layer this instance ships at a 12 km2 mean
     "police-station",    // 1,290 police-station points in Michigan's envelope, live from the USGS National Map (no data/app file) — a nearest-3 proximity layer, ranked with the other point layers rather than by feature area
@@ -7660,6 +7660,12 @@ function initMichiganExplorer() {
   /* ---------- case-insensitive property lookup — Socrata field-name casing/
    * naming varies dataset to dataset (see probeGeometryColumn's rationale) ---------- */
   function findPropCI(props, candidates) {
+    // CANDIDATES MUST BE LOWERCASE. This lowercases the property KEY and
+    // compares it against the candidate exactly as given, so "Ward" can never
+    // match anything. Measured 2026-09-05: a Grand Rapids entry passing
+    // ["Ward", "WARD"] rendered "Unknown ward" on a card whose feature plainly
+    // carried Ward, and Detroit's ["District", "district_number"] was working
+    // only through its second, already-lowercase candidate.
     if (!props) return null;
     var keys = Object.keys(props);
     for (var c = 0; c < candidates.length; c++) {
@@ -9207,11 +9213,254 @@ function initMichiganExplorer() {
   });
 
 
-  /* ---------- 15. Detroit City Council District — the first city tier ----------
-   * Pre-built from the City of Detroit's own ArcGIS org
-   * (mi/scripts/build_mi_detroit_council.py). Seven districts; Detroit's two
-   * at-large council seats are elected citywide and correctly have no
-   * geometry here.
+  /* ==== MICHIGAN:BEGIN city-dispatch ====
+   * THE MUNICIPAL DISPATCHER, ported from ia/index.html (which ported it from
+   * Illinois, where it has carried cross-county concepts since 2026-07).
+   *
+   * WHY MICHIGAN HAS ONE NOW. `docs/EXPANSION_GUIDE.md` §3.0: "A concept that
+   * appears in a second city becomes a dispatched concept, exactly as a county
+   * concept does", and §3.1: "the dispatch only ever required disjoint
+   * footprints." Grand Rapids is Michigan's second city publishing council
+   * boundaries, so `city-ward` is that concept and the two cities are two
+   * entries. The alternative — a second near-identical ward layer — is what
+   * the expansion invariant forbids: expanding coverage changes which dispatch
+   * ENTRIES exist, never which LAYERS do.
+   *
+   * NO SHARED ENTRY HELPER, DELIBERATELY. Iowa's two cities are near-identical
+   * (a mayor, two at-large members, one member per ward) so it factored a
+   * `cityWardEntry`. Michigan's are not: Detroit runs SEVEN districts of ONE
+   * member with two at-large colleagues and no mayor on the card, while Grand
+   * Rapids runs THREE wards of TWO commissioners with a mayor and a seat the
+   * city does not publish. Forcing both through one helper would mean a helper
+   * with a flag for every difference. The dispatcher already lets each entry
+   * bring its own query/render/cardIdentifier, so they do.
+   *
+   * THIS IS A THIRD COPY OF SHARED CODE, and Iowa's own note calls that a debt
+   * rather than a decision it is happy with. It stays a debt here: the honest
+   * home is `engine/`, spliced by compose_app.py, and promoting it means
+   * refactoring Illinois's 18 dispatched concepts in a PR about Grand Rapids.
+   * Recorded in mi/WATCH.md. ------------------------------------------- */
+  function registerCountyLayer(opts) {
+    // opts.entries is the general form; opts.counties is the original name.
+    // The dispatch was never county-specific — it needs disjoint footprints,
+    // nothing more — so this instance keys its table by CITY.
+    var entries = opts.entries || opts.counties;
+    var byKey = {};
+    entries.forEach(function (entry) {
+      // A DUPLICATE KEY IS A SILENT DISASTER, so it throws at boot instead.
+      // byKey is last-wins, and render/cardIdentifier/primaryLink all dispatch
+      // through it — so a second entry under an existing key does not merely
+      // add a redundant lookup, it silently re-points the FIRST entry's cards
+      // at the second entry's renderer. That shipped in Illinois: a precinct
+      // entry was pasted into the county-board table under key "stephenson"
+      // (2026-08-03), and from then until 2026-08-04 a Stephenson board result
+      // rendered through the precinct card. Nothing failed — every gate
+      // passed, because the layer still registered and still had a working
+      // query walk.
+      if (byKey[entry.key]) {
+        throw new Error(opts.id + ": duplicate entry key '" + entry.key +
+          "' — byKey is last-wins, so this would re-point the earlier entry's card");
+      }
+      byKey[entry.key] = entry;
+    });
+
+    // Union overlay, drawn INCREMENTALLY: one attempt per entry, each feature
+    // WRAPPED (never mutating the per-entry caches — other cards spatial-join
+    // against them) and stamped dxCounty so hover dispatches per feature. The
+    // load resolves as soon as the FIRST entry's geometry is in, so one slow
+    // host cannot keep every other unit's boundaries off the map; later
+    // arrivals are appended to the same live FeatureCollection (=== rt.geojson)
+    // and drawn by drawAppendedCountyFeatures below. An entry whose source is
+    // DOWN drops out of the drawing while the others render; only if every one
+    // fails does the load reject (overlay error + Retry). Deliberately not
+    // makeCached, so the total-failure path stays retryable.
+    function loadUnion() {
+      var fc = { type: "FeatureCollection", features: [] };
+      return new Promise(function (resolve, reject) {
+        var resolved = false, pending = entries.length, anySuccess = false;
+        if (!pending) { reject(new Error(opts.label + ": no source responded")); return; }
+        entries.forEach(function (entry) {
+          entry.loadGeometry().then(function (geojson) {
+            var wrapped = (geojson.features || []).map(function (f) {
+              return { type: "Feature", geometry: f.geometry, properties: f.properties, dxCounty: entry.key };
+            });
+            anySuccess = true;
+            Array.prototype.push.apply(fc.features, wrapped);
+            if (!resolved) { resolved = true; resolve(fc); }
+            else drawAppendedCountyFeatures(wrapped);
+          }, function () { /* down source: absent from the drawing (tradeoff above) */ })
+            .catch(function () { /* a drawing hiccup in one entry must not skew the settle count */ })
+            .then(function () {
+              pending--;
+              if (!pending && !anySuccess) reject(new Error(opts.label + ": no source responded"));
+            });
+        });
+      });
+    }
+
+    // Draw one late-arriving entry onto the already-built union overlay. Its
+    // features are already in the resolved FeatureCollection (=== rt.geojson,
+    // which highlight/hover/outline consumers re-read on every event), so this
+    // only has to teach the LEAFLET layer about them: addData creates their
+    // paths, then they're restyled to the current stack state — the flat style
+    // captured at L.geoJSON build time goes stale, because fill-opacity scaling
+    // tracks the active-layer count and an active selection highlight keeps
+    // every non-matched path faded.
+    function drawAppendedCountyFeatures(features) {
+      var rt = layerRuntime[spec.id];
+      // No live Leaflet layer (toggled off, relevance-hidden, or the engine's
+      // load handler hasn't built it yet): nothing to draw — the engine
+      // (re)builds from rt.geojson when the overlay next attaches, and these
+      // features are already in it.
+      if (!rt || !rt.overlayLayer || !features.length) return;
+      rt.overlayLayer.addData({ type: "FeatureCollection", features: features });
+      var style = rt.highlightApplied ? fadedStyle(baseStyleFor(spec)) : baseStyleFor(spec);
+      if (style) {
+        rt.overlayLayer.eachLayer(function (subLayer) {
+          if (subLayer.setStyle && features.indexOf(subLayer.feature) !== -1) subLayer.setStyle(style);
+        });
+      }
+      reorderActiveLayers(); // fresh paths must not sit above smaller layers' boundaries
+      // Disjoint footprints mean an active highlight never belongs to an
+      // appended entry — but the selected point CAN (the previously-no-match
+      // case). Run the full highlight pass so the user's own district lights up
+      // the moment its city lands, instead of waiting for the next point move.
+      if (state.selectedPoint && state.layersOn[spec.id] &&
+          findFeatureContaining({ type: "FeatureCollection", features: features }, state.selectedPoint)) {
+        updateLayerHighlight(spec);
+      }
+    }
+
+    var anyHoverOfficial = entries.some(function (entry) { return !!entry.hoverOfficial; });
+
+    /* Which entries' COVERAGE contains the point, evaluated in PARALLEL.
+     *
+     * Coverage is the cheap question: every entry gates on a same-origin
+     * outline of a couple of KB, cached after first use. Asking all of them at
+     * once costs one round of small local fetches and names the ONE unit worth
+     * querying — so an expensive remote call happens once instead of once per
+     * entry. Errors are collected, not thrown, so a single unit's coverage
+     * outage cannot decide the answer for the others; both callers below
+     * re-raise the first error only when nothing matched. */
+    function coverageMatches(point) {
+      var firstErr = null;
+      return Promise.all(entries.map(function (entry) {
+        return Promise.resolve().then(function () { return entry.coverage(point); })
+          .then(function (inside) { return inside ? entry : null; },
+                function (err) { if (!firstErr) firstErr = err; return null; });
+      })).then(function (hits) {
+        return { matches: hits.filter(Boolean), firstErr: firstErr };
+      });
+    }
+
+    // Held in a var (rather than passed as a literal) so
+    // drawAppendedCountyFeatures above can hand the registered module to the
+    // engine's style/highlight helpers — registerLayer stores this same object.
+    var spec = {
+      id: opts.id,
+      group: opts.group,
+      label: opts.label,
+      // OR of the per-entry coverage tests, asked in parallel. A throwing test
+      // cannot decide the answer for the others; if none matched and one threw,
+      // the error propagates so the engine's fail-open applies — a coverage
+      // outage never hides the layer.
+      coverage: function (point) {
+        return coverageMatches(point).then(function (r) {
+          if (r.matches.length) return true;
+          if (r.firstErr) throw r.firstErr;
+          return false;
+        });
+      },
+      hoverName: function (feature) {
+        var entry = byKey[feature.dxCounty];
+        return entry && entry.hoverName ? entry.hoverName(feature) : null;
+      },
+      overlay: { load: loadUnion, style: opts.style },
+      // Dispatch by CONTAINMENT, not coverage: the footprints are disjoint, so
+      // at most one entry's query returns a hit. A downed unit is skipped while
+      // the others still resolve; if nothing matched and one errored, that error
+      // propagates — a point in the downed city gets the honest error card +
+      // Retry, never a lying "No result for this point."
+      query: function (point, seq) {
+        // COVERAGE NARROWS, CONTAINMENT DECIDES. If coverage names nobody, fall
+        // back to the full table, so an entry whose coverage test is missing or
+        // wrong still resolves rather than silently going blank.
+        return coverageMatches(point).then(function (r) {
+          var list = r.matches.length ? r.matches : entries;
+          var i = 0, firstErr = r.matches.length ? null : r.firstErr;
+          function next() {
+            if (i >= list.length) {
+              if (firstErr) throw firstErr;
+              return null;
+            }
+            var entry = list[i++];
+            return entry.query(point, seq).then(function (result) {
+              if (result) { result.dxCounty = entry.key; return result; }
+              return next();
+            }, function (err) { if (!firstErr) firstErr = err; return next(); });
+          }
+          return next();
+        });
+      },
+      render: function (result) {
+        return byKey[result.dxCounty].render(result);
+      },
+      // per-entry pill + footer link, dispatched like render — an entry that
+      // declares neither renders extras-free
+      cardIdentifier: function (result) {
+        var entry = byKey[result.dxCounty];
+        return entry && entry.cardIdentifier ? entry.cardIdentifier(result) : null;
+      },
+      primaryLink: function (result) {
+        var entry = byKey[result.dxCounty];
+        return entry && entry.primaryLink ? entry.primaryLink(result) : null;
+      },
+      pointOfInterest: function (result) {
+        var entry = byKey[result.dxCounty];
+        return entry && entry.pointOfInterest ? entry.pointOfInterest(result) : null;
+      },
+      // concept-level (not per-entry) nesting + toggle hook, passed through
+      subOf: opts.subOf,
+      onToggle: opts.onToggle,
+      hoverOfficial: anyHoverOfficial ? {
+        // composite prefetch: every entry's officeholder data, keyed for the
+        // per-feature dispatch in name(). All-or-retry ON PURPOSE: the engine
+        // caches a resolved roster for the session (rt.roster — the prefetch
+        // never refetches a truthy value), so resolving with a failed entry's
+        // slot null would pin that gap until reload. Rejecting instead leaves
+        // rt.roster unset — the engine swallows the rejection and the next
+        // toggle-on retries, with the already-succeeded loaders resolving
+        // instantly. Hover simply omits names until every entry's data is in;
+        // the click cards fetch per query and are unaffected either way.
+        load: function () {
+          return Promise.all(entries.map(function (entry) {
+            return entry.hoverOfficial ? entry.hoverOfficial.load() : Promise.resolve(null);
+          })).then(function (results) {
+            var byUnit = {};
+            entries.forEach(function (entry, idx) { byUnit[entry.key] = results[idx]; });
+            return byUnit;
+          });
+        },
+        name: function (feature, byUnit) {
+          var entry = byKey[feature.dxCounty];
+          if (!entry || !entry.hoverOfficial || !byUnit || !byUnit[entry.key]) return null;
+          return entry.hoverOfficial.name(feature, byUnit[entry.key]);
+        }
+      } : undefined
+    };
+    registerLayer(spec);
+  }
+  /* ==== MICHIGAN:END city-dispatch ==== */
+
+
+  /* ---------- 15. City Council District — Detroit and Grand Rapids ----------
+   * ONE DISPATCHED LAYER, TWO CITIES, each entry pre-built from that city's
+   * own ArcGIS org and each bringing its own card, because the two bodies are
+   * not alike. Grand Rapids's half is further down, after Detroit's.
+   *
+   * DETROIT (mi/scripts/build_mi_detroit_council.py). Seven districts; its two
+   * at-large council seats are elected citywide and correctly have no geometry
+   * here.
    *
    * THE CITY PUBLISHES FOUR COUNCIL-DISTRICT BOUNDARY SERVICES AND THE NAMES DO NOT
    * SETTLE WHICH IS IN FORCE — one titled "Current" dating from 2016, one
@@ -9272,6 +9521,13 @@ function initMichiganExplorer() {
     return String(Number(m[3])) + " " + mon + " " + m[1];
   }
 
+  var loadGrandRapidsWards = makeCached(function () {
+    return fetchJSONWithRetry("data/app/mi-grand-rapids-wards.json", {}, 2);
+  });
+  var loadGrandRapidsRoster = makeCached(function () {
+    return fetchJSONWithRetry("data/app/mi-grand-rapids-council-members.json", {}, 2);
+  });
+
   function detroitCoverage(point) {
     // The districts tile the city exactly (the builder asserts the population
     // identity), so this is a city test and not an approximation of one. A
@@ -9282,17 +9538,13 @@ function initMichiganExplorer() {
     });
   }
 
-  registerLayer({
-    id: "detroit-council",
-    group: "political",
-    label: "Detroit Council District",
+  var detroitEntry = {
+    key: "detroit",
+    label: "Detroit",
     coverage: detroitCoverage,
-    overlay: {
-      load: loadDetroitCouncilDistricts,
-      style: { color: "#0F5C8C", weight: 2, fillColor: "#2E8FC4", fillOpacity: 0.06 }
-    },
+    loadGeometry: loadDetroitCouncilDistricts,
     hoverName: function (feature) {
-      var v = findPropCI(feature.properties || {}, ["District", "district_number"]);
+      var v = findPropCI(feature.properties || {}, ["district", "district_number"]);
       return (v == null || v === "") ? null : String(v);
     },
     query: function (point, seq) {
@@ -9304,7 +9556,7 @@ function initMichiganExplorer() {
       ]).then(function (parts) {
         var feature = parts[0];
         if (!feature) return null;
-        var district = findPropCI(feature.properties || {}, ["District", "district_number"]);
+        var district = findPropCI(feature.properties || {}, ["district", "district_number"]);
         var roster = parts[1];
         return {
           seq: seq,
@@ -9377,7 +9629,147 @@ function initMichiganExplorer() {
       var url = safeHttpUrl(result.rosterUrl) || "https://detroitmi.gov/government/city-council";
       return { label: "Detroit City Council", url: url };
     }
+  };
+
+  function grandRapidsCoverage(point) {
+    // The three wards tile the city, but NOT exactly: the builder measures 21
+    // Census blocks on which the ward outline and the Census place outline
+    // disagree, at the city's edge. That is fine for a coverage test — a point
+    // inside a ward is inside Grand Rapids either way — and it is why the
+    // builder records a tolerance rather than asserting Detroit's exact
+    // population identity. A load failure rejects to the engine's fail-open.
+    return loadGrandRapidsWards().then(function (geojson) {
+      return !!findFeatureContaining(geojson, point);
+    });
+  }
+
+  var grandRapidsEntry = {
+    key: "grand-rapids",
+    label: "Grand Rapids",
+    coverage: grandRapidsCoverage,
+    loadGeometry: loadGrandRapidsWards,
+    hoverName: function (feature) {
+      var v = findPropCI(feature.properties || {}, ["ward"]);
+      return (v == null || v === "") ? null : "Ward " + String(v);
+    },
+    query: function (point, seq) {
+      return Promise.all([
+        queryFeatureAt(loadGrandRapidsWards, point),
+        loadGrandRapidsRoster().catch(function () { return null; }),
+        loadGrandRapidsWards().catch(function () { return null; })
+      ]).then(function (parts) {
+        var feature = parts[0];
+        if (!feature) return null;
+        var ward = findPropCI(feature.properties || {}, ["ward"]);
+        var roster = parts[1];
+        return {
+          seq: seq,
+          ward: ward,
+          members: (roster && roster.wards && ward != null)
+            ? (roster.wards[String(ward)] || []) : [],
+          citywide: (roster && roster.citywide) || null,
+          office: (roster && roster.office) || null,
+          seats: roster ? roster.seats : null,
+          seatsPerWard: roster ? roster.seatsPerWard : null,
+          rosterUrl: roster ? roster.sourceUrl : null,
+          // Required by the city's own use agreement, which conditions use of
+          // its GIS data on carrying the disclaimer (the Des Moines case).
+          disclaimer: parts[2] ? parts[2].disclaimer : null
+        };
+      });
+    },
+    cardIdentifier: function (result) {
+      return result.ward ? "Ward " + String(result.ward) : "Unknown ward";
+    },
+    render: function (result) {
+      var wrap = cardEl("div", "card-flush");
+      if (result.members && result.members.length) {
+        wrap.appendChild(renderPersonRows(result.members.map(function (rec) {
+          return {
+            name: rec.name,
+            badge: "City Commissioner",
+            phone: rec.phone || null,
+            email: rec.email || null,
+            links: rec.profileUrl ? [{ label: "Profile", url: rec.profileUrl }] : null
+          };
+        })));
+      }
+      // Every ward elects more than one commissioner, so a ward naming fewer
+      // than it elects is a seat the city has not published rather than a ward
+      // with one member. Say so in the card's own words instead of leaving the
+      // reader to count — and take the number from the DATA, because how many
+      // commissioners a ward elects is the city's fact, not this file's.
+      var expected = result.seatsPerWard || 0;
+      if (result.members && result.members.length && expected &&
+          result.members.length < expected) {
+        wrap.appendChild(renderFieldStack([{
+          label: "This ward's other seat",
+          value: "Grand Rapids elects two commissioners from each ward, and the city "
+               + "lists only one for this one. The second is not named on the City "
+               + "Commission's own page, so this app does not name it either."
+        }]));
+      }
+      if (result.citywide && result.citywide.length) {
+        wrap.appendChild(renderSectionLabel("ELECTED BY THE WHOLE CITY"));
+        wrap.appendChild(renderPersonRows(result.citywide.map(function (rec) {
+          return {
+            name: rec.name,
+            badge: rec.seat || "Citywide",
+            phone: rec.phone || null,
+            email: rec.email || null,
+            links: rec.profileUrl ? [{ label: "Profile", url: rec.profileUrl }] : null
+          };
+        }), { tinted: true }));
+      }
+      // The city switchboard — the one number on every commissioner's page, so
+      // it belongs to the body and not to any of them.
+      if (result.office && (result.office.phone || (result.office.lines || []).length)) {
+        wrap.appendChild(renderOfficeGroup({
+          label: result.office.label || "City Hall",
+          offices: [{
+            label: "Grand Rapids City Commission",
+            lines: result.office.lines || [],
+            phone: result.office.phone
+          }]
+        }));
+      }
+      var rows = [{ label: "Ward", value: result.ward ? String(result.ward) : "Unknown",
+                    primary: true }];
+      rows.push({ label: "How this ward is represented",
+                  value: "Grand Rapids elects two commissioners from each of its three "
+                       + "wards, plus a mayor elected by the whole city. Commissioners "
+                       + "serve four-year overlapping terms, so each ward elects one of "
+                       + "its two every two years." });
+      if (result.disclaimer) {
+        rows.push({ label: "Data notice", value: String(result.disclaimer) });
+      }
+      wrap.appendChild(renderFieldStack(rows));
+      return wrap;
+    },
+    primaryLink: function (result) {
+      var url = safeHttpUrl(result.rosterUrl)
+        || "https://www.grandrapidsmi.gov/Government/City-Commission";
+      return { label: "Grand Rapids City Commission", url: url };
+    }
+  };
+
+  registerCountyLayer({
+    id: "city-ward",
+    group: "political",
+    // ONE label for two cities that name the thing differently: Detroit runs
+    // COUNCIL DISTRICTS, Grand Rapids runs COMMISSION WARDS. The toggle names
+    // the fleet concept (the guidebook's "City council district" row, and the
+    // id Iowa already uses) and each card then speaks the city's own
+    // vocabulary — "District 6 / Council member" against "Ward 1 / City
+    // Commissioner". The toggle names the concept; the card names the thing.
+    label: "City Council District",
+    style: { color: "#0F5C8C", weight: 2, fillColor: "#2E8FC4", fillOpacity: 0.06 },
+    // DETROIT FIRST: §3.1 says to order the table so the cheapest
+    // already-cached coverage test short-circuits the OR. Detroit is far the
+    // larger city and the one most selections land in.
+    entries: [detroitEntry, grandRapidsEntry]
   });
+
 
   /* ==== ENGINE:BEGIN hover-explorer ==== */
   /* =========================================================================
@@ -9939,11 +10331,10 @@ function initMichiganExplorer() {
   // specific. validate_index.py asserts this list matches the registered id
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
   var LAYER_SIDEBAR_RANK = ["us-house", "mi-senate", "mi-house", "county-commissioner",
-    // Detroit's council sits after the county board: same Political family,
-    // one level finer, and it is the only city-level representation this
-    // instance ships. It hides outside Detroit, so for most readers this slot
-    // simply is not there.
-    "detroit-council",
+    // The city tier sits after the county board: same Political family, one
+    // level finer. It hides outside the two cities that publish boundaries
+    // (Detroit and Grand Rapids), so for most readers this slot is not there.
+    "city-ward",
     "school-district-unified", "school-district-elementary",
     "county", "county-subdivision", "municipality", "zip-code", "precinct", "police-station", "fire-station", "post-office"];
   (function applySidebarRank() {
@@ -9956,6 +10347,39 @@ function initMichiganExplorer() {
       var pb = pos[b.id] != null ? pos[b.id] : 999;
       return pa - pb;
     });
+  })();
+
+  // A LAYER ID IS A PUBLIC ADDRESS. `detroit-council` shipped in every
+  // permalink and embed built while Detroit was Michigan's only city tier, and
+  // those links sit in other people's pages and bookmarks and cannot be
+  // recalled. Consolidating the concept onto the dispatched `city-ward` toggle
+  // (docs/EXPANSION_GUIDE.md §3.0, when Grand Rapids became the second city)
+  // would otherwise answer every one of them with the layer silently off — the
+  // page would still load, still look right, and quietly not show the thing
+  // the link was shared to show. Every future consolidation appends here.
+  var CONSOLIDATED_LAYER_ALIASES = {
+    // 2026-09-05: Grand Rapids became Michigan's second city publishing
+    // council boundaries, so the concept became one dispatched `city-ward`.
+    "detroit-council": "city-ward"
+  };
+  (function rewriteAliasedPermalink() {
+    var raw = location.hash.replace(/^#/, "");
+    var m = /(^|&)layers=([^&]*)/.exec(raw);
+    if (!m) return;
+    var seen = {};
+    var ids = m[2].split(",").map(function (id) {
+      return CONSOLIDATED_LAYER_ALIASES[id] || id;
+    }).filter(function (id) { // aliasing can duplicate the target — keep one
+      if (seen[id]) return false;
+      seen[id] = true;
+      return true;
+    });
+    var rewritten = raw.slice(0, m.index) +
+      (m[1] || "") + "layers=" + ids.join(",") +
+      raw.slice(m.index + m[0].length);
+    if (rewritten !== raw) {
+      history.replaceState(null, "", location.pathname + location.search + "#" + rewritten);
+    }
   })();
 
   buildGroupsUI();

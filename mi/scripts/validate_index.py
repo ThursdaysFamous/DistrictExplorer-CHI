@@ -89,7 +89,7 @@ CAPABILITIES = [
 # ==== GENERATED:BEGIN validator-config ====
 # Floor, not a moving target: new layers only raise this; a drop means
 # modules were lost.
-MIN_REGISTER_LAYER = 7
+MIN_REGISTER_LAYER = 10
 
 # Every layer id that must be registered in index.html. Most modules register
 # through the factories, so deleting one would NOT lower the raw registerLayer(
@@ -98,8 +98,8 @@ MIN_REGISTER_LAYER = 7
 EXPECT_LAYER_IDS = [
     "us-house", "mi-senate", "county", "mi-house", "school-district-unified",
     "school-district-elementary", "county-commissioner", "county-subdivision",
-    "zip-code", "detroit-council", "precinct", "municipality",
-    "police-station", "fire-station", "post-office",
+    "zip-code", "city-ward", "precinct", "municipality", "police-station",
+    "fire-station", "post-office",
 ]
 
 # file -> (min features, max features) for the boundary layers fetched by the app.
@@ -112,6 +112,7 @@ GEOMETRY_FILES = {
     "mi-commissioner-districts.json": (619, 619),  # All 619 county commissioner districts across all 83 counties, pre-built by mi/scripts/build_mi_commissioner_districts.py from the Bureau of Elections' statewide compilation (2,000-point agreement gate at 100.00%, per-county 1..N numbering check, MCL 46.401(1) 5..21 board-size check, and a guard that REFUSES the file if the source's Commissioner/Party columns ever reach data/app/). 611 of 619 carry an apportionment population; Baraga District 1 and all seven Cheboygan districts do not, and the card omits the row rather than showing a blank.
     "mi-precincts.json": (3895, 3895),  # 2026-cycle voting precincts, mi/scripts/build_mi_precincts.py. Exact band, not a floor: the builder refuses to write any count but 3,895, because on a cycle-scoped layer a count change is real information (Michigan went 4,340 -> 3,895 between the 2024 and 2026 maps) rather than drift.
     "mi-detroit-council-districts.json": (7, 7),  # Detroit's seven City Council districts, mi/scripts/build_mi_detroit_council.py. Exact band: the council's district seats are fixed at seven by the city charter, so any other count is a source change wanting a human, not drift.
+    "mi-grand-rapids-wards.json": (3, 3),  # Grand Rapids's three City Commission wards, from the city's own ArcGIS org. Built by mi/scripts/build_mi_grand_rapids_wards.py, whose currency gate is the state's own 2026 precinct layer.
 }
 
 # file -> minimum key count (officeholder rosters).
@@ -121,6 +122,7 @@ ROSTER_FILES = {
     "mi-house-members.json": 99,  # House roster from Open States mi.csv, refreshed weekly by update-mi-legislature-roster.yml; floor tolerates transient vacancies (110 seats). No capitol contact block — see the layer's source note.
     "coverage-gaps.json": 0,  # The Data gaps panel's content; empty at arrival — this instance's first recorded gap ships with the layer it belongs to.
     "mi-detroit-council-members.json": 4,  # Detroit's nine council members — seven by district plus two at large (charter Art. 4 §4-101). Built by mi/scripts/build_mi_detroit_council_roster.py from mi_detroit_council_scraper.py's cache. Five top-level keys: districts, citywide, office (the body's own address and switchboard, hoisted), sourceUrl, archivedAt.
+    "mi-grand-rapids-council-members.json": 5,  # Grand Rapids's City Commission — six of seven seats, the city publishing no second Ward 1 commissioner. Built by mi/scripts/build_mi_grand_rapids_council.py from mi_grand_rapids_council_scraper.py's cache. Six top-level keys: wards, citywide, office (the city switchboard and City Hall, hoisted), seats, seatsPerWard (how many commissioners a ward elects — the card counts the shortfall against it rather than hardcoding the city's arithmetic), sourceUrl.
 }
 
 # Files the app references DYNAMICALLY — the URL is built from a slug at
