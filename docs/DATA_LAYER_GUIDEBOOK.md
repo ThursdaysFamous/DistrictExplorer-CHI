@@ -10225,7 +10225,8 @@ the way there is worth more than the county. This project's own record had said 
 carried "1,584 FILLED curves — the Jackson precondition", and told the next reader to read
 the fill objects. The filled curves are real and NONE OF THEM IS A DISTRICT: the largest is
 2.63% of the page and not one exceeds 5% — lakes, parks and city fills. Story's districts
-are STROKES at linewidth 12, the only curves on the page at that weight out of 10,235.
+are STROKES at linewidth 12, the only curves on the page at that weight out of 10,761
+(pdfplumber 0.11.10; an earlier pass published 10,235 and that figure was wrong).
 *"This PDF has filled paths" and "this PDF's DISTRICTS are filled paths" are different
 claims, and only the second licenses the Jackson method* — the rule that survived is the one
 that was always the point: **read the path OBJECTS, never the pixels.**
@@ -10245,11 +10246,32 @@ load-bearing rather than reassuring. **IT IS EXACT**: sorting all 2,797 blocks a
 POP100 reproduces the Legislative Services Agency's published 32,783 / 32,894 / 32,860
 district by district IN ORDER. A negative test confirms the check is what carries the build
 — with the labels for districts 2 and 3 swapped, the georeference, nesting and tiling gates
-all still pass and only this one fails. Two measurements are recorded rather than gated: 16
-of the 19 blocks the fitted line does not cleanly nest hold ZERO people, and **Story's
-districts SPLIT A PRECINCT** (Roland/Howard Twp is 110 blocks / 1,837 people in District 2
-and 3 blocks / 32 people in District 1, each nesting at 99.8%), so precincts could not have
-been the resolution unit even if blocks had been optional.
+all still pass and only this one fails.
+
+**CORRECTED 2026-09-05 — THE LSA PUBLISHED TWO PLANS AND THIS ENTRY NAMED NEITHER.** The
+First Plan (2025-12-04) gives 32,783 / 32,894 / 32,860; the Board REJECTED it on 2026-01-06
+"based on compactness of districts"; the Second Plan (2026-01-14) gives 32,940 / 32,793 /
+32,804 and reshuffles the county completely. Iowa Code 331.210A(2)(d) lets the Board then
+approve either plan or an amendment, and its 2026-01-27 approval does not say which — **the
+geometry does.** The blocks reproduce the FIRST plan exactly and match none of the second's,
+which is a sharper witness than "the published populations" and is now gated in both
+directions. A SECOND, INDEPENDENT GATE went in with it: the First Plan also NAMES each
+district's precincts, and dissolving those lists out of the shipped precinct fabric (45/45
+names match after zero-padding and one suffix alias) lands on the map-derived districts at
+worst IoU 0.99127 — a different document and a different geometry reaching the same answer.
+
+**ALSO CORRECTED — STORY'S DISTRICTS DO NOT SPLIT A PRECINCT, AND THIS ENTRY SAID THEY DID.**
+Iowa Code 49.3(2)(1) requires that "all boundaries shall follow precinct boundaries", and
+LSA's First Plan lists Roland/Howard Twp WHOLE in District 2, so a split was never possible.
+What the block sort divided is the SHIPPED PRECINCT POLYGON: `ia-precincts.json` carries a
+2024 vintage in which that precinct still holds its 2020 census voting-district geometry —
+IoU 0.999573 against TIGERweb's own `HOWARD TWP W/O STORY CITY`, whose POP100 of 1,869 is
+exactly the 1,837 + 32 the sort divided. The county re-precincted (43 census voting districts
+against 45 current precincts) and only 6 of the 45 shipped Story precincts still match a
+voting district to within IoU 0.999. The conclusion the wrong claim carried is unchanged and
+now rests on something firmer: blocks were the necessary unit because the shipped precinct
+layer cannot be trusted to draw the current lines. One measurement stands as recorded: 16 of
+the 19 blocks the fitted line does not cleanly nest hold ZERO people.
 
 **ITS PLANTYPE STAYS `TRANSITIONING` AND THAT IS THE HONEST PART.** Calling it `PLAN 3` is
 the tempting simplification and would tell a reader their district elects one supervisor

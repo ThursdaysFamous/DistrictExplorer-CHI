@@ -220,7 +220,8 @@ whole repo, rather than confined to the new tree, returns false positives from
 > 270 → 272.** Step 2's "currently effective at-large form with a dated note" fallback was
 > always meant to be temporary, and Story's ended by reading the county Auditor's own printed
 > district map: three closed stroke path objects at linewidth 12 (the only curves on the page
-> at that weight out of 10,235), one legend-declared numeral inside each, georeferenced to
+> at that weight out of 10,761 under pdfplumber 0.11.10 — an earlier pass published 10,235
+> and it was wrong), one legend-declared numeral inside each, georeferenced to
 > NAD83 / Iowa North — which the drawn aspect ratio identifies to five digits, and which fits
 > the county's real outline to 0.6 m mean / 2.0 m max — then resolved to whole Census 2020
 > blocks so nothing traced ships. **The gate is a different county product and it is exact**:
@@ -237,6 +238,28 @@ whole repo, rather than confined to the new tree, returns false positives from
 > its own gap record (`johnson-county-supervisor-districts`); its recorded source URL, which
 > ia/WATCH.md had called dead, answers 200 — the original probe hit a different path read from
 > a truncated string in tool output.
+>
+> **REVIEW FOLLOW-UP 2026-09-05 — two of this entry's own claims were wrong and a second
+> gate went in.** (a) **THE LSA PUBLISHED TWO PLANS.** The First (2025-12-04) gives
+> 32,783 / 32,894 / 32,860; the Board REJECTED it on 2026-01-06 "based on compactness of
+> districts"; the Second (2026-01-14) gives 32,940 / 32,793 / 32,804 and reshuffles the
+> county completely. Iowa Code 331.210A(2)(d) lets the Board then approve either or an
+> amendment, and its 2026-01-27 approval does not say which — the geometry does, matching the
+> First exactly and none of the Second. Both directions are now gated, and the citation names
+> the document rather than "the ledger". (b) **STORY'S DISTRICTS DO NOT SPLIT A PRECINCT.**
+> Iowa Code 49.3(2)(1) makes district boundaries follow precinct boundaries and the First
+> Plan lists Roland/Howard Twp whole in District 2. What the block sort divided is the
+> SHIPPED precinct polygon, still carrying its 2020 census voting-district geometry (IoU
+> 0.999573 against `HOWARD TWP W/O STORY CITY`, POP100 1,869 = 1,837 + 32); the county
+> re-precincted 43 → 45 and only 6 of 45 shipped Story precincts still match a voting district
+> that closely. Blocks were still the necessary unit — now for a better reason. (c) A SECOND
+> GATE dissolves the First Plan's own precinct lists out of `ia-precincts.json` (45/45 names
+> match after zero-padding and one suffix alias) and lands on the map-derived districts at
+> worst IoU 0.99127. (d) `rnd()` never rounded — `shapely.mapping()` emits TUPLES and it
+> handled list/dict only — so the committed source shipped 15-decimal coordinates, 225,722
+> bytes against 172,833. **The app file was never affected**, because mapshaper re-rounds at
+> `precision=0.000001`; rebuilding the aggregate after the fix changed zero features and zero
+> properties.
 
 **Geometry — VERIFIED and re-verified this session**:
 `services.arcgis.com/vPD5PVLI6sfkZ5E4/arcgis/rest/services/CountySupervisorDistricts/FeatureServer/0`.
