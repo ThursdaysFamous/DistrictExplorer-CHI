@@ -1,5 +1,5 @@
 {
-  "_comment": "Row counts as the OEC's own returnCountOnly endpoints reported them at the last operator build of build_wi_ng911_service_areas.py. validate_sources.py compares the live counts against these monthly and WARNs when the shipped files have fallen behind. Written by the build; never edit by hand.",
+  "_comment": "What the OEC's own service reported at the last operator build of build_wi_ng911_service_areas.py: `rows` as its returnCountOnly endpoints answered, and `dataLastEdit` as its editingInfo.dataLastEditDate. validate_sources.py compares BOTH monthly and WARNs when either has moved \u2014 a REDRAW does not change a row count, which is how the 2026-08-31 edit moved ~300 features silently. Written by the build; never edit by hand.",
   "agencies": {
     "ems": 580,
     "fire": 1046,
