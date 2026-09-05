@@ -132,28 +132,51 @@ shipped; Iowa's is the fleet's largest missing safety fabric.
 
 ---
 
-## Ask 4 — Iowa Secretary of State: a current polling-place edition
+## Ask 4 — Iowa HSEMD: the precinct column the current polling-place file dropped
 
-The state's published `IowaPollingPlaces` item is a 2024-08 vintage. A per-election
-current edition is what a polling-place layer would need before it could ship under the
-fleet's display contract (the election named, provisional wording before certification).
+**REWRITTEN 2026-09-05, and the rewrite is the point.** This ask used to be addressed to the
+Secretary of State and to read "is there a current edition?" — measured against the published
+files, that is the wrong question and would have spent the operator's credibility on something
+already answered. HSEMD publishes a CURRENT edition openly and without a licence
+(`PollingPlaces2026`, created 2026-05-21, 1,658 points). What it does not publish is the column
+that made the previous edition usable: the **2024** file carried `Precinct_Name` and joins this
+app's precinct fabric at **98.0%**, while the 2026 file dropped it and its `Pre_Code` joins at
+**22.0%**, matching nothing at all in Polk, Linn, Scott and Black Hawk. So the ask is now for one
+column, to the office that publishes the file, and the whole measurement is the
+`ia-polling-places` gap record's blocker.
 
-> **Subject:** Is there a current edition of the statewide polling-place file?
+Recipient: **both offices**. The Legislature's own CC0 polling item credits "Iowa Secretary of
+State, Iowa Legislative Services Agency" as its source, and HSEMD's layer is visibly geocoder
+output over a supplied spreadsheet — so the **Secretary of State supplies** and **HSEMD hosts**.
+An earlier version of this draft said the SoS "does not publish it" and re-addressed the ask to
+HSEMD alone, which would have asked the wrong office to change a column it does not originate.
+
+> **Subject:** Could the statewide polling-place layer carry the precinct name again?
 >
-> Dear Elections Division,
+> Dear Elections Division and HSEMD GIS team,
 >
 > I run districtry (https://districtry.com/ia/), a free, non-commercial site that shows
 > Iowans which civic districts cover any point in the state. It already carries Iowa's
-> precincts from the Legislature's own published service.
+> precincts from the Legislature's own published service, and I would like to be able to
+> tell a reader where their precinct votes.
 >
-> The statewide polling-place dataset I can find is stamped August 2024. Is a current
-> per-election edition published anywhere, or is the 2024 file the most recent one
-> intended for public use?
+> Your current polling-place layer (`PollingPlaces2026`) carries County_Name, Pre_Code and
+> the polling place's name and address. The 2024 edition also carried a `Precinct_Name`
+> column, and that column is what made it possible to match each polling place to the
+> precinct it serves — it lines up with the Legislature's precinct names for about 98% of
+> rows. `Pre_Code` does not: it appears to be each county's own internal code, and I can
+> match only about a fifth of the rows with it, none at all in Polk, Linn, Scott or Black
+> Hawk.
 >
-> If polling places are only authoritative on the county's own notice and a statewide
-> file should not be relied on for a given election, please tell me that — it is the kind
-> of caveat I would want to put on the page, and it would stop me shipping something
-> misleading.
+> Would it be possible for the current layer to carry the precinct name as the 2024 one
+> did? A single column would be enough. I am not asking for anything not already public —
+> the 2024 file has it today.
+>
+> If the pairing is deliberately not published, or if polling places are only authoritative
+> on each county's own notice and a statewide file should not be relied on for a given
+> election, please tell me that — it is exactly the caveat I would want on the page, and it
+> would stop me shipping something misleading. A "no" is a genuinely useful answer and I
+> will record it.
 >
 > Thank you for your time,
 > <YOUR NAME>
@@ -1097,3 +1120,169 @@ note is drafted and waits on a route rather than on a send.
   gap narrows to name it, and nothing is drawn from a map known to be wrong.
 * **No reply** → follow up once at ~3 weeks and once at ~2 more, then `UNRESPONSIVE` — a
   claim about the ask, never about the city.
+
+---
+
+## Ask 17 — League of Wisconsin Municipalities: terms, before any money changes hands
+
+**NOT YET ASKED — DRAFTED 2026-09-05.** Nothing here has been bought, and nothing should
+be until this is answered.
+
+**The sweep this draft was waiting on has landed, and the draft names its figures.**
+When Ask 17 was first written, a sweep of all 608 city and village websites was still
+running, and the mail said "I have been through the cities' and villages' own websites"
+without a count, because a count that is not finished is not a measurement. It finished
+on 2026-09-05: **444 of the 608 readable, 238 pairing an executive title with a name, 206
+naming none, 63 with no municipal website at all in the Commission's clerk file, 47
+disallowing all crawling, 29 refusing with HTTP 403 and 25 failing the network.** The
+figures are in the `municipal-officers` gap record and the mail below now states the two
+that bear on the ask. **The 238 is triage and not a roster** — roughly sixteen of them are
+page furniture and the sweep truncates candidate names at its own column width — which is
+why the mail says "fewer than half" rather than quoting it as a result.
+
+**This ask exists because its prerequisite is now met.** The `municipal-officers` gap
+record has said since 2026-09-02 that the League route needed one thing established
+first: *"What was measured is the sign-in, NOT that officer names sit behind it —
+establish that before any purchase or permission ask, because the Jo Daviess route costs
+money and a signature."* Measured 2026-09-05, from the League's own public pages, with no
+sign-in and no account:
+
+**THE RECORD WAS LOOKING AT THE WRONG PAGE.** `lwm-info.org/directory.aspx` — the URL the
+record measured as "presenting a Sign In control" — is the League's **own staff
+directory**: its employees, Executive Director through Government Affairs Director. It
+answers 200 to an ordinary browser and gates nothing. (**A first version of this note said
+*six employees*. That was a filter artefact** — it came from grepping the page for lines
+matching `director|member|official`, which surfaces only the titles containing the word
+*Director* — and an unfiltered read gives eighteen, sixteen League staff plus two League
+Insurance. The six is retracted; the eighteen is not restated as a measurement of my own,
+because the page could not be re-read on 2026-09-05, `/directory.aspx` now redirecting to
+`/m/directory`, which timed out on every attempt. **The finding does not rest on the count either way**: what matters is that this
+is the League's staff, not Wisconsin's municipal officials, and that nothing on it is
+gated.) The "Sign In" seen there is the
+site-wide CivicPlus header control that appears on every page of the site, including the
+front page the record measured as 200 without noticing it there.
+
+**THE MUNICIPAL PRODUCT IS A PUBLICATION, NOT A WEB DIRECTORY**, and the League describes
+its contents itself, at `lwm-info.org/1236/Directory-of-Cities-Villages`:
+
+> "The League's Annual Directory is *the* municipal phone book: well used by
+> municipalities throughout Wisconsin. It lists all city and village elected officials,
+> governing body meeting days… The Directory is no longer available for download from our
+> website, but League members may request a free copy by emailing the League. Non-members
+> may purchase a copy through our mailing lists page."
+
+*All city and village elected officials* is both halves of this gap — the executive and
+the governing body — in one document. That is the establishing measurement the record
+asked for, and it did not cost anything.
+
+**AND IT IS SOLD RATHER THAN MEMBER-GATED — THE PRICES ARE PUBLISHED.**
+`lwm-info.org/713/Mailing-Lists` (which now redirects to `/713/Contact-and-Mailing-Lists`)
+sells contact lists as Excel spreadsheets, and sells the Directory itself. Read
+2026-09-05, with no account and no sign-in:
+
+| Product | Contacts | Price |
+|---|---|---|
+| **Chief Executives** (Mayors, City and Village Managers, Village Presidents) | ~600 | **$30.00** |
+| **Governing Bodies** — the other half of this gap | **~3,500** | **$180.00** |
+| **Directory of Cities and Villages** — the annual publication described at `/1236/` | — | **$500.00** |
+| Clerks (*the only list that contains e-mail addresses*) | ~600 | $50.00 |
+| Administrators, Managers | ~230 | $10.00 |
+| Finance Director, Treasurer, Comptroller, HR Director | ~670 | $35.00 |
+
+So the whole gap has a price on it: $30 for the executive half, $180 for the governing
+bodies, $500 for the Directory that carries both. **This is a decision about terms and
+about money, and both numbers belong in front of whoever makes it** — which is why they
+are here rather than left as "member-gated", which is what an earlier version of this
+record called it and which was simply wrong.
+
+**TWO THINGS ABOUT THE $500 DIRECTORY DO NOT MATCH ITS OTHER PAGE, AND THE NARROWER ONE
+IS THE ONE ON THE ORDER FORM.** `/1236/` says the Directory "lists **all** city and
+village elected officials"; the order page's own scope line says it *"Lists all **member**
+city and village elected officials, governing body, and staff. Includes county and
+population."* Membership is not universal, so those two sentences describe different
+documents, and the second is the one attached to the price. **What the $500 actually
+covers is therefore part of the ask rather than a detail to settle afterwards** — a
+Directory of members only would leave every non-member municipality exactly where it is
+today.
+
+**AND THE $180 LIST CARRIES NO PHONE AND NO E-MAIL.** The same page: *"Included is mailing
+information, population, and county location… Only list '#2. Clerks' contains phone
+numbers, clerk email addresses, and the municipal webpage."* So Governing Bodies would
+give ~3,500 names with a mailing address and nothing else — and this project already has
+the one officer whose list carries contact detail, free, from the Elections Commission.
+One more thing is worth saying plainly before anyone pays: **"mailing information" for a
+village trustee is very often their house**, and this project never ships a home address,
+so part of what the $180 buys would be dropped on arrival.
+
+**The page also says what a buyer may do with any of it:** *"Mailing lists are emailed as
+an Excel spreadsheet **for your exclusive use**."* Exclusive use is the opposite of
+publishing on a free public map, so **the purchase does not answer the question — the
+terms do**, and paying first and asking afterwards is how a project ends up with data it
+cannot use. That is the Jo Daviess lesson exactly: ask for written permission BEFORE
+signing or paying.
+
+### Recipients
+
+| WRITE TO | WHO | WHY THIS ADDRESS |
+|---|---|---|
+| `league@lwm-info.org` | The League's general mailbox | The address the League's own Directory page gives for requesting the Directory, and the one on its Contact page. A terms question is an organisation's answer rather than one person's. |
+
+### The draft
+
+> **Subject:** Reuse terms for the Directory of City and Village Officials
+>
+> Dear League of Wisconsin Municipalities,
+>
+> I run districtry (https://districtry.com/wi/), a free, non-commercial site that shows
+> Wisconsinites which civic districts cover any point in the state and who represents them
+> there. It carries the Legislature's ward and district files, the Elections Commission's
+> statewide municipal clerk directory, all 72 county boards, and the alderpersons and
+> village trustees of eighteen cities and villages read from those municipalities' own
+> pages. There are no adverts and nothing is sold.
+>
+> The one level it cannot answer for is the municipal governing body. Outside those
+> eighteen municipalities it can name no mayor, no village president and no council or
+> village board member, because I have found no source that publishes them together. I
+> have been through all 608 city and village websites looking for one: I could read 444 of
+> them, and fewer than half of those name an executive anywhere a program can find it, so
+> reading them one at a time is not a route to a statewide answer. Your Annual Directory
+> of City and Village Officials plainly does publish them together, your Governing Bodies
+> list covers the same ground, and your Chief Executives list would cover the executive
+> half.
+>
+> Before buying either I would rather ask what I may do with it, because the mailing-list
+> page says the spreadsheet is "for your exclusive use", and what I would want to do is the
+> opposite: show a reader the name of their own mayor or village president, or their own
+> village board, on the page for their own municipality, with the League credited as the
+> source and a link to you.
+>
+> So: would the League be willing to let a free public site display officeholder names
+> from the Directory, or from the Chief Executives list, with attribution? If there is a
+> licence, a fee, or a form for that, I will follow it. If the answer is simply no, that is
+> a completely acceptable answer — I would record it and stop looking, and the site would
+> keep pointing readers at each municipality's own website instead. I would rather know
+> than guess, and I never publish a name I cannot source.
+>
+> Thank you for your time,
+> <YOUR NAME>
+> <YOUR E-MAIL>
+
+### What each answer means
+
+* **Yes, with attribution** — Wisconsin's municipality card names a mayor or village
+  president in ~600 municipalities and the `municipal-officers` gap closes on its
+  executive half; the Directory would close the governing-body half as well. The purchase
+  becomes a decision about money rather than about permission, and it is the operator's.
+* **No** — a clean, citable no. The gap record records the League route CLOSED rather than
+  unexplored, and what remains is the per-municipality ladder, which the 2026-09-05 sweep
+  has now measured and found poor: 444 of the 608 sites readable, 238 pairing an executive
+  title with a name (a triage figure, not a roster), and no CMS platform covering even a
+  fifth of the state, so there is no one parser to write.
+* **"Members get it free"** — districtry is not a municipality and cannot join, so this
+  is really the purchase route with a different price. Worth asking whether a
+  non-commercial public-information use has any standing.
+
+**Nothing is blocked on the answer.** The clerk ships statewide today, the eighteen
+rostered municipalities need nothing from the League, and neither does the
+per-municipality route — that route is simply a poor one, which the sweep measured rather
+than assumed.

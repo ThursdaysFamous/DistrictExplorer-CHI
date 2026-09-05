@@ -71,6 +71,7 @@ Usage (rare operator step; network access to the county services required):
 import json
 import math
 import os
+import re
 import sys
 
 import requests
@@ -189,6 +190,120 @@ for _code in ("05009", "07005"):
 for _code in ("03004", "03007", "03011", "05008"):
     BOONE_LIBRARY_CODES[_code] = NORTH_SUBURBAN_LIBRARY
 
+# --- Woodford ------------------------------------------------------------
+# One 25,824-parcel fabric, published three times over under three names. Every
+# name it carries is `<CODE> - <District>`, the same form the County Clerk's
+# certified settlement sheets use, so the code is the join between the two
+# documents; it is kept on the shipped feature and the card leads with the name.
+WOODFORD_PARCELS = ("https://services1.arcgis.com/iOG1OLysrxLAswZi/arcgis/rest/"
+                    "services/%s/FeatureServer/%d")
+WOODFORD_FIRE = WOODFORD_PARCELS % ("Fire_Protection_Districts", 2)
+WOODFORD_LIBRARY = WOODFORD_PARCELS % ("Library_Districts", 8)
+WOODFORD_PARK = WOODFORD_PARCELS % ("Park_Districts", 9)
+WOODFORD_CODE_RE = r"^(?P<code>[A-Z]{2}[A-Z0-9]{2}) - (?P<name>.+)$"
+
+# The second witness, PINNED. A DEVNET-generated Settlement Sheet for tax year
+# 2025, in the county's own "County Taxes" archive and linked from its Real
+# Estate Tax Information page. Re-verifying the district SET means re-reading
+# these two, not searching the county's site again.
+WOODFORD_TAX_YEAR = 2025
+WOODFORD_SETTLEMENT_SHEETS = "https://www.woodford-county.org/Archive.aspx?ADID=3720"
+WOODFORD_COUNTY_SUMMARY = "https://www.woodford-county.org/Archive.aspx?ADID=3719"
+
+# WHAT THE THREE ITEMS SAY ABOUT THEMSELVES. All three are `access: public` in
+# the county's own ArcGIS org, and the library and park items carry no licence
+# text at all. The FIRE item carries two notes worth carrying forward rather
+# than smoothing away: its licenseInfo reads "Does not match scale of Woodford
+# Parcel Data", and its description opens "2007 Illinois Department of Revenue
+# Taxing District Data for Woodford County".
+#
+# THAT 2007 DATE DESCRIBES THE ORIGINAL DISTRICT SHAPES, NOT WHAT IS DISSOLVED
+# HERE, and the difference is measurable rather than argued. A parcel's district
+# on this layer follows its TAX CODE: all 119 distinct `Tax_Code_1` values map
+# to exactly one district per concept, on all three concepts, with no code split
+# between two districts. So what is being dissolved is a tax-code crosswalk, and
+# the tax codes are the ones the 2025 settlement sheets levy under — which is
+# why the district set agrees with those sheets exactly. The geometry is the
+# county's current parcel fabric throughout. The scale caveat is the county's
+# own, and is why nothing here treats a district edge as survey-accurate.
+
+# MINONK IS THE ONE MUNICIPAL LIBRARY IN THE SET and the card says so, because
+# "Library District: Minonk City Library" would otherwise read as a district a
+# resident lives inside. Measured, not inferred: all 1,230 of its parcels are
+# in the City of Minonk and all 1,230 of the city's parcels are in it. The
+# app's existing LIBRARY_GOVERNANCE wording for a city library ("levies no
+# district tax of its own") is NOT reused, because the Clerk's own 2025
+# settlement sheet shows LYMI levying $99,987.82 under a `016 - Library` fund —
+# so the note states the territory, which is what was measured, and makes no
+# claim about which body votes the levy.
+# THE FIRST VERSION OF THIS NOTE SAID "its area is exactly the city" AND THAT
+# WAS FALSE, because it was measured against the county's parcel ATTRIBUTE
+# (`Village`) and never against the county's corporate-boundary LAYER. Both
+# were consulted this time and THEY DISAGREE: the parcel table puts all 1,230
+# LYMI parcels in `VCMI - City of Minonk` and all 1,230 city-tagged parcels in
+# LYMI, while `Corporate_Boundary` excludes five of them — tax code 06002, a
+# 16,059 m² tract whose nearest point is 5.2 km south of the city polygon,
+# which is why the shipped LYMI feature is a two-part MultiPolygon. Two county
+# products disagreeing IS the finding; the note states the territory and drops
+# the word that was doing the overclaiming.
+WOODFORD_LIBRARY_NOTES = {
+    "LYMI - Minonk City Library":
+        "Municipal library — its territory is the City of Minonk: the county's "
+        "parcel table puts all 1,230 of the library's parcels in the city, "
+        "though its corporate-boundary layer places five of them on a detached "
+        "tract 5 km to the south.",
+}
+
+# ONE POSITIVE PROBE PER FIRE DISTRICT, plus the Metamora negative. Each point
+# is a representative point of a real parcel and its EXPECTED answer is that
+# parcel's own attribute value, read from the county's table before this build
+# ran — so a probe tests the dissolve-and-close pipeline against the county's
+# own row rather than against another product of the same pipeline.
+WOODFORD_FIRE_PROBES = [
+    (40.61778, -89.31191, "Deer Creek Fire District"),
+    (40.74938, -89.49057, "Germantown Fire District"),
+    (40.92399, -88.93623, "Dana Fire District"),
+    (40.87464, -89.38365, "Washburn Fire District"),
+    (40.75507, -88.93417, "Gridley Fire Protection District"),
+    (40.76133, -89.03991, "El Paso Fire District"),
+    (40.75880, -89.41516, "Central Fire District"),
+    (40.61237, -89.25837, "Eureka-Goodfield Fire District"),
+    (40.90300, -89.44234, "Spring Bay Fire District"),
+    (40.75269, -89.20083, "Roanoke Fire District"),
+    (40.77375, -89.41533, "Metamora Rural Fire District"),
+    (40.90942, -89.07173, "Minonk Fire District"),
+    (40.60559, -89.14376, "Carlock Fire District"),
+    (40.69675, -89.08596, "Secor Fire District"),
+    (40.63796, -89.05176, "Hudson Fire District"),
+    (40.59862, -89.23620, "Congerville Fire District"),
+    (40.83437, -89.13839, "Benson Fire District"),
+    # inside the Village of Metamora, which runs its own department — the whole
+    # of the county's 1,701-parcel fire hole. The SAME point is a positive on
+    # the park layer below, so a build that quietly closed this hole over would
+    # fail here while still passing there.
+    (40.78554, -89.36257, None),
+]
+WOODFORD_LIBRARY_PROBES = [
+    (40.61778, -89.31191, "Deer Creek Library District"),
+    (40.69675, -89.08596, "El Paso District Library"),
+    (40.76112, -89.28529, "IL Prairie Library District"),
+    (40.90850, -89.04460, "Minonk City Library"),
+    (40.60559, -89.14376, "Carlock Library District"),
+    (40.69351, -89.30522, "Eureka Library District"),
+    (40.92399, -88.93623, None),   # Dana — no library district
+    (40.61237, -89.25837, None),   # rural Eureka-Goodfield
+    (40.59862, -89.23620, None),   # Congerville village
+    (40.83437, -89.13839, None),   # Benson village
+]
+WOODFORD_PARK_PROBES = [
+    (40.84710, -89.31738, "Grant Memorial Park District"),
+    (40.79629, -89.19274, "Roanoke Park District"),
+    (40.78554, -89.36257, "Metamora Park District"),  # fire-negative, park-positive
+    (40.61778, -89.31191, None),   # Deer Creek — no park district
+    (40.90942, -89.07173, None),   # Minonk — no park district
+]
+
+
 def _in_clause(codes):
     return "tax_code IN (%s)" % ", ".join("'%s'" % c for c in sorted(codes))
 
@@ -252,6 +367,73 @@ SOURCES = [
                 (42.34853, -88.93519, NORTH_SUBURBAN_LIBRARY),   # 03004
                 (42.39853, -88.74735, None),                    # Capron village (04003)
                 (42.32119, -88.83908, None)]},                  # 05007 — park only, no library
+    # Woodford's three, and the SIMPLER half of Boone's shape: the county
+    # publishes no district tiling either, but its parcels carry the district's
+    # NAME rather than a bare tax code, so no Clerk crosswalk is needed and
+    # nothing is hand-transcribed. `Fire_Protection_Districts`,
+    # `Library_Districts` and `Park_Districts` are three views of ONE 25,824-row
+    # parcel fabric with an identical 100-column schema; each dissolves a
+    # different column of it.
+    #
+    # THE SECOND WITNESS IS THE COUNTY'S OWN TAX SETTLEMENT SHEETS
+    # (WOODFORD_SETTLEMENT_SHEETS above), and what they are NOT is worth
+    # stating, because an earlier draft called them "the Clerk's certified"
+    # sheets and neither half is supported: the document names NO OFFICE and
+    # the word "certified" does not appear in it. What it does establish is the
+    # thing that matters — the fabric's 17 fire, 6 library and 3 park districts
+    # are exactly the set the county levies for, code for code (`FDBE - BENSON
+    # FIRE DISTRICT` there, `FDBE - Benson Fire District` here), so the district
+    # SET is corroborated by a different county product rather than by the same
+    # layer restating itself.
+    #
+    # THE HOLES ARE MEASURED, NOT ASSUMED. 1,701 parcels carry no fire district
+    # and every single one of them is in the Village of Metamora, which runs its
+    # own department — the county says as much in the name of the district that
+    # surrounds it, `Metamora RURAL Fire District`. 3,273 carry no library
+    # (unincorporated ground plus Goodfield and Congerville) and 21,711 no park
+    # district, which is ordinary: Woodford levies only three.
+    #
+    # THE HOLES WERE THEN COUNTED IN PEOPLE RATHER THAN IN ACRES, because area
+    # answers the wrong question. The fire tiling covers 96.9% of the county by
+    # area and the largest gap — 66% of all the uncovered ground — is the
+    # Illinois River corridor along the western line, where the fabric has no
+    # parcels because there is nothing to assess. Against the county's own
+    # 16,889 ADDRESS POINTS (2026-09-05): 14,989 land inside a fire district,
+    # 1,738 of the 1,900 that do not are the Village of Metamora, 79 more are
+    # within the app's 60 ft runtime snap and answer anyway, and 83 — 0.49% —
+    # sit on ground the county's OWN FABRIC HAS NO PARCEL FOR. Each of those 83
+    # was queried against the county's service one at a time and every one came
+    # back with no parcel at all. 72 of the 83 fall inside the City of Eureka's
+    # own corporate boundary and 11 are scattered across the county, so the
+    # BBOX of the set spans Woodford even though seven in eight sit in one
+    # city — an earlier draft said only that they "cluster in and around
+    # Eureka", which is true of the points and misleading about their extent.
+    # The shape is a subdivision addressed before the assessor split its lots.
+    # So the layer says nothing exactly where the county says nothing, which is the
+    # right answer rather than a defect to close over.
+    {"slug": "woodford-fire", "out": "woodford-fire-districts.json",
+     "layer": WOODFORD_FIRE, "name_prop": "Fire_Prote", "expect": 17,
+     "out_fields": "Fire_Prote", "where": "Fire_Prote <> ' '",
+     "out_prop": "district",
+     "expect_rows": 24123, "expect_no_geometry": 2,
+     "edit_pin": 1770658506423,
+     "code_split": WOODFORD_CODE_RE,
+     "probes": WOODFORD_FIRE_PROBES},
+    {"slug": "woodford-library", "out": "woodford-library-districts.json",
+     "layer": WOODFORD_LIBRARY, "name_prop": "Library_Di", "expect": 6,
+     "out_fields": "Library_Di", "where": "Library_Di <> ' '",
+     "out_prop": "district",
+     "expect_rows": 22551, "expect_no_geometry": 1,
+     "edit_pin": 1770655810726,
+     "code_split": WOODFORD_CODE_RE, "notes": WOODFORD_LIBRARY_NOTES,
+     "probes": WOODFORD_LIBRARY_PROBES},
+    {"slug": "woodford-park", "out": "woodford-park-districts.json",
+     "layer": WOODFORD_PARK, "name_prop": "Park_Distr", "expect": 3,
+     "out_fields": "Park_Distr", "where": "Park_Distr <> ' '",
+     "out_prop": "district",
+     "expect_rows": 4113, "edit_pin": 1770655529993,
+     "code_split": WOODFORD_CODE_RE,
+     "probes": WOODFORD_PARK_PROBES},
     {"slug": "kendall-fire", "out": "kendall-fire-districts.json",
      "layer": KENDALL + "Fire_Protection_Districts/FeatureServer/0",
      "name_prop": "fire", "expect": 10,
@@ -274,6 +456,12 @@ SOURCES = [
     {"slug": "macon-park", "out": "macon-park-districts.json",
      "layer": MACON + "ParkJoin_Dissolve/FeatureServer/0", "name_prop": "Park",
      "expect": 6, "edit_pin": 1770754910514, "probes": []},
+    # KENDALL'S FIRE FILE DOES NOT REBUILD BYTE-IDENTICALLY, and it did not
+    # before this branch either — the drift is seam wobble under a count+name
+    # pin that passes, so nothing here detects it. Recorded rather than fixed:
+    # Kendall publishes no edit stamp, so that pin is all there is, and a
+    # reproducible rebuild would also need the shapely version of the original
+    # run. Nothing in this change touches that source.
     # Sangamon fire is deliberately NOT here: its 226-fragment source measured
     # as INTERLEAVED, not void-carved — 168 of its sibling gaps are another
     # district's territory and only 2 are empty ground, and closing added
@@ -378,10 +566,38 @@ def build_source(cfg):
         print("  (no edit stamp published — count+name pin is the guard; "
               "live stamp: %r)" % edit_ms)
 
-    if cfg.get("code_map") is not None and not cfg.get("out_prop"):
-        fail("%s: a code_map source must set out_prop — name_prop names the "
-             "input column, and shipping a district name under it would "
-             "mislabel the column" % cfg["slug"])
+    # A source whose SHIPPED value is not the column's own value must say what
+    # column it ships under. Two ways that happens, and both mislabel the data
+    # in the same way if left alone: a code_map source reads Boone's `tax_code`
+    # and ships a district NAME, and a code_split source reads Woodford's
+    # `Fire_Prote` ("FDBE - Benson Fire District") and ships only the name half.
+    # THIS GUARD WAS code_map-ONLY AND THAT COST A BROWSER RUN: Woodford's three
+    # files shipped under `Fire_Prote`/`Library_Di`/`Park_Distr` while the app
+    # read `district`, so every static gate passed and every card rendered with
+    # its district name reading "Unknown".
+    if (cfg.get("code_map") is not None or cfg.get("code_split")) \
+            and not cfg.get("out_prop"):
+        fail("%s: a source that transforms its name (code_map or code_split) "
+             "must set out_prop — name_prop names the INPUT column, and "
+             "shipping a different value under it would mislabel the column"
+             % cfg["slug"])
+
+    where = cfg.get("where", "1=1")
+
+    # ASK THE SERVER HOW MANY ROWS IT HAS, THEN REQUIRE THE PAGER TO DELIVER
+    # THAT MANY. The loop used to trust `exceededTransferLimit` alone, and that
+    # flag's LOCATION IS A SERVER DIALECT: an ArcGIS Server MapServer (Boone,
+    # Cook) puts it at the top level of a GeoJSON response, while an AGOL hosted
+    # FeatureServer (Woodford) puts it under "properties". Reading only the top
+    # level, Woodford's 24,123-parcel fire fabric returned its first 1,000 rows
+    # with the flag apparently absent and the pager stopped — a district drawn
+    # from 4% of its own ground, silently, which is the exact failure the
+    # paragraph below says this loop exists to prevent. So the flag is read from
+    # BOTH places AND the total is checked against the county's own count: a
+    # dialect this script has not met yet fails loudly instead of truncating.
+    count_probe = requests.get(cfg["layer"] + "/query", params={
+        "where": where, "returnCountOnly": "true", "f": "json",
+    }, timeout=120).json().get("count")
 
     # WHERE + PAGINATION, because Boone's upstream is not a district tiling.
     # Every other source here publishes one row per district (9 to 40 of them),
@@ -392,22 +608,39 @@ def build_source(cfg):
     # said nothing — a district drawn from 8% of its own ground, silently. So
     # the fetch pages, and REFUSES rather than truncating if the server still
     # reports more to give.
-    where = cfg.get("where", "1=1")
+    #
+    # outFields defaults to "*", which is right for a district tiling. A PARCEL
+    # fabric sets out_fields to the one column being dissolved: Woodford's
+    # carries 100 columns per row including owner names, home addresses and
+    # billing addresses, and the honest handling of data this app would never
+    # show is not to fetch it.
     features, offset = [], 0
     while True:
         page = requests.get(cfg["layer"] + "/query", params={
-            "where": where, "outFields": "*", "outSR": 4326, "f": "geojson",
+            "where": where, "outFields": cfg.get("out_fields", "*"),
+            "outSR": 4326, "f": "geojson",
             "resultOffset": offset, "resultRecordCount": PAGE_SIZE,
         }, timeout=180).json()
         got = page.get("features") or []
         features += got
-        if not page.get("exceededTransferLimit") or not got:
+        more = page.get("exceededTransferLimit") or \
+            (page.get("properties") or {}).get("exceededTransferLimit")
+        if not more or not got:
             break
         offset += len(got)
         if offset > MAX_FETCH_ROWS:
             fail("%s: fetch passed %d rows without the server saying it was "
                  "done — refusing to guess where the data ends"
                  % (cfg["slug"], MAX_FETCH_ROWS))
+    if isinstance(count_probe, int):
+        if len(features) != count_probe:
+            fail("%s: paged %d rows but the server counts %d for the same "
+                 "where clause — the pager stopped early (check whether this "
+                 "service reports exceededTransferLimit somewhere new)"
+                 % (cfg["slug"], len(features), count_probe))
+    else:
+        print("  (server returned no row count to check the pager against: %r)"
+              % (count_probe,))
     geo = {"features": features}
 
     # ROW-COUNT PIN + EMPTY-CODE GATE, for a code_map source only. `expect`
@@ -418,12 +651,17 @@ def build_source(cfg):
     # to none. That is not a fault — a tax code with no parcels contributes no
     # geometry — but it was happening SILENTLY, so the codes are declared and
     # any change to that set stops the build.
-    if cfg.get("code_map") is not None:
+    # THE ROW PIN IS FOR ANY PARCEL FABRIC, not only a code_map one. `expect`
+    # counts DISTRICTS, which for a fabric is a floor so low that half the roll
+    # could vanish and every guard here would still pass — true of Boone's 2 and
+    # 3, and of Woodford's 3 park districts drawn from 4,113 parcels.
+    if cfg.get("expect_rows") is not None:
         want_rows = cfg["expect_rows"]
         if len(features) != want_rows:
             fail("%s: %d parcels, expected %d — the county re-coded its roll; "
-                 "re-read %s before re-pinning"
-                 % (cfg["slug"], len(features), want_rows, BOONE_REPORTS["roster"]))
+                 "re-verify this source's measurements before re-pinning"
+                 % (cfg["slug"], len(features), want_rows))
+    if cfg.get("code_map") is not None:
         seen = set()
         for f in features:
             props = f.get("properties") or {}
@@ -453,7 +691,7 @@ def build_source(cfg):
     # any usable time over Boone's 12,264 parcels, which is what a parcel fabric
     # costs. Same geometry either way; a single unary_union over a list is the
     # call shapely is built for.
-    parts, blanks = {}, 0
+    parts, blanks, no_geom = {}, 0, {}
     excl = set(cfg.get("exclude_names", []))
     for f in geo.get("features", []):
         props = f.get("properties") or {}
@@ -475,6 +713,17 @@ def build_source(cfg):
             continue
         if name in excl:
             continue
+        # A PARCEL ROW WITH NO SHAPE AT ALL. Woodford's roll carries three
+        # (two on the fire view, one on the library view, all in Eureka) — an
+        # assessment record the county has not drawn, which contributes no
+        # ground to a district built from thousands of other parcels. It is
+        # DECLARED rather than skipped: an undeclared skip here is how a fabric
+        # loses ground quietly, so the count is pinned per source and a change
+        # to it stops the build. Distinguish it from a row that HAS a geometry
+        # which cleaning cannot use — that is a fault and still fails.
+        if not f.get("geometry"):
+            no_geom[name] = no_geom.get(name, 0) + 1
+            continue
         g = polygonal(clean(shape(f["geometry"])))
         if g is None or g.is_empty:
             fail("%s: %r has no usable geometry" % (cfg["slug"], name))
@@ -482,6 +731,15 @@ def build_source(cfg):
 
     named = {n: (unary_union(v) if len(v) > 1 else v[0]) for n, v in parts.items()}
 
+    if sum(no_geom.values()) != cfg.get("expect_no_geometry", 0):
+        fail("%s: %d rows carry no geometry, expected %d (%s) — the county's "
+             "roll changed; re-verify before re-pinning"
+             % (cfg["slug"], sum(no_geom.values()),
+                cfg.get("expect_no_geometry", 0), dict(no_geom)))
+    if no_geom:
+        print("  %d undrawn parcel row(s), contributing no ground: %s"
+              % (sum(no_geom.values()),
+                 ", ".join("%s x%d" % (k, v) for k, v in sorted(no_geom.items()))))
     if blanks != cfg.get("expect_blanks", 0):
         fail("%s: %d blank-named rows, expected %d — the layer changed"
              % (cfg["slug"], blanks, cfg.get("expect_blanks", 0)))
@@ -595,6 +853,30 @@ def build_source(cfg):
         print("  gaps kept by design (contested seam or short-frontage outlier):", seams)
 
     out_prop = cfg.get("out_prop", cfg["name_prop"])
+
+    # SPLIT A COUNTY'S OWN CODE OFF THE FRONT OF THE NAME, when the source says
+    # its names carry one. Woodford's fabric and its certified settlement sheets
+    # both write every district as `FDBE - Benson Fire District`: the code is
+    # the county's join key between the two documents and is worth keeping, and
+    # it is not what a resident's card should lead with. The pattern is
+    # DECLARED per source and every name must match it — a county that changes
+    # its convention fails the build rather than shipping a half-split set —
+    # and the code ships beside the name rather than being discarded, so
+    # nothing the county published is lost.
+    split_re = re.compile(cfg["code_split"]) if cfg.get("code_split") else None
+    codes = {}
+    if split_re:
+        for n in ordered:
+            m = split_re.match(n)
+            if not m:
+                fail("%s: %r does not match the declared code pattern %s"
+                     % (cfg["slug"], n, cfg["code_split"]))
+            codes[n] = (m.group("code"), m.group("name"))
+        shown = [v[1] for v in codes.values()]
+        if len(set(shown)) != len(shown):
+            fail("%s: splitting the code off leaves duplicate names (%s) — the "
+                 "code was carrying the distinction" % (cfg["slug"], sorted(shown)))
+
     features = []
     for n in ordered:
         g = from_ft(final_ft[n])
@@ -605,15 +887,21 @@ def build_source(cfg):
                 return round(c, 5)
             return [rnd(x) for x in c]
         geom["coordinates"] = rnd(geom["coordinates"])
+        props = {out_prop: n}
+        if split_re:
+            props = {out_prop: codes[n][1], "code": codes[n][0]}
+        note = (cfg.get("notes") or {}).get(n)
+        if note:
+            props["note"] = note
         features.append({"type": "Feature",
-                         "properties": {out_prop: n},
+                         "properties": props,
                          "geometry": geom})
     fc = {"type": "FeatureCollection", "features": features}
 
     for lat, lng, want in cfg["probes"]:
         p = Point(lng, lat)
         hits = [f["properties"][out_prop] for f in features
-                if shape(f["geometry"]).contains(p)]
+                if shape(f["geometry"]).contains(p)]  # the SHIPPED name
         got = hits[0] if hits else None
         print("  probe %.5f,%.5f -> %-30s [%s]"
               % (lat, lng, got or "no district", "ok" if got == want else "FAIL"))

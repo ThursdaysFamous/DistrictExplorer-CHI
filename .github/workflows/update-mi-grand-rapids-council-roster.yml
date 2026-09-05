@@ -17,7 +17,7 @@ name: Update Grand Rapids council roster
 
 on:
   schedule:
-    - cron: "30 18 * * 4" # Thursday 18:30 UTC
+    - cron: "30 20 * * 4" # Thursday 20:30 UTC (18:30 collided with update-ia-waterloo-council-roster.yml)
   workflow_dispatch: {}
 
 permissions:

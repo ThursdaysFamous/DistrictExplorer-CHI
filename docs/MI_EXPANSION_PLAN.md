@@ -264,14 +264,30 @@ Each opens its own refreshed plan PR with its own measured ledger when it begins
   other side of the Census place outline (+66 against 198,917): two digitisations of one municipal
   edge. The builder bounds that rather than asserting zero, because pretending otherwise would have
   been the more comfortable lie.
-  **SIX OF SEVEN SEATS SHIP.** The city publishes one Ward 1 commissioner where Wards 2 and 3 have
-  two, with no vacancy stated anywhere, so the roster carries `seats` and the card states the
-  unlisted seat — the Alexander machinery, used for the first time on a districted body. Each
+  **SIX OF SEVEN SEATS SHIP, AND THE SEVENTH IS A STATED VACANCY.** The city publishes one Ward 1
+  commissioner where Wards 2 and 3 have two, so the roster carries `seats` and the card accounts
+  for the seventh — the Alexander machinery, used for the first time on a districted body. This
+  PR first said "no vacancy stated anywhere", **on a measurement of one page**. The city's own news
+  post of 2026-04-17 states the vacancy "was created following the resignation of former
+  Commissioner Drew Robbins", and a 2026-03-31 post names ten applicants advancing. ONE PAGE IS NOT
+  THE CITY — the same error that once called Detroit's open-data portal blocked. The card now names
+  the vacancy and its cause, and deliberately says nothing about how it was resolved, because no
+  city source found on 2026-09-05 does. A related trap avoided by construction: the departed
+  commissioner's own page still answers 200 and is still in the sitemap, so a scraper walking
+  sitemap entries would ship him as sitting. Each
   member's own page gives ward, e-mail and direct phone. Three traps recorded: the e-mail domain is
   `grcity.us` and NOT the website's, so a hostname-keyed scraper finds none; the listing's role
   labels sit beside an anchor that is not their own (the Franklin grid trap, which put Ward 1 on a
   Ward 3 member until the member pages contradicted it); and 616.456.3000 is on every page and is the
   switchboard, detected as the number common to all rather than hardcoded.
+  **TWO MORE OF THIS PR'S OWN CLAIMS WERE WRONG AND ARE CORRECTED.** "The city publishes two ward
+  services" came from a search capped at the first 100 of the org's 681 — swept in full there are
+  EIGHT, of which three are byte-identical to what ships, one differs only at the perimeter and
+  three are single-ward layers agreeing with their own ward. No newer plan exists, so the currency
+  finding stands and only the count was wrong. And the shipped map disclaimer was an author-composed
+  paraphrase while the docstring called it verbatim; the card now quotes the city's Data Access and
+  Use Constraint Agreement in its own words, which is what the Des Moines precedent it cited
+  actually does.
   **SIMPLIFICATION IS 50%, AND COPYING THE SIBLINGS' 20-25% WOULD HAVE BEEN WRONG**: mapshaper's
   percentage is a share of the SOURCE vertex count, so on a three-feature layer 20% leaves too little
   to describe the line and agreement falls to 98.95%, below the fleet's floor. The floor was never

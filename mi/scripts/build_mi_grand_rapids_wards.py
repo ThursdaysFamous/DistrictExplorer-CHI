@@ -20,10 +20,31 @@ block rather than dropping him: a card naming two of seven would look complete.
 
 THE CURRENCY QUESTION, AND THE WITNESS THAT ANSWERS IT
 --------------------------------------------------------
-The city publishes two ward services and they are NOT competitors the way
-Detroit's four are: `City_of_Grand_Rapids_Wards` and `CGR_Wards` carry
-identical `Shape__Area` to eight decimal places. One is a duplicate of the
-other with a `GlobalID` column added, and this ships the maintained one.
+THE CITY PUBLISHES EIGHT WARD SERVICES, AND AN EARLIER VERSION OF THIS
+DOCSTRING SAID TWO. That number came from a search capped at the first 100 of
+the org's 681 feature services — a truncated listing read as a measurement.
+Swept in full and each compared against what ships (2026-09-05):
+
+    City_of_Grand_Rapids_Wards   3 features   100.000%   identical
+    GR Wards                     3 features   100.000%   identical
+    City Wards                   3 features   100.000%   identical
+    Wards                        3 features    99.733%   edge differences only
+    GR 1st Ward                  1 feature    100.000%   vs shipped Ward 1
+    GR 2nd Ward                  1 feature     98.400%   vs shipped Ward 2, 0
+                                                         points in a different
+                                                         ward, 24 edge-only
+    GR 3rd Ward                  1 feature    100.000%   vs shipped Ward 3
+
+The three `GR Nth Ward` services are SINGLE wards rather than rival plans, and
+comparing them against the whole city is the wrong test — done that way they
+score 26-38% purely because they cover a third of it. Measured against their
+OWN ward they agree. So no newer plan exists anywhere in the org and the
+conclusion below stands; the count was wrong, not the finding.
+
+The duplicate gate below watches ONE of the seven siblings, which is a real
+limit rather than an oversight: `City_of_Grand_Rapids_Wards` is the one that
+has tracked `CGR_Wards` byte for byte, and widening the gate to all seven would
+fail the build on the two that already differ at the city edge.
 
 The real doubt was age. `CGR_Wards` has `editingInfo.dataLastEditDate` of
 2018-01-24 — before the census these wards are checked against — while its
@@ -44,6 +65,15 @@ rather than stale, and the description is accurate.
 That comparison is a GATE here, not a note, because it is the only thing
 standing between this app and a decade-old ward map.
 
+A THIRD WITNESS, AND THE CHEAPEST ONE: THE CITY CONSUMES THIS SERVICE ITSELF.
+Two of the org's own web maps — "Wards" and "Wards-Zoomed-Out" — draw
+`CGR_Wards/FeatureServer/0`, the exact service shipped here, while an older map
+("Updated City Wards for GRPD") draws the duplicate. A publisher pointing its
+own public map products at a layer is evidence about which layer it maintains,
+and it costs one catalogue query to check. Not gated, because a city
+reorganising its web maps is not a redraw — but worth reading before the
+expensive comparisons, and this build did not.
+
 THE POPULATION IDENTITY IS *NOT* EXACT HERE, AND IS NOT ASSERTED AS IF IT WERE
 --------------------------------------------------------------------------------
 Detroit's seven districts sum to its Census 2020 count exactly, so that build
@@ -55,11 +85,18 @@ blocks over the city's envelope:
     inside the Census place but outside a ward :  10 blocks,  12 people
     net                                        :  +66 against 198,917
 
-Twenty-one blocks at the city's edge, out of 2,883 — the city's ward outline
-and the Census place outline are two independent digitisations of one municipal
-boundary, and they disagree by metres along it. So the gate is a TOLERANCE with
-the measured value recorded, plus a check that the disagreement stays confined
-to that edge rather than opening a hole inside the city.
+Twenty-one blocks at the city's edge. THE DENOMINATOR IS 2,883 — the blocks
+inside EITHER outline — and not the 4,202 the envelope fetch returns, which is
+stated here because the two are easy to confuse and only one of them means
+anything: a block a mile outside both outlines cannot disagree about where the
+city edge runs, so including it would flatter the rate rather than tighten it.
+(2,873 fall inside a ward, 2,872 inside the place, 2,883 inside either.)
+
+The city's ward outline and the Census place outline are two independent
+digitisations of one municipal boundary, and they disagree by metres along it.
+So the gate is a TOLERANCE with the measured value recorded, plus a check that
+the disagreement stays confined to that edge rather than opening a hole inside
+the city.
 
 BALANCE. Against Census 2020 the three wards run 64,400-68,716 on a 66,328
 ideal, worst 3.60% — which is what a plan in force looks like, and is a second,
@@ -68,8 +105,10 @@ independent reason to believe the 2018 file.
 LICENCE. The item carries a long `licenseInfo`, and it is the DES MOINES CASE
 rather than a refusal: a "Data Access and Use Constraint Agreement" that
 conditions use on carrying the city's disclaimer, provided "as a complementary
-service to its residents". It ships verbatim on the card, exactly as Des
-Moines's does.
+service to its residents". The card carries the agreement's OPERATIVE SENTENCES
+QUOTED FROM IT — not a paraphrase, which is what this build shipped first while
+this paragraph called it verbatim. Des Moines's card quotes its city's words
+too; that was the precedent being claimed and not followed.
 
 A MAPSHAPER WARNING THAT IS NOT A DEFECT, MEASURED SO NOBODY RE-CHASES IT.
 Every tolerance above 20% prints "Repaired 0 intersections; N intersections
@@ -105,8 +144,11 @@ MAPSHAPER = "mapshaper@0.6.25"
 
 CITY_ORG = "https://services2.arcgis.com/L81TiOwAPO1ZvU9b/arcgis/rest/services"
 SERVICE = CITY_ORG + "/CGR_Wards/FeatureServer/0"
-# The byte-identical sibling. Read once, as a witness that it IS a duplicate —
-# if the two ever diverge, a human should decide which the city maintains.
+# The byte-identical sibling, one of SEVEN in the org (see the docstring). Read
+# once, as a witness that it IS a duplicate — if the two ever diverge, a human
+# should decide which the city maintains. The other six are not gated: three are
+# single-ward layers and two already differ at the city edge, so a gate over all
+# of them would refuse a correct build.
 DUPLICATE = CITY_ORG + "/City_of_Grand_Rapids_Wards/FeatureServer/0"
 
 # The state's own CURRENT precinct fabric, already shipped by this instance.
@@ -487,10 +529,19 @@ def main():
 
     # The city's licence conditions use on carrying its disclaimer, so it rides
     # the file and the card renders it (the Des Moines pattern).
+    # QUOTED FROM THE CITY'S OWN `licenseInfo`, not paraphrased. An earlier
+    # version of this build composed its own sentence and the docstring called
+    # it verbatim, which it was not — and a use agreement is exactly the text
+    # that must not be reworded. These are the operative sentences of the
+    # City of Grand Rapids Data Access and Use Constraint Agreement, in its
+    # words and order; the full agreement (3,050 characters, including its
+    # arbitration clause) is on the item and linked from the card's source row.
     built["disclaimer"] = (
-        "Ward boundaries provided by the City of Grand Rapids for illustration only. "
-        "The areas depicted are approximate and are not suitable for site-specific "
-        "decision making; the City makes no guarantee of accuracy or completeness.")
+        "The City of Grand Rapids provides data for use \u201cas is\u201d as a "
+        "complementary service to its residents. The areas depicted by this special "
+        "database are approximate and may not be accurate to surveying or engineering "
+        "standards. The special data shown here are for illustration purposes only and "
+        "are not suitable for site specific decision making.")
     with open(out_path, "w") as f:
         json.dump(built, f, separators=(",", ":"))
         f.write("\n")

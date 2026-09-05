@@ -9699,14 +9699,23 @@ function initMichiganExplorer() {
       // with one member. Say so in the card's own words instead of leaving the
       // reader to count — and take the number from the DATA, because how many
       // commissioners a ward elects is the city's fact, not this file's.
+      //
+      // THE REASON IS THE CITY'S TOO, and an earlier version of this row said
+      // the city gave none. It does: its 2026-04-17 news post names the
+      // resignation that created the vacancy. Only the commission page had been
+      // read. What the row deliberately does NOT say is how the vacancy was
+      // resolved — no city source states that, so neither does this.
       var expected = result.seatsPerWard || 0;
       if (result.members && result.members.length && expected &&
           result.members.length < expected) {
         wrap.appendChild(renderFieldStack([{
           label: "This ward's other seat",
-          value: "Grand Rapids elects two commissioners from each ward, and the city "
-               + "lists only one for this one. The second is not named on the City "
-               + "Commission's own page, so this app does not name it either."
+          value: "Grand Rapids elects two commissioners from each ward, and this "
+               + "ward's second seat is vacant. The city says it was \u201ccreated "
+               + "following the resignation of former Commissioner Drew Robbins\u201d "
+               + "and that its Committee on Appointments named three finalists in "
+               + "April 2026. No successor is listed on the City Commission's page, "
+               + "so this app names nobody for it."
         }]));
       }
       if (result.citywide && result.citywide.length) {

@@ -199,7 +199,9 @@ SHEBOYGAN_INDEX = "https://www.sheboyganwi.gov/395/Common-Council"
 # what ships so a reader clicks the address the city actually serves.
 SUPERIOR_INDEX = "https://www.superiorwi.gov/697/City-Councilor-Information"
 PORTAGE_INDEX = "https://www.portagewi.gov/mayor-and-council"
-VIROQUA_INDEX = ("http://viroqua-wisconsin.com/government"
+# http:// 301s here, the same shape as Superior's host; the redirect target is
+# what ships so a reader clicks the address the city actually serves.
+VIROQUA_INDEX = ("https://viroqua-wisconsin.com/government"
                  "/city_council_and_committees.php")
 MENASHA_INDEX = ("https://www.menashawi.gov/residents/government"
                  "/common_council/index.php")

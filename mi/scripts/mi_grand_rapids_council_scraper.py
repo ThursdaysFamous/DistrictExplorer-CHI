@@ -20,14 +20,31 @@ THE CITY PUBLISHES SIX OF THE SEVEN, AND THAT IS SHIPPED AS A SHORTFALL
 -------------------------------------------------------------------------
 Measured 2026-09-05: the commission page links exactly six commissioner pages
 — one for Ward 1, two for Ward 2, two for Ward 3, and the Mayor — and the word
-"vacant" appears nowhere on it. Ward 1's second seat is named by nobody.
+"vacant" appears nowhere ON IT.
 
-This is the Alexander County case, and the honest answer is the one that
-machinery exists for: ship the six the city names, carry `seats` beside them,
-and let the card say a seat is unlisted. Guessing a name is forbidden; silently
-shipping six for a seven-seat body would conceal a seat. Nothing here decides
-WHETHER that seat is vacant or merely unpublished, because the city says
-neither, and inventing the difference would be the same error one level down.
+THE SEAT IS VACANT AND THE CITY DOES SAY SO, JUST NOT THERE. An earlier version
+of this docstring concluded "the city says neither", having measured only the
+commission page. The city's own news post of 2026-04-17 — "Committee on
+Appointments names three finalists for First Ward City Commissioner vacancy" —
+states: "The vacancy was created following the resignation of former
+Commissioner Drew Robbins." A 2026-03-31 post names ten applicants advancing.
+ONE PAGE IS NOT THE CITY, which is the same error that once called Detroit's
+open-data portal blocked.
+
+So the card names the vacancy and its cause. What it does NOT say is anything
+about how the vacancy has since been handled: no city source found on
+2026-09-05 states an appointment outcome, and the commission page still lists
+one Ward 1 commissioner. That silence ships as silence.
+
+The rest is the Alexander County case: ship the six the city names, carry
+`seats` beside them, and let the card account for the seventh. Guessing a name
+is forbidden; silently shipping six for a seven-seat body would conceal a seat.
+
+A TRAP THIS PARSER AVOIDS BY CONSTRUCTION: the departed commissioner's own page
+(/government/city-commission/commissioners/drew-robbins/) STILL ANSWERS 200 and
+is still in the city's sitemap. A scraper walking sitemap entries or guessing
+commissioner URLs would ship him as sitting. This one reads the commission
+listing, which no longer links him — the Alexander nav-menu rule.
 
 THIS SITE IS READABLE, WHICH IS WHY THERE IS NO ARCHIVE RUNG
 --------------------------------------------------------------

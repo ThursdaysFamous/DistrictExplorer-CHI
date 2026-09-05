@@ -39,6 +39,18 @@ noise that nobody reads. A NEW instance (no `sw.js` at the base) is skipped
 rather than failed. And it does not verify the bump is an INCREMENT: any
 different name evicts the old cache, which is the property that matters.
 
+THE GAP THIS CANNOT SEE, and it is a real one: a change that ADDS files to
+GEOMETRY_URLS without changing any file already there passes here, because the
+cache-first list is taken from the BASE's sw.js and a brand-new file has no
+stale copy for a returning visitor to hold. That reasoning is sound for the
+visitor and it is NOT the whole rule — `sw.js`'s own header says to bump
+"whenever SHELL_URLS, GEOMETRY_URLS, or ROSTER_URLS change", which a pure
+addition does. Found on the Woodford change (2026-09-05), which added three
+geometry files and shipped with the cache name unmoved while this gate stayed
+green. Until the comment and the gate are reconciled, TREAT THE COMMENT AS THE
+RULE: a change to any of the three lists gets a bump, and this gate catches
+only the subset that would actually serve stale bytes.
+
 Usage:
     python3 scripts/check_cache_version.py --base origin/main
 """

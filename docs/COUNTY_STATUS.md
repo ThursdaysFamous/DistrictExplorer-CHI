@@ -113,7 +113,7 @@
 | Will | 17197 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 4 — `aurora-council-contact` (blocked); `county-board-office-addresses` (no-source); `crete-municipal-clerk` (no-source); `joliet-municipal-contact` (blocked) |
 | Williamson | 17199 | County card | at-large — County card | — | 2 — `captcha-county-commissioner-contact` (blocked); `library-districts-unmapped-counties` (no-source) |
 | Winnebago | 17201 | dispatch | districted | `county-board`, `county-precinct`, `judicial-subcircuit` | 4 — `county-board-office-addresses` (no-source); `library-districts-unmapped-counties` (no-source); `rockford-city-precincts` (no-source); `winnebago-special-districts` (no-source) |
-| Woodford | 17203 | dispatch | districted | `county-board`, `county-precinct` | 3 — `county-board-office-addresses` (no-source); `library-districts-unmapped-counties` (no-source); `woodford-special-districts` (no-source) |
+| Woodford | 17203 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 2 — `county-board-office-addresses` (no-source); `woodford-special-district-boards` (data-quality) |
 
 ## Researched frontier (11) — gap-recorded, not yet served
 

@@ -11,12 +11,17 @@ rides none of them and ships in a `citywide` block, because a ward card naming
 two of seven would look complete.
 
 The city publishes SIX of the seven — one Ward 1 commissioner where Wards 2 and
-3 each have two — and says nothing about the seventh. So `seats` ships beside
-the members and the card states the shortfall in its own words. That is the
-Alexander County machinery, used here for the first time on a DISTRICTED body:
-naming five and implying six would conceal a seat, and naming a sixth would
-invent a person. Nothing here decides whether that seat is vacant or merely
-unpublished; the city says neither.
+3 each have two. So `seats` ships beside the members and the card accounts for
+the seventh. That is the Alexander County machinery, used here for the first
+time on a DISTRICTED body: naming five and implying six would conceal a seat,
+and naming a sixth would invent a person.
+
+THE SEVENTH IS VACANT, AND THE CITY SAYS SO OFF THE COMMISSION PAGE. Its news
+post of 2026-04-17 states "The vacancy was created following the resignation of
+former Commissioner Drew Robbins". An earlier version of this file said the
+city said nothing, on a measurement of one page. What no city source states, as
+of 2026-09-05, is how the vacancy was resolved — so the card names the vacancy
+and its cause and stops there.
 
 WHAT SHIPS PER MEMBER, AND WHAT DOES NOT
 ------------------------------------------
@@ -27,6 +32,16 @@ Part 5) — and this REFUSES to write if the hoisted number ever reappears on a
 member row. The address is City Hall, labelled as such: unlike Detroit's page,
 which carries an explicit "City Council Office" block, Grand Rapids prints
 300 Monroe Avenue NW only in its site-wide footer.
+
+NO FETCH TIMESTAMP SHIPS, AND THAT IS A DECISION RATHER THAN AN OMISSION.
+Detroit's roster carries `archivedAt` because it is read from an ARCHIVE and a
+reader needs to know which day's copy they are seeing. This source is the live
+city site, refreshed weekly by CI, so a timestamp would carry almost no
+information — and it would cost something real: the weekly workflow gates its
+PR on `git diff --quiet` over this file, so a field that changes on every run
+would open a no-op pull request every Thursday for a roster that had not
+changed. The recency a reader can rely on is the refresh cadence, which the
+card's source link and the workflow both make plain.
 
     python3 mi/scripts/mi_grand_rapids_council_scraper.py   # refresh the cache
     python3 mi/scripts/build_mi_grand_rapids_council.py

@@ -1433,6 +1433,37 @@ that taught them — the wording is Illinois's because Illinois paid for them. *
 the cross-state synthesis**; this section is the county-work detail behind it, and where
 the two overlap Part 5 is the shorter statement of the same rule.
 
+- **A COUNTY THAT PUBLISHES ITS PARCEL LAYER UNDER A DISTRICT'S NAME HAS PUBLISHED THE
+  DISTRICT.** Ask this before writing any county off for want of a boundary layer, and ask
+  it of the PARCEL layer specifically — the sweep that misses it is the one that searches a
+  county's catalogue for a *district* dataset, finds none, and stops. Woodford's record sat
+  shut for five weeks saying its "Fire Protection Districts" service "returns 25,824
+  records, one per parcel of land … it publishes the individual parcels instead of the
+  combined district" — an accurate measurement and the wrong conclusion, because a dissolve
+  is exactly what turns one into the other. Two shapes, easiest first:
+  - **The parcel carries the district's NAME** (Woodford: `Fire_Prote`, `Library_Di`,
+    `Park_Distr`; Grundy: one comma-separated `Districts` field listing every body a
+    parcel pays into). Nothing is transcribed and nothing is hand-mapped — dissolve the
+    column.
+  - **The parcel carries only a TAX CODE** (Boone). Then you also need the Clerk's
+    "Taxcode Value within District Report" to say which codes pay into which district,
+    and that report is hand-transcribed and pinned.
+  Either way `scripts/build_parcel_fabric_districts.py` already holds the machinery — the
+  75 ft road-void closing, the contested-seam rule, the probe gates — so a new county is a
+  config entry, not a script. **Corroborate the district SET against a second county
+  document**, never against the same layer restating itself: the Clerk's certified tax
+  settlement sheets name and levy for exactly the districts that should come out.
+  **Count the holes in PEOPLE, not acres.** Woodford's fire tiling covers 96.9% of the
+  county and the largest gap by area is the Illinois River, which tells you nothing;
+  against the county's own 16,889 address points, 1,738 of the 1,900 that land outside
+  every district are one village that runs its own fire department and 83 sit on ground
+  the county's fabric has no parcel for. The first number is a fact about water and the
+  second is the answer.
+  **And make the builder refuse a mislabelled column.** A source whose shipped value is
+  not its column's own value must declare `out_prop`. Woodford shipped under `Fire_Prote`
+  while the app read `district`; every static gate passed, every card rendered, and every
+  district name read "Unknown" — caught only by looking at it in a browser.
+
 - **FETCHABLE IS NOT LICENSED. Read the publisher's terms before you build, and treat
   the answer as part of "is there a source?"** This is now step zero of county research,
   ahead of every technical probe. Champaign and Piatt were surveyed as BUILD-READY —

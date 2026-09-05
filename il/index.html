@@ -14050,6 +14050,27 @@ function initChiExplorer() {
   // of plain strings reads identically and would never be probed, so a district
   // that moved or folded would keep a dead link on its card indefinitely — the
   // same reason the six statewide library loaders name their files literally.
+  /* ---------- Woodford's fire, library and park districts ----------------
+   * Boone's shape without Boone's crosswalk. The county publishes no district
+   * tiling: its "Fire Protection Districts", "Library Districts" and "Park
+   * Districts" services are three views of ONE 25,824-row PARCEL FABRIC, one
+   * record per property. What makes it easy is that each parcel carries the
+   * district's NAME rather than a bare tax code, so no Clerk report has to be
+   * transcribed — scripts/build_parcel_fabric_districts.py dissolves the column
+   * and closes the road voids, and the Clerk's certified 2025 settlement sheets
+   * levy for exactly the 17 / 6 / 3 districts that come out.
+   *
+   * Cache-first geometry like every other pre-built tiling here.
+   */
+  var loadWoodfordFireDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/woodford-fire-districts.json", {}, 2);
+  });
+  var loadWoodfordLibraryDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/woodford-library-districts.json", {}, 2);
+  });
+  var loadWoodfordParkDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/woodford-park-districts.json", {}, 2);
+  });
   var BOONE_DISTRICT_SITES = {
     "BELVIDERE PARK DISTRICT": { url: "https://www.belviderepark.org/" },
     "ROCKFORD PARK DISTRICT": { url: "https://www.rockfordparkdistrict.org/" },
@@ -23288,6 +23309,24 @@ function initChiExplorer() {
           { label: "County", value: "Effingham County" }
         ]
       }),
+      // Woodford — 17 districts dissolved from the county's parcel fabric.
+      // The VILLAGE OF METAMORA is a hole on purpose: every one of the 1,701
+      // parcels the county leaves without a fire district is inside it, it runs
+      // its own department, and the district wrapped around it is named
+      // "Metamora Rural". No `excluded` block is needed the way Boone's fire
+      // entry needs one — Boone's tiling covered Belvidere and claimed it,
+      // where Woodford's fabric simply does not draw the village, so the layer
+      // stays silent there instead of asserting a membership.
+      polygonCountyEntry({
+        key: "woodford",
+        coverage: woodfordCountyCoverage,
+        loader: loadWoodfordFireDistricts,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
+        fields: [
+          { name: "name", label: "Fire District", keys: ["district"], primary: true },
+          { label: "County", value: "Woodford County" }
+        ]
+      }),
       // Hamilton — three named districts from the county's own layer (a
       // fourth, unnamed ~0.4 km² sliver is excluded in the loader); most of
       // the county sits in none, and the empty state says so
@@ -23552,6 +23591,19 @@ function initChiExplorer() {
         fields: [
           { name: "name", label: "Park District", keys: ["name"], primary: true },
           { label: "County", value: "Effingham County" }
+        ]
+      }),
+      // Woodford — 3 districts dissolved from the county's parcel fabric. Only
+      // 4,113 of its 25,824 parcels are in one, so most of the county sits in
+      // no park district and the empty state is the true answer there.
+      polygonCountyEntry({
+        key: "woodford",
+        coverage: woodfordCountyCoverage,
+        loader: loadWoodfordParkDistricts,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
+        fields: [
+          { name: "name", label: "Park District", keys: ["district"], primary: true },
+          { label: "County", value: "Woodford County" }
         ]
       })
     ]
@@ -23831,6 +23883,30 @@ function initChiExplorer() {
                               coverage: stClairCountyCoverage, loader: loadStClairLibraries }),
       statewideLibraryEntry({ key: "stephenson", county: "Stephenson County",
                               coverage: stephensonCountyCoverage, loader: loadStephensonLibraries }),
+      // Woodford — 6 library bodies dissolved from the county's parcel fabric.
+      // ONE OF THE SIX IS NOT A DISTRICT: Minonk City Library is municipal, so
+      // its feature carries a `note` the card renders and the other five carry
+      // none. The note says its territory is the City of Minonk and stops
+      // short of "exactly", because the county's own two products disagree —
+      // the parcel table puts all 1,230 of its parcels in the city, while
+      // Corporate_Boundary leaves five of them on a tract 5.2 km south. The
+      // app's LIBRARY_GOVERNANCE wording for a city library is deliberately
+      // NOT reused either: it says such a library "levies no district tax of
+      // its own", and the county's own 2025 settlement sheet shows LYMI
+      // levying $51,791.31 on its `016 - Library` fund ($99,987.82 across both
+      // of its funds), so the note states the territory that was measured and
+      // claims nothing about who votes the levy.
+      polygonCountyEntry({
+        key: "woodford",
+        coverage: woodfordCountyCoverage,
+        loader: loadWoodfordLibraryDistricts,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
+        fields: [
+          { name: "name", label: "Library District", keys: ["district"], primary: true },
+          { name: "note", label: "Governance", keys: ["note"] },
+          { label: "County", value: "Woodford County" }
+        ]
+      }),
       // Adams — 7 library districts on a 10-polygon tiling. One polygon is named
       // "None": that is the county recording an area no library district serves,
       // so the card says exactly that instead of naming a district called None.
