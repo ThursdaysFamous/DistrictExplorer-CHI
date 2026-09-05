@@ -132,7 +132,7 @@ shipped; Iowa's is the fleet's largest missing safety fabric.
 
 ---
 
-## Ask 4 — Iowa HSEMD: the precinct column the current polling-place file dropped
+## Ask 4 — Iowa Secretary of State and HSEMD: the precinct column the current polling-place file dropped
 
 **REWRITTEN 2026-09-05, and the rewrite is the point.** This ask used to be addressed to the
 Secretary of State and to read "is there a current edition?" — measured against the published
@@ -142,7 +142,8 @@ already answered. HSEMD publishes a CURRENT edition openly and without a licence
 that made the previous edition usable: the **2024** file carried `Precinct_Name` and joins this
 app's precinct fabric at **98.0%**, while the 2026 file dropped it and its `Pre_Code` joins at
 **22.0%**, matching nothing at all in Polk, Linn, Scott and Black Hawk. So the ask is now for one
-column, to the office that publishes the file, and the whole measurement is the
+column, to BOTH offices that stand behind the file — the Secretary of State supplies it and
+HSEMD hosts it, and the recipient line below says so — and the whole measurement is the
 `ia-polling-places` gap record's blocker.
 
 Recipient: **both offices**. The Legislature's own CC0 polling item credits "Iowa Secretary of

@@ -1115,7 +1115,9 @@ three columns are the whole story: the 2024 edition carried `Precinct_Name`, `El
 So the two properties the display contract needs — JOINABLE and CURRENT — exist in different
 files and never in the same one. The 2024 file is joinable and names an election that passed ten
 months ago, which the contract's own "retired once the election passes" rule refuses. The 2026
-file is current and cannot be attached to a precinct by anything published.
+file is current and carries no precinct key of its own — it can be attached to a precinct
+ONLY through the 2024 crosswalk described below, which bridges 93.8% of its rows through a
+two-year-old code map, and that is a stale route rather than no route at all.
 
 **THERE ARE TWO PUBLISHERS, AND A FIRST DRAFT OF THIS ENTRY COLLAPSED THEM INTO ONE.** The
 corrections it made to the old sentence were themselves wrong, and are restated here as measured:
