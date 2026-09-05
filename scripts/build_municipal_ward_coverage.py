@@ -109,6 +109,14 @@ STATIC_ENTRY_MUNICIPALITIES = {
     "springfield": ["Springfield"],
     "freeport": ["Freeport"],
     "st-clair-cities": ["Belleville", "O'Fallon"],
+    # Elmwood alone of the three cities on Peoria County's own Wards layer
+    # (2026-09-05). Chillicothe and West Peoria are on that same service and are
+    # deliberately NOT here: measured against their own Census place polygons
+    # they leave 3.3% and 8.0% of themselves in no ward, against Elmwood's 0.4%
+    # and the 0.1-0.5% the shipped layers manage. A held city is held in this
+    # table as much as in index.html — an entry here with no dispatch entry
+    # would claim coverage the layer cannot answer.
+    "elmwood": ["Elmwood"],
 }
 # Chicago's wards are the city's own Socrata layer with its own coverage test
 # (chicagoCoverage); it is never part of this file.
