@@ -58,7 +58,7 @@
 | Jackson | 17077 | dispatch | districted | `county-board`, `county-precinct` | none |
 | Jefferson | 17081 | dispatch | districted | `county-board`, `county-precinct` | none |
 | Jersey | 17083 | judicial circuit | no board layer — see gaps | — | 2 — `jersey-county-board-districts` (no-source); `jodaviess-jersey-precinct-geometry` (no-source) |
-| Jo Daviess | 17085 | dispatch | districted | `county-board` | 1 — `jodaviess-jersey-precinct-geometry` (no-source) |
+| Jo Daviess | 17085 | dispatch | districted | `county-board`, `county-precinct` | none |
 | Johnson | 17087 | dispatch | no board layer — see gaps | `county-precinct` | 1 — `johnson-county-board` (no-source) |
 | Kane | 17089 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `judicial-subcircuit`, `library-district`, `park-district` | 2 — `aurora-council-contact` (blocked); `county-board-office-addresses` (no-source) |
 | Kankakee | 17091 | dispatch | districted | `county-board`, `county-precinct`, `fire-district`, `library-district`, `park-district` | 5 — `county-board-office-addresses` (no-source); `kankakee-city-wards` (no-source); `kankakee-municipal-officials` (no-source); `kankakee-special-districts` (data-quality); `momence-ward-geometry` (no-source) |
