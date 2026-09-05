@@ -85,6 +85,7 @@ const ROSTER_URLS = [
   "./data/app/waterloo-council-members.json",
   "./data/app/cedar-rapids-council-members.json",
   "./data/app/ia-city-officials.json",
+  "./data/app/ia-county-board-chairs.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
 /* ==== METRO:END sw-config ==== */

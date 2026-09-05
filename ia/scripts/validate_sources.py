@@ -198,6 +198,20 @@ PROVENANCE = [
         "note": "Which supervisor holds each district, for PLAN 3 counties only (Iowa Code 331.206 — plan 1 has no districts and plan 2 elects countywide). There is no statewide source: the Legislature's own layer names DISTRICTS not people, the ISAC portal attaches a district to nobody, the Secretary of State's statewide canvass carries ZERO supervisor contests (counties canvass their own county offices), and electionresults.iowa.gov exposes no data API. So each county's own board page supplies the district NUMBER by proximity to names the shipped roster already carries. Probed here at one representative county (Polk); the run reads 40 and keys the ones that pass its gates. Built by ia/scripts/ia_supervisor_district_scraper.py + build_ia_supervisor_roster.py; refreshed weekly by update-ia-supervisor-roster.yml.",
     },
     {
+        "layer": "county-supervisor",
+        "app_file": "ia-county-board-chairs.json",
+        "source_url": "https://www.linncountyiowa.gov/158/Board-of-Supervisors",
+        # ONE ROW, NOT THIRTY-SIX, and the reason is not brevity. Every county
+        # page this file rests on ships as a `sourceUrl` INSIDE the data file,
+        # and validate_card_links.py extracts every http string in every
+        # instance's data/app -- so all 36 are already probed monthly, by the
+        # gate whose whole design is that a new one is covered the day it
+        # ships. Duplicating them here would be a second hand-kept list of the
+        # same URLs, going stale in the way that gate exists to prevent. What
+        # this row registers is the PIPELINE.
+        "note": "Which supervisor chairs each county board -- 36 of 99 counties, probed here at one representative county (Linn); the run reads all 98 in ia-county-board-directory.json and keys the ones that pass its gates, and the other 35 shipped URLs are probed by validate_card_links.py out of the data file itself. THERE IS NO STATEWIDE SOURCE AND THE TWO OBVIOUS CANDIDATES WERE MEASURED, NOT ASSUMED: the ISAC member portal is already this app's source for the supervisors themselves and its per-county pages contain ZERO occurrences of chair, chairperson, chairman, chairwoman or vice-chair; and iowaauditors.org answers 200 on /, /directory/ and /county-auditors/ with zero occurrences of the same, because it publishes county AUDITORS, who are not board members. The chair is chosen by each board's own January vote, so a weekly re-read tracks it where a one-time answer from 99 offices would not -- which is why the gap record carries NOT YET ASKED rather than a drafted ask. Built by ia/scripts/ia_county_chair_scraper.py + build_ia_county_chair.py; refreshed weekly by update-ia-county-chair-roster.yml.",
+    },
+    {
         "layer": "city-ward",
         "app_file": "dsm-wards.json",
         "source_url": "https://services.arcgis.com/HT7H9QGiZQoRJDpJ/arcgis/rest/services/Wards_view/FeatureServer/0",

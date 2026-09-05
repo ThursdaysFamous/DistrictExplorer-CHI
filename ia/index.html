@@ -8410,6 +8410,13 @@ function initIowaExplorer() {
   var loadIaSupervisorMembers = makeCached(function () {
     return fetchJSONWithRetry("data/app/ia-supervisor-members.json", {}, 2);
   });
+  // Which supervisor chairs the board — 36 of 99 counties, from each one's own
+  // board page. No statewide publisher records it, and the chair changes by
+  // the board's own vote each January, which is why this rides a weekly
+  // re-scrape rather than an answer someone gave once.
+  var loadIaCountyBoardChairs = makeCached(function () {
+    return fetchJSONWithRetry("data/app/ia-county-board-chairs.json", {}, 2);
+  });
   // What a list of supervisors MEANS, per Iowa Code 331.206's representation
   // plan. An unqualified list of N names claims all N represent the reader,
   // which is true under plans 1 and 2 and FALSE under plan 3 — the fleet rule
@@ -8500,7 +8507,8 @@ function initIowaExplorer() {
         queryFeatureAt(loadStateCounties, point),
         loadIaCountyAuditors().catch(function () { return null; }),
         loadIaCountyOfficers().catch(function () { return null; }),
-        loadIaSupervisorMembers().catch(function () { return null; })
+        loadIaSupervisorMembers().catch(function () { return null; }),
+        loadIaCountyBoardChairs().catch(function () { return null; })
       ]).then(function (parts) {
         var feature = parts[0];
         if (!feature) return null;
@@ -8518,7 +8526,8 @@ function initIowaExplorer() {
           geoid: geoid,
           auditor: auditor || null,
           officers: officers || null,
-          supervisorDistricts: (keyed && keyed.districts) || null
+          supervisorDistricts: (keyed && keyed.districts) || null,
+          boardChair: ((parts[4] && geoid != null) ? parts[4][String(geoid)] : null) || null
         };
       });
     },
@@ -8601,13 +8610,25 @@ function initIowaExplorer() {
               return parseInt(byName[String(a.name)], 10) - parseInt(byName[String(b.name)], 10);
             });
           }
+          // The chair joins BY NAME, and deliberately not by index or seat:
+          // this file and the officers file refresh on separate weekly
+          // schedules, so a chair who has left the board simply stops
+          // matching and stops rendering, rather than moving to whoever now
+          // holds that position in the list.
+          var chairName = (result.boardChair && result.boardChair.chair)
+            ? String(result.boardChair.chair) : null;
           wrap.appendChild(renderPersonRows(ordered.map(function (m) {
             var dist = byName[String(m.name)];
             var row = {
               name: String(m.name),
               badge: dist ? "District " + String(dist) : "Supervisor"
             };
-            if (m.party) row.note = String(m.party);
+            // the badge keeps the district — a plan-3 reader is looking for a
+            // number — so the chair marker rides the note beside the party
+            var marks = [];
+            if (m.party) marks.push(String(m.party));
+            if (chairName && String(m.name) === chairName) marks.push("Board chair");
+            if (marks.length) row.note = marks.join(" · ");
             // no phone here on purpose: where every member shares one number it
             // is the board office's, hoisted to the office block below
             if (m.phone) row.phone = String(m.phone);
