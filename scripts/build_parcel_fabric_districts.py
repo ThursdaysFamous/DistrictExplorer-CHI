@@ -208,6 +208,32 @@ GRUNDY_PARCELS = ("https://maps.grundyco.org/arcgis/rest/services/CountyWebsiteM
 GRUNDY_DISTRICTS_COL = ("GrundyParcels.dbo.GISParcelsJoinedDistrictCodes_"
                         "SingleField.Districts")
 
+# THE TERMS QUESTION, ASKED AFTER THE BUILD RATHER THAN BEFORE IT, which is the
+# wrong order: EXPANSION_GUIDE §3.5.1 makes reading the publisher's terms step
+# ZERO of county research, ahead of every technical probe, and this build did
+# not. Asked afterwards (2026-09-05) the answer is genuinely ambiguous rather
+# than obviously fine, so it is recorded here and put to the county rather than
+# resolved by this script in either direction (docs/ASK_DRAFTS.md Ask 17,
+# DRAFTED and HELD):
+#   - the county SELLS a bundled parcel data product — its GIS Data Request page
+#     publishes a fee schedule, $0.35 per parcel plus a $100 processing fee,
+#     ordered by section, township, full county or custom area;
+#   - the county ALSO runs THIS server open and unauthenticated, backing the
+#     "GIS Interactive Map" property viewer it links from its own home page. No
+#     token, no referer check, and the service's copyrightText is EMPTY;
+#   - the county's site-wide Terms of Use carry NO data clause at all — a
+#     boilerplate agreement about user submissions and acceptable use, with no
+#     redistribution or copyright assertion over GIS data.
+# So this is NOT Champaign/Piatt, whose terms expressly forbid copying, public
+# display and transfer, and NOT WinGIS, whose data is sold under a signed Data
+# License Agreement. It is a county that sells a bulk product and separately
+# publishes a resident-facing service that says nothing. Whether the fee
+# schedule reaches a derived layer built from the public service is the county's
+# to say. Contrast WOODFORD, built the same day, where the question does not
+# arise: its three items are `access: public` with empty licenceInfo and empty
+# accessInformation, and its Maps page publishes a viewer and a PDF gallery with
+# no fee schedule and no data-request form anywhere on the county site.
+
 # THE SECOND WITNESS IS THE COUNTY'S OWN TAX DISTRIBUTION LIST, and it is also
 # where the NAMES come from — the Boone division of labour, where one county
 # document owns the lines and another owns the names. The parcel column
