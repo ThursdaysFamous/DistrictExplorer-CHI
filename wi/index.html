@@ -10087,19 +10087,25 @@ function initWisconsinExplorer() {
         var profile = safeHttpUrl(result.member.url);
         if (profile) person.links = [{ label: "Profile", url: profile }];
         wrap.appendChild(renderPersonRows([person]));
-        if (carriedFrom) {
-          wrap.appendChild(renderFieldStack([
-            { label: "Last re-read",
-              value: "The city's own page could not be read since "
-                     + String(carriedFrom) + "; this name is carried from the "
-                     + "last refresh that could." }
-          ]));
-        }
       } else if (result.vacant) {
         // Madison's District 1 at first build — the city's own directory
         // says vacant, so the card says vacant rather than nothing
         wrap.appendChild(renderFieldStack([
           { label: "Seat", value: "Vacant (per the city's own council directory)", primary: true }
+        ]));
+      }
+      // THE CARRY NOTE SITS OUTSIDE THE NAMED BRANCH, corrected 2026-09-05.
+      // It was written inside `if (result.member)`, so a carried municipality
+      // whose district is VACANT showed "Vacant" in the same confident voice
+      // as a fresh reading — and a vacancy is exactly the fact most likely to
+      // have changed while the city's page was unreadable. The staleness
+      // belongs to the municipality, not to whether this seat has a name.
+      if (carriedFrom) {
+        wrap.appendChild(renderFieldStack([
+          { label: "Last re-read",
+            value: "The city's own page could not be read since "
+                   + String(carriedFrom) + "; what this card shows is carried "
+                   + "from the last refresh that could." }
         ]));
       }
       // no roster city -> identity-only card: the council rosters beyond the
