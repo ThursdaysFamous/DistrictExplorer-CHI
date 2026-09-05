@@ -1216,10 +1216,11 @@ village trustee is very often their house**, and this project never ships a home
 so part of what the $180 buys would be dropped on arrival.
 
 **The page also says what a buyer may do with any of it:** *"Mailing lists are emailed as
-an Excel spreadsheet **for your exclusive use**."* Exclusive use is the opposite of
-publishing on a free public map, so **the purchase does not answer the question — the
-terms do**, and paying first and asking afterwards is how a project ends up with data it
-cannot use. That is the Jo Daviess lesson exactly: ask for written permission BEFORE
+an Excel spreadsheet **for your exclusive use**."* It does not say what that excludes, and
+**whether it leaves room for naming an officeholder on a free public map is exactly what
+this ask is for** — the phrase is the reason to ask, not an answer to it. So **the purchase
+does not settle the question — the terms do**, and paying first and asking afterwards is
+how a project ends up with data it cannot use. That is the Jo Daviess lesson exactly: ask for written permission BEFORE
 signing or paying.
 
 ### Recipients

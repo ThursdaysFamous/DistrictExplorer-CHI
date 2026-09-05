@@ -59,7 +59,49 @@ entry (and the matching gap record) with eyes open. The remaining
 "uncovered" area in a naive statewide sample is Great Lakes water inside
 TIGER county polygons — measured, not a gap.
 
-An OPERATOR rebuild; the monthly source report watches the layer counts.
+AN OPERATOR REBUILD WHOSE DRIFT NOBODY WAS MEASURING, until 2026-09-05. This
+docstring used to end "the monthly source report watches the layer counts",
+and validate_sources.py's own comment on these four rows called a count change
+"the operator's rebuild trigger". Both were true of the INTENT and false of the
+code: those rows asked the service for `returnCountOnly=true` and the checker
+read only whether the endpoint answered, throwing the number away — so nothing
+anywhere held last month's count and nothing could see it move. A trigger with
+no baseline is a sentence, which is the same shape as sw.js's "bump CACHE_NAME
+whenever…" before check_cache_version.py existed.
+
+WHAT THAT COST, MEASURED THE FIRST TIME ANYONE COMPARED. The EMS layer had
+gained an agency the shipped file did not have: 580 live against 579 shipped,
+the new key being `Berlin` under wausharacountywi.gov. It was not a hole being
+filled. The CITY OF BERLIN straddles the Green Lake / Waushara county line, and
+Waushara had filed the city's OWN ambulance service over the city's Waushara
+half — 2.1 km2, Census place 5506925, county subdivision 5513706925 — where
+this project was still answering `Poy Sippi`, the rural service, for everyone
+in it. 400 of 400 sampled points inside that polygon said Poy Sippi on the
+shipped file and Berlin on the source, and the live source no longer files Poy
+Sippi there at all, so it was a TRANSFER and not one of the concurrent
+jurisdictions this layer legitimately carries.
+
+WHAT A 20,000-POINT SAMPLE SAID ABOUT THAT, AND WHY IT WAS WORTHLESS. Such a
+sample across all four layers found ZERO changed answers, and a first version of
+this docstring concluded from it that the other three layers had "changed BYTES
+while changing no answer". THAT WAS FALSE, and review caught it: measured
+against main, this rebuild changes the geometry of 136 fire, 161 law, 19 PSAP
+and 74 EMS features. The sample could not see any of it — 2.1 km2 of a 169,000
+km2 state is one part in eighty thousand, so a 20,000-point sample expects
+FEWER THAN ONE hit — and a null result from an instrument with no power is not
+evidence of no change. That is the real lesson: the question a staleness check
+must ask is "did the source move at all", which is a COUNT and an EDIT DATE,
+never a sample; and byte churn is not evidence of a reader-visible change in
+either direction.
+
+THE FIX IS A SIDECAR, NOT A CONSTANT. wi/data/source/ng911/built-rows.json is
+written by this build on every successful run and carries the row counts the
+OEC's own count endpoints reported at that moment; validate_sources.py reads it
+monthly and WARNs when the live counts have moved. It is a file rather than a
+hand-edited constant because the two must never disagree, and one run writes
+both. Its blind spot is stated where it is read: a county REDRAWING a boundary
+without changing its row count does not show up.
+
 Prerequisites: curl and Node.js (mapshaper).
 """
 
@@ -74,7 +116,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, SCRIPT_DIR)
 from build_wi_supervisory_districts import (  # noqa: E402
     fetch_layer, _model, _districts_at, _bbox, _point_in_geometry,
-    MAPSHAPER, STATE_BBOX)
+    _curl, MAPSHAPER, STATE_BBOX)
 
 REPO_ROOT = os.path.dirname(SCRIPT_DIR)
 APP_DATA_DIR = os.path.join(REPO_ROOT, "data", "app")
@@ -104,8 +146,9 @@ LAYERS = [
     # (Emplify, Tri State) file under multiple counties' authorities, and a
     # few EMS Agency_IDs are not county domains at all (BVEM files under
     # BVEM1/BVEM2) — the pair still keys them correctly. 2,443 effective
-    # rows over 579 services at first measurement, with essentially no
-    # cross-name overlap (1 same-name multi-hit in 3,000 points).
+    # rows over 579 services at first measurement (2026-08-26); 2,444 over
+    # 580 at the 2026-09-05 rebuild, the extra one being Berlin. Essentially
+    # no cross-name overlap (1 same-name multi-hit in 3,000 points).
     {"name": "ems", "url": EMS, "out": "ems-service-areas.json",
      "min_rows": 2300, "min_agencies": 530},
 ]
@@ -195,6 +238,66 @@ def sample_inside(geom, n, seed):
     return pts
 
 
+def gate_against_server(layer, out_feats, samples=25):
+    """Ask the SERVICE which agencies cover a point, and compare to what the
+    shipped file answers there. THIS IS THE ONLY GATE HERE THAT IS INDEPENDENT.
+
+    validate() below samples 4,000 points, but it compares the dissolved output
+    against the SAME fetch it was built from, so it agrees with itself by
+    construction — which is exactly how the MASON hole (see fetch_layer's
+    esri_rings_to_geojson) passed every gate while shipping a wrong card. This
+    one asks the server, whose geometry this project does not hold, so a defect
+    introduced anywhere between the query and the written file shows up.
+
+    Deliberately small: 25 points is 25 round trips per layer, enough to catch a
+    systematic defect and not a proof of per-point correctness. A disagreement
+    FAILS the build rather than warning — the server is the authority here.
+    """
+    import random
+    import urllib.parse
+    model = _model(out_feats, "NAME")
+    rng = random.Random(4242)
+    bb = STATE_BBOX
+    checked = 0
+    attempts = 0
+    while checked < samples and attempts < samples * 40:
+        attempts += 1
+        pt = (rng.uniform(bb["minLng"], bb["maxLng"]),
+              rng.uniform(bb["minLat"], bb["maxLat"]))
+        ours = set(_districts_at(model, pt))
+        if not ours:
+            continue          # outside coverage; the server has nothing to compare
+        params = {
+            "geometry": "%f,%f" % pt,
+            "geometryType": "esriGeometryPoint",
+            "inSR": "4326",
+            "spatialRel": "esriSpatialRelIntersects",
+            "outFields": "DsplayName",
+            "returnGeometry": "false",
+            "where": "1=1",
+            "f": "json",
+        }
+        data = json.loads(_curl(layer["url"] + "/query?" + urllib.parse.urlencode(params)))
+        theirs = {(f["attributes"].get("DsplayName") or "").strip()
+                  for f in (data.get("features") or [])}
+        theirs.discard("")
+        # Expired rows this build drops can still answer on the server, so the
+        # server may legitimately name MORE than we do; it must never name FEWER.
+        if not ours <= theirs:
+            raise RuntimeError(
+                "%s: the shipped file answers %s at %.5f,%.5f where the service "
+                "answers %s — the built geometry claims coverage the source does "
+                "not. Re-read fetch_layer's esri_rings_to_geojson before touching "
+                "anything else."
+                % (layer["name"], sorted(ours), pt[0], pt[1], sorted(theirs)))
+        checked += 1
+    if checked < samples:
+        raise RuntimeError("%s: only %d of %d sample points landed in coverage"
+                           % (layer["name"], checked, samples))
+    print("%s: %d/%d sampled points agree with the service's own point query"
+          % (layer["name"], checked, samples), file=sys.stderr)
+
+
 def gate_filings(feats_by_layer):
     """Recompute per-authority coverage inside the provisioning polygons and
     refuse the build if it disagrees with the pinned UNFILED map."""
@@ -263,6 +366,12 @@ def validate(source_feats, result_feats):
 def build(layer, check_only):
     feats = fetch_retry(layer["url"], "DsplayName,Agency_ID,NGUID,Expire")
     feats, dropped, future = effective(feats)
+    # TOTAL is what returnCountOnly reports — effective rows PLUS the expired
+    # ones this build drops. The monthly staleness check (below) compares the
+    # live count endpoint against it, so the two must be the same quantity;
+    # comparing against the effective count would drift on its own every time
+    # a row's Expire date passed, with no source change at all.
+    total = len(feats) + dropped
     if len(feats) < layer["min_rows"]:
         raise RuntimeError("%s: %d effective rows, floor %d — the service shrank; "
                            "re-measure before shipping"
@@ -273,10 +382,11 @@ def build(layer, check_only):
         raise RuntimeError("%s: %d agencies, floor %d"
                            % (layer["name"], len(keys), layer["min_agencies"]))
     print("%s: %d effective rows (%d expired dropped, %d future-dated kept) "
-          "-> %d agency keys" % (layer["name"], len(feats), dropped, future, len(keys)),
+          "-> %d agency keys (%d rows total)"
+          % (layer["name"], len(feats), dropped, future, len(keys), total),
           file=sys.stderr)
     if check_only:
-        return feats, None
+        return feats, None, total
 
     with tempfile.TemporaryDirectory() as tmp:
         src_path = os.path.join(tmp, layer["name"] + "-src.geojson")
@@ -307,6 +417,7 @@ def build(layer, check_only):
         f["properties"] = {"NAME": f["properties"]["NAME"]}
 
     msg = validate(feats, out_feats)
+    gate_against_server(layer, out_feats)
     compact = json.dumps({"type": "FeatureCollection", "features": out_feats},
                          separators=(",", ":"), ensure_ascii=False)
     path = os.path.join(APP_DATA_DIR, layer["out"])
@@ -315,7 +426,124 @@ def build(layer, check_only):
     print("%s: wrote %s — %d agency areas, %d bytes; %s"
           % (layer["name"], layer["out"], len(out_feats), len(compact), msg),
           file=sys.stderr)
-    return feats, len(out_feats)
+    return feats, len(out_feats), total
+
+
+# WHERE THE STALENESS PIN LIVES, AND WHY IT IS A FILE RATHER THAN A CONSTANT.
+# This is an OPERATOR build with no schedule, reading a source the OEC refreshes
+# roughly weekly — so its output drifts from the source with nothing measuring
+# the drift. `validate_sources.py` already asks each of these four layers for
+# `returnCountOnly=true` every month and its own comment calls a count change
+# "the operator's rebuild trigger", but the checker READ ONLY REACHABILITY and
+# threw the number away, so the trigger was a sentence and never a mechanism —
+# exactly the defect that file records for the nearest-3 rows and fixed only
+# there. Measured 2026-09-05: the shipped EMS file was one agency behind, and
+# the difference was not cosmetic (see the Berlin note in the module docstring).
+#
+# The pin is a SIDECAR written by this build rather than a constant edited by
+# hand, because a hand-edited pin is one an operator can forget while the data
+# files move — and a staleness gate comparing against a stale pin is worse than
+# no gate. Written by the same run that writes the data, it cannot disagree with
+# them. It sits under data/source/, which the Pages deploy excludes, because it
+# is build metadata and not something a reader fetches.
+BUILT_ROWS_PATH = os.path.join(REPO_ROOT, "data", "source", "ng911",
+                               "built-rows.json")
+
+
+def layer_last_edit(url):
+    """The layer's own `editingInfo.dataLastEditDate`, as an ISO date.
+
+    A ROW COUNT CANNOT SEE A REDRAW. That was written into this file as a
+    stated blind spot on 2026-09-05 and the very rebuild that stated it hit
+    the case: the OEC edited all four layers on 2026-08-31, moving boundaries
+    in ~300 features, while three of the four row counts did not move at all.
+    The service publishes the edit timestamp, so the blind spot was avoidable
+    rather than inherent, and the monthly check now reads both.
+    """
+    import urllib.parse  # noqa: F401  (kept local; _curl takes a full url)
+    meta = json.loads(_curl(url + "?f=json"))
+    ms = (meta.get("editingInfo") or {}).get("dataLastEditDate")
+    if not isinstance(ms, (int, float)):
+        return None
+    return datetime.datetime.fromtimestamp(
+        ms / 1000.0, datetime.timezone.utc).date().isoformat()
+
+
+def read_built_rows():
+    """The pin, or None when this build has never run since the pin existed."""
+    try:
+        with open(BUILT_ROWS_PATH) as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return None
+
+
+def write_built_rows(totals, agencies, last_edits):
+    os.makedirs(os.path.dirname(BUILT_ROWS_PATH), exist_ok=True)
+    payload = {
+        "_comment": ("What the OEC's own service reported at the last operator "
+                     "build of build_wi_ng911_service_areas.py: `rows` as its "
+                     "returnCountOnly endpoints answered, and `dataLastEdit` as "
+                     "its editingInfo.dataLastEditDate. validate_sources.py "
+                     "compares BOTH monthly and WARNs when either has moved — a "
+                     "REDRAW does not change a row count, which is how the "
+                     "2026-08-31 edit moved ~300 features silently. Written by "
+                     "the build; never edit by hand."),
+        "builtOn": datetime.date.today().isoformat(),
+        "rows": totals,
+        "agencies": agencies,
+        "dataLastEdit": last_edits,
+    }
+    with open(BUILT_ROWS_PATH, "w") as f:
+        json.dump(payload, f, indent=2, sort_keys=True)
+        f.write("\n")
+    print("wrote %s — rows %s" % (os.path.relpath(BUILT_ROWS_PATH, REPO_ROOT),
+                                  totals), file=sys.stderr)
+
+
+def check_built_rows(totals, last_edits=None):
+    """--check: is the shipped tree still current with the source?
+
+    This is the local half of the monthly staleness check. It compares what the
+    source holds NOW against what it held when these files were built. It cannot
+    see a county REDRAWING a boundary without changing its row count — that is a
+    real blind spot and is why the OEC row is a WARN a human reads rather than a
+    claim of freshness.
+    """
+    pin = read_built_rows()
+    if pin is None:
+        raise RuntimeError(
+            "no %s — run this builder without --check once to write the pin"
+            % os.path.relpath(BUILT_ROWS_PATH, REPO_ROOT))
+    behind = {name: (pin["rows"].get(name), total)
+              for name, total in sorted(totals.items())
+              if pin["rows"].get(name) != total}
+    if behind:
+        raise RuntimeError(
+            "the shipped NG911 files are STALE — the source has moved since they "
+            "were built on %s. %s. Re-run this builder without --check, bump "
+            "cache_name in wi/metro-worksheet.json (these are cache-first), and "
+            "commit the rebuilt files with the refreshed pin."
+            % (pin.get("builtOn", "an unrecorded date"),
+               "; ".join("%s %s -> %s" % (n, was, now)
+                         for n, (was, now) in behind.items())))
+    moved = {}
+    for name, live in sorted((last_edits or {}).items()):
+        was = (pin.get("dataLastEdit") or {}).get(name)
+        if live and was and live != was:
+            moved[name] = (was, live)
+    if moved:
+        raise RuntimeError(
+            "the shipped NG911 files are STALE — the row counts still match, but "
+            "the service EDITED %s since the build on %s (%s). A redraw does not "
+            "move a row count, which is exactly the blind spot this second signal "
+            "closes. Re-run this builder without --check, bump cache_name, and "
+            "commit the rebuilt files."
+            % (", ".join(sorted(moved)), pin.get("builtOn", "an unrecorded date"),
+               "; ".join("%s %s -> %s" % (n, w, l) for n, (w, l) in moved.items())))
+    print("staleness: all 4 layers still carry the row counts AND the edit dates "
+          "they were built from on %s"
+          % pin.get("builtOn", "an unrecorded date"), file=sys.stderr)
 
 
 def main():
@@ -323,10 +551,17 @@ def main():
     built = {}
     for layer in LAYERS:
         built[layer["name"]] = build(layer, check_only)
-    n_prov = gate_filings({name: pair[0] for name, pair in built.items()})
+    n_prov = gate_filings({name: t[0] for name, t in built.items()})
     print("gates: filing absences match the pinned UNFILED map across all %d "
           "provisioning authorities (Langlade still absent)" % n_prov,
           file=sys.stderr)
+    totals = {name: t[2] for name, t in built.items()}
+    last_edits = {layer["name"]: layer_last_edit(layer["url"]) for layer in LAYERS}
+    if check_only:
+        check_built_rows(totals, last_edits)
+    else:
+        write_built_rows(totals, {name: t[1] for name, t in built.items()},
+                         last_edits)
 
 
 if __name__ == "__main__":
