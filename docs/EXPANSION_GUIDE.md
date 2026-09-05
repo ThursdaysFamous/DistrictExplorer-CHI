@@ -1448,6 +1448,12 @@ the two overlap Part 5 is the shorter statement of the same rule.
     those tokens, because the column is named for the civil taxing unit and abbreviates
     "code" to `CD`. A regex is a way to rank a field list for reading, never a way to
     conclude one is empty. Read all of it; 70 names is a screenful.
+    **THIS HAPPENED TWICE IN ONE DAY AND THE SECOND TIME WAS OVER HOSTNAMES**, which is
+    what makes it a class rather than a field-naming quirk: the same pass screened
+    Livingston's home page for `gis|arcgis|map|beacon|devnet|schneider|parcel` and reported
+    NO GIS HOST, on a page linking `livingston.illinoisassessors.com` and
+    `livingstoncountyiltax.us` — neither of which contains one of those tokens. Twenty-seven
+    hosts; print them.
   - **The parcel carries the district's NAME** (Woodford: `Fire_Prote`, `Library_Di`,
     `Park_Distr`; Grundy: one comma-separated `Districts` field listing every body a
     parcel pays into). Nothing is transcribed and nothing is hand-mapped — dissolve the
@@ -2215,9 +2221,18 @@ Two corollaries the same day earned:
   while probing GUESSED hostnames (`gis.wincoil.gov`, `maps.wincoil.gov`) — and the rule
   that a guessed host's failure must not be recorded as the county's is right, but it
   stops one step short: **the host was not unknown, it was in the repo.** A gap record and
-  a loader in the same repository are two descriptions of one county. Before any probe,
-  grep the instance's `index.html`, its `scripts/`, and `validate_sources.py` for the
-  county's name.
+  a loader in the same repository are two descriptions of one county.
+  **AND THE SEARCH INCLUDES THE GAP RECORDS THEMSELVES — the same change failed this rule
+  one record down while writing it.** Its Livingston entry said the county "references no
+  GIS, mapping, parcel or tax-inquiry host of ANY kind", and the SIBLING record
+  `livingston-precincts`, fourteen lines above it in the same file, had said since July
+  that the county's "only mapping product is the assessment office's mail-order parcel
+  program, at 10 to 20 cents per parcel". No probe was needed to know better; a `grep -n
+  livingston` would have done it. A county's own gap records are written at different
+  times by different passes asking different questions, so they are the cheapest place a
+  contradiction shows up and the last place anyone looks. Before any probe, grep for the
+  county's name in: the instance's `index.html`, its `scripts/`, `validate_sources.py`,
+  **and `docs/DATA_LAYER_GUIDEBOOK.md` itself** — every record, not the one being edited.
 - **READ THE OPERATIVE LICENCE, NOT THE TERMS PAGE.** A public "Terms of Use" page and the
   data licence a purchaser signs are different documents that answer different questions,
   and the permissive one is the one a probe finds first. WinGIS's `/Terms` carries no
