@@ -1,0 +1,60 @@
+{
+ "archivedAt": "20260831152830",
+ "citywide": [
+  {
+   "name": "Coleman A. Young II",
+   "profileUrl": "https://detroitmi.gov/government/city-council/city-council-president-pro-tem-large",
+   "seat": "City Council President Pro Tem, At Large"
+  },
+  {
+   "name": "Mary Waters",
+   "profileUrl": "https://detroitmi.gov/government/city-council/city-council-large",
+   "seat": "City Council At Large"
+  }
+ ],
+ "districts": {
+  "1": {
+   "name": "James Tate",
+   "profileUrl": "https://detroitmi.gov/government/city-council/city-council-president-district-1",
+   "seat": "City Council President, District 1"
+  },
+  "2": {
+   "name": "Angela Whitfield-Calloway",
+   "profileUrl": "https://detroitmi.gov/government/city-council/city-council-district-2",
+   "seat": "City Council District 2"
+  },
+  "3": {
+   "name": "Scott Benson",
+   "profileUrl": "https://detroitmi.gov/government/city-council/city-council-district-3",
+   "seat": "City Council District 3"
+  },
+  "4": {
+   "name": "Latisha Johnson",
+   "profileUrl": "https://detroitmi.gov/government/city-council/city-council-district-4",
+   "seat": "City Council District 4"
+  },
+  "5": {
+   "name": "Renata Miller",
+   "profileUrl": "https://detroitmi.gov/government/city-council/city-council-district-5",
+   "seat": "City Council District 5"
+  },
+  "6": {
+   "name": "Gabriela Santiago-Romero",
+   "profileUrl": "https://detroitmi.gov/government/city-council/city-council-district-6",
+   "seat": "City Council District 6"
+  },
+  "7": {
+   "name": "Denzel Anton McCampbell",
+   "profileUrl": "https://detroitmi.gov/government/city-council/city-council-district-7-0",
+   "seat": "City Council District 7"
+  }
+ },
+ "office": {
+  "lines": [
+   "2 Woodward Ave. Suite 1340",
+   "Detroit, MI 48226"
+  ],
+  "phone": "(313) 224-3443"
+ },
+ "sourceUrl": "https://detroitmi.gov/government/city-council"
+}

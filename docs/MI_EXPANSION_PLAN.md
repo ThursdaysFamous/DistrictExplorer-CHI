@@ -1,7 +1,7 @@
 # districtry Michigan — the expansion plan and its running record
 
 > **SHIPPED 2026-09-03 — phases 1, 2 and go-live, in three PRs on one day.** Michigan is live at
-> districtry.com/mi/ with 14 layers. **The running status is the Status table near the foot of this
+> districtry.com/mi/ with 15 layers. **The running status is the Status table near the foot of this
 > file; what is left is under Still open.** What go-live actually cost is recorded here because it
 > was almost entirely NOT on any checklist.
 > **Four defects had survived the full 38-gate battery twice, and three were the same shape — a
@@ -214,8 +214,36 @@ Each opens its own refreshed plan PR with its own measured ledger when it begins
   National Map point layers, all three verified present in Michigan's envelope that day — post
   offices 1,799 (structures layer 38), police 1,290 (layer 53), fire/EMS 2,838 (layer 51) — the
   same national source every sibling instance already uses.
-- **Phase 4 — the city tiers.** Detroit and Grand Rapids council districts, with the per-city
-  roster work that implies.
+- **Phase 4 — the city tiers.** DETROIT SHIPPED 2026-09-05 as the 15th layer: seven council
+  districts from the city's own ArcGIS org, geometry only. Three of the city's services compete and
+  their NAMES do not settle which is in force — one titled "Current" (live since 2016), one named
+  2026, and one named 2013 that was CREATED in December 2025 — so the builder decides it by
+  MEASUREMENT and gates it in both directions: "Current" must carry geometry identical to what
+  ships, the 2013 archive must differ, the shipped plan must balance on Census 2020 (4.28% worst
+  deviation) and the archive must not (13.51%, which is a plan drawn on 2010 seen from 2020). The
+  seven districts sum to 639,111 — Detroit's Census 2020 population exactly — which is both the
+  tiling proof and the reason `coverage` is the layer's own tiling with no separate city outline.
+  THE ROSTER SHIPPED THE SAME DAY, ON REVIEW, AND THE FIX IS THE LESSON. The layer first shipped
+  naming NOBODY, on a finding that five routes to the membership were shut. Two of the five were
+  wrong. `data.detroitmi.gov` was recorded as challenged when it answers **HTTP 200 with a readable
+  robots.txt** — a verdict reached by grepping a 68 KB page for the word "challenge" and finding
+  one hit WHILE THE STATUS CODE SAID 200. And the fleet's OWN terminal fetch rung, the Internet
+  Archive, in weekly use for Kendall and McHenry since 2026-07, was never attempted; it answers
+  with all nine members, their districts and their roles. **A ROUTE NOT WALKED IS NOT A ROUTE
+  MEASURED**, and five routes were claimed shut with four examined. So all nine ship — seven on the
+  polygons, two at large in a `citywide` block (the Des Moines shape) — with the card printing which
+  day's archived copy it read and the scraper refusing one over 45 days old. What survived
+  measurement is narrower and holds: detroitmi.gov and mvic.sos.state.mi.us DO carry a genuine
+  Cloudflare managed challenge on the plain AND the client-hints rung, so there is deliberately no
+  headless rung here; and Legistar was abandoned in 2017 and never carried a district in
+  OfficeRecordTitle where Milwaukee's does — test a vendor by content per city. The remaining gap is
+  `detroit-council-contact`: no phone and no e-mail anywhere on either city surface, measured.
+  Three further corrections came out of the same review — the org holds **1,512 items (795 feature
+  services)**, not 225; the plan's own dates (adopted 2024-02-06, effective 2026-01-01) were sitting
+  in the shipped service's `description` and were never cited; and `SIMPLIFY` at 8% moved D5's
+  boundary 135 m, against a city tier that simplifies at 20-25%. All three are fixed.
+  **GRAND RAPIDS IS NEXT** — its three wards elect two commissioners each, so the at-large question
+  arrives in a different shape than Detroit's, and its publisher has not been researched yet.
 - **The 619 commissioners** — gap `mi-commissioner-roster`. The honest route is county-by-county
   against each board's own page, weekly and count-guarded; ten of the twelve counties sampled
   publish a readable one. Oakland answers only through its CMS origin and Ottawa sits behind a
