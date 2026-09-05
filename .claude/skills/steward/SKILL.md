@@ -96,6 +96,7 @@ BASE_URL=http://localhost:8000/ia/ node ia/scripts/smoke_test.mjs
 BASE_URL=http://localhost:8000/mi/ node mi/scripts/smoke_test.mjs
 BASE_URL=http://localhost:8000      node scripts/landing_test.mjs
 BASE_URL=http://localhost:8000      node scripts/page_consistency_test.mjs
+BASE_URL=http://localhost:8000      node scripts/probe_point_transmission.mjs --check
 ```
 
 `scripts/landing_test.mjs` defaults to port 8131, so `BASE_URL` is mandatory
@@ -103,6 +104,23 @@ for it, and it concatenates `BASE + "/"` without stripping — a trailing slash
 fails every bare-visit assertion with `http://localhost:8000//`;
 `scripts/page_consistency_test.mjs` strips one. Do not `pkill -f` the server
 by its command line from a shell whose own command line contains it.
+
+`scripts/probe_point_transmission.mjs` is the one browser gate that is not a
+page test: it measures which layers send the reader's selected point to a
+server, which neither a regex nor a structural read can see. A registration
+factory serves as many layers as it is CALLED, `registerCountyLayer` closes
+over its entries, and — the one that cost a wrong published figure — a layer
+that merely CARRIES an `.atPoint` hook may never fire it, since the hook is
+invoked only inside `queryFeatureAt` and the nearest-point factory calls its
+loader directly. So the probe replaces every hook with a recorder and counts
+the ones that FIRE, at more than one point because coverage-gated layers are
+not queried outside their coverage. Red here
+means an app changed what it transmits — re-run it WITHOUT `--check`, then
+`python3 scripts/build_privacy_page.py`, and read the diff to
+`point-transmission.json` as the privacy claim it is. `build_privacy_page.py`
+fails separately, and earlier, when an app's `.atPoint` sites or
+`LAYER_AREA_RANK` have moved since the probe last ran; that failure names the
+same two commands.
 
 Not in CI, but run before shipping a change that touches a source or a card
 link, because the monthly job will otherwise find it for you (both need

@@ -43,7 +43,7 @@
 // refreshed per election.)
 /* ==== TEMPLATE:END sw-version-history ==== */
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "districtry-il-shell-v11";
+const CACHE_NAME = "districtry-il-shell-v12";
 
 const SHELL_URLS = [
   "./",
@@ -147,6 +147,7 @@ const GEOMETRY_URLS = [
   "./data/app/jersey-county-outline.json",
   "./data/app/jo-daviess-county-board-districts.json",
   "./data/app/jo-daviess-county-outline.json",
+  "./data/app/jo-daviess-precincts.json",
   "./data/app/johnson-county-outline.json",
   "./data/app/johnson-precincts.json",
   "./data/app/kane-county-outline.json",
