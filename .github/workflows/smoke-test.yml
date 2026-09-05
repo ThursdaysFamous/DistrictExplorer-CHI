@@ -514,4 +514,18 @@ jobs:
           # expectations from the tree, so a new page is covered the day it
           # ships and a correct change cannot fail it.
           BASE_URL=http://localhost:8000        node scripts/page_consistency_test.mjs || status=1
+
+          # Which layers send the reader's SELECTED POINT to a government
+          # server. The privacy page publishes that number per app, and until
+          # 2026-09-05 it counted `loadArcGISPointGeoJSON(` call sites and was
+          # wrong for three of the six apps — New York City and San Francisco
+          # published "None." while nine and three of their layers sent it.
+          # No static read can be right: a registration factory serves as many
+          # layers as it is CALLED from one occurrence, and registerCountyLayer
+          # CLOSES OVER its entries, so two Illinois layers are invisible even
+          # to a full walk of the live module graph. So it is measured HERE,
+          # in the browser, and build_privacy_page.py — which has no browser in
+          # its own step — reads the artifact and refuses to publish when the
+          # apps have moved under it.
+          BASE_URL=http://localhost:8000        node scripts/probe_point_transmission.mjs --check || status=1
           exit $status
