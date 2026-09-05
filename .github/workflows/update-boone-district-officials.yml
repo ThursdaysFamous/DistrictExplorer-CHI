@@ -10,9 +10,9 @@ name: Update Boone park and library district officials
 # single one of their boards, measured 2026-09-05: it prints none at all for
 # the three seated in Winnebago whose districts reach across the county line,
 # and for the two Boone-seated bodies it prints a board that is a seat SHORT of
-# what each body itself publishes. Belvidere Park District's own page calls it
-# a "five member Board of Commissioners" and names four; Ida Public Library's
-# lists eight trustees and the word "Open". An annual booklet prints the board
+# what each body itself publishes. It names four Belvidere Park District
+# commissioners where the district's own page names all five; Ida Public
+# Library's own page lists eight trustees and the word "Open". An annual booklet prints the board
 # it was handed and has no way to show an absence, so every board here is read
 # from the body that maintains it. See the scraper's docstring.
 #

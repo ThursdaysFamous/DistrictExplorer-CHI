@@ -2963,7 +2963,7 @@
     },
     {
       "file": "update-boone-district-officials.yml",
-      "purpose": "Boone County's five park and library districts' office and board. The County Clerk's Year Book supplies the office — address, telephone, fax, website and agency head — for all five; every BOARD comes from that body's own published page, because the booklet is an annual snapshot and two of the five boards are a seat short (Belvidere Park District's own page calls it a 'five member Board of Commissioners' and names four; Ida Public Library's lists eight trustees and the word 'Open'). Where both name the same person the booklet's term-expiry year rides along. The builder refuses to write unless the roster's keys are exactly the districts the two boundary files draw",
+      "purpose": "Boone County's five park and library districts' office and board. The County Clerk's Year Book supplies the office — address, telephone, fax, website and agency head — for all five; every BOARD comes from that body's own published page, because the booklet is an annual snapshot and is short of what two of the five bodies publish (it names four Belvidere Park District commissioners where the district's own page names all five; Ida Public Library's own page lists eight trustees and the word 'Open', which the booklet cannot show). Where both name the same person the booklet's term-expiry year rides along. The builder refuses to write unless the roster's keys are exactly the districts the two boundary files draw",
       "schedule": "Wed 22:00 UTC"
     }
   ],
