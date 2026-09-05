@@ -59,7 +59,45 @@ entry (and the matching gap record) with eyes open. The remaining
 "uncovered" area in a naive statewide sample is Great Lakes water inside
 TIGER county polygons — measured, not a gap.
 
-An OPERATOR rebuild; the monthly source report watches the layer counts.
+AN OPERATOR REBUILD WHOSE DRIFT NOBODY WAS MEASURING, until 2026-09-05. This
+docstring used to end "the monthly source report watches the layer counts",
+and validate_sources.py's own comment on these four rows called a count change
+"the operator's rebuild trigger". Both were true of the INTENT and false of the
+code: those rows asked the service for `returnCountOnly=true` and the checker
+read only whether the endpoint answered, throwing the number away — so nothing
+anywhere held last month's count and nothing could see it move. A trigger with
+no baseline is a sentence, which is the same shape as sw.js's "bump CACHE_NAME
+whenever…" before check_cache_version.py existed.
+
+WHAT THAT COST, MEASURED THE FIRST TIME ANYONE COMPARED. The EMS layer had
+gained an agency the shipped file did not have: 580 live against 579 shipped,
+the new key being `Berlin` under wausharacountywi.gov. It was not a hole being
+filled. The CITY OF BERLIN straddles the Green Lake / Waushara county line, and
+Waushara had filed the city's OWN ambulance service over the city's Waushara
+half — 2.1 km2, Census place 5506925, county subdivision 5513706925 — where
+this project was still answering `Poy Sippi`, the rural service, for everyone
+in it. 400 of 400 sampled points inside that polygon said Poy Sippi on the
+shipped file and Berlin on the source, and the live source no longer files Poy
+Sippi there at all, so it was a TRANSFER and not one of the concurrent
+jurisdictions this layer legitimately carries.
+
+TWO THINGS ABOUT THAT ARE WORTH KEEPING. It is small — 2.1 km2 of a 169,000
+km2 state — and a 20,000-point statewide sample across all four layers found
+ZERO changed answers, which is exactly why a sample is the wrong instrument for
+this and a row count is the right one: the question is not "how much of the map
+moved" but "did the source move at all". And the other three layers' files
+changed BYTES in the same rebuild while changing no answer at any of those
+20,000 points — vertex-level edits below the sampling resolution — so byte
+churn is not evidence of a reader-visible change either.
+
+THE FIX IS A SIDECAR, NOT A CONSTANT. wi/data/source/ng911/built-rows.json is
+written by this build on every successful run and carries the row counts the
+OEC's own count endpoints reported at that moment; validate_sources.py reads it
+monthly and WARNs when the live counts have moved. It is a file rather than a
+hand-edited constant because the two must never disagree, and one run writes
+both. Its blind spot is stated where it is read: a county REDRAWING a boundary
+without changing its row count does not show up.
+
 Prerequisites: curl and Node.js (mapshaper).
 """
 
@@ -263,6 +301,12 @@ def validate(source_feats, result_feats):
 def build(layer, check_only):
     feats = fetch_retry(layer["url"], "DsplayName,Agency_ID,NGUID,Expire")
     feats, dropped, future = effective(feats)
+    # TOTAL is what returnCountOnly reports — effective rows PLUS the expired
+    # ones this build drops. The monthly staleness check (below) compares the
+    # live count endpoint against it, so the two must be the same quantity;
+    # comparing against the effective count would drift on its own every time
+    # a row's Expire date passed, with no source change at all.
+    total = len(feats) + dropped
     if len(feats) < layer["min_rows"]:
         raise RuntimeError("%s: %d effective rows, floor %d — the service shrank; "
                            "re-measure before shipping"
@@ -273,10 +317,11 @@ def build(layer, check_only):
         raise RuntimeError("%s: %d agencies, floor %d"
                            % (layer["name"], len(keys), layer["min_agencies"]))
     print("%s: %d effective rows (%d expired dropped, %d future-dated kept) "
-          "-> %d agency keys" % (layer["name"], len(feats), dropped, future, len(keys)),
+          "-> %d agency keys (%d rows total)"
+          % (layer["name"], len(feats), dropped, future, len(keys), total),
           file=sys.stderr)
     if check_only:
-        return feats, None
+        return feats, None, total
 
     with tempfile.TemporaryDirectory() as tmp:
         src_path = os.path.join(tmp, layer["name"] + "-src.geojson")
@@ -315,7 +360,87 @@ def build(layer, check_only):
     print("%s: wrote %s — %d agency areas, %d bytes; %s"
           % (layer["name"], layer["out"], len(out_feats), len(compact), msg),
           file=sys.stderr)
-    return feats, len(out_feats)
+    return feats, len(out_feats), total
+
+
+# WHERE THE STALENESS PIN LIVES, AND WHY IT IS A FILE RATHER THAN A CONSTANT.
+# This is an OPERATOR build with no schedule, reading a source the OEC refreshes
+# roughly weekly — so its output drifts from the source with nothing measuring
+# the drift. `validate_sources.py` already asks each of these four layers for
+# `returnCountOnly=true` every month and its own comment calls a count change
+# "the operator's rebuild trigger", but the checker READ ONLY REACHABILITY and
+# threw the number away, so the trigger was a sentence and never a mechanism —
+# exactly the defect that file records for the nearest-3 rows and fixed only
+# there. Measured 2026-09-05: the shipped EMS file was one agency behind, and
+# the difference was not cosmetic (see the Berlin note in the module docstring).
+#
+# The pin is a SIDECAR written by this build rather than a constant edited by
+# hand, because a hand-edited pin is one an operator can forget while the data
+# files move — and a staleness gate comparing against a stale pin is worse than
+# no gate. Written by the same run that writes the data, it cannot disagree with
+# them. It sits under data/source/, which the Pages deploy excludes, because it
+# is build metadata and not something a reader fetches.
+BUILT_ROWS_PATH = os.path.join(REPO_ROOT, "data", "source", "ng911",
+                               "built-rows.json")
+
+
+def read_built_rows():
+    """The pin, or None when this build has never run since the pin existed."""
+    try:
+        with open(BUILT_ROWS_PATH) as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return None
+
+
+def write_built_rows(totals, agencies):
+    os.makedirs(os.path.dirname(BUILT_ROWS_PATH), exist_ok=True)
+    payload = {
+        "_comment": ("Row counts as the OEC's own returnCountOnly endpoints "
+                     "reported them at the last operator build of "
+                     "build_wi_ng911_service_areas.py. validate_sources.py "
+                     "compares the live counts against these monthly and WARNs "
+                     "when the shipped files have fallen behind. Written by the "
+                     "build; never edit by hand."),
+        "builtOn": datetime.date.today().isoformat(),
+        "rows": totals,
+        "agencies": agencies,
+    }
+    with open(BUILT_ROWS_PATH, "w") as f:
+        json.dump(payload, f, indent=2, sort_keys=True)
+        f.write("\n")
+    print("wrote %s — rows %s" % (os.path.relpath(BUILT_ROWS_PATH, REPO_ROOT),
+                                  totals), file=sys.stderr)
+
+
+def check_built_rows(totals):
+    """--check: is the shipped tree still current with the source?
+
+    This is the local half of the monthly staleness check. It compares what the
+    source holds NOW against what it held when these files were built. It cannot
+    see a county REDRAWING a boundary without changing its row count — that is a
+    real blind spot and is why the OEC row is a WARN a human reads rather than a
+    claim of freshness.
+    """
+    pin = read_built_rows()
+    if pin is None:
+        raise RuntimeError(
+            "no %s — run this builder without --check once to write the pin"
+            % os.path.relpath(BUILT_ROWS_PATH, REPO_ROOT))
+    behind = {name: (pin["rows"].get(name), total)
+              for name, total in sorted(totals.items())
+              if pin["rows"].get(name) != total}
+    if behind:
+        raise RuntimeError(
+            "the shipped NG911 files are STALE — the source has moved since they "
+            "were built on %s. %s. Re-run this builder without --check, bump "
+            "cache_name in wi/metro-worksheet.json (these are cache-first), and "
+            "commit the rebuilt files with the refreshed pin."
+            % (pin.get("builtOn", "an unrecorded date"),
+               "; ".join("%s %s -> %s" % (n, was, now)
+                         for n, (was, now) in behind.items())))
+    print("staleness: all 4 layers still carry the row counts they were built "
+          "from on %s" % pin.get("builtOn", "an unrecorded date"), file=sys.stderr)
 
 
 def main():
@@ -323,10 +448,15 @@ def main():
     built = {}
     for layer in LAYERS:
         built[layer["name"]] = build(layer, check_only)
-    n_prov = gate_filings({name: pair[0] for name, pair in built.items()})
+    n_prov = gate_filings({name: t[0] for name, t in built.items()})
     print("gates: filing absences match the pinned UNFILED map across all %d "
           "provisioning authorities (Langlade still absent)" % n_prov,
           file=sys.stderr)
+    totals = {name: t[2] for name, t in built.items()}
+    if check_only:
+        check_built_rows(totals)
+    else:
+        write_built_rows(totals, {name: t[1] for name, t in built.items()})
 
 
 if __name__ == "__main__":

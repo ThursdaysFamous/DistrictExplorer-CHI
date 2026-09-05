@@ -1073,23 +1073,43 @@ ENDPOINTS = [
         "url": "https://maps.cityofmadison.com/arcgis/rest/services/Public/OPEN_DATA/MapServer/11/query?where=1%3D1&returnCountOnly=true&f=json",
     },
     {
-        # The NG911 pair is PRE-BUILT, but the OEC refreshes the service
-        # roughly weekly and a count change here is the operator's rebuild
-        # trigger (WATCH.md); the service going dark is the failure. The
-        # counts move a little week to week — expected news, not drift.
+        # THE NG911 COUNT IS COMPARED, NOT JUST FETCHED. These four rows asked
+        # for returnCountOnly=true and this checker read only reachability, so
+        # the number was thrown away — the same defect fixed above for the
+        # nearest-3 layers and never carried down here. The comment that used to
+        # sit on this row said "a count change here is the operator's rebuild
+        # trigger (WATCH.md)", which was a sentence and not a mechanism: nothing
+        # held last month's number, so nothing could see a change.
+        #
+        # Measured 2026-09-05, the first time anyone compared: the shipped EMS
+        # file was a filing behind. Waushara County had filed the City of
+        # Berlin's own ambulance service over the city's Waushara-side half, and
+        # the app was still answering Poy Sippi — the rural service — for
+        # everyone in it (400/400 sampled points; 2.1 km2).
+        #
+        # `built_rows` names the key in the sidecar the BUILDER writes on every
+        # run (wi/data/source/ng911/built-rows.json). The pin is a file rather
+        # than a constant so it cannot fall out of step with the data files it
+        # describes: one run writes both. What this CANNOT see is a county
+        # redrawing a boundary without changing its row count, which is why the
+        # finding is a WARN a human reads rather than a claim of freshness.
         "layer": "fire-service",
+        "built_rows": "fire",
         "url": "https://services3.arcgis.com/GoOAGCoqFEhZEh7f/arcgis/rest/services/WI_NG911_GIS_Service_Polygons_and_Road_Centerline_Data_v2/FeatureServer/3/query?where=1%3D1&returnCountOnly=true&f=json",
     },
     {
         "layer": "law-service",
+        "built_rows": "law",
         "url": "https://services3.arcgis.com/GoOAGCoqFEhZEh7f/arcgis/rest/services/WI_NG911_GIS_Service_Polygons_and_Road_Centerline_Data_v2/FeatureServer/4/query?where=1%3D1&returnCountOnly=true&f=json",
     },
     {
         "layer": "psap-area",
+        "built_rows": "psap",
         "url": "https://services3.arcgis.com/GoOAGCoqFEhZEh7f/arcgis/rest/services/WI_NG911_GIS_Service_Polygons_and_Road_Centerline_Data_v2/FeatureServer/6/query?where=1%3D1&returnCountOnly=true&f=json",
     },
     {
         "layer": "ems-service",
+        "built_rows": "ems",
         "url": "https://services3.arcgis.com/GoOAGCoqFEhZEh7f/arcgis/rest/services/WI_NG911_GIS_Service_Polygons_and_Road_Centerline_Data_v2/FeatureServer/2/query?where=1%3D1&returnCountOnly=true&f=json",
     },
     {
@@ -1238,6 +1258,71 @@ def check_count_envelope_matches_index(findings):
         findings.add(OK, "count-envelope",
                      "all %d record-count URL(s) measure the app's own METRO_BBOX "
                      "(%s)" % (len(rows), want))
+
+
+NG911_BUILT_ROWS = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    "data", "source", "ng911", "built-rows.json")
+
+
+def _check_shipped_is_current(findings, spec):
+    """Report whether the shipped pre-built files still match the live source.
+
+    The OEC refreshes roughly weekly; the builder is an OPERATOR build with no
+    schedule. Nothing held the last build's row counts, so nothing could see the
+    two drift apart — this reads the sidecar the builder writes and compares.
+
+    A WARN here means a human should re-run wi/scripts/build_wi_ng911_service_areas.py.
+    It is deliberately not a FAIL: falling behind a weekly source is the normal
+    state between operator builds, and a monthly FAIL on it would be noise.
+    """
+    layer = spec["layer"]
+    key = spec["built_rows"]
+    try:
+        with open(NG911_BUILT_ROWS) as f:
+            pin = json.load(f)
+    except (OSError, ValueError) as exc:
+        findings.add(WARN, layer,
+                     "the NG911 build sidecar could not be read (%s: %s), so "
+                     "whether the shipped files are current with the source is "
+                     "unknown — re-run the builder to write it"
+                     % (os.path.basename(NG911_BUILT_ROWS), exc))
+        return
+    built = (pin.get("rows") or {}).get(key)
+    built_on = pin.get("builtOn", "an unrecorded date")
+    if not isinstance(built, int):
+        findings.add(WARN, layer,
+                     "the NG911 build sidecar carries no row count for %r — it "
+                     "was written by an older builder, or the layer was renamed; "
+                     "re-run the builder" % key)
+        return
+
+    ok, res = http_get(spec["url"])
+    if not ok:
+        findings.add(WARN, layer,
+                     "count endpoint not reachable (%s): %s — the service may have "
+                     "been renamed or retired" % (res, spec["url"]))
+        return
+    count = res.get("count") if isinstance(res, dict) else None
+    if count is None:
+        findings.add(WARN, layer,
+                     "count endpoint answered without a count field: %r" % (res,))
+        return
+
+    if count == built:
+        findings.add(OK, layer,
+                     "%d rows, the same count these files were built from on %s "
+                     "(a redraw that keeps the row count would not show here)"
+                     % (count, built_on))
+        return
+    findings.add(WARN, layer,
+                 "the source now has %d rows against the %d these files were "
+                 "built from on %s — the shipped layer is behind by %+d and a "
+                 "reader may be getting a superseded answer. Re-run "
+                 "wi/scripts/build_wi_ng911_service_areas.py, bump cache_name in "
+                 "wi/metro-worksheet.json (these files are cache-first), and "
+                 "commit the rebuilt files with the refreshed sidecar."
+                 % (count, built, built_on, count - built))
 
 
 def _check_single_request_count(findings, spec):
@@ -1479,6 +1564,9 @@ def check_endpoints(findings, offline):
     for e in ENDPOINTS:
         if e.get("count_layer"):
             _check_single_request_count(findings, e)
+            continue
+        if e.get("built_rows"):
+            _check_shipped_is_current(findings, e)
             continue
         ok, res = http_get(e["url"], want_json=False)
         if ok:
