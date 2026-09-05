@@ -8045,6 +8045,12 @@ function initChiExplorer() {
   /* ---------- case-insensitive property lookup — Socrata field-name casing/
    * naming varies dataset to dataset (see probeGeometryColumn's rationale) ---------- */
   function findPropCI(props, candidates) {
+    // CANDIDATES MUST BE LOWERCASE. This lowercases the property KEY and
+    // compares it against the candidate exactly as given, so "Ward" can never
+    // match anything. Measured 2026-09-05: a Grand Rapids entry passing
+    // ["Ward", "WARD"] rendered "Unknown ward" on a card whose feature plainly
+    // carried Ward, and Detroit's ["District", "district_number"] was working
+    // only through its second, already-lowercase candidate.
     if (!props) return null;
     var keys = Object.keys(props);
     for (var c = 0; c < candidates.length; c++) {

@@ -1,0 +1,74 @@
+{
+ "citywide": [
+  {
+   "email": "mayor@grcity.us",
+   "name": "David LaGrand",
+   "phone": "616.456.3168",
+   "profileUrl": "https://www.grandrapidsmi.gov/government/city-commission/commissioners/mayor-david-lagrand/",
+   "seat": "Mayor"
+  }
+ ],
+ "office": {
+  "label": "City Hall",
+  "lines": [
+   "300 Monroe Avenue NW",
+   "Grand Rapids, Michigan 49503"
+  ],
+  "phone": "616.456.3000"
+ },
+ "seats": 7,
+ "seatsPerWard": 2,
+ "sourceUrl": "https://www.grandrapidsmi.gov/Government/City-Commission",
+ "vacancies": {
+  "1": {
+   "cause": "resignation",
+   "postedOn": "April 17, 2026",
+   "predecessor": "Drew Robbins",
+   "sourceUrl": "https://www.grandrapidsmi.gov/city-news/posts/committee-on-appointments-names-three-finalists-for-first-ward-city-commissioner-vacancy/",
+   "ward": "1"
+  }
+ },
+ "wards": {
+  "1": [
+   {
+    "email": "abelchak@grcity.us",
+    "name": "AliciaMarie Belchak",
+    "phone": "616.456.3855",
+    "profileUrl": "https://www.grandrapidsmi.gov/government/city-commission/commissioners/aliciamarie-belchak/",
+    "seat": "Ward 1 Commissioner"
+   }
+  ],
+  "2": [
+   {
+    "email": "lknight@grcity.us",
+    "name": "Lisa Knight",
+    "phone": "616.456.3864",
+    "profileUrl": "https://www.grandrapidsmi.gov/government/city-commission/commissioners/lisa-knight/",
+    "seat": "Ward 2 Commissioner"
+   },
+   {
+    "email": "mysasi@grcity.us",
+    "name": "Milinda Ysasi",
+    "phone": "616.456.3859",
+    "profileUrl": "https://www.grandrapidsmi.gov/government/city-commission/commissioners/milinda-ysasi/",
+    "seat": "Ward 2 Commissioner"
+   }
+  ],
+  "3": [
+   {
+    "email": "kperdue@grcity.us",
+    "name": "Kelsey Perdue",
+    "phone": "616.456.3862",
+    "profileUrl": "https://www.grandrapidsmi.gov/government/city-commission/commissioners/kelsey-perdue/",
+    "seat": "Ward 3 Commissioner"
+   },
+   {
+    "email": "mkilgore@grcity.us",
+    "name": "Marshall Kilgore",
+    "phone": "616.456.3858",
+    "profileUrl": "https://www.grandrapidsmi.gov/government/city-commission/commissioners/marshall-kilgore/",
+    "seat": "Ward 3 Commissioner"
+   }
+  ]
+ }
+}

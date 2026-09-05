@@ -124,8 +124,135 @@ def oid_field(base):
     raise RuntimeError("no object-id field on " + base)
 
 
+def _ring_is_clockwise(ring):
+    """Esri's own rule: a CLOCKWISE ring is an outer boundary, a
+    COUNTER-CLOCKWISE one is a hole in the ring that contains it."""
+    s = 0.0
+    for i in range(len(ring) - 1):
+        x1, y1 = ring[i][0], ring[i][1]
+        x2, y2 = ring[i + 1][0], ring[i + 1][1]
+        s += (x2 - x1) * (y2 + y1)
+    return s > 0
+
+
+def _ring_area(ring):
+    """Unsigned planar area of a ring, in squared degrees — used only to compare
+    rings with each other, never as a real-world measurement."""
+    s = 0.0
+    for i in range(len(ring) - 1):
+        s += ring[i][0] * ring[i + 1][1] - ring[i + 1][0] * ring[i][1]
+    return abs(s) / 2.0
+
+
+def _ring_contains(outer, pt):
+    x, y = pt[0], pt[1]
+    inside = False
+    for i in range(len(outer) - 1):
+        x1, y1 = outer[i][0], outer[i][1]
+        x2, y2 = outer[i + 1][0], outer[i + 1][1]
+        if (y1 > y) != (y2 > y) and x < (x2 - x1) * (y - y1) / (y2 - y1) + x1:
+            inside = not inside
+    return inside
+
+
+def esri_rings_to_geojson(rings, label=""):
+    """Esri rings -> a properly NESTED GeoJSON Polygon/MultiPolygon.
+
+    WHY THIS EXISTS, measured 2026-09-05. `fetch_layer` used to ask ArcGIS for
+    `f=geojson` and ship whatever came back. For the NG911 law layer's MASON
+    (Marquette County) the server's GeoJSON export returned the feature as a
+    MultiPolygon of THREE SINGLE-RING POLYGONS — 1330, 40 and 4 vertices — where
+    its own Esri-JSON form returns the same three rings with the 40-vertex one
+    COUNTER-CLOCKWISE, i.e. a hole: the Village of Westfield, which files its own
+    police department. The exporter had failed to nest it, so the hole became a
+    shell, MASON's area grew 669.20 -> 677.13 km2, and every point in Westfield
+    got a card reading "MASON ... Also filed at this point: WPD ... concurrent
+    jurisdiction exactly as the county filed it" — a jurisdiction the county did
+    NOT file. The build's own 4,000-point agreement gate could not see it: it
+    compares the dissolved output against the same fetch, so it agreed with
+    itself. Not every feature is affected (Brown County Sheriff Law Zone 5A came
+    back correctly nested the same day), which is what makes it a silent class
+    rather than an outage.
+
+    So the fetch asks for `f=json` and does the nesting here, where the rule is
+    NORMATIVE rather than inferred. Winding alone is not enough to lean on in
+    GeoJSON — RFC 7946 wants exterior rings counter-clockwise, the opposite
+    convention — so this reads Esri's orientation AND requires containment
+    before it treats a ring as a hole; a counter-clockwise ring contained by
+    nothing is kept as its own shell rather than silently dropped.
+    """
+    shells, holes = [], []
+    for ring in rings:
+        if len(ring) < 4:
+            # Degenerate; keep it as a shell so nothing is silently discarded.
+            shells.append(ring)
+            continue
+        (shells if _ring_is_clockwise(ring) else holes).append(ring)
+    if not shells:
+        # Every ring counter-clockwise: the orientation signal is absent, so
+        # treat them all as shells rather than inventing holes.
+        shells, holes = list(rings), []
+    polys = [[s] for s in shells]
+    shell_area = [_ring_area(s) for s in shells]
+    for hole in holes:
+        # WHICH SHELL OWNS A HOLE — measured 2026-09-05, after a first draft of
+        # this function got it wrong on Marathon County Sheriff Department. That
+        # feature has 34 rings: 22 shells and 12 holes. One of its shells is a
+        # 17-vertex SLIVER OF ZERO AREA, and an even-odd test against a zero-area
+        # ring is not reliable — it reported that the sliver "contained" a hole
+        # of area 0.0358, and a tie-break that only asked whether one SHELL sat
+        # inside another then handed the hole to the sliver instead of to the
+        # county outline. The hole was therefore never subtracted, and the source
+        # claimed the Sheriff covered Kronenwetter, Wausau and Mountain Bay,
+        # which the service's own point query denies. So: a hole goes to the
+        # SMALLEST shell that contains it AND is larger than it, and containment
+        # is a majority vote over three of the hole's own vertices rather than
+        # one — a single vertex can sit exactly on a neighbouring ring.
+        h_area = _ring_area(hole)
+        probes = [hole[0], hole[len(hole) // 3], hole[(2 * len(hole)) // 3]]
+        owner, owner_area = None, None
+        for i, s in enumerate(shells):
+            if shell_area[i] <= h_area:
+                continue
+            if sum(1 for pt in probes if _ring_contains(s, pt)) < 2:
+                continue
+            if owner is None or shell_area[i] < owner_area:
+                owner, owner_area = i, shell_area[i]
+        if owner is None:
+            polys.append([hole])          # contained by nothing: its own shell
+        else:
+            polys[owner].append(hole)
+    if len(polys) == 1:
+        return {"type": "Polygon", "coordinates": polys[0]}
+    return {"type": "MultiPolygon", "coordinates": [[list(r) for r in p] for p in polys]}
+
+
+def _esri_feature_to_geojson(f, label=""):
+    geom = f.get("geometry")
+    out = None
+    if geom:
+        if "rings" in geom:
+            out = esri_rings_to_geojson(geom["rings"], label)
+        elif "x" in geom and "y" in geom:
+            out = {"type": "Point", "coordinates": [geom["x"], geom["y"]]}
+        elif "paths" in geom:
+            paths = geom["paths"]
+            out = ({"type": "LineString", "coordinates": paths[0]} if len(paths) == 1
+                   else {"type": "MultiLineString", "coordinates": paths})
+        else:
+            raise RuntimeError("unhandled Esri geometry shape: %s"
+                               % sorted(geom.keys()))
+    return {"type": "Feature", "properties": f.get("attributes") or {},
+            "geometry": out}
+
+
 def fetch_layer(base, out_fields, geometry=True, where="1=1"):
-    """Page an ArcGIS feature layer out as GeoJSON in 4326."""
+    """Page an ArcGIS feature layer out as GeoJSON in 4326.
+
+    Asks the server for ESRI JSON and converts, rather than asking for
+    `f=geojson` — see esri_rings_to_geojson for the hole the GeoJSON exporter
+    silently unnested and the wrong card it produced.
+    """
     import urllib.parse
     order = oid_field(base)
     feats = []
@@ -137,16 +264,18 @@ def fetch_layer(base, out_fields, geometry=True, where="1=1"):
             "returnGeometry": "true" if geometry else "false",
             "outSR": "4326",
             "geometryPrecision": "6",
-            "f": "geojson",
+            "f": "json",
             "resultOffset": str(offset),
             "resultRecordCount": "1000",
             "orderByFields": order,
         }
         data = json.loads(_curl(base + "/query?" + urllib.parse.urlencode(params)))
-        batch = data.get("features") or []
+        if isinstance(data, dict) and data.get("error"):
+            raise RuntimeError("ArcGIS error from %s: %s" % (base, data["error"]))
+        batch = [_esri_feature_to_geojson(f) for f in (data.get("features") or [])]
         feats.extend(batch)
-        if not data.get("properties", {}).get("exceededTransferLimit") \
-           and not data.get("exceededTransferLimit"):
+        if not data.get("exceededTransferLimit") \
+           and not data.get("properties", {}).get("exceededTransferLimit"):
             break
         if not batch:
             break
