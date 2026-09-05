@@ -112,6 +112,30 @@ UA = {"User-Agent": ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
 
 PAUSE_S = 1.0   # the city sets no Crawl-delay; this is politeness, not policy
 
+# WHY A VACANCY NEEDS ITS OWN SOURCE. A short ward is visible from the
+# commission page — a ward listing fewer commissioners than the city elects —
+# but WHY it is short is not on that page at all. The cause is stated in a
+# separate city news post, so it is fetched and VERIFIED here rather than typed
+# into a card: keyed by ward, and dropped (never guessed, never left stale) if
+# the post stops saying it.
+#
+# The ordinal is how the post names the ward, and is checked, so this cannot
+# attach one ward's vacancy to another's card.
+VACANCY_SOURCES = {
+    "1": {
+        "url": (SITE + "/city-news/posts/committee-on-appointments-names-three-"
+                       "finalists-for-first-ward-city-commissioner-vacancy/"),
+        "ordinal": "First Ward",
+    },
+}
+# The name stops at the sentence boundary. A period is allowed only on a
+# single-letter token (a middle initial) — the first draft let it ride on any
+# token and captured "Drew Robbins. The", which is the sentence, not the name.
+RESIGNATION_RE = re.compile(
+    r"vacancy was created following the resignation of former Commissioner\s+"
+    r"((?:(?:[A-Z]\.|[A-Z][a-z\u2019'\-]+)\s+){1,3}[A-Z][a-z\u2019'\-]+)")
+POST_DATE_RE = re.compile(r"\b([A-Z][a-z]+ \d{1,2}, 20\d\d)\b")
+
 
 def fail(msg):
     print("grand-rapids-council-scraper: FAIL — %s" % msg, file=sys.stderr)
@@ -197,6 +221,37 @@ def parse_member(slug, page):
     return {"slug": slug, "name": name, "ward": ward, "isMayor": is_mayor,
             "emails": emails, "phones": phones,
             "profileUrl": SITE + MEMBER_PREFIX + slug + "/"}
+
+
+def fetch_vacancy(ward):
+    """The stated cause of one ward's vacancy, from the city's own post.
+
+    Returns a dict or None. NEVER raises for a missing or changed post: a
+    vacancy this cannot verify simply does not ship, and the card falls back to
+    saying the seat is not listed — which is still true. What it must not do is
+    keep asserting a resignation the city has stopped describing."""
+    src = VACANCY_SOURCES.get(ward)
+    if not src:
+        return None
+    try:
+        page = get(src["url"])
+    except Exception as exc:                          # noqa: BLE001 — an absent post is data
+        print("  vacancy source for ward %s unreadable (%s) — shipping the neutral "
+              "wording instead" % (ward, exc), file=sys.stderr)
+        return None
+    body = flat(page)
+    if src["ordinal"] not in body:
+        print("  vacancy source for ward %s no longer names %r — not shipping it"
+              % (ward, src["ordinal"]), file=sys.stderr)
+        return None
+    m = RESIGNATION_RE.search(body)
+    if not m:
+        print("  vacancy source for ward %s no longer states the cause — not shipping it"
+              % ward, file=sys.stderr)
+        return None
+    d = POST_DATE_RE.search(body)
+    return {"ward": ward, "cause": "resignation", "predecessor": m.group(1).strip(),
+            "postedOn": d.group(1) if d else None, "sourceUrl": src["url"]}
 
 
 def detect_switchboard(members):
@@ -291,8 +346,26 @@ def main():
         print("  note: no City Hall address found in the page footer; the card will "
               "carry the switchboard alone", file=sys.stderr)
 
+    # A vacancy is looked up only for a ward the roster actually shows short, so
+    # a recorded source cannot outlive the shortfall it explains.
+    vacancies = {}
+    for w in EXPECT_WARDS:
+        held = len([m for m in members if m["ward"] == w])
+        if held < COMMISSIONERS_PER_WARD:
+            v = fetch_vacancy(w)
+            if v:
+                vacancies[w] = v
+                print("    ward %s short %d of %d — vacancy verified: %s, %s"
+                      % (w, held, COMMISSIONERS_PER_WARD, v["cause"], v["predecessor"]),
+                      file=sys.stderr)
+            else:
+                print("    ward %s short %d of %d — no verified cause; the card will say "
+                      "only that the seat is not listed" % (w, held, COMMISSIONERS_PER_WARD),
+                      file=sys.stderr)
+
     payload = {"sourceUrl": LISTING, "seats": EXPECT_SEATS,
-               "switchboard": switchboard, "address": address, "members": members}
+               "switchboard": switchboard, "address": address,
+               "vacancies": vacancies, "members": members}
     os.makedirs(os.path.dirname(CACHE), exist_ok=True)
     with open(CACHE, "w", encoding="utf-8") as fh:
         json.dump(payload, fh, indent=2, sort_keys=True, ensure_ascii=False)

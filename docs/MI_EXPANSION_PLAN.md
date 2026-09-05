@@ -272,7 +272,19 @@ Each opens its own refreshed plan PR with its own measured ledger when it begins
   Commissioner Drew Robbins", and a 2026-03-31 post names ten applicants advancing. ONE PAGE IS NOT
   THE CITY — the same error that once called Detroit's open-data portal blocked. The card now names
   the vacancy and its cause, and deliberately says nothing about how it was resolved, because no
-  city source found on 2026-09-05 does. A related trap avoided by construction: the departed
+  city source found on 2026-09-05 does.
+  **THE CAUSE WAS A STRING LITERAL IN THE CARD AND IS NOW DATA, WHICH IS THE THIRD OF THIS PR'S OWN
+  CLAIMS TO BE WRONG.** That literal named Ward 1's predecessor on a row that fires for ANY ward the
+  city names short of its seats, so a later Ward 2 or 3 vacancy would have rendered his name on the
+  wrong card. The scraper now fetches and verifies the cause per ward from the city's own post, the
+  builder refuses a vacancy for a ward the city fully seats or one with no on-site source, and the
+  card renders the sentence — and a link to that post — from the roster, falling back to the
+  neutral "not listed there" wording for a short ward with no verified cause. Nothing in CI had ever
+  selected a point in either city, because the instance's anchor is in Lansing where `city-ward`
+  hides; the smoke test now carries eight checks that do, including a STUBBED roster that makes a
+  full ward short — the only scenario that catches the ward-agnostic shape, since under the broken
+  code every check against the live roster still passes.
+  A related trap avoided by construction: the departed
   commissioner's own page still answers 200 and is still in the sitemap, so a scraper walking
   sitemap entries would ship him as sitting. Each
   member's own page gives ward, e-mail and direct phone. Three traps recorded: the e-mail domain is

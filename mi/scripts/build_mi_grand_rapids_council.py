@@ -23,6 +23,14 @@ city said nothing, on a measurement of one page. What no city source states, as
 of 2026-09-05, is how the vacancy was resolved — so the card names the vacancy
 and its cause and stops there.
 
+THE CAUSE RIDES THE DATA, KEYED TO ITS WARD, AND IT DID NOT AT FIRST. It was a
+string literal in the card, on a row that fires for ANY ward short of its
+seats — so a Ward 2 or 3 resignation would have rendered Ward 1's predecessor
+by name on the wrong card. Now the scraper fetches and verifies the cause per
+ward and this refuses to write a vacancy for a ward the city fully seats, or
+one carrying no source. A ward that is short with no verified cause ships no
+cause: the card falls back to saying the seat is not listed, which stays true.
+
 WHAT SHIPS PER MEMBER, AND WHAT DOES NOT
 ------------------------------------------
 Name, ward, e-mail and a direct phone, each read from that member's own page.
@@ -111,6 +119,8 @@ def shape(cache):
     if office:
         office["label"] = "City Hall"
         doc["office"] = office
+    if cache.get("vacancies"):
+        doc["vacancies"] = cache["vacancies"]
     return doc
 
 
@@ -153,6 +163,26 @@ def validate(doc):
     names = [r["name"] for r in everyone]
     if len(set(names)) != len(names):
         fail("one person holds two seats")
+
+    # A VACANCY IS KEYED TO ITS WARD AND MUST EXPLAIN A REAL SHORTFALL. The card
+    # renders the cause per ward, so a record attached to a ward that is fully
+    # seated would put one ward's resignation on another ward's card — which is
+    # what the first version did by holding the cause as a ward-agnostic string.
+    for w, v in (doc.get("vacancies") or {}).items():
+        if w not in doc["wards"]:
+            fail("a vacancy is recorded for ward %s, which is not one of %s"
+                 % (w, EXPECT_WARDS))
+        if len(doc["wards"][w]) >= COMMISSIONERS_PER_WARD:
+            fail("a vacancy is recorded for ward %s, but the city names all %d of its "
+                 "commissioners — the record has outlived the shortfall it explains"
+                 % (w, COMMISSIONERS_PER_WARD))
+        for key in ("cause", "predecessor", "sourceUrl"):
+            if not v.get(key):
+                fail("the ward %s vacancy record carries no %s; a stated cause needs a "
+                     "source or it does not ship" % (w, key))
+        if not v["sourceUrl"].startswith(SITE):
+            fail("the ward %s vacancy cites %s, which is not the city's own site"
+                 % (w, v["sourceUrl"]))
 
 
 def check():

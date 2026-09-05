@@ -19,6 +19,15 @@
  "seats": 7,
  "seatsPerWard": 2,
  "sourceUrl": "https://www.grandrapidsmi.gov/Government/City-Commission",
+ "vacancies": {
+  "1": {
+   "cause": "resignation",
+   "postedOn": "April 17, 2026",
+   "predecessor": "Drew Robbins",
+   "sourceUrl": "https://www.grandrapidsmi.gov/city-news/posts/committee-on-appointments-names-three-finalists-for-first-ward-city-commissioner-vacancy/",
+   "ward": "1"
+  }
+ },
  "wards": {
   "1": [
    {

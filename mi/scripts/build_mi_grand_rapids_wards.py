@@ -66,13 +66,25 @@ That comparison is a GATE here, not a note, because it is the only thing
 standing between this app and a decade-old ward map.
 
 A THIRD WITNESS, AND THE CHEAPEST ONE: THE CITY CONSUMES THIS SERVICE ITSELF.
-Two of the org's own web maps — "Wards" and "Wards-Zoomed-Out" — draw
-`CGR_Wards/FeatureServer/0`, the exact service shipped here, while an older map
-("Updated City Wards for GRPD") draws the duplicate. A publisher pointing its
-own public map products at a layer is evidence about which layer it maintains,
-and it costs one catalogue query to check. Not gated, because a city
-reorganising its web maps is not a redraw — but worth reading before the
-expensive comparisons, and this build did not.
+The org publishes two chains of ward products, and they point at the two
+services. The city's public ward viewer — the web app "City of Grand Rapids
+Wards" (modified 2026-05-15) — wraps the web map "Wards" (2026-03-05), which
+draws `CGR_Wards/FeatureServer/0`, the exact service shipped here; so does
+"Wards-Zoomed-Out" (2018-06-01). The duplicate is drawn by a departmental
+chain: the web experience "City Wards for GRPD" (2026-06-23) wraps the web map
+"Updated City Wards for GRPD" (2026-06-23), which pairs it with a Consumers
+Energy outage layer. A publisher pointing its own public map products at a
+layer is evidence about which layer it maintains, and it costs one catalogue
+query to check.
+
+RECENCY IS NOT WHAT MAKES THAT A WITNESS, and an earlier draft of this
+paragraph said the duplicate was drawn by "an older map" — measured
+2026-09-05, the GRPD pair is the NEWEST of the five, by three months. What the
+chains show is which product is the CITY'S ward viewer, not which was touched
+last. Not gated either way, because the two services are byte-identical
+geometry and THAT is gated (100.00% agreement, above) — a city reorganising
+its web maps is not a redraw. Worth reading before the expensive comparisons,
+and this build did not.
 
 THE POPULATION IDENTITY IS *NOT* EXACT HERE, AND IS NOT ASSERTED AS IF IT WERE
 --------------------------------------------------------------------------------
@@ -105,10 +117,17 @@ independent reason to believe the 2018 file.
 LICENCE. The item carries a long `licenseInfo`, and it is the DES MOINES CASE
 rather than a refusal: a "Data Access and Use Constraint Agreement" that
 conditions use on carrying the city's disclaimer, provided "as a complementary
-service to its residents". The card carries the agreement's OPERATIVE SENTENCES
-QUOTED FROM IT — not a paraphrase, which is what this build shipped first while
-this paragraph called it verbatim. Des Moines's card quotes its city's words
-too; that was the precedent being claimed and not followed.
+service to its residents". The card carries the sentences of that agreement
+that describe the DATA, QUOTED FROM IT — not a paraphrase, which is what this
+build shipped first while this paragraph called it verbatim. Des Moines's card
+quotes its city's words too; that was the precedent being claimed and not
+followed. THE SECOND DRAFT WAS NOT VERBATIM EITHER, in two ways a reader of the
+card could not have caught: it dropped the ("City") parenthetical from the
+opening sentence and cut the agreement's two acceptance sentences without an
+ellipsis. Both are fixed, the cut is marked, and the quotation is now ASSERTED
+segment by segment against the live licenceInfo on every run — so a reworded
+agreement fails this build rather than leaving the card quoting words the city
+has stopped saying.
 
 A MAPSHAPER WARNING THAT IS NOT A DEFECT, MEASURED SO NOBODY RE-CHASES IT.
 Every tolerance above 20% prints "Repaired 0 intersections; N intersections
@@ -130,9 +149,11 @@ it is not the current precinct fabric, and it is read nowhere here.
 """
 
 import argparse
+import html as htmllib
 import json
 import os
 import random
+import re
 import subprocess
 import sys
 import urllib.parse
@@ -199,6 +220,64 @@ DERIVED_FIELDS = ("Ward",)
 def fail(msg):
     print("build-mi-grand-rapids-wards: FAIL — %s" % msg, file=sys.stderr)
     sys.exit(1)
+
+
+def curl(url):
+    return subprocess.run(["curl", "-sS", "--fail", "--max-time", "120", url],
+                          check=True, capture_output=True).stdout
+
+
+def fetch_license_info():
+    """The city's use agreement, as HTML, off the service's OWN AGO item.
+
+    The item id is read from the service rather than hardcoded, so a republish
+    under a new item still lands on the agreement the shipped geometry actually
+    carries. Observed 2026-09-05: a576ba34b3dd4a0ea6fef475d1100ef3."""
+    svc = json.loads(curl(SERVICE + "?f=json"))
+    iid = svc.get("serviceItemId")
+    if not iid:
+        fail("%s carries no serviceItemId, so its use agreement cannot be read — "
+             "the disclaimer this build ships is quoted from that agreement and is "
+             "not shipped unverified" % SERVICE)
+    item = json.loads(curl(
+        "https://www.arcgis.com/sharing/rest/content/items/%s?f=json" % iid))
+    return item.get("licenseInfo") or ""
+
+
+def flatten_licence(html_text):
+    t = htmllib.unescape(re.sub(r"<[^>]+>", " ", html_text))
+    # The agreement is typed with curly quotes; normalise BOTH sides rather than
+    # matching on a character an editor can change without changing a word.
+    t = t.replace("\u2018", "'").replace("\u2019", "'")
+    t = t.replace("\u201c", '"').replace("\u201d", '"')
+    return re.sub(r"\s+", " ", t).strip()
+
+
+def check_disclaimer_is_quoted(quote, license_info):
+    """Every segment of the shipped disclaimer must appear, in order, in the
+    city's live agreement — the gate that keeps a QUOTATION a quotation.
+
+    Nothing compared the two before: the first draft of this build composed its
+    own sentence, the second dropped a parenthetical and silently cut two
+    sentences, and both shipped under a docstring calling the result verbatim.
+    A reworded agreement now fails the build instead."""
+    flat = flatten_licence(license_info)
+    if len(flat) < 500:
+        fail("the city's licenseInfo came back %d characters — too short to be the "
+             "use agreement, so the shipped disclaimer cannot be verified against it"
+             % len(flat))
+    at = 0
+    for seg in [s.strip() for s in flatten_licence(quote).split("\u2026")]:
+        if not seg:
+            continue
+        i = flat.find(seg, at)
+        if i < 0:
+            fail("the shipped disclaimer quotes %r, which is not in the city's live "
+                 "use agreement (in order, after character %d). The agreement has "
+                 "been reworded: re-quote it, never reword the quotation" % (seg, at))
+        at = i + len(seg)
+    print("  disclaimer: %d character(s) quoted from the city's live use agreement "
+          "(%d characters), in order" % (len(quote), len(flat)))
 
 
 def esri(url, params):
@@ -403,6 +482,12 @@ def main():
         print("build-mi-grand-rapids-wards: OK — 3 wards shipped")
         return
 
+    # First, because a quotation this cannot verify must not reach the geometry
+    # work at all: the shipped disclaimer is the city's own words, and an
+    # agreement that has been reworded is a build failure, not a card edit.
+    print("reading the city's use agreement off the service's own AGO item…")
+    license_info = fetch_license_info()
+
     print("fetching the city's ward service and its duplicate…")
     wards = esri(SERVICE, {"where": "1=1", "outFields": "WARD"})
     dup = esri(DUPLICATE, {"where": "1=1", "outFields": "WARD"})
@@ -532,16 +617,28 @@ def main():
     # QUOTED FROM THE CITY'S OWN `licenseInfo`, not paraphrased. An earlier
     # version of this build composed its own sentence and the docstring called
     # it verbatim, which it was not — and a use agreement is exactly the text
-    # that must not be reworded. These are the operative sentences of the
-    # City of Grand Rapids Data Access and Use Constraint Agreement, in its
-    # words and order; the full agreement (3,050 characters, including its
+    # that must not be reworded. These are the sentences of the City of Grand
+    # Rapids Data Access and Use Constraint Agreement that describe the DATA,
+    # in its words and order, down to the (\u201cCity\u201d) parenthetical the
+    # first draft silently dropped. THE ONE ELISION IS MARKED. Two sentences
+    # sit between the first and the rest — the agreement's acceptance clause,
+    # addressed to whoever ACCESSES the data (this build) rather than to
+    # whoever reads a card — and cutting them without saying so made a
+    # four-sentence quotation out of a five-sentence passage. The ellipsis
+    # says a cut happened; the full agreement (3,050 characters, including its
     # arbitration clause) is on the item and linked from the card's source row.
+    #
+    # The quotation is ASSERTED against the live licenceInfo below, so a
+    # reworded agreement fails the build instead of shipping a quotation the
+    # city no longer makes.
     built["disclaimer"] = (
-        "The City of Grand Rapids provides data for use \u201cas is\u201d as a "
-        "complementary service to its residents. The areas depicted by this special "
+        "The City of Grand Rapids (\u201cCity\u201d) provides data for use "
+        "\u201cas is\u201d as a complementary service to its residents. \u2026 "
+        "The areas depicted by this special "
         "database are approximate and may not be accurate to surveying or engineering "
         "standards. The special data shown here are for illustration purposes only and "
         "are not suitable for site specific decision making.")
+    check_disclaimer_is_quoted(built["disclaimer"], license_info)
     with open(out_path, "w") as f:
         json.dump(built, f, separators=(",", ":"))
         f.write("\n")

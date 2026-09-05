@@ -9671,6 +9671,7 @@ function initMichiganExplorer() {
           office: (roster && roster.office) || null,
           seats: roster ? roster.seats : null,
           seatsPerWard: roster ? roster.seatsPerWard : null,
+          vacancies: (roster && roster.vacancies) || null,
           rosterUrl: roster ? roster.sourceUrl : null,
           // Required by the city's own use agreement, which conditions use of
           // its GIS data on carrying the disclaimer (the Des Moines case).
@@ -9697,26 +9698,42 @@ function initMichiganExplorer() {
       // Every ward elects more than one commissioner, so a ward naming fewer
       // than it elects is a seat the city has not published rather than a ward
       // with one member. Say so in the card's own words instead of leaving the
-      // reader to count — and take the number from the DATA, because how many
+      // reader to count — and take BOTH numbers from the DATA, because how many
       // commissioners a ward elects is the city's fact, not this file's.
       //
-      // THE REASON IS THE CITY'S TOO, and an earlier version of this row said
-      // the city gave none. It does: its 2026-04-17 news post names the
-      // resignation that created the vacancy. Only the commission page had been
-      // read. What the row deliberately does NOT say is how the vacancy was
-      // resolved — no city source states that, so neither does this.
+      // THE REASON IS THE CITY'S TOO, and it is keyed to the ward it belongs
+      // to. An earlier version of this row was a ward-agnostic literal naming
+      // the First Ward's predecessor, so a later vacancy in ward 2 or 3 would
+      // have rendered his name on the wrong card. A ward with no recorded
+      // vacancy gets the neutral sentence — the seat is simply not listed —
+      // which stays true whatever caused it. The cause is attributed to the
+      // city and linked rather than quoted, so the sentence cannot become a
+      // fabricated quotation if the builder ever carries a cause other than
+      // the one its source states. What the row deliberately does NOT say is
+      // how the vacancy was resolved: no city source states that.
       var expected = result.seatsPerWard || 0;
-      if (result.members && result.members.length && expected &&
-          result.members.length < expected) {
-        wrap.appendChild(renderFieldStack([{
-          label: "This ward's other seat",
-          value: "Grand Rapids elects two commissioners from each ward, and this "
-               + "ward's second seat is vacant. The city says it was \u201ccreated "
-               + "following the resignation of former Commissioner Drew Robbins\u201d "
-               + "and that its Committee on Appointments named three finalists in "
-               + "April 2026. No successor is listed on the City Commission's page, "
-               + "so this app names nobody for it."
-        }]));
+      var named = (result.members && result.members.length) || 0;
+      if (named && expected && named < expected) {
+        var vacancy = (result.vacancies && result.ward != null)
+          ? result.vacancies[String(result.ward)] : null;
+        var short = expected - named;
+        var note = "Grand Rapids elects " + expected + " commissioners from each "
+                 + "ward. The City Commission's page names " + named + " for this "
+                 + "ward, so " + (short === 1 ? "one seat is" : short + " seats are")
+                 + " not listed there, and this app names nobody for "
+                 + (short === 1 ? "it." : "them.");
+        if (vacancy && vacancy.predecessor && vacancy.cause) {
+          note += " The city attributes the vacancy to the " + vacancy.cause
+                + " of former Commissioner " + vacancy.predecessor
+                + (vacancy.postedOn ? ", in an announcement dated " + vacancy.postedOn : "")
+                + ".";
+        }
+        wrap.appendChild(renderLinkRow({
+          title: short === 1 ? "This ward's other seat" : "This ward's other seats",
+          note: note,
+          links: (vacancy && vacancy.sourceUrl)
+            ? [{ label: "City announcement", url: vacancy.sourceUrl }] : null
+        }));
       }
       if (result.citywide && result.citywide.length) {
         wrap.appendChild(renderSectionLabel("ELECTED BY THE WHOLE CITY"));
