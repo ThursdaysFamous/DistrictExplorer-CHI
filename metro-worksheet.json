@@ -461,7 +461,7 @@
             "label": "Pre-built from the county's published district map, for the counties that publish no vector data"
           },
           {
-            "label": "Illinois Broadband Office / Connected Nation, IL_Boundary_Layers layer 11 \u2014 Carroll, Lee, Randolph, Sangamon, St. Clair and Stephenson ONLY. Not a county or library publication: every attribute besides the library name and type is a broadband service metric. Its licence (AGOL item 675906ae06b5460296154760b7fb1367) permits public use, disclaims warranty, says the data is NOT for legal boundary determinations, and requires both attribution and disclosure of any changes \u2014 so each of those cards names this publisher AND states that the boundary shown was clipped to the county and simplified to 5 m.",
+            "label": "Illinois Broadband Office / Connected Nation, IL_Boundary_Layers layer 11 — Carroll, Lee, Randolph, Sangamon, St. Clair and Stephenson ONLY. Not a county or library publication: every attribute besides the library name and type is a broadband service metric. Its licence (AGOL item 675906ae06b5460296154760b7fb1367) permits public use, disclaims warranty, says the data is NOT for legal boundary determinations, and requires both attribution and disclosure of any changes — so each of those cards names this publisher AND states that the boundary shown was clipped to the county and simplified to 5 m.",
             "url": "https://services.arcgis.com/R0IGaIgf2sox9aCY/arcgis/rest/services/IL_Boundary_Layers/FeatureServer/11"
           },
           {
@@ -545,7 +545,7 @@
             "url": "https://gis.cookcountyil.gov/traditional/rest/services/politicalBoundary/MapServer/22"
           },
           {
-            "label": "Peoria County GIS \u2014 DP/Elections, layer 13 (Elmwood's wards; the COUNTY publishes them, not the city)",
+            "label": "Peoria County GIS — DP/Elections, layer 13 (Elmwood's wards; the COUNTY publishes them, not the city)",
             "url": "https://gis.peoriacounty.gov/arcgis/rest/services/DP/Elections/MapServer/13"
           },
           {
@@ -943,7 +943,7 @@
         "file": "belvidere-city-outline.json",
         "min_features": 1,
         "max_features": 1,
-        "note": "City of Belvidere corporate limits (scripts/build_place_outline.py) \u2014 the ONLY municipal outline this instance ships, and it exists to carve one hole in a county source rather than to draw a city. Boone's Fire_Districts layer tiles every acre of the county, so a Belvidere address returned Fire District 2 while the Clerk's own district-rates report gives 18 of 55 tax codes no fire line at all \u2014 those 18 being the city's, which runs a MUNICIPAL fire department. TWENTY-TWO of its twenty-four rings are HOLES, unincorporated pockets the city annexed around, and they are load-bearing: a resident of one is not in the city, so they ARE in the fire district and keep their card. The even-odd test both the builder and pointInGeometry use gets that right, and the builder gates its own area against the Census's published AREALAND so a hole counted as solid (43.05 km\u00b2 against a real 35.19) fails the build."
+        "note": "City of Belvidere corporate limits (scripts/build_place_outline.py) — the ONLY municipal outline this instance ships, and it exists to carve one hole in a county source rather than to draw a city. Boone's Fire_Districts layer tiles every acre of the county, so a Belvidere address returned Fire District 2 while the Clerk's own district-rates report gives 18 of 55 tax codes no fire line at all — those 18 being the city's, which runs a MUNICIPAL fire department. TWENTY-TWO of its twenty-four rings are HOLES, unincorporated pockets the city annexed around, and they are load-bearing: a resident of one is not in the city, so they ARE in the fire district and keep their card. The even-odd test both the builder and pointInGeometry use gets that right, and the builder gates its own area against the Census's published AREALAND so a hole counted as solid (43.05 km² against a real 35.19) fails the build."
       },
       {
         "file": "bond-county-outline.json",
@@ -969,6 +969,24 @@
         "min_features": 2,
         "max_features": 2,
         "note": "Boone's 2 park districts, pre-built by scripts/build_parcel_fabric_districts.py from the parcels the county's own fabric assigns to the tax codes its Clerk's 2025 Taxcode Value within District Report puts in PDBV (25) and PDRF (1) — the county publishes no park boundary of any kind. Same 75 ft road-void closing and probe gates as its library sibling; Rockford Park District is seated in Winnebago and only its Boone slice is drawn. Bounds are an EQUALITY: the county levies exactly these two, and the rest of Boone genuinely sits in no park district."
+      },
+      {
+        "file": "woodford-fire-districts.json",
+        "min_features": 17,
+        "max_features": 17,
+        "note": "Woodford's 17 fire protection districts, pre-built by scripts/build_parcel_fabric_districts.py. The county publishes no district tiling — its \u201cFire Protection Districts\u201d service is its 25,824-row PARCEL FABRIC, one record per property — so each district is the DISSOLVE of the parcels whose Fire_Prote column names it, road voids closed at 75 ft by the Rock Island rules. The set is corroborated by the county's own 2025 Tax Year Settlement Sheets (Archive.aspx?ADID=3720), which levy for exactly these 17, code for code; that document names no office and does not say “certified”, so neither does this note. The source item is public in the county's own ArcGIS org and its description dates the ORIGINAL district shapes to 2007 IDOR data — but a parcel's district here follows its TAX CODE, and all 119 Tax_Code_1 values map to exactly one district per concept, so what is dissolved is a tax-code crosswalk current with the 2025 levy. The item's own licenceInfo warns it “does not match scale of Woodford Parcel Data”, so no district edge here is survey-accurate. Bounds are an EQUALITY. The Village of Metamora is a deliberate hole: all 1,701 parcels with no fire district are inside it, it runs its own department, and the district around it is named Metamora RURAL."
+      },
+      {
+        "file": "woodford-library-districts.json",
+        "min_features": 6,
+        "max_features": 6,
+        "note": "Woodford's 6 library districts, pre-built by scripts/build_parcel_fabric_districts.py from the Library_Di column of the same 25,824-row parcel fabric, with the same 75 ft closing and probe gates as its fire sibling; the county's own 2025 settlement sheets levy for exactly these 6. Bounds are an EQUALITY. One of the six, Minonk City Library, is MUNICIPAL rather than a district, and the two county products disagree about its edge: the parcel table puts all 1,230 of its parcels in the City of Minonk, while the county's corporate-boundary layer leaves five of them (tax code 06002, 16,059 m²) on a tract 5.2 km south, which is why the shipped feature is a two-part MultiPolygon. Its feature carries a note saying so, which the card renders."
+      },
+      {
+        "file": "woodford-park-districts.json",
+        "min_features": 3,
+        "max_features": 3,
+        "note": "Woodford's 3 park districts, pre-built by scripts/build_parcel_fabric_districts.py from the Park_Distr column of the same 25,824-row parcel fabric; the county's own 2025 settlement sheets levy for exactly these 3. Bounds are an EQUALITY: most of the county genuinely sits in no park district, and only 4,113 of its parcels are in one."
       },
       {
         "file": "brown-county-outline.json",
@@ -1745,7 +1763,7 @@
         "file": "municipal-ward-coverage.json",
         "min_features": 50,
         "max_features": 76,
-        "note": "Ward-electing municipalities' outlines, tagged by dispatch entry — the cheap same-origin coverage test for every non-Chicago entry of the ward layer, metro or not (build_municipal_ward_coverage.py; Rockford is the first outside the metro, Moline and Silvis the first on the Mississippi, Mendota the first whose seats were already in the roster before its geometry was). 72 municipalities across twenty-six entries as of 2026-09-05, when Madison's six ward cities joined on one county layer; the pass-6 ward tranche (2026-08-02) had taken it to 56 across twenty-one. THE COUNT MOVES WITHOUT A SOURCE BEING ADDED: build_municipal_ward_coverage.py queries TIGERweb's place service UNPINNED, so any rebuild adopts that day's vintage for every municipality already here \u2014 Madison's six re-drew 22 unrelated outlines — which is why the builder now names what it redrew and why this bound has room above the current count."
+        "note": "Ward-electing municipalities' outlines, tagged by dispatch entry — the cheap same-origin coverage test for every non-Chicago entry of the ward layer, metro or not (build_municipal_ward_coverage.py; Rockford is the first outside the metro, Moline and Silvis the first on the Mississippi, Mendota the first whose seats were already in the roster before its geometry was). 72 municipalities across twenty-six entries as of 2026-09-05, when Madison's six ward cities joined on one county layer; the pass-6 ward tranche (2026-08-02) had taken it to 56 across twenty-one. THE COUNT MOVES WITHOUT A SOURCE BEING ADDED: build_municipal_ward_coverage.py queries TIGERweb's place service UNPINNED, so any rebuild adopts that day's vintage for every municipality already here — Madison's six re-drew 22 unrelated outlines — which is why the builder now names what it redrew and why this bound has room above the current count."
       },
       {
         "file": "ogle-county-board-districts.json",
@@ -2602,7 +2620,7 @@
     ]
   },
   "sw": {
-    "cache_name": "districtry-il-shell-v13",
+    "cache_name": "districtry-il-shell-v14",
     "shell_urls": [
       "./",
       "./sources.html",
