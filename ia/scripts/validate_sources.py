@@ -545,9 +545,39 @@ ENDPOINTS = [
         "layer": "municipality",
         "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Places_CouSub_ConCity_SubMCD/MapServer/4/query?where=STATE%3D%2719%27&returnCountOnly=true&f=json",
     },
+    # WAS A METADATA PROBE (`MapServer/11?f=json`) AND THAT IS WHY NOTHING
+    # CAUGHT #718: the layer's metadata was reachable and always would be,
+    # while the app's own enveloped QUERY was answering HTTP 200 with an Esri
+    # error envelope and zero features, so the ZIP overlay never drew for
+    # weeks.
+    #
+    # THE ENVELOPE IS SENT AS A JSON OBJECT, WITH KEY NAMES, BECAUSE THE KEY
+    # NAMES WERE THE BUG. Iowa's loader was ported carrying METRO_BBOX's
+    # {minLng,minLat,maxLng,maxLat} where Esri wants {xmin,ymin,xmax,ymax},
+    # and `JSON.stringify` is how the app builds it. Esri also accepts a bare
+    # comma form (`-96.69,40.32,...`), and two independent fixes for #718 --
+    # this one and the Michigan session's -- reached for different ones; the
+    # merge of the two is where it showed. MEASURED 2026-09-04, all three
+    # against this same layer:
+    #
+    #     comma form                 -> {"count":1443}
+    #     JSON object, xmin/ymin/... -> {"count":1443}
+    #     JSON object, minLng/...    -> {"error":{"code":400}}
+    #
+    # The comma form has NO KEY NAMES, so it returns the right answer whatever
+    # the app's object is keyed on -- it is a valid query that tests a
+    # different question, and it would have passed all the way through #718.
+    # This row sends the shape the app sends, and `min_count` is what makes
+    # the answer count rather than the status code.
     {
         "layer": "zip-code",
-        "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/PUMA_TAD_TAZ_UGA_ZCTA/MapServer/11?f=json",
+        "url": ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
+                "PUMA_TAD_TAZ_UGA_ZCTA/MapServer/11/query?where=1%3D1"
+                "&geometry=%7B%22xmin%22%3A-96.69%2C%22ymin%22%3A40.32%2C"
+                "%22xmax%22%3A-90.09%2C%22ymax%22%3A43.55%7D"
+                "&geometryType=esriGeometryEnvelope&inSR=4326"
+                "&spatialRel=esriSpatialRelIntersects&returnCountOnly=true&f=json"),
+        "min_count": 1300,  # 1,443 measured 2026-09-04; floor set below it, not at it
     },
     {
         "layer": "post-office",
@@ -741,13 +771,47 @@ def check_endpoints(findings, offline):
     if offline:
         return
     for e in ENDPOINTS:
-        ok, res = http_get(e["url"], want_json=False)
-        if ok:
-            findings.add(OK, e["layer"], "endpoint reachable")
-        else:
+        # An entry carrying `min_count` is checked for CONTENT, not just
+        # reachability, and the difference is the whole point of the flag.
+        # HTTP STATUS CANNOT SEE AN ESRI ERROR ENVELOPE: a malformed query
+        # answers 200 with {"error": {"code": 400}} and no rows, which every
+        # status-based check reads as healthy. That is exactly how ia/ shipped
+        # a dead ZIP overlay for weeks (#718) while its own source validator
+        # reported the layer reachable — the endpoint it probed was the layer's
+        # METADATA, which was reachable and always would be. A count query with
+        # a floor is the smallest check that could actually have caught it.
+        want_json = "min_count" in e
+        ok, res = http_get(e["url"], want_json=want_json)
+        if not ok:
             findings.add(WARN, e["layer"],
                          "endpoint not reachable (%s): %s — the service may have been "
                          "renamed or retired" % (res, e["url"]))
+            continue
+        if not want_json:
+            findings.add(OK, e["layer"], "endpoint reachable")
+            continue
+        if isinstance(res, dict) and "error" in res:
+            findings.add(FAIL, e["layer"],
+                         "the query answered HTTP 200 with an Esri ERROR ENVELOPE "
+                         "(%s) — the request is malformed or the service rejected "
+                         "it, and nothing about the status code says so. Check the "
+                         "envelope's KEY NAMES against the app's own loader first; "
+                         "that is what broke last time: %s"
+                         % (res.get("error"), e["url"]))
+            continue
+        count = res.get("count") if isinstance(res, dict) else None
+        if count is None:
+            findings.add(FAIL, e["layer"],
+                         "the count query returned no `count` field, so the layer "
+                         "cannot be confirmed to be answering: %s" % e["url"])
+        elif count < e["min_count"]:
+            findings.add(WARN, e["layer"],
+                         "the query returns %d features, below the floor of %d "
+                         "recorded when the layer shipped — the source may have "
+                         "moved, been re-scoped, or started truncating: %s"
+                         % (count, e["min_count"], e["url"]))
+        else:
+            findings.add(OK, e["layer"], "endpoint answering — %d features" % count)
 
 
 def render(findings):

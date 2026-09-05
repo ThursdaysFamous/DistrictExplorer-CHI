@@ -839,9 +839,10 @@ table.matrix code {
   <section class="matrix-section">
     <h2>The layer matrix</h2>
     <!-- ==== GENERATED:BEGIN layer-matrix ==== -->
-      <p class="matrix-lede">11 layers — 5 political and legislative, 2 schools, 4 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
+      <p class="matrix-lede">13 layers — 5 political and legislative, 1 public safety, 2 schools, 5 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
       <nav class="matrix-nav" aria-label="Jump to a layer group">
         <a href="#political">Political &amp; legislative</a>
+        <a href="#safety">Public safety</a>
         <a href="#schools">Schools</a>
         <a href="#geography">Geography &amp; amenities</a>
       </nav>
@@ -915,6 +916,31 @@ table.matrix code {
         </div>
       </section>
 
+      <section class="matrix-group" id="safety">
+        <h2>Public safety <span class="matrix-count">1 layer</span></h2>
+        <p class="matrix-blurb">Who answers a call at this address, and where they answer it from.</p>
+        <div class="matrix-wrap">
+          <table class="matrix">
+            <thead>
+              <tr><th scope="col">Layer</th><th scope="col">What it answers</th><th scope="col">Boundary source</th><th scope="col">Who it names</th><th scope="col">Where it applies</th></tr>
+            </thead>
+            <tbody>
+              <tr id="layer-police-station">
+                <th scope="row"><span class="layer-name">Police Station</span><code>police-station</code></th>
+                <td data-label="What it answers">The three nearest police station BUILDINGS to the point, by straight-line distance, with each one's address.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/53" target="_blank" rel="noopener">USGS The National Map — structures layer 53 (Police Stations), queried live at runtime by a bounding envelope through the same paged loader the post-office layer introduced (no builder script, no committed data/app file). Public domain. 1,290 points in Michigan's envelope, every one carrying name, address, city, state and ZIP, measured 2026-09-04 — under the service's 2,000-record cap today, and paged anyway so that stops being a fact anyone has to re-check</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">NO OFFICEHOLDER, AND NONE IS MISSING: a police station is a facility, not an elected district. Nobody is elected from one.</td>
+                <td data-label="Where it applies">Michigan — plus the border strip its envelope necessarily includes (608 of the 1,290 are in Michigan; the rest Wisconsin 396, Illinois 265, and a handful in Indiana, Ohio, Iowa and Minnesota). THIS IS A BUILDING, NOT A JURISDICTION: which agency answers a 911 call at a given point is a service-area question, a separate concept this instance has not been researched for, so the card says where the nearest stations are and never who polices you. The intro says so in the reader's own sentence.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
       <section class="matrix-group" id="schools">
         <h2>Schools <span class="matrix-count">2 layers</span></h2>
         <p class="matrix-blurb">The district, the attendance zone, and the schools nearest the point.</p>
@@ -952,7 +978,7 @@ table.matrix code {
       </section>
 
       <section class="matrix-group" id="geography">
-        <h2>Geography &amp; amenities <span class="matrix-count">4 layers</span></h2>
+        <h2>Geography &amp; amenities <span class="matrix-count">5 layers</span></h2>
         <p class="matrix-blurb">The boundaries that place an address without electing anyone, plus the nearest public services.</p>
         <div class="matrix-wrap">
           <table class="matrix">
@@ -1003,6 +1029,17 @@ table.matrix code {
                 </td>
                 <td data-label="Who it names">NO OFFICEHOLDER, AND THE CARD SAYS SO — no statewide source names Michigan's mayors, village presidents, council members or clerks; the Michigan Municipal League's directory is membership-facing and the state publishes no aggregate. Recorded as gap mi-municipal-officeholders. Per-municipality rosters are later phase work, the route every other instance took.</td>
                 <td data-label="Where it applies">Michigan — statewide, all 533 incorporated places. A CITY is independent of any township; a VILLAGE remains part of one, so a village resident has two general-purpose local governments and each card names the other. Measured 2026-09-04: all 252 villages land inside a township at their TIGER interior point (235 general-law, 17 charter), zero exceptions, and the Census's own place class codes agree — every village is C1, 'does not serve as a county subdivision equivalent'.</td>
+              </tr>
+              <tr id="layer-post-office">
+                <th scope="row"><span class="layer-name">Post Office</span><code>post-office</code></th>
+                <td data-label="What it answers">The three nearest post offices to the point, by straight-line distance, with each one's address.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/38" target="_blank" rel="noopener">USGS The National Map — structures layer 38 (Post Offices), queried live at runtime by a bounding envelope (no builder script, no committed data/app file). Public domain. 1,799 points in Michigan's envelope, every one carrying name, address, city, state and ZIP, measured 2026-09-04. THE FETCH PAGES: the service caps a response at 2,000 records and returns HTTP 200 with exceededTransferLimit rather than an error, so a single request is safe only by margin — Michigan is at 1,799 and its fire-station sibling is at 2,838, already over</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">NO OFFICEHOLDER, AND NONE IS MISSING: a post office is a federal facility, not an elected district. The card answers where the nearest ones are, not who runs them.</td>
+                <td data-label="Where it applies">Michigan — plus the border strip its envelope necessarily includes. Of the 1,799 points, 900 are in Michigan and the rest are in Wisconsin (535), Illinois (334) and a handful in Iowa, Ohio, Indiana and Minnesota. THAT IS DELIBERATE, NOT SPILL: nearest-3 is a proximity fact rather than a jurisdictional claim, so for a reader in Menominee the nearest post office really is across the river in Wisconsin, and the card's intro says these are straight-line distances.</td>
               </tr>
             </tbody>
           </table>

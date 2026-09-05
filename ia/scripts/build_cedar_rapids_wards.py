@@ -135,7 +135,7 @@ TIGERWEB = ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
 # Linn County's own page for these lines, which the CITY's "Find Your District"
 # page links to. Provenance for the boundary; the council file carries the
 # people's source and is what the card links.
-SOURCE_PAGE = "https://www.linncounty.org/1350/Cedar-Rapids-Council-Districts-Marion-Wa"
+SOURCE_PAGE = "https://www.linncountyiowa.gov/1350/Cedar-Rapids-Council-Districts-Marion-Wa"
 
 CITY_NAME = "Cedar Rapids"
 CITY_TWP = "27"
@@ -153,7 +153,7 @@ SOURCE_OVERLAP_CEILING = 0.02   # fraction of samples
 
 # --- the tiling ceilings, all measured 2026-09-04 -------------------------
 # residual 0.1018 sq mi (0.1338% of the city) in 366 fragments, largest
-# 34,444 m2 at compactness 0.0396. See the docstring for why these are looser
+# 34,190 m2 at compactness 0.0396. See the docstring for why these are looser
 # than Waterloo's: this compares two publishers, that one compares a city
 # against itself.
 UNCOVERED_CEILING_SQMI = 0.30

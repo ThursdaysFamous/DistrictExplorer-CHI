@@ -5989,7 +5989,9 @@ function initMichiganExplorer() {
     "county-subdivision", // 1,581 records tiling the state, live from TIGERweb (no data/app file) — 1,122 general-law townships, 118 charter townships, 301 city placeholder records for 281 distinct cities (18 of which cross a county line), and 40 'not defined' records that are pure Great Lakes water
     "zip-code",          // 1,010 ZIP Code Tabulation Areas covering Michigan, live from TIGERweb (no data/app file) — 139.7 km2 mean feature area, between a township and a precinct
     "precinct",          // 3,895 voting precincts across all 83 counties, pre-built from the state's own 2026-cycle layer — 38.8 km2 mean feature area against a 6.4 km2 median, a six-fold skew because a rural township precinct and a city precinct are barely the same kind of object; the finest tiling this instance ships
-    "municipality"       // 533 incorporated places, live from TIGERweb (no data/app file) — 281 cities and 252 villages, small dense pockets inside the township fabric, so the smallest layer this instance ships at a 12 km2 mean
+    "municipality",      // 533 incorporated places, live from TIGERweb (no data/app file) — 281 cities and 252 villages, small dense pockets inside the township fabric, so the smallest layer this instance ships at a 12 km2 mean
+    "police-station",    // 1,290 police-station points in Michigan's envelope, live from the USGS National Map (no data/app file) — a nearest-3 proximity layer, ranked with the other point layers rather than by feature area
+    "post-office"        // 1,799 post-office points in Michigan's envelope, live from the USGS National Map (no data/app file) — a nearest-3 proximity layer, so it is ranked last with the other point layers rather than by feature area
   ];
   /* ==== GENERATED:END layer-area-rank ==== */
   /* ==== ENGINE:BEGIN layer-registry ==== */
@@ -9027,6 +9029,130 @@ function initMichiganExplorer() {
     ]
   });
 
+
+  /* ---------- 12. Post Offices (nearest 3) — USGS National Map ----------
+   * structures layer 38, the fleet's shared post-office source: country-wide,
+   * public domain ("USGS The National Map"), CORS-open, and f=geojson serves
+   * lowercase property names (name/address/city/state/zipcode, all populated
+   * 1,799 of 1,799 for Michigan, measured 2026-09-04).
+   *
+   * THIS FETCH PAGES, AND THE SIBLINGS' DOES NOT. Every other instance asks
+   * for its envelope in ONE request. That works only while the answer fits
+   * under the service's 2,000-record maxRecordCount, and Michigan sits close
+   * enough to it to make that a matter of luck rather than design: measured
+   * 2026-09-04 in each instance's own METRO_BBOX, post offices run il 1,946 ·
+   * mi 1,799 · ia 1,170 · wi 1,107, and the FIRE layer this helper will also
+   * serve is 2,838 in Michigan and 2,820 in Illinois — both already over.
+   * A capped Esri response is not an error: it returns 200 with 2,000 rows and
+   * `exceededTransferLimit: true`, so a nearest-3 card would quietly rank the
+   * wrong three wherever a dropped station was among them. Paging removes the
+   * whole class rather than betting on a margin.
+   *
+   * The engine's own loadArcGISPaged cannot be reused here: it queries
+   * `where=1=1` with NO geometry, which on a national dataset means fetching
+   * the United States. This keeps the envelope and adds the paging.
+   *
+   * NEAREST IS A PROXIMITY FACT, NOT A JURISDICTIONAL ONE, and the envelope is
+   * built to respect that: of the 1,799 post offices it returns, 900 are in
+   * Michigan and the rest are Wisconsin (535), Illinois (334) and a handful in
+   * Iowa, Ohio, Indiana and Minnesota. That is deliberate — for a reader in
+   * Menominee the nearest post office really is across the river in Wisconsin,
+   * and the card's intro says these are straight-line distances rather than a
+   * claim about which state serves them. ---------- */
+  var USGS_POST_OFFICE_LAYER = "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/38";
+  // Envelope + paging. PAGE is the service's own maxRecordCount; the
+  // continuation guard is loadArcGISPaged's (advance by feats.length and
+  // continue while the server flags more AND the page was non-empty), so a
+  // service that caps below PAGE still terminates and never ships short.
+  function usgsStructuresLoader(layerUrl, label) {
+    var PAGE = 2000;
+    var ENVELOPE = [METRO_BBOX.minLng, METRO_BBOX.minLat,
+                    METRO_BBOX.maxLng, METRO_BBOX.maxLat].join(",");
+    return makeCached(function () {
+      function page(offset, acc) {
+        var url = layerUrl + "/query?geometry=" + ENVELOPE +
+          "&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects" +
+          "&where=1%3D1&outFields=NAME,ADDRESS,CITY,ZIPCODE&outSR=4326&f=geojson" +
+          "&geometryPrecision=6&resultRecordCount=" + PAGE + "&resultOffset=" + offset;
+        return fetchJSONWithRetry(url, { timeoutMs: REMOTE_GEOJSON_TIMEOUT_MS }, 2)
+          .then(function (gj) {
+            var feats = (gj && gj.features) || [];
+            acc = acc.concat(feats);
+            var more = gj && (gj.exceededTransferLimit ||
+                              (gj.properties && gj.properties.exceededTransferLimit));
+            if (more && feats.length > 0) return page(offset + feats.length, acc);
+            var out = { type: "FeatureCollection", features: acc };
+            // Same "200 but useless" guard the unpaged loaders apply: an Esri
+            // error envelope 200s carrying no geometry, and makeCached would
+            // otherwise pin that empty response for the whole session.
+            if (!hasUsableGeometry(out)) throw new Error("no usable geometry from " + label);
+            return out;
+          });
+      }
+      return page(0, []);
+    });
+  }
+  // The card line and the hover identity read the SAME properties, so the two
+  // surfaces cannot disagree; the segment before the first " — " is the name.
+  function usgsStructureLine(fallbackName) {
+    return function (props) {
+      var name = findPropCI(props, ["name"]);
+      var address = findPropCI(props, ["address"]);
+      var city = findPropCI(props, ["city"]);
+      var zip = findPropCI(props, ["zipcode", "zip"]);
+      return (name ? String(name) : fallbackName) +
+        (address ? " — " + String(address) : "") +
+        (city ? ", " + String(city) : "") +
+        (zip ? " " + String(zip) : "");
+    };
+  }
+  var loadPostOffices = usgsStructuresLoader(USGS_POST_OFFICE_LAYER, "USGS post offices");
+
+  registerNearestPointLayer({
+    id: "post-office",
+    group: "geography",
+    color: "#4B2E83",
+    fill: "#B39DDB",
+    label: "Post Office",
+    loader: loadPostOffices,
+    intro: "Nearest post offices (USGS National Map structures data), straight-line distance:",
+    line: usgsStructureLine("Post office")
+  });
+
+
+  /* ---------- 13. Police Stations (nearest 3) — USGS National Map ----------
+   * structures layer 53, through the same paged envelope loader the
+   * post-office layer introduced. 1,290 points in Michigan's envelope with
+   * name, address, city, state and ZIP populated on every one, measured
+   * 2026-09-04 — under the service's 2,000-record cap today, and fetched by
+   * the paging path anyway so that stops being a fact anyone has to re-check.
+   *
+   * THIS IS A BUILDING, NOT A JURISDICTION, and the card must not be read as
+   * one. Which agency answers a 911 call at a given point is a service-area
+   * question — a separate concept, and one Michigan has not been researched
+   * for — so this layer says where the nearest stations ARE and never who
+   * polices you. Wisconsin's own police-station module carries the same
+   * caveat for the same reason.
+   *
+   * The envelope's out-of-state points are deliberate, as with post offices:
+   * 608 of the 1,290 are in Michigan, the rest Wisconsin (396), Illinois
+   * (265) and a handful in Indiana, Ohio, Iowa and Minnesota. Nearest is a
+   * proximity fact. ---------- */
+  var USGS_POLICE_LAYER = "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/53";
+  var loadPoliceStations = usgsStructuresLoader(USGS_POLICE_LAYER, "USGS police stations");
+
+  registerNearestPointLayer({
+    id: "police-station",
+    group: "safety",
+    color: "#1B4F8C",
+    fill: "#7FA8D9",
+    label: "Police Station",
+    loader: loadPoliceStations,
+    intro: "Nearest police stations (USGS National Map structures data), straight-line distance. " +
+      "These are station buildings, not service areas — they do not say which agency answers a call here:",
+    line: usgsStructureLine("Police station")
+  });
+
   /* ==== ENGINE:BEGIN hover-explorer ==== */
   /* =========================================================================
    * HOVER EXPLORER — a live popup (on by default, toggled bottom-left) that
@@ -9588,7 +9714,7 @@ function initMichiganExplorer() {
   // set 1:1 (as it does for LAYER_AREA_RANK) — extend it with every layer added.
   var LAYER_SIDEBAR_RANK = ["us-house", "mi-senate", "mi-house", "county-commissioner",
     "school-district-unified", "school-district-elementary",
-    "county", "county-subdivision", "municipality", "zip-code", "precinct"];
+    "county", "county-subdivision", "municipality", "zip-code", "precinct", "police-station", "post-office"];
   (function applySidebarRank() {
     var pos = {};
     for (var i = 0; i < LAYER_SIDEBAR_RANK.length; i++) pos[LAYER_SIDEBAR_RANK[i]] = i;
@@ -9685,11 +9811,12 @@ function initMichiganExplorer() {
      carries the method and the measurements behind it, and its --check fails
      when a layer colour moves and its dark counterpart does not. */
   /* ==== GENERATED:BEGIN dark-map-palette ==== */
-  var DST_DARK_MAP_COLORS = { "#0B5394": "#4FA4FE", "#14181C": "#696F76", "#1B7A3D": "#58CD7A",
-    "#2E9E6B": "#5BEAA5", "#2F6B3A": "#6FBE7B", "#41B6E6": "#C6EBFE", "#444B54": "#929BA8",
-    "#4A2E8C": "#9B7CFD", "#4C8F59": "#83DC93", "#5C4B8C": "#AB95EF", "#6B7280": "#B1BBCE",
-    "#7A5C3E": "#CFA57D", "#8C2E4A": "#F47294", "#8F7BC4": "#D1C2FF", "#A98B6C": "#F3CBA1",
-    "#B0316E": "#FD88B8", "#B26A00": "#FFB15F", "#D06A9C": "#FFBDDA", "#D19133": "#FED7A7"};
+  var DST_DARK_MAP_COLORS = { "#0B5394": "#4FA4FE", "#14181C": "#696F76", "#1B4F8C": "#5CA0F5",
+    "#1B7A3D": "#58CD7A", "#2E9E6B": "#5BEAA5", "#2F6B3A": "#6FBE7B", "#41B6E6": "#C6EBFE",
+    "#444B54": "#929BA8", "#4A2E8C": "#9B7CFD", "#4B2E83": "#9E7BF1", "#4C8F59": "#83DC93",
+    "#5C4B8C": "#AB95EF", "#6B7280": "#B1BBCE", "#7A5C3E": "#CFA57D", "#8C2E4A": "#F47294",
+    "#8F7BC4": "#D1C2FF", "#A98B6C": "#F3CBA1", "#B0316E": "#FD88B8", "#B26A00": "#FFB15F",
+    "#D06A9C": "#FFBDDA", "#D19133": "#FED7A7"};
   /* ==== GENERATED:END dark-map-palette ==== */
   /* ==== ENGINE:BEGIN districtry-theme ==== */
   /* The theme controller and the wordmark fleet switch, shared for the same

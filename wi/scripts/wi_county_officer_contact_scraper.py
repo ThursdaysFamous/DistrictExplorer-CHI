@@ -589,6 +589,45 @@ def name_parts(name):
     return parts[0], parts[-1]
 
 
+# PER-OFFICE WINDOW WIDENINGS, EACH ONE MEASURED. The 350-character default
+# carried no comment explaining it, which made it look arbitrary; it is not, and
+# the sweep that proved so is why this is a table of two rows rather than a
+# bigger number.
+#
+# Washington's sheriff publishes its main line inside the office's own address
+# block — "Washington County Sheriff's Office / 500 Rolfs Avenue / West Bend, WI
+# 53090 / (View Map) / 262-335-4378" — 392 characters after the name, so the
+# window ended 42 characters short and the county shipped no phone. Bot PR #714
+# was closed for dropping it.
+#
+# WIDENING THE DEFAULT WOULD HAVE BEEN WRONG, and that is measured rather than
+# feared: swept across all 25 page-mode counties at 450/550/700, thirteen of
+# 125 (county, office) pairs move. Six gain a plausible county contact — but
+# five are corrupted, and one of those badly: MARQUETTE'S REGISTER OF DEEDS goes
+# from its own `(608) 297-3025` / `nziebell@marquettecountywi.gov` to a
+# succession of THIRD-PARTY E-RECORDING VENDORS (`support@hopdox.com`,
+# `eRecordSupport@Indecomm.net`, `erecording@cscglobal.com`), which would ship a
+# commercial address as a county officer's contact. Jefferson's clerk of circuit
+# court returns a DIFFERENT phone at every span, and Grant's register of deeds
+# picks up a toll-free vendor line.
+#
+# So each entry here is one office whose wider window was read in context and
+# confirmed to be that office's own number. Washington's CORONER is deliberately
+# absent: it also changes at 450 (414-516-4300 -> 262-338-0888) and which is
+# right was not established, so the county is widened per OFFICE, never whole.
+#
+# Six other measured gains are recorded and NOT taken here, because each needs
+# its own reading first: Langlade's coroner (an address at 450, a phone at 550),
+# Trempealeau's and Waupaca's clerks of circuit court, Clark's register of
+# deeds, and Washington's own district attorney — which IS taken below, having
+# been read: `262-335-4311` sits at +435 under the page's own "Contact Me /
+# Contact Us / District Attorney / (View Map) / Phone:" heading.
+WINDOW_SPAN = {
+    ("Washington", "sheriff"): 450,          # 262-335-4378 at +392
+    ("Washington", "districtAttorney"): 450,  # 262-335-4311 at +435
+}
+
+
 def witness_window(text, book_name, span=350):
     """Find the shipped officer on the page: the surname as a whole word,
     with a capitalized word sharing the first name's initial nearby.
@@ -654,7 +693,7 @@ def scrape_directory(county, cfg, book):
 
 
 def scrape_pages(county, cfg, book):
-    out = {}
+    out, unwitnessed, fetched = {}, [], 0
     for office, url in cfg["offices"].items():
         book_name = (book.get(office) or {}).get("name")
         if office == "executive":
@@ -663,13 +702,19 @@ def scrape_pages(county, cfg, book):
             continue
         try:
             text = to_text(fetch(url))
+            fetched += 1
         except RuntimeError as exc:
             print("%s/%s: fetch failed — %s" % (county, office, exc),
                   file=sys.stderr)
             continue
-        window = witness_window(text, book_name)
+        window = witness_window(
+            text, book_name, span=WINDOW_SPAN.get((county, office), 350))
         if window is None:
-            print("%s/%s: page does not witness %r — no contact ships"
+            # COUNTED, NOT JUST PRINTED: see the caller. A page that answered
+            # 200 and witnesses nobody is a fact about the FETCH at least as
+            # often as about the county.
+            unwitnessed.append(office)
+            print("%s/%s: page fetched but does not witness %r"
                   % (county, office, book_name), file=sys.stderr)
             continue
         entry = {"url": url}
@@ -680,6 +725,26 @@ def scrape_pages(county, cfg, book):
         if email:
             entry["email"] = email
         out[office] = entry
+
+    # A 200 IS NOT A DOCUMENT EITHER. When every page this county publishes
+    # answered and NONE of them carries the name of the officer it is about,
+    # the bodies are not this county's pages — they are a challenge page, an
+    # interstitial, or a reshaped template. Oneida hit exactly this on both of
+    # 2026-09-04's runs: four pages, HTTP 200 each, zero of four officers
+    # witnessed, while the same four pages witness all four from another client
+    # and did from the runner on 09-03 (Cloudflare bot management, __cf_bm;
+    # a Python-urllib UA is refused outright with a 403). Bot PR #709 was closed
+    # for dropping all four contacts on the strength of it.
+    #
+    # Raising here rather than returning {} is what tells the caller apart from
+    # a county that genuinely publishes nothing: RuntimeError is already the
+    # "could not read this county" channel, and the builder preserves the last
+    # good contacts for a county that does not appear in the intermediate.
+    if fetched and not out and len(unwitnessed) == fetched:
+        raise RuntimeError(
+            "all %d page(s) answered and none witnesses its own officer (%s) — "
+            "that is a blocked or reshaped body, not a county without contacts"
+            % (fetched, ", ".join(sorted(unwitnessed))))
     return out
 
 
@@ -846,15 +911,35 @@ def main():
             else:
                 entries = scrape_civicplus(county, cfg, book)
         except RuntimeError as exc:
+            # A SKIP IS EMITTED, NOT OMITTED. The builder preserves a county's
+            # last-known contacts when the scrape could not read it, and it can
+            # only say WHY on the card if the reason travels with the skip. An
+            # omitted county and a county that 404'd are the same silence, and
+            # the first version of that preservation stamped one sentence about
+            # blocked bodies on every absent county — false for a county whose
+            # pages had simply moved.
             print("%s: SKIPPED — %s" % (county, exc), file=sys.stderr)
+            out[str(geoid_by_base[county])] = {
+                "county": county, "offices": {}, "skipped": str(exc)}
             continue
         if len(entries) < cfg["floor"]:
-            print("%s: SKIPPED — %d offices resolved, floor %d (a page "
-                  "reshaped; re-read it, never loosen the floor)"
-                  % (county, len(entries), cfg["floor"]), file=sys.stderr)
+            reason = ("%d of the county's offices resolved against a floor of "
+                      "%d, so the read was refused rather than shipped short"
+                      % (len(entries), cfg["floor"]))
+            print("%s: SKIPPED — %s (a page reshaped; re-read it, never loosen "
+                  "the floor)" % (county, reason), file=sys.stderr)
+            out[str(geoid_by_base[county])] = {
+                "county": county, "offices": {}, "skipped": reason}
             continue
-        out[str(geoid_by_base[county])] = {"county": county,
-                                           "offices": entries}
+        # THE READ DATE COMES FROM THE SCRAPE, NOT THE BUILDER'S CLOCK. The
+        # builder stamps `contactReadOn` so preservation can later say when a
+        # contact was last actually read; taking `today` there would date a
+        # week-old intermediate as today's — which is the same overstatement
+        # preservation was fixed to stop making, arriving from the other side.
+        out[str(geoid_by_base[county])] = {
+            "county": county,
+            "offices": entries,
+            "read_on": datetime.date.today().isoformat()}
         print("%s: %d offices (%s)" % (county, len(entries),
                                        ", ".join(sorted(entries))),
               file=sys.stderr)

@@ -193,17 +193,44 @@ ENDPOINTS = [
         "layer": "school-district-elementary",
         "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/School/MapServer/2/query?where=STATE%3D%2726%27&returnCountOnly=true&f=json",
     },
-    # ZCTAs carry NO STATE field, so this one is counted by ENVELOPE. The
-    # envelope is Esri's own {xmin,ymin,xmax,ymax} in comma form for the same
-    # reason the app's loader uses that shape: the {minLng,...} shape makes
-    # TIGERweb answer HTTP 200 with a JSON error envelope (measured 2026-09-04).
-    # 2,000 in Michigan's full box, 1,010 east of -87.60 -- see the layer's note.
+    # USGS structures layer 38. Counted rather than fetched, because the count
+    # is the thing at risk: the service caps a response at 2,000 records and
+    # says so with HTTP 200 + exceededTransferLimit rather than an error. The
+    # app's loader PAGES for that reason, and min_count below is what makes
+    # this row a real tripwire rather than a ping: a count that falls away, or
+    # an error envelope arriving as a 200, both surface here. 1,799 measured
+    # 2026-09-04.
+    {
+        "layer": "post-office",
+        "url": ("https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/38/query"
+                "?geometry=-90.42%2C41.69%2C-82.12%2C48.31&geometryType=esriGeometryEnvelope"
+                "&inSR=4326&spatialRel=esriSpatialRelIntersects&where=1%3D1"
+                "&returnCountOnly=true&f=json"),
+        "min_count": 1600,  # 1,799 measured 2026-09-04; floor set below it, not at it
+    },
+    # Layer 53. Under the 2,000 cap today (1,290 measured 2026-09-04) and
+    # fetched by the paging path regardless; min_count is what turns this from
+    # a reachability ping into a check that can see an error envelope.
+    {
+        "layer": "police-station",
+        "url": ("https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/53/query"
+                "?geometry=-90.42%2C41.69%2C-82.12%2C48.31&geometryType=esriGeometryEnvelope"
+                "&inSR=4326&spatialRel=esriSpatialRelIntersects&where=1%3D1"
+                "&returnCountOnly=true&f=json"),
+        "min_count": 1150,  # 1,290 measured 2026-09-04; floor set below it, not at it
+    },
+    # ZCTAs carry NO STATE field, so this one is counted by ENVELOPE, in Esri's
+    # own {xmin,...} comma form -- the {minLng,...} shape makes TIGERweb answer
+    # HTTP 200 with a JSON error envelope (measured 2026-09-04). min_count is
+    # what makes this a real check rather than a reachability ping: without it
+    # the error envelope reads as a healthy 200. 2,000 in Michigan's full box.
     {
         "layer": "zip-code",
         "url": ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"
                 "PUMA_TAD_TAZ_UGA_ZCTA/MapServer/11/query?where=1%3D1"
                 "&geometry=-90.42%2C41.69%2C-82.12%2C48.31&geometryType=esriGeometryEnvelope"
                 "&inSR=4326&spatialRel=esriSpatialRelIntersects&returnCountOnly=true&f=json"),
+        "min_count": 1800,  # 2,000 measured 2026-09-04; floor set below it, not at it
     },
 ]
 FAIL, WARN, OK = "FAIL", "WARN", "OK"
@@ -384,13 +411,45 @@ def check_endpoints(findings, offline):
     if offline:
         return
     for e in ENDPOINTS:
-        ok, res = http_get(e["url"], want_json=False)
-        if ok:
-            findings.add(OK, e["layer"], "endpoint reachable")
-        else:
+        # An entry carrying `min_count` is checked for CONTENT, not just
+        # reachability, and the difference is the whole point of the flag.
+        # HTTP STATUS CANNOT SEE AN ESRI ERROR ENVELOPE: a malformed query
+        # answers 200 with {"error": {"code": 400}} and no rows, which every
+        # status-based check reads as healthy. That is exactly how ia/ shipped
+        # a dead ZIP overlay for weeks (#718) while its own source validator
+        # reported the layer reachable — the endpoint it probed was the layer's
+        # METADATA, which was reachable and always would be. A count query with
+        # a floor is the smallest check that could actually have caught it.
+        want_json = "min_count" in e
+        ok, res = http_get(e["url"], want_json=want_json)
+        if not ok:
             findings.add(WARN, e["layer"],
                          "endpoint not reachable (%s): %s — the service may have been "
                          "renamed or retired" % (res, e["url"]))
+            continue
+        if not want_json:
+            findings.add(OK, e["layer"], "endpoint reachable")
+            continue
+        if isinstance(res, dict) and "error" in res:
+            findings.add(FAIL, e["layer"],
+                         "the query answered HTTP 200 with an Esri ERROR ENVELOPE "
+                         "(%s) — the request is malformed or the service rejected "
+                         "it, and nothing about the status code says so: %s"
+                         % (res.get("error"), e["url"]))
+            continue
+        count = res.get("count") if isinstance(res, dict) else None
+        if count is None:
+            findings.add(FAIL, e["layer"],
+                         "the count query returned no `count` field, so the layer "
+                         "cannot be confirmed to be answering: %s" % e["url"])
+        elif count < e["min_count"]:
+            findings.add(WARN, e["layer"],
+                         "the query returns %d features, below the floor of %d "
+                         "recorded when the layer shipped — the source may have "
+                         "moved, been re-scoped, or started truncating: %s"
+                         % (count, e["min_count"], e["url"]))
+        else:
+            findings.add(OK, e["layer"], "endpoint answering — %d features" % count)
 
 
 def render(findings):

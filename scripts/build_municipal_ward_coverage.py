@@ -445,11 +445,6 @@ def main():
         if was is not None and was != json.dumps(feature["geometry"], sort_keys=True):
             redrawn.add(props["name"])
 
-    with open(OUT_PATH, "w") as f:
-        json.dump({"type": "FeatureCollection", "features": out}, f,
-                  ensure_ascii=False, separators=(",", ":"))
-        f.write("\n")
-
     problems = []
     for lat, lng, entry, name in COVERAGE_PROBES:
         hit = None
@@ -466,9 +461,14 @@ def main():
     if problems:
         for line in problems:
             print("  FAIL: %s" % line, file=sys.stderr)
-        print("FATAL: refusing to write a coverage file that misplaces its probes",
-              file=sys.stderr)
+        print("FATAL: refusing to write a coverage file that misplaces its probes "
+              "— the file on disk is unchanged", file=sys.stderr)
         sys.exit(1)
+
+    with open(OUT_PATH, "w") as f:
+        json.dump({"type": "FeatureCollection", "features": out}, f,
+                  ensure_ascii=False, separators=(",", ":"))
+        f.write("\n")
 
     if redrawn:
         # NOT a warning to silence. TIGER_PLACES is UNPINNED, so a rebuild run
