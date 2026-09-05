@@ -179,6 +179,22 @@ STORY = {
     ),
 }
 
+# SIMPLIFY IS A SHARE OF THE WHOLE DATASET, NOT A PER-FEATURE TOLERANCE, so
+# ADDING ONE COUNTY RE-SIMPLIFIES EVERY OTHER COUNTY. #737 added Story's three
+# districts (270 features -> 272) and the same commit changed the geometry of
+# 76 non-Story features across 49 counties, with no change to this constant
+# and none to the mapshaper pin above. That was reported at the time as a
+# re-simplification that "did NOT reproduce", i.e. as nondeterminism, and it
+# is nothing of the kind: mapshaper's `-simplify <pct>` removes that
+# proportion of the DATASET's points, so a bigger dataset gets a different
+# per-shape budget. Measured directly on two synthetic collections, same
+# mapshaper build, same flags: two rings simplified to 45 and 38 vertices
+# alone, and to 57 and 67 with a third ring added beside them.
+#
+# So the expectation for the NEXT county added here is a large diff touching
+# counties the change never mentions -- once, deterministically. A fresh
+# rebuild against an unchanged source is a no-op, and if one is ever NOT a
+# no-op, that is the upstream aggregate moving and worth reading.
 SIMPLIFY = "10%"
 PRECISION = "0.000001"
 STATE_BBOX = {"minLng": -96.69, "minLat": 40.32, "maxLng": -90.09, "maxLat": 43.55}

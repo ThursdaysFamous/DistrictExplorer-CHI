@@ -9992,9 +9992,10 @@ function initWisconsinExplorer() {
    * submissions are excluded on the record, so everywhere else the honest
    * no-district answer IS the answer. Appleton's fifteen are the one set
    * composed LOCALLY: its county files every ward uncoded, and the city
-   * clerk's own polling-locations page supplies the assignment under four
-   * witnesses (see the builder). The roster
-   * (wi-alderpersons.json, weekly CI) covers the 18 municipalities with a
+   * clerk's own polling-locations page supplies the assignment under three
+   * independent witnesses and a second edition of one of them (see the
+   * builder). The roster (wi-alderpersons.json, weekly CI) covers the 18
+   * municipalities with a
    * verified witnessed route; the other 138 councils are a recorded gap, and
    * their cards stay identity-only rather than guessing.
    * In the nine villages that elect trustees by district the officer is a
@@ -10070,6 +10071,11 @@ function initWisconsinExplorer() {
     render: function (result) {
       var wrap = cardEl("div", "card-flush");
       var isTrustee = alderDistrictWord(result.props) === "Trustee District";
+      // A CARRIED MUNICIPALITY SAYS SO. build_wi_alderperson_roster.py writes
+      // carriedFrom when a city's own page could not be read and its last
+      // shipped rows were kept; without this row the card would show
+      // weeks-old officeholders in exactly the same voice as fresh ones.
+      var carriedFrom = result.city && result.city.carriedFrom;
       if (result.member) {
         var person = {
           name: String(result.member.name),
@@ -10081,6 +10087,14 @@ function initWisconsinExplorer() {
         var profile = safeHttpUrl(result.member.url);
         if (profile) person.links = [{ label: "Profile", url: profile }];
         wrap.appendChild(renderPersonRows([person]));
+        if (carriedFrom) {
+          wrap.appendChild(renderFieldStack([
+            { label: "Last re-read",
+              value: "The city's own page could not be read since "
+                     + String(carriedFrom) + "; this name is carried from the "
+                     + "last refresh that could." }
+          ]));
+        }
       } else if (result.vacant) {
         // Madison's District 1 at first build — the city's own directory
         // says vacant, so the card says vacant rather than nothing

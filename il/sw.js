@@ -365,6 +365,7 @@ const ROSTER_URLS = [
   "./data/app/wayne-county-board-members.json",
   "./data/app/clay-county-board-members.json",
   "./data/app/st-clair-precinct-polling.json",
+  "./data/app/boone-district-officials.json",
 ];
 /* ==== GENERATED:END sw-metro-config ==== */
 /* ==== METRO:END sw-config ==== */

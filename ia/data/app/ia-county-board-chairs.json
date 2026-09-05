@@ -1,0 +1,190 @@
+{
+ "19003": {
+  "chair": "Chris Standley",
+  "county": "Adams",
+  "match": "diminutive",
+  "pageName": "Christopher Standley",
+  "sourceUrl": "https://adamscounty.iowa.gov/supervisors/"
+ },
+ "19005": {
+  "chair": "Tom Clark",
+  "county": "Allamakee",
+  "sourceUrl": "https://allamakeecounty.iowa.gov/supervisors/"
+ },
+ "19007": {
+  "chair": "Jeffery Kulmatycki",
+  "county": "Appanoose",
+  "match": "prefix",
+  "pageName": "Jeff Kulmatycki",
+  "sourceUrl": "https://appanoosecounty.iowa.gov/departments/board-of-supervisors/"
+ },
+ "19011": {
+  "chair": "Tracy Seeman",
+  "county": "Benton",
+  "sourceUrl": "https://www.bentoncountyia.gov/board_of_supervisors/"
+ },
+ "19013": {
+  "chair": "Linda Laylin",
+  "county": "Black Hawk",
+  "sourceUrl": "https://www.blackhawkcounty.iowa.gov/"
+ },
+ "19015": {
+  "chair": "Erich Kretzinger",
+  "county": "Boone",
+  "sourceUrl": "https://www.boonecounty.iowa.gov/board_of_supervisors/"
+ },
+ "19031": {
+  "chair": "Jon Bell",
+  "county": "Cedar",
+  "sourceUrl": "https://cedarcounty.iowa.gov/board_of_supervisors/"
+ },
+ "19035": {
+  "chair": "Bryan Petersen",
+  "county": "Cherokee",
+  "sourceUrl": "https://www.cherokeecounty.iowa.gov/departments/offices_a_-_e/board_of_supervisors/index.php"
+ },
+ "19039": {
+  "chair": "Randy Dunbar",
+  "county": "Clarke",
+  "sourceUrl": "https://clarkecounty.iowa.gov/departments/board-of-supervisors/"
+ },
+ "19041": {
+  "chair": "Barry Anderson",
+  "county": "Clay",
+  "sourceUrl": "https://claycounty.iowa.gov/board-of-supervisors/"
+ },
+ "19043": {
+  "chair": "Ray Peterson",
+  "county": "Clayton",
+  "sourceUrl": "https://www.claytoncountyia.gov/supervisors/"
+ },
+ "19051": {
+  "chair": "Ron Bride",
+  "county": "Davis",
+  "sourceUrl": "https://www.daviscountyiowa.gov/board-of-supervisors/"
+ },
+ "19065": {
+  "chair": "Alex Popenhagen",
+  "county": "Fayette",
+  "sourceUrl": "https://fayettecounty.iowa.gov/departments/board-of-supervisors/"
+ },
+ "19071": {
+  "chair": "Clint Blackburn",
+  "county": "Fremont",
+  "sourceUrl": "https://www.fremontcountyia.gov/vnews/display.v/SEC/County%7CSupervisors"
+ },
+ "19075": {
+  "chair": "Heidi Nederhoff",
+  "county": "Grundy",
+  "sourceUrl": "https://www.grundycountyiowa.gov/departments/supervisors"
+ },
+ "19095": {
+  "chair": "Kevin Heitshusen",
+  "county": "Iowa",
+  "sourceUrl": "https://iowacounty.iowa.gov/supervisors/"
+ },
+ "19097": {
+  "chair": "Don Schwenker",
+  "county": "Jackson",
+  "sourceUrl": "https://jacksoncounty.iowa.gov/supervisors/"
+ },
+ "19099": {
+  "chair": "Thad Nearmyer",
+  "county": "Jasper",
+  "sourceUrl": "https://www.jasperia.org/board_of_supervisors/"
+ },
+ "19107": {
+  "chair": "Mr. Mike Hadley",
+  "county": "Keokuk",
+  "match": "diminutive",
+  "pageName": "Michael Hadley",
+  "sourceUrl": "https://keokukcounty.iowa.gov/supervisors/"
+ },
+ "19113": {
+  "chair": "Kirsten Running-Marquardt",
+  "county": "Linn",
+  "sourceUrl": "https://www.linncountyiowa.gov/123/Board-of-Supervisors"
+ },
+ "19115": {
+  "chair": "Kevin Hardin",
+  "county": "Louisa",
+  "sourceUrl": "https://louisacountyia.gov/government/departments-a-f/louisa-county-board-of-supervisors/"
+ },
+ "19121": {
+  "chair": "Heather Stancil",
+  "county": "Madison",
+  "sourceUrl": "https://madisoncounty.iowa.gov/offices/board-of-supervisors/"
+ },
+ "19123": {
+  "chair": "Mark Groenendyk",
+  "county": "Mahaska",
+  "sourceUrl": "https://www.mahaskacountyia.gov/board_of_supervisors/"
+ },
+ "19125": {
+  "chair": "Kisha Jahner",
+  "county": "Marion",
+  "sourceUrl": "https://www.marioncountyiowa.gov/board_of_supervisors/"
+ },
+ "19127": {
+  "chair": "Jarret Heil",
+  "county": "Marshall",
+  "sourceUrl": "https://www.marshallcountyia.gov/supervisors/"
+ },
+ "19133": {
+  "chair": "Bo Fox",
+  "county": "Monona",
+  "sourceUrl": "https://www.mononacountyiowa.gov/supervisors/"
+ },
+ "19139": {
+  "chair": "Danny Chick",
+  "county": "Muscatine",
+  "sourceUrl": "https://www.muscatinecountyiowa.gov/supervisors/"
+ },
+ "19157": {
+  "chair": "Jason Roudabush",
+  "county": "Poweshiek",
+  "sourceUrl": "https://poweshiekcountyiowa.gov/board_of_supervisors/"
+ },
+ "19163": {
+  "chair": "John Maxwell",
+  "county": "Scott",
+  "sourceUrl": "https://www.scottcountyiowa.gov/board"
+ },
+ "19165": {
+  "chair": "Charles Parkhurst",
+  "county": "Shelby",
+  "sourceUrl": "https://shelbycounty.iowa.gov/supervisors/"
+ },
+ "19173": {
+  "chair": "Jack Beggs",
+  "county": "Taylor",
+  "sourceUrl": "https://www.taylorcounty.iowa.gov/board-of-supervisors/"
+ },
+ "19175": {
+  "chair": "Rick Friday",
+  "county": "Union",
+  "sourceUrl": "https://unioncountyiowa.gov/departments/board-of-supervisors/"
+ },
+ "19179": {
+  "chair": "Darren Batterson",
+  "county": "Wapello",
+  "sourceUrl": "https://wapellocounty.org/board_of_supervisors/"
+ },
+ "19185": {
+  "chair": "Chris Moore",
+  "county": "Wayne",
+  "sourceUrl": "https://waynecounty.iowa.gov/board-of-supervisors/"
+ },
+ "19191": {
+  "chair": "Daniel Langreck",
+  "county": "Winneshiek",
+  "match": "diminutive",
+  "pageName": "Dan Langreck",
+  "sourceUrl": "https://winneshiekcounty.iowa.gov/departments/board-of-supervisors"
+ },
+ "19193": {
+  "chair": "Mark Nelson",
+  "county": "Woodbury",
+  "sourceUrl": "https://www.woodburycountyiowa.gov/supervisors/"
+ }
+}

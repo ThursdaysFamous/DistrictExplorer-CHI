@@ -121,25 +121,41 @@ SLIVER_OK = {"19450": "Delavan", "19775": "De Pere",
 #
 # WHAT THERE IS is the CITY CLERK's own polling-locations page, which prints
 # "District N: <polling place>" and under it the wards that vote there. That is
-# the election authority stating the composition, and it is corroborated FOUR
-# ways, none of them the page checking itself:
+# the election authority stating the composition, and it is corroborated by TWO
+# OTHER PUBLISHERS plus a second edition of the clerk's own assignment.
+#
+# THE COUNT WAS WRITTEN AS FOUR UNTIL 2026-09-05 AND THAT WAS ONE TOO MANY.
+# Items 1 and 2 below are the SAME FACT through a second channel: the Elections
+# Commission publishes what each municipality reports, so its ward-to-place file
+# IS the Appleton clerk's assignment, machine-readable and already in this repo.
+# That makes it the best gate here and NOT an independent voice, and the
+# difference matters — three sources agreeing is a weaker claim than four, and
+# the record should say the weaker true one.
 #
 #   1. THE STATE'S POLLING FILE, already shipped in this repo
 #      (wi/data/app/{outagamie,calumet,winnebago}-polling-places.json, from the
 #      Elections Commission). Appleton's 60 wards group into exactly 15 polling
 #      places, one per district, and that grouping reproduces the clerk page's
 #      15 ward lists EXACTLY on the 57 wards the page names. This is the gate
-#      below: it needs no network and fails if either side moves.
-#   2. IT ALSO PLACES THE THREE THE PAGE OMITS. Wards 51, 59 and 60 are recent
-#      annexation slivers (0.025%, 0.714% and 0.012% of the city's area) that
-#      the clerk's page does not list; the state's file puts 51 at St Matthew
-#      (District 10), 59 at Celebration Ministry (District 13) and 60 at First
-#      English Lutheran (District 7). They are marked FROM_POLLING_FILE below.
-#   3. LTSB'S OWN TEN CODED WARDS agree with the page on all ten (13/14/15→05,
-#      25→08, 33/34→11, 44/45/46/47→15). Gated below.
+#      below: it needs no network and fails if either side moves. SAME SOURCE
+#      as the page, second channel — a cross-CHANNEL check, which still catches
+#      a mis-transcription, a stale page and a re-warding, and does not catch
+#      the clerk being wrong.
+#   2. IT ALSO PLACES THE THREE THE PAGE OMITS, which is why it earns its place
+#      even without being independent. Wards 51, 59 and 60 are recent annexation
+#      slivers (0.025%, 0.714% and 0.012% of the city's area) that the clerk's
+#      page does not list; the state's file puts 51 at St Matthew (District 10),
+#      59 at Celebration Ministry (District 13) and 60 at First English Lutheran
+#      (District 7). They are marked FROM_POLLING_FILE below.
+#   3. LTSB'S OWN TEN CODED WARDS — the COUNTIES' filing, a different publisher
+#      entirely — agree with the page on all ten (13/14/15→05, 25→08, 33/34→11,
+#      44/45/46/47→15). Gated below. This is the one that would catch the clerk
+#      being wrong, and it covers ten wards of sixty.
 #   4. CENSUS 2020 POPULATION BALANCES: 75,862 across the fifteen, ideal 5,057,
 #      worst deviation 6.3% (D4 -6.3%, D12 +3.2%). A plan drawn to a census
 #      balances on that census — the Vermilion measurement, applied to a city.
+#      Independent of every publisher above, and the check that would catch a
+#      composition that was internally consistent and simply not the plan.
 #
 # A FIFTH SOURCE DISAGREES ON EXACTLY TWO WARDS AND IS RECORDED RATHER THAN
 # USED. The city's own parcel service (My_Property_Data_Publish_V2, the data

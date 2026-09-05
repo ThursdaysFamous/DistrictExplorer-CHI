@@ -1,0 +1,296 @@
+{
+  "source": "Boone County Clerk & Recorder, Boone County Year Book",
+  "sourceUrl": "https://www.boonecountyil.gov/Departments/Clerk-Recorder/BCC%202026%20Yearbook%20Final%207.7.26.pdf?t=202608040920000",
+  "officialsPage": "https://www.boonecountyil.gov/government/departments/clerk___recorder/2019_boone_county_illinois_year_book.php",
+  "generated": "2026-09-05T12:02:35Z",
+  "districts": {
+    "BELVIDERE PARK DISTRICT": {
+      "kind": "park",
+      "office": {
+        "address": "1006 W. Lincoln Ave.",
+        "city": "Belvidere, Illinois 61008",
+        "phone": "815-547-5711",
+        "fax": "815-544-4648",
+        "email": "contactus@belviderepark.org",
+        "website": "https://www.belviderepark.org"
+      },
+      "heads": [
+        {
+          "name": "Jen Jacky",
+          "role": "Executive Director",
+          "email": "jjacky@belviderepark.org"
+        }
+      ],
+      "board": [
+        {
+          "name": "Daniel Noble",
+          "role": "President",
+          "term": "2029",
+          "email": "dannoble@belviderepark.org"
+        },
+        {
+          "name": "Amy Nord",
+          "role": "Vice-President",
+          "term": "2029"
+        },
+        {
+          "name": "Mary Marquardt",
+          "role": "Secretary",
+          "term": "2027",
+          "email": "marymarquardt@belviderepark.org"
+        },
+        {
+          "name": "Gary Thacker",
+          "role": "Commissioner",
+          "term": "2027",
+          "email": "garythacker@belviderepark.org"
+        },
+        {
+          "name": "Carrie Lenzen",
+          "role": "Commissioner",
+          "email": "clenzen@belviderepark.org"
+        }
+      ],
+      "boardSource": {
+        "label": "Belvidere Township Park District Board of Commissioners",
+        "url": "https://www.belviderepark.org/about-us/board/"
+      },
+      "seats": 5
+    },
+    "ROCKFORD PARK DISTRICT": {
+      "kind": "park",
+      "office": {
+        "address": "401 S. Main St.",
+        "city": "Rockford, IL 61101",
+        "phone": "815-987-8800",
+        "website": "https://www.rockfordparkdistrict.org"
+      },
+      "heads": [
+        {
+          "name": "Jay Sandine",
+          "role": "Executive Director"
+        }
+      ],
+      "board": [
+        {
+          "name": "Martesha Brown",
+          "role": "President",
+          "term": "2027",
+          "phone": "815-601-4374"
+        },
+        {
+          "name": "Rudy Valdez",
+          "role": "Vice President",
+          "term": "2029",
+          "phone": "815-520-6022"
+        },
+        {
+          "name": "Owen Carter",
+          "role": "Secretary",
+          "term": "2031",
+          "phone": "815-329-2394"
+        },
+        {
+          "name": "Jack Armstrong",
+          "role": "Commissioner",
+          "term": "2031",
+          "phone": "815-398-2974"
+        },
+        {
+          "name": "Tyler Smith",
+          "role": "Commissioner",
+          "term": "2027",
+          "phone": "815-636-8500"
+        }
+      ],
+      "boardSource": {
+        "label": "Rockford Park District Board of Commissioners",
+        "url": "https://www.rockfordparkdistrict.org/board"
+      }
+    },
+    "IDA PUBLIC LIBRARY": {
+      "kind": "library",
+      "office": {
+        "address": "320 N. State St.",
+        "city": "Belvidere, Illinois",
+        "phone": "815-544-3838",
+        "email": "Board@idapubliclibrary.org",
+        "website": "https://www.idapubliclibrary.org"
+      },
+      "heads": [
+        {
+          "name": "Mindy Long",
+          "role": "Library Director",
+          "email": "mindyl@idapubliclibrary.org"
+        },
+        {
+          "name": "Daisy Mechler",
+          "role": "Assistant Director",
+          "email": "daisym@idapubliclibrary.org"
+        }
+      ],
+      "board": [
+        {
+          "name": "Jenny Tillema",
+          "role": "President"
+        },
+        {
+          "name": "Steve Pierce",
+          "role": "Vice President"
+        },
+        {
+          "name": "Paige Ansley",
+          "role": "Secretary"
+        },
+        {
+          "name": "Daniel Arevalo",
+          "role": "Treasurer"
+        },
+        {
+          "name": "Corey Beard",
+          "role": "Trustee"
+        },
+        {
+          "name": "Lucy Capitosti",
+          "role": "Trustee"
+        },
+        {
+          "name": "Wendy Frank",
+          "role": "Trustee"
+        },
+        {
+          "name": "Chris Hvezda",
+          "role": "Trustee"
+        }
+      ],
+      "boardSource": {
+        "label": "Ida Public Library Board of Trustees",
+        "url": "https://idapubliclibrary.org/library-board/"
+      },
+      "seats": 9,
+      "vacancies": 1
+    },
+    "CHERRY VALLEY DISTRICT LIBRARY": {
+      "kind": "library",
+      "office": {
+        "address": "755 E. State St.",
+        "city": "Cherry Valley, IL 61016",
+        "phone": "815-332-5161",
+        "fax": "815-332-2441",
+        "website": "https://www.cherryvalleylib.org"
+      },
+      "heads": [
+        {
+          "name": "Sue Stevens",
+          "role": "Director"
+        }
+      ],
+      "board": [
+        {
+          "name": "Michelle Forster",
+          "role": "President",
+          "term": "2029",
+          "email": "michellef@cherryvalleylib.org"
+        },
+        {
+          "name": "Karen Lane",
+          "role": "Vice-President",
+          "term": "2029",
+          "email": "karenl@cherryvalleylib.org"
+        },
+        {
+          "name": "Ken Berger",
+          "role": "Secretary",
+          "term": "2031",
+          "email": "kenb@cherryvalleylib.org"
+        },
+        {
+          "name": "Karl Schmitt",
+          "role": "Treasurer",
+          "term": "2027",
+          "email": "karls@cherryvalleylib.org"
+        },
+        {
+          "name": "Donna Riha",
+          "role": "Trustee",
+          "term": "2029",
+          "email": "donnar@cherryvalleylib.org"
+        },
+        {
+          "name": "Deb Okeson",
+          "role": "Trustee",
+          "term": "2027",
+          "email": "debo@cherryvalleylib.org"
+        },
+        {
+          "name": "Ed Liegl",
+          "role": "Trustee",
+          "term": "2027",
+          "email": "edliegl@cherryvalleylib.org"
+        }
+      ],
+      "boardSource": {
+        "label": "Cherry Valley Public Library District Board of Trustees",
+        "url": "https://cherryvalleylib.org/governance/"
+      }
+    },
+    "NORTH SUBURBAN DISTRICT LIBRARY": {
+      "kind": "library",
+      "office": {
+        "address": "6340 N. 2nd St.",
+        "city": "Loves Park, IL 61111",
+        "phone": "815-633-4247",
+        "fax": "815-636-5042",
+        "website": "https://www.northsuburbanlibrary.org"
+      },
+      "heads": [
+        {
+          "name": "Jon Mark Bolthouse",
+          "role": "Director"
+        }
+      ],
+      "board": [
+        {
+          "name": "Jane Burden",
+          "role": "President",
+          "term": "2027"
+        },
+        {
+          "name": "Sara Porter",
+          "role": "Treasurer",
+          "term": "2029"
+        },
+        {
+          "name": "Judy Lindberg",
+          "role": "Secretary",
+          "term": "2027"
+        },
+        {
+          "name": "Christopher Galetsis",
+          "role": "Vice-President",
+          "term": "2027"
+        },
+        {
+          "name": "Jo Beck",
+          "role": "Trustee",
+          "term": "2029"
+        },
+        {
+          "name": "Michael P. Dunn",
+          "role": "Trustee",
+          "term": "2029"
+        },
+        {
+          "name": "Deborah Dunnavan-Moreau",
+          "role": "Trustee",
+          "term": "2029"
+        }
+      ],
+      "boardSource": {
+        "label": "North Suburban Library District Board of Trustees",
+        "url": "https://www.northsuburbanlibrary.org/wp-content/uploads/2022/03/boardtrustees.pdf",
+        "modified": "2025-06-20"
+      }
+    }
+  }
+}
