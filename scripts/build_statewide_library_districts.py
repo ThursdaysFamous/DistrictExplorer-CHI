@@ -6,11 +6,27 @@ WHOSE BOUNDARY THIS IS, AND WHY THAT SENTENCE COMES FIRST. The source is the
 Illinois Broadband Office / Connected Nation `IL_Boundary_Layers` service,
 layer 11 "Library Districts" — 642 polygons for the whole state, public and
 token-free. The publisher is a BROADBAND CONTRACTOR, not a county and not the
-districts: `copyrightText` is empty, the item description is empty, the layer
-is not named in its own service documentation, and every attribute besides
-`Library` and `LibraryType` is a broadband service metric. That is a real
-published boundary with a weak provenance line, which under this project's
-rules is an operator decision rather than a default; it was recorded in
+districts, and every attribute besides `Library` and `LibraryType` is a
+broadband service metric.
+
+IT CARRIES A LICENCE, AND THE FIRST VERSION OF THIS FILE SAID IT CARRIED NONE.
+That claim came from reading LAYER 11, whose own copyrightText and description
+are indeed empty, and generalising to the whole publication — the same
+read-one-surface-and-generalise mistake this project keeps recording. Measured
+2026-09-05: the SERVICE carries `copyrightText` "Illinois Broadband Office,
+Connected Nation" plus a full description, and AGOL item
+675906ae06b5460296154760b7fb1367 states the terms: public use permitted; no
+warranty; NOT for legal boundary determinations; "Attribution Requirement:
+Users must cite the data source"; and "Modification & Redistribution: Users may
+modify or analyze the data but must indicate any changes when sharing derived
+products".
+
+BOTH OBLIGATIONS ARE MET ON THE CARD, and the second one is why the credit is
+longer than a publisher's name. This file MODIFIES the data twice — it clips
+each district to its county and simplifies at SIMPLIFY_M — so the card states both
+the compiler and the changes. Attribution alone would have satisfied half a
+licence. That is a real published boundary with a weak provenance line, which
+under this project's rules is an operator decision rather than a default; it was recorded in
 docs/DATA_LAYER_GUIDEBOOK.md's backlog on 2026-08-20, measured further on
 2026-09-04, and the decision to ship was taken 2026-09-05. Every card built on
 this file NAMES the publisher, because a reader is entitled to know that the
@@ -97,8 +113,11 @@ SIMPLIFY_M = 5.0             # invisible at any zoom this map allows. 10 m was
 # three never reach 10 m inside — Winnebago PLD in Stephenson (257 m2),
 # Farmersville-Waggoner in Sangamon (3,444 m2) and Hanover Township in Carroll
 # (11,806 m2), each a body seated in a neighbouring county — and every other
-# intersection reaches at least 10 m in. Ten metres is the simplification
-# tolerance, i.e. the resolution below which this file makes no claim anyway.
+# intersection reaches at least 10 m in. TEN METRES IS TWICE THE SIMPLIFICATION
+# TOLERANCE, which is 5 m: an earlier draft simplified at 10 m and this comment
+# still called them the same number after that changed. Twice the tolerance is
+# the right bar either way — a patch that never reaches beyond the distance
+# simplification alone can move a line is not evidence of reach into the county.
 SLIVER_REACH_M = 10.0
 
 # Simplification eats a larger FRACTION of a small high-perimeter shape than of

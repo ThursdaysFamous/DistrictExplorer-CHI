@@ -461,7 +461,7 @@
             "label": "Pre-built from the county's published district map, for the counties that publish no vector data"
           },
           {
-            "label": "Illinois Broadband Office / Connected Nation, IL_Boundary_Layers layer 11 \u2014 Carroll, Lee, Randolph, Sangamon, St. Clair and Stephenson ONLY. Not a county or library publication: its copyrightText and item description are both empty and every attribute besides the library name and type is a broadband service metric, so each of those cards names this publisher on the card itself.",
+            "label": "Illinois Broadband Office / Connected Nation, IL_Boundary_Layers layer 11 \u2014 Carroll, Lee, Randolph, Sangamon, St. Clair and Stephenson ONLY. Not a county or library publication: every attribute besides the library name and type is a broadband service metric. Its licence (AGOL item 675906ae06b5460296154760b7fb1367) permits public use, disclaims warranty, says the data is NOT for legal boundary determinations, and requires both attribution and disclosure of any changes \u2014 so each of those cards names this publisher AND states that the boundary shown was clipped to the county and simplified to 5 m.",
             "url": "https://services.arcgis.com/R0IGaIgf2sox9aCY/arcgis/rest/services/IL_Boundary_Layers/FeatureServer/11"
           },
           {
@@ -1002,7 +1002,7 @@
         "file": "carroll-library-districts.json",
         "min_features": 7,
         "max_features": 7,
-        "note": "Boundaries from the Illinois Broadband Office / Connected Nation IL_Boundary_Layers service, layer 11, pre-built by scripts/build_statewide_library_districts.py (clipped to the county, simplified 5 m). NOT a county or library publication: copyrightText and the item description are both empty and every other attribute is a broadband service metric, so every card built on it names the publisher. Carroll's 7, and the county that validates the whole source: these are exactly the seven library tax lines the County Clerk's own Tax Code by District Listing names, and the builder refuses to write if they ever stop matching. Shannon and Lake Carroll correctly sit in NO library district, which the Clerk's tax codes independently confirm."
+        "note": "Boundaries from the Illinois Broadband Office / Connected Nation IL_Boundary_Layers service, layer 11, pre-built by scripts/build_statewide_library_districts.py. NOT a county or library publication, and it CARRIES A LICENCE rather than nothing: AGOL item 675906ae06b5460296154760b7fb1367 states public use permitted, no warranty, NOT for legal boundary determinations, an ATTRIBUTION requirement (users must cite the source) and a MODIFICATION-DISCLOSURE requirement (users may modify the data but must indicate any changes when sharing derived products). This file IS modified — clipped to the county and simplified at 5 m — so the card discloses both the publisher and those changes. Only LAYER 11's sub-metadata is empty; the service and the item are not. Carroll's 7, and the county that validates the whole source: these are exactly the seven library tax lines the County Clerk's own Tax Code by District Listing names, and the builder refuses to write if they ever stop matching. Shannon and Lake Carroll correctly sit in NO library district, which the Clerk's tax codes independently confirm."
       },
       {
         "file": "cass-county-board-districts.json",
@@ -1503,7 +1503,7 @@
         "file": "lee-library-districts.json",
         "min_features": 11,
         "max_features": 11,
-        "note": "Boundaries from the Illinois Broadband Office / Connected Nation IL_Boundary_Layers service, layer 11, pre-built by scripts/build_statewide_library_districts.py (clipped to the county, simplified 5 m). NOT a county or library publication: copyrightText and the item description are both empty and every other attribute is a broadband service metric, so every card built on it names the publisher. Lee's 11. Five are seated in neighbouring counties and reach across the line; only the Lee slice is drawn, so a reader on either side is answered by their own county's entry."
+        "note": "Boundaries from the Illinois Broadband Office / Connected Nation IL_Boundary_Layers service, layer 11, pre-built by scripts/build_statewide_library_districts.py. NOT a county or library publication, and it CARRIES A LICENCE rather than nothing: AGOL item 675906ae06b5460296154760b7fb1367 states public use permitted, no warranty, NOT for legal boundary determinations, an ATTRIBUTION requirement (users must cite the source) and a MODIFICATION-DISCLOSURE requirement (users may modify the data but must indicate any changes when sharing derived products). This file IS modified — clipped to the county and simplified at 5 m — so the card discloses both the publisher and those changes. Only LAYER 11's sub-metadata is empty; the service and the item are not. Lee's 11. Five are seated in neighbouring counties and reach across the line; only the Lee slice is drawn, so a reader on either side is answered by their own county's entry."
       },
       {
         "file": "livingston-county-board-districts.json",
@@ -1829,7 +1829,7 @@
         "file": "randolph-library-districts.json",
         "min_features": 9,
         "max_features": 9,
-        "note": "Boundaries from the Illinois Broadband Office / Connected Nation IL_Boundary_Layers service, layer 11, pre-built by scripts/build_statewide_library_districts.py (clipped to the county, simplified 5 m). NOT a county or library publication: copyrightText and the item description are both empty and every other attribute is a broadband service metric, so every card built on it names the publisher. Randolph's 9, a mix of two large districts and seven municipal libraries — the county is 27.6% covered and the rest genuinely sits in no library district."
+        "note": "Boundaries from the Illinois Broadband Office / Connected Nation IL_Boundary_Layers service, layer 11, pre-built by scripts/build_statewide_library_districts.py. NOT a county or library publication, and it CARRIES A LICENCE rather than nothing: AGOL item 675906ae06b5460296154760b7fb1367 states public use permitted, no warranty, NOT for legal boundary determinations, an ATTRIBUTION requirement (users must cite the source) and a MODIFICATION-DISCLOSURE requirement (users may modify the data but must indicate any changes when sharing derived products). This file IS modified — clipped to the county and simplified at 5 m — so the card discloses both the publisher and those changes. Only LAYER 11's sub-metadata is empty; the service and the item are not. Randolph's 9, a mix of two large districts and seven municipal libraries — the county is 27.6% covered and the rest genuinely sits in no library district."
       },
       {
         "file": "richland-county-outline.json",
@@ -1878,7 +1878,7 @@
         "file": "sangamon-library-districts.json",
         "min_features": 16,
         "max_features": 16,
-        "note": "Boundaries from the Illinois Broadband Office / Connected Nation IL_Boundary_Layers service, layer 11, pre-built by scripts/build_statewide_library_districts.py (clipped to the county, simplified 5 m). NOT a county or library publication: copyrightText and the item description are both empty and every other attribute is a broadband service metric, so every card built on it names the publisher. Sangamon's 16, including Springfield's Lincoln Library as a CITY library rather than a district. Farmersville-Waggoner's 3,444 m2 border sliver is dropped: it never reaches 10 m inside the county and its body is seated in Montgomery."
+        "note": "Boundaries from the Illinois Broadband Office / Connected Nation IL_Boundary_Layers service, layer 11, pre-built by scripts/build_statewide_library_districts.py. NOT a county or library publication, and it CARRIES A LICENCE rather than nothing: AGOL item 675906ae06b5460296154760b7fb1367 states public use permitted, no warranty, NOT for legal boundary determinations, an ATTRIBUTION requirement (users must cite the source) and a MODIFICATION-DISCLOSURE requirement (users may modify the data but must indicate any changes when sharing derived products). This file IS modified — clipped to the county and simplified at 5 m — so the card discloses both the publisher and those changes. Only LAYER 11's sub-metadata is empty; the service and the item are not. Sangamon's 16, including Springfield's Lincoln Library as a CITY library rather than a district. Farmersville-Waggoner's 3,444 m2 border sliver is dropped: it never reaches 10 m inside the county and its body is seated in Montgomery."
       },
       {
         "file": "sangamon-judicial-subcircuits.json",
@@ -1943,7 +1943,7 @@
         "file": "st-clair-library-districts.json",
         "min_features": 19,
         "max_features": 19,
-        "note": "Boundaries from the Illinois Broadband Office / Connected Nation IL_Boundary_Layers service, layer 11, pre-built by scripts/build_statewide_library_districts.py (clipped to the county, simplified 5 m). NOT a county or library publication: copyrightText and the item description are both empty and every other attribute is a broadband service metric, so every card built on it names the publisher. St. Clair's 19, the densest of the six. East Saint Louis, Belleville and O'Fallon are municipal libraries; New Athens, Marissa and Freeburg are districts."
+        "note": "Boundaries from the Illinois Broadband Office / Connected Nation IL_Boundary_Layers service, layer 11, pre-built by scripts/build_statewide_library_districts.py. NOT a county or library publication, and it CARRIES A LICENCE rather than nothing: AGOL item 675906ae06b5460296154760b7fb1367 states public use permitted, no warranty, NOT for legal boundary determinations, an ATTRIBUTION requirement (users must cite the source) and a MODIFICATION-DISCLOSURE requirement (users may modify the data but must indicate any changes when sharing derived products). This file IS modified — clipped to the county and simplified at 5 m — so the card discloses both the publisher and those changes. Only LAYER 11's sub-metadata is empty; the service and the item are not. St. Clair's 19, the densest of the six. East Saint Louis, Belleville and O'Fallon are municipal libraries; New Athens, Marissa and Freeburg are districts."
       },
       {
         "file": "stark-county-board-districts.json",
@@ -1998,7 +1998,7 @@
         "file": "stephenson-library-districts.json",
         "min_features": 5,
         "max_features": 5,
-        "note": "Boundaries from the Illinois Broadband Office / Connected Nation IL_Boundary_Layers service, layer 11, pre-built by scripts/build_statewide_library_districts.py (clipped to the county, simplified 5 m). NOT a county or library publication: copyrightText and the item description are both empty and every other attribute is a broadband service metric, so every card built on it names the publisher. Stephenson's 5. Pearl City Public Library District appears here AND in Carroll's file, each with its own county's slice — the district straddles the line and neither county's reader loses their answer."
+        "note": "Boundaries from the Illinois Broadband Office / Connected Nation IL_Boundary_Layers service, layer 11, pre-built by scripts/build_statewide_library_districts.py. NOT a county or library publication, and it CARRIES A LICENCE rather than nothing: AGOL item 675906ae06b5460296154760b7fb1367 states public use permitted, no warranty, NOT for legal boundary determinations, an ATTRIBUTION requirement (users must cite the source) and a MODIFICATION-DISCLOSURE requirement (users may modify the data but must indicate any changes when sharing derived products). This file IS modified — clipped to the county and simplified at 5 m — so the card discloses both the publisher and those changes. Only LAYER 11's sub-metadata is empty; the service and the item are not. Stephenson's 5. Pearl City Public Library District appears here AND in Carroll's file, each with its own county's slice — the district straddles the line and neither county's reader loses their answer."
       },
       {
         "file": "stephenson-fire-districts.json",

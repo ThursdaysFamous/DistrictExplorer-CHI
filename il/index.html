@@ -13912,25 +13912,36 @@ function initChiExplorer() {
    * scripts/build_statewide_library_districts.py, which carries the provenance
    * argument in full and gates the trust claims rather than describing them.
    *
-   * THE CARD NAMES THE PUBLISHER, and that is the whole condition of shipping
-   * this. `copyrightText` is empty, the item description is empty, and every
-   * attribute besides the two above is a broadband service metric — so a reader
-   * is told, on the card, that the line was compiled by a broadband contractor
-   * rather than filed by the library or the county. Where a county publishes
-   * its own (Cook, Rock Island, Peoria and eleven others), the county's source
-   * stays the authority and this layer is not used.
+   * THE CARD NAMES THE PUBLISHER AND THE CHANGES, because the source carries a
+   * LICENCE rather than nothing. Only layer 11's own sub-metadata is empty; the
+   * service carries `copyrightText` "Illinois Broadband Office, Connected
+   * Nation" and the AGOL item (675906ae06b5460296154760b7fb1367)
+   * carries terms — public use permitted, no warranty, NOT for legal boundary
+   * determinations, users must cite the source, and users "must indicate any
+   * changes when sharing derived products". This file IS changed (clipped to the
+   * county, simplified 5 m), so the credit states that too. Every attribute
+   * besides the library's name and type is still a broadband service metric.
+   * Where a county publishes its own, the county's source stays the authority
+   * and this layer is not used.
    *
    * THE TYPE IS RENDERED, NOT HIDDEN, because it is the difference between two
    * quite different things wearing one label: a library DISTRICT is a taxing
    * body a resident lives inside, while a municipal library's boundary is
    * simply the municipality and it levies no district tax of its own. */
+  // BOTH HALVES OF THE LICENCE, on the card, because the source carries one.
+  // AGOL item 675906ae06b5460296154760b7fb1367 requires that users
+  // cite the source AND "indicate any changes when sharing derived products" —
+  // and this file is changed: clipped to the county and simplified to 5 m. The
+  // first draft of this credit said only who compiled it, which met the
+  // attribution requirement and not the disclosure one.
   var STATEWIDE_LIBRARY_CREDIT =
-    "Compiled by the Illinois Broadband Office / Connected Nation — not filed by the library or the county";
+    "Compiled by the Illinois Broadband Office / Connected Nation — not filed by the library or " +
+    "the county. Clipped to the county and simplified to 5 m; not for legal boundary determinations.";
   // The source's own vocabulary, spelled out. An unrecognised value falls
   // through to the source's string rather than being dropped or guessed at.
   var LIBRARY_GOVERNANCE = {
     "District": "Library district — a taxing body you live inside",
-    "District (contracting)": "Library district — a taxing body you live inside, serving this area by contract",
+    "District (contracting)": "Library district serving this area by contract — the district is the taxing body, and this ground is served by agreement rather than being inside it",
     "City": "Municipal library — its area is the city, and it levies no district tax of its own",
     "Village": "Municipal library — its area is the village, and it levies no district tax of its own",
     "Village (contracting)": "Municipal library — its area is the village, serving this area by contract",
