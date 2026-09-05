@@ -1036,7 +1036,7 @@ the `jones-county-supervisor` gap both said its adopted-map PDF "does carry real
 (moveto/lineto/stroke operators), so a Jackson-County-IL-style extraction is plausible". **It is
 not.** The Jackson method reads FILLED path objects whose colours pair with a legend; stroke
 operators appear in nearly every vector PDF, including ones whose map body is a raster. Measured
-with pdfplumber: 554 curves, **zero filled**, plus **22 raster strips** that are the map, and the
+with pdfplumber: 554 curves, **zero filled**, plus **22 raster images**, 20 of them full-width strips stacked to form the map body, and the
 largest vector path on the page is an 18×14 pt road shield. Reading it would mean sampling pixels,
 which the Jackson record forbids and the Knox build proved wrong. What the PDF DOES have is a TEXT
 LAYER giving all five districts' populations and compositions (the Menard shape — look for text
