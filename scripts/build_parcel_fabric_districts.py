@@ -202,6 +202,31 @@ WOODFORD_LIBRARY = WOODFORD_PARCELS % ("Library_Districts", 8)
 WOODFORD_PARK = WOODFORD_PARCELS % ("Park_Districts", 9)
 WOODFORD_CODE_RE = r"^(?P<code>[A-Z]{2}[A-Z0-9]{2}) - (?P<name>.+)$"
 
+# The second witness, PINNED. A DEVNET-generated Settlement Sheet for tax year
+# 2025, in the county's own "County Taxes" archive and linked from its Real
+# Estate Tax Information page. Re-verifying the district SET means re-reading
+# these two, not searching the county's site again.
+WOODFORD_TAX_YEAR = 2025
+WOODFORD_SETTLEMENT_SHEETS = "https://www.woodford-county.org/Archive.aspx?ADID=3720"
+WOODFORD_COUNTY_SUMMARY = "https://www.woodford-county.org/Archive.aspx?ADID=3719"
+
+# WHAT THE THREE ITEMS SAY ABOUT THEMSELVES. All three are `access: public` in
+# the county's own ArcGIS org, and the library and park items carry no licence
+# text at all. The FIRE item carries two notes worth carrying forward rather
+# than smoothing away: its licenseInfo reads "Does not match scale of Woodford
+# Parcel Data", and its description opens "2007 Illinois Department of Revenue
+# Taxing District Data for Woodford County".
+#
+# THAT 2007 DATE DESCRIBES THE ORIGINAL DISTRICT SHAPES, NOT WHAT IS DISSOLVED
+# HERE, and the difference is measurable rather than argued. A parcel's district
+# on this layer follows its TAX CODE: all 119 distinct `Tax_Code_1` values map
+# to exactly one district per concept, on all three concepts, with no code split
+# between two districts. So what is being dissolved is a tax-code crosswalk, and
+# the tax codes are the ones the 2025 settlement sheets levy under — which is
+# why the district set agrees with those sheets exactly. The geometry is the
+# county's current parcel fabric throughout. The scale caveat is the county's
+# own, and is why nothing here treats a district edge as survey-accurate.
+
 # MINONK IS THE ONE MUNICIPAL LIBRARY IN THE SET and the card says so, because
 # "Library District: Minonk City Library" would otherwise read as a district a
 # resident lives inside. Measured, not inferred: all 1,230 of its parcels are
@@ -211,10 +236,22 @@ WOODFORD_CODE_RE = r"^(?P<code>[A-Z]{2}[A-Z0-9]{2}) - (?P<name>.+)$"
 # settlement sheet shows LYMI levying $99,987.82 under a `016 - Library` fund —
 # so the note states the territory, which is what was measured, and makes no
 # claim about which body votes the levy.
+# THE FIRST VERSION OF THIS NOTE SAID "its area is exactly the city" AND THAT
+# WAS FALSE, because it was measured against the county's parcel ATTRIBUTE
+# (`Village`) and never against the county's corporate-boundary LAYER. Both
+# were consulted this time and THEY DISAGREE: the parcel table puts all 1,230
+# LYMI parcels in `VCMI - City of Minonk` and all 1,230 city-tagged parcels in
+# LYMI, while `Corporate_Boundary` excludes five of them — tax code 06002, a
+# 16,059 m² tract whose nearest point is 5.2 km south of the city polygon,
+# which is why the shipped LYMI feature is a two-part MultiPolygon. Two county
+# products disagreeing IS the finding; the note states the territory and drops
+# the word that was doing the overclaiming.
 WOODFORD_LIBRARY_NOTES = {
     "LYMI - Minonk City Library":
-        "Municipal library — the City of Minonk's own, and its area is exactly "
-        "the city.",
+        "Municipal library — its territory is the City of Minonk: the county's "
+        "parcel table puts all 1,230 of the library's parcels in the city, "
+        "though its corporate-boundary layer places five of them on a detached "
+        "tract 5 km to the south.",
 }
 
 # ONE POSITIVE PROBE PER FIRE DISTRICT, plus the Metamora negative. Each point
@@ -338,12 +375,16 @@ SOURCES = [
     # parcel fabric with an identical 100-column schema; each dissolves a
     # different column of it.
     #
-    # THE SECOND WITNESS IS THE COUNTY'S OWN CERTIFIED TAX SETTLEMENT. The
-    # fabric's 17 fire, 6 library and 3 park districts are exactly the set the
-    # Clerk's 2025 Tax Year 1st Distribution Settlement Sheets levy for, code
-    # for code (`FDBE - BENSON FIRE DISTRICT` there, `FDBE - Benson Fire
-    # District` here), so the district SET is corroborated by a document the
-    # county certifies rather than by the same layer restating itself.
+    # THE SECOND WITNESS IS THE COUNTY'S OWN TAX SETTLEMENT SHEETS
+    # (WOODFORD_SETTLEMENT_SHEETS above), and what they are NOT is worth
+    # stating, because an earlier draft called them "the Clerk's certified"
+    # sheets and neither half is supported: the document names NO OFFICE and
+    # the word "certified" does not appear in it. What it does establish is the
+    # thing that matters — the fabric's 17 fire, 6 library and 3 park districts
+    # are exactly the set the county levies for, code for code (`FDBE - BENSON
+    # FIRE DISTRICT` there, `FDBE - Benson Fire District` here), so the district
+    # SET is corroborated by a different county product rather than by the same
+    # layer restating itself.
     #
     # THE HOLES ARE MEASURED, NOT ASSUMED. 1,701 parcels carry no fire district
     # and every single one of them is in the Village of Metamora, which runs its
@@ -362,9 +403,13 @@ SOURCES = [
     # within the app's 60 ft runtime snap and answer anyway, and 83 — 0.49% —
     # sit on ground the county's OWN FABRIC HAS NO PARCEL FOR. Each of those 83
     # was queried against the county's service one at a time and every one came
-    # back with no parcel at all; they cluster in and around Eureka, the shape
-    # of a subdivision addressed before the assessor split its lots. So the
-    # layer says nothing exactly where the county says nothing, which is the
+    # back with no parcel at all. 72 of the 83 fall inside the City of Eureka's
+    # own corporate boundary and 11 are scattered across the county, so the
+    # BBOX of the set spans Woodford even though seven in eight sit in one
+    # city — an earlier draft said only that they "cluster in and around
+    # Eureka", which is true of the points and misleading about their extent.
+    # The shape is a subdivision addressed before the assessor split its lots.
+    # So the layer says nothing exactly where the county says nothing, which is the
     # right answer rather than a defect to close over.
     {"slug": "woodford-fire", "out": "woodford-fire-districts.json",
      "layer": WOODFORD_FIRE, "name_prop": "Fire_Prote", "expect": 17,
@@ -411,6 +456,12 @@ SOURCES = [
     {"slug": "macon-park", "out": "macon-park-districts.json",
      "layer": MACON + "ParkJoin_Dissolve/FeatureServer/0", "name_prop": "Park",
      "expect": 6, "edit_pin": 1770754910514, "probes": []},
+    # KENDALL'S FIRE FILE DOES NOT REBUILD BYTE-IDENTICALLY, and it did not
+    # before this branch either — the drift is seam wobble under a count+name
+    # pin that passes, so nothing here detects it. Recorded rather than fixed:
+    # Kendall publishes no edit stamp, so that pin is all there is, and a
+    # reproducible rebuild would also need the shapely version of the original
+    # run. Nothing in this change touches that source.
     # Sangamon fire is deliberately NOT here: its 226-fragment source measured
     # as INTERLEAVED, not void-carved — 168 of its sibling gaps are another
     # district's territory and only 2 are empty ground, and closing added
