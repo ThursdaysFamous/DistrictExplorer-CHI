@@ -1935,6 +1935,17 @@ detail into `blocker`.
       "wanted": "The missing counties' PSAP-boundary filings reaching the OEC aggregate — the state's roughly weekly refresh carries them the moment a county files."
     },
     {
+      "id": "wtcs-district-holes",
+      "concept": "Technical College District",
+      "area": "Wisconsin — statewide",
+      "kind": "data-quality",
+      "layer": "wtcs-district",
+      "summary": "The technical college card draws each district with its interior cutouts filled in, so a point the state excludes from a district is still shown inside one. Every other answer on that card is right.",
+      "why": "The state's map service can hand the same shapes over in two formats, and one of them quietly turns a cut-out into solid ground. This layer was built through that one; the county board layer has been rebuilt through the other.",
+      "wanted": "Nothing from the state \u2014 the shapes are already published correctly. This is a rebuild of the layer through the corrected reader, which is queued.",
+      "blocker": "MEASURED 2026-09-05, as a side finding of the supervisory-district rebuild. ArcGIS's GeoJSON export silently UNNESTS interior rings: it returns a feature's holes as separate SHELLS, so an area the publisher cut out becomes an area the layer claims. Measured on this layer's own DPI endpoint, same query, same generalisation, only the format changed: f=geojson returns 16 features with ZERO holes, f=json returns the same 16 with 109. The shipped wtcs-districts.json carries 0, so it fills all 109. THE BUILDER'S OWN GATE MAKES THIS SHARPER RATHER THAN SOFTER: build_wi_wtcs_districts.py asserts that the union's one lawful interior hole is Lake Winnebago, a check written because holes matter here, and it passed against a fetch that had already removed them all. The fix is not new code \u2014 fetch_layer in build_wi_supervisory_districts.py was switched to f=json with a containment-aware converter on 2026-09-05 and every caller of it is correct; this builder fetches f=geojson itself and is one of eight that still do (wi/WATCH.md names all eight, and records that build_metro_outline.py was MEASURED unaffected because TIGERweb's county layer has no interior rings either way). WHAT IS NOT YET MEASURED IS THE READER IMPACT: a hole in one technical college district is often another district, so the card may still answer correctly at many of these points, and no count of wrong answers is claimed here. The supervisory layer's equivalent rebuild moved 123 points, of which 121 had been naming TWO districts at once. Retire this record by rebuilding the layer through the corrected path and diffing at the restored hole centroids, exactly as the supervisory rebuild did."
+    },
+    {
       "id": "ng911-ems-filings",
       "concept": "EMS service areas",
       "area": "Iowa, Jefferson, Langlade, Vilas and Walworth counties",
