@@ -190,6 +190,112 @@ for _code in ("05009", "07005"):
 for _code in ("03004", "03007", "03011", "05008"):
     BOONE_LIBRARY_CODES[_code] = NORTH_SUBURBAN_LIBRARY
 
+# --- Grundy -------------------------------------------------------------
+# The THIRD shape a parcel fabric comes in, after Woodford's one-column-per-
+# concept and Boone's bare tax code: Grundy publishes ONE `Districts` column
+# per parcel listing EVERY taxing body it pays into, comma-separated —
+# "CITY OF MORRIS, COUNTY, JOLIET JR COLL 525, MORRIS AREA LIBRARY, MORRIS FIRE
+# AND AMBUL, MORRIS GRADE 54, MORRIS HIGH 101, MORRIS TWP". 116 distinct bodies
+# across 27,661 parcels; three of the concepts this app maps are in there.
+#
+# THE SERVICE DOES NOT PAGE (`supportsPagination: false`, and a resultOffset
+# query is refused outright with "Pagination is not supported"), which is safe
+# only because maxRecordCount is 50,000 against 27,661 rows. The row pin below
+# is what keeps that true: if the roll ever passes the cap, the count check
+# fails rather than the fetch silently truncating.
+GRUNDY_PARCELS = ("https://maps.grundyco.org/arcgis/rest/services/CountyWebsiteMaps/"
+                  "CountyParcelsBaseLayer_ParcelFabric_SPIE/MapServer/0")
+GRUNDY_DISTRICTS_COL = ("GrundyParcels.dbo.GISParcelsJoinedDistrictCodes_"
+                        "SingleField.Districts")
+
+# THE SECOND WITNESS IS THE CLERK'S CERTIFIED TAX DISTRIBUTION LIST, and it is
+# also where the NAMES come from — the Boone division of labour, where one
+# county document owns the lines and another owns the names. The parcel column
+# abbreviates ("CHANNAHON PARK DIST", "S. WILMINGTON FIRE"); the Clerk's list
+# gives each body a code and its fuller certified name. The county's "Rates &
+# Extensions" PDF would have been the obvious witness and is NOT usable: all
+# 102 pages are a scan with no text layer (101 characters extract from the
+# whole document).
+GRUNDY_TAX_YEAR = 2025
+GRUNDY_REPORT = ("https://www.grundycountyil.gov/Documents/Communities/Taxes/"
+                 "Tax%20Distribution%20Listing%20with%20EAV%202025.pdf")
+
+# parcel-column name -> the Clerk's certified name. Both sides are pinned: the
+# build fails if a parcel lists a body this map does not carry (it would come
+# through as a blank and miss expect_blanks=0), and the district COUNT is an
+# equality, so a name that stops appearing fails too.
+GRUNDY_FIRE = {
+    "ALLEN FIRE": "ALLEN FIRE",
+    "BRACEVILLE FIRE": "BRACEVILLE FIRE",
+    "BRAIDWOOD FIRE": "BRAIDWOOD FIRE",
+    "COAL CITY FIRE": "COAL CITY FIRE",
+    "DWIGHT FIRE": "DWIGHT FIRE",
+    "GARDNER FIRE": "GARDNER FIRE",
+    "MAZON FIRE": "MAZON FIRE",
+    "MINOOKA FIRE": "MINOOKA FIRE",
+    "MORRIS FIRE AND AMBUL": "MORRIS FIRE & AMBUL",
+    "REDDICK FIRE": "REDDICK FIRE",
+    "S. WILMINGTON FIRE": "S WILMINGTON FIRE",
+    "SENECA FIRE AND AMBUL": "SENECA FIRE PROT & AMBUL",
+    "VERONA-KINSMAN FIRE": "VERONA-KINSMAN FIRE",
+}
+# MVK RESCUE SQUAD IS DELIBERATELY NOT HERE, and the reason is measured rather
+# than assumed from its name. The Clerk codes it FDMV — an FD code, the same
+# prefix every fire district carries — so a build keyed on the Clerk's coding
+# would ship it as a fourteenth fire district. All 2,257 of its parcels are
+# ALSO in a named fire district, 1,224 in Mazon and 1,033 in Verona-Kinsman,
+# summing to exactly its own total: it is the union of those two districts,
+# which is what its name says (Mazon-Verona-Kinsman) and what an EMS levy laid
+# over existing fire districts looks like. Including it would put two fire
+# districts on one card for 2,257 parcels.
+GRUNDY_LIBRARY = {n: n for n in (
+    "COAL CITY LIBRARY", "FOSSIL RIDGE LIBRARY", "MORRIS AREA LIBRARY",
+    "PRAIRIE CREEK LIBRARY", "SENECA LIBRARY", "THREE RIVERS LIBRARY")}
+GRUNDY_PARK = {
+    "CHANNAHON PARK DIST": "CHANNAHON PARK DISTRICT",
+    "GODLEY PARK DISTRICT": "GODLEY PARK DISTRICT",
+}
+
+# One positive probe per district. Each point is a real parcel's representative
+# point and its expected answer is that parcel's own Districts cell, read from
+# the county's table before this build ran.
+GRUNDY_FIRE_PROBES = [
+    (41.12780, -88.58314, "ALLEN FIRE"),
+    (41.23609, -88.27253, "BRACEVILLE FIRE"),
+    (41.23098, -88.24718, "BRAIDWOOD FIRE"),
+    (41.35240, -88.31806, "COAL CITY FIRE"),
+    (41.11567, -88.51916, "DWIGHT FIRE"),
+    (41.14566, -88.37007, "GARDNER FIRE"),
+    (41.18525, -88.45056, "MAZON FIRE"),
+    (41.39445, -88.31342, "MINOOKA FIRE"),
+    (41.36628, -88.35430, "MORRIS FIRE & AMBUL"),
+    (41.11570, -88.27450, "REDDICK FIRE"),
+    (41.17974, -88.25280, "S WILMINGTON FIRE"),
+    (41.41029, -88.54595, "SENECA FIRE PROT & AMBUL"),
+    (41.14112, -88.54087, "VERONA-KINSMAN FIRE"),
+]
+GRUNDY_LIBRARY_PROBES = [
+    (41.35240, -88.31806, "COAL CITY LIBRARY"),
+    (41.14840, -88.34791, "FOSSIL RIDGE LIBRARY"),
+    (41.36628, -88.35430, "MORRIS AREA LIBRARY"),
+    (41.11567, -88.51916, "PRAIRIE CREEK LIBRARY"),
+    (41.41029, -88.54595, "SENECA LIBRARY"),
+    (41.38241, -88.34018, "THREE RIVERS LIBRARY"),
+    # three fire-positive points the county puts in NO library district
+    (41.14566, -88.37007, None),   # Gardner
+    (41.18525, -88.45056, None),   # Mazon
+    (41.11570, -88.27450, None),   # Reddick
+]
+GRUNDY_PARK_PROBES = [
+    (41.39766, -88.35622, "CHANNAHON PARK DISTRICT"),
+    (41.23943, -88.25065, "GODLEY PARK DISTRICT"),
+    # only 1,779 of 27,661 parcels are in a park district; most of the county
+    # is honestly in none
+    (41.36628, -88.35430, None),   # Morris
+    (41.41029, -88.54595, None),   # Seneca
+    (41.11567, -88.51916, None),   # Dwight
+]
+
 # --- Woodford ------------------------------------------------------------
 # One 25,824-parcel fabric, published three times over under three names. Every
 # name it carries is `<CODE> - <District>`, the same form the County Clerk's
@@ -389,6 +495,29 @@ SOURCES = [
      "expect_rows": 4113, "edit_pin": 1770655529993,
      "code_split": WOODFORD_CODE_RE,
      "probes": WOODFORD_PARK_PROBES},
+    # Grundy's three — the multi_value shape. Each fetches only the parcels
+    # whose Districts cell mentions this concept, which the server can filter
+    # even on the joined column; those LIKE counts were checked against a full
+    # client-side pass over all 27,661 rows and agree exactly (27,141 / 24,485
+    # / 1,779), so the filter is not quietly dropping a district.
+    {"slug": "grundy-fire", "out": "grundy-fire-districts.json",
+     "layer": GRUNDY_PARCELS, "name_prop": GRUNDY_DISTRICTS_COL, "expect": 13,
+     "out_fields": GRUNDY_DISTRICTS_COL,
+     "where": GRUNDY_DISTRICTS_COL + " LIKE '%FIRE%'",
+     "expect_rows": 27141, "multi_value": ",", "code_map": GRUNDY_FIRE,
+     "out_prop": "district", "probes": GRUNDY_FIRE_PROBES},
+    {"slug": "grundy-library", "out": "grundy-library-districts.json",
+     "layer": GRUNDY_PARCELS, "name_prop": GRUNDY_DISTRICTS_COL, "expect": 6,
+     "out_fields": GRUNDY_DISTRICTS_COL,
+     "where": GRUNDY_DISTRICTS_COL + " LIKE '%LIBRARY%'",
+     "expect_rows": 24485, "multi_value": ",", "code_map": GRUNDY_LIBRARY,
+     "out_prop": "district", "probes": GRUNDY_LIBRARY_PROBES},
+    {"slug": "grundy-park", "out": "grundy-park-districts.json",
+     "layer": GRUNDY_PARCELS, "name_prop": GRUNDY_DISTRICTS_COL, "expect": 2,
+     "out_fields": GRUNDY_DISTRICTS_COL,
+     "where": GRUNDY_DISTRICTS_COL + " LIKE '%PARK DIST%'",
+     "expect_rows": 1779, "multi_value": ",", "code_map": GRUNDY_PARK,
+     "out_prop": "district", "probes": GRUNDY_PARK_PROBES},
     {"slug": "kendall-fire", "out": "kendall-fire-districts.json",
      "layer": KENDALL + "Fire_Protection_Districts/FeatureServer/0",
      "name_prop": "fire", "expect": 10,
@@ -524,6 +653,10 @@ def build_source(cfg):
     # files shipped under `Fire_Prote`/`Library_Di`/`Park_Distr` while the app
     # read `district`, so every static gate passed and every card rendered with
     # its district name reading "Unknown".
+    if cfg.get("multi_value") and cfg.get("code_map") is None:
+        fail("%s: a multi_value source needs a code_map — the column is a list "
+             "of every taxing body, and which member is this concept's is a "
+             "lookup, never a guess" % cfg["slug"])
     if (cfg.get("code_map") is not None or cfg.get("code_split")) \
             and not cfg.get("out_prop"):
         fail("%s: a source that transforms its name (code_map or code_split) "
@@ -563,17 +696,39 @@ def build_source(cfg):
     # carries 100 columns per row including owner names, home addresses and
     # billing addresses, and the honest handling of data this app would never
     # show is not to fetch it.
+    # SOME SERVICES REFUSE TO PAGE AT ALL. Grundy's MapServer declares
+    # advancedQueryCapabilities.supportsPagination false and answers a query
+    # carrying resultOffset with an outright error — "Pagination is not
+    # supported" — so the paging loop got ZERO rows where the server had 1,779.
+    # It is safe to ask such a service for everything at once only because its
+    # maxRecordCount (50,000) is well above its row count (27,661), and the
+    # count check below is what keeps that true: if the roll ever passes the
+    # cap, this fails rather than silently truncating.
+    pages = ((meta.get("advancedQueryCapabilities") or {})
+             .get("supportsPagination", True))
     features, offset = [], 0
     while True:
-        page = requests.get(cfg["layer"] + "/query", params={
-            "where": where, "outFields": cfg.get("out_fields", "*"),
-            "outSR": 4326, "f": "geojson",
-            "resultOffset": offset, "resultRecordCount": PAGE_SIZE,
-        }, timeout=180).json()
+        params = {"where": where, "outFields": cfg.get("out_fields", "*"),
+                  "outSR": 4326, "f": "geojson"}
+        if pages:
+            params["resultOffset"] = offset
+            params["resultRecordCount"] = PAGE_SIZE
+        page = requests.get(cfg["layer"] + "/query", params=params,
+                            timeout=600).json()
+        if page.get("error"):
+            fail("%s: the service refused the query — %s"
+                 % (cfg["slug"], str(page["error"])[:200]))
         got = page.get("features") or []
         features += got
         more = page.get("exceededTransferLimit") or \
             (page.get("properties") or {}).get("exceededTransferLimit")
+        if not pages:
+            if more:
+                fail("%s: the service cannot page AND says it had more to give "
+                     "— %d rows returned against maxRecordCount %s; nothing "
+                     "here can fetch the rest"
+                     % (cfg["slug"], len(got), meta.get("maxRecordCount")))
+            break
         if not more or not got:
             break
         offset += len(got)
@@ -616,7 +771,11 @@ def build_source(cfg):
             props = f.get("properties") or {}
             for k in props:
                 if k.lower() == cfg["name_prop"].lower() and props[k]:
-                    seen.add(" ".join(str(props[k]).split()))
+                    if cfg.get("multi_value"):
+                        for x in str(props[k]).split(cfg["multi_value"]):
+                            seen.add(" ".join(x.split()))
+                    else:
+                        seen.add(" ".join(str(props[k]).split()))
         empty = sorted(set(cfg["code_map"]) - seen)
         if empty != sorted(cfg.get("expect_empty_codes", [])):
             fail("%s: codes with no parcel changed — got %s, expected %s"
@@ -654,7 +813,26 @@ def build_source(cfg):
         # District Report". A code the map does not carry is skipped, not
         # guessed — the where clause should already have excluded it, and a row
         # arriving anyway means the county changed something.
-        if cfg.get("code_map") is not None:
+        #
+        # A multi_value source's cell is a LIST rather than one code. Grundy
+        # publishes one `Districts` column naming EVERY taxing body a parcel
+        # pays into — "CITY OF MORRIS, COUNTY, JOLIET JR COLL 525, MORRIS AREA
+        # LIBRARY, MORRIS FIRE AND AMBUL, ..." — so the concept being built is
+        # whichever member of that list the code_map knows. TWO MATCHES IS A
+        # FAILURE, NOT A CHOICE: a parcel in two fire districts means either the
+        # county changed something or the map is wrong, and picking one would
+        # publish a coin-flip. (Measured 2026-09-05: zero parcels match twice.)
+        if cfg.get("multi_value"):
+            # NOT `parts` — that name is the accumulator this loop fills
+            listed = [" ".join(x.split()) for x in
+                      str(v or "").split(cfg["multi_value"])]
+            hits = [cfg["code_map"][x] for x in listed if x in cfg["code_map"]]
+            if len(set(hits)) > 1:
+                fail("%s: a parcel lists %d of this concept's districts (%s) — "
+                     "the county's roll changed or the map is wrong; refusing "
+                     "to pick one" % (cfg["slug"], len(set(hits)), sorted(set(hits))))
+            v = hits[0] if hits else None
+        elif cfg.get("code_map") is not None:
             v = cfg["code_map"].get(" ".join(str(v or "").split()))
         name = " ".join(str(v or "").split())
         if not name:
