@@ -839,7 +839,7 @@ table.matrix code {
   <section class="matrix-section">
     <h2>The layer matrix</h2>
     <!-- ==== GENERATED:BEGIN layer-matrix ==== -->
-      <p class="matrix-lede">13 layers — 5 political and legislative, 1 public safety, 2 schools, 5 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
+      <p class="matrix-lede">14 layers — 5 political and legislative, 2 public safety, 2 schools, 5 geography and amenities. Each row names the publisher the boundary comes from, where the names on the card come from, and the ground the layer actually answers on — outside that ground the layer hides itself rather than guessing.</p>
       <nav class="matrix-nav" aria-label="Jump to a layer group">
         <a href="#political">Political &amp; legislative</a>
         <a href="#safety">Public safety</a>
@@ -917,7 +917,7 @@ table.matrix code {
       </section>
 
       <section class="matrix-group" id="safety">
-        <h2>Public safety <span class="matrix-count">1 layer</span></h2>
+        <h2>Public safety <span class="matrix-count">2 layers</span></h2>
         <p class="matrix-blurb">Who answers a call at this address, and where they answer it from.</p>
         <div class="matrix-wrap">
           <table class="matrix">
@@ -935,6 +935,17 @@ table.matrix code {
                 </td>
                 <td data-label="Who it names">NO OFFICEHOLDER, AND NONE IS MISSING: a police station is a facility, not an elected district. Nobody is elected from one.</td>
                 <td data-label="Where it applies">Michigan — plus the border strip its envelope necessarily includes (608 of the 1,290 are in Michigan; the rest Wisconsin 396, Illinois 265, and a handful in Indiana, Ohio, Iowa and Minnesota). THIS IS A BUILDING, NOT A JURISDICTION: which agency answers a 911 call at a given point is a service-area question, a separate concept this instance has not been researched for, so the card says where the nearest stations are and never who polices you. The intro says so in the reader's own sentence.</td>
+              </tr>
+              <tr id="layer-fire-station">
+                <th scope="row"><span class="layer-name">Fire &amp; EMS Station</span><code>fire-station</code></th>
+                <td data-label="What it answers">The three nearest fire and EMS station BUILDINGS to the point, by straight-line distance, with each one's address.</td>
+                <td data-label="Boundary source">
+                  <ul class="src-list">
+                    <li><a href="https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/51" target="_blank" rel="noopener">USGS The National Map — structures layer 51 (Fire Stations/EMS Stations), queried live at runtime by a bounding envelope through the paged loader the post-office layer introduced. Public domain. THIS IS THE LAYER THAT PAGING EXISTS FOR: 2,838 points in Michigan's envelope against the service's 2,000-record cap, and the cap is NOT an error — a single request returns HTTP 200 with exactly 2,000 rows and exceededTransferLimit set, silently dropping 838 real stations. Measured 2026-09-04: paged it is two requests and 2,838, every one carrying name, address, city, state and ZIP. Fire and EMS are one layer because USGS publishes them as one, named 'Fire Stations/EMS Stations'</a></li>
+                  </ul>
+                </td>
+                <td data-label="Who it names">NO OFFICEHOLDER, AND NONE IS MISSING: a fire station is a facility, not an elected district. Nobody is elected from one.</td>
+                <td data-label="Where it applies">Michigan — plus the border strip its envelope necessarily includes (1,406 of the 2,838 are in Michigan; the rest Wisconsin 798, Illinois 578, and a handful in Indiana, Iowa, Ohio and Minnesota). A BUILDING, NOT A JURISDICTION: which department or ambulance service is dispatched to a point is a service-area question, a separate concept this instance has not been researched for, so the card says where the nearest stations are and never who responds. The intro says so in the reader's own sentence.</td>
               </tr>
             </tbody>
           </table>

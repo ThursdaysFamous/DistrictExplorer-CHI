@@ -208,6 +208,20 @@ ENDPOINTS = [
                 "&returnCountOnly=true&f=json"),
         "min_count": 1600,  # 1,799 measured 2026-09-04; floor set below it, not at it
     },
+    # Layer 51, THE ONE THAT IS OVER THE CAP: 2,838 measured 2026-09-04 against
+    # a 2,000-record ceiling the service reports as HTTP 200 + exceededTransfer-
+    # Limit rather than an error. min_count is set ABOVE 2,000 on purpose --
+    # if this ever answers 2,000 exactly, the app has stopped paging and is
+    # shipping a silently short set, which is precisely the failure a floor
+    # below the cap could never see.
+    {
+        "layer": "fire-station",
+        "url": ("https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/51/query"
+                "?geometry=-90.42%2C41.69%2C-82.12%2C48.31&geometryType=esriGeometryEnvelope"
+                "&inSR=4326&spatialRel=esriSpatialRelIntersects&where=1%3D1"
+                "&returnCountOnly=true&f=json"),
+        "min_count": 2500,  # 2,838 measured 2026-09-04; deliberately above the 2,000 cap
+    },
     # Layer 53. Under the 2,000 cap today (1,290 measured 2026-09-04) and
     # fetched by the paging path regardless; min_count is what turns this from
     # a reachability ping into a check that can see an error envelope.
