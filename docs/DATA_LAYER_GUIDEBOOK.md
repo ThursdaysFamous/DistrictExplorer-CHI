@@ -6176,6 +6176,33 @@ form `"f": "geojson"`):
 files instead of 35 — that mistake was made here first, and the dict form is
 the commoner one by an order of magnitude.
 
+**THE DEFECT TRACKS THE HOST, NOT ARCGIS IN GENERAL — so 26 of those 69 files
+are the ones to check first.** Measured 2026-09-05 across twelve layers on six
+hosts:
+
+| host class | layers | interior rings `f=geojson` vs `f=json` |
+|---|---|---|
+| ArcGIS Online (`services*.arcgis.com`) | 2 | **both AFFECTED** — LTSB 1 vs 2 on Marathon alone; DPI 0 vs 109 |
+| on-premises ArcGIS Server + TIGERweb | 10 | all identical, on four hosts |
+
+The clean ten are not a null result: Madison's ward layer keeps **44** interior
+rings through the GeoJSON exporter, its association layer 14, its TIF layer 4,
+Milwaukee's MPS layer 2, its TID layer 1, and LTSB's on-premises ward layer 1.
+Rings that survive are evidence the exporter nests correctly; **a layer with no
+interior rings either way proves nothing about the exporter** and is merely
+unaffected — TIGERweb's legislative and county layers are clean only in that
+weaker sense.
+
+**LTSB IS ITS OWN CONTROL, which is what makes this more than a correlation**:
+the same publisher's on-premises ward layer keeps its ring while its ArcGIS
+Online supervisory layer drops one, so the difference is the HOST rather than
+the publisher, the data or the query.
+
+Twelve layers on six hosts is a strong signal, not a proof, so the per-layer
+test above stays the rule. But it says where to look first — files naming an
+ArcGIS Online host: 11 in `ia/`, 8 in `scripts/`, 4 in `wi/`, 3 in `mi/`, none
+in `ny/` or `ca/`.
+
 Two narrowings worth carrying, both measured:
 
 * A fetch with `returnGeometry=false` cannot be affected, whatever its format.
