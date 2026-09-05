@@ -9991,9 +9991,9 @@ function initWisconsinExplorer() {
    * districts in 155 municipalities ship; ten measurably incomplete
    * submissions (Appleton the flagship) are excluded on the record, so
    * everywhere else the honest no-district answer IS the answer. The roster
-   * (wi-alderpersons.json, weekly CI) covers the six big cities with a
-   * verified witnessed route; the other municipalities' councils are a
-   * recorded gap, and their cards stay identity-only rather than guessing.
+   * (wi-alderpersons.json, weekly CI) covers the 17 municipalities with a
+   * verified witnessed route; the other 138 councils are a recorded gap, and
+   * their cards stay identity-only rather than guessing.
    * In the nine villages that elect trustees by district the officer is a
    * trustee, and the card says so. ---------- */
   var loadAldermanicDistricts = makeCached(function () {
@@ -10086,7 +10086,7 @@ function initWisconsinExplorer() {
         ]));
       }
       // no roster city -> identity-only card: the council rosters beyond the
-      // six verified cities are a recorded data gap, never a guess
+      // 17 verified municipalities are a recorded data gap, never a guess
       return wrap;
     },
     primaryLink: function (result) {

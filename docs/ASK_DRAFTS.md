@@ -884,3 +884,88 @@ office whose page publishes the district map).
   outcome; it retires a route rather than leaving it open forever.
 * **No reply** → follow up once at ~3 weeks and once at ~2 more, then `UNRESPONSIVE` — which is a
   claim about the ask, never about the county.
+
+---
+
+## Ask 15 — City of Marion, Iowa: four names and the ward each holds
+
+> **NOT YET ASKED — DRAFTED 2026-09-05.** Not queued in Gmail; there is no existing thread
+> with this office. On send, change `NOT YET ASKED — DRAFTED` to `ASKED <date>` in the
+> `marion-council-roster` blocker in `docs/DATA_LAYER_GUIDEBOOK.md` AND in the Marion row
+> of `ia/WATCH.md` — Iowa keeps the ledger in both, unlike Illinois.
+
+**This is the shortest ask in this file, and the only one whose subject is four names.**
+Marion's ward boundaries are already built and gated: Linn County publishes them, they tile
+the city on the same test Cedar Rapids's five already ship on, and the map is ready to draw.
+The card does not ship because a boundary that names nobody is half a card — and everything
+that would name the four ward members is out of reach from this project's server.
+
+**The recipient is an office mailbox, not a person.** `cityclerk@cityofmarion.org` is
+published by the city itself on every page of its own agenda portal; no name is guessed here
+because none is needed.
+
+**One thing to be careful about in the wording, and it is the reason this ask exists.** The
+city's website returns HTTP 403 to this project's server at the network edge, and its origin
+answers one path with an explicit "IP … is not authorized". That is worth telling them
+plainly — it is probably not deliberate, and they may want to know — but it must be said as
+a fact about our server's access, never as a complaint or a request to change their security
+posture. The ask is for the four names, not for an exemption.
+
+> **Subject:** Marion's four ward council members — a quick question from a civic map
+>
+> Hello,
+>
+> I run districtry (https://districtry.com/ia/), a free, non-commercial map of Iowa's civic
+> districts. You click a point and it tells you every district that covers it and who
+> represents you there. There are no ads and nothing is sold.
+>
+> Marion already appears on it: the City card carries the city's own main number and website,
+> from the Iowa League of Cities' municipal directory. Linn County publishes Marion's four
+> council ward boundaries as open GIS data, and I have those loaded and checked — they cover
+> the city cleanly.
+>
+> What I am missing is the people. I would like the map to tell a Marion resident which ward
+> they live in AND who represents that ward, and I have not been able to find the council
+> roster in a form I can read and keep current.
+>
+> I should be straightforward about why: requests from my server to cityofmarion.org are
+> refused before they reach your site — I get an HTTP 403 from the site's content-delivery
+> layer on every page, and one path reports that my server's IP address is not authorized. I
+> mention it only so it is clear I am not asking you to do something I could look up myself;
+> I am not asking for an exception or for anything to be changed on your end. Your agenda
+> portal at cityofmarion.civicweb.net is reachable, which is how I found this address, but it
+> does not appear to publish which ward each council member represents.
+>
+> So the question is simply: **who currently represents each of Marion's four wards?** Four
+> names against Ward 1 to Ward 4 is all I need. If the council also has at-large members, I
+> would show them on every ward's card, so knowing which seats are at-large would help too.
+>
+> A page I could read on a regular basis would be even better than a one-off list, since
+> officeholders change — but a plain list in a reply is genuinely enough to get Marion on the
+> map.
+>
+> If this is not something your office provides, that is a perfectly useful answer: I will
+> record it as the reason Marion's ward map is not shown and stop asking. A one-line reply
+> either way is all I need.
+>
+> With thanks for your time,
+>
+> `<YOUR NAME>`
+> `<YOUR E-MAIL>`
+> districtry.com
+
+### What each answer means
+
+* **Four names with their wards** → build `marion-council-members.json` with a count guard,
+  add Marion as the fourth `city-ward` entry beside Des Moines, Waterloo and Cedar Rapids,
+  ship the boundaries that are already measured, close `marion-council-roster`, and credit
+  the city in `docs/SOURCE_CREDITS.md`.
+* **A readable page** → the better outcome: a weekly workflow like the other three cities'
+  rather than a list that goes stale the first time a seat turns over.
+* **Names but no ward attribution** → NOT enough on its own, and the record should say so
+  rather than shipping wards keyed by guess. It would still close half the gap: the names
+  could ride the City card the way five other Iowa cities' officials already do.
+* **"We do not provide that"** → `ANSWERED <date>` with the substance, the ward geometry
+  stays unshipped for good, and the record retires the route rather than leaving it open.
+* **No reply** → follow up once at ~3 weeks and once at ~2 more, then `UNRESPONSIVE` — a
+  claim about the ask, never about the city.

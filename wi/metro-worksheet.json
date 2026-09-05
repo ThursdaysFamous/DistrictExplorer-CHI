@@ -481,7 +481,7 @@
       "area_rank": 22,
       "rank_note": "838 city and village council districts — each a union of wards, smaller than a ZCTA, above the ward layer they dissolve from",
       "source": {
-        "answers": "The aldermanic district (in the nine villages that elect trustees by district, the trustee district) covering the point, in the 155 cities and villages whose ward filings compose their districts completely — and, in Milwaukee, Madison, Green Bay, Kenosha, Racine and Waukesha, the alderperson holding the seat.",
+        "answers": "The aldermanic district (in the nine villages that elect trustees by district, the trustee district) covering the point, in the 155 cities and villages whose ward filings compose their districts completely — and, in 17 of them, the alderperson or trustee holding the seat.",
         "boundary": [
           {
             "label": "Derived ward unions — no publisher ships a statewide aldermanic layer, so no new line is drawn: LTSB's statewide ward layer carries each ward's district id (ALDERID), and wi/scripts/build_wi_aldermanic_districts.py dissolves the coded city/village wards on the statewide municipality key. Cross-witnessed against the state's own BAS pre-dissolve, a different filing edition agreeing on all 867 district keys; ten municipalities whose submissions are measurably incomplete (Appleton the flagship) are excluded on the record rather than drawn as fragments",
@@ -492,7 +492,7 @@
             "url": "https://mapservices.legis.wisconsin.gov/arcgis/rest/services/BAS_Collection/BAS_Live_Collection_Alderpersons/FeatureServer/0"
           }
         ],
-        "people": "wi-alderpersons.json, rebuilt weekly by CI for the six big cities with a verified route — Milwaukee's own GIS witnessed against the city's Legistar API, Madison's per-district council pages (the vacant seat named as vacant), Green Bay's staff directory, Kenosha's GIS witnessed against the county's certified April 2026 canvass (which caught and corrected one stale seat), and the Racine and Waukesha council pages. The other 149 municipalities' councils are a recorded gap, never a guess.",
+        "people": "wi-alderpersons.json, rebuilt weekly by CI for the 17 municipalities with a verified route — Milwaukee's Legistar API (its GIS layer retired when the host was found to disallow all crawling), Madison's per-district council pages (the vacant seat named as vacant), Green Bay's staff directory, Kenosha's GIS witnessed against the county's certified April 2026 canvass (which caught and corrected one stale seat), the Racine and Waukesha council pages, and the eleven added 2026-09-05: Stevens Point, Menomonie, Manitowoc, Sheboygan, Superior, Portage, Viroqua, Menasha, Howard, Tomah and Eau Claire. The other 138 municipalities' councils are a recorded gap, never a guess.",
         "applies": "Wisconsin — the 155 cities and villages that elect council members by district and file complete ward coding; everywhere else the card honestly reports no district."
       }
     },
@@ -2303,8 +2303,8 @@
       },
       {
         "file": "wi-alderpersons.json",
-        "min_keys": 6,
-        "note": "The alderperson roster for the six big cities with a verified, witnessed route (Milwaukee, Madison, Green Bay, Kenosha, Racine, Waukesha — 94 seats), keyed by the municipality's statewide COUSUBFP and zero-padded district id, the geometry file's exact key pair. Built by wi/scripts/build_wi_alderperson_roster.py with per-city, per-field floors and a geometry cross-gate; refreshed weekly by update-wi-alderperson-roster.yml."
+        "min_keys": 17,
+        "note": "The alderperson roster for the 17 municipalities with a verified, witnessed route — the six big cities of 2026-08-26 (Milwaukee, Madison, Green Bay, Kenosha, Racine, Waukesha) plus the eleven of 2026-09-05 (Stevens Point, Menomonie, Manitowoc, Sheboygan, Superior, Portage, Viroqua, Menasha, Howard, Tomah, Eau Claire), 193 seats — keyed by the municipality's statewide COUSUBFP and zero-padded district id, the geometry file's exact key pair. Built by wi/scripts/build_wi_alderperson_roster.py with per-municipality, per-field floors and a geometry cross-gate; refreshed weekly by update-wi-alderperson-roster.yml."
       },
       {
         "file": "wi-assembly-members.json",
@@ -2421,7 +2421,7 @@
     },
     {
       "file": "update-wi-alderperson-roster.yml",
-      "purpose": "Alderpersons for the six big cities (Milwaukee GIS × Legistar witness, Madison district pages, Green Bay directory, Kenosha GIS × certified canvass, Racine, Waukesha)",
+      "purpose": "Alderpersons and village trustees for 17 municipalities (Milwaukee Legistar, Madison district pages, Green Bay directory, Kenosha GIS × certified canvass, Racine, Waukesha, and the eleven added 2026-09-05)",
       "schedule": "Thu 15:30 UTC"
     },
     {
