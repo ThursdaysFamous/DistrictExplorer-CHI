@@ -43,7 +43,7 @@
 // refreshed per election.)
 /* ==== TEMPLATE:END sw-version-history ==== */
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "districtry-il-shell-v15";
+const CACHE_NAME = "districtry-il-shell-v14";
 
 const SHELL_URLS = [
   "./",
@@ -78,9 +78,6 @@ const GEOMETRY_URLS = [
   "./data/app/woodford-fire-districts.json",
   "./data/app/woodford-library-districts.json",
   "./data/app/woodford-park-districts.json",
-  "./data/app/whiteside-fire-districts.json",
-  "./data/app/whiteside-library-districts.json",
-  "./data/app/whiteside-park-districts.json",
   "./data/app/brown-county-outline.json",
   "./data/app/bureau-county-outline.json",
   "./data/app/calhoun-county-outline.json",

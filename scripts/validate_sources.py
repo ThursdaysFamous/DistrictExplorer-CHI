@@ -126,8 +126,6 @@ SERVICE_KENDALL_TAX = ("https://maps.co.kendall.il.us/server/rest/services/"
 SERVICE_WOODFORD = ("https://services1.arcgis.com/iOG1OLysrxLAswZi/arcgis/rest/"
                     "services/%s/FeatureServer/%d")
 SERVICE_WOODFORD_FIRE = SERVICE_WOODFORD % ("Fire_Protection_Districts", 2)
-WHITESIDE_PARCELS = ("https://services.arcgis.com/l0M0OC6J9QAHCiGx/arcgis/rest/"
-                     "services/Tax_Parcels_Ver_2_Parcels_Only/FeatureServer/0")
 SERVICE_WOODFORD_LIBRARY = SERVICE_WOODFORD % ("Library_Districts", 8)
 SERVICE_WOODFORD_PARK = SERVICE_WOODFORD % ("Park_Districts", 9)
 SERVICE_MACON_ORG = ("https://services1.arcgis.com/a3k0qIja5SolIRYR/arcgis/"
@@ -315,43 +313,6 @@ PROVENANCE = [
      "source_url": SERVICE_WOODFORD_PARK + "?f=json",
      "note": "3 districts from 4,113 parcels; most of the county sits in no "
              "park district and the empty state is the true answer there."},
-    # Whiteside's three come off ONE parcel layer whose CVTTXCD column holds a
-    # five-digit TAX CODE, joined to the County Clerk's District Rates by
-    # Taxcode Report. The county draws no district tiling at all. Both halves
-    # are probed: the service, and the Clerk's PDF, because a Clerk who stops
-    # publishing that report closes the route even while the parcels stay up.
-    {"layer": "Whiteside County fire districts (pre-built from the parcel tax code)",
-     "app_file": "whiteside-fire-districts.json",
-     "source_url": WHITESIDE_PARCELS + "?f=json",
-     "note": "13 districts dissolved from the 19,805 parcels whose CVTTXCD "
-             "carries a tax code the Clerk's report puts in a fire district. "
-             "Sterling, Rock Falls and Morrison are measured holes — each runs "
-             "its own department, and the county's ETSB page names the first "
-             "two. 33 of the county's 140 tax codes carry no fire line."},
-    {"layer": "Whiteside County library districts (pre-built from the parcel tax code)",
-     "app_file": "whiteside-library-districts.json",
-     "source_url": WHITESIDE_PARCELS + "?f=json",
-     "note": "7 districts from 11,640 parcels on the same tax code. Sterling "
-             "and Morrison fund municipal libraries rather than districts, so "
-             "the layer is silent over both."},
-    {"layer": "Whiteside County park districts (pre-built from the parcel tax code)",
-     "app_file": "whiteside-park-districts.json",
-     "source_url": WHITESIDE_PARCELS + "?f=json",
-     "note": "5 districts from 15,931 parcels on the same tax code; most of "
-             "the county sits in none and the empty state says so."},
-    {"layer": "Whiteside County Clerk — District Rates by Taxcode Report (the crosswalk)",
-     "app_file": "whiteside-fire-districts.json",
-     "source_url": "https://www.whitesidecountyil.gov/DocumentCenter/View/1285/"
-                   "2025-District-Tax-Rates-PDF",
-     "note": "The half of the build the parcel service does not carry: which "
-             "districts each of the county's 140 tax codes pays into. Tax year "
-             "2025, 32 pages, DEVNET-generated, published per tax year back to "
-             "2016. WHITESIDE PUBLISHES NO 'Taxcode Value within District' "
-             "report, which is the document Boone's build uses and which this "
-             "one warns is the wider of the two — so the rates report's "
-             "completeness is TESTED: all 140 codes' district rates sum to "
-             "their own printed totals across 1,140 lines, and it prints 16 "
-             "zero-rate lines rather than suppressing them."},
     {"layer": "Kane County Board members (roster)",
      "app_file": "kane-county-board-members.json",
      "source_url": "https://www2.kanecountyil.gov/pages/countyboard/boardMembers.aspx",
