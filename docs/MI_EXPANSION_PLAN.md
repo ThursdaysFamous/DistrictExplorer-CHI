@@ -281,9 +281,10 @@ Each opens its own refreshed plan PR with its own measured ledger when it begins
   card renders the sentence — and a link to that post — from the roster, falling back to the
   neutral "not listed there" wording for a short ward with no verified cause. Nothing in CI had ever
   selected a point in either city, because the instance's anchor is in Lansing where `city-ward`
-  hides; the smoke test now carries eight checks that do, including a STUBBED roster that makes a
-  full ward short — the only scenario that catches the ward-agnostic shape, since under the broken
-  code every check against the live roster still passes.
+  hides; the smoke test now carries ten checks that do (eight `check(` call sites, six of them
+  inside a loop over two wards). One of the ten is the only scenario that catches the ward-agnostic
+  shape: a STUBBED roster that makes a FULL ward short, since under the broken code every check
+  against the live roster still passes.
   A related trap avoided by construction: the departed
   commissioner's own page still answers 200 and is still in the sitemap, so a scraper walking
   sitemap entries would ship him as sitting. Each
