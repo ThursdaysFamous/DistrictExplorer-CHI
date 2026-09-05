@@ -127,6 +127,29 @@ PROVENANCE = [
         ),
     },
     {
+        "layer": "detroit-council",
+        "app_file": "mi-detroit-council-districts.json",
+        "source_url": ("https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/"
+                       "services/city_council_districts_2026/FeatureServer/0"),
+        "note": (
+            "Detroit's seven City Council districts, from the city's own ArcGIS org. "
+            "Pre-built by mi/scripts/build_mi_detroit_council.py. "
+            "WHAT THIS ROW WATCHES IS A NAME COLLISION, not an outage. The city "
+            "publishes THREE council-district services -- one titled 'Current' dating "
+            "from 2016, this one named for 2026, and one named for 2013 that was "
+            "CREATED in December 2025 -- and their names do not settle which is in "
+            "force. The builder decides it by measurement and gates it in both "
+            "directions: 'Current' must carry geometry identical to this service and "
+            "the 2013 archive must differ, and against Census 2020 blocks this plan "
+            "must balance (measured 4.28% worst deviation) while the archive must not "
+            "(13.51%). If the archived plan ever comes into balance too, the build "
+            "refuses, because the test has stopped telling them apart. "
+            "A REDRAW REACHES THIS APP ONLY THROUGH THAT BUILDER -- the file is "
+            "pre-built and cache-first -- so this row existing is what makes a "
+            "vanished or moved service visible at all."
+        ),
+    },
+    {
         "layer": "county-commissioner",
         "app_file": "mi-commissioner-districts.json",
         "source_url": "https://gisagocss.state.mi.us/arcgis/rest/services/OpenData/boundaries/MapServer/10",

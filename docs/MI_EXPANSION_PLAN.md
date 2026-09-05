@@ -1,7 +1,7 @@
 # districtry Michigan — the expansion plan and its running record
 
 > **SHIPPED 2026-09-03 — phases 1, 2 and go-live, in three PRs on one day.** Michigan is live at
-> districtry.com/mi/ with 14 layers. **The running status is the Status table near the foot of this
+> districtry.com/mi/ with 15 layers. **The running status is the Status table near the foot of this
 > file; what is left is under Still open.** What go-live actually cost is recorded here because it
 > was almost entirely NOT on any checklist.
 > **Four defects had survived the full 38-gate battery twice, and three were the same shape — a
@@ -214,8 +214,21 @@ Each opens its own refreshed plan PR with its own measured ledger when it begins
   National Map point layers, all three verified present in Michigan's envelope that day — post
   offices 1,799 (structures layer 38), police 1,290 (layer 53), fire/EMS 2,838 (layer 51) — the
   same national source every sibling instance already uses.
-- **Phase 4 — the city tiers.** Detroit and Grand Rapids council districts, with the per-city
-  roster work that implies.
+- **Phase 4 — the city tiers.** DETROIT SHIPPED 2026-09-05 as the 15th layer: seven council
+  districts from the city's own ArcGIS org, geometry only. Three of the city's services compete and
+  their NAMES do not settle which is in force — one titled "Current" (live since 2016), one named
+  2026, and one named 2013 that was CREATED in December 2025 — so the builder decides it by
+  MEASUREMENT and gates it in both directions: "Current" must carry geometry identical to what
+  ships, the 2013 archive must differ, the shipped plan must balance on Census 2020 (4.28% worst
+  deviation) and the archive must not (13.51%, which is a plan drawn on 2010 seen from 2020). The
+  seven districts sum to 639,111 — Detroit's Census 2020 population exactly — which is both the
+  tiling proof and the reason `coverage` is the layer's own tiling with no separate city outline.
+  NO ROSTER, measured across five routes: detroitmi.gov and data.detroitmi.gov sit behind a
+  Cloudflare managed challenge that 403s on robots.txt ITSELF, and Detroit's Legistar was abandoned
+  in 2017 and never carried a district in OfficeRecordTitle where Milwaukee's does — test a vendor
+  by content per city (gap `detroit-council-roster`, ask drafted and held).
+  **GRAND RAPIDS IS NEXT** — its three wards elect two commissioners each, so the at-large question
+  arrives in a different shape than Detroit's, and its publisher has not been researched yet.
 - **The 619 commissioners** — gap `mi-commissioner-roster`. The honest route is county-by-county
   against each board's own page, weekly and count-guarded; ten of the twelve counties sampled
   publish a readable one. Oakland answers only through its CMS origin and Ottawa sits behind a
