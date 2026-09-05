@@ -134,7 +134,23 @@ VACANCY_SOURCES = {
 RESIGNATION_RE = re.compile(
     r"vacancy was created following the resignation of former Commissioner\s+"
     r"((?:(?:[A-Z]\.|[A-Z][a-z\u2019'\-]+)\s+){1,3}[A-Z][a-z\u2019'\-]+)")
-POST_DATE_RE = re.compile(r"\b([A-Z][a-z]+ \d{1,2}, 20\d\d)\b")
+# THE DATE COMES FROM THE POST'S OWN DATE ELEMENT, NOT FROM THE PAGE. The first
+# draft searched the whole flattened page for a "Month D, YYYY" and took the
+# first hit. Measured 2026-09-05 there is exactly one on this page, so it was
+# right — and it was right by luck: a dated banner, a "latest news" rail or a
+# related-posts block ahead of the article would have displaced it silently,
+# and the card would then state a wrong date about a named person's seat.
+#
+# The page carries NO semantic date: no <time datetime>, no
+# article:published_time, no datePublished in ld+json (all three checked). What
+# it does carry is the CMS's own date span, which is the narrowest anchor
+# available, so that is what this reads. If the span goes away the date is
+# simply not shipped — the card omits the clause and still reads correctly —
+# rather than falling back to a page-wide scan, which is the guess this
+# replaces.
+POST_DATE_RE = re.compile(
+    r'<span[^>]*class="[^"]*gs-news-details-date[^"]*"[^>]*>\s*'
+    r'([A-Z][a-z]+ \d{1,2}, 20\d\d)\s*</span>')
 
 
 def fail(msg):
@@ -249,7 +265,13 @@ def fetch_vacancy(ward):
         print("  vacancy source for ward %s no longer states the cause — not shipping it"
               % ward, file=sys.stderr)
         return None
-    d = POST_DATE_RE.search(body)
+    # Against the RAW page, because the anchor is the markup: flattening the
+    # tags away is exactly what made the old page-wide search possible.
+    d = POST_DATE_RE.search(page)
+    if not d:
+        print("  vacancy source for ward %s carries no date element — shipping the "
+              "vacancy without a date rather than guessing one from the page"
+              % ward, file=sys.stderr)
     return {"ward": ward, "cause": "resignation", "predecessor": m.group(1).strip(),
             "postedOn": d.group(1) if d else None, "sourceUrl": src["url"]}
 

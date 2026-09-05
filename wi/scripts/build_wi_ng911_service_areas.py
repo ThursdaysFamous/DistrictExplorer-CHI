@@ -85,8 +85,11 @@ WHAT A 20,000-POINT SAMPLE SAID ABOUT THAT, AND WHY IT WAS WORTHLESS. Such a
 sample across all four layers found ZERO changed answers, and a first version of
 this docstring concluded from it that the other three layers had "changed BYTES
 while changing no answer". THAT WAS FALSE, and review caught it: measured
-against main, this rebuild changes the geometry of 136 fire, 161 law, 19 PSAP
-and 74 EMS features. The sample could not see any of it — 2.1 km2 of a 169,000
+against main, this rebuild changes the geometry of 138 fire, 161 law, 19 PSAP
+and 79 EMS features (PER FEATURE — a first count said 136 and 74 because it
+keyed on DsplayName, which collapses the 12 fire and 14 EMS agencies that file
+under more than one authority; keying a measurement on the name alone, in the
+builder whose whole dissolve key exists because the name alone is not one). The sample could not see any of it — 2.1 km2 of a 169,000
 km2 state is one part in eighty thousand, so a 20,000-point sample expects
 FEWER THAN ONE hit — and a null result from an instrument with no power is not
 evidence of no change. That is the real lesson: the question a staleness check

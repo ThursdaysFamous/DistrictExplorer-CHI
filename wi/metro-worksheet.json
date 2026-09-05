@@ -279,7 +279,7 @@
       "label": "EMS Service Area",
       "group": "safety",
       "area_rank": 12,
-      "rank_note": "579 dissolved EMS dispatch areas statewide — regional ambulance services keep the average above the law layer's 639 and the county-board fabric",
+      "rank_note": "580 dissolved EMS dispatch areas statewide — regional ambulance services keep the average above the law layer's 639 and the county-board fabric",
       "source": {
         "answers": "The emergency medical service dispatched at the point, per the state's NG911 dataset — a response-area fact, never a taxing district or an elected body, so the card names no officeholder. Where a county 911 authority has not filed — four counties plus provisioning-less Langlade, recorded as gap ng911-ems-filings — the card says so instead of hiding.",
         "boundary": [
