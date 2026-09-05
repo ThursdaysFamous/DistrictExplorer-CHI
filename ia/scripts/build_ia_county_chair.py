@@ -44,7 +44,8 @@ CACHE = os.path.join(HERE, ".cache", "ia_county_chairs.json")
 OFFICERS = os.path.join(DATA, "ia-county-officers.json")
 OUT_PATH = os.path.join(DATA, "ia-county-board-chairs.json")
 
-MIN_COUNTIES = 30           # measured 36 of 98 on 2026-09-05
+MIN_COUNTIES = 30           # measured 35 of 98 on 2026-09-05 (36 before the
+                            # qualified-chair and expired-term refusals)
 SOURCE_NOTE = ("each county's own board-of-supervisors page, paired "
                "structurally and gated on the county's supervisor roster")
 
