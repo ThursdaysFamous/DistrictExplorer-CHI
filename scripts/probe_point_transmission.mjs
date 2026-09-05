@@ -42,6 +42,16 @@
 // layer whose query never ran is reported UNKNOWN rather than counted as a no:
 // silence is not evidence of not sending.
 //
+// AND EVERY MEASURED LOADER IS PINNED UNCACHED, because otherwise the number
+// is a race. `queryFeatureAt` answers locally the moment `load.cached()` has a
+// value, so a layer only reaches its hook while the full boundary set is still
+// downloading. Measured 2026-09-05: with the government APIs unreachable
+// nothing caches and Illinois reports 19; on a CI runner that can reach them,
+// the same commit reported 9. The uncached state is both the deterministic one
+// and the one the privacy page is describing — a reader's first click on a
+// fresh load — so the probe pins it rather than sampling whichever way the
+// download raced.
+//
 // AND IT RECONCILES ITSELF, which is what keeps a future hiding place from
 // silently reading as zero. Every `.atPoint` assignment site in the shipped
 // source is reported as either FIRED or never fired; an observed hook whose
@@ -245,6 +255,22 @@ async function measure(browser, tag) {
             fired.add(t);
             return Promise.resolve({ type: "FeatureCollection", features: [] });
           };
+          // AND PIN THE LOADER UNCACHED, which is the difference between a
+          // measurement and a coin toss. queryFeatureAt short-circuits on
+          // `load.cached()` and never reaches the hook once the full boundary
+          // set has arrived, so whether a layer "sends" would otherwise depend
+          // on whether a multi-megabyte download beat the click. It does not
+          // reproduce: with the government APIs unreachable nothing caches and
+          // every hook fires, and with them reachable Illinois measured 9 of
+          // its 19 — same code, same commit, two answers.
+          //
+          // The uncached state is also the one the page is describing. A
+          // reader's first click on a fresh load is exactly this, and the
+          // page's own prose says so ("one district can answer immediately
+          // while the full layer downloads"). So the question this probe asks
+          // is "when the set is not yet cached, does this layer's query send
+          // the point" — which has one answer, not a distribution.
+          load.cached = function () { return null; };
         }
         mine.push(tokenOf.get(load));
       }
