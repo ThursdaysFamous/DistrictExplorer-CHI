@@ -132,28 +132,51 @@ shipped; Iowa's is the fleet's largest missing safety fabric.
 
 ---
 
-## Ask 4 — Iowa Secretary of State: a current polling-place edition
+## Ask 4 — Iowa HSEMD: the precinct column the current polling-place file dropped
 
-The state's published `IowaPollingPlaces` item is a 2024-08 vintage. A per-election
-current edition is what a polling-place layer would need before it could ship under the
-fleet's display contract (the election named, provisional wording before certification).
+**REWRITTEN 2026-09-05, and the rewrite is the point.** This ask used to be addressed to the
+Secretary of State and to read "is there a current edition?" — measured against the published
+files, that is the wrong question and would have spent the operator's credibility on something
+already answered. HSEMD publishes a CURRENT edition openly and without a licence
+(`PollingPlaces2026`, created 2026-05-21, 1,658 points). What it does not publish is the column
+that made the previous edition usable: the **2024** file carried `Precinct_Name` and joins this
+app's precinct fabric at **98.0%**, while the 2026 file dropped it and its `Pre_Code` joins at
+**22.0%**, matching nothing at all in Polk, Linn, Scott and Black Hawk. So the ask is now for one
+column, to the office that publishes the file, and the whole measurement is the
+`ia-polling-places` gap record's blocker.
 
-> **Subject:** Is there a current edition of the statewide polling-place file?
+Recipient: **both offices**. The Legislature's own CC0 polling item credits "Iowa Secretary of
+State, Iowa Legislative Services Agency" as its source, and HSEMD's layer is visibly geocoder
+output over a supplied spreadsheet — so the **Secretary of State supplies** and **HSEMD hosts**.
+An earlier version of this draft said the SoS "does not publish it" and re-addressed the ask to
+HSEMD alone, which would have asked the wrong office to change a column it does not originate.
+
+> **Subject:** Could the statewide polling-place layer carry the precinct name again?
 >
-> Dear Elections Division,
+> Dear Elections Division and HSEMD GIS team,
 >
 > I run districtry (https://districtry.com/ia/), a free, non-commercial site that shows
 > Iowans which civic districts cover any point in the state. It already carries Iowa's
-> precincts from the Legislature's own published service.
+> precincts from the Legislature's own published service, and I would like to be able to
+> tell a reader where their precinct votes.
 >
-> The statewide polling-place dataset I can find is stamped August 2024. Is a current
-> per-election edition published anywhere, or is the 2024 file the most recent one
-> intended for public use?
+> Your current polling-place layer (`PollingPlaces2026`) carries County_Name, Pre_Code and
+> the polling place's name and address. The 2024 edition also carried a `Precinct_Name`
+> column, and that column is what made it possible to match each polling place to the
+> precinct it serves — it lines up with the Legislature's precinct names for about 98% of
+> rows. `Pre_Code` does not: it appears to be each county's own internal code, and I can
+> match only about a fifth of the rows with it, none at all in Polk, Linn, Scott or Black
+> Hawk.
 >
-> If polling places are only authoritative on the county's own notice and a statewide
-> file should not be relied on for a given election, please tell me that — it is the kind
-> of caveat I would want to put on the page, and it would stop me shipping something
-> misleading.
+> Would it be possible for the current layer to carry the precinct name as the 2024 one
+> did? A single column would be enough. I am not asking for anything not already public —
+> the 2024 file has it today.
+>
+> If the pairing is deliberately not published, or if polling places are only authoritative
+> on each county's own notice and a statewide file should not be relied on for a given
+> election, please tell me that — it is exactly the caveat I would want on the page, and it
+> would stop me shipping something misleading. A "no" is a genuinely useful answer and I
+> will record it.
 >
 > Thank you for your time,
 > <YOUR NAME>
