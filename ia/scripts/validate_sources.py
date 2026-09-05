@@ -506,10 +506,15 @@ PROVENANCE = [
         "app_file": "ia-county-city-officials.json",
         "source_url": "https://boonecounty.iowa.gov/about/elected_officials/city/",
         "note": (
-            "Boone County's nine cities. THE PAGE THAT SETTLES THE MARKUP FOR ALL "
-            "ELEVEN: the clerk's and the mayor's role sits in a <b> INSIDE the name's "
-            "own div while a council member's comes from a preceding heading, and the "
-            "seat follows a <br/> in that same div. Read flat, Beaver's clerk becomes a "
+            "Boone County's nine cities. THE PAGE THIS PARSER WAS WRITTEN AGAINST, "
+            "and NOT the page that settles the markup for the other ten -- an earlier "
+            "version of this note said it was, which is the generalising-from-one error "
+            "this project keeps correcting elsewhere. Here the clerk's and the mayor's "
+            "role sits in a <b> INSIDE the name's own div, as it does in Crawford, Iowa, "
+            "Marion and Winnebago; the other six counties give every role a positionTitle "
+            "heading instead. Its 59 mailto hrefs are all EMPTY, where Cerro Gordo's 56, "
+            "Shelby's 11 and Marion's 8 are populated. The seat follows a <br/> in that "
+            "same div. Read flat, Beaver's clerk becomes a "
             "person called 'City Clerk Sarah Miller'; keyed on the heading alone, the "
             "clerk and the mayor are filed as council members. Boone city is also the "
             "ward case -- five ward seats and two at large, published by the county and "

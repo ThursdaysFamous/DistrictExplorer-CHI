@@ -26,20 +26,35 @@ sandbox's own egress proxy and not the county at all.
 
 THREE TRAPS, ALL IN THE MARKUP AND ALL SILENT
 -----------------------------------------------
-1. THE ROLE IS INSIDE THE NAME'S OWN DIV for the clerk and the mayor --
-   `<div class="offName"><b>City Clerk </b><br>Sarah Miller</div>` -- while a
-   council member's row carries no <b> and takes its role from the nearest
-   preceding `div.positionTitle`. Read the text flat and the clerk is a person
-   called "City Clerk Sarah Miller"; take positionTitle for every row and the
-   clerk and the mayor are both filed as council members. That is the Franklin
-   trap in both directions at once, so the role is read STRUCTURALLY here.
-2. THE SEAT FOLLOWS A <br/> INSIDE THE SAME DIV. 109 of the officials carry
-   `Ward 1` or `At Large` after the break -- so these counties publish which
-   ward a council member holds, which no other Iowa source does -- and a
-   parser that takes the div's text ships people whose surname is "Ward".
-3. EVERY mailto: HREF IS EMPTY. The address is the link TEXT. An href-keyed
-   scrape returns an e-mail for nobody and every count guard still passes,
-   which is exactly how Brown County's seven addresses went out silently.
+1. THE ROLE SITS IN TWO DIFFERENT PLACES AND THE COUNTY DECIDES WHICH. FIVE of
+   the eleven put the clerk's and mayor's role in a <b> INSIDE the name's own
+   div -- `<div class="offName"><b>City Clerk </b><br>Sarah Miller</div>` --
+   and the other SIX give every role a `div.positionTitle` heading instead.
+   Measured 2026-09-05: <b> in Boone (19), Crawford (32), Iowa (7), Marion (16)
+   and Winnebago (14); headings only in Cerro Gordo, Jackson, Keokuk,
+   Muscatine, Sac and Shelby; Crawford uses BOTH. Read the text flat and the
+   clerk is a person called "City Clerk Sarah Miller"; take positionTitle for
+   every row and, in those five, the clerk and the mayor are filed as council
+   members. That is the Franklin trap in both directions at once, so the role
+   is read STRUCTURALLY: the <b> when the row has one, the heading when it does
+   not. AN EARLIER VERSION OF THIS PARAGRAPH CALLED THE <b> UNIVERSAL, which is
+   the fleet's own recurring error -- a correct parser described by a record
+   that generalises one county's markup to eleven.
+2. THE SEAT FOLLOWS A <br/> INSIDE THE SAME DIV. 106 of the officials across
+   the eleven carry `Ward 1` or `At Large` after the break, 93 of them in the
+   eight counties that ship -- so these counties publish which ward a council
+   member holds, which no other Iowa source does -- and a parser that takes the
+   div's text ships people whose surname is "Ward". (An earlier draft said 109,
+   which came from a throwaway parse before this scraper existed.)
+3. THE mailto: HREF IS EMPTY IN SOME COUNTIES AND POPULATED IN OTHERS, so the
+   address is read from the link TEXT, which is correct either way. Measured
+   2026-09-05: Boone (59 of 59) and Crawford (13 of 13) publish EMPTY hrefs;
+   Cerro Gordo (56), Shelby (11) and Marion (8) publish POPULATED ones; the
+   other six publish no mailto at all. An href-keyed scrape would return an
+   e-mail for nobody in Boone and Crawford while every count guard still
+   passed -- the shape that took Brown County's seven addresses out silently --
+   and it would work perfectly in the three that populate them, which is
+   exactly how a universal like this survives being written down.
 
 A vacancy annotation ("Appointed to Fill Vacancy until Election") sits in its
 own `div.officialInfoDescription` behind an info icon; it is a real status and

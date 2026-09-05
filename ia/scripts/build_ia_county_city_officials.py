@@ -38,11 +38,30 @@ the next weekly run with nothing here to edit, and one that goes stale drops
 out the same way. This is the Mahaska posture from the board-chair roster:
 refusing loses a possibly-right answer, and that is the safe direction.
 
+WHAT THE 605 ACTUALLY ARE, SINCE "MAYOR, CLERK AND COUNCIL" UNDERSTATES IT
+---------------------------------------------------------------------------
+421 council members, 84 mayors and 75 city clerks -- and 25 people who are
+none of those: 8 city administrators, 5 park commissioners, 5 park board
+members, 5 library trustees, a city manager and an administrative secretary.
+They ship under the role their own county publishes, on the same card, because
+dropping them would be this app deciding which of a city's officials a reader
+is allowed to see. Several are appointed rather than elected, which is why the
+card's block is headed CITY OFFICIALS and not a claim about who was elected.
+
+THE FLOOR IS EXPECTED TO FAIL, PERIODICALLY, BY DESIGN
+--------------------------------------------------------
+Exactly eight counties are current and MIN_COUNTIES is 8, so ONE county letting
+its page go stale fails this build -- not a collapse, one county. And every
+EVEN-YEAR JANUARY, when terms elected the previous November begin, all eight
+will briefly publish expired terms until each page is updated, so expect red
+for days or weeks each cycle. NEVER lower the floor to get past that: it is the
+only thing that makes a county quietly going stale visible.
+
 WHAT IS DELIBERATELY NOT CLAIMED
 ----------------------------------
 The seat ("Ward 3", "At Large") is carried where the county publishes it --
-109 officials across the eleven, and no other Iowa source pairs a council
-member with a ward at all. It is NOT a district card and NOT geometry: this
+93 of the 605 officials that ship, 106 across all eleven counties -- and no
+other Iowa source pairs a council member with a ward at all. It is NOT a district card and NOT geometry: this
 file names a person and the seat their own county says they hold, and the
 `city-ward` layer stays the three cities whose boundaries this app actually
 has. A city here that elects by ward gets its members named without any claim

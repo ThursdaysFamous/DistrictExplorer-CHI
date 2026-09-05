@@ -9193,6 +9193,23 @@ function initIowaExplorer() {
   // ended in January 2026. This is a SEPARATE file from ia-city-officials.json
   // on purpose: that one is read from each CITY's own page on its own weekly
   // cadence, and where both name a city the city's own page wins.
+  // How many counties publish a city-officials page, counted from the shipped
+  // file rather than typed into a sentence. The expired-term gate adds and
+  // drops counties on its own every week, so any figure written by hand here
+  // is wrong the first time it does its job.
+  function countyPublisherCount(file) {
+    if (!file) return 0;
+    var seen = {}, n = 0;
+    for (var geoid in file) {
+      if (!Object.prototype.hasOwnProperty.call(file, geoid)) continue;
+      var sources = file[geoid] && file[geoid].sources;
+      for (var i = 0; sources && i < sources.length; i++) {
+        var c = sources[i] && sources[i].county;
+        if (c && !seen[c]) { seen[c] = true; n++; }
+      }
+    }
+    return n;
+  }
   var loadCountyCityOfficials = makeCached(function () {
     return fetchJSONWithRetry("data/app/ia-county-city-officials.json", {}, 2);
   });
@@ -9240,7 +9257,8 @@ function initIowaExplorer() {
           email: contact ? contact.email : null,
           url: contact ? contact.url : null,
           officials: officials || null,
-          countyOfficials: officials ? null : (byCounty || null)
+          countyOfficials: officials ? null : (byCounty || null),
+          countyPublishers: parts[3] || null
         };
       });
     },
@@ -9269,11 +9287,13 @@ function initIowaExplorer() {
       // different thing from the 84 its COUNTY names in the branch below --
       // and where a city appears in both, the city's own page wins.
       // 847 cities name nobody anywhere in this app (939 less these five, the
-      // 84 their counties publish, and the three that elect by ward), which is
-      // why the absence note further down still runs for everyone else.
-      // THIS COUNT HAS BEEN STALE TWICE. It read 932 and named "the two that
-      // elect by ward" for a day after Cedar Rapids shipped as the third, so
-      // it is derived here from the same three numbers the gap record carries.
+      // 84 their counties publish, and the three that elect by ward).
+      // THAT NUMBER IS TYPED, NOT DERIVED, and this comment used to claim
+      // otherwise. It has already been stale twice -- it read 932 and named
+      // "the two that elect by ward" for a day after Cedar Rapids shipped as
+      // the third. It survives here only because it is a COMMENT: no rendered
+      // string carries it, and the one count a reader does see (how many
+      // counties publish) is counted from the file at render time below.
       if (result.officials && result.officials.members && result.officials.members.length) {
         wrap.appendChild(renderSectionLabel("ELECTED BY THE WHOLE CITY"));
         wrap.appendChild(renderPersonRows(result.officials.members.map(function (rec) {
@@ -9315,7 +9335,10 @@ function initIowaExplorer() {
         wrap.appendChild(renderFieldStack([{
           label: "City officials",
           value: "Named by " + countyPublisherPhrase(result.countyOfficials) +
-            ", which publishes the officials of every city inside it. Iowa has " +
+            ((result.countyOfficials.sources || []).length > 1
+              ? ", which publish the officials of every city inside them. "
+              : ", which publishes the officials of every city inside it. ") +
+            "Iowa has " +
             "no statewide list of city officeholders, so most cities in this " +
             "app name nobody; where a county publishes them, this card does."
         }]));
@@ -9340,11 +9363,18 @@ function initIowaExplorer() {
           note += " The city directory this app reads carries no phone or website " +
             "for it either.";
         }
-        note += " Eight Iowa counties do publish the officials of every city " +
-          "inside them, and those cards name them; a few cities publish a " +
-          "roster of their own that this app can read; and Des Moines, " +
-          "Waterloo and Cedar Rapids elect by ward or district, so those " +
-          "cards name the member for the seat you are standing in.";
+        // COUNTED FROM THE FILE, NOT TYPED. The weekly run's whole job is to
+        // add and drop counties as their pages go current or stale, so a
+        // number written into this sentence is wrong the first week it does.
+        var pubs = countyPublisherCount(result.countyPublishers);
+        note += (pubs ? (pubs === 1 ? " One Iowa county publishes"
+                                    : " " + pubs + " Iowa counties publish")
+                      : " Some Iowa counties publish") +
+          " the officials of every city inside them, and those cards name " +
+          "them; a few cities publish a roster of their own that this app can " +
+          "read; and Des Moines, Waterloo and Cedar Rapids elect by ward or " +
+          "district, so those cards name the member for the seat you are " +
+          "standing in.";
         wrap.appendChild(renderFieldStack([{ label: "City officials", value: note }]));
       }
       return wrap;

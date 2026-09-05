@@ -32,17 +32,26 @@ name: Update IA county-published city officials
 # THREE MARKUP TRAPS ARE GATED IN THE SCRAPER, each because a plausible-looking
 # answer would otherwise ship:
 #
-#   * THE ROLE IS INSIDE THE NAME'S OWN DIV for the clerk and the mayor, while a
-#     council member's row takes its role from a preceding heading. Read flat,
-#     the clerk becomes a person called "City Clerk Sarah Miller"; keyed on the
-#     heading alone, the clerk and the mayor are both filed as council members.
+#   * THE ROLE SITS IN TWO DIFFERENT PLACES AND THE COUNTY DECIDES WHICH.
+#     FIVE of the eleven put the clerk's and mayor's role in a <b> INSIDE the
+#     name's own div (Boone 19, Crawford 32, Iowa 7, Marion 16, Winnebago 14);
+#     the other SIX put every role in a positionTitle heading. Crawford uses
+#     both. Read the div flat and the clerk becomes a person called "City Clerk
+#     Sarah Miller"; key on the heading alone and, in those five, the clerk and
+#     the mayor are filed as council members. The scraper reads the <b> when
+#     there is one and falls back to the heading, so it needs neither to be
+#     universal — which is the point, because neither is.
 #   * THE SEAT FOLLOWS A <br/> IN THAT SAME DIV — 93 shipped officials carry the
-#     ward or at-large seat their county states, which no other Iowa source
-#     pairs with a name — so a parser reading the div's text ships people whose
-#     surname appears to be "Ward".
-#   * EVERY mailto: HREF IS EMPTY; the address is the link TEXT. An href-keyed
-#     scrape returns an e-mail for nobody while every count guard still passes,
-#     which is exactly how Brown County's seven addresses went out silently.
+#     ward or at-large seat their county states (106 across all eleven), which
+#     no other Iowa source pairs with a name — so a parser reading the div's
+#     text ships people whose surname appears to be "Ward".
+#   * THE mailto: HREF IS EMPTY IN SOME COUNTIES AND POPULATED IN OTHERS, so the
+#     address is read from the link TEXT, which is right either way. Measured
+#     across the eleven: Boone (59) and Crawford (13) publish EMPTY hrefs,
+#     Cerro Gordo (56), Shelby (11) and Marion (8) publish POPULATED ones, and
+#     the other six publish no mailto at all. An href-keyed scrape would return
+#     an e-mail for nobody in two counties while every count guard still passed
+#     — the shape that took Brown County's seven addresses out silently.
 #
 # AND THE BUILDER RE-TESTS EVERY ADDRESS against the name actually shipped:
 # the officeholder's own name in the local part, or an office mailbox. The
@@ -53,13 +62,22 @@ name: Update IA county-published city officials
 # at laura@manillaia.com — a city-domain address carrying somebody else's first
 # name, which is the whole reason the test runs against the SHIPPED name.
 #
+# THIS WORKFLOW IS EXPECTED TO GO RED, AND KNOWING WHEN IS THE POINT. Exactly
+# eight counties are current and MIN_COUNTIES is 8, so ONE county letting its
+# page go stale fails the build — not "a real collapse", one county. And every
+# EVEN-YEAR JANUARY, when the terms elected in the previous November's city
+# election begin, every one of the eight will publish terms that have just
+# expired until it updates its page, so expect this to be red for days or weeks
+# each cycle. That is the gate working. NEVER lower MIN_COUNTIES to get past it:
+# the floor is what makes a county quietly going stale visible at all.
+#
 # This is 84 cities out of 939 and must never be described as a statewide
 # roster: `ia-municipal-officeholders` stays open for the other 847, and the
 # City card says so on every one of their cards.
 
 on:
   schedule:
-    - cron: "30 19 * * 4" # Thursday 19:30 UTC
+    - cron: "30 20 * * 4" # Thursday 20:30 UTC (19:30 is Cedar Rapids's)
   workflow_dispatch: {}
 
 permissions:
