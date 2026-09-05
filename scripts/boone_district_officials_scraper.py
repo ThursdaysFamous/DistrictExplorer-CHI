@@ -76,14 +76,16 @@ in the Clerk's own yearbook". Measured against the bodies' own publications,
 that holds for exactly one of the five, and the correction is the reason this
 scraper reads more than one source:
 
-  BELVIDERE PARK DISTRICT   the district publishes four commissioners AND its
+  BELVIDERE PARK DISTRICT   the district publishes FIVE commissioners and its
                             own seat count in words — "our community-elected,
-                            five member Board of Commissioners" — so the fifth
-                            seat is measurably vacant, which the booklet's list
-                            of the same four cannot say. Its staff listing also
+                            five member Board of Commissioners" — and the
+                            booklet lists four of them. Its staff listing also
                             corroborates the director and the four staff
                             dropped below. This page was TWICE recorded as not
-                            existing before the sitemap was read; see OWN_BOARDS.
+                            existing before the sitemap was read, and its fifth
+                            commissioner was then LOST TO A PARSE BUG that
+                            published a vacancy in her place; see OWN_BOARDS
+                            and fetch_belvidere_park_board.
   IDA PUBLIC LIBRARY        the yearbook's board is SUPERSEDED. Its own board
                             page names a different one, and the page states the
                             mechanism: an "Annual Meeting of Board w/Officer
@@ -94,9 +96,17 @@ scraper reads more than one source:
                             two have joined, and one seat is OPEN.
   ROCKFORD PARK DISTRICT    the yearbook prints no board; the district
                             publishes five commissioners with telephone numbers
-                            and term years.
+                            and term years, on its PLAIN /board page — an
+                            earlier version fetched a `?format=json` URL the
+                            site's robots.txt disallows, on a false claim that
+                            the page was empty without it. See OWN_BOARDS.
   NORTH SUBURBAN            the yearbook prints no board; the library publishes
-                            seven trustees and their terms as a linked PDF.
+                            seven trustees and their terms as a linked PDF. The
+                            card cites that DOCUMENT and its Last-Modified date
+                            rather than the page that links it, and the scraper
+                            warns if it predates the last April consolidated
+                            election — a page shows its own drift week to week,
+                            a PDF can sit unchanged through an election.
   CHERRY VALLEY             the yearbook prints no board; the library
                             publishes seven trustees with a term year and an
                             individual address each. THIS ONE WAS FIRST
@@ -107,15 +117,23 @@ scraper reads more than one source:
 A SNAPSHOT IS COMPLETE BY CONSTRUCTION AND THAT IS THE EVIDENCE AGAINST IT.
 The yearbook prints nine names for Ida and four for Belvidere Park because an
 annual booklet prints the board it was handed; the library's own page prints
-eight and the word "Open", and the park district's own page prints the same
-four under a sentence saying the board seats five. TWO OF THE FIVE BODIES ARE A
-SEAT SHORT AND THE BOOKLET SAYS SO ABOUT NEITHER — not because it is careless
-but because a list has no way to show an absence. The absence of a vacancy is
-evidence of a snapshot rather than of a full board, the same reasoning that
-keeps Michigan's statewide commissioner columns out of `mi/data/app`. So the
-rule here is the Coles rule: GEOMETRY FROM WHATEVER PROVES THE LINES, PEOPLE
-FROM WHATEVER THE BODY MAINTAINS AS PEOPLE — and all five boards now come from
-the bodies themselves, with the yearbook keeping the office it does own.
+eight and the word "Open", and the park district's own page prints FIVE. The
+booklet says nothing about either difference — not because it is careless but
+because a list has no way to show a change. The absence of a vacancy is evidence
+of a snapshot rather than of a full board, the same reasoning that keeps
+Michigan's statewide commissioner columns out of `mi/data/app`. So the rule here
+is the Coles rule: GEOMETRY FROM WHATEVER PROVES THE LINES, PEOPLE FROM WHATEVER
+THE BODY MAINTAINS AS PEOPLE — and all five boards come from the bodies
+themselves, with the yearbook keeping the office it does own.
+
+AND A VACANCY IS NEVER ARITHMETIC. `vacancies` is counted from a body's own word
+for an empty seat — Ida's list prints "Trustee: Open" — and from nothing else. A
+roster that comes up SHORT of the seat count a body states is a parse miss or a
+body that stopped listing someone, and it is reported as that and refused by the
+builder's floor. This rule cost a shipped falsehood to learn: an earlier build
+derived Belvidere Park's vacancies as seats minus rows parsed, and a markup
+quirk that hid one commissioner became a card announcing "1 of 5 seats is
+vacant" about a district whose own page names five.
 
 WHERE BOTH NAME THE SAME PERSON the booklet's TERM-EXPIRY YEAR rides along,
 because it is a fact about that person which the body's own page does not
@@ -171,6 +189,7 @@ postal boundary, however likely.
 from __future__ import annotations
 
 import argparse
+import html as html_mod
 import json
 import re
 import sys
@@ -262,14 +281,20 @@ OWN_BOARDS = {
         "label": "Ida Public Library Board of Trustees",
     },
     "ROCKFORD PARK DISTRICT": {
-        # Squarespace: the served HTML carries only navigation, and the board
-        # is rendered client-side. `?format=json` returns the same page's
-        # `mainContent` as markup, which is the only way to read it without a
-        # browser. It is the platform's own documented content endpoint rather
-        # than a private API, but it IS undocumented by this district, so the
-        # parser fails loudly rather than quietly if the shape moves.
+        # THE PLAIN PAGE, AND AN EARLIER VERSION FETCHED A URL THE SITE
+        # DISALLOWS. It read `/board?format=json`, justified in a comment
+        # claiming the served HTML "carries only navigation, and the board is
+        # rendered client-side". Both halves were wrong. rockfordparkdistrict
+        # .org/robots.txt carries `Disallow:/*?format=json` under
+        # `User-agent: *` — robots.txt is an honesty rule in this repo, not a
+        # technical obstacle, and no user agent is ever renamed to get past
+        # one. And a plain GET of /board returns ~300 KB whose text carries
+        # "Meet Our Board Martesha Brown President Phone: … Term Expires: 2027"
+        # and every other commissioner; the same parse over it yields all five.
+        # The false claim came from reading ONE stripped rendering of the page
+        # and generalising, without checking the raw HTML — the same mistake
+        # this scraper's other three traps are all versions of.
         "url": "https://www.rockfordparkdistrict.org/board",
-        "json_url": "https://www.rockfordparkdistrict.org/board?format=json",
         "label": "Rockford Park District Board of Commissioners",
     },
     "CHERRY VALLEY DISTRICT LIBRARY": {
@@ -682,7 +707,6 @@ def _is_transient(exc):
 
 
 def _visible_text(markup):
-    import html as html_mod
     text = re.sub(r"(?is)<(script|style).*?</\1>", " ", markup)
     text = re.sub(r"(?s)<[^>]+>", " ", text)
     return clean(html_mod.unescape(text)) or ""
@@ -711,50 +735,96 @@ def last_sentence(text):
 def fetch_belvidere_park_board(warnings):
     """-> ([member], vacancies, seats) from the district's own board page.
 
-    Each commissioner prints as "<Name> Commissioner[ / <Office>] <address>"
-    followed by a paragraph of biography, so — for the fourth time on this job —
-    the CONTACT is the delimiter and the name is what sits immediately before
-    it. The seat count is read from the page's own sentence rather than from the
-    number of rows, which is the whole reason to read this page at all: the
-    difference between the two IS the vacancy.
+    READ FROM THE MARKUP, NOT FROM THE VISIBLE TEXT — and this cost a shipped
+    falsehood before it was fixed. The first version anchored each row on an
+    `@belviderepark.org` address found in `_visible_text()`, which replaces
+    tags with spaces. Carrie Lenzen's address is marked up as
+    `<span ...>clenzen</span>@belviderepark.org` (Outlook paste residue), so
+    the visible text reads "clenzen @belviderepark.org", the anchor never
+    fired, and she was dropped. THE MISS THEN BECAME A CLAIM: seats came from
+    the page's own "five member Board of Commissioners" sentence and vacancies
+    were computed as seats minus rows parsed, so a parser bug published "1 of 5
+    seats is vacant" about a district whose own page names five commissioners.
+    Each member is now taken from their own block — `<h3>Name</h3>` then
+    `<p><em>Role</em>…<a href="mailto:…">`, in the RAW HTML — so markup inside
+    a name or an address cannot hide a seat.
+
+    A VACANCY IS NEVER ARITHMETIC. It ships only where the body states one in
+    words, the way Ida's list prints "Trustee: Open". A roster SHORT of the
+    seat count the body states is a parse failure or a body that has stopped
+    listing someone, and either way it is reported and refused — see the
+    caller, which will not let a short board through.
     """
     conf = OWN_BOARDS["BELVIDERE PARK DISTRICT"]
     resp = _get(conf["url"], warnings, "BELVIDERE PARK DISTRICT")
     if resp is None:
         return [], 0, None
-    text = _visible_text(resp.text)
+    markup = resp.text
     seats = None
-    phrase = re.search(conf["seats_phrase"], text, re.I)
+    phrase = re.search(conf["seats_phrase"], _visible_text(markup), re.I)
     if phrase:
         seats = WORD_NUMBERS.get(phrase.group(1).lower())
     if seats is None:
         warnings.append("BELVIDERE PARK DISTRICT: %s no longer states its seat "
-                        "count in words — without it a short list cannot be "
-                        "told from a full board, so no vacancy is claimed"
-                        % conf["url"])
-    members, cursor = [], 0
-    for contact in re.finditer(r"[A-Za-z0-9._%+-]+@belviderepark\.org", text):
-        # Each commissioner's row is preceded by the PREVIOUS commissioner's
-        # biography, whose last sentence can end in a capitalised phrase — one
-        # ends "...quality of life in Boone County." and was read straight into
-        # the next name as "Boone County. Mary Marquardt". Cut to the final
-        # sentence first; a name never spans a full stop.
-        segment = last_sentence(text[cursor:contact.start()])
-        cursor = contact.end()
-        row = re.search(r"([A-Z][A-Za-z.'’-]+(?:\s+[A-Z][A-Za-z.'’-]+){0,3})\s+"
-                        r"Commissioner\s*(?:/\s*([A-Za-z][A-Za-z-]*"
-                        r"(?:\s+[A-Za-z][A-Za-z-]*)?))?\s*$", segment)
-        if not row:
+                        "count in words — the roster still ships, but nothing "
+                        "can check it for completeness" % conf["url"])
+
+    block = markup[markup.find("Board of Commissioners"):]
+    # ONE REGEX CANNOT READ THIS PAGE: five members are marked up four ways.
+    # Noble and Thacker put the link after `</em>`; Marquardt puts it INSIDE
+    # the `<em>`; Lenzen wraps both her name and her address's local part in
+    # `<span>`s (Outlook paste residue); Nord's link and its label disagree.
+    # A single pattern over the whole shape drops whichever variants it did
+    # not anticipate — the first version lost Lenzen, the second lost
+    # Marquardt — so each member's chunk is cut out on `<h3>` boundaries and
+    # read on its own, where the only structural assumptions are "the heading
+    # is the name" and "the first mailto is the address".
+    chunks = re.split(r"(?i)(?=<h3[\s>])", block)
+    members = []
+    for chunk in chunks[1:]:
+        head = re.search(r"(?is)<h3[^>]*>(.*?)</h3>", chunk)
+        if not head:
             continue
-        name = clean(row.group(1))
+        name = clean(html_mod.unescape(re.sub(r"(?s)<[^>]+>", "", head.group(1))))
         if not name or not looks_like_name(name):
             continue
-        members.append({"name": name, "role": clean(row.group(2)) or "Commissioner",
-                        "term": None, "email": contact.group(0)})
-    vacancies = 0
-    if seats is not None and members:
-        vacancies = max(0, seats - len(members))
-    return members, vacancies, seats
+        # The role is the run before the first line break or link inside the
+        # emphasis that follows the heading.
+        em = re.search(r"(?is)<em[^>]*>(.*?)</em>", chunk)
+        raw_role = em.group(1) if em else ""
+        raw_role = re.split(r"(?i)<br\s*/?>|<a[\s>]", raw_role)[0]
+        role = clean(html_mod.unescape(re.sub(r"(?s)<[^>]+>", "", raw_role)))
+        if not role or "commissioner" not in role.lower():
+            continue
+        # "Commissioner / President" -> the office; a bare "Commissioner" stays.
+        office = role.split("/", 1)[1].strip() if "/" in role else role
+        member = {"name": name, "role": office or "Commissioner",
+                  "term": None, "email": None}
+        link = re.search(r'(?is)<a\s+href="mailto:([^"]+)"[^>]*>(.*?)</a>', chunk)
+        href = clean(link.group(1)) if link else None
+        shown = clean(html_mod.unescape(
+            re.sub(r"(?s)<[^>]+>", "", link.group(2)))) if link else None
+        # THE LINK AND ITS LABEL CAN DISAGREE, and on this page one does: the
+        # Vice-President's row is
+        # `<a href="mailto:amygrafton@…">amynord@…</a>`. One publisher, one
+        # element, two addresses, and nothing on the site settles which is
+        # current — so NEITHER ships, the same call this county's record
+        # already made about a telephone digit two publishers disagreed on. A
+        # bouncing address on a card is a broken promise; her name, office and
+        # the district's own contact address still ship.
+        if href and shown and href.lower() != shown.lower():
+            warnings.append(
+                "BELVIDERE PARK DISTRICT: %s's row links %s and displays %s — "
+                "one page, two addresses, nothing settles which is current, so "
+                "neither ships" % (name, href, shown))
+        elif href:
+            member["email"] = href
+        members.append(member)
+    if not members:
+        warnings.append("BELVIDERE PARK DISTRICT: no commissioner blocks parsed "
+                        "from %s — the page's markup changed" % conf["url"])
+    # No vacancy is ever derived here; see the docstring.
+    return members, 0, seats
 
 
 def fetch_ida_board(warnings):
@@ -812,7 +882,7 @@ def fetch_ida_board(warnings):
 
 
 def fetch_rockford_board(warnings):
-    """-> [member] from the district's own board page (Squarespace JSON).
+    """-> [member] from the district's own board page.
 
     Each commissioner prints as "Name Role Phone: NNN-NNN-NNNN E-Mail > Term
     Expires: YYYY", and a member with no office (Rockford seats five and gives
@@ -822,16 +892,10 @@ def fetch_rockford_board(warnings):
     commissioners who hold none.
     """
     conf = OWN_BOARDS["ROCKFORD PARK DISTRICT"]
-    resp = _get(conf["json_url"], warnings, "ROCKFORD PARK DISTRICT")
+    resp = _get(conf["url"], warnings, "ROCKFORD PARK DISTRICT")
     if resp is None:
         return []
-    try:
-        main = resp.json().get("mainContent") or ""
-    except ValueError:
-        warnings.append("ROCKFORD PARK DISTRICT: %s stopped returning JSON — "
-                        "the site's platform changed" % conf["json_url"])
-        return []
-    text = _visible_text(main)
+    text = _visible_text(resp.text)
     text = re.sub(r"#block-[^{]*\{[^}]*\}", " ", text)
     text = re.sub(r"@media[^{]*\{(?:[^{}]|\{[^}]*\})*\}", " ", text)
     start = text.find("Meet Our Board")
@@ -915,6 +979,39 @@ def fetch_cherry_valley_board(warnings):
     return members
 
 
+def _http_date(value):
+    """-> an aware datetime for an HTTP Last-Modified header, or None."""
+    if not value:
+        return None
+    try:
+        from email.utils import parsedate_to_datetime
+        stamp = parsedate_to_datetime(value)
+    except Exception:  # noqa: BLE001 - a malformed header is simply unusable
+        return None
+    if stamp is None:
+        return None
+    return stamp if stamp.tzinfo else stamp.replace(tzinfo=timezone.utc)
+
+
+def _last_consolidated_election(today):
+    """-> the date of the most recent Illinois consolidated election.
+
+    10 ILCS 5/2A-1.1: the first Tuesday after the first Monday in April of
+    odd-numbered years. Library-district and park-district boards are elected
+    there, so it is the line a roster document has to be newer than.
+    """
+    import datetime as _dt
+
+    def april_election(year):
+        first = _dt.date(year, 4, 1)
+        first_monday = first + _dt.timedelta(days=(7 - first.weekday()) % 7)
+        return first_monday + _dt.timedelta(days=1)
+
+    year = today.year if today.year % 2 else today.year - 1
+    day = april_election(year)
+    return day if day <= today else april_election(year - 2)
+
+
 def fetch_north_suburban_board(warnings):
     """-> [member] from the PDF the library's own page links.
 
@@ -929,7 +1026,6 @@ def fetch_north_suburban_board(warnings):
     page = _get(conf["url"], warnings, "NORTH SUBURBAN DISTRICT LIBRARY")
     if page is None:
         return []
-    import html as html_mod
     import urllib.parse
     href = None
     for match in re.finditer(r'<a[^>]+href="([^"]+)"[^>]*>(.*?)</a>', page.text,
@@ -949,6 +1045,28 @@ def fetch_north_suburban_board(warnings):
     if not doc.content.startswith(b"%PDF"):
         warnings.append("NORTH SUBURBAN DISTRICT LIBRARY: %s is not a PDF" % href)
         return []
+    # WHAT A DOCUMENT SOURCE OWES THAT A PAGE DOES NOT: a date, and a rule for
+    # when it is too old. A page is re-read weekly and shows its own drift; a
+    # PDF can sit unchanged through an election and still parse perfectly. So
+    # its Last-Modified is carried onto every member and checked against the
+    # last CONSOLIDATED ELECTION — Illinois library-district trustees are
+    # elected in April of odd-numbered years, so a roster document that
+    # predates the most recent one describes a board that may no longer exist.
+    # That is a real test rather than an arbitrary number of months.
+    modified = doc.headers.get("Last-Modified")
+    stamp = _http_date(modified)
+    if stamp is None:
+        warnings.append("NORTH SUBURBAN DISTRICT LIBRARY: %s carries no usable "
+                        "Last-Modified (%r) — its age cannot be checked"
+                        % (href, modified))
+    else:
+        cutoff = _last_consolidated_election(datetime.now(timezone.utc).date())
+        if stamp.date() < cutoff:
+            warnings.append(
+                "NORTH SUBURBAN DISTRICT LIBRARY: %s was last modified %s, "
+                "BEFORE the %s consolidated election — trustees are elected in "
+                "April of odd years, so this document may name a board that no "
+                "longer sits" % (href, stamp.date().isoformat(), cutoff.isoformat()))
     if pdfplumber is None:
         raise RuntimeError("pdfplumber is required")
     members = []
@@ -968,7 +1086,9 @@ def fetch_north_suburban_board(warnings):
         warnings.append("NORTH SUBURBAN DISTRICT LIBRARY: %s carried no "
                         "'<name> <year>' rows — the document's shape changed"
                         % href)
-    return members
+    # The DOCUMENT is what these names come from, so the card cites the document
+    # and its date — not the administration page that merely links it.
+    return members, href, (stamp.date().isoformat() if stamp else None)
 
 
 def apply_own_boards(bodies, warnings):
@@ -1001,9 +1121,17 @@ def apply_own_boards(bodies, warnings):
             continue
         conf = OWN_BOARDS[heading]
         fetched = fetchers[heading](warnings)
-        # Two fetcher shapes: a bare list, or (members, vacancies, seats) where
-        # the body states its own seat count and the difference is a vacancy.
-        if isinstance(fetched, tuple):
+        # Three fetcher shapes. A bare list; (members, vacancies, seats) where
+        # the body STATES its own seat count and STATES its own vacancies in
+        # words (a fetcher never derives one from the other — see below); or
+        # (members, document_url, document_date) where the names come from a
+        # DOCUMENT rather than a page, so the card can cite the document and
+        # say when it was last changed.
+        doc_url = doc_date = None
+        if isinstance(fetched, tuple) and len(fetched) == 3 and \
+                isinstance(fetched[1], (str, type(None))):
+            members, doc_url, doc_date = fetched
+        elif isinstance(fetched, tuple):
             members, body["vacancies"], body["seats"] = fetched
         else:
             members = fetched
@@ -1033,14 +1161,36 @@ def apply_own_boards(bodies, warnings):
             body["board"] = []
             body["boardSource"] = None
             continue
-        expected = spec.get("own_seats")
-        seated = len(members) + (body["vacancies"] or 0)
-        if expected is not None and seated != expected:
-            warnings.append("%s: parsed %d seat(s) where this body is recorded "
-                            "as seating %d — the page's shape moved, or the "
-                            "board's size did" % (heading, seated, expected))
+        # A SHORT BOARD IS A PARSE FAILURE UNTIL THE BODY SAYS OTHERWISE. This
+        # is the rule that a shipped falsehood bought: Belvidere Park's fetcher
+        # used to compute `vacancies = seats - len(members)`, so when a markup
+        # quirk hid Carrie Lenzen the card announced "1 of 5 seats is vacant"
+        # about a district whose own page names five commissioners. Arithmetic
+        # cannot tell a missing person from a missing seat. Only a body's own
+        # word can — Ida's list prints "Trustee: Open" — so `vacancies` is
+        # counted from that token and from nothing else, and any OTHER
+        # shortfall against the seat count the body states is reported as what
+        # it is. The builder's per-body floor is what stops it shipping.
+        stated = body["seats"] if body["seats"] is not None else spec.get("own_seats")
+        if stated is not None:
+            accounted = len(members) + (body["vacancies"] or 0)
+            if accounted < stated:
+                warnings.append(
+                    "%s: parsed %d member(s) plus %d stated vacancy(ies) "
+                    "against the %d seats this body states — that is a PARSE "
+                    "MISS or a body that stopped listing someone, NEVER a "
+                    "vacancy; no empty seat is claimed from the difference"
+                    % (heading, len(members), body["vacancies"] or 0, stated))
+            elif accounted > stated:
+                warnings.append(
+                    "%s: parsed %d seat(s) against the %d this body states — "
+                    "the page's shape moved, or the board grew"
+                    % (heading, accounted, stated))
         body["board"] = members
-        body["boardSource"] = {"label": conf["label"], "url": conf["url"]}
+        source = {"label": conf["label"], "url": doc_url or conf["url"]}
+        if doc_date:
+            source["modified"] = doc_date
+        body["boardSource"] = source
 
 
 # What the card tells a reader about a board nobody readable publishes. Written
@@ -1153,6 +1303,21 @@ def apply_ida_contacts(bodies, warnings):
                             "it, or the page was rebuilt"
                             % (head["name"], IDA_CONTACT_PAGE))
             continue
+        # THE LIBRARY'S TITLE FOR ITS OWN STAFF WINS. The yearbook prints
+        # "Executive Director" and the library's contact page prints "Mindy
+        # Long, Library Director" — its own words about its own officer, on the
+        # page it maintains. Same rule as the address below it: a body owns
+        # what it calls its people.
+        title = re.match(r"\s*,?\s*([A-Z][A-Za-z .-]{3,40}?)\s*[;:(]",
+                         text[at + len(head["name"]):at + len(head["name"]) + 80])
+        if title:
+            published = clean(title.group(1))
+            if published and published != head["role"]:
+                warnings.append("IDA PUBLIC LIBRARY: the yearbook calls %s "
+                                "%r and the library's own page calls them %r "
+                                "— the library's title ships"
+                                % (head["name"], head["role"], published))
+                head["role"] = published
         found = EMAIL_RE.search(text[at:at + 400])
         if not found:
             continue

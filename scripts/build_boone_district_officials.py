@@ -8,12 +8,19 @@ also, exactly, the `district` property on the two shipped geometry files. Each
 entry carries the office (address, telephone, fax, website, a contact address),
 the head of the agency, and the governing body.
 
-TWO OF THE FIVE BOARDS ARE A SEAT SHORT AND THE CARD SAYS SO, because the body
-itself does: Belvidere Park District's own page calls it a "five member Board
-of Commissioners" and names four, and Ida Public Library's lists eight trustees
-and the word "Open". That is `vacancies`, and it is the reason none of these
-boards is read from the County Clerk's annual booklet — a snapshot lists the
-board it was handed and has no way to show an absence.
+ONE BOARD IS A SEAT SHORT AND THE CARD SAYS SO, because the LIBRARY does:
+Ida's own list prints eight trustees and the word "Open". That is `vacancies`,
+and it is the reason none of these boards is read from the County Clerk's
+annual booklet — a snapshot lists the board it was handed and has no way to
+show an absence.
+
+A VACANCY IS NEVER ARITHMETIC, and this floor is what enforces it. An earlier
+build computed Belvidere Park's vacancies as its stated seat count minus the
+rows parsed, so when a markup quirk hid one commissioner the card announced
+"1 of 5 seats is vacant" about a district whose own page names five. The
+scraper now counts a vacancy only from a body's own word, and a roster that
+comes up short against the seat count the body states breaks the floor here
+rather than shipping as an empty seat.
 
 THE JOIN IS A GATE, NOT AN ASSUMPTION. il/index.html stamps this roster onto
 the district polygons by name, so a name that stops matching costs a card its
@@ -57,7 +64,7 @@ GEOMETRY_FILES = [
 # name -> (minimum board members, minimum agency heads). A board of None is one
 # nobody publishes; see the docstring.
 FLOORS = {
-    "BELVIDERE PARK DISTRICT": (4, 1),
+    "BELVIDERE PARK DISTRICT": (5, 1),
     "ROCKFORD PARK DISTRICT": (4, 1),
     "IDA PUBLIC LIBRARY": (6, 1),
     "CHERRY VALLEY DISTRICT LIBRARY": (5, 1),

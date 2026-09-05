@@ -13880,9 +13880,9 @@ function initChiExplorer() {
    * nothing. */
   /* The boundary carries the district's NAME and nothing else — a parcel
    * dissolve has no room for a trustee. The county's Clerk publishes the office
-   * and the people in its annual Year Book, and three of the five bodies
-   * publish their own boards, so scripts/build_boone_district_officials.py
-   * assembles both into one roster keyed by the same name the polygons carry.
+   * in its annual Year Book and ALL FIVE bodies publish their own boards, so
+   * scripts/build_boone_district_officials.py assembles both into one roster
+   * keyed by the same name the polygons carry.
    * It is stamped onto the features at load (the Grundy polling precedent) so
    * the query stays a plain containment test and a ROSTER failure costs the
    * contact block, never the district. */
@@ -13919,12 +13919,14 @@ function initChiExplorer() {
    * a returning visitor on a stale cache sees the card they saw before rather
    * than an empty "Board" heading.
    *
-   * WHERE THE BOARD CAME FROM IS PRINTED, because it differs per district and a
-   * reader is entitled to know which. Belvidere Park's is the County Clerk's
-   * booklet, which is the only source for it; Ida's, Rockford's and North
-   * Suburban's are each the body's OWN published board, which is what settles
-   * the disagreement the builder found — the booklet's Ida board predates that
-   * library's own 28 July officer election. */
+   * WHERE THE BOARD CAME FROM IS PRINTED, because every one is the body's OWN
+   * published board rather than the county's booklet, and a reader is entitled
+   * to know which document answered. It is also what settles the disagreements
+   * the builder finds — the booklet's Ida board predates that library's own 28
+   * July officer election, and its Belvidere Park board predates a
+   * commissioner the district itself lists. A source with a DATE prints it:
+   * North Suburban's trustees come from a PDF rather than a page, so the card
+   * says when that document was last changed. */
   function booneDistrictPeople(result) {
     var info = result && result.officials;
     if (!info) return null;
@@ -13953,7 +13955,13 @@ function initChiExplorer() {
           (info.vacancies === 1 ? "is" : "are") + " vacant");
       }
       if (info.boardSource && info.boardSource.label) {
-        notes.push("Board from " + String(info.boardSource.label));
+        // A DOCUMENT source prints its date; a page does not need one, because
+        // it is re-read weekly and its own drift is visible. A PDF can sit
+        // unchanged through an election and still parse perfectly.
+        notes.push("Board from " + String(info.boardSource.label) +
+          (info.boardSource.modified
+            ? " (document last changed " + String(info.boardSource.modified) + ")"
+            : ""));
       }
       if (notes.length) {
         frag.appendChild(renderBodyIntro({ note: notes.join(" · ") }));

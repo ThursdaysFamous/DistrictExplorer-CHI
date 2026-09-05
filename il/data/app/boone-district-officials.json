@@ -2,7 +2,7 @@
   "source": "Boone County Clerk & Recorder, Boone County Year Book",
   "sourceUrl": "https://www.boonecountyil.gov/Departments/Clerk-Recorder/BCC%202026%20Yearbook%20Final%207.7.26.pdf?t=202608040920000",
   "officialsPage": "https://www.boonecountyil.gov/government/departments/clerk___recorder/2019_boone_county_illinois_year_book.php",
-  "generated": "2026-09-05T02:38:04Z",
+  "generated": "2026-09-05T12:02:35Z",
   "districts": {
     "BELVIDERE PARK DISTRICT": {
       "kind": "park",
@@ -31,8 +31,7 @@
         {
           "name": "Amy Nord",
           "role": "Vice-President",
-          "term": "2029",
-          "email": "amynord@belviderepark.org"
+          "term": "2029"
         },
         {
           "name": "Mary Marquardt",
@@ -45,14 +44,18 @@
           "role": "Commissioner",
           "term": "2027",
           "email": "garythacker@belviderepark.org"
+        },
+        {
+          "name": "Carrie Lenzen",
+          "role": "Commissioner",
+          "email": "clenzen@belviderepark.org"
         }
       ],
       "boardSource": {
         "label": "Belvidere Township Park District Board of Commissioners",
         "url": "https://www.belviderepark.org/about-us/board/"
       },
-      "seats": 5,
-      "vacancies": 1
+      "seats": 5
     },
     "ROCKFORD PARK DISTRICT": {
       "kind": "park",
@@ -117,7 +120,7 @@
       "heads": [
         {
           "name": "Mindy Long",
-          "role": "Executive Director",
+          "role": "Library Director",
           "email": "mindyl@idapubliclibrary.org"
         },
         {
@@ -285,7 +288,8 @@
       ],
       "boardSource": {
         "label": "North Suburban Library District Board of Trustees",
-        "url": "https://www.northsuburbanlibrary.org/about-us/administration/"
+        "url": "https://www.northsuburbanlibrary.org/wp-content/uploads/2022/03/boardtrustees.pdf",
+        "modified": "2025-06-20"
       }
     }
   }
