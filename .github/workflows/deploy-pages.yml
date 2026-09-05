@@ -189,11 +189,12 @@ jobs:
             ca/data/source ca/icons/source 'ca/data/*.geojson'
             ny/scripts ny/docs ny/.github ca/scripts ca/docs ca/.github
             wi/data/state wi/data/source wi/scripts 'wi/data/*.geojson'
-            ia/data/state ia/scripts
+            ia/data/state ia/data/source ia/scripts
             mi/data/state mi/data/source mi/scripts
             fonts/barlow-fontface.css
             node_modules package.json package-lock.json
-            engine metros.json metro-worksheet.json schema CLAUDE.md
+            engine metros.json metro-worksheet.json point-transmission.json
+            schema CLAUDE.md
             _site
           )
           args=()

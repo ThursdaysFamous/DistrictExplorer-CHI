@@ -60,6 +60,10 @@ from build_landing_page import (  # noqa: E402
 )
 
 OUT = os.path.join(REPO_ROOT, "privacy.html")
+# Written by scripts/probe_point_transmission.mjs — the ONE fact on this page
+# that cannot be read off a file, because it depends on which layers a
+# registration factory was called for and on entries a closure holds.
+POINT_TRANSMISSION = os.path.join(REPO_ROOT, "point-transmission.json")
 CANONICAL = "https://districtry.com/privacy.html"
 SITE = "https://districtry.com/"
 UPDATED = "24 August 2026"
@@ -249,39 +253,41 @@ def measure(rel, name, url, tag):
     app["cdn"] = "cdnjs.cloudflare.com" in src_all
 
     # A layer that asks a government server about the SELECTED POINT rather than
-    # downloading the layer and testing in the browser. Definitions are
-    # subtracted so carrying the engine loader unused reads as zero, which is
-    # the difference between NYC/SF and Illinois.
+    # downloading the layer and testing in the browser.
     #
-    # COUNTING CALL SITES UNDERSTATES THE MOMENT A WRAPPER IS SHARED, and that
-    # is not hypothetical: `tigerStatewideLoader` attaches `.atPoint` once and
-    # hands the result to every statewide TIGERweb layer, so six Illinois layers
-    # and four Michigan ones rode a single `loadArcGISPointGeoJSON(` call site.
-    # Measured 2026-09-04, the published figure was wrong for three of the four
-    # mapped instances that use it — il 5 against a true 10, wi 3 against 6, mi 1
-    # against 4 (ia's 2 was right by coincidence, and is 3 once zip-code is
-    # counted). So the wrapper's own call site is subtracted and its CALL SITES
-    # are added instead: one per layer, which is what the wrapper is for.
-    calls = len(re.findall(r"loadArcGISPointGeoJSON\s*\(", src))
-    defs = len(re.findall(
-        r"function\s+loadArcGISPointGeoJSON|loadArcGISPointGeoJSON\s*=\s*function", src))
-    wrapper_defs = len(re.findall(r"function\s+tigerStatewideLoader", src))
-    wrapped = len(re.findall(r"tigerStatewideLoader\s*\(", src)) - wrapper_defs
-    app["point_query_layers"] = (calls - defs - wrapper_defs) + wrapped
-
-    # KNOWN UNDERCOUNT, MEASURED AND NOT YET FIXED (2026-09-04). The figure above
-    # counts the ArcGIS path only. The engine's `makeCachedLoader` ALSO attaches
-    # an `.atPoint`, backed by `loadSocrataPointGeoJSON` — so every Socrata-backed
-    # polygon layer sends the selected point to an open-data portal on click, and
-    # this page's own prose covers those ("municipal open-data portals"). NYC and
-    # SF therefore render "None." while their school-zone, council, precinct and
-    # police layers do send the point. It is recorded rather than guessed at
-    # because two independent static recounts of it disagreed (11/6/4/6/5/7 and
-    # 16/8/5/6/5/7): one source occurrence of `loadZones` inside a registration
-    # factory serves as many layers as that factory is CALLED, and the runtime
-    # namespace does not expose the layer list, so the honest count needs a
-    # behavioural probe rather than a regex. Fixing it changes what two apps
-    # publish about themselves and belongs in its own reviewed change.
+    # THIS IS NOT COUNTED HERE, AND THAT IS THE FIX OF 2026-09-05. It used to be
+    # `loadArcGISPointGeoJSON(` call sites, adjusted for the one wrapper that
+    # shares a call site across layers, and it published 10 for Illinois against
+    # a true 19 and "None." for New York City against a true 4.
+    #
+    # A REGEX CANNOT BE RIGHT, for two reasons that were measured rather than
+    # assumed. A REGISTRATION FACTORY serves as many layers as it is CALLED from
+    # one source occurrence, so counting occurrences is wrong in both directions.
+    # And `registerCountyLayer` CLOSES OVER its entries, so the spec it registers
+    # never references them and not even a full walk of the live module graph
+    # reaches Illinois's `ward` or `county-board` — both of which do send.
+    #
+    # AND NEITHER CAN A STRUCTURAL READ, which is the correction this comment
+    # carries. The first version of that browser probe counted layers whose
+    # loader CARRIED an `.atPoint` hook, and that overcounts: the hook is invoked
+    # in exactly ONE place in every instance, inside `queryFeatureAt`, and a
+    # layer whose query does not route through it never fires the hook it holds.
+    # `registerNearestPointLayer.query` calls `opts.loader()` directly, and
+    # several NYC and SF layers call their load function directly, so they carry
+    # the Socrata hook and send nothing. Counting carriage published il 20, ny 9
+    # and ca 3 against a true 19, 4 and 0 — and on this page an OVERCOUNT is a
+    # false statement exactly as an undercount is: it has an app confessing to a
+    # transmission it does not make. San Francisco's original "None." was right.
+    #
+    # So the number is MEASURED IN A BROWSER by
+    # `scripts/probe_point_transmission.mjs`, which boots each app, REPLACES
+    # every `.atPoint` with a recorder, switches on every layer, selects points
+    # inside the instance's own coverage and counts the hooks that FIRE. This
+    # generator must stay stdlib-only — its CI step has no browser — so it READS
+    # that probe's artifact and re-derives a FINGERPRINT of each app to prove the
+    # artifact still describes it (see fingerprint() and
+    # gate_point_transmission()).
+    app["fingerprint"] = fingerprint(src)
 
     app["events"] = sorted({mm.group(1) for mm in
                             re.finditer(r"trackEvent\(\s*[\"']([^\"']+)[\"']", src)})
@@ -290,6 +296,75 @@ def measure(rel, name, url, tag):
     app["coord_decimals"] = sorted({int(mm.group(1)) for mm in re.finditer(
         r"trackEvent\(\s*[\"'][^\"']+[\"']\s*,\s*\w+\.toFixed\((\d)\)", src)})
     return app
+
+
+def fingerprint(src):
+    """The two things about an app that move whenever its point-sending set can.
+
+    Not a count of anything published — a CHECKSUM the browser probe and this
+    generator can both compute, so a stdlib CI step can tell whether the probe's
+    artifact still describes the app it was measured from.
+
+      * every `<name>.atPoint = function` site, which is where the hook that
+        sends the point is attached; and
+      * every registered layer id, taken from the generated LAYER_AREA_RANK in
+        the app file itself. That moves when a layer is added, removed or
+        renamed INCLUDING one registered through a factory whose call site never
+        changes — which is the case a call-site count cannot see.
+
+    WHAT IT DOES NOT COVER, stated rather than implied. Two things move the true
+    count while leaving both halves of this fingerprint identical: swapping an
+    existing layer's loader for another EXISTING loader that differs only in
+    whether it carries `.atPoint`, and REROUTING A LAYER'S QUERY into or out of
+    `queryFeatureAt`, which is the only place the hook is ever invoked — a layer
+    can hold a hook for years and start or stop firing it with no change to any
+    site name or layer id. Nothing short of booting the app can see either, so
+    the browser probe's own `--check` (which does boot it, in CI) is the gate for
+    both and this is the tripwire for everything else.
+    """
+    sites = sorted(m.group(1) for m in re.finditer(r"(\w+)\.atPoint\s*=\s*function", src))
+    block = re.search(r"var LAYER_AREA_RANK = \[([\s\S]*?)\n\s*\];", src)
+    ids = sorted(m.group(1) for m in re.finditer(r'"([^"]+)"', block.group(1))) if block else []
+    return {"atpoint_sites": sites, "layer_ids": ids}
+
+
+def gate_point_transmission(apps):
+    """Attach each app's measured point-sending count, or refuse to publish.
+
+    The front door has no tag and no map, and is absent from the artifact by
+    construction; it publishes "None." and that is measured too, since a surface
+    with no LAYER_AREA_RANK has no layer that could send anything.
+    """
+    try:
+        probe = json.loads(read(POINT_TRANSMISSION, "the point-transmission probe"))
+    except ValueError as e:
+        fail("point-transmission.json is not valid JSON: %s. Regenerate it with "
+             "`node scripts/probe_point_transmission.mjs`" % e)
+    measured = probe.get("apps") or {}
+    for a in apps:
+        if a["tag"] is None:
+            a["point_query_layers"] = 0
+            continue
+        got = measured.get(a["tag"])
+        if got is None:
+            fail("%s is in metros.json but not in point-transmission.json — this "
+                 "page would publish nothing about whether it sends your selected "
+                 "point. Run `node scripts/probe_point_transmission.mjs`"
+                 % a["file"])
+        for key in ("atpoint_sites", "layer_ids"):
+            if got.get(key) != a["fingerprint"][key]:
+                fail("%s has changed since the point-transmission probe last ran: "
+                     "%s is now %s, measured as %s. What it sends about your "
+                     "selected point may have changed with it, and this page is "
+                     "not going to guess. Run "
+                     "`node scripts/probe_point_transmission.mjs`, then rebuild "
+                     "this page."
+                     % (a["file"], key, a["fingerprint"][key], got.get(key)))
+        # The probe records WHICH layers too; nothing renders them, so nothing
+        # carries them here. Michigan's go-live shipped a false privacy claim
+        # off a helper that was never called — in this module above all others,
+        # dead code is not free.
+        a["point_query_layers"] = got["layers_sending_point"]
 
 
 def gate_fleet_claims(apps):
@@ -551,6 +626,7 @@ def _jsonld(title, desc):
 
 def build():
     apps = load_apps()
+    gate_point_transmission(apps)
     gate_fleet_claims(apps)
 
     tokens_css = read(TOKENS, "the design tokens")

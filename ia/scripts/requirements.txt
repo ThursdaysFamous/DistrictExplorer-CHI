@@ -28,3 +28,18 @@ jsonschema==4.26.0
 # assign every word to a column by its x-coordinate BEFORE forming a line, and
 # extract_words() is what exposes that; pypdf has no equivalent.
 pdfplumber==0.11.10
+
+# Geometry for ia/scripts/build_story_supervisor_districts.py, which reads
+# Story County's supervisor districts off the county Auditor's printed map.
+# An OPERATOR step, not one of the weekly workflows above: these lines move
+# when a county redraws them, which Senate File 75 has just done and which
+# will not happen again for years. pdfplumber (pinned above for the sheriff
+# and county-attorney directories) supplies the vector path objects.
+#
+# shapely does the point-in-ring and dissolve work; pyproj holds the
+# projection. NAD83 / Iowa North is not incidental -- the map's drawn aspect
+# ratio matches that projection's to five digits and no other candidate's, so
+# reading it needs a real CRS transform rather than a linear degree fit, which
+# lands 26 m out.
+shapely==2.1.2
+pyproj==3.7.2

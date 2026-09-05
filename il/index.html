@@ -13983,14 +13983,138 @@ function initChiExplorer() {
     }
     return frag;
   }
-  function booneDistrictLink(result) {
-    var info = result && result.officials;
-    var site = info && info.office && info.office.website
-      ? safeHttpUrl(String(info.office.website)) : null;
-    if (!site) return null;
-    return { label: (result.name || "District") + " (official)", url: site };
-  }
 
+  /* Each of the five bodies' own website, from the SAME County Clerk yearbook
+   * the names came from — so the card links the body rather than only naming
+   * it, and one document backs both. Not scraped: the yearbook prints these as
+   * plain text under each body's heading, and a five-row hand-kept table beside
+   * the names it belongs with is honest where a sixth entry appearing without
+   * one would not be. www.northsuburbanlibrary.org refuses this client with a
+   * 403 (a CDN turning away datacenter traffic, not a dead site) and is shipped
+   * anyway, because the county publishes it and a reader's browser reaches it. */
+  // Each address is written as `url: "…"` rather than as a bare string value,
+  // because that is the literal scripts/validate_card_links.py extracts. A map
+  // of plain strings reads identically and would never be probed, so a district
+  // that moved or folded would keep a dead link on its card indefinitely — the
+  // same reason the six statewide library loaders name their files literally.
+  var BOONE_DISTRICT_SITES = {
+    "BELVIDERE PARK DISTRICT": { url: "https://www.belviderepark.org/" },
+    "ROCKFORD PARK DISTRICT": { url: "https://www.rockfordparkdistrict.org/" },
+    "IDA PUBLIC LIBRARY": { url: "https://www.idapubliclibrary.org/" },
+    "CHERRY VALLEY DISTRICT LIBRARY": { url: "https://www.cherryvalleylib.org/" },
+    "NORTH SUBURBAN DISTRICT LIBRARY": { url: "https://www.northsuburbanlibrary.org/" }
+  };
+  function booneDistrictLink(result) {
+    var name = result && result.name ? String(result.name) : "";
+    // TWO SOURCES, AND THE MEASURED ONE WINS. The map above is a literal so the
+    // monthly link gate can extract and probe it, and it is the fallback when
+    // the roster does not load. But boone-district-officials.json carries each
+    // body's website as the County Clerk's yearbook printed it THIS WEEK, and
+    // its builder fetches every one before shipping it — so a district that
+    // moves is followed by the roster and frozen by the map. Reading the roster
+    // first is what stops the two from quietly disagreeing on a reader's card.
+    var info = result && result.officials;
+    var live = info && info.office && info.office.website
+      ? safeHttpUrl(String(info.office.website)) : null;
+    var site = BOONE_DISTRICT_SITES[name];
+    var safe = live || (site ? safeHttpUrl(site.url) : null);
+    if (!safe) return null;
+    // The card body prints the yearbook's own capitals; the link LABEL reads
+    // as a sentence, so "BELVIDERE PARK DISTRICT" does not shout twice in one
+    // card. Only the display changes — the name shipped in the data does not.
+    var pretty = name.toLowerCase().replace(/\b[a-z]/g, function (c) { return c.toUpperCase(); });
+    return { label: pretty + " (official)", url: safe };
+  }
+  /* ---------- Six counties' library districts, from a STATEWIDE layer whose
+   * publisher is neither the county nor the library -----------------------
+   * Carroll, Lee, Randolph, Sangamon, St. Clair and Stephenson publish no
+   * library-district boundary of their own — each has carried a recorded gap
+   * saying so. One public statewide service answers for all six: the Illinois
+   * Broadband Office / Connected Nation `IL_Boundary_Layers` layer 11, 642
+   * polygons with a `Library` name and a `LibraryType`. Pre-built per county by
+   * scripts/build_statewide_library_districts.py, which carries the provenance
+   * argument in full and gates the trust claims rather than describing them.
+   *
+   * THE CARD NAMES THE PUBLISHER AND THE CHANGES, because the source carries a
+   * LICENCE rather than nothing. Only layer 11's own sub-metadata is empty; the
+   * service carries `copyrightText` "Illinois Broadband Office, Connected
+   * Nation" and the AGOL item (675906ae06b5460296154760b7fb1367)
+   * carries terms — public use permitted, no warranty, NOT for legal boundary
+   * determinations, users must cite the source, and users "must indicate any
+   * changes when sharing derived products". This file IS changed (clipped to the
+   * county, simplified 5 m), so the credit states that too. Every attribute
+   * besides the library's name and type is still a broadband service metric.
+   * Where a county publishes its own, the county's source stays the authority
+   * and this layer is not used.
+   *
+   * THE TYPE IS RENDERED, NOT HIDDEN, because it is the difference between two
+   * quite different things wearing one label: a library DISTRICT is a taxing
+   * body a resident lives inside, while a municipal library's boundary is
+   * simply the municipality and it levies no district tax of its own. */
+  // BOTH HALVES OF THE LICENCE, on the card, because the source carries one.
+  // AGOL item 675906ae06b5460296154760b7fb1367 requires that users
+  // cite the source AND "indicate any changes when sharing derived products" —
+  // and this file is changed: clipped to the county and simplified to 5 m. The
+  // first draft of this credit said only who compiled it, which met the
+  // attribution requirement and not the disclosure one.
+  var STATEWIDE_LIBRARY_CREDIT =
+    "Compiled by the Illinois Broadband Office / Connected Nation — not filed by the library or " +
+    "the county. Clipped to the county and simplified to 5 m; not for legal boundary determinations.";
+  // The source's own vocabulary, spelled out. An unrecognised value falls
+  // through to the source's string rather than being dropped or guessed at.
+  var LIBRARY_GOVERNANCE = {
+    "District": "Library district — a taxing body you live inside",
+    "District (contracting)": "Library district serving this area by contract — the district is the taxing body, and this ground is served by agreement rather than being inside it",
+    "City": "Municipal library — its area is the city, and it levies no district tax of its own",
+    "Village": "Municipal library — its area is the village, and it levies no district tax of its own",
+    "Village (contracting)": "Municipal library — its area is the village, serving this area by contract",
+    "Town": "Municipal library — its area is the town, and it levies no district tax of its own",
+    "Township": "Township library — a township body, under a different statute than a library district"
+  };
+  // Each loader names its file as a LITERAL rather than building the path from
+  // the key. validate_index.py checks that every shipped data/app file is
+  // referenced by index.html, and a concatenated path is invisible to it — so
+  // six lines of boilerplate keep a real gate working instead of six worksheet
+  // entries opting out of it.
+  var loadCarrollLibraries = makeCached(function () {
+    return fetchJSONWithRetry("data/app/carroll-library-districts.json", {}, 2);
+  });
+  var loadLeeLibraries = makeCached(function () {
+    return fetchJSONWithRetry("data/app/lee-library-districts.json", {}, 2);
+  });
+  var loadRandolphLibraries = makeCached(function () {
+    return fetchJSONWithRetry("data/app/randolph-library-districts.json", {}, 2);
+  });
+  var loadSangamonLibraries = makeCached(function () {
+    return fetchJSONWithRetry("data/app/sangamon-library-districts.json", {}, 2);
+  });
+  var loadStClairLibraries = makeCached(function () {
+    return fetchJSONWithRetry("data/app/st-clair-library-districts.json", {}, 2);
+  });
+  var loadStephensonLibraries = makeCached(function () {
+    return fetchJSONWithRetry("data/app/stephenson-library-districts.json", {}, 2);
+  });
+  // Takes an options object rather than positional arguments so each entry
+  // still spells `key: "<slug>"` INSIDE the dispatch table. That literal is not
+  // decoration: scripts/build_county_status.py derives every county's layer list
+  // by reading `key:` out of each registerCountyLayer body, so a helper that
+  // swallowed the key would quietly drop six counties out of the generated
+  // status page while every gate stayed green.
+  function statewideLibraryEntry(opts) {
+    return polygonCountyEntry({
+      key: opts.key,
+      coverage: opts.coverage,
+      loader: opts.loader,
+      snapFeet: PARCEL_FABRIC_SNAP_FT,
+      fields: [
+        { name: "name", label: "Library", keys: ["library"], primary: true },
+        { name: "type", label: "Governance", keys: ["type"],
+          format: function (v) { return LIBRARY_GOVERNANCE[v] || v; } },
+        { label: "County", value: opts.county },
+        { label: "Boundary", value: STATEWIDE_LIBRARY_CREDIT }
+      ]
+    });
+  }
   var GRUNDY_GIS = "https://maps.grundyco.org/arcgis/rest/services/";
   /* Grundy's polling places live in a sibling layer keyed by POLLINGID. Stamp
    * them onto the precinct features at load time (the Kendall/LaSalle
@@ -17910,10 +18034,17 @@ function initChiExplorer() {
           if (f.when && !f.when(result)) return;
           if (f.keys) {
             var val = result[f.name];
+            // `format` turns a source's own vocabulary into the sentence a
+            // reader needs. The statewide library entries use it to say what a
+            // LibraryType of "City" MEANS — a municipal library that levies no
+            // district tax of its own — rather than printing a bare word whose
+            // whole significance is invisible. It never invents: a value the
+            // map does not carry falls through to the source's own string.
+            var shown = (val != null && val !== "" && f.format) ? f.format(String(val)) : val;
             // with opts.pill the primary field renders as the header pill
             // (cardIdentifier below), not as a body row
-            if (f.primary) { if (opts.pill !== true) rows.push({ label: f.label, value: val ? String(val) : "Unknown", primary: true }); }
-            else if (val) rows.push({ label: f.label, value: String(val) });
+            if (f.primary) { if (opts.pill !== true) rows.push({ label: f.label, value: shown ? String(shown) : "Unknown", primary: true }); }
+            else if (shown) rows.push({ label: f.label, value: String(shown) });
           } else {
             rows.push({ label: f.label, value: f.value });
           }
@@ -23624,6 +23755,24 @@ function initChiExplorer() {
           { label: "County", value: "Kendall County" }
         ]
       }),
+      // Six counties that publish no library boundary of their own, all from
+      // ONE statewide layer — see statewideLibraryEntry and its loader block for
+      // the provenance argument and why every one of these cards names the
+      // publisher. These are the ONLY entries here not sourced from the county
+      // that levies the tax, which is exactly why they are grouped and labelled
+      // rather than slipped in among the county-published ones.
+      statewideLibraryEntry({ key: "carroll", county: "Carroll County",
+                              coverage: carrollCountyCoverage, loader: loadCarrollLibraries }),
+      statewideLibraryEntry({ key: "lee", county: "Lee County",
+                              coverage: leeCountyCoverage, loader: loadLeeLibraries }),
+      statewideLibraryEntry({ key: "randolph", county: "Randolph County",
+                              coverage: randolphCountyCoverage, loader: loadRandolphLibraries }),
+      statewideLibraryEntry({ key: "sangamon", county: "Sangamon County",
+                              coverage: sangamonCountyCoverage, loader: loadSangamonLibraries }),
+      statewideLibraryEntry({ key: "st-clair", county: "St. Clair County",
+                              coverage: stClairCountyCoverage, loader: loadStClairLibraries }),
+      statewideLibraryEntry({ key: "stephenson", county: "Stephenson County",
+                              coverage: stephensonCountyCoverage, loader: loadStephensonLibraries }),
       // Adams — 7 library districts on a 10-polygon tiling. One polygon is named
       // "None": that is the county recording an area no library district serves,
       // so the card says exactly that instead of naming a district called None.

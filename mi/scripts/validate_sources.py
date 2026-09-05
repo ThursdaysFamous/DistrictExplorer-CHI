@@ -210,17 +210,30 @@ ENDPOINTS = [
     },
     # Layer 51, THE ONE THAT IS OVER THE CAP: 2,838 measured 2026-09-04 against
     # a 2,000-record ceiling the service reports as HTTP 200 + exceededTransfer-
-    # Limit rather than an error. min_count is set ABOVE 2,000 on purpose --
-    # if this ever answers 2,000 exactly, the app has stopped paging and is
-    # shipping a silently short set, which is precisely the failure a floor
-    # below the cap could never see.
+    # Limit rather than an error.
+    #
+    # CORRECTED 2026-09-05. This comment used to say the floor was set above
+    # 2,000 so that "if this ever answers 2,000 exactly, the app has stopped
+    # paging" -- A CHECK THIS ROW CANNOT PERFORM, and the claim shipped in the
+    # PR that added it. returnCountOnly is NOT subject to maxRecordCount, so it
+    # answers the true count whatever the app does. Measured against this exact
+    # envelope: returnCountOnly says 2838, a real feature request on the same
+    # layer returns 2000 with exceededTransferLimit set, and the service's own
+    # maxRecordCount is 2000. The count endpoint never sees the cap, so it can
+    # never see the client hitting it.
+    #
+    # So this floor watches the SOURCE SHRINKING, exactly like the other three,
+    # and the number is above 2,000 only because 2,838 is. WHAT WOULD ACTUALLY
+    # CATCH THE CLIENT TRUNCATING is a check on what the app receives, which is
+    # what the browser gates are for -- mi/scripts/smoke_test.mjs asserts the
+    # pager makes more than one request. A row here cannot substitute for it.
     {
         "layer": "fire-station",
         "url": ("https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/51/query"
                 "?geometry=-90.42%2C41.69%2C-82.12%2C48.31&geometryType=esriGeometryEnvelope"
                 "&inSR=4326&spatialRel=esriSpatialRelIntersects&where=1%3D1"
                 "&returnCountOnly=true&f=json"),
-        "min_count": 2500,  # 2,838 measured 2026-09-04; deliberately above the 2,000 cap
+        "min_count": 2500,  # 2,838 measured 2026-09-04; floor set below it, not at it
     },
     # Layer 53. Under the 2,000 cap today (1,290 measured 2026-09-04) and
     # fetched by the paging path regardless; min_count is what turns this from
@@ -237,7 +250,14 @@ ENDPOINTS = [
     # own {xmin,...} comma form -- the {minLng,...} shape makes TIGERweb answer
     # HTTP 200 with a JSON error envelope (measured 2026-09-04). min_count is
     # what makes this a real check rather than a reachability ping: without it
-    # the error envelope reads as a healthy 200. 2,000 in Michigan's full box.
+    # the error envelope reads as a healthy 200.
+    #
+    # 2,000 IN MICHIGAN'S FULL BOX, AND THAT ROUND NUMBER IS REAL RATHER THAN A
+    # CAP -- worth stating, because a count that lands exactly on a power of ten
+    # reads like a truncated one. TIGERweb's maxRecordCount on this layer is
+    # 100,000, and splitting the envelope at -86.27 counts 1,113 west and 915
+    # east: 2,028, which is 2,000 plus the 28 ZCTAs straddling the split and so
+    # counted in both halves. Measured 2026-09-05.
     {
         "layer": "zip-code",
         "url": ("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/"

@@ -112,6 +112,40 @@ BOONE_PARCELS = ("https://maps.boonecountyil.org/arcgis/rest/services/"
 # parcels, and the first attempt at this build read that omission as the county
 # contradicting itself and stopped.
 #
+# THE 90 UNCODED PARCELS ARE MEASURED, AND THE OBVIOUS EXPLANATION IS WRONG.
+# This lived in the `boone-park-library-contact` gap record, which was retired
+# on 2026-09-05 when its subject shipped; a measurement about the BUILD belongs
+# with the build, not with a gap that closed. Ninety parcels carry no tax_code
+# at all, so they never enter the where clause and are holes by construction:
+# 23 of them, 104 acres, sit inside the Belvidere Park District's outline and
+# outside its shipped polygon. The natural guess is that they ARE the parks —
+# and the county's own layers refute it. Overlaid on every published
+# park-property polygon (BCCD Property, Belvidere Parks, Poplar Grove Parks,
+# Parks and Conservation Foundation Property) the 23 overlap by 0.0% of their
+# area, one merely touching, while the county's 15 `Belvidere Parks` polygons
+# (301 acres) fall 100% INSIDE the shipped district — a second, independent
+# corroboration of the boundary. WHAT THE 23 ARE IS UNKNOWN AND IS NOT GUESSED
+# AT: every one of the 90 carries a completely empty attribute row — no owner,
+# no address, no class, no assessment — so the layer says nothing about them
+# beyond their shape.
+#
+# THE MAPS BELOW ARE HAND-TRANSCRIBED FROM THOSE PDFs, so the documents are
+# pinned here and the tax year is stated: re-verifying means re-reading these
+# two, not searching the Clerk's page again. Both are linked from
+# boonecountyil.gov's Clerk & Recorder "Tax Reports" page, which carries a
+# folder per tax year back to 2013.
+BOONE_TAX_YEAR = 2025
+BOONE_REPORTS = {
+    "roster": "https://www.boonecountyil.gov/Departments/Clerk-Recorder/"
+              "Tax%20Reports/2025/Taxcode%20Value%20within%20district%20report.pdf",
+    "corroborating": "https://www.boonecountyil.gov/Departments/Clerk-Recorder/"
+                     "Tax%20Reports/2025/District%20Value%20with%20taxcode%20report.pdf",
+    # the NARROWER report, kept named because reading it as a membership list is
+    # what manufactured the twelve
+    "rates": "https://www.boonecountyil.gov/Departments/Clerk-Recorder/"
+             "Tax%20Reports/2025/District%20rates%20by%20taxcode%20report.pdf",
+}
+#
 # TWO COUNTY DOCUMENTS, EACH USED FOR WHAT IT OWNS. The Clerk's "Taxcode Value
 # within District Report" owns the LINES — which tax codes pay into which
 # district — and abbreviates the names to fit its columns (`PDBV - BELVIDERE PK
@@ -185,8 +219,10 @@ SOURCES = [
      "layer": RI + "8", "name_prop": "park_distr", "expect": 1,
      "edit_pin": 1642177768661, "probes": []},
     # Boone's two, the first sources here whose upstream is a PARCEL FABRIC
-    # rather than a district tiling: ~13k parcels for the park districts and
-    # ~8.7k for the libraries, paged 1,000 at a time. The probes carry the
+    # rather than a district tiling: 12,816 parcels for the park districts and
+    # 9,122 for the libraries, paged 1,000 at a time and PINNED (expect_rows)
+    # so a county that re-codes its roll fails the build instead of quietly
+    # redrawing a district. The probes carry the
     # weight here, and they are chosen to discriminate rather than to pass —
     # every district gets a positive, every negative sits on a REAL parcel in a
     # code the Clerk's report puts in no such district, and the two sources
@@ -195,6 +231,8 @@ SOURCES = [
     # so a source that quietly reused the other's code map would fail both.
     {"slug": "boone-park", "out": "boone-park-districts.json",
      "layer": BOONE_PARCELS, "name_prop": "tax_code", "expect": 2,
+     "expect_rows": 12816,
+     "expect_empty_codes": ["05010", "05110", "05901", "05903", "07044", "08102", "09700"],
      "out_prop": "district", "code_map": BOONE_PARK_CODES,
      "where": _in_clause(BOONE_PARK_CODES),
      "probes": [(42.25670, -88.83936, BELVIDERE_PARK),        # Belvidere City Hall (05005)
@@ -204,6 +242,8 @@ SOURCES = [
                 (42.34853, -88.93519, None)]},                # 03004 — library only, no park
     {"slug": "boone-library", "out": "boone-library-districts.json",
      "layer": BOONE_PARCELS, "name_prop": "tax_code", "expect": 3,
+     "expect_rows": 9122,
+     "expect_empty_codes": ["05901", "05903", "07044", "08102", "09700"],
      "out_prop": "district", "code_map": BOONE_LIBRARY_CODES,
      "where": _in_clause(BOONE_LIBRARY_CODES),
      "probes": [(42.25670, -88.83936, IDA_LIBRARY),              # Belvidere City Hall (05005)
@@ -347,7 +387,7 @@ def build_source(cfg):
     # Every other source here publishes one row per district (9 to 40 of them),
     # so a single unpaginated query was right and its 1,000-row cap was never
     # near. Boone publishes no district layer at all: its park and library
-    # footprints exist only as PARCELS carrying a tax_code, 12,264 and 8,351 of
+    # footprints exist only as PARCELS carrying a tax_code, 12,816 and 9,122 of
     # them, and the same one-shot query would have returned the first 1,000 and
     # said nothing — a district drawn from 8% of its own ground, silently. So
     # the fetch pages, and REFUSES rather than truncating if the server still
@@ -369,6 +409,43 @@ def build_source(cfg):
                  "done — refusing to guess where the data ends"
                  % (cfg["slug"], MAX_FETCH_ROWS))
     geo = {"features": features}
+
+    # ROW-COUNT PIN + EMPTY-CODE GATE, for a code_map source only. `expect`
+    # counts DISTRICTS, which for Boone is 2 and 3 — floors so low that half the
+    # roll could vanish and every guard here would still pass. So the parcel
+    # count is pinned too, and each mapped code is asked whether it produced a
+    # parcel: today 7 of the 26 park codes and 5 of the 24 library codes resolve
+    # to none. That is not a fault — a tax code with no parcels contributes no
+    # geometry — but it was happening SILENTLY, so the codes are declared and
+    # any change to that set stops the build.
+    if cfg.get("code_map") is not None:
+        want_rows = cfg["expect_rows"]
+        if len(features) != want_rows:
+            fail("%s: %d parcels, expected %d — the county re-coded its roll; "
+                 "re-read %s before re-pinning"
+                 % (cfg["slug"], len(features), want_rows, BOONE_REPORTS["roster"]))
+        seen = set()
+        for f in features:
+            props = f.get("properties") or {}
+            for k in props:
+                if k.lower() == cfg["name_prop"].lower() and props[k]:
+                    seen.add(" ".join(str(props[k]).split()))
+        empty = sorted(set(cfg["code_map"]) - seen)
+        if empty != sorted(cfg.get("expect_empty_codes", [])):
+            fail("%s: codes with no parcel changed — got %s, expected %s"
+                 % (cfg["slug"], empty, sorted(cfg.get("expect_empty_codes", []))))
+        if empty:
+            print("  %d mapped code(s) resolve to NO parcel and contribute no "
+                  "geometry: %s" % (len(empty), " ".join(empty)))
+        # The parcels with NO tax_code never enter the where clause at all, so
+        # they are holes by construction rather than by decision. Counted and
+        # printed because an unmeasured hole is the thing this builder exists to
+        # refuse; what they ARE is recorded in the gap record, not guessed at.
+        nulls = requests.get(cfg["layer"] + "/query", params={
+            "where": cfg["name_prop"] + " IS NULL", "returnCountOnly": "true", "f": "json",
+        }, timeout=120).json().get("count")
+        print("  %s parcels carry no %s at all and are outside this build by "
+              "construction" % (nulls, cfg["name_prop"]))
 
     # Accumulate PARTS and union each district ONCE at the end. Unioning
     # incrementally per row — the shape this loop had — is quadratic in the row

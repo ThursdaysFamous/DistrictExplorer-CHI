@@ -324,9 +324,25 @@ PROVENANCE = [
         "app_file": "ia-supervisor-districts.json",
         "source_url": "https://www.storycountyiowa.gov/1172/Jurisdictional-Maps",
         "note": (
-            "Story County's own site — states its SOS-approved Senate File 75 "
-            "plan's facts; no GIS service found, so the county ships as one "
-            "county-level TRANSITIONING feature pending real district geometry."
+            "Story County's own Jurisdictional Maps page — where the county "
+            "publishes the Auditor's Board of Supervisors District Map. Still "
+            "no GIS service (re-swept 2026-09-05), so the three adopted "
+            "districts are read off that map itself."
+        ),
+    },
+    {
+        "layer": "county-supervisor",
+        "app_file": "ia-supervisor-districts.json",
+        "source_url": ("https://www.storycountyiowa.gov/DocumentCenter/View/17463/"
+                       "Board-of-Supervisors-District-Map"),
+        "note": (
+            "The map itself — the document Story's three districts are DERIVED "
+            "from, so it is watched separately from the page that links it. "
+            "ia/scripts/build_story_supervisor_districts.py pins its SHA-256 "
+            "and refuses to re-derive from a re-print, which is a stricter "
+            "check than this reachability probe; this row is here so a link "
+            "that goes dead surfaces on the monthly issue rather than only "
+            "when an operator next rebuilds."
         ),
     },
     {
