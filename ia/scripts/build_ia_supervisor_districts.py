@@ -51,18 +51,26 @@ countyRedistricting) plus each county's own site:
   * STORY and JOHNSON have SOS-approved adopted plans (Story: county board
     approved 2026-01-27, SOS technical approval confirmed; Johnson: county
     board approved 2025-12-23, SOS approval 2026-01-07 — both re-confirmed
-    live via news coverage 2026-08-27) but publish only a PDF map, no GIS
-    service found for either. Per the plan's own gate ("ship the count/
-    board-size fact even where the exact line geometry is still in
-    dispute... the honest move is the pinned-source override, not a
-    guess"), each ships as ONE county-level feature (reusing the county's
-    own outer boundary from state-counties.json — county lines don't move,
-    only the internal district lines do) carrying PLANTYPE=TRANSITIONING
-    and the adopted plan's known facts (district count, populations where
-    published, approval dates, a citation). The card states plainly that
-    this app cannot yet resolve which specific district contains a point.
-    A future PR that finds or extracts real geometry (e.g. a Jackson-County-
-    IL-style vector PDF trace) supersedes this fallback.
+    live via news coverage 2026-08-27) and NEITHER publishes a GIS service
+    (re-swept 2026-09-05). On 2026-08-26 each shipped as ONE county-level
+    feature carrying PLANTYPE=TRANSITIONING and the adopted plan's known
+    facts, on a card that said plainly it could not resolve which district
+    contains a point — and that entry predicted its own successor: "a future
+    PR that finds or extracts real geometry (e.g. a Jackson-County-IL-style
+    vector PDF trace) supersedes this fallback."
+      - STORY DID, 2026-09-05. Its three districts are read off the county
+        Auditor's own printed map by build_story_supervisor_districts.py and
+        resolved to whole Census 2020 blocks; see STORY below and that
+        script's docstring for the method, the gates, and the correction to
+        this project's own earlier claim about that PDF. Its PLANTYPE stays
+        TRANSITIONING, because the lines are adopted and first elect in
+        November 2026 while the board sitting now is at-large.
+      - JOHNSON HAS NOT, and is now a recorded gap
+        (johnson-county-supervisor-districts in docs/DATA_LAYER_GUIDEBOOK.md)
+        rather than an absence described only in prose. It still ships the
+        one county-level feature, reusing the county's own outer boundary
+        from state-counties.json — county lines don't move, only the
+        internal district lines do.
 
 Occasional OPERATOR step, not weekly CI — Iowa publishes no statewide
 supervisor roster (`build_ia_county_board_directory.py` is a separate,
@@ -110,21 +118,8 @@ BLACK_HAWK = {
     "source_url": "https://blackhawkcountyelections.iowa.gov/page/supervisordistricts/",
 }
 
+# Story LEFT this table on 2026-09-05 -- see STORY below. Johnson has not.
 TRANSITIONING_PENDING = {
-    "Story": {
-        "fips": "169",
-        "num_districts": 3,
-        "populations": [32783, 32894, 32860],
-        "note": (
-            "Story County is transitioning from at-large to district elections "
-            "under Senate File 75. The Iowa Legislative Services Agency's plan "
-            "(3 districts, populations approx. 32,783 / 32,894 / 32,860) was "
-            "approved by the Board of Supervisors 2026-01-27 and received "
-            "Secretary of State technical approval. This app cannot yet "
-            "identify which specific district contains this point."
-        ),
-        "source_url": "https://www.storycountyiowa.gov/1172/Jurisdictional-Maps",
-    },
     "Johnson": {
         "fips": "103",
         "num_districts": 5,
@@ -143,6 +138,46 @@ TRANSITIONING_PENDING = {
 }
 for _name, _rec in TRANSITIONING_PENDING.items():
     _rec["source"] = "ADOPTED-PENDING-GEOMETRY"
+
+# Story County: real district lines, from the county's own printed map.
+#
+# Its board is STILL ELECTED AT LARGE. Senate File 75 moves it to three
+# single-member districts at the November 2026 election, and the Board adopted
+# these lines on 2026-01-27 -- so the county is genuinely mid-transition and
+# PLANTYPE stays TRANSITIONING. What changed on 2026-09-05 is only that this
+# app can now say WHICH district a point is in, where before it shipped one
+# county-shaped feature that could not.
+#
+# Calling it PLAN 3 would be the tempting simplification and would be false: it
+# would tell a reader their district elects one supervisor today, which is the
+# exact class of error the fleet's at-large rule exists to prevent. The card
+# distinguishes the two states by whether DISTRICT is a number or "PENDING".
+#
+# The geometry is built by ia/scripts/build_story_supervisor_districts.py --
+# the county Auditor's own map read as vector path objects, georeferenced, and
+# resolved to whole Census 2020 blocks so nothing traced ships. Its gate is
+# that the derived populations equal the Legislative Services Agency's
+# published 32,783 / 32,894 / 32,860 EXACTLY, district by district. That file
+# is committed (data/source/, deploy-excluded) so this builder needs neither
+# the PDF nor shapely; re-derive with that script's --check.
+STORY = {
+    "county": "Story",
+    "fips": "169",
+    "path": os.path.join(REPO_ROOT, "data", "source",
+                         "story-supervisor-districts.geojson"),
+    "expected_districts": 3,
+    "populations": {"1": 32783, "2": 32894, "3": 32860},
+    "source": "STORY-COUNTY-AUDITOR-MAP-2026-03-13",
+    "source_url": "https://www.storycountyiowa.gov/1172/Jurisdictional-Maps",
+    "note": (
+        "Story County is moving from at-large to district elections under "
+        "Senate File 75. These are the lines the Board of Supervisors adopted "
+        "2026-01-27, read from the county Auditor's own district map; they "
+        "first elect supervisors at the November 2026 election. The board "
+        "sitting now is elected at large, so this district does not yet have "
+        "a supervisor of its own."
+    ),
+}
 
 SIMPLIFY = "10%"
 PRECISION = "0.000001"
@@ -261,6 +296,61 @@ def black_hawk_features():
     worst = max(abs(p - ideal) for p in pops) / ideal * 100
     print("Black Hawk: %d districts, pop %d-%d (ideal %.0f, worst %.1f%%)"
           % (len(out), min(pops), max(pops), ideal, worst), file=sys.stderr)
+    return out
+
+
+def story_features():
+    """Story's three adopted districts, from the committed derivation.
+
+    Read here rather than re-derived: build_story_supervisor_districts.py owns
+    the PDF read and carries the gates, and this builder deliberately depends
+    on nothing heavier than curl and mapshaper.
+    """
+    try:
+        with open(STORY["path"]) as f:
+            fc = json.load(f)
+    except OSError as e:
+        raise RuntimeError(
+            "%s is missing (%s). Build it first: python3 "
+            "ia/scripts/build_story_supervisor_districts.py"
+            % (os.path.relpath(STORY["path"], REPO_ROOT), e))
+    feats = fc.get("features") or []
+    if len(feats) != STORY["expected_districts"]:
+        raise RuntimeError("Story's derivation carries %d districts, expected %d"
+                           % (len(feats), STORY["expected_districts"]))
+    got = {f["properties"]["DISTRICT"]: f["properties"]["POPULATION"]
+           for f in feats}
+    if got != STORY["populations"]:
+        raise RuntimeError(
+            "Story's derived populations are %s, expected the Legislative "
+            "Services Agency's published %s. Re-run "
+            "ia/scripts/build_story_supervisor_districts.py --check"
+            % (got, STORY["populations"]))
+    out = []
+    for f in feats:
+        d = f["properties"]["DISTRICT"]
+        out.append({
+            "type": "Feature",
+            "properties": {
+                "COUNTY": STORY["county"],
+                "FIPS": STORY["fips"],
+                "DISTRICT": d,
+                # NOT "PLAN 3" -- these lines are adopted and not yet in force.
+                "PLANTYPE": "TRANSITIONING",
+                "NUMDISTRICTS": STORY["expected_districts"],
+                "POPULATION": STORY["populations"][d],
+                "SOURCE": STORY["source"],
+                "SOURCE_URL": STORY["source_url"],
+                "SOURCE_NOTE": STORY["note"],
+            },
+            "geometry": f["geometry"],
+        })
+    pops = list(STORY["populations"].values())
+    ideal = sum(pops) / len(pops)
+    print("Story: %d adopted districts, pop %d-%d (ideal %.0f, worst %.2f%%) — "
+          "still at-large until November 2026"
+          % (len(out), min(pops), max(pops), ideal,
+             max(abs(p - ideal) for p in pops) / ideal * 100), file=sys.stderr)
     return out
 
 
@@ -446,10 +536,11 @@ def main():
           % (len(lsa), dropped, sorted(KNOWN_TRANSITIONING)), file=sys.stderr)
 
     bh = black_hawk_features()
+    story = story_features()
     county_geoms = load_state_county_geometry()
     pending = transitioning_pending_features(county_geoms)
 
-    feats = lsa_kept + bh + pending
+    feats = lsa_kept + bh + story + pending
     by_county = gate_counties(feats, county_geoms)
     print("gates: %d counties represented (%s recorded missing); PLANTYPE values all known"
           % (len(by_county), sorted(EXPECTED_MISSING)), file=sys.stderr)

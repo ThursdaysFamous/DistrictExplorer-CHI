@@ -216,6 +216,28 @@ whole repo, rather than confined to the new tree, returns false positives from
 > Jones, whose own site is real even though its geometry isn't shipped) from the Iowa State Association
 > of Counties' member directory rather than guessing a pattern.
 
+> **OUTCOME UPDATE 2026-09-05 — STORY'S PLACEHOLDER IS RETIRED, and the count above moves
+> 270 → 272.** Step 2's "currently effective at-large form with a dated note" fallback was
+> always meant to be temporary, and Story's ended by reading the county Auditor's own printed
+> district map: three closed stroke path objects at linewidth 12 (the only curves on the page
+> at that weight out of 10,235), one legend-declared numeral inside each, georeferenced to
+> NAD83 / Iowa North — which the drawn aspect ratio identifies to five digits, and which fits
+> the county's real outline to 0.6 m mean / 2.0 m max — then resolved to whole Census 2020
+> blocks so nothing traced ships. **The gate is a different county product and it is exact**:
+> the derived populations reproduce the Legislative Services Agency's published
+> 32,783 / 32,894 / 32,860 district by district in order, and a negative test with the labels
+> for districts 2 and 3 swapped passes every other gate and fails only this one.
+> **A CORRECTION TO THIS PROJECT'S OWN RECORD went with it**: an earlier pass had called the
+> map's 1,584 FILLED curves "the Jackson precondition". None of them is a district (largest
+> 2.63% of the page); they are lakes, parks and city fills. Reading the FILLS would have found
+> nothing — **read the path OBJECTS, never the pixels** is the rule that survived.
+> Story keeps PLANTYPE `TRANSITIONING`, not `PLAN 3`: the lines are adopted and first elect in
+> November 2026, and the board sitting now is still at-large, so `ia-supervisor-members.json`
+> correctly keys no supervisor to a Story district. **JOHNSON IS UNCHANGED** and now carries
+> its own gap record (`johnson-county-supervisor-districts`); its recorded source URL, which
+> ia/WATCH.md had called dead, answers 200 — the original probe hit a different path read from
+> a truncated string in tool output.
+
 **Geometry — VERIFIED and re-verified this session**:
 `services.arcgis.com/vPD5PVLI6sfkZ5E4/arcgis/rest/services/CountySupervisorDistricts/FeatureServer/0`.
 This session's own fetch confirms: 266 features; fields `COUNTY, DISTRICT, NAME, PLANTYPE,
