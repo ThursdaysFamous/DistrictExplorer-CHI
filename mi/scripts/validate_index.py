@@ -120,7 +120,7 @@ ROSTER_FILES = {
     "mi-senate-members.json": 34,  # Senate roster from Open States mi.csv enriched by the Michigan Senate's own all-senators directory, refreshed weekly by update-mi-legislature-roster.yml; floor tolerates transient vacancies (38 seats).
     "mi-house-members.json": 99,  # House roster from Open States mi.csv, refreshed weekly by update-mi-legislature-roster.yml; floor tolerates transient vacancies (110 seats). No capitol contact block — see the layer's source note.
     "coverage-gaps.json": 0,  # The Data gaps panel's content; empty at arrival — this instance's first recorded gap ships with the layer it belongs to.
-    "mi-detroit-council-members.json": 4,  # Detroit's nine council members — seven by district plus two at large (charter Art. 4 §4-101). Built by mi/scripts/build_mi_detroit_council_roster.py from mi_detroit_council_scraper.py's cache. Four top-level keys: districts, citywide, sourceUrl, archivedAt.
+    "mi-detroit-council-members.json": 4,  # Detroit's nine council members — seven by district plus two at large (charter Art. 4 §4-101). Built by mi/scripts/build_mi_detroit_council_roster.py from mi_detroit_council_scraper.py's cache. Five top-level keys: districts, citywide, office (the body's own address and switchboard, hoisted), sourceUrl, archivedAt.
 }
 
 # Files the app references DYNAMICALLY — the URL is built from a slug at

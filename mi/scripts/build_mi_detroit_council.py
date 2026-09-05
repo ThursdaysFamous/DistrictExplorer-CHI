@@ -355,7 +355,8 @@ def main():
         print("build-mi-detroit-council: OK — %d districts shipped" % n)
         return
 
-    print("fetching the city's three council-district services…")
+    print("fetching the city's council-district services (the shipped plan, plus the "
+          "'Current' and 2013 witnesses)…")
     src = fetch_geojson(SERVICE, ",".join(KEEP_FIELDS))
     current = fetch_geojson(WITNESS_CURRENT, "DistrictNu")
     archive = fetch_geojson(WITNESS_ARCHIVE, "district_number")
