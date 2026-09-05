@@ -2238,7 +2238,8 @@ Two corollaries the same day earned:
   and the permissive one is the one a probe finds first. WinGIS's `/Terms` carries no
   redistribution clause at all — a no-warranty clause, a limitation of liability, and a
   credits requirement — and reading it alone produced the conclusion that Winnebago was
-  freely licensable. Its Data License Agreement, a PDF linked from the same page, says
+  freely licensable. Its Data License Agreement, a PDF linked from its /GISData page and NOT from
+  /Terms (which carries no occurrence of "licens" at all), says
   "reproduction or redistribution of digital datasets or products derived therefrom
   outside of licensee's organization or entity is expressly forbidden" — WORD FOR WORD the
   clause that stopped Bureau, and the same class as the CCGISC licence that withdrew
