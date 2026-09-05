@@ -190,7 +190,7 @@
   "members": {
    "01": {
     "name": "Maria Lasecki",
-    "url": "http://www.villageofhoward.com/directory.aspx?EID=110"
+    "url": "https://www.villageofhoward.com/directory.aspx?EID=110"
    },
    "02": {
     "name": "Chris Nielsen",
@@ -357,7 +357,7 @@
    },
    "16": {
     "email": "district16@cityofmadison.com",
-    "name": "Sean O&#039;Brien",
+    "name": "Sean O'Brien",
     "url": "https://www.cityofmadison.com/council/district16"
    },
    "17": {
@@ -869,7 +869,7 @@
   },
   "municipality": "Superior",
   "seats": 10,
-  "sourceUrl": "https://www.ci.superior.wi.us/697/City-Councilor-Information"
+  "sourceUrl": "https://www.superiorwi.gov/697/City-Councilor-Information"
  },
  "80075": {
   "members": {

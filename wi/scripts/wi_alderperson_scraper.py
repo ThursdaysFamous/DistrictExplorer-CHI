@@ -2,7 +2,7 @@
 """
 Scrape the alderperson rosters for the Wisconsin municipalities whose
 aldermanic districts the statewide dissolve ships AND whose rosters have a
-verified open route — six measured 2026-08-26, eleven more 2026-09-05.
+verified open route — six measured 2026-08-26, twelve more 2026-09-05.
 Stage 1 of the pair; build_wi_alderperson_roster.py writes
 data/app/wi-alderpersons.json.
 
@@ -81,8 +81,8 @@ could not be drawn, so there was no card for the names to ride. Outagamie
 County still files all 50 of its Appleton wards uncoded; what changed is that
 the CITY CLERK's own polling-locations page turned out to state the
 composition, and build_wi_aldermanic_districts.py now composes the fifteen
-districts from it under four independent witnesses. A roster and the boundary
-it rides ship together or not at all.
+districts from it under three independent witnesses and a second edition of
+one of them. A roster and the boundary it rides ship together or not at all.
 """
 
 import html as H
@@ -128,7 +128,7 @@ RACINE_INDEX = ("https://cityofracinewi.gov/government/city-leadership"
 WAUKESHA_INDEX = "https://www.waukesha-wi.gov/about_the_common_council/index.php"
 
 # ---------------------------------------------------------------------------
-# THE ELEVEN ADDED 2026-09-05, each hand-read from its own page before a line of
+# THE TWELVE ADDED 2026-09-05, each hand-read from its own page before a line of
 # parser was written. They came out of a sweep of all 149 unrostered districted
 # municipalities: home page (robots.txt honoured first), then up to two hops of
 # council-ish links, scoring how many of the municipality's districts a page
@@ -153,7 +153,7 @@ WAUKESHA_INDEX = "https://www.waukesha-wi.gov/about_the_common_council/index.php
 # Lake, Ripon, St Croix Falls, St Francis, Tomahawk, Westfield. Those are shut,
 # not unexamined, and nothing here renames a user agent to get past one.
 #
-# TEN OF THE ELEVEN BELOW CAME OUT OF THAT 32, AND MENOMONIE DID NOT — its
+# TEN OF THE TWELVE BELOW CAME OUT OF THAT 32, AND MENOMONIE DID NOT — its
 # council page pairs every seat with a name and the triage scored it 0, because
 # the crawl never reached the page inside its six-link budget. The sweep
 # UNDER-reports, which is the right direction for a triage and the reason the
@@ -195,7 +195,9 @@ STEVENS_POINT_DIR = "https://stevenspoint.com/Directory.aspx?DID=23"
 MENOMONIE_INDEX = "https://www.menomonie-wi.gov/248/City-Council"
 MANITOWOC_INDEX = "https://www.manitowoc.org/78/Meet-Your-Alderperson"
 SHEBOYGAN_INDEX = "https://www.sheboyganwi.gov/395/Common-Council"
-SUPERIOR_INDEX = "https://www.ci.superior.wi.us/697/City-Councilor-Information"
+# www.ci.superior.wi.us answers, and 301s to this host; the redirect target is
+# what ships so a reader clicks the address the city actually serves.
+SUPERIOR_INDEX = "https://www.superiorwi.gov/697/City-Councilor-Information"
 PORTAGE_INDEX = "https://www.portagewi.gov/mayor-and-council"
 VIROQUA_INDEX = ("http://viroqua-wisconsin.com/government"
                  "/city_council_and_committees.php")
@@ -344,10 +346,20 @@ def scrape_milwaukee():
     every run as the currency witness, and it carries the district as well as
     the name: OfficeRecordTitle is "3rd District", corroborated by
     OfficeRecordSort. Measured 2026-09-05 against the shipped roster: 15 of 15
-    districts, 14 exact surnames and one suffix difference (the file's
-    "Russell W Stamper, II" against Legistar's "Russell W. Stamper"). So the
-    two fetches this function makes are unchanged in number — the ROLES are
-    swapped, and the disallowed one is gone.
+    districts and 15 of 15 surnames. So the two fetches this function makes are
+    unchanged in number — the ROLES are swapped, and the disallowed one is gone.
+
+    SIX ROWS CHANGED SPELLING ON THE FIRST REBUILD, NOT ONE. An earlier version
+    of this paragraph said "one suffix difference", which was the one that
+    LOSES something and not the count. The GIS spelled middle names out and
+    Legistar abbreviates or omits them: D01 "Andrea M Pratt" -> "Andrea Pratt",
+    D02 "Mark Chambers, Jr" -> "Mark Chambers Jr.", D06 "Milele A Coggs" ->
+    "Milele A. Coggs", D10 "Sharlen P Moore" -> "Sharlen Moore", D12 "Jose G
+    Perez" -> "Jose Perez", D15 "Russell W Stamper, II" -> "Russell W. Stamper".
+    Same six people, the Council's own styling. Only D15 loses a name part
+    Legistar does not carry at all — there is no suffix field anywhere in the
+    record (Chambers keeps his inside the LAST name) — and it is NOT typed back
+    in by hand, because that would be a name this project cannot source.
 
     The CKAN shapefile stays as corroboration rather than as a fallback: it is
     the city's own open-data portal, its robots.txt permits the path, and where
@@ -431,7 +443,13 @@ def scrape_madison():
     by_href = {}
     for m in re.finditer(r'href="(?:https://www\.cityofmadison\.com)?/council/district(\d+)"'
                          r'[^>]*>\s*Alder\s+([^<]+)<', index):
-        by_href[int(m.group(1))] = " ".join(m.group(2).split())
+        # UNESCAPE. The index writes an apostrophe as `&#039;`, and D16 shipped
+        # the literal "Sean O&#039;Brien" from 2026-08-26 to 2026-09-05 because
+        # nothing here decoded it and the card renders through textContent, which
+        # is exactly right for safety and does not undo an entity. The surname
+        # gate below never caught it either: fold() drops punctuation, so
+        # "O&#039;Brien" and "O'Brien" both fold to "brien".
+        by_href[int(m.group(1))] = " ".join(H.unescape(m.group(2)).split())
     if not (17 <= len(by_href) <= 20):
         raise SystemExit("madison index links %d alder districts (expected ~19-20 "
                          "with vacancies) — the page shape moved" % len(by_href))
@@ -440,7 +458,7 @@ def scrape_madison():
     for n in range(1, 21):
         page = fetch(MADISON_DISTRICT % n)
         h1 = re.search(r"<h1[^>]*>(.*?)</h1>", page, re.S)
-        head = re.sub(r"<[^>]+>", "", h1.group(1)).strip() if h1 else ""
+        head = H.unescape(re.sub(r"<[^>]+>", "", h1.group(1))).strip() if h1 else ""
         if not head.startswith("District %d" % n):
             raise SystemExit("madison district page %d headlines %r" % (n, head))
         if "Vacant" in head:
@@ -685,8 +703,8 @@ def scrape_waukesha():
     return members, WAUKESHA_INDEX
 
 
-# ========================================================= the eleven of 2026-09-05
-# One helper first. TWO OF THE TEN PRINT A WARD NUMBER WHERE THE KEY IS A
+# ======================================================== the twelve of 2026-09-05
+# One helper first. TWO OF THEM PRINT A WARD NUMBER WHERE THE KEY IS A
 # DISTRICT: Menomonie's council page reads "Jeff Luther, Ward 1" and Viroqua's
 # table reads "WARD 1 | SETH MCCLURG", while the file this roster keys into is
 # dissolved on ALDERID. In both cities every ward is its own district today and
@@ -873,6 +891,10 @@ def scrape_sheboygan():
     and naming the alderperson with a link back to this page is the reference
     use the signal permits. Recorded so the reading is visible and the operator
     can drop this city if they read it differently.
+
+    THE OPERATOR READ IT AND KEPT IT, 2026-09-05. This paragraph was written as
+    an open question for exactly that decision; it has been answered, and the
+    reading above stands as the reason rather than as a proposal.
     """
     members = {}
     for name, title, href in civicplus_hcards(fetch(SHEBOYGAN_INDEX)):
@@ -1099,8 +1121,16 @@ def scrape_howard():
             continue
         n = int(d.group(1))
         name = " ".join(re.sub(r"<[^>]+>", " ", H.unescape(nm.group(2))).split())
+        # THE PAGE MIXES SCHEMES: six of the eight anchors are https and two —
+        # districts 1 and 7 — are written http, which urljoin preserves because
+        # they are absolute. The host serves both and redirects, but a card that
+        # hands a reader an http link on a site that has https is shipping the
+        # worse of two addresses the publisher itself uses. Upgraded on this
+        # host only, and only for a bare http scheme.
+        href = re.sub(r"^http://(www\.villageofhoward\.com)", r"https://\1",
+                      nm.group(1))
         entry = {"name": name,
-                 "url": urllib.parse.urljoin(HOWARD_INDEX, nm.group(1))}
+                 "url": urllib.parse.urljoin(HOWARD_INDEX, href)}
         key = "%02d" % n
         if key in members and members[key]["name"] != name:
             raise SystemExit("howard lists two names for district %d" % n)
@@ -1200,21 +1230,37 @@ def scrape_appleton():
     return members, APPLETON_INDEX
 
 
-# ONE CITY NEVER TAKES THE OTHER FIVE DOWN. Until 2026-09-03 the six scrapes
-# ran unguarded and any raise ended the run, so greenbaywi.gov timing out after
-# three 60-second tries cost Milwaukee, Madison, Kenosha, Racine and Waukesha
-# their weekly refresh as well — 82 alderpersons dropped because one city's
-# webserver was slow. That is the per-layer failure isolation the APP has
-# always had (a layer whose source is down shows a Retry inside its own card
-# and never touches the others), arriving in the pipeline that feeds it.
+# ONE UNREACHABLE SERVER NEVER TAKES THE OTHERS DOWN — AND A BROKEN READING
+# TAKES EVERYTHING DOWN ON PURPOSE. The distinction is the whole design and it
+# was stated wrongly in this repo until 2026-09-05: the workflow's comment and
+# this module's docstring both said a municipality whose page reshapes "fails
+# its own gate" in isolation, which is false.
 #
-# A missed city is NOT a city with no alderpersons: it emits nothing here and
-# `build_wi_alderperson_roster.py` carries its last shipped rows forward, names
-# it in the log, and refuses if too many are carried at once. The reason
-# travels in `failures` so the weekly PR's reviewer can see which server was
+# WHAT IS ISOLATED. Until 2026-09-03 the six scrapes ran unguarded and any raise
+# ended the run, so greenbaywi.gov timing out after three 60-second tries cost
+# Milwaukee, Madison, Kenosha, Racine and Waukesha their weekly refresh as well
+# — 82 alderpersons dropped because one city's webserver was slow. `attempt()`
+# catches `Exception`, so that class of failure — a timeout, a reset, an HTTP
+# error, a malformed body — is now caught per municipality, and
+# `build_wi_alderperson_roster.py` carries that municipality's last shipped rows
+# forward, names it in the log, and refuses if too many are carried at once. The
+# reason travels in `failures` so the weekly PR's reviewer sees WHICH server was
 # unreadable rather than inferring it from an absence.
+#
+# WHAT IS NOT, AND MUST NOT BE. Every gate in this file raises `SystemExit`, and
+# `SystemExit` inherits from `BaseException` rather than `Exception` — so a gate
+# failure walks straight past `attempt()` and ends the run. THAT IS THE SAFE
+# DIRECTION AND THE CATCH IS DELIBERATELY NOT WIDENED. A timeout means "not
+# today"; a gate failure means a pinned reading has stopped being true, and the
+# honest response to that is to stop, not to carry a municipality forward under
+# a date that says the run went fine. Widening this to `BaseException` would
+# turn every reshaped page into a silent six-week-old roster.
 def attempt(label, fn):
-    """(result, None) or (None, reason) — never raises."""
+    """(result, None) on success; (None, reason) on an UNREACHABLE source.
+
+    Never catches a gate failure — see the block above. `SystemExit` is not an
+    `Exception`, and that is the point rather than an oversight.
+    """
     try:
         return fn(), None
     except Exception as e:                   # noqa: BLE001 - reported per city
