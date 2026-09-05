@@ -1101,11 +1101,17 @@ note is drafted and waits on a route rather than on a send.
 **NOT YET ASKED — DRAFTED 2026-09-05.** Nothing here has been bought, and nothing should
 be until this is answered.
 
-**One number in the draft below is deliberately absent.** A sweep of all 608 city and
-village websites was running when this was written, and the mail says "I have been
-through the cities' and villages' own websites" rather than naming a count, because a
-count that is not finished is not a measurement. When the sweep lands, its figures go
-into the `municipal-officers` gap record and this draft can name them.
+**The sweep this draft was waiting on has landed, and the draft names its figures.**
+When Ask 17 was first written, a sweep of all 608 city and village websites was still
+running, and the mail said "I have been through the cities' and villages' own websites"
+without a count, because a count that is not finished is not a measurement. It finished
+on 2026-09-05: **444 of the 608 readable, 238 pairing an executive title with a name, 206
+naming none, 63 with no municipal website at all in the Commission's clerk file, 47
+disallowing all crawling, 29 refusing with HTTP 403 and 25 failing the network.** The
+figures are in the `municipal-officers` gap record and the mail below now states the two
+that bear on the ask. **The 238 is triage and not a roster** — roughly sixteen of them are
+page furniture and the sweep truncates candidate names at its own column width — which is
+why the mail says "fewer than half" rather than quoting it as a result.
 
 **This ask exists because its prerequisite is now met.** The `municipal-officers` gap
 record has said since 2026-09-02 that the League route needed one thing established
@@ -1116,8 +1122,16 @@ sign-in and no account:
 
 **THE RECORD WAS LOOKING AT THE WRONG PAGE.** `lwm-info.org/directory.aspx` — the URL the
 record measured as "presenting a Sign In control" — is the League's **own staff
-directory**: six employees, Executive Director through Government Affairs Director. It
-answers 200 to an ordinary browser and gates nothing. The "Sign In" seen there is the
+directory**: its employees, Executive Director through Government Affairs Director. It
+answers 200 to an ordinary browser and gates nothing. (**A first version of this note said
+*six employees*. That was a filter artefact** — it came from grepping the page for lines
+matching `director|member|official`, which surfaces only the titles containing the word
+*Director* — and an unfiltered read gives eighteen. The six is retracted; the eighteen is
+not restated as a measurement of my own, because the page could not be re-read on
+2026-09-05, `/directory.aspx` now redirecting to `/m/directory`, which timed out on every
+attempt. **The finding does not rest on the count either way**: what matters is that this
+is the League's staff, not Wisconsin's municipal officials, and that nothing on it is
+gated.) The "Sign In" seen there is the
 site-wide CivicPlus header control that appears on every page of the site, including the
 front page the record measured as 200 without noticing it there.
 
@@ -1134,23 +1148,51 @@ its contents itself, at `lwm-info.org/1236/Directory-of-Cities-Villages`:
 the governing body — in one document. That is the establishing measurement the record
 asked for, and it did not cost anything.
 
-**AND THERE IS A CHEAPER, NARROWER PRODUCT WITH A TERM THAT BLOCKS IT.**
-`lwm-info.org/713/Mailing-Lists` sells contact lists as Excel spreadsheets:
+**AND IT IS SOLD RATHER THAN MEMBER-GATED — THE PRICES ARE PUBLISHED.**
+`lwm-info.org/713/Mailing-Lists` (which now redirects to `/713/Contact-and-Mailing-Lists`)
+sells contact lists as Excel spreadsheets, and sells the Directory itself. Read
+2026-09-05, with no account and no sign-in:
 
-| List | Contacts | Price |
+| Product | Contacts | Price |
 |---|---|---|
 | **Chief Executives** (Mayors, City and Village Managers, Village Presidents) | ~600 | **$30.00** |
-| Clerks (*the only list that contains emails*) | ~600 | $50.00 |
+| **Governing Bodies** — the other half of this gap | **~3,500** | **$180.00** |
+| **Directory of Cities and Villages** — the annual publication described at `/1236/` | — | **$500.00** |
+| Clerks (*the only list that contains e-mail addresses*) | ~600 | $50.00 |
 | Administrators, Managers | ~230 | $10.00 |
 | Finance Director, Treasurer, Comptroller, HR Director | ~670 | $35.00 |
 
-Thirty dollars would name a mayor or village president in essentially every city and
-village in Wisconsin. **The page also says what the buyer may do with it:** *"Mailing
-lists are emailed as an Excel spreadsheet **for your exclusive use**."* Exclusive use is
-the opposite of publishing on a free public map, so **the purchase does not answer the
-question — the terms do**, and paying first and asking afterwards is how a project ends
-up with data it cannot use. That is the Jo Daviess lesson exactly: ask for written
-permission BEFORE signing or paying.
+So the whole gap has a price on it: $30 for the executive half, $180 for the governing
+bodies, $500 for the Directory that carries both. **This is a decision about terms and
+about money, and both numbers belong in front of whoever makes it** — which is why they
+are here rather than left as "member-gated", which is what an earlier version of this
+record called it and which was simply wrong.
+
+**TWO THINGS ABOUT THE $500 DIRECTORY DO NOT MATCH ITS OTHER PAGE, AND THE NARROWER ONE
+IS THE ONE ON THE ORDER FORM.** `/1236/` says the Directory "lists **all** city and
+village elected officials"; the order page's own scope line says it *"Lists all **member**
+city and village elected officials, governing body, and staff. Includes county and
+population."* Membership is not universal, so those two sentences describe different
+documents, and the second is the one attached to the price. **What the $500 actually
+covers is therefore part of the ask rather than a detail to settle afterwards** — a
+Directory of members only would leave every non-member municipality exactly where it is
+today.
+
+**AND THE $180 LIST CARRIES NO PHONE AND NO E-MAIL.** The same page: *"Included is mailing
+information, population, and county location… Only list '#2. Clerks' contains phone
+numbers, clerk email addresses, and the municipal webpage."* So Governing Bodies would
+give ~3,500 names with a mailing address and nothing else — and this project already has
+the one officer whose list carries contact detail, free, from the Elections Commission.
+One more thing is worth saying plainly before anyone pays: **"mailing information" for a
+village trustee is very often their house**, and this project never ships a home address,
+so part of what the $180 buys would be dropped on arrival.
+
+**The page also says what a buyer may do with any of it:** *"Mailing lists are emailed as
+an Excel spreadsheet **for your exclusive use**."* Exclusive use is the opposite of
+publishing on a free public map, so **the purchase does not answer the question — the
+terms do**, and paying first and asking afterwards is how a project ends up with data it
+cannot use. That is the Jo Daviess lesson exactly: ask for written permission BEFORE
+signing or paying.
 
 ### Recipients
 
@@ -1167,16 +1209,19 @@ permission BEFORE signing or paying.
 > I run districtry (https://districtry.com/wi/), a free, non-commercial site that shows
 > Wisconsinites which civic districts cover any point in the state and who represents them
 > there. It carries the Legislature's ward and district files, the Elections Commission's
-> statewide municipal clerk directory, all 72 county boards, and the alderpersons of
-> eighteen cities read from those cities' own pages. There are no adverts and nothing is
-> sold.
+> statewide municipal clerk directory, all 72 county boards, and the alderpersons and
+> village trustees of eighteen cities and villages read from those municipalities' own
+> pages. There are no adverts and nothing is sold.
 >
 > The one level it cannot answer for is the municipal governing body. Outside those
-> eighteen cities it can name no mayor, no village president and no council or village
-> board member, because I have found no source that publishes them together, and I have
-> been through the cities' and villages' own websites looking for one. Your Annual
-> Directory of City and Village Officials plainly does publish them together, and your
-> Chief Executives mailing list would cover the executive half.
+> eighteen municipalities it can name no mayor, no village president and no council or
+> village board member, because I have found no source that publishes them together. I
+> have been through all 608 city and village websites looking for one: I could read 444 of
+> them, and fewer than half of those name an executive anywhere a program can find it, so
+> reading them one at a time is not a route to a statewide answer. Your Annual Directory
+> of City and Village Officials plainly does publish them together, your Governing Bodies
+> list covers the same ground, and your Chief Executives list would cover the executive
+> half.
 >
 > Before buying either I would rather ask what I may do with it, because the mailing-list
 > page says the spreadsheet is "for your exclusive use", and what I would want to do is the
@@ -1202,11 +1247,15 @@ permission BEFORE signing or paying.
   executive half; the Directory would close the governing-body half as well. The purchase
   becomes a decision about money rather than about permission, and it is the operator's.
 * **No** — a clean, citable no. The gap record records the League route CLOSED rather than
-  unexplored, and what remains is the per-municipality ladder: 608 city and village sites
-  read one at a time, which the 2026-09-05 sweep is measuring.
+  unexplored, and what remains is the per-municipality ladder, which the 2026-09-05 sweep
+  has now measured and found poor: 444 of the 608 sites readable, 238 pairing an executive
+  title with a name (a triage figure, not a roster), and no CMS platform covering even a
+  fifth of the state, so there is no one parser to write.
 * **"Members get it free"** — districtry is not a municipality and cannot join, so this
   is really the purchase route with a different price. Worth asking whether a
   non-commercial public-information use has any standing.
 
-**Nothing is blocked on the answer.** The clerk ships statewide today and the sweep's
-per-municipality route needs nothing from the League.
+**Nothing is blocked on the answer.** The clerk ships statewide today, the eighteen
+rostered municipalities need nothing from the League, and neither does the
+per-municipality route — that route is simply a poor one, which the sweep measured rather
+than assumed.
