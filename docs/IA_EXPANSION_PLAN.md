@@ -1097,10 +1097,34 @@ takes PART of a township, and the state precinct layer's single `Castle Grove/Lo
 spans districts 1, 2 and 3. So the remaining route is the county's own GIS file, drafted as Ask 14
 and held for the operator. **A ROUTE NAMED IN A GAP RECORD IS A HYPOTHESIS UNTIL SOMEBODY OPENS THE
 FILE.**
-**Polling places** ship only if the SOS ask
-in phase 3 lands a current per-election edition — `IowaPollingPlaces` joined to `precinct` by `PPID`
-under the full Wisconsin display contract (election named, provisional wording while pre-certification,
-pull dated, retired once the election passes) — the August 2024 item never ships labeled "current."
+~~**Polling places** ship only if the SOS ask in phase 3 lands a current per-election edition —
+`IowaPollingPlaces` joined to `precinct` by `PPID`~~ — **MEASURED SHUT 2026-09-05, and the ask was
+aimed at the wrong thing.** HSEMD publishes a CURRENT edition already, openly and unlicensed
+(`PollingPlaces2026`, created 2026-05-21, 1,658 points, `licenseInfo` and `copyrightText` both
+empty), so "a current edition" was never what was missing. **What is missing is the KEY**, and
+three columns are the whole story: the 2024 edition carried `Precinct_Name`, `Election_Date` and
+`Election_Description`, and the 2026 one carries none of them.
+
+| | 2024 edition | 2026 edition |
+|---|---|---|
+| joins to `precinct` | **1,625 of 1,658 — 98.0%**, on `Precinct_Name` | **365 of 1,658 — 22.0%** on `Pre_Code`, and **0%** in Polk, Linn, Scott and Black Hawk |
+| names its election | yes — 5 Nov 2024, per-county wording | **no such field** |
+| current | no — a 2024 General snapshot | yes |
+
+So the two properties the display contract needs — JOINABLE and CURRENT — exist in different
+files and never in the same one. The 2024 file is joinable and names an election that passed ten
+months ago, which the contract's own "retired once the election passes" rule refuses. The 2026
+file is current and cannot be attached to a precinct by anything published.
+
+**Three corrections to the sentence this replaces.** (a) `PPID` is not a join key here: it exists
+on the PRECINCT layer (1,620 of 1,660) and on NEITHER polling edition, so the planned join could
+never have been made. (b) "The August 2024 item" is `IowaPollingPlaces_buffer`, a BUFFER service
+whose layer 0 happens to be the points — the name in the plan is not the shape of the thing. (c)
+A GEOMETRIC join was tried and is not a serving relationship: all 1,658 points fall inside some
+precinct, but only 923 of 1,660 precincts contain exactly one, **449 contain none and 288 contain
+several** — a polling place is a building, and buildings sit where they sit rather than where the
+precinct they serve is. The full measurement is the `ia-polling-places` gap record; Ask 4 is
+re-drafted to ask for the three dropped columns rather than for an edition that already exists.
 **The municipal probe ran on 2026-09-03 and its yield was three findings, one of which SHIPPED the next day** (the full
 measurement is the `ia-municipal-officeholders` gap record): the League of Cities is NOT gated
 and publishes a phone for 935 of 948 cities while naming nobody; the Secretary of State
