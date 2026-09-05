@@ -200,7 +200,7 @@ PROVENANCE = [
     {
         "layer": "county-supervisor",
         "app_file": "ia-county-board-chairs.json",
-        "source_url": "https://www.linncountyiowa.gov/158/Board-of-Supervisors",
+        "source_url": "https://www.linncountyiowa.gov/123/Board-of-Supervisors",
         # ONE ROW, NOT THIRTY-SIX, and the reason is not brevity. Every county
         # page this file rests on ships as a `sourceUrl` INSIDE the data file,
         # and validate_card_links.py extracts every http string in every
@@ -209,7 +209,7 @@ PROVENANCE = [
         # ships. Duplicating them here would be a second hand-kept list of the
         # same URLs, going stale in the way that gate exists to prevent. What
         # this row registers is the PIPELINE.
-        "note": "Which supervisor chairs each county board -- 36 of 99 counties, probed here at one representative county (Linn); the run reads all 98 in ia-county-board-directory.json and keys the ones that pass its gates, and the other 35 shipped URLs are probed by validate_card_links.py out of the data file itself. THERE IS NO STATEWIDE SOURCE AND THE TWO OBVIOUS CANDIDATES WERE MEASURED, NOT ASSUMED: the ISAC member portal is already this app's source for the supervisors themselves and its per-county pages contain ZERO occurrences of chair, chairperson, chairman, chairwoman or vice-chair; and iowaauditors.org answers 200 on /, /directory/ and /county-auditors/ with zero occurrences of the same, because it publishes county AUDITORS, who are not board members. The chair is chosen by each board's own January vote, so a weekly re-read tracks it where a one-time answer from 99 offices would not -- which is why the gap record carries NOT YET ASKED rather than a drafted ask. Built by ia/scripts/ia_county_chair_scraper.py + build_ia_county_chair.py; refreshed weekly by update-ia-county-chair-roster.yml.",
+        "note": "Which supervisor chairs each county board -- 35 of 99 counties, probed here at one representative county (Linn); the run reads all 98 in ia-county-board-directory.json and keys the ones that pass its gates, and the other 34 shipped URLs are probed by validate_card_links.py out of the data file itself. THERE IS NO STATEWIDE SOURCE AND THE TWO OBVIOUS CANDIDATES WERE MEASURED, NOT ASSUMED: the ISAC member portal is already this app's source for the supervisors themselves and its per-county pages contain ZERO occurrences of chair, chairperson, chairman, chairwoman or vice-chair; and iowaauditors.org answers 200 on /, /directory/ and /county-auditors/ with zero occurrences of the same, because it publishes county AUDITORS, who are not board members. The chair is chosen by each board's own January vote, so a weekly re-read tracks it where a one-time answer from 99 offices would not -- which is why the gap record carries NOT YET ASKED rather than a drafted ask. Built by ia/scripts/ia_county_chair_scraper.py + build_ia_county_chair.py; refreshed weekly by update-ia-county-chair-roster.yml.",
     },
     {
         "layer": "city-ward",

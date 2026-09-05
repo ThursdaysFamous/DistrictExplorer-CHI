@@ -52,18 +52,27 @@ A FOURTH test is not structural at all and no structural test can replace it:
 the page has to be the BOARD's page. See OTHERBODYRX below -- it is what the
 independent-witness check caught, on the one county of 38 that came out wrong.
 
-MEASURED 2026-09-05 over all 98 counties in `ia-county-board-directory.json`:
-38 yield exactly one chair before that exclusion and 36 after, 36 none, 17 unreachable, 7 have no roster to gate
-with. ZERO counties yield two candidates. The widest accepted pairing is 25
-characters (Clarke's `Randy Dunbar, District II Supervisor/Chairman`); the
-tightest REJECTED one is 84, so GAP_CAP at 30 sits in a gap of more than
-three times, and is not a knob to turn when a county stops resolving.
+MEASURED 2026-09-05 over all 98 counties in `ia-county-board-directory.json`, and
+re-measured after two further refusals were added (a chair QUALIFIED by another
+body, and a pairing whose own term dates have expired), which cost exactly one
+county -- Mahaska, whose page says "Term: 2017 - 2020":
+38 yield exactly one chair before that exclusion, 36 after it, and 35 once the
+two refusals above are applied, 38 none, 17 unreachable, 7 have no roster to gate
+with. ZERO counties yield two candidates. The widest accepted pairing is 28
+characters (Muscatine's `Danny Chick Supervisor - 1st District (Chair)`, two
+under the cap); the tightest REJECTED one is 84, exactly three times that, so
+GAP_CAP at 30 sits in the middle of a wide gap and is not a knob to turn when
+a county stops resolving. An earlier draft of this paragraph said 25 and named
+Clarke, which was the widest pairing in the sweep BEFORE the directional rule
+existed; Muscatine only became acceptable when direction was added, and the
+sentence was never re-derived from the sweep that shipped.
 
 Usage:
     python3 ia/scripts/ia_county_chair_scraper.py [--county NAME ...]
 """
 
 import argparse
+import datetime
 import hashlib
 import json
 import os
@@ -87,7 +96,7 @@ HEADERS = {"User-Agent": "districtry/1.0 (+https://districtry.com/ia/)",
 TIMEOUT = 25
 WORKERS = 6
 MAX_PAGES = 8
-GAP_CAP = 30          # widest true pairing measured 25; tightest false one 84
+GAP_CAP = 30          # widest true pairing measured 28; tightest false one 84
 
 # Paths tried when a county's own home page links nothing usable.
 PATHS = ["board-of-supervisors/", "supervisors/",
@@ -143,6 +152,56 @@ more view details click here home page menu skip main content navigation
 search toggle dropdown login site map departments government services
 residents business how do i""".split())
 NAMEISH = re.compile(r"\b([A-Z][a-z]{1,})(?:\s+[A-Z]\.?)?\s+([A-Z][A-Za-z'’\-]{1,})\b")
+
+# A CHAIR OF SOMETHING ELSE, ON THE BOARD'S OWN PAGE. OTHERBODYRX below
+# excludes a boards-and-commissions PAGE, and that is a URL test, so it cannot
+# see a committee named INSIDE the board's own page. Both of these are
+# accepted without this refusal, at a gap of 2, with every structural test
+# passing: "Budget Committee Chair: Kevin Weber", and a "Regional Planning
+# Commission" heading sitting above "Kevin Weber, Chair".
+#
+# THE WINDOW IS THE WHOLE DESIGN, AND THE FIRST VERSION OF THIS GOT IT WRONG.
+# Testing the whole CONTAINER for a committee word dropped EIGHT of 36
+# counties, five of them because the container lists the supervisor's own
+# REPRESENTATIVE APPOINTMENTS a line below their name -- Benton's and
+# Clayton's chairs sit on the Conservation Board, Jackson's on an ATV
+# Committee, and every one of those is the right chair with their committee
+# assignments printed after it. A committee word in the box is not evidence
+# that the chair word belongs to the committee; a committee word QUALIFYING
+# the chair word is. So the test runs over the text from a little before the
+# NAME through the end of the role, which is where a qualifier can live, and
+# never over what follows.
+OTHERBODY_LEAD = 45           # chars before the name a body's heading can sit in
+OTHERBODY_SCOPE_CAP = 600     # a record or a section, never a page
+OTHERBODY_TEXT = re.compile(
+    r"\bcommittee\b|\bcommission\b|\bauthority\b|\bconservation\b|\bE\.?M\.?S\.?\b"
+    r"|\bboard\s+of\s+(?!supervisors\b)\w+", re.I)
+
+# A TERM THAT ENDED BEFORE THIS YEAR MEANS THE BLOCK IS STALE, whatever the
+# roster says. Mahaska publishes "Chair: Mark Groenendyk Term: 2017 - 2020":
+# Groenendyk is still a sitting supervisor, so the roster gate is satisfied
+# and the pairing is clean -- and the page's own dates say it was last
+# maintained two board terms ago, which is precisely the state in which a
+# chair line goes on naming somebody who has since handed the gavel on.
+# Refusing loses a possibly-right answer, which is the safe direction and the
+# same call Worth County's exclusion made.
+TERM_RANGE = re.compile(r"\b(20\d{2})\s*(?:-|\u2013|\u2014|to|through)\s*(20\d{2})\b", re.I)
+TERM_END = re.compile(r"term\s*(?:expires?|ends?)\s*:?\s*(?:\d{1,2}[-/])?(?:\d{1,2}[-/])?(20\d{2})", re.I)
+
+
+def stale_term(segment):
+    """-> the latest term year in `segment` when every one of them is past.
+
+    Scoped to the pairing for the same reason OTHERBODY_TEXT is: Mahaska
+    prints three supervisors' terms in one paragraph, and only the one
+    attached to the accepted name says anything about the accepted line.
+    """
+    yrs = [int(m.group(2)) for m in TERM_RANGE.finditer(segment)]
+    yrs += [int(m.group(1)) for m in TERM_END.finditer(segment)]
+    if not yrs:
+        return None
+    this_year = datetime.date.today().year
+    return max(yrs) if max(yrs) < this_year else None
 
 # Only forms this sweep actually produced get an entry, and every join that
 # uses one is PRINTED on every run (the Vermilion rule).
@@ -398,7 +457,39 @@ def chairs_in(page, roster):
                             if before is not None and looks_like_a_person(before):
                                 continue
                             if best is None or g < best[0]:
-                                best = (g, t[max(0, ns[0] - 10):b + 40])
+                                # (gap, evidence, span-start, span-end) — the
+                                # two spans are what the refusals window on
+                                best = (g, t[max(0, ns[0] - 10):b + 40],
+                                        min(ns[0], a), max(ns[1], b))
+                    if best is not None:
+                        # BOTH refusals below read from the same scoped
+                        # window. The lead window is cut from the PARENT where the
+                        # parent is small, because a body's name is as often a
+                        # SIBLING heading as it is inline: `<h3>Regional
+                        # Planning Commission</h3><p>Kevin Weber, Chair</p>`
+                        # keeps the heading out of the accepted container
+                        # entirely. Only backwards, and only when the parent is
+                        # record-sized -- widening to a page reaches a nav that
+                        # names every commission in the county.
+                        scope, shift = t, 0
+                        par = up.parent
+                        if par is not None and par.tag != "#root":
+                            pt = txt[id(par)]
+                            at = pt.find(t)
+                            if len(pt) <= OTHERBODY_SCOPE_CAP and at >= 0:
+                                scope, shift = pt, at
+                        lo = max(0, shift + best[2] - OTHERBODY_LEAD)
+                        if OTHERBODY_TEXT.search(scope[lo:shift + best[3]]):
+                            best = None      # a chair of some OTHER body
+                    if best is not None:
+                        # The term sits just AFTER the pairing -- and, like the
+                        # body heading, often OUTSIDE the accepted container:
+                        # Mahaska's accepted box ends at the name, with "Term:
+                        # 2017 - 2020" in the parent beside it, so testing the
+                        # container alone let it through on the live page while
+                        # refusing the same markup synthetically. Same scope.
+                        if stale_term(scope[shift + best[2]:shift + best[3] + 40]) is not None:
+                            best = None
                     if best is not None:
                         found.append({
                             "roster": here[0][0], "page_form": here[0][1],
