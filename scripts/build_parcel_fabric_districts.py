@@ -250,6 +250,19 @@ GRUNDY_DISTRICTS_COL = ("GrundyParcels.dbo.GISParcelsJoinedDistrictCodes_"
 # list and neither half is supported: the document names NO OFFICE and the
 # word "certified" does not appear in it. (Woodford's witness was miscited the
 # same way in the same week — check before writing an office onto a document.)
+#
+# BOTH GRUNDY DOCUMENTS GET THE SAME TREATMENT, which an earlier draft did not
+# give them: it called the Rates by Taxcode report "the Clerk's" in the same
+# breath as saying the Distribution List names no office, and they sit on the
+# SAME PAGE. Applied here, Woodford's navigation rule does not reach an office:
+# communities/taxes.php has the H1 and title "Tax Extension" — a County Clerk
+# function in Illinois — but breadcrumbs Home > Communities > Taxes, naming no
+# department, where Woodford's page breadcrumbed to its Treasurer outright. The
+# county DOES file a sibling document under a path segment it named "County
+# Clerk/Tax Extension/" (the Rates & Extensions scan), which points at the
+# Clerk for that family; it is not these two documents' own path. So both are
+# "the county's own" here, and the Clerk evidence is recorded rather than
+# asserted.
 # The county's "Rates & Extensions" PDF would have been the obvious witness and
 # is NOT usable: all 102 pages are a scan with no text layer, and 101
 # characters extract from the whole document.
@@ -301,7 +314,7 @@ GRUNDY_FIRE = {
 # THAN BESIDE THEM:
 #   - the parcel fabric: all 2,257 of its parcels are ALSO in Mazon (1,224) or
 #     Verona-Kinsman (1,033), summing to exactly its own total;
-#   - the Clerk's District Rates by Taxcode report (below): twelve tax codes
+#   - the county's District Rates by Taxcode report (below): twelve tax codes
 #     carry MVK, and every one of them ALSO carries a fire protection district
 #     — Mazon on seven, Verona-Kinsman on five. MVK never appears alone;
 #   - the entity report: its service description is the same "fire and EMS
