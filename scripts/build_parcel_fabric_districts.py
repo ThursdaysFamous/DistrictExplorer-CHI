@@ -342,7 +342,13 @@ WOODFORD_PARK_PROBES = [
 #
 # SO THE COMPLETENESS OF THE MEMBERSHIP LIST IS TESTED RATHER THAN ASSUMED, and
 # the report tests itself. Every tax-code block prints each levying district's
-# rate and then its own "Totals for <code> <rate>" line. A district omitted
+# rate and then its own "Totals for <code> <rate>" line. SPLIT ON THAT
+# TERMINATOR AND NEVER ON THE BLOCK HEADER: the header form (`NNNNN - `) is
+# lost at page breaks for twelve of the 140 codes, so a header split yields 128
+# and manufactures a ten-code shortfall against the parcel layer's 138 that is
+# a parse artefact and not a gap in the county's document. Split on the
+# terminator and all 138 parcel codes are present, with two the report carries
+# that no parcel does (00923, 01111). A district omitted
 # from a code would leave that arithmetic short. ALL 140 TAX CODES BALANCE TO
 # FOUR DECIMALS across 1,140 district rate lines, 140 of 140. And the omission
 # mechanism that would evade an arithmetic test — a district present at a rate
