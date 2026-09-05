@@ -14065,6 +14065,29 @@ function initChiExplorer() {
   var loadWoodfordParkDistricts = makeCached(function () {
     return fetchJSONWithRetry("data/app/woodford-park-districts.json", {}, 2);
   });
+
+  /* WHITESIDE'S THREE — the Boone route, and the county whose record read "no
+   * taxing district boundaries of any kind" for five weeks while it published
+   * both halves of a dissolve. Its parcel layer's `CVTTXCD` column is named for
+   * the civil taxing unit and holds a five-digit TAX CODE (138 of them on
+   * 36,267 of 36,499 parcels); its County Clerk publishes a District Rates by
+   * Taxcode Report naming which districts each code pays. 13 / 7 / 5 districts
+   * come out, and the county's two largest cities are HOLES the layer does not
+   * fill — Sterling and Rock Falls run their own fire departments, which the
+   * county's own ETSB page states, so their tax codes carry no fire district
+   * and the empty state is the true answer there.
+   *
+   * Cache-first geometry like every other pre-built tiling here.
+   */
+  var loadWhitesideFireDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/whiteside-fire-districts.json", {}, 2);
+  });
+  var loadWhitesideLibraryDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/whiteside-library-districts.json", {}, 2);
+  });
+  var loadWhitesideParkDistricts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/whiteside-park-districts.json", {}, 2);
+  });
   var BOONE_DISTRICT_SITES = {
     "BELVIDERE PARK DISTRICT": { url: "https://www.belviderepark.org/" },
     "ROCKFORD PARK DISTRICT": { url: "https://www.rockfordparkdistrict.org/" },
@@ -23321,6 +23344,23 @@ function initChiExplorer() {
           { label: "County", value: "Woodford County" }
         ]
       }),
+      // Whiteside — 13 districts dissolved from the tax code on the county's
+      // own parcel layer, keyed by its Clerk's District Rates by Taxcode
+      // Report. THREE HOLES ARE THE ANSWER RATHER THAN A GAP: Sterling, Rock
+      // Falls and Morrison run their own fire departments, so their tax codes
+      // carry no fire district and the county's ETSB page names the first two
+      // outright ("Sterling, Rock Falls Police & Fire"). Thirty-three of the
+      // county's 140 tax codes carry no fire line at all.
+      polygonCountyEntry({
+        key: "whiteside",
+        coverage: whitesideCountyCoverage,
+        loader: loadWhitesideFireDistricts,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
+        fields: [
+          { name: "name", label: "Fire District", keys: ["district"], primary: true },
+          { label: "County", value: "Whiteside County" }
+        ]
+      }),
       // Hamilton — three named districts from the county's own layer (a
       // fourth, unnamed ~0.4 km² sliver is excluded in the loader); most of
       // the county sits in none, and the empty state says so
@@ -23598,6 +23638,19 @@ function initChiExplorer() {
         fields: [
           { name: "name", label: "Park District", keys: ["district"], primary: true },
           { label: "County", value: "Woodford County" }
+        ]
+      }),
+      // Whiteside — 5 park districts from the same parcel tax code. 15,931 of
+      // the county's 36,499 parcels are in one, so a large share of the county
+      // sits in no park district and the empty state is the true answer there.
+      polygonCountyEntry({
+        key: "whiteside",
+        coverage: whitesideCountyCoverage,
+        loader: loadWhitesideParkDistricts,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
+        fields: [
+          { name: "name", label: "Park District", keys: ["district"], primary: true },
+          { label: "County", value: "Whiteside County" }
         ]
       })
     ]
@@ -23899,6 +23952,20 @@ function initChiExplorer() {
           { name: "name", label: "Library District", keys: ["district"], primary: true },
           { name: "note", label: "Governance", keys: ["note"] },
           { label: "County", value: "Woodford County" }
+        ]
+      }),
+      // Whiteside — 7 library districts from the same parcel tax code. Sterling
+      // and Morrison are holes for the library layer too, on the same evidence:
+      // their tax codes carry no library line because both cities fund a
+      // municipal library rather than a taxing district.
+      polygonCountyEntry({
+        key: "whiteside",
+        coverage: whitesideCountyCoverage,
+        loader: loadWhitesideLibraryDistricts,
+        snapFeet: PARCEL_FABRIC_SNAP_FT,
+        fields: [
+          { name: "name", label: "Library District", keys: ["district"], primary: true },
+          { label: "County", value: "Whiteside County" }
         ]
       }),
       // Adams — 7 library districts on a 10-polygon tiling. One polygon is named
