@@ -5985,7 +5985,7 @@ function initIowaExplorer() {
     "ia-senate",         // 50 Senate districts, each the union of two whole House districts
     "county",            // 99 counties, pre-built from TIGERweb; the fork's offline anchor layer
     "ia-house",          // 100 House districts; two nest exactly inside each Senate district
-    "county-supervisor", // The flagship layer: 270 features across 98 counties, PLANTYPE-aware (at-large / residence-district / single-member)
+    "county-supervisor", // The flagship layer: 272 features across 98 counties, PLANTYPE-aware (at-large / residence-district / single-member)
     "school-district-unified", // 324 unified school districts, statewide — the only school-district tiling Iowa runs (TIGER's elementary/secondary layers measure zero)
     "school-director-district", // 716 director districts inside the 324 school districts — the sub-district fabric a board is elected from, where a district elects by district at all
     "community-college", // 15 merged areas, shipped as published (no dissolve) — larger on average than a school district, ranked beside it
@@ -8780,8 +8780,17 @@ function initIowaExplorer() {
       if (county == null) return null;
       var plantype = findPropCI(props, ["plantype"]);
       if (plantype === "PLAN 1") return String(county) + " (at-large)";
-      if (plantype === "TRANSITIONING") return String(county) + " (districts pending)";
       var district = findPropCI(props, ["district"]);
+      // A transitioning county ships EITHER a real numbered district whose
+      // first election is still ahead of it (Story) or a single county-shaped
+      // placeholder that cannot answer at all (Johnson, DISTRICT "PENDING").
+      // Saying "districts pending" over a district this app CAN name would
+      // under-report; dropping the date would over-report.
+      if (plantype === "TRANSITIONING") {
+        return (district != null && String(district) !== "PENDING")
+          ? String(county) + " District " + String(district) + " (from Nov 2026)"
+          : String(county) + " (districts pending)";
+      }
       return district != null ? String(county) + " District " + String(district) : String(county);
     },
     query: function (point, seq) {
@@ -8822,7 +8831,9 @@ function initIowaExplorer() {
     },
     cardIdentifier: function (result) {
       if (result.plantype === "PLAN 1") return "At-large";
-      if (result.plantype === "TRANSITIONING") return "Districts pending";
+      if (result.plantype === "TRANSITIONING" && String(result.district) === "PENDING") {
+        return "Districts pending";
+      }
       return result.district != null ? "District " + String(result.district) : "Unknown district";
     },
     render: function (result) {

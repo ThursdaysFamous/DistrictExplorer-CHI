@@ -43,7 +43,7 @@
 // refreshed per election.)
 /* ==== TEMPLATE:END sw-version-history ==== */
 /* ==== GENERATED:BEGIN sw-metro-config ==== */
-const CACHE_NAME = "districtry-il-shell-v11";
+const CACHE_NAME = "districtry-il-shell-v12";
 
 const SHELL_URLS = [
   "./",
@@ -80,6 +80,7 @@ const GEOMETRY_URLS = [
   "./data/app/calhoun-county-outline.json",
   "./data/app/carroll-county-board-districts.json",
   "./data/app/carroll-county-outline.json",
+  "./data/app/carroll-library-districts.json",
   "./data/app/cass-county-board-districts.json",
   "./data/app/cass-county-outline.json",
   "./data/app/cass-precincts.json",
@@ -162,6 +163,7 @@ const GEOMETRY_URLS = [
   "./data/app/lasalle-county-outline.json",
   "./data/app/lawrence-county-outline.json",
   "./data/app/lee-county-outline.json",
+  "./data/app/lee-library-districts.json",
   "./data/app/livingston-county-board-districts.json",
   "./data/app/livingston-county-outline.json",
   "./data/app/logan-county-outline.json",
@@ -214,6 +216,7 @@ const GEOMETRY_URLS = [
   "./data/app/pulaski-county-outline.json",
   "./data/app/putnam-county-outline.json",
   "./data/app/randolph-county-outline.json",
+  "./data/app/randolph-library-districts.json",
   "./data/app/richland-county-outline.json",
   "./data/app/rock-island-county-outline.json",
   "./data/app/rock-island-fire-districts.json",
@@ -221,6 +224,7 @@ const GEOMETRY_URLS = [
   "./data/app/rock-island-park-districts.json",
   "./data/app/saline-county-outline.json",
   "./data/app/sangamon-county-outline.json",
+  "./data/app/sangamon-library-districts.json",
   "./data/app/sangamon-judicial-subcircuits.json",
   "./data/app/school-board-districts.json",
   "./data/app/schuyler-county-outline.json",
@@ -231,6 +235,7 @@ const GEOMETRY_URLS = [
   "./data/app/shelby-precincts.json",
   "./data/app/shelby-county-outline.json",
   "./data/app/st-clair-county-outline.json",
+  "./data/app/st-clair-library-districts.json",
   "./data/app/stark-county-board-districts.json",
   "./data/app/stark-county-outline.json",
   "./data/app/stark-fire-districts.json",
@@ -239,6 +244,7 @@ const GEOMETRY_URLS = [
   "./data/app/stark-precincts.json",
   "./data/app/stephenson-county-board-districts.json",
   "./data/app/stephenson-county-outline.json",
+  "./data/app/stephenson-library-districts.json",
   "./data/app/stephenson-fire-districts.json",
   "./data/app/stephenson-precincts.json",
   "./data/app/tazewell-county-outline.json",
