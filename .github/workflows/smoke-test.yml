@@ -514,4 +514,27 @@ jobs:
           # expectations from the tree, so a new page is covered the day it
           # ships and a correct change cannot fail it.
           BASE_URL=http://localhost:8000        node scripts/page_consistency_test.mjs || status=1
+
+          # Which layers send the reader's SELECTED POINT to a government
+          # server. The privacy page publishes that number per app, and until
+          # 2026-09-05 it counted `loadArcGISPointGeoJSON(` call sites —
+          # Illinois published 10 against a true 19, New York City "None."
+          # against a true 4.
+          #
+          # NEITHER A REGEX NOR A STRUCTURAL READ CAN BE RIGHT. A registration
+          # factory serves as many layers as it is CALLED from one occurrence,
+          # and registerCountyLayer CLOSES OVER its entries, so two Illinois
+          # layers are invisible even to a full walk of the live module graph.
+          # And a layer that merely CARRIES an `.atPoint` hook may never fire
+          # it: the hook is invoked in exactly one place, inside
+          # queryFeatureAt, and the nearest-point factory and several NYC/SF
+          # layers call their loader directly. Counting carriage overcounts,
+          # which on this page is a false statement in the other direction.
+          #
+          # So the probe REPLACES every hook with a recorder, switches on every
+          # layer, selects points inside the instance's own coverage, and
+          # counts the hooks that FIRE. build_privacy_page.py — which has no
+          # browser in its own step — reads the artifact and refuses to publish
+          # when the apps have moved under it.
+          BASE_URL=http://localhost:8000        node scripts/probe_point_transmission.mjs --check || status=1
           exit $status

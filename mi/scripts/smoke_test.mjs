@@ -534,6 +534,80 @@ try {
     check("tile failure shows dismissible banner", shown && hiddenAfterDismiss === true, `shown=${shown} hiddenAfterDismiss=${hiddenAfterDismiss}`);
     await context.close();
   }
+
+  // 6. The USGS structures loader PAGES, and the second page reaches the card.
+  //    fire-station is 2,838 points against a 2,000-record cap the service
+  //    reports as HTTP 200 + exceededTransferLimit rather than an error, so a
+  //    single request drops 838 real stations and the nearest-3 card looks
+  //    correct at every point. That was proven by hand when the layer shipped
+  //    and then by NOTHING: the source manifest's count row cannot see it,
+  //    because returnCountOnly is not subject to maxRecordCount and answers the
+  //    true count whatever the client does. This is the check that can.
+  //
+  //    The service is stubbed rather than called, so the assertion is about
+  //    THIS APP'S control flow and cannot fail on somebody else's outage. Page
+  //    one is far away and flagged as truncated; page two carries one station
+  //    at the selected point. A single-request loader would request once, never
+  //    see that station, and name a page-one station instead — so this fails
+  //    for the right reason rather than merely counting requests.
+  {
+    const context = await browser.newContext({ serviceWorkers: "block" });
+    const offsets = [];
+    const fieldsAsked = [];
+    const far = (i) => ({
+      type: "Feature",
+      properties: { NAME: `FAR STATION ${i}`, ADDRESS: "1 Far Rd", CITY: "Detroit", STATE: "MI", ZIPCODE: "48226" },
+      geometry: { type: "Point", coordinates: [-83.0458, 42.3314] },
+    });
+    const [lat, lng] = POINT.split(",").map(Number);
+    const page = await booted(context, BASE, (p) =>
+      p.route(/MapServer\/51\/query/, (route) => {
+        const params = new URL(route.request().url()).searchParams;
+        const offset = Number(params.get("resultOffset"));
+        offsets.push(offset);
+        fieldsAsked.push(params.get("outFields") || "");
+        const body = offset === 0
+          ? { type: "FeatureCollection", exceededTransferLimit: true,
+              features: [far(1), far(2), far(3)] }
+          : { type: "FeatureCollection",
+              features: [{
+                type: "Feature",
+                properties: { NAME: "PAGE TWO STATION", ADDRESS: "2 Second Page Way",
+                              CITY: "Lansing", STATE: "MI", ZIPCODE: "48933" },
+                geometry: { type: "Point", coordinates: [lng, lat] },
+              }] };
+        route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(body) });
+      })
+    );
+    await page.evaluate(({ pt, n }) => {
+      const [la, ln] = pt.split(",").map(Number);
+      window[n].setSelectedPoint(la, ln);
+      const box = document.getElementById("toggle-fire-station");
+      if (box && !box.checked) box.click();
+    }, { pt: POINT, n: EXPORTS_NAME }).catch(() => {});
+    // cardText returns {text, error, empty}, not a bare string.
+    let card = { text: "(card never resolved)" };
+    try {
+      card = await cardText(page, "fire-station");
+    } catch (e) { /* keep the placeholder; the assertions below report it */ }
+    const text = card.text || "";
+    check("USGS structures loader pages past the record cap",
+      offsets.length > 1, `requests at offsets [${offsets.join(", ")}]`);
+    check("the second page's station reaches the card",
+      /PAGE TWO STATION/.test(text), text.slice(0, 140));
+    // TWO assertions, because either alone passes while the other half is
+    // broken. Asserting only the rendered line is GREEN FOR THE WRONG REASON —
+    // this stub returns STATE whatever outFields asks for, so deleting STATE
+    // from the app's request left the line check passing (measured, while
+    // writing this). Asserting only the request would pass with a card that
+    // never renders what it fetched.
+    check("the app ASKS the service for STATE",
+      fieldsAsked.every((f) => /\bSTATE\b/.test(f)),
+      `outFields=${fieldsAsked[0] || "(none seen)"}`);
+    check("a structure line RENDERS its state",
+      /Lansing, MI/.test(text), text.slice(0, 140));
+    await context.close();
+  }
 } finally {
   await browser.close();
 }
