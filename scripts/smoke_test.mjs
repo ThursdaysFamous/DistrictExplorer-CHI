@@ -880,6 +880,57 @@ try {
       `${light.stroke} -> ${dark.stroke}`);
     await context.close();
   }
+
+  // 7. The USGS structures loader PAGES past the service's transfer cap.
+  //     This guards a defect that shipped and was invisible: carto.nationalmap.gov
+  //     caps at maxRecordCount 2,000 and flags exceededTransferLimit when it
+  //     truncates, and Illinois's envelope holds 2,820 fire stations (L51) —
+  //     measured live 2026-09-05 — so a single request answered the nearest-3
+  //     card over 2,000 of them. Nothing failed: a truncated FeatureCollection is
+  //     a valid one, and a nearest-N card always has an answer. Over a uniform
+  //     40x40 grid of the bbox the truncated set named a different nearest-3 at
+  //     58% of points and a different NEAREST station at 27%.
+  //     The service is stubbed rather than called, for the reason every stub here
+  //     exists: a gate that needs a third party up fails on somebody else's
+  //     schedule. The stub reproduces the cap exactly — 2,000 per page with the
+  //     flag set while more remain — so the assertion is on the app's behaviour
+  //     against that contract, not on today's national feature count.
+  {
+    const CAP = 2000, TOTAL = 2820;      // the live cap and the live Illinois count
+    const seen = [];
+    const stubFeature = (i) => ({
+      type: "Feature",
+      properties: { name: "Station " + i, address: i + " Main St", city: "Town", state: "IL", zipcode: "60000" },
+      geometry: { type: "Point", coordinates: [-87.63 + (i % 100) * 0.001, 41.88 + Math.floor(i / 100) * 0.001] },
+    });
+    const context = await browser.newContext({ serviceWorkers: "block" });
+    // ONE handler for every structures layer, branching on the layer index:
+    // two page.route patterns would collide, since the most recently
+    // registered wins and a broad one swallows the specific one.
+    const page = await booted(context, `${BASE}#point=${POINT}&layers=fire-station`, (p) =>
+      p.route("**/structures/MapServer/**", (r) => {
+        const u = new URL(r.request().url());
+        const m = /\/MapServer\/(\d+)\/query/.exec(u.pathname);
+        if (!m) return r.continue();
+        const body = (feats, more) => r.fulfill({
+          status: 200, contentType: "application/json",
+          body: JSON.stringify({ type: "FeatureCollection", features: feats, exceededTransferLimit: more }),
+        });
+        if (m[1] !== "51") return body([stubFeature(0)], false);
+        const offset = parseInt(u.searchParams.get("resultOffset") || "0", 10);
+        const want = parseInt(u.searchParams.get("resultRecordCount") || "0", 10);
+        seen.push(offset);
+        const n = Math.min(CAP, want || CAP, Math.max(0, TOTAL - offset));
+        const feats = [];
+        for (let i = offset; i < offset + n; i++) feats.push(stubFeature(i));
+        return body(feats, offset + n < TOTAL);
+      }));
+    const fire = await cardText(page, "fire-station");
+    check("USGS structures loader pages past the 2,000-row transfer cap",
+      seen.length === 2 && seen[0] === 0 && seen[1] === CAP && !fire.error,
+      `offsets requested: [${seen.join(", ")}]`);
+    await context.close();
+  }
 } finally {
   await browser.close();
 }
