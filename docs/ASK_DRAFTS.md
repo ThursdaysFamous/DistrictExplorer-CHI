@@ -778,7 +778,19 @@ this file has asked for since the ask was written.
 
 ---
 
+## Iowa drafts
+
+The section above is the Illinois queue and its "all eight drafts below" refers only to
+that table. What follows is Iowa, held the same way and under the same rule: the operator
+sends, and the `ASKED <date>` goes in on the day it goes, never before.
+
 ## Ask 14 — Jones County, Iowa: the GIS file behind a map the county already publishes
+
+> **NOT YET ASKED — DRAFTED 2026-09-04.** Not queued in Gmail; there is no existing thread
+> with this office, so it is a fresh message to the County Auditor. On send, change
+> `NOT YET ASKED — DRAFTED` to `ASKED <date>` in the `jones-county-supervisor` blocker in
+> `docs/DATA_LAYER_GUIDEBOOK.md` AND in the Jones row of `ia/WATCH.md` — Iowa keeps the
+> ledger in both, unlike Illinois.
 
 **This is the narrowest ask in this file, and the only one whose answer is a file the office
 already has.** Jones County is the ONE Iowa county carrying no supervisor-district card at all:

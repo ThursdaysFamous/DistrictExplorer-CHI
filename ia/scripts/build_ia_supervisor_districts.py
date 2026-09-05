@@ -138,7 +138,7 @@ TRANSITIONING_PENDING = {
             "received Secretary of State approval 2026-01-07. This app "
             "cannot yet identify which specific district contains this point."
         ),
-        "source_url": "https://johnsoncountyiowa.gov/supervisor-districts",
+        "source_url": "https://johnsoncountyiowa.gov/board-of-supervisors",
     },
 }
 for _name, _rec in TRANSITIONING_PENDING.items():

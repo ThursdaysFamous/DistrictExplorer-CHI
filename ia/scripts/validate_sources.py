@@ -332,7 +332,7 @@ PROVENANCE = [
     {
         "layer": "county-supervisor",
         "app_file": "ia-supervisor-districts.json",
-        "source_url": "https://johnsoncountyiowa.gov/supervisor-districts",
+        "source_url": "https://johnsoncountyiowa.gov/board-of-supervisors",
         "note": (
             "Johnson County's own site — states its SOS-approved Senate File "
             "75 plan's facts; no GIS service found, so the county ships as "
