@@ -1,0 +1,148 @@
+name: Update IA county board chair roster
+
+# Weekly refresh of which supervisor chairs each Iowa county board
+# (ia/data/app/ia-county-board-chairs.json, joined by name onto the County
+# Supervisor card's board block).
+#
+# WHY THIS IS A WEEKLY SCRAPE AND NOT AN E-MAIL TO 99 AUDITORS. The chair is
+# chosen by the board's own vote at its January reorganisation, so a one-time
+# answer from every county would be stale within the year. That is a different
+# shape from the one-off dataset asks in docs/ASK_DRAFTS.md, and it is why the
+# `ia-board-chair` gap record recorded NOT YET ASKED rather than drafting one.
+# A page this app re-reads every Friday tracks a January vote; a 2026 reply
+# does not.
+#
+# THIRTY-SIX OF NINETY-NINE, AND THE GAP STAYS OPEN for the rest. No statewide
+# publisher records this at all: ISAC's member directory, which is where this
+# app's supervisor names come from, has no chair field, and the auditors'
+# association publishes auditors, who are not board members. So each county's
+# own board page is the only source, and 17 counties are unreachable to this
+# client, 38 name no chair anywhere a machine can find, and 7 have no
+# supervisor roster to gate against.
+#
+# WHAT THIS RUN IS REALLY WATCHING is whether a role can still be paired with
+# a person on 36 hand-built county pages. Three structural tests decide it and
+# each exists because a plausible answer would otherwise ship:
+#
+#   * CONTAINMENT — role and name must share the smallest DOM element that
+#     holds no OTHER supervisor. Scott County's board page wraps each member's
+#     panel in a copy of a 3,385-character navigation menu.
+#   * DIRECTION — a role word standing BEFORE a name is refused when a
+#     person-shaped phrase stands before IT. Shelby County publishes an EMS
+#     board reading `Tim Plumb, Chairman Bryce Schaben, Vice-Chairman`, where a
+#     chair word sits ONE character from a supervisor and belongs to the man in
+#     front of it. This is the Franklin trap, and the earlier attempt at this
+#     file walked straight into it and shipped Keokuk's vice-chairman.
+#   * PROXIMITY — at most 30 characters apart. Widest true pairing measured 25;
+#     tightest false one 84.
+#
+# AND ONE TEST THAT IS NOT STRUCTURAL AT ALL, which no structural test can
+# replace: the page has to be the BOARD's page. Des Moines County's
+# boards-and-commissions page reads `Tom Broeker, Chair` — his chairmanship of
+# a different body — while the county's own minutes of 25 August 2026 open
+# "with Chair Shane McCampbell, Vice-Chair Tom Broeker". All three tests above
+# passed that pairing, because as a pairing it is clean. Only excluding the
+# page catches it, and only an independent document found it.
+#
+# THE BUILDER RE-GATES ON THE ROSTER. A chair who is not on that county's own
+# supervisor list in ia-county-officers.json is dropped, not carried forward:
+# the two files refresh on separate schedules, and the card joins by NAME, so
+# a chair who leaves the board stops rendering rather than sliding onto
+# whoever now holds their position in the list.
+
+on:
+  schedule:
+    - cron: "30 18 * * 5" # Friday 18:30 UTC (an hour after the city-officials sweep)
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-roster:
+    runs-on: ubuntu-latest
+    steps:
+      # Pushed and PR-opened as BOT_PR_TOKEN so the resulting PR actually runs
+      # CI. A PR opened with the default GITHUB_TOKEN fires no workflows
+      # (GitHub suppresses recursive triggers). Falls back to github.token when
+      # the secret is absent, so the refresh still runs — it just goes back to
+      # opening unchecked PRs.
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.BOT_PR_TOKEN || github.token }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: pip install -c ia/scripts/requirements.txt requests
+
+      - name: Sweep every county's own board-of-supervisors page
+        run: python3 ia/scripts/ia_county_chair_scraper.py
+
+      - name: Rebuild the chair roster (re-gated on each county's supervisors)
+        run: python3 ia/scripts/build_ia_county_chair.py
+
+      # Gate the regenerated data before it can reach a PR: the app must still
+      # parse and carry every layer, and every data/app file must be present,
+      # well formed and cached in exactly one service-worker list.
+      - name: Validate app + data files
+        run: python3 ia/scripts/validate_index.py ia/index.html
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet -- ia/data/app/ia-county-board-chairs.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open or update pull request
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.BOT_PR_TOKEN || github.token }}
+          # THE PR BODY IS AN env: BLOCK SCALAR, NOT A SHELL STRING, AND THAT IS
+          # LOAD-BEARING. A multi-line double-quoted string inside `run: |` puts
+          # its continuation lines at column 0, which ENDS the block scalar —
+          # GitHub then rejects the whole file as an invalid workflow and every
+          # run instant-fails with zero jobs.
+          PR_BODY: |
+            Automated weekly refresh of which supervisor chairs each Iowa county board — `ia/data/app/ia-county-board-chairs.json`, generated by `ia/scripts/build_ia_county_chair.py` from `ia_county_chair_scraper.py`.
+
+            Please review the diff before merging — this changes data about real officeholders.
+
+            **What a change here usually means.** Iowa boards elect their chair at the January reorganisation, so a swap in January is the expected event and is worth a quick look at the county's page. A swap at any other time of year is worth a closer one: it is more often a page being rebuilt than a board voting again.
+
+            **What a COUNT change means.** Counties enter and leave this file as their pages change shape, not as their boards change. A county appearing is its page starting to name a chair somewhere a machine can pair; a county disappearing is the opposite, and neither is a claim that the board has or lacks a chair. The builder floor is 30 of the 36 that first resolved — it is there to catch the parser or the network collapsing, not ordinary churn.
+
+            **The name join is printed in the build log.** Four counties are matched across a diminutive or a shortened first name (Adams, Appanoose, Keokuk, Winneshiek), and the log prints each one as `roster <- page` so the join can be read rather than trusted.
+        run: |
+          # Fixed branch (not per-run): an unmerged roster PR is refreshed in
+          # place by the force-push below instead of spawning a duplicate PR
+          # every week.
+          branch="bot/ia-county-chair-roster-update"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          # Cut the branch from main's CURRENT tip, not from the checkout this
+          # run started with — actions/checkout is shallow, and a meanwhile
+          # change under .github/workflows/ reads as the push updating a
+          # workflow, which a token without `workflow` scope is refused.
+          git fetch --depth=1 origin main
+          git checkout -B "$branch" FETCH_HEAD
+          git add ia/data/app/ia-county-board-chairs.json
+          git commit -m "Update the Iowa county board chair roster from the counties' own board pages"
+          git push -u origin "$branch" --force
+          # Only open a PR if one isn't already open for this branch; if it is,
+          # the force-push above already updated it.
+          if [ -z "$(gh pr list --head "$branch" --state open --json number --jq '.[].number')" ]; then
+            gh pr create \
+              --title "Update the Iowa county board chair roster from the counties' own board pages" \
+              --body "$PR_BODY" \
+              --base main \
+              --head "$branch"
+          else
+            echo "PR already open for $branch; force-push refreshed it."
+          fi

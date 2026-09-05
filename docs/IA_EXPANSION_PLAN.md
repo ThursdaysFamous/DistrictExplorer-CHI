@@ -247,7 +247,8 @@ whole repo, rather than confined to the new tree, returns false positives from
 > amendment, and its 2026-01-27 approval does not say which — the geometry does, matching the
 > First exactly and none of the Second. Both directions are now gated, and the citation names
 > the document rather than "the ledger". (b) **STORY'S DISTRICTS DO NOT SPLIT A PRECINCT.**
-> Iowa Code 49.3(2)(1) makes district boundaries follow precinct boundaries and the First
+> Iowa Code 49.3(2)(a) — lettered, and exempting the fifteen plan-"two" counties, which Story
+> is not — makes district boundaries follow precinct boundaries and the First
 > Plan lists Roland/Howard Twp whole in District 2. What the block sort divided is the
 > SHIPPED precinct polygon, still carrying its 2020 census voting-district geometry (IoU
 > 0.999573 against `HOWARD TWP W/O STORY CITY`, POP100 1,869 = 1,837 + 32); the county
@@ -259,7 +260,14 @@ whole repo, rather than confined to the new tree, returns false positives from
 > handled list/dict only — so the committed source shipped 15-decimal coordinates, 225,722
 > bytes against 172,833. **The app file was never affected**, because mapshaper re-rounds at
 > `precision=0.000001`; rebuilding the aggregate after the fix changed zero features and zero
-> properties.
+> properties. (e) **THE 76 RE-SIMPLIFIED FEATURES ARE NOT NONDETERMINISM**, which is how
+> that PR's commit message described them. `-simplify 10%` is a share of the WHOLE
+> dataset's points, so adding Story's three districts (270 features → 272) changed the
+> per-shape budget for the 76 non-Story features across 49 counties that moved — no change
+> to the tolerance, none to the mapshaper pin. Measured directly on two synthetic
+> collections under the same pinned build and flags: two rings keep 45 and 38 vertices
+> alone, 57 and 67 with a third beside them. **The next county added to this aggregate
+> will do the same, once**, and a rebuild against an unchanged source is a no-op.
 
 **Geometry — VERIFIED and re-verified this session**:
 `services.arcgis.com/vPD5PVLI6sfkZ5E4/arcgis/rest/services/CountySupervisorDistricts/FeatureServer/0`.
@@ -1074,8 +1082,7 @@ current-edition polling-place export exists beyond the 2024-08 item.
 
 ~~County card gains the remaining elected county officers~~ — **DONE in phase 3 PR 1** (above), and
 it did not need the Wisconsin tranche model: ISAC's member portal plus three per-office statewide
-directories covered all 99 counties in one PR. What phase 4 still owns here is the **board CHAIR**,
-which no statewide publisher names, and keying supervisors to their own districts (phase 3 PR 2). **JONES COUNTY WAS MEASURED ON 2026-09-04 AND ITS NAMED ROUTE IS CLOSED** — the one Iowa county
+directories covered all 99 counties in one PR. ~~What phase 4 still owns here is the **board CHAIR**, which no statewide publisher names~~ — **36 OF 99 SHIPPED 2026-09-05** (`ia-county-board-chairs.json`, weekly Fri 18:30), and keying supervisors to their own districts (phase 3 PR 2). **The `ia-board-chair` record had closed this as impossible and the sentence that closed it was the wrong one.** Its measurement was sound — of 22 sampled counties a chair-plus-name matched on 5 and four of those five were furniture (`Contact Information`, `Term Expires`, `its activities`, `Supervisor Office`) — but its conclusion, "there is no gate that separates those five hits", was written while the gate sat in this repo: all four fail membership in their own county's supervisor list, and this app already ships 350 of those names. **Roster membership alone is still not enough**: a second attempt gated on it and shipped Keokuk's VICE-chairman, because its window was symmetric (the Franklin trap — it reached backwards into the previous person's role) and its matching was exact-substring (`Mr. Mike Hadley` can never meet `Michael C. Hadley`). So the pairing is structural — role and name must share the smallest DOM element holding no OTHER supervisor, a role standing BEFORE a name is refused when a person-shaped phrase stands before IT, and the two must sit within 30 characters against a widest true pairing of 25 and a tightest false one of 84 — and **the fourth test is not structural at all**: the page must be the BOARD's page. Des Moines County's boards-and-commissions entry reads `Tom Broeker, Chair` — his chairmanship of another body — while its own minutes of 25 August 2026 name Chair Shane McCampbell; all three structural tests passed that pairing, and only checking every answer against an independent document caught it. **Precision is the number that decided this, and it was measured, not asserted**: of the 36 shipped, 19 were checkable against the counties' own minutes and 19 agreed, none disagreed. This is a `data-quality` gap now, not `no-source`, and it stays NOT YET ASKED on purpose — a chair is chosen by each board's own January vote, so a one-time answer from 99 offices would be stale within the year and a weekly re-read would not. **JONES COUNTY WAS MEASURED ON 2026-09-04 AND ITS NAMED ROUTE IS CLOSED** — the one Iowa county
 with no supervisor-district card at all, absent from the state's 98-county aggregate. This plan and
 the `jones-county-supervisor` gap both said its adopted-map PDF "does carry real vector path data
 (moveto/lineto/stroke operators), so a Jackson-County-IL-style extraction is plausible". **It is
