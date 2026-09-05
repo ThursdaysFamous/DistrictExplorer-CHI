@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 """
 Build data/app/wi-alderpersons.json from wi_alderperson_scraper.py's
-intermediate — the aldermanic-district card's roster for the six big cities
-whose routes are verified (Milwaukee, Madison, Green Bay, Kenosha, Racine,
-Waukesha; 94 seats, 93 filled + Madison's vacant District 1 as of the first
-build). Keyed by COUSUBFP + zero-padded district id, the exact key pair the
+intermediate — the aldermanic-district card's roster for the 17 municipalities
+whose routes are verified (the six of 2026-08-26: Milwaukee, Madison, Green
+Bay, Kenosha, Racine, Waukesha; and the eleven of 2026-09-05: Stevens Point,
+Menomonie, Manitowoc, Sheboygan, Superior, Portage, Viroqua, Menasha, Howard,
+Tomah, Eau Claire — 193 seats, 192 filled + Madison's vacant District 1).
+Keyed by COUSUBFP + zero-padded district id, the exact key pair the
 dissolved geometry carries, and CROSS-GATED against the shipped geometry
 file: a roster row naming a district the map does not draw fails the build,
 as does a covered city whose district count stops matching its seat count.
 
-Floors are per city and per field, tuned to the measured first run — a city
-losing its e-mail column (the Brown County lesson) fails here before the
-retention gate ever sees it.
+Floors are per municipality and per field, tuned to that municipality's
+measured first run — one losing its e-mail column (the Brown County lesson)
+fails here before the retention gate ever sees it.
 """
 
 import json
@@ -32,14 +34,48 @@ FLOORS = {
     "39225": ("Kenosha", 17, 17, 0, 0, 0),
     "66000": ("Racine", 15, 15, 0, 0, 13),
     "84250": ("Waukesha", 15, 15, 14, 14, 0),
+    # The eleven added 2026-09-05. Each field floor is the FIRST RUN'S measured
+    # count less one, so a single member's blank cell is tolerated and a column
+    # emptying is not; a zero is a field the source genuinely does not publish,
+    # written down rather than left to look like an omission:
+    #   Stevens Point routes contact through per-district forms, not addresses.
+    #   Menomonie, Sheboygan, Howard and Tomah publish a profile page per seat
+    #     and no contact on the roster page itself.
+    #   Menasha publishes a phone and a form, and the one mailto in its table
+    #     belongs to a staffer (see the scraper) — so no e-mail is read.
+    #   Eau Claire seats eleven and districts five; the five district members
+    #     are what an aldermanic-district card can answer for.
+    #   Manitowoc's district 3 links the site's own staging host, which is not
+    #     shipped, so its url floor is one below its seat count for a reason
+    #     about the page rather than about a member.
+    "77200": ("Stevens Point", 11, 11, 0, 10, 10),
+    "51025": ("Menomonie", 11, 11, 0, 0, 10),
+    "48500": ("Manitowoc", 10, 10, 0, 9, 8),
+    "72975": ("Sheboygan", 10, 10, 0, 0, 9),
+    "78650": ("Superior", 10, 10, 9, 9, 0),
+    "64100": ("Portage", 9, 9, 8, 8, 0),
+    "82925": ("Viroqua", 9, 9, 8, 8, 0),
+    "50825": ("Menasha", 8, 8, 0, 7, 0),
+    "35950": ("Howard", 8, 8, 0, 0, 7),
+    "80075": ("Tomah", 8, 8, 0, 0, 7),
+    "22300": ("Eau Claire", 5, 5, 0, 0, 4),
 }
 
 
-# How many cities may be CARRIED from the last shipped file in one run before
-# this refuses. One unreadable site is a bad afternoon on somebody else's
-# server; three at once is this end breaking, and shipping six-week-old rows
-# under a current date is exactly what the fleet's dating discipline forbids.
-MAX_CARRIED = 2
+# How many municipalities may be CARRIED from the last shipped file in one run
+# before this refuses. One unreadable site is a bad afternoon on somebody else's
+# server; a THIRD of the fleet at once is this end breaking, and shipping
+# six-week-old rows under a current date is exactly what the fleet's dating
+# discipline forbids.
+#
+# WRITTEN AS A FRACTION 2026-09-05, WHICH IS A RE-DERIVATION AND NOT A LOOSENING:
+# the constant was a bare 2 with the reasoning "three at once is this end
+# breaking", calibrated when there were six cities — a third of them. Ten more
+# municipalities on ten more independent webservers makes a flat 2 a different
+# and much stricter rule than the sentence that justified it, and the failure it
+# would produce is a weekly PR that stops opening. `len(FLOORS) // 3` yields
+# exactly 2 for the original six, so nothing about them changes.
+MAX_CARRIED = max(2, len(FLOORS) // 3)
 
 
 def carry_forward(cities, failures):

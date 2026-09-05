@@ -619,10 +619,12 @@ PROVENANCE = [
         "app_file": "wi-alderpersons.json",
         "source_url": "https://www.cityofmadison.com/council/council-members",
         "note": (
-            "One representative roster page of the six the weekly scrape "
-            "reads (wi_alderperson_scraper.py carries the full table) — the "
-            "scrape already fails loudly per city; this row exists so the "
-            "FILE has a manifest row and a dead index page is noticed."
+            "One representative roster page of the seventeen the weekly "
+            "scrape reads (wi_alderperson_scraper.py carries the full table, "
+            "and each municipality's sourceUrl reaches the monthly link gate "
+            "through the shipped file) — the scrape already fails loudly per "
+            "municipality; this row exists so the FILE has a manifest row and "
+            "a dead index page is noticed."
         ),
     },
     {
