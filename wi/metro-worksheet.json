@@ -1340,7 +1340,7 @@
         "file": "aldermanic-districts.json",
         "min_features": 853,
         "max_features": 853,
-        "note": "Every aldermanic (and village trustee) district the ward fabric composes completely — coded city/village wards dissolved on the statewide municipality key by wi/scripts/build_wi_aldermanic_districts.py under its completeness, BAS-witness and point-agreement gates (853 districts, 156 municipalities; nine incomplete submissions still excluded on the record). Appleton's fifteen are LOCALLY COMPOSED: its county files every ward uncoded, so the city clerk's own polling-locations page supplies the ward-to-district assignment, gated against the state's polling file, against the ten wards the state does code, and against Census 2020 population balance. Rebuild after each Jan/Jul filing window; a count change is expected news."
+        "note": "Every aldermanic (and village trustee) district the ward fabric composes completely — coded city/village wards dissolved on the statewide municipality key by wi/scripts/build_wi_aldermanic_districts.py under its completeness, BAS-witness and point-agreement gates (853 districts, 156 municipalities; nine incomplete submissions still excluded on the record). Appleton's fifteen are LOCALLY COMPOSED: its county files every ward uncoded, so the city clerk's own polling-locations page supplies the ward-to-district assignment, gated against a second edition of that same assignment in the state's polling file, against the ten wards the state does code, and against Census 2020 population balance. Rebuild after each Jan/Jul filing window; a count change is expected news."
       },
       {
         "file": "library-sites.json",
@@ -2304,7 +2304,7 @@
       {
         "file": "wi-alderpersons.json",
         "min_keys": 18,
-        "note": "The alderperson roster for the 17 municipalities with a verified, witnessed route — the six big cities of 2026-08-26 (Milwaukee, Madison, Green Bay, Kenosha, Racine, Waukesha) plus the twelve of 2026-09-05 (Stevens Point, Menomonie, Manitowoc, Sheboygan, Superior, Portage, Viroqua, Menasha, Howard, Tomah, Eau Claire, Appleton), 208 seats — keyed by the municipality's statewide COUSUBFP and zero-padded district id, the geometry file's exact key pair. Built by wi/scripts/build_wi_alderperson_roster.py with per-municipality, per-field floors and a geometry cross-gate; refreshed weekly by update-wi-alderperson-roster.yml."
+        "note": "The alderperson roster for the 18 municipalities with a verified, witnessed route — the six big cities of 2026-08-26 (Milwaukee, Madison, Green Bay, Kenosha, Racine, Waukesha) plus the twelve of 2026-09-05 (Stevens Point, Menomonie, Manitowoc, Sheboygan, Superior, Portage, Viroqua, Menasha, Howard, Tomah, Eau Claire, Appleton), 208 seats — keyed by the municipality's statewide COUSUBFP and zero-padded district id, the geometry file's exact key pair. Built by wi/scripts/build_wi_alderperson_roster.py with per-municipality, per-field floors and a geometry cross-gate; a municipality whose page could not be read keeps its last shipped rows and carries a carriedFrom date the card renders, so nothing rides stale silently. Refreshed weekly by update-wi-alderperson-roster.yml."
       },
       {
         "file": "wi-assembly-members.json",

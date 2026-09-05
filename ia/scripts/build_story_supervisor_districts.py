@@ -94,9 +94,16 @@ document and a different geometry reaching the same answer, at worst IoU
 rather than an equality.
 
 CORRECTED 2026-09-05 — STORY'S DISTRICTS DO NOT SPLIT A PRECINCT, AND THIS
-FILE SAID THEY DID. Iowa Code 49.3(2)(1) requires that "all boundaries shall
-follow precinct boundaries", and LSA's First Plan lists Roland/Howard Twp
-whole in District 2, so a split was never possible. What the block sort split
+FILE SAID THEY DID. Iowa Code 49.3(2)(a) requires that "all boundaries ...
+shall follow precinct boundaries", and LSA's First Plan lists Roland/Howard
+Twp whole in District 2, so a split was never possible. THE PARAGRAPH IS
+LETTERED, NOT NUMBERED, and it is not unconditional: it exempts "supervisor
+districts for counties using supervisor representation plan 'two' pursuant to
+section 331.209", which fifteen Iowa counties use. Story is not one of them --
+both LSA reports are headed PLAN "THREE", 2025 Iowa Acts ch. 15 requires plan
+three of a county holding a regents institution, and section 331.210 says
+plan-three district boundaries "shall follow voting precinct lines" -- so the
+rule binds here on two separate grounds and must not be quoted flat. What the block sort split
 is the SHIPPED PRECINCT POLYGON: `ia-precincts.json` carries a 2024 vintage in
 which that precinct still holds its 2020 census voting-district geometry —
 measured against TIGERweb's own `HOWARD TWP W/O STORY CITY` at IoU 0.999573,
@@ -181,13 +188,18 @@ UNCOVERED_CEILING_PCT = 0.05  # of county area; measured 0.0057
 # the board then "approve the second plan, THE FIRST PLAN, or an amended plan".
 # The board approved on 2026-01-27 without the record saying which.
 #
-# The geometry says which. The two plans reshuffle the county completely — the
-# first puts Story City in District 1 and Ames 2 in District 2, the second puts
-# both in District 1 — and their population triples are disjoint. The map's
-# blocks reproduce the FIRST plan's three numbers exactly and match none of the
-# second's, so the county adopted the first plan. Gating on the match alone
-# would leave that inference invisible; gating on the MISMATCH too makes it a
-# measurement.
+# The geometry says which. The two plans reshuffle the county completely, and
+# their population triples are disjoint: Ames 2 is in District 2 in the first
+# plan and in District 3 in the second, and District 1 is a different set of
+# precincts in each — thirteen in the first (the north Ames precincts plus
+# Story City), nineteen in the second (the rural ring plus Story City). Story
+# City itself is in District 1 in BOTH, which is why it is no use as a
+# discriminator; an earlier draft of this comment said the second plan put
+# Story City and Ames 2 together in District 1, and only the Story City half
+# of that was true. The map's blocks reproduce the FIRST plan's three numbers
+# exactly and match none of the second's, so the county adopted the first
+# plan. Gating on the match alone would leave that inference invisible; gating
+# on the MISMATCH too makes it a measurement.
 LSA_FIRST_PLAN_DOC = "https://www.legis.iowa.gov/docs/publications/CSR/1545311.pdf"
 LSA_SECOND_PLAN_DOC = "https://www.legis.iowa.gov/docs/publications/CSR/1595873.pdf"
 LSA_POPULATIONS = {"1": 32783, "2": 32894, "3": 32860}    # First Plan, 2025-12-04
@@ -197,7 +209,7 @@ LSA_CITE = ("Iowa Legislative Services Agency, Story County Supervisor "
             "32,783 / 32,894 / 32,860")
 
 # --- the second gate: LSA's own precinct lists ------------------------------
-# The First Plan names the precincts in each district (Iowa Code 49.3(2)(1):
+# The First Plan names the precincts in each district (Iowa Code 49.3(2)(a):
 # "All boundaries shall follow precinct boundaries"), and this app already
 # ships Iowa's precinct fabric. Dissolving those lists is therefore a check on
 # the map that uses no part of the map — different document, different

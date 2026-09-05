@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Build data/app/wi-alderpersons.json from wi_alderperson_scraper.py's
-intermediate — the aldermanic-district card's roster for the 17 municipalities
+intermediate — the aldermanic-district card's roster for the 18 municipalities
 whose routes are verified (the six of 2026-08-26: Milwaukee, Madison, Green
 Bay, Kenosha, Racine, Waukesha; and the twelve of 2026-09-05: Stevens Point,
 Menomonie, Manitowoc, Sheboygan, Superior, Portage, Viroqua, Menasha, Howard,
@@ -17,6 +17,7 @@ measured first run — one losing its e-mail column (the Brown County lesson)
 fails here before the retention gate ever sees it.
 """
 
+import datetime
 import json
 import os
 import sys
@@ -93,8 +94,24 @@ def carry_forward(cities, failures):
     rows are at most a week old and unchanged since the last human-reviewed PR,
     which is a far smaller claim than an empty card.
 
-    Loud on purpose: every carry prints, and the weekly PR shows no diff for
-    that city, which is the honest record of "nothing could be read".
+    Loud on purpose: every carry prints a NOT RE-READ line naming the
+    municipality, its age and the reason, the way Illinois's DOCUMENT_ROSTERS
+    do for a county with no website.
+
+    AND IT IS LOUD IN THE DATA TOO, FROM 2026-09-05. Until then a carry copied
+    the previous block verbatim: no date, no marker, and — because the card
+    reads only name/phone/email/url/note — nothing a reader or a PR reviewer
+    could see. With MAX_CARRIED scaling with the fleet, several municipalities
+    could ride weeks-old rows under a current-dated refresh with the weekly PR
+    showing no diff at all, which is precisely the "shipped six-week-old rows
+    under a current date" this file's own MAX_CARRIED comment forbids.
+
+    A carried block now carries `carriedFrom`, THE DATE THE CARRY BEGAN — not
+    today's, so a municipality carried four weeks running shows a four-week-old
+    date rather than a fresh one, and the card can say how stale it is. It is
+    written ONLY on a carry, so a normal run adds no field and produces no diff;
+    it disappears by itself the run the municipality reads again, which is what
+    makes the PR that removes it the record of the recovery.
     """
     missing = sorted(set(FLOORS) - set(cities))
     if not missing:
@@ -105,6 +122,7 @@ def carry_forward(cities, failures):
     with open(OUT) as f:
         shipped = json.load(f)
     carried = []
+    today = datetime.date.today().isoformat()
     for code in missing:
         previous = shipped.get(code)
         reason = (failures.get(code) or {}).get("reason", "no reason recorded")
@@ -112,10 +130,21 @@ def carry_forward(cities, failures):
             raise SystemExit("%s (%s) could not be read (%s) and has no shipped "
                              "rows to carry — a city cannot enter this file by "
                              "failing" % (FLOORS[code][0], code, reason))
-        cities[code] = previous
+        block = dict(previous)
+        # keep the date the carry BEGAN, so the age is real on the fourth week
+        block["carriedFrom"] = previous.get("carriedFrom") or today
+        cities[code] = block
         carried.append(FLOORS[code][0])
-        print("  CARRIED %-12s %d members kept from the last shipped file — %s"
-              % (FLOORS[code][0], len(previous["members"]), reason))
+        age = ""
+        try:
+            since = datetime.date.fromisoformat(block["carriedFrom"])
+            age = ", %d days" % (datetime.date.today() - since).days
+        except ValueError:
+            pass
+        print("  NOT RE-READ %-14s %d members kept from the last shipped file, "
+              "carried since %s%s — %s"
+              % (FLOORS[code][0], len(block["members"]), block["carriedFrom"],
+                 age, reason))
     if len(carried) > MAX_CARRIED:
         raise SystemExit("%d of %d cities were unreadable (%s) — that is this "
                          "end failing, not their servers; read the scraper log "
