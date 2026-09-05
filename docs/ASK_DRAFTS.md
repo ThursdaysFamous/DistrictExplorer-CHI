@@ -778,11 +778,13 @@ this file has asked for since the ask was written.
 
 ---
 
-## Iowa drafts
+## After the Illinois queue
 
-The section above is the Illinois queue and its "all eight drafts below" refers only to
-that table. What follows is Iowa, held the same way and under the same rule: the operator
-sends, and the `ASKED <date>` goes in on the day it goes, never before.
+**This file is chronological, not grouped by state** — Asks 1, 3, 4, 5 and 8 above are
+Iowa, interleaved with the Illinois and Wisconsin ones. The "all eight Illinois drafts
+below" line belongs to the table it introduces and covers Asks 9 through 13 only; what
+follows here is outside it. Same rule either way: the operator sends, and the
+`ASKED <date>` goes in on the day it goes, never before.
 
 ## Ask 14 — Jones County, Iowa: the GIS file behind a map the county already publishes
 
