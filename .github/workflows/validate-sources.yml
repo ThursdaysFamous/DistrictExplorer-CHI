@@ -98,6 +98,18 @@ jobs:
         continue-on-error: true
         run: python3 scripts/build_place_outline.py --check
 
+      # Six counties' library cards are drawn from ONE statewide layer whose
+      # publisher is a broadband contractor rather than the county or the
+      # library — the whole condition of shipping it was that the trust claims
+      # be re-checkable rather than remembered. --check re-derives all six from
+      # the live service and diffs them, which means the CARROLL GATE runs
+      # monthly: the layer must keep returning exactly the seven library tax
+      # lines Carroll's own County Clerk names. A publisher who quietly redraws
+      # or renames a district shows up here rather than on a reader's card.
+      - name: Statewide library districts still match the published layer
+        continue-on-error: true
+        run: python3 scripts/build_statewide_library_districts.py --check
+
       - name: Validate layer sources
         id: validate
         # continue-on-error: a FAIL exit (1) must not red the job — per the
