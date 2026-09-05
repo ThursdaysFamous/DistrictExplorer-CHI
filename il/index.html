@@ -11012,6 +11012,20 @@ function initChiExplorer() {
   var loadCalhounPrecincts = makeCached(function () {
     return fetchJSONWithRetry("data/app/calhoun-precincts.json", {}, 2);
   });
+  /* JO DAVIESS was recorded shut for a fortnight because it SHARED A GAP RECORD
+   * with Jersey, whose blocker is real and is not its. Jersey went from 25
+   * census voting districts to 22 through two events and only one composes:
+   * Quarry 1 + Quarry 2 -> Quarry names itself, while Jersey 9 and Jersey 10
+   * vanish into some unnamed subset of Jersey 1-8. Jo Daviess's own difference
+   * from the census is a single self-describing merge — Warren I + Warren II ->
+   * Warren — which is the Calhoun shape above and the same thing the Knox record
+   * calls a nameable merge. Two county offices witness it CURRENT: the Clerk's
+   * certified 17 March 2026 results and the GIS department's polling map of
+   * 12 Aug 2026, a map that writes "Dunleith I, II, III" where precincts share a
+   * building and so would have written "Warren I, II" had there been two. */
+  var loadJoDaviessPrecincts = makeCached(function () {
+    return fetchJSONWithRetry("data/app/jo-daviess-precincts.json", {}, 2);
+  });
   /* GALLATIN reached the map only after the COLES PATTERN was found a second
    * time: gallatinco.illinois.gov answers 200 and serves an INCOMPLETE TLS
    * CHAIN, so every automated client called the county dark while the site
@@ -26826,6 +26840,43 @@ function initChiExplorer() {
           return {
             label: "Calhoun County Clerk — elections",
             url: "https://www.calhouncountyil.gov/departments/county-clerk-and-recorder/elections/"
+          };
+        }
+      },
+      // Jo Daviess — twenty-eight precincts dissolved from the twenty-nine
+      // Census 2020 voting districts, the one merge being Warren (see
+      // loadJoDaviessPrecincts). NO POLLING PLACE: the county's GIS department
+      // publishes one per precinct, and that is a roster fact wanting its own
+      // guard and date. Its BOARD DISTRICTS ship separately from a licensed
+      // county shapefile and nothing here reads them.
+      {
+        key: "jo-daviess",
+        coverage: joDaviessCountyCoverage,
+        loadGeometry: loadJoDaviessPrecincts,
+        hoverName: function (feature) {
+          var v = findPropCI(feature.properties || {}, ["name"]);
+          return (v == null || String(v).trim() === "") ? null : String(v).trim();
+        },
+        query: function (point, seq) {
+          return loadJoDaviessPrecincts().then(function (geojson) {
+            var feature = findFeatureContaining(geojson, point);
+            if (!feature) return null;
+            return {
+              seq: seq,
+              name: findPropCI(feature.properties || {}, ["name"])
+            };
+          });
+        },
+        render: function () {
+          return renderFieldStack([{ label: "County", value: "Jo Daviess County" }]);
+        },
+        cardIdentifier: function (result) {
+          return result.name ? "Precinct " + String(result.name) : "Unknown";
+        },
+        primaryLink: function () {
+          return {
+            label: "Jo Daviess County Clerk — election results",
+            url: "https://jodaviesscountyil.gov/1380/Election-Results"
           };
         }
       },
