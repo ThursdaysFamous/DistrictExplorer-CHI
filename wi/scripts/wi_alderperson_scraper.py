@@ -80,9 +80,10 @@ DEFAULT_OUT = os.path.join(CACHE_DIR, "wi_alderpersons_raw.json")
 UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
                     "(KHTML, like Gecko) Chrome/124.0 Safari/537.36"}
 
-MKE_GIS = ("https://milwaukeemaps.milwaukee.gov/arcgis/rest/services/election"
-           "/alderman/MapServer/0/query?where=1%3D1&outFields=DISTRICT,ALDERPERSON"
-           "&returnGeometry=false&f=json")
+# REMOVED 2026-09-05: milwaukeemaps.milwaukee.gov/arcgis/rest/services/election
+# /alderman/... was this file's primary Milwaukee source, and that host publishes
+# `User-agent: * / Disallow: /`. It is not re-added under another name or agent;
+# scrape_milwaukee() reads Legistar, which it was already fetching.
 MKE_CKAN_ZIP = ("https://data.milwaukee.gov/dataset/1301738f-4b4a-4f73-bbaa-a4cac069e371"
                 "/resource/4b68b244-779e-406f-9d94-7fb85a764496/download/alderman.zip")
 MKE_LEGISTAR = ("https://webapi.legistar.com/v1/milwaukee/officerecords"
@@ -200,51 +201,95 @@ def read_dbf(data):
 
 
 def scrape_milwaukee():
-    members = {}
-    try:
-        for i in range(6):
-            try:
-                d = json.loads(fetch(MKE_GIS, tries=1, timeout=25))
-                for f in d["features"]:
-                    a = f["attributes"]
-                    members["%02d" % int(a["DISTRICT"])] = {"name": a["ALDERPERSON"].strip()}
-                break
-            except Exception:  # noqa: BLE001 — the measured flaky host
-                time.sleep(2)
-    except Exception:  # noqa: BLE001
-        pass
-    source = MKE_GIS.split("/query")[0]
-    if len(members) != 15:
-        members = {}
-        z = zipfile.ZipFile(io.BytesIO(fetch(MKE_CKAN_ZIP, binary=True)))
-        dbf = next(n for n in z.namelist() if n.lower().endswith(".dbf"))
-        for row in read_dbf(z.read(dbf)):
-            members["%02d" % int(row["DISTRICT"])] = {"name": row["ALDERPERSO"].strip()}
-        source = MKE_CKAN_ZIP
-        print("milwaukee: GIS host dropped every try; the CKAN shapefile answered",
-              file=sys.stderr)
-    if len(members) != 15:
-        raise SystemExit("milwaukee names %d of 15 districts" % len(members))
+    """Milwaukee's 15 alderpersons, from Legistar — which was already the witness.
 
-    # the Legistar witness: current COMMON COUNCIL membership, client-side
-    # dated. NEVER OfficeRecordFullName — that column is "ALD. SURNAME"
-    # (measured), so the fold is built from the First/Last columns.
+    THE OLD PRIMARY WAS A HOST THAT ASKS NOT TO BE CRAWLED. milwaukeemaps.
+    milwaukee.gov publishes
+
+        User-agent: Googlebot
+        Allow: /
+        User-agent: *
+        Disallow: /
+
+    and this function fetched its alderman layer every week, six times over with
+    backoff, under a comment calling it "the measured flaky host". It is not
+    flaky; it is asking. wi/scripts/validate_robots.py did not cover this module
+    until 2026-09-05, which is the whole reason a blanket Disallow went unread
+    for as long as it did.
+
+    NOTHING IS LOST AND NO SOURCE IS ADDED. Legistar was already fetched on
+    every run as the currency witness, and it carries the district as well as
+    the name: OfficeRecordTitle is "3rd District", corroborated by
+    OfficeRecordSort. Measured 2026-09-05 against the shipped roster: 15 of 15
+    districts, 14 exact surnames and one suffix difference (the file's
+    "Russell W Stamper, II" against Legistar's "Russell W. Stamper"). So the
+    two fetches this function makes are unchanged in number — the ROLES are
+    swapped, and the disallowed one is gone.
+
+    The CKAN shapefile stays as corroboration rather than as a fallback: it is
+    the city's own open-data portal, its robots.txt permits the path, and where
+    it answers its districts must agree. It is NOT required, because a host
+    that declines one client on one day must not be able to fail a build whose
+    data is already sound.
+    """
     today = time.strftime("%Y-%m-%d")
     recs = json.loads(fetch(MKE_LEGISTAR))
-    current = set()
+    members, current = {}, set()
     for r in recs:
         start = (r.get("OfficeRecordStartDate") or "")[:10]
         end = (r.get("OfficeRecordEndDate") or "9999")[:10]
-        if start <= today <= end:
-            full = ((r.get("OfficeRecordFirstName") or "") + " " +
-                    (r.get("OfficeRecordLastName") or "")).strip()
-            if full:
-                current.add(fold(full))
-    gis = {fold(m["name"]) for m in members.values()}
-    if gis - current:
-        raise SystemExit("milwaukee: GIS names %s absent from Legistar's current "
-                         "COMMON COUNCIL membership — the layer went stale"
-                         % sorted(gis - current))
+        if not (start <= today <= end):
+            continue
+        # NEVER OfficeRecordFullName — that column is "ALD. SURNAME" (measured),
+        # so the name is built from the First/Last columns.
+        full = ((r.get("OfficeRecordFirstName") or "") + " " +
+                (r.get("OfficeRecordLastName") or "")).strip()
+        if full:
+            current.add(fold(full))
+        m = re.match(r"\s*(\d+)(?:st|nd|rd|th)\s+District\s*$",
+                     r.get("OfficeRecordTitle") or "", re.I)
+        if not (m and full):
+            continue
+        num = int(m.group(1))
+        # THE TITLE AND THE SORT COLUMN MUST AGREE. Two fields on the same
+        # record naming the same district is the cheapest witness available,
+        # and a Legistar body whose Sort stopped tracking the district is
+        # exactly the drift that would put a name under the wrong ward.
+        sort = r.get("OfficeRecordSort")
+        if isinstance(sort, int) and sort != num:
+            raise SystemExit("milwaukee: Legistar title %r says district %d but "
+                             "OfficeRecordSort says %d — the two disagree, so "
+                             "neither is trusted" % (r.get("OfficeRecordTitle"),
+                                                     num, sort))
+        members["%02d" % num] = {"name": full}
+    if len(members) != 15:
+        raise SystemExit("milwaukee: Legistar names %d of 15 districts among %d "
+                         "current COMMON COUNCIL records" % (len(members),
+                                                             len(current)))
+    source = MKE_LEGISTAR
+
+    # Corroboration, not a dependency: where the city's open-data shapefile
+    # answers, its districts must agree with Legistar's.
+    try:
+        z = zipfile.ZipFile(io.BytesIO(fetch(MKE_CKAN_ZIP, binary=True)))
+        dbf = next(n for n in z.namelist() if n.lower().endswith(".dbf"))
+        ckan = {"%02d" % int(row["DISTRICT"]): row["ALDERPERSO"].strip()
+                for row in read_dbf(z.read(dbf))}
+    except Exception as exc:  # noqa: BLE001 — a witness that declines is not a failure
+        print("milwaukee: the CKAN shapefile did not answer (%s); Legistar's 15 "
+              "districts ship uncorroborated this run" % type(exc).__name__,
+              file=sys.stderr)
+    else:
+        disagree = sorted(d for d, name in ckan.items()
+                          if d in members and fold(name) not in current)
+        if disagree:
+            raise SystemExit("milwaukee: the CKAN shapefile names %s for district(s) "
+                             "%s, and Legistar's current COMMON COUNCIL membership "
+                             "does not carry them — one of the two is stale"
+                             % ([ckan[d] for d in disagree], disagree))
+        print("milwaukee: CKAN corroborates %d of %d districts"
+              % (sum(1 for d in ckan if d in members), len(members)),
+              file=sys.stderr)
     return members, source
 
 

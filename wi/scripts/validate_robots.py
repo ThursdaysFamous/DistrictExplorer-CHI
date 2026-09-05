@@ -70,6 +70,7 @@ Usage:
     python3 wi/scripts/validate_robots.py --offline  # list the surface only
 """
 
+import glob
 import gzip
 import os
 import re
@@ -130,6 +131,37 @@ def read_body(response):
     return raw.decode("utf-8", "replace")
 
 
+def scheduled_scraper_modules():
+    """[(module, label)] for every *_scraper.py a workflow runs on a schedule.
+
+    The workflow files are the authority on "scheduled": a scraper nothing
+    dispatches makes no requests, and sweeping it would report policies for
+    fetches that never happen.
+    """
+    import importlib
+    workflows = os.path.join(os.path.dirname(os.path.dirname(SCRIPT_DIR)),
+                             ".github", "workflows")
+    texts = []
+    for name in sorted(os.listdir(workflows)):
+        if name.endswith((".yml", ".yaml")):
+            with open(os.path.join(workflows, name), encoding="utf-8") as f:
+                texts.append((name, f.read()))
+    out = []
+    for path in sorted(glob.glob(os.path.join(SCRIPT_DIR, "*_scraper.py"))):
+        stem = os.path.basename(path)[:-3]
+        runs = [n for n, t in texts if stem in t]
+        if not runs:
+            continue
+        out.append((importlib.import_module(stem),
+                    "%s [%s]" % (stem, ", ".join(runs))))
+    if len(out) < 2:
+        raise SystemExit("robots: discovered %d scheduled scraper(s) under %s — "
+                         "that cannot be right, and a narrowed sweep reporting "
+                         "OK is exactly what this gate must never do"
+                         % (len(out), SCRIPT_DIR))
+    return out
+
+
 def fetched_urls():
     """[(url, why)] — every address this instance requests on a schedule."""
     import wi_county_board_scraper as board
@@ -143,24 +175,28 @@ def fetched_urls():
         if spec.get("live"):
             out.append((spec["source_url"],
                         "%s carried roster, live re-try each run" % spec["name"]))
-    # THE MODULE LIST IS STILL A LIST, AND THAT IS THIS GATE'S REMAINING HOLE.
-    # Discovery is total WITHIN a module and hand-kept ACROSS modules, so a
-    # scraper written after this file is outside the sweep entirely — which is
-    # the same shape as the 2026-09-02 miss recorded below, one level up. The
-    # RUSD board scraper was added 2026-09-03 and is named here; the MPS,
-    # alderperson, municipal-executive, circuit-court, court-of-appeals and
-    # county-clerk scrapers are NOT, and that is an open gap rather than a
-    # statement that their hosts permit anything. Widening it needs its own
-    # pass, because it will surface hosts nobody has read a policy for.
-    import rusd_school_board_scraper as rusd
-    for module, label in ((board, "county board roster (weekly)"),
-                          (officers, "county officer contact (twice weekly)"),
-                          (rusd, "RUSD school board roster (weekly)")):
+    # THE MODULE LIST IS DISCOVERED, NOT KEPT. It used to name three modules by
+    # hand while eight other scheduled scrapers sat outside the sweep entirely —
+    # this file's own comment called that "an open gap rather than a statement
+    # that their hosts permit anything", and it was right: widening it found
+    # milwaukeemaps.milwaukee.gov publishing `User-agent: * / Disallow: /` under
+    # a fetch this repo had been making every week.
+    #
+    # A hand-kept list across modules is the same shape as the miss recorded
+    # below, one level up, and the fleet has learned it twice elsewhere
+    # (validate_card_links.py naming four instances of five;
+    # check_roster_retention.py pointed at one instance's data/app). So the
+    # subject is now every wi/scripts/*_scraper.py that a workflow actually
+    # RUNS — which is exactly this gate's contract, "every address this
+    # instance requests on a schedule". A scraper written tomorrow is swept the
+    # day its workflow lands, and one that exists but is not scheduled is
+    # correctly left alone.
+    for module, label in scheduled_scraper_modules():
         for nm in dir(module):
             if not nm.isupper() or nm in NOT_FETCHED:
                 continue
             for url in _strings(getattr(module, nm)):
-                out.append((url, "%s [%s]" % (label, nm)))
+                out.append((url, "%s %s" % (label, nm)))
     seen, uniq = set(), []
     for url, why in out:
         if url.startswith("http") and url not in seen:
