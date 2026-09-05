@@ -26,21 +26,29 @@ sandbox's own egress proxy and not the county at all.
 
 THREE TRAPS, ALL IN THE MARKUP AND ALL SILENT
 -----------------------------------------------
-1. THE ROLE SITS IN TWO DIFFERENT PLACES AND THE COUNTY DECIDES WHICH. FIVE of
+1. THE ROLE SITS IN TWO DIFFERENT PLACES AND THE COUNTY DECIDES WHICH. SIX of
    the twelve put the clerk's and mayor's role in a <b> INSIDE the name's own
    div -- `<div class="offName"><b>City Clerk </b><br>Sarah Miller</div>` --
-   and the other SEVEN give every role a `div.positionTitle` heading instead.
-   Measured 2026-09-05: <b> in Boone (19), Crawford (32), Iowa (7), Marion (16)
-   and Winnebago (14); headings only in Cerro Gordo, Jackson, Jasper, Keokuk,
-   Muscatine, Sac and Shelby. THE <b> IS AN ADDITION, NOT AN ALTERNATIVE: in all
-   five, City Council still comes from a positionTitle heading exactly as it does
-   in the other seven, and what the <b> carries is the NON-COUNCIL roles -- so
-   "Crawford uses both" is no distinction, every one of the five does. What IS
-   distinctive about Crawford is a THIRD <b> role, Library (6); Boone and
-   Winnebago carry City Administrator there instead, and Iowa carries only Mayor
-   because it publishes no clerk at all. Read the text flat and the
+   and the other SIX give every role a `div.positionTitle` heading instead.
+   RE-MEASURED 2026-09-05 with the parser's own `div.offName` selector rather
+   than a page-wide <b> count, which is what makes this list trustworthy: Boone
+   (Mayor 9, City Clerk 8, City Administrator 2), Crawford (City Clerk 13, Mayor
+   13, Library 6), Iowa (Mayor 7), JASPER (Mayor 14, City Attorney 11, City
+   Clerk 11, City Administrator 4), Marion (City Clerk 8, Mayor 8) and Winnebago
+   (Mayor 7, City Clerk 6, City Administrator 1); headings only in Cerro Gordo,
+   Jackson, Keokuk, Muscatine, Sac and Shelby. AN EARLIER VERSION OF THIS
+   PARAGRAPH PUT JASPER IN THE HEADINGS-ONLY GROUP, which was the opposite of
+   what its page carries -- Jasper has the widest <b> vocabulary of the twelve
+   and is the SOLE source of all ten City Attorney rows this file ships. THE <b>
+   IS AN ADDITION, NOT AN ALTERNATIVE: in all six, City Council still comes from
+   a positionTitle heading exactly as it does in the other six, and what the <b>
+   carries is the NON-COUNCIL roles -- so "Crawford uses both" is no
+   distinction, every one of the six does. Nor is Crawford's third role
+   distinctive now that Jasper is read correctly: Crawford's is Library (6),
+   Boone's and Winnebago's City Administrator, and Jasper carries FOUR, while
+   Iowa carries only Mayor because it publishes no clerk at all. Read the text flat and the
    clerk is a person called "City Clerk Sarah Miller"; take positionTitle for
-   every row and, in those five, the clerk and the mayor are filed as council
+   every row and, in those six, the clerk and the mayor are filed as council
    members. That is the Franklin trap in both directions at once, so the role
    is read STRUCTURALLY: the <b> when the row has one, the heading when it does
    not. AN EARLIER VERSION OF THIS PARAGRAPH CALLED THE <b> UNIVERSAL, which is
@@ -53,14 +61,18 @@ THREE TRAPS, ALL IN THE MARKUP AND ALL SILENT
    div's text ships people whose surname is "Ward". (An earlier draft said 109,
    which came from a throwaway parse before this scraper existed.)
 3. THE mailto: HREF IS EMPTY IN SOME COUNTIES AND POPULATED IN OTHERS, so the
-   address is read from the link TEXT, which is correct either way. Measured
-   2026-09-05: Boone (59 of 59) and Crawford (13 of 13) publish EMPTY hrefs;
-   Cerro Gordo (56), Jasper (37), Shelby (11) and Marion (8) publish POPULATED
-   ones; the other five publish no mailto at all. An href-keyed scrape would return an
-   e-mail for nobody in Boone and Crawford while every count guard still
-   passed -- the shape that took Brown County's seven addresses out silently --
-   and it would work perfectly in the three that populate them, which is
-   exactly how a universal like this survives being written down.
+   address is read from the link TEXT, which is correct either way. RE-MEASURED
+   2026-09-05: THREE counties publish nothing but EMPTY hrefs -- Boone (59 of
+   59), Crawford (13 of 13) and JASPER (38 of 38) -- THREE publish nothing but
+   POPULATED ones -- Cerro Gordo (56), Shelby (11) and Marion (8) -- and the
+   other SIX publish no mailto at all. AN EARLIER VERSION OF THIS PARAGRAPH PUT
+   JASPER IN THE POPULATED GROUP AT 37, and its page carries 38 hrefs of which
+   ZERO are populated; the "other five" that followed from it was six. An
+   href-keyed scrape would therefore return an e-mail for nobody in THREE
+   counties -- 110 hrefs between them -- while every count guard still passed,
+   the shape that took Brown County's seven addresses out silently, and it
+   would work perfectly in the three that populate them, which is exactly how a
+   universal like this survives being written down.
 
 A vacancy annotation ("Appointed to Fill Vacancy until Election") sits in its
 own `div.officialInfoDescription` behind an info icon; it is a real status and

@@ -39,15 +39,17 @@ name: Update IA county-published city officials
 # answer would otherwise ship:
 #
 #   * THE ROLE SITS IN TWO DIFFERENT PLACES AND THE COUNTY DECIDES WHICH.
-#     FIVE of the twelve put the clerk's and mayor's role in a <b> INSIDE the
-#     name's own div (Boone 19, Crawford 32, Iowa 7, Marion 16, Winnebago 14);
-#     the other SEVEN put every role in a positionTitle heading. Crawford uses
-#     both. Read the div flat and the clerk becomes a person called "City Clerk
-#     Sarah Miller"; key on the heading alone and, in those five, the clerk and
+#     SIX of the twelve put the clerk's and mayor's role in a <b> INSIDE the
+#     name's own div (Boone 19, Crawford 32, Iowa 7, Jasper 40, Marion 16,
+#     Winnebago 14); the other SIX put every role in a positionTitle heading.
+#     "Crawford uses both" was NO DISTINCTION and is withdrawn — all six take
+#     City Council from a heading and use the <b> for the non-council roles.
+#     Read the div flat and the clerk becomes a person called "City Clerk
+#     Sarah Miller"; key on the heading alone and, in those six, the clerk and
 #     the mayor are filed as council members. The scraper reads the <b> when
 #     there is one and falls back to the heading, so it needs neither to be
 #     universal — which is the point, because neither is.
-#   * THE SEAT FOLLOWS A <br/> IN THAT SAME DIV — 93 shipped officials carry the
+#   * THE SEAT FOLLOWS A <br/> IN THAT SAME DIV — 104 shipped officials carry the
 #     ward or at-large seat their county states (117 across all twelve), which
 #     no other Iowa source pairs with a name — so a parser reading the div's
 #     text ships people whose surname appears to be "Ward".
@@ -72,7 +74,7 @@ name: Update IA county-published city officials
 # nine counties are current and MIN_COUNTIES is 9, so ONE county letting its
 # page go stale fails the build — not "a real collapse", one county. And every
 # EVEN-YEAR JANUARY, when the terms elected in the previous November's city
-# election begin, every one of the eight will publish terms that have just
+# election begin, every one of the nine will publish terms that have just
 # expired until it updates its page, so expect this to be red for days or weeks
 # each cycle. That is the gate working. NEVER lower MIN_COUNTIES to get past it:
 # the floor is what makes a county quietly going stale visible at all.

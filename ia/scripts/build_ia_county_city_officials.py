@@ -63,7 +63,7 @@ THE FLOOR IS EXPECTED TO FAIL, PERIODICALLY, BY DESIGN
 --------------------------------------------------------
 Exactly nine counties are current and MIN_COUNTIES is 9, so ONE county letting
 its page go stale fails this build -- not a collapse, one county. And every
-EVEN-YEAR JANUARY, when terms elected the previous November begin, all eight
+EVEN-YEAR JANUARY, when terms elected the previous November begin, all nine
 will briefly publish expired terms until each page is updated, so expect red
 for days or weeks each cycle. NEVER lower the floor to get past that: it is the
 only thing that makes a county quietly going stale visible.
@@ -79,8 +79,8 @@ has. A city here that elects by ward gets its members named without any claim
 about which part of the city a reader is standing in.
 
 Nothing asserts at-large either. The five cities on `ia-city-officials.json`
-were each read from the city's own page and each verified at-large; these 84
-were not, and 93 of their officials carry a seat that says otherwise, so the
+were each read from the city's own page and each verified at-large; these 98
+were not, and 104 of their officials carry a seat that says otherwise, so the
 card's copy for them says who published the roster and stops there.
 
 NO HOME ADDRESSES. The county pages publish CITY HALL's address and phone
@@ -121,8 +121,10 @@ MIN_MAYORS = 92               # measured 98 of 98. North English straddles the
                               # Iowa/Keokuk line: its mayor and council come
                               # from Iowa County's page and its clerk from
                               # Keokuk's, so the merge is what makes it whole.
-MIN_EMAILS = 125              # measured 142; three of the nine publish none
-MIN_PHONES = 100              # measured 116; four of the nine publish none
+MIN_EMAILS = 125              # measured 142; FOUR of the nine publish none
+                              # (Iowa, Jackson, Keokuk, Muscatine)
+MIN_PHONES = 100              # measured 116; FIVE of the nine publish none
+                              # (Cerro Gordo, Iowa, Jackson, Keokuk, Muscatine)
 
 # Lifted unchanged in behaviour from build_ia_city_officials.py, which lifted it
 # from build_ia_county_officers.py: an address ships only if the officeholder's

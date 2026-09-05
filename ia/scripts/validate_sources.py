@@ -527,7 +527,8 @@ PROVENANCE = [
         "source_url": "https://cerrogordo.gov/about/elected_officials/city/",
         "note": (
             "Cerro Gordo County's ten cities, Mason City and Clear Lake among them. IT "
-            "CARRIES THE MOST SEATS OF THE EIGHT (51 of the 93 shipped) and it is where "
+            "CARRIES THE MOST SEATS OF THE NINE (51 of the 104 shipped, against the "
+            "next county's 12) and it is where "
             "the vacancy annotation appears: 'Appointed to Fill Vacancy until Election' "
             "sits in its own div behind an info icon, so a text read folds it into the "
             "person's name. It is a real status and ships as one, never as part of a "
